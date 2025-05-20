@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Arbeitssicherheit 2025</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: Arial, sans-serif;
+      background-color: #d6eaff;
+      color: #333;
+    }
+
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .content {
+      flex: 1;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .tile-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .tile {
+      position: relative;
+      background-color: #fff;
+      border-radius: 16px;
+      padding: 24px;
+      text-decoration: none;
+      color: #333;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      text-align: center;
+    }
+
+    .tile:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .tile .icon {
+      font-size: 36px;
+      margin-bottom: 12px;
+      color: #007bff;
+    }
+
+    .tooltip {
+      visibility: hidden;
+      opacity: 0;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 8px;
+      padding: 8px;
+      position: absolute;
+      z-index: 1;
+      bottom: 110%;
+      left: 50%;
+      transform: translateX(-50%);
+      transition: opacity 0.3s;
+      white-space: nowrap;
+      font-size: 0.85em;
+    }
+
+    .tile:hover .tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .description-box {
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 24px;
+      max-width: 800px;
+      margin: 40px auto;
+      font-size: 1.1em;
+      text-align: left;
+    }
+
+    footer {
+      text-align: center;
+      padding: 10px 0;
+      font-size: 0.75em;
+      color: #888;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="content">
+      <h1>Arbeitssicherheit 2025 </h1>
+      <br><br><br>
+
+      <div class="tile-container">
+        <a href="https://andreas-zott.github.io/sicher/unten-farbig.html" class="tile">
+          <div class="icon"><i class="fas fa-file-archive"></i></div>
+          <h2>Checkliste farbig</h2>
+          <p>unten</p>
+          <span class="tooltip">Öffnet die farbige Checkliste (unten)</span>
+        </a>
+
+        <a href="https://andreas-zott.github.io/sicher/oben-farbig.html" class="tile">
+          <div class="icon"><i class="fas fa-file-archive"></i></div>
+          <h2>Checkliste farbig</h2>
+          <p>oben</p>
+          <span class="tooltip">Öffnet die farbige Checkliste (oben)</span>
+        </a>
+
+        <a href="https://andreas-zott.github.io/sicher/unten.html" class="tile">
+          <div class="icon"><i class="fas fa-file-archive"></i></div>
+          <h2>Checkliste</h2>
+          <p>unten</p>
+          <span class="tooltip">Öffnet die klassische Checkliste (unten)</span>
+        </a>
+
+        <a href="https://andreas-zott.github.io/sicher/oben.html" class="tile">
+          <div class="icon"><i class="fas fa-file-archive"></i></div>
+          <h2>Checkliste</h2>
+          <p>oben</p>
+          <span class="tooltip">Öffnet die klassische Checkliste (oben)</span>
+        </a>
+      </div>
+
+      <div class="description-box">
+        <strong>Beschreibung:</strong><br><br>
+        • Checklisten für den Einzelhandel<br>
+        • Farbig unterteilt oder klassische Unterteilung<br>
+        • Mit Unterschriftenfeld einmal oben sowie unten<br>
+        • Es können weitere Bereiche und Fragen nach Wunsch eingefügt werden.
+      </div>
+    </div>
+
+    <footer>
+      &copy; <span id="jahr1"></span> Andreas Zott. Alle Rechte vorbehalten. (Sifa) Arbeitssicherheit <span id="jahr2"></span>
+    </footer>
+  </div>
+
+  <script>
+    const jahr = new Date().getFullYear();
+    document.getElementById('jahr1').textContent = jahr;
+    document.getElementById('jahr2').textContent = jahr;
+  </script>
+</body>
+</html>
