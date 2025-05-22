@@ -3,7 +3,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Arbeitssicherheit-Checkliste-2025</title>
 
 <style>
@@ -710,10 +710,17 @@
     }
   </style>
 </head>
-</div></body>
+</div>
+</body>
 </tbody>
 </table>		
 <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      padding: 20px;
+    }
+
     #signature-pad {
       border: 2px solid #000;
       border-radius: 8px;
@@ -722,13 +729,29 @@
       height: 150px;
       touch-action: none;
     }
+
     .buttons {
       margin-top: 10px;
     }
+
     #content {
       max-width: 600px;
       margin: auto;
-      font-family: sans-serif;
+    }
+
+    button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-right: 10px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
     }
   </style>
 </head>
@@ -754,11 +777,25 @@
     let drawing = false;
 
     function resizeCanvas() {
-      const ratio = Math.max(window.devicePixelRatio || 1, 1);
-      canvas.width = canvas.offsetWidth * ratio;
-      canvas.height = canvas.offsetHeight * ratio;
+      const ratio = window.devicePixelRatio || 1;
+      const displayWidth = canvas.offsetWidth;
+      const displayHeight = canvas.offsetHeight;
+
+      const oldImage = new Image();
+      oldImage.src = canvas.toDataURL();
+
+      canvas.width = displayWidth * ratio;
+      canvas.height = displayHeight * ratio;
+
+      canvas.style.width = displayWidth + "px";
+      canvas.style.height = displayHeight + "px";
+
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.scale(ratio, ratio);
-      restoreSignature();
+
+      oldImage.onload = () => {
+        ctx.drawImage(oldImage, 0, 0, displayWidth, displayHeight);
+      };
     }
 
     function getX(e) {
@@ -802,7 +839,9 @@
       const dataURL = localStorage.getItem("signatureImage");
       if (dataURL) {
         const image = new Image();
-        image.onload = () => ctx.drawImage(image, 0, 0);
+        image.onload = () => {
+          ctx.drawImage(image, 0, 0, canvas.offsetWidth, canvas.offsetHeight);
+        };
         image.src = dataURL;
       }
     }
@@ -819,7 +858,10 @@
     }
 
     window.addEventListener("resize", resizeCanvas);
-    window.addEventListener("load", resizeCanvas);
+    window.addEventListener("load", () => {
+      resizeCanvas();
+      restoreSignature();
+    });
 
     canvas.addEventListener('mousedown', startDrawing);
     canvas.addEventListener('mousemove', draw);
@@ -829,9 +871,6 @@
     canvas.addEventListener('touchmove', draw, {passive: false});
     canvas.addEventListener('touchend', stopDrawing);
   </script>
-</body>
-
-    </script>
 <footer style="text-align: center; margin-top: 60px; font-size: 12px; color: #777;">
      &copy; 2025 Andreas Zott. Alle Rechte vorbehalten. (Sifa) Arbeitssicherheit 2025
   </footer>
