@@ -733,24 +733,19 @@
   </style>
 </head>
 <body>
-
   <div id="content">
     <h1>Arbeitssicherheit-Checkliste-2025</h1>
     <p>Bitte das Dokument durchlesen und unterschreiben.</p>
 
     <h2>Unterschrift</h2>
-
-    
     <canvas id="signature-pad"></canvas>
 
     <div class="buttons">
       <button onclick="clearSignature()">Löschen</button>
-    
-      <button onclick="window.print()">Als PDF speichern / Drucken</button>
-   
+      <button onclick="prepareForPrint()">Als PDF speichern / Drucken</button>
+    </div>
   </div>
 
-  <!-- html2pdf CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <script>
@@ -763,9 +758,8 @@
       canvas.width = canvas.offsetWidth * ratio;
       canvas.height = canvas.offsetHeight * ratio;
       ctx.scale(ratio, ratio);
+      restoreSignature();
     }
-    resizeCanvas();
-    window.addEventListener("resize", resizeCanvas);
 
     function getX(e) {
       return e.touches ? e.touches[0].clientX - canvas.getBoundingClientRect().left :
@@ -791,7 +785,41 @@
 
     function stopDrawing() {
       drawing = false;
+      saveSignature();
     }
+
+    function clearSignature() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      localStorage.removeItem("signatureImage");
+    }
+
+    function saveSignature() {
+      const dataURL = canvas.toDataURL();
+      localStorage.setItem("signatureImage", dataURL);
+    }
+
+    function restoreSignature() {
+      const dataURL = localStorage.getItem("signatureImage");
+      if (dataURL) {
+        const image = new Image();
+        image.onload = () => ctx.drawImage(image, 0, 0);
+        image.src = dataURL;
+      }
+    }
+
+    function prepareForPrint() {
+      const dataURL = canvas.toDataURL();
+      const img = document.createElement("img");
+      img.src = dataURL;
+      img.style.border = "2px solid #000";
+      img.style.width = "100%";
+      img.style.maxWidth = "600px";
+      canvas.replaceWith(img);
+      window.print();
+    }
+
+    window.addEventListener("resize", resizeCanvas);
+    window.addEventListener("load", resizeCanvas);
 
     canvas.addEventListener('mousedown', startDrawing);
     canvas.addEventListener('mousemove', draw);
@@ -800,14 +828,6 @@
     canvas.addEventListener('touchstart', startDrawing, {passive: false});
     canvas.addEventListener('touchmove', draw, {passive: false});
     canvas.addEventListener('touchend', stopDrawing);
-
-    function clearSignature() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-
-    function saveFullPDF() {
-      html2pdf().from(document.getElementById("content")).save("formular_mit_unterschrift.pdf");
-    }
   </script>
 </body>
 
