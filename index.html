@@ -149,6 +149,43 @@
         • Das Unterschriftenfeld läuft stabil auf einem IPad ohne Scrollbewegung<br>
         • Es können weitere Bereiche und Fragen nach Wunsch eingefügt werden.
       </div>
+<link rel="apple-touch-icon" href="icon.png">
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover { background-color: #0056b3; }
+  </style>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js');
+      });
+    }
+
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    function openInSafari() {
+      if (isStandalone) {
+        window.location.href = window.location.href;
+      } else {
+        alert("Diese Seite läuft bereits in Safari mit Navigationsleiste.");
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>Checkliste</h1>
+  </p>
+
+  <div style="text-align: center; margin-top: 40px;">
+    <button onclick="openInSafari()">In Safari mit Adressleiste öffnen</button>
     </div>
 
     <footer>
