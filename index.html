@@ -7,31 +7,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html, body {
-      height: 100%;
-      font-family: Arial, sans-serif;
-      background-color: #d6eaff;
-      color: #333;
-    }
-
-    .wrapper {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-
-    main {
-      flex: 1;
-      padding: 40px;
-      text-align: center;
-      position: relative;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; font-family: Arial, sans-serif; background-color: #d6eaff; color: #333; }
+    .wrapper { display: flex; flex-direction: column; min-height: 100vh; }
+    main { flex: 1; padding: 40px; text-align: center; position: relative; }
 
     .tile-container {
       display: grid;
@@ -58,11 +37,7 @@
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
     }
 
-    .tile .icon {
-      font-size: 36px;
-      margin-bottom: 12px;
-      color: #007bff;
-    }
+    .tile .icon { font-size: 36px; margin-bottom: 12px; color: #007bff; }
 
     .tooltip {
       visibility: hidden;
@@ -82,10 +57,7 @@
       font-size: 0.85em;
     }
 
-    .tile:hover .tooltip {
-      visibility: visible;
-      opacity: 1;
-    }
+    .tile:hover .tooltip { visibility: visible; opacity: 1; }
 
     .description-box {
       background-color: #fff;
@@ -98,9 +70,7 @@
       text-align: left;
     }
 
-    .description-box li {
-      margin-bottom: 10px;
-    }
+    .description-box li { margin-bottom: 10px; }
 
     footer {
       text-align: center;
@@ -108,6 +78,12 @@
       font-size: 0.75em;
       color: #888;
       margin-top: 20px;
+    }
+
+    footer a {
+      color: #007bff;
+      text-decoration: underline;
+      margin: 0 8px;
     }
 
     /* Dark Mode Styles */
@@ -142,6 +118,18 @@
       color: #aaa;
     }
 
+    body.dark #privacyModal div,
+    body.dark #impressumModal div {
+      background: #2a2a2a;
+      color: #eee;
+    }
+
+    body.dark #privacyModal button,
+    body.dark #impressumModal button {
+      background: #66b2ff;
+      color: #111;
+    }
+
     #toggle-dark {
       position: absolute;
       top: 20px;
@@ -154,6 +142,35 @@
       cursor: pointer;
       font-size: 0.9em;
     }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      z-index: 9999;
+    }
+
+    .modal-content {
+      background: white;
+      max-width: 600px;
+      margin: 5% auto;
+      padding: 2em;
+      border-radius: 10px;
+      position: relative;
+      color: #333;
+    }
+
+    .modal-content button {
+      margin-top: 2em;
+      padding: 8px 16px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -165,39 +182,39 @@
       <br><br><br>
 
       <div class="tile-container">
-        <a href="https://andreas-zott.github.io/sicher/unten-farbig.html" class="tile" aria-label="Checkliste farbig, Unterschrift unten, iPad-Version">
+        <a href="unten-farbig.html" class="tile">
           <div class="icon"><i class="fas fa-clipboard-check"></i></div>
           <h2>Checkliste iPad</h2>
           <p>Unterschrift unten</p>
-          <span class="tooltip">Öffnet die farbige Checkliste (unten)</span>
+          <span class="tooltip">Farbig, Unterschrift unten</span>
         </a>
 
-        <a href="https://andreas-zott.github.io/sicher/oben-farbig.html" class="tile" aria-label="Checkliste farbig, Unterschrift oben">
+        <a href="oben-farbig.html" class="tile">
           <div class="icon"><i class="fas fa-clipboard-list"></i></div>
           <h2>Checkliste oben</h2>
           <p>Unterschrift oben</p>
-          <span class="tooltip">Öffnet die farbige Checkliste (oben)</span>
+          <span class="tooltip">Farbig, Unterschrift oben</span>
         </a>
 
-        <a href="https://andreas-zott.github.io/sicher/detaillierter.html" class="tile" aria-label="Detailliertere Checkliste, Unterschrift unten">
+        <a href="detaillierter.html" class="tile">
           <div class="icon"><i class="fas fa-list-alt"></i></div>
           <h2>Detaillierte Checkliste</h2>
           <p>Unterschrift unten</p>
-          <span class="tooltip">Öffnet eine detailliertere Checkliste (unten)</span>
+          <span class="tooltip">Mehr Inhalte</span>
         </a>
 
-        <a href="https://andreas-zott.github.io/sicher/help.html" class="tile" aria-label="Anleitung für PDF-Versand auf dem iPad">
+        <a href="help.html" class="tile">
           <div class="icon"><i class="fas fa-info-circle"></i></div>
           <h2>Anleitung</h2>
           <p>PDF auf iPad</p>
-          <span class="tooltip">Webseite in Safari öffnen und als PDF versenden (iPad)</span>
+          <span class="tooltip">Anleitung zur PDF-Erstellung</span>
         </a>
 
-        <a href="https://andreas-zott.github.io/sicher/foto.html" class="tile" aria-label="Fotoformular zur Aufnahme und PDF-Versand">
+        <a href="foto.html" class="tile">
           <div class="icon"><i class="fas fa-camera"></i></div>
           <h2>Fotoformular</h2>
           <p>Kamera & PDF</p>
-          <span class="tooltip">Das Fotoformular nimmt Fotos auf und versendet diese als PDF</span>
+          <span class="tooltip">Foto aufnehmen und speichern</span>
         </a>
       </div>
 
@@ -216,8 +233,42 @@
     </main>
 
     <footer>
-      &copy; <span id="jahr1"></span> Andreas Zott. Alle Rechte vorbehalten. (Sifa) Arbeitssicherheit <span id="jahr2"></span>
+      &copy; <span id="jahr1"></span> Andreas Zott. Alle Rechte vorbehalten. (Sifa) Arbeitssicherheit <span id="jahr2"></span><br>
+      <a href="#" onclick="document.getElementById('privacyModal').style.display='block'">Datenschutzerklärung</a> |
+      <a href="#" onclick="document.getElementById('impressumModal').style.display='block'">Impressum</a>
     </footer>
+  </div>
+
+  <!-- Datenschutzerklärung Modal -->
+  <div id="privacyModal" class="modal">
+    <div class="modal-content">
+      <h2>Datenschutzerklärung</h2>
+      <p>Diese Website verarbeitet keinerlei personenbezogene Daten. Alle eingegebenen Informationen, Fotos und Unterschriften werden ausschließlich lokal im Browser verarbeitet und nicht gespeichert oder übertragen.</p>
+      <ul>
+        <li>✅ Keine Serververbindung</li>
+        <li>✅ Keine Speicherung von Daten</li>
+        <li>✅ Keine Cookies oder Analyse-Tools</li>
+      </ul>
+      <p>Die erzeugten PDFs werden nur lokal erstellt und können manuell gespeichert oder versendet werden. Für die Versendung sind Sie selbst verantwortlich.</p>
+      <p>Verantwortlich gemäß DSGVO:<br>
+        Andreas Zott<br>
+        E-Mail: [quadzott@gmail.com]</p>
+      <button onclick="document.getElementById('privacyModal').style.display='none'">Schließen</button>
+    </div>
+  </div>
+
+  <!-- Impressum Modal -->
+  <div id="impressumModal" class="modal">
+    <div class="modal-content">
+      <h2>Impressum</h2>
+      <p>Angaben gemäß § 5 TMG:</p>
+      <p>Andreas Zott<br>         
+         [58513]<br>
+         E-Mail: [quadzott@gmail.com]</p>
+      <p>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br>
+         Andreas Zott, [Adresse wie oben]</p>
+      <button onclick="document.getElementById('impressumModal').style.display='none'">Schließen</button>
+    </div>
   </div>
 
   <script>
