@@ -4,6 +4,47 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Detailliertere Arbeitssicherheit-Checkliste-2025</title>
+<div style="flex: 1; text-align: center;">
+    <h1 style="margin: 0;">Arbeitssicherheit-Checkliste-2025</h1>
+  </div>
+ <style>
+    .datum-container {
+      text-align: left;
+      margin: 7px;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+    }
+
+    .datum-label {
+      font-weight: normal;
+    }
+
+    .datum-wert {
+      font-weight: normal;
+      border: 1px solid #000;   /* Schwarzer Rahmen */
+      padding: 5px 10px;        /* Innenabstand */
+      display: inline-block;    /* Nur so breit wie der Inhalt */
+      margin-top: 5px;          /* Abstand zur Überschrift */
+      border-radius: 4px;       /* Optional: abgerundete Ecken */
+    }
+  </style>
+</head>
+<body>
+
+  <div class="datum-container">
+    <div class="datum-label">Datum:</div>
+    <div class="datum-wert" id="datum-wert"></div>
+  </div>
+
+  <script>
+    const heute = new Date();
+    const datumFormat = heute.toLocaleDateString('de-DE', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+    document.getElementById('datum-wert').textContent = datumFormat;
+  </script>
 <style>
   body {
     font-family: Arial, sans-serif;
@@ -79,18 +120,6 @@
 </style>
 </head>
 <header style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
-
-  
-
-  <!-- Titel mittig -->
-  <div style="flex: 1; text-align: center;">
-    <h1 style="margin: 0;">Arbeitssicherheit-Checkliste-2025</h1>
-  </div>
-
-  <!-- Datum rechts -->
-  <div style="text-align: right;">
-    <input id="datum" type="date" style="padding: 8px; font-size: 16px;"/>
-  </div>
 </header>
 <div class="form-section" style="max-width: 300px;">
 <div style="margin-bottom: 10px;">
