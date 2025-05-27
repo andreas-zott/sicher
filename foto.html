@@ -24,7 +24,6 @@
       transition: background-color 0.3s, color 0.3s;
     }
 
-    /* Dark Mode Styles */
     body.dark-mode {
       background-color: #121212;
       color: #ddd;
@@ -49,7 +48,7 @@
     body.dark-mode #formular {
       background: #1e1e1e;
       color: #ddd;
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
     }
 
     input[type="text"],
@@ -99,18 +98,23 @@
       color: #aaa;
     }
 
-    /* Dark mode button */
+    /* Dark Mode Button oben rechts */
     #darkModeToggle {
-      margin-bottom: 15px;
-      width: 160px;
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      padding: 4px 10px;
+      font-size: 16px;
+      z-index: 1000;
     }
   </style>
 </head>
 <body>
 
-  <h1>Arbeitssicherheit-Checkliste-2025</h1>
+  <!-- Dark Mode Icon oben rechts -->
+  <button id="darkModeToggle" class="btn btn-sm btn-outline-secondary" title="Dark Mode umschalten">🌙</button>
 
-  <button id="darkModeToggle" class="btn btn-secondary">🌙 Dark Mode</button>
+  <h1>Arbeitssicherheit-Checkliste-2025</h1>
 
   <form id="formular">
     <h2 class="text-center mb-4">Fotoformular</h2>
@@ -120,20 +124,17 @@
       <input type="text" id="name" name="name" class="form-control" required />
     </div>
 
-    <!-- Kamera-Upload -->
     <div class="mb-3">
       <label class="form-label">Foto aufnehmen:</label>
       <input type="file" id="foto" accept="image/*" capture="environment" />
       <button type="button" id="fotoBtn" class="btn btn-primary w-100 mt-2" aria-label="Foto mit Kamera aufnehmen">📷 Foto aufnehmen</button>
     </div>
 
-    <!-- Datei-Upload -->
     <div class="mb-3">
       <label for="upload" class="form-label">Datei auswählen:</label>
       <input type="file" id="upload" accept="image/*" class="form-control" />
     </div>
 
-    <!-- Vorschau -->
     <div class="mb-3">
       <img id="vorschau" class="img-fluid" style="display: none;" alt="Bildvorschau" />
     </div>
@@ -156,19 +157,15 @@
     // Dark Mode Umschalten
     darkModeToggle.addEventListener("click", () => {
       document.body.classList.toggle("dark-mode");
-      if (document.body.classList.contains("dark-mode")) {
-        darkModeToggle.textContent = "☀️ Light Mode";
-      } else {
-        darkModeToggle.textContent = "🌙 Dark Mode";
-      }
+      darkModeToggle.textContent = document.body.classList.contains("dark-mode") ? "☀️" : "🌙";
     });
 
-    // Öffnet Kamera
+    // Kamera öffnen
     fotoButton.addEventListener("click", () => {
       fotoInput.click();
     });
 
-    // Bild aus Kamera oder Datei
+    // Datei oder Kamera-Bild laden
     fotoInput.addEventListener("change", handleFile);
     uploadInput.addEventListener("change", handleFile);
 
@@ -208,10 +205,11 @@
       doc.save(`formular_${name}.pdf`);
     }
 
-    // Jahr setzen
+    // Jahreszahl automatisch setzen
     const aktuellesJahr = new Date().getFullYear();
     document.getElementById("jahr1").textContent = aktuellesJahr;
     document.getElementById("jahr2").textContent = aktuellesJahr;
   </script>
+
 </body>
 </html>
