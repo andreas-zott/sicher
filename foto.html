@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Fotoformular</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+   footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  padding: 15px;
+  background-color: #f4f4f4;
+  font-size: 10px;
+  box-shadow: 0 -1px 5px rgba(0,0,0,0.1);
+}
+
+  </style>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+    }
+
+    #formular {
+      background: white;
+      padding: 40px 50px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 16px;
+      margin-top: 15px;
+      font-size: 18px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    img {
+      margin-top: 15px;
+      max-width: 100%;
+      border-radius: 10px;
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 28px;
+    }
+
+    label {
+      font-size: 18px;
+      display: block;
+      margin-top: 20px;
+    }
+  </style>
+ <style>
+   body {
+  font-family: sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 5px 20px 40px 20px; /* Oben nur 5px */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+    h1 {
+      margin: 0 0 60px 0;
+      font-size: 28px;
+      color: #333;
+      text-align: center;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    form {
+      background: white;
+      padding: 40px 50px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 16px;
+      margin-top: 15px;
+      font-size: 18px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    img {
+      margin-top: 15px;
+      max-width: 100%;
+      border-radius: 10px;
+    }
+
+    label {
+      font-size: 18px;
+      display: block;
+      margin-top: 20px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Arbeitssicherheit-Checkliste-2025</h1>
+</head>
+<body>
+  <form id="formular">
+    <h2>Fotoformular</h2>
+
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name">
+
+    <label for="foto">Foto aufnehmen:</label>
+    <input type="file" id="foto" accept="image/*" capture="environment">
+
+    <img id="vorschau" style="display: none;">
+
+    <button type="button" onclick="speichernAlsPDF()">Als PDF speichern</button>
+  </form>
+
+  <script>
+    const fotoInput = document.getElementById("foto");
+    const vorschau = document.getElementById("vorschau");
+    let fotoDataUrl = "";
+
+    fotoInput.addEventListener("change", function () {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          fotoDataUrl = e.target.result;
+          vorschau.src = fotoDataUrl;
+          vorschau.style.display = "block";
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    async function speichernAlsPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const name = document.getElementById("name").value;
+      doc.setFontSize(14);
+      doc.text("Name: " + name, 10, 10);
+
+      if (fotoDataUrl) {
+        doc.text("Foto:", 10, 20);
+        doc.addImage(fotoDataUrl, "JPEG", 10, 25, 100, 75);
+      }
+
+      doc.save("formular.pdf");
+    }
+  </script>
+<footer style="
+  text-align: center;
+  padding: 15px 10px;
+  font-size: 14px;
+  color: #888;
+">
+  &copy; <span id="jahr1"></span> Andreas Zott. Alle Rechte vorbehalten. (Sifa) Arbeitssicherheit <span id="jahr2"></span>
+</footer>
+
+<script>
+  const aktuellesJahr = new Date().getFullYear();
+  document.getElementById("jahr1").textContent = aktuellesJahr;
+  document.getElementById("jahr2").textContent = aktuellesJahr;
+</script>
+
+</body>
+</html>
