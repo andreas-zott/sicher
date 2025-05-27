@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Arbeitssicherheit 2025</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
   <style>
     * {
       box-sizing: border-box;
@@ -25,10 +26,11 @@
       min-height: 100vh;
     }
 
-    .content {
+    main {
       flex: 1;
       padding: 40px;
       text-align: center;
+      position: relative;
     }
 
     .tile-container {
@@ -96,6 +98,10 @@
       text-align: left;
     }
 
+    .description-box li {
+      margin-bottom: 10px;
+    }
+
     footer {
       text-align: center;
       padding: 10px 0;
@@ -103,61 +109,111 @@
       color: #888;
       margin-top: 20px;
     }
+
+    /* Dark Mode Styles */
+    body.dark {
+      background-color: #1e1e1e;
+      color: #eee;
+    }
+
+    body.dark .tile {
+      background-color: #2c2c2c;
+      color: #eee;
+    }
+
+    body.dark .tile:hover {
+      box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+    }
+
+    body.dark .tile .icon {
+      color: #66b2ff;
+    }
+
+    body.dark .description-box {
+      background-color: #2a2a2a;
+      color: #ddd;
+    }
+
+    body.dark .tooltip {
+      background-color: #555;
+    }
+
+    body.dark footer {
+      color: #aaa;
+    }
+
+    #toggle-dark {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 8px;
+      background: #333;
+      color: #fff;
+      cursor: pointer;
+      font-size: 0.9em;
+    }
   </style>
 </head>
 <body>
   <div class="wrapper">
-    <div class="content">
-      <h1>Arbeitssicherheit 2025 </h1>
+    <main>
+      <button id="toggle-dark" aria-label="Dark Mode umschalten">🌙 Dark Mode</button>
+
+      <h1>Arbeitssicherheit 2025</h1>
       <br><br><br>
 
       <div class="tile-container">
-        <a href="https://andreas-zott.github.io/sicher/unten-farbig.html" class="tile">
-          <div class="icon"><i class="fas fa-file-archive"></i></div>
-          <h2>Checkliste farbig</h2>
-          <p>IPad Version</p>
+        <a href="https://andreas-zott.github.io/sicher/unten-farbig.html" class="tile" aria-label="Checkliste farbig, Unterschrift unten, iPad-Version">
+          <div class="icon"><i class="fas fa-clipboard-check"></i></div>
+          <h2>Checkliste iPad</h2>
+          <p>Unterschrift unten</p>
           <span class="tooltip">Öffnet die farbige Checkliste (unten)</span>
         </a>
 
-        <a href="https://andreas-zott.github.io/sicher/oben-farbig.html" class="tile">
-          <div class="icon"><i class="fas fa-file-archive"></i></div>
-          <h2>Checkliste farbig</h2>
+        <a href="https://andreas-zott.github.io/sicher/oben-farbig.html" class="tile" aria-label="Checkliste farbig, Unterschrift oben">
+          <div class="icon"><i class="fas fa-clipboard-list"></i></div>
+          <h2>Checkliste oben</h2>
           <p>Unterschrift oben</p>
           <span class="tooltip">Öffnet die farbige Checkliste (oben)</span>
         </a>
 
-        <a href="https://andreas-zott.github.io/sicher/detaillierter.html" class="tile">
-          <div class="icon"><i class="fas fa-file-archive"></i></div>
-          <h2>detailliertere Checkliste</h2>
+        <a href="https://andreas-zott.github.io/sicher/detaillierter.html" class="tile" aria-label="Detailliertere Checkliste, Unterschrift unten">
+          <div class="icon"><i class="fas fa-list-alt"></i></div>
+          <h2>Detaillierte Checkliste</h2>
           <p>Unterschrift unten</p>
           <span class="tooltip">Öffnet eine detailliertere Checkliste (unten)</span>
         </a>
 
-        <a href="https://andreas-zott.github.io/sicher/help.html" class="tile">
-          <div class="icon"><i class="fas fa-file-archive"></i></div>
+        <a href="https://andreas-zott.github.io/sicher/help.html" class="tile" aria-label="Anleitung für PDF-Versand auf dem iPad">
+          <div class="icon"><i class="fas fa-info-circle"></i></div>
           <h2>Anleitung</h2>
-          <p>IPad</p>
-          <span class="tooltip">Anleitung: Webseite in Safari öffnen und als PDF versenden (iPad)</span>
+          <p>PDF auf iPad</p>
+          <span class="tooltip">Webseite in Safari öffnen und als PDF versenden (iPad)</span>
         </a>
-<a href="https://andreas-zott.github.io/sicher/foto.html" class="tile">
-          <div class="icon"><i class="fas fa-file-archive"></i></div>
+
+        <a href="https://andreas-zott.github.io/sicher/foto.html" class="tile" aria-label="Fotoformular zur Aufnahme und PDF-Versand">
+          <div class="icon"><i class="fas fa-camera"></i></div>
           <h2>Fotoformular</h2>
-          <p>Kamera</p>
+          <p>Kamera & PDF</p>
           <span class="tooltip">Das Fotoformular nimmt Fotos auf und versendet diese als PDF</span>
         </a>
       </div>
 
       <div class="description-box">
         <strong>Beschreibung:</strong><br><br>
-        • Checklisten für den Einzelhandel<br>
-        • Farbig unterteilt oder klassische Unterteilung<br>
-        • Mit Unterschriftenfeld einmal oben sowie unten<br>
-        • Das Unterschriftenfeld läuft stabil auf einem IPad ohne Scrollbewegung<br>
-        • Eine detailliertere Checkliste 2025 wurde beigefügt<br>
-        • Das Fotoformular nimmt Fotos auf und versendet diese als PDF<br>
-        • Es können weitere Bereiche und Fragen nach Wunsch eingefügt werden
+        <ul>
+          <li><i class="fas fa-check-circle" style="color:#007bff;"></i> Checklisten für den Einzelhandel</li>
+          <li><i class="fas fa-check-circle" style="color:#007bff;"></i> Farbig unterteilt oder klassische Unterteilung</li>
+          <li><i class="fas fa-check-circle" style="color:#007bff;"></i> Mit Unterschriftenfeld oben oder unten</li>
+          <li><i class="fas fa-check-circle" style="color:#007bff;"></i> Stabile Darstellung auf dem iPad (kein Scrollen beim Unterschreiben)</li>
+          <li><i class="fas fa-check-circle" style="color:#007bff;"></i> Detailliertere Checkliste 2025 enthalten</li>
+          <li><i class="fas fa-check-circle" style="color:#007bff;"></i> Fotoformular zur Bildaufnahme und PDF-Versand</li>
+          <li><i class="fas fa-check-circle" style="color:#007bff;"></i> Erweiterbar mit weiteren Bereichen & Fragen</li>
+        </ul>
       </div>
-    </div>
+    </main>
 
     <footer>
       &copy; <span id="jahr1"></span> Andreas Zott. Alle Rechte vorbehalten. (Sifa) Arbeitssicherheit <span id="jahr2"></span>
@@ -168,6 +224,21 @@
     const jahr = new Date().getFullYear();
     document.getElementById('jahr1').textContent = jahr;
     document.getElementById('jahr2').textContent = jahr;
+
+    const toggleButton = document.getElementById('toggle-dark');
+    const prefersDark = localStorage.getItem('dark-mode') === 'true';
+
+    if (prefersDark) {
+      document.body.classList.add('dark');
+      toggleButton.textContent = '☀️ Light Mode';
+    }
+
+    toggleButton.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      const isDark = document.body.classList.contains('dark');
+      toggleButton.textContent = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
+      localStorage.setItem('dark-mode', isDark);
+    });
   </script>
 </body>
 </html>
