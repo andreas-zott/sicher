@@ -1,23 +1,74 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Arbeitssicherheit 2025</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; font-family: Arial, sans-serif; background-color: #d6eaff; color: #333; }
-    .wrapper { display: flex; flex-direction: column; min-height: 100vh; }
-    main { flex: 1; padding: 40px; text-align: center; position: relative; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html,
+    body {
+      height: 100%;
+      font-family: Arial, sans-serif;
+      background-color: #d6eaff;
+      color: #333;
+    }
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    main {
+      flex: 1;
+      padding: 40px;
+      text-align: center;
+      position: relative;
+    }
 
+    /* Dark Mode Button klein, rund, fixiert oben rechts */
+    #toggle-dark {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      padding: 6px 10px;
+      border-radius: 50%;
+      background: #333;
+      color: #fff;
+      cursor: pointer;
+      font-size: 1.2em;
+      width: 40px;
+      height: 40px;
+      line-height: 26px;
+      text-align: center;
+      border: none;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      transition: background-color 0.3s;
+    }
+    #toggle-dark:hover {
+      background-color: #555;
+    }
+
+    /* Tile-Container: immer 3 Tiles nebeneinander, mit Abstand */
     .tile-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: 20px;
       max-width: 1200px;
       margin: 0 auto;
+    }
+    @media (max-width: 700px) {
+      .tile-container {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      }
     }
 
     .tile {
@@ -37,7 +88,11 @@
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
     }
 
-    .tile .icon { font-size: 36px; margin-bottom: 12px; color: #007bff; }
+    .tile .icon {
+      font-size: 36px;
+      margin-bottom: 12px;
+      color: #007bff;
+    }
 
     .tooltip {
       visibility: hidden;
@@ -57,20 +112,26 @@
       font-size: 0.85em;
     }
 
-    .tile:hover .tooltip { visibility: visible; opacity: 1; }
+    .tile:hover .tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
 
+    /* Beschreibung-Container mit gleicher Breite wie Tile-Container */
     .description-box {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 24px;
       background-color: #fff;
       border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      padding: 24px;
-      max-width: 800px;
-      margin: 40px auto;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       font-size: 1.1em;
       text-align: left;
     }
 
-    .description-box li { margin-bottom: 10px; }
+    .description-box li {
+      margin-bottom: 10px;
+    }
 
     footer {
       text-align: center;
@@ -130,25 +191,14 @@
       color: #111;
     }
 
-    #toggle-dark {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      padding: 8px 12px;
-      border: none;
-      border-radius: 8px;
-      background: #333;
-      color: #fff;
-      cursor: pointer;
-      font-size: 0.9em;
-    }
-
     .modal {
       display: none;
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6);
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
       z-index: 9999;
     }
 
@@ -176,10 +226,10 @@
 <body>
   <div class="wrapper">
     <main>
-      <button id="toggle-dark" aria-label="Dark Mode umschalten">🌙 Dark Mode</button>
+      <button id="toggle-dark" aria-label="Dark Mode umschalten" title="Dark Mode umschalten">🌙</button>
 
       <h1>Arbeitssicherheit 2025</h1>
-      <br><br><br>
+      <br /><br /><br />
 
       <div class="tile-container">
         <a href="unten-farbig.html" class="tile">
@@ -214,33 +264,56 @@
           <div class="icon"><i class="fas fa-camera"></i></div>
           <h2>Fotoformular</h2>
           <p>Kamera & PDF</p>
-          <span class="tooltip">Foto aufnehmen und speichern</span>
+          <span class="tooltip">Fotos aufnehmen und speichern</span>
         </a>
 <a href="Kameraaufnahme.html" class="tile">
           <div class="icon"><i class="fas fa-camera"></i></div>
           <h2>Kamera</h2>
           <p>Kamera & PDF</p>
-          <span class="tooltip">Checkliste mit Kameraaufnahme & Bildvorschau</span>
+          <span class="tooltip">Fotos aufnehmen mit Marktnummer</span>
         </a>
       </div>
 
       <div class="description-box">
-        <strong>Beschreibung:</strong><br><br>
+        <strong>Beschreibung:</strong><br /><br />
         <ul>
-          <li><i class="fas fa-check-circle" style="color:#007bff;"></i> Checklisten für den Einzelhandel</li>
-          <li><i class="fas fa-check-circle" style="color:#007bff;"></i> Farbig unterteilt oder klassische Unterteilung</li>
-          <li><i class="fas fa-check-circle" style="color:#007bff;"></i> Mit Unterschriftenfeld oben oder unten</li>
-          <li><i class="fas fa-check-circle" style="color:#007bff;"></i> Stabile Darstellung auf dem iPad (kein Scrollen beim Unterschreiben)</li>
-          <li><i class="fas fa-check-circle" style="color:#007bff;"></i> Detailliertere Checkliste 2025 enthalten</li>
-          <li><i class="fas fa-check-circle" style="color:#007bff;"></i> Fotoformular zur Bildaufnahme und PDF-Versand</li>
-          <li><i class="fas fa-check-circle" style="color:#007bff;"></i> Erweiterbar mit weiteren Bereichen & Fragen</li>
+          <li>
+            <i class="fas fa-check-circle" style="color:#007bff;"></i> Checklisten für
+            den Einzelhandel
+          </li>
+          <li>
+            <i class="fas fa-check-circle" style="color:#007bff;"></i> Farbig
+            unterteilt oder klassische Unterteilung
+          </li>
+          <li>
+            <i class="fas fa-check-circle" style="color:#007bff;"></i> Mit
+            Unterschriftenfeld oben oder unten
+          </li>
+          <li>
+            <i class="fas fa-check-circle" style="color:#007bff;"></i> Stabile
+            Darstellung auf dem iPad (kein Scrollen beim Unterschreiben)
+          </li>
+          <li>
+            <i class="fas fa-check-circle" style="color:#007bff;"></i> Detailliertere
+            Checkliste 2025 enthalten
+          </li>
+          <li>
+            <i class="fas fa-check-circle" style="color:#007bff;"></i> Fotoformular zur
+            Bildaufnahme und PDF-Versand
+          </li>
+          <li>
+            <i class="fas fa-check-circle" style="color:#007bff;"></i> Erweiterbar
+            mit weiteren Bereichen &amp; Fragen
+          </li>
         </ul>
       </div>
     </main>
 
     <footer>
-      &copy; <span id="jahr1"></span> Andreas Zott. Alle Rechte vorbehalten. (Sifa) Arbeitssicherheit <span id="jahr2"></span><br>
-      <a href="#" onclick="document.getElementById('privacyModal').style.display='block'">Datenschutzerklärung</a> |
+      &copy; <span id="jahr1"></span> Andreas Zott. Alle Rechte vorbehalten. (Sifa)
+      Arbeitssicherheit <span id="jahr2"></span><br />
+      <a href="#" onclick="document.getElementById('privacyModal').style.display='block'">Datenschutzerklärung</a>
+      |
       <a href="#" onclick="document.getElementById('impressumModal').style.display='block'">Impressum</a>
     </footer>
   </div>
@@ -249,21 +322,38 @@
   <div id="privacyModal" class="modal">
     <div class="modal-content">
       <h2>Datenschutzerklärung</h2>
-<p>Der Schutz Ihrer persönlichen Daten ist uns ein wichtiges Anliegen. <br>Diese Website verarbeitet keinerlei personenbezogene Daten und speichert keine Eingaben, Unterschriften oder Fotos dauerhaft. Die Nutzung erfolgt vollständig lokal im Browser (Client-seitig), ohne Serververbindung oder Datenübertragung an Dritte.</p>
+      <p>
+        Der Schutz Ihrer persönlichen Daten ist uns ein wichtiges Anliegen. <br />
+        Diese Website verarbeitet keinerlei personenbezogene Daten und speichert
+        keine Eingaben, Unterschriften oder Fotos dauerhaft. Die Nutzung erfolgt
+        vollständig lokal im Browser (Client-seitig), ohne Serververbindung oder
+        Datenübertragung an Dritte.
+      </p>
 
-  <ul>
-      <p>Diese Website verarbeitet keinerlei personenbezogene Daten. <br>Alle eingegebenen Informationen, Fotos und Unterschriften werden ausschließlich lokal im Browser verarbeitet und nicht gespeichert oder übertragen.</p>
       <ul>
-
-        <li>✅ Keine Serververbindung</li>
-        <li>✅ Keine Speicherung von Daten</li>
-        <li>✅ Keine Cookies oder Analyse-Tools</li>
+        <p>
+          Diese Website verarbeitet keinerlei personenbezogene Daten. <br />
+          Alle eingegebenen Informationen, Fotos und Unterschriften werden
+          ausschließlich lokal im Browser verarbeitet und nicht gespeichert oder
+          übertragen.
+        </p>
+        <ul>
+          <li>✅ Keine Serververbindung</li>
+          <li>✅ Keine Speicherung von Daten</li>
+          <li>✅ Keine Cookies oder Analyse-Tools</li>
+        </ul>
+        <p>
+          Die erzeugten PDFs werden nur lokal erstellt und können manuell
+          gespeichert oder versendet werden.<br />
+          Für die Versendung sind Sie selbst verantwortlich.
+        </p>
+        <p>
+          Verantwortlich gemäß DSGVO:<br />
+          Andreas Zott<br />
+          E-Mail: [quadzott@gmail.com]
+        </p>
+        <button onclick="document.getElementById('privacyModal').style.display='none'">Schließen</button>
       </ul>
-      <p>Die erzeugten PDFs werden nur lokal erstellt und können manuell gespeichert oder versendet werden.<br> Für die Versendung sind Sie selbst verantwortlich.</p>
-      <p>Verantwortlich gemäß DSGVO:<br>
-        Andreas Zott<br>
-        E-Mail: [quadzott@gmail.com]</p>
-      <button onclick="document.getElementById('privacyModal').style.display='none'">Schließen</button>
     </div>
   </div>
 
@@ -272,33 +362,39 @@
     <div class="modal-content">
       <h2>Impressum</h2>
       <p>Angaben gemäß § 5 TMG:</p>
-      <p>Andreas Zott<br>         
-         [58513]<br>
-         E-Mail: [quadzott@gmail.com]</p>
-      <p>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br>
-         Andreas Zott, [Adresse wie oben]</p>
+      <p>
+        Andreas Zott<br />
+        [58513]<br />
+        E-Mail: [quadzott@gmail.com]
+      </p>
+      <p>
+        Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
+        Andreas Zott, [Adresse wie oben]
+      </p>
       <button onclick="document.getElementById('impressumModal').style.display='none'">Schließen</button>
     </div>
   </div>
 
   <script>
     const jahr = new Date().getFullYear();
-    document.getElementById('jahr1').textContent = jahr;
-    document.getElementById('jahr2').textContent = jahr;
+    document.getElementById("jahr1").textContent = jahr;
+    document.getElementById("jahr2").textContent = jahr;
 
-    const toggleButton = document.getElementById('toggle-dark');
-    const prefersDark = localStorage.getItem('dark-mode') === 'true';
+    const toggleButton = document.getElementById("toggle-dark");
+    const prefersDark = localStorage.getItem("dark-mode") === "true";
 
     if (prefersDark) {
-      document.body.classList.add('dark');
-      toggleButton.textContent = '☀️ Light Mode';
+      document.body.classList.add("dark");
+      toggleButton.textContent = "☀️";
+      toggleButton.title = "Light Mode umschalten";
     }
 
-    toggleButton.addEventListener('click', () => {
-      document.body.classList.toggle('dark');
-      const isDark = document.body.classList.contains('dark');
-      toggleButton.textContent = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
-      localStorage.setItem('dark-mode', isDark);
+    toggleButton.addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+      const isDark = document.body.classList.contains("dark");
+      toggleButton.textContent = isDark ? "☀️" : "🌙";
+      toggleButton.title = isDark ? "Light Mode umschalten" : "Dark Mode umschalten";
+      localStorage.setItem("dark-mode", isDark);
     });
   </script>
 </body>
