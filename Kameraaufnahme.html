@@ -1,456 +1,326 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Kameraaufnahme & Bildvorschau mit PDF Export</title>
-<style>
-  /* Hellmodus */
-  body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-    background: #cce7ff;
-    color: #222;
-    transition: background-color 0.3s, color 0.3s;
-  }
-  h1 {
-    text-align: center;
-  }
-  form {
-    max-width: 600px;
-    margin: auto;
-    background: white;
-    padding: 15px 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
-    position: relative;
-    transition: background-color 0.3s, color 0.3s;
-  }
-  #fotoVorschau {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-top: 15px;
-    justify-content: center;
-  }
-  .previewBild {
-    position: relative;
-    width: 130px;
-    height: 130px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    overflow: hidden;
-    background: #eee;
-    transition: background-color 0.3s, border-color 0.3s;
-  }
-  .previewBild img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  .loeschenBtn {
-    position: absolute;
-    top: 3px;
-    right: 3px;
-    background: rgba(255,0,0,0.8);
-    border: none;
-    color: white;
-    font-weight: bold;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-    line-height: 22px;
-    text-align: center;
-    font-size: 18px;
-    transition: background-color 0.3s;
-  }
-  .loeschenBtn:hover {
-    background: rgba(255,0,0,1);
-  }
-  input[type="file"] {
-    display: none;
-  }
-  .buttonContainer {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 15px;
-  }
-  button.cameraBtn {
-    padding: 10px 20px;
-    font-size: 16px;
-    background: #007bff;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  button.cameraBtn:disabled {
-    background: #999;
-    cursor: not-allowed;
-  }
-  button.cameraBtn:hover:not(:disabled) {
-    background: #0056b3;
-  }
-  button#submitBtn, button#pdfBtn {
-    display: block;
-    margin: 30px auto 0 auto;
-    padding: 10px 25px;
-    font-size: 18px;
-    background: #28a745;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  button#submitBtn:hover, button#pdfBtn:hover {
-    background: #1e7e34;
-  }
-  label {
-    font-weight: bold;
-    display: block;
-    margin-top: 15px;
-  }
-  input[type="text"], input[type="date"] {
-    width: 100%;
-    padding: 8px 10px;
-    font-size: 16px;
-    margin-top: 5px;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-  }
-  footer {
-    text-align: center;
-    margin-top: 60px;
-    font-size: 12px;
-    color: #777;
-    transition: color 0.3s;
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Arbeitssicherheit-Checkliste-2025</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body {
+      background-color: #d0e7ff; /* Hellblau */
+      color: #212529;
+      padding: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      position: relative;
+    }
+    body.dark-mode {
+      background-color: #121212;
+      color: #eee;
+    }
+    body.dark-mode input,
+    body.dark-mode select,
+    body.dark-mode button {
+      background-color: #333;
+      color: #eee;
+      border-color: #555;
+    }
+    body.dark-mode label {
+      color: #ccc;
+    }
 
-  /* Dark Mode Styles */
-  body.dark-mode {
-    background: #121212;
-    color: #ddd;
-  }
-  body.dark-mode form {
-    background: #1e1e1e;
-    color: #ddd;
-    box-shadow: 0 0 15px rgba(255,255,255,0.1);
-  }
-  body.dark-mode .previewBild {
-    background: #333;
-    border-color: #555;
-  }
-  body.dark-mode .loeschenBtn {
-    background: rgba(255, 80, 80, 0.8);
-  }
-  body.dark-mode .loeschenBtn:hover {
-    background: rgba(255, 80, 80, 1);
-  }
-  body.dark-mode button.cameraBtn {
-    background: #3399ff;
-    color: #eee;
-  }
-  body.dark-mode button.cameraBtn:disabled {
-    background: #555;
-  }
-  body.dark-mode button.cameraBtn:hover:not(:disabled) {
-    background: #66b2ff;
-  }
-  body.dark-mode button#submitBtn, body.dark-mode button#pdfBtn {
-    background: #28a745;
-    color: #eee;
-  }
-  body.dark-mode button#submitBtn:hover, body.dark-mode button#pdfBtn:hover {
-    background: #1e7e34;
-  }
-  body.dark-mode input[type="text"], body.dark-mode input[type="date"] {
-    background: #2b2b2b;
-    color: #ddd;
-    border-color: #555;
-  }
-  body.dark-mode footer {
-    color: #aaa;
-  }
+    /* Box / Rahmen */
+    .container-box {
+      background-color: white;
+      max-width: 800px;
+      width: 100%;
+      padding: 2rem 2rem 3rem 2rem;
+      box-shadow: 0 0 15px rgba(0,0,0,0.15);
+      border-radius: 12px;
+      box-sizing: border-box;
+    }
+    body.dark-mode .container-box {
+      background-color: #1e1e1e;
+      box-shadow: 0 0 20px rgba(255,255,255,0.1);
+    }
 
-  /* Dark Mode Toggle Button */
-  #darkModeToggle {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    background: #007bff;
-    border: none;
-    color: white;
-    padding: 6px 12px;
-    font-size: 12px;
-    border-radius: 20px;
-    cursor: pointer;
-    user-select: none;
-    transition: background-color 0.3s;
-  }
-  #darkModeToggle:hover {
-    background: #0056b3;
-  }
-  body.dark-mode #darkModeToggle {
-    background: #3399ff;
-    color: #222;
-  }
-  body.dark-mode #darkModeToggle:hover {
-    background: #66b2ff;
-  }
-</style>
+    #vorschauContainer img {
+      border-radius: 10px;
+      max-height: 150px;
+      margin-right: 10px;
+      margin-top: 10px;
+      object-fit: cover;
+      display: block;
+    }
+    .delete-btn {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background-color: rgba(255, 0, 0, 0.8);
+      color: white;
+      font-weight: bold;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+    }
+    .img-wrapper {
+      position: relative;
+      display: inline-block;
+      max-width: 150px;
+    }
+
+    /* Responsive: iPad und kleiner */
+    @media (max-width: 768px) {
+      .container-box {
+        padding: 1.5rem 1rem 2rem 1rem;
+        max-width: 100%;
+      }
+      #vorschauContainer img {
+        max-height: 120px;
+        max-width: 100px;
+      }
+      .img-wrapper {
+        max-width: 100px;
+      }
+    }
+
+    footer {
+      font-size: 0.8rem;
+      color: #666c7a; /* helles Grau */
+      margin-top: 1.5rem;
+    }
+    body.dark-mode footer {
+      color: #aaa; /* heller im Dark Mode */
+    }
+
+    /* Dark Mode Button fixieren rechts oben */
+    #darkModeToggle {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 1000;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      padding: 0;
+    }
+  </style>
 </head>
 <body>
 
-<h1>Checkliste mit Kameraaufnahme & Bildvorschau</h1>
+  <button id="darkModeToggle" class="btn btn-outline-secondary" title="Dark Mode umschalten">🌙</button>
 
-<form id="checklistForm">
-  <button type="button" id="darkModeToggle" aria-label="Dark Mode umschalten">🌙</button>
+  <div class="container-box">
 
-  <label for="datum">Datum:</label>
-  <input type="date" id="datum" name="datum" required />
+    <h1 class="mb-4 text-center">Arbeitssicherheit-Checkliste-2025</h1>
 
-  <label for="marktnummer">Marktnummer:</label>
-  <input type="text" id="marktnummer" name="marktnummer" required />
+    <form id="formular" class="mb-4">
 
-  <label for="name">Name:</label>
-  <input type="text" id="name" name="name" required />
+      <div class="mb-3">
+        <label for="datum" class="form-label">Datum:</label>
+        <input type="date" id="datum" name="datum" class="form-control" required />
+      </div>
 
-  <label for="sifa">SiFa:</label>
-  <input type="text" id="sifa" name="sifa" required />
+      <div class="mb-3">
+        <label for="marktnummer" class="form-label">Marktnummer:</label>
+        <input type="text" id="marktnummer" name="marktnummer" class="form-control" required />
+      </div>
 
-  <label>Fotos (maximal 16 Bilder):</label>
-  <div class="buttonContainer">
-    <button type="button" id="btnKamera" class="cameraBtn">Foto aufnehmen</button>
-    <button type="button" id="btnGalerie" class="cameraBtn">Bild auswählen</button>
+      <div class="mb-3">
+        <label for="name" class="form-label">Name:</label>
+        <input type="text" id="name" name="name" class="form-control" required />
+      </div>
+
+      <div class="mb-3">
+        <label for="sifa" class="form-label">SiFa:</label>
+        <input type="text" id="sifa" name="sifa" class="form-control" required />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Foto aufnehmen (Kamera):</label>
+        <input type="file" id="foto" accept="image/*" capture="environment" multiple style="display:none;" />
+        <button type="button" id="fotoBtn" class="btn btn-primary w-100">📷 Foto aufnehmen</button>
+      </div>
+
+      <div class="mb-3">
+        <label for="upload" class="form-label">Dateien auswählen (Galerie):</label>
+        <input type="file" id="upload" accept="image/*" multiple class="form-control" />
+      </div>
+
+      <div id="vorschauContainer" class="mb-3"></div>
+
+      <button type="button" class="btn btn-success w-100" onclick="speichernAlsPDF()">💾 Als PDF speichern</button>
+    </form>
+
+    <footer class="text-center">
+      &copy; <span id="jahr1"></span> Andreas Zott. Alle Rechte vorbehalten. (SiFa) Arbeitssicherheit <span id="jahr2"></span>
+    </footer>
+
   </div>
 
-  <!-- Unsichtbare File Inputs -->
-  <input type="file" id="fotoInputKamera" accept="image/*" capture="environment" />
-  <input type="file" id="fotoInputGalerie" accept="image/*" multiple />
+  <script>
+    const fotoInput = document.getElementById("foto");
+    const uploadInput = document.getElementById("upload");
+    const fotoButton = document.getElementById("fotoBtn");
+    const vorschauContainer = document.getElementById("vorschauContainer");
+    const darkModeToggle = document.getElementById("darkModeToggle");
+    let bilder = [];
 
-  <div id="fotoVorschau"></div>
-
-  <button type="button" id="pdfBtn">Als PDF speichern</button>
-</form>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<script>
-  const { jsPDF } = window.jspdf;
-
-  const btnKamera = document.getElementById('btnKamera');
-  const btnGalerie = document.getElementById('btnGalerie');
-  const fotoInputKamera = document.getElementById('fotoInputKamera');
-  const fotoInputGalerie = document.getElementById('fotoInputGalerie');
-  const fotoVorschau = document.getElementById('fotoVorschau');
-  const form = document.getElementById('checklistForm');
-  const darkModeToggle = document.getElementById('darkModeToggle');
-  const pdfBtn = document.getElementById('pdfBtn');
-
-  let gespeicherteBilder = [];
-
-  function zeigeVorschau() {
-    fotoVorschau.innerHTML = '';
-
-    gespeicherteBilder.forEach((file, index) => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const div = document.createElement('div');
-        div.classList.add('previewBild');
-
-        const img = document.createElement('img');
-        img.src = e.target.result;
-        img.alt = `Foto ${index + 1}`;
-
-        const btnLoeschen = document.createElement('button');
-        btnLoeschen.classList.add('loeschenBtn');
-        btnLoeschen.innerHTML = '&times;';
-        btnLoeschen.title = 'Bild löschen';
-        btnLoeschen.onclick = (event) => {
-          event.preventDefault();
-          gespeicherteBilder.splice(index, 1);
-          zeigeVorschau();
-          updateButtons();
-        };
-
-        div.appendChild(img);
-        div.appendChild(btnLoeschen);
-        fotoVorschau.appendChild(div);
-      };
-      reader.readAsDataURL(file);
+    // Dark Mode Umschalter
+    darkModeToggle.addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+      darkModeToggle.textContent = document.body.classList.contains("dark-mode") ? "☀️" : "🌙";
     });
 
-    updateButtons();
-  }
+    // Kamera-Button öffnet verstecktes File Input
+    fotoButton.addEventListener("click", () => {
+      fotoInput.click();
+    });
 
-  function updateButtons() {
-    const maxBilder = 16;
-    const istVoll = gespeicherteBilder.length >= maxBilder;
-    btnKamera.disabled = istVoll;
-    btnGalerie.disabled = istVoll;
-  }
+    fotoInput.addEventListener("change", handleFile);
+    uploadInput.addEventListener("change", handleFile);
 
-  btnKamera.addEventListener('click', () => {
-    if (gespeicherteBilder.length >= 16) {
-      alert('Maximal 16 Bilder erlaubt.');
-      return;
-    }
-    fotoInputKamera.click();
-  });
-
-  btnGalerie.addEventListener('click', () => {
-    if (gespeicherteBilder.length >= 16) {
-      alert('Maximal 16 Bilder erlaubt.');
-      return;
-    }
-    fotoInputGalerie.click();
-  });
-
-  fotoInputKamera.addEventListener('change', (event) => {
-    if (event.target.files.length === 0) return;
-    if (gespeicherteBilder.length >= 16) {
-      alert('Maximal 16 Bilder erlaubt.');
-      return;
-    }
-    gespeicherteBilder.push(event.target.files[0]);
-    zeigeVorschau();
-    fotoInputKamera.value = '';
-  });
-
-  fotoInputGalerie.addEventListener('change', (event) => {
-    const neueDateien = Array.from(event.target.files);
-
-    if (gespeicherteBilder.length + neueDateien.length > 16) {
-      alert('Maximal 16 Bilder erlaubt.');
-      fotoInputGalerie.value = '';
-      return;
-    }
-
-    gespeicherteBilder = gespeicherteBilder.concat(neueDateien);
-    zeigeVorschau();
-    fotoInputGalerie.value = '';
-  });
-
-  form.addEventListener('submit', (event) => {
-    event.preventDefault();
-
-    if (gespeicherteBilder.length === 0) {
-      if (!confirm('Sie haben keine Fotos hinzugefügt. Möchten Sie trotzdem absenden?')) {
-        return;
+    // Bilder laden und Vorschau anzeigen
+    function handleFile(event) {
+      const files = event.target.files;
+      for (const file of files) {
+        if (file && file.type.startsWith("image/")) {
+          if (bilder.length >= 16) {
+            alert("Maximal 16 Bilder erlaubt.");
+            break;
+          }
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            bilder.push(e.target.result);
+            renderVorschau();
+          };
+          reader.readAsDataURL(file);
+        }
       }
+      // Input zurücksetzen, damit gleiche Dateien nochmal ausgewählt werden können
+      event.target.value = "";
     }
 
-    alert('Formular wurde abgesendet. Siehe Konsole für Details.');
-    // Hier kann Server-Upload oder weitere Verarbeitung erfolgen
-    const formData = new FormData(form);
-    gespeicherteBilder.forEach(file => formData.append('fotos[]', file));
-    console.log('Formulardaten:');
-    for (let pair of formData.entries()) {
-      if(pair[0] === 'fotos[]'){
-        console.log(pair[0] + ':', pair[1].name);
-      } else {
-        console.log(pair[0] + ':', pair[1]);
-      }
-    }
-  });
+    // Vorschau mit Lösch-Button rendern
+    function renderVorschau() {
+      vorschauContainer.innerHTML = "";
+      bilder.forEach((src, index) => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "img-wrapper";
 
-  darkModeToggle.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-    if(document.body.classList.contains('dark-mode')){
-      darkModeToggle.textContent = '☀️';
-      darkModeToggle.title = 'Light Mode umschalten';
-    } else {
-      darkModeToggle.textContent = '🌙';
-      darkModeToggle.title = 'Dark Mode umschalten';
-    }
-  });
+        const imgElement = document.createElement("img");
+        imgElement.src = src;
+        imgElement.alt = `Foto ${index + 1}`;
 
-  pdfBtn.addEventListener('click', () => {
-    if (gespeicherteBilder.length === 0) {
-      alert('Bitte mindestens ein Foto hinzufügen, um das PDF zu erzeugen.');
-      return;
-    }
+        const deleteBtn = document.createElement("div");
+        deleteBtn.textContent = "✖";
+        deleteBtn.className = "delete-btn";
+        deleteBtn.title = "Foto löschen";
+        deleteBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          bilder.splice(index, 1);
+          renderVorschau();
+        });
 
-    const datum = document.getElementById('datum').value;
-    const marktnummer = document.getElementById('marktnummer').value;
-    const name = document.getElementById('name').value;
-    const sifa = document.getElementById('sifa').value;
-
-    if(!datum || !marktnummer || !name || !sifa){
-      alert('Bitte alle Pflichtfelder ausfüllen.');
-      return;
-    }
-
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
-
-    const margin = 15;
-    const imageSize = 80; // Breite/Höhe der Fotos
-    const imagesPerPage = 4;
-    const padding = 10;
-
-    // Text oben
-    pdf.setFontSize(16);
-    pdf.text('Checkliste mit Fotos', pageWidth / 2, margin + 10, { align: 'center' });
-
-    pdf.setFontSize(12);
-    pdf.text(`Datum: ${datum}`, margin, margin + 25);
-    pdf.text(`Marktnummer: ${marktnummer}`, margin, margin + 35);
-    pdf.text(`Name: ${name}`, margin, margin + 45);
-    pdf.text(`SiFa: ${sifa}`, margin, margin + 55);
-
-    // Fotos werden nach 4 pro Seite gruppiert
-    let xPositions = [margin, margin + imageSize + padding];
-    let yPositions = [margin + 70, margin + 70 + imageSize + padding];
-
-    const addImageToPDF = (imgData, x, y, size) => {
-      pdf.addImage(imgData, 'JPEG', x, y, size, size);
-    };
-
-    // Funktion um Bilder als DataURL zu laden (Promise)
-    function readFileAsDataURL(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = e => resolve(e.target.result);
-        reader.onerror = e => reject(e);
-        reader.readAsDataURL(file);
+        wrapper.appendChild(imgElement);
+        wrapper.appendChild(deleteBtn);
+        vorschauContainer.appendChild(wrapper);
       });
     }
 
-    (async () => {
-      for(let i = 0; i < gespeicherteBilder.length; i++) {
-        if(i > 0 && i % imagesPerPage === 0) {
-          pdf.addPage();
-          // Seitenkopf
-          pdf.setFontSize(16);
-          pdf.text('Checkliste mit Fotos (Fortsetzung)', pageWidth / 2, margin + 10, { align: 'center' });
-        }
+    // PDF speichern mit jsPDF
+    async function speichernAlsPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
 
-        const imgData = await readFileAsDataURL(gespeicherteBilder[i]);
-        const posIndex = i % imagesPerPage;
-        const x = xPositions[posIndex % 2];
-        const y = yPositions[Math.floor(posIndex / 2)];
+      const datum = document.getElementById("datum").value.trim();
+      const marktnummer = document.getElementById("marktnummer").value.trim();
+      const name = document.getElementById("name").value.trim();
+      const sifa = document.getElementById("sifa").value.trim();
 
-        addImageToPDF(imgData, x, y, imageSize);
+      if (!datum || !marktnummer || !name || !sifa) {
+        alert("Bitte fülle alle Pflichtfelder aus (Datum, Marktnummer, Name, SiFa).");
+        return;
       }
 
-      pdf.output('dataurlnewwindow'); // PDF im neuen Tab/Fenster anzeigen
-    })();
-  });
+      doc.setFontSize(14);
+      let yPos = 20;
+      doc.text(`Datum: ${datum}`, 10, yPos); yPos += 10;
+      doc.text(`Marktnummer: ${marktnummer}`, 10, yPos); yPos += 10;
+      doc.text(`Name: ${name}`, 10, yPos); yPos += 10;
+      doc.text(`SiFa: ${sifa}`, 10, yPos); yPos += 15;
 
-  updateButtons();
-</script>
+      const margin = 10;
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
 
-<footer>
-  &copy; 2025 Andreas Zott. Alle Rechte vorbehalten. (SiFa) Arbeitssicherheit 2025
-</footer>
+      const maxWidth = (pageWidth - margin * 3) / 2; // 2 Bilder pro Zeile
+      const maxHeight = (pageHeight - yPos - margin * 3) / 2; // 2 Bilder pro Spalte
+
+      let xPos = margin;
+      let rowCount = 0;
+
+      for (let i = 0; i < bilder.length; i++) {
+        const img = bilder[i];
+        const imgProps = doc.getImageProperties(img);
+
+        let imgWidth = maxWidth;
+        let imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+
+        if (imgHeight > maxHeight) {
+          imgHeight = maxHeight;
+          imgWidth = (imgProps.width * imgHeight) / imgProps.height;
+        }
+
+        if (yPos + imgHeight + margin > pageHeight) {
+          doc.addPage();
+          yPos = 20;
+          xPos = margin;
+          doc.text(`Datum: ${datum}`, 10, yPos); yPos += 10;
+          doc.text(`Marktnummer: ${marktnummer}`, 10, yPos); yPos += 10;
+          doc.text(`Name: ${name}`, 10, yPos); yPos += 10;
+          doc.text(`SiFa: ${sifa}`, 10, yPos); yPos += 15;
+        }
+
+        doc.addImage(img, 'JPEG', xPos, yPos, imgWidth, imgHeight);
+
+        if (xPos + imgWidth * 2 <= pageWidth) {
+          xPos += imgWidth + margin;
+        } else {
+          xPos = margin;
+          yPos += imgHeight + margin;
+        }
+
+        rowCount++;
+      }
+
+      doc.save(`Arbeitssicherheit-Checkliste-${datum}.pdf`);
+
+      // Formular und Vorschau zurücksetzen
+      document.getElementById("formular").reset();
+      bilder = [];
+      renderVorschau();
+    }
+
+    // Footer Jahr automatisch einfügen
+    const aktuellesJahr = new Date().getFullYear();
+    document.getElementById("jahr1").textContent = aktuellesJahr;
+    document.getElementById("jahr2").textContent = aktuellesJahr;
+  </script>
 
 </body>
 </html>
