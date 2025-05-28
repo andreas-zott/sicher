@@ -64,23 +64,6 @@
     #foto {
       display: none;
     }
-    #vorschauContainer {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      max-height: 300px;
-      overflow-y: auto;
-      border: 1px solid #ccc;
-      padding: 10px;
-      border-radius: 10px;
-      background: #fafafa;
-      margin-top: 10px;
-      transition: background-color 0.3s, color 0.3s;
-    }
-    body.dark-mode #vorschauContainer {
-      background: #2c2c2c;
-      border-color: #555;
-    }
     footer {
       text-align: center;
       padding: 15px 10px;
@@ -156,51 +139,60 @@
           const reader = new FileReader();
           reader.onload = function (e) {
             bilder.push(e.target.result);
-
-            const wrapper = document.createElement("div");
-            wrapper.style.position = "relative";
-            wrapper.style.display = "inline-block";
-            wrapper.style.marginRight = "10px";
-            wrapper.style.marginBottom = "10px";
-
-            const imgElement = document.createElement("img");
-            imgElement.src = e.target.result;
-            imgElement.className = "img-fluid mt-2";
-            imgElement.style.borderRadius = "10px";
-            imgElement.style.maxWidth = "150px";
-            imgElement.style.height = "auto";
-            wrapper.appendChild(imgElement);
-
-            const deleteBtn = document.createElement("button");
-            deleteBtn.textContent = "✖";
-            deleteBtn.style.position = "absolute";
-            deleteBtn.style.top = "5px";
-            deleteBtn.style.right = "5px";
-            deleteBtn.style.background = "rgba(255, 0, 0, 0.7)";
-            deleteBtn.style.border = "none";
-            deleteBtn.style.color = "white";
-            deleteBtn.style.borderRadius = "50%";
-            deleteBtn.style.width = "24px";
-            deleteBtn.style.height = "24px";
-            deleteBtn.style.cursor = "pointer";
-            deleteBtn.title = "Bild löschen";
-
-            deleteBtn.addEventListener("click", () => {
-              const index = bilder.indexOf(e.target.result);
-              if (index > -1) {
-                bilder.splice(index, 1);
-              }
-              wrapper.remove();
-            });
-
-            wrapper.appendChild(deleteBtn);
-            vorschauContainer.appendChild(wrapper);
+            renderVorschau();
           };
           reader.readAsDataURL(file);
         }
       }
-      // Form resetten, damit dieselbe Datei später nochmal gewählt werden kann
+      // Clear the input value to allow re-upload of the same file(s) if needed
       event.target.value = "";
+    }
+
+    function renderVorschau() {
+      vorschauContainer.innerHTML = "";
+      bilder.forEach((src, index) => {
+        const wrapper = document.createElement("div");
+        wrapper.style.position = "relative";
+        wrapper.style.display = "inline-block";
+        wrapper.style.marginRight = "10px";
+        wrapper.style.marginTop = "10px";
+        wrapper.style.maxWidth = "150px";
+
+        const imgElement = document.createElement("img");
+        imgElement.src = src;
+        imgElement.className = "img-fluid";
+        imgElement.style.borderRadius = "10px";
+        imgElement.style.maxHeight = "150px";
+        imgElement.style.display = "block";
+
+        // Rotes X zum Löschen
+        const deleteBtn = document.createElement("div");
+        deleteBtn.textContent = "✖";
+        deleteBtn.style.position = "absolute";
+        deleteBtn.style.top = "5px";
+        deleteBtn.style.right = "5px";
+        deleteBtn.style.backgroundColor = "rgba(255, 0, 0, 0.8)";
+        deleteBtn.style.color = "white";
+        deleteBtn.style.fontWeight = "bold";
+        deleteBtn.style.borderRadius = "50%";
+        deleteBtn.style.width = "24px";
+        deleteBtn.style.height = "24px";
+        deleteBtn.style.display = "flex";
+        deleteBtn.style.alignItems = "center";
+        deleteBtn.style.justifyContent = "center";
+        deleteBtn.style.cursor = "pointer";
+        deleteBtn.title = "Foto löschen";
+
+        deleteBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          bilder.splice(index, 1);
+          renderVorschau();
+        });
+
+        wrapper.appendChild(imgElement);
+        wrapper.appendChild(deleteBtn);
+        vorschauContainer.appendChild(wrapper);
+      });
     }
 
     async function speichernAlsPDF() {
@@ -212,33 +204,41 @@
         alert("Bitte gib deinen Namen ein.");
         return;
       }
-      if (bilder.length === 0) {
-        alert("Bitte lade mindestens ein Foto hoch, bevor du das PDF speicherst.");
-        return;
-      }
 
       doc.setFontSize(14);
       doc.text(`Name: ${name}`, 10, 20);
+      let xPos = 10;
       let yPos = 30;
+      const margin = 10;
+      const maxWidth = (doc.internal.pageSize.getWidth() - margin * 3) / 2; // Zwei Bilder pro Zeile
+      const maxHeight = (doc.internal.pageSize.getHeight() - margin * 4 - 20) / 2; // Zwei Bilder pro Spalte, 20 für Name Text
 
       for (let i = 0; i < bilder.length; i++) {
         const bild = bilder[i];
         const imgProps = doc.getImageProperties(bild);
-        const pdfWidth = doc.internal.pageSize.getWidth() - 20;
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        let imgWidth = maxWidth;
+        let imgHeight = (imgProps.height * imgWidth) / imgProps.width;
 
-        if (yPos + pdfHeight > doc.internal.pageSize.getHeight() - 20) {
-          doc.addPage();
-          yPos = 20;
+        if (imgHeight > maxHeight) {
+          imgHeight = maxHeight;
+          imgWidth = (imgProps.width * imgHeight) / imgProps.height;
         }
 
-        doc.text(`Foto ${i + 1}:`, 10, yPos);
-        yPos += 5;
+        if (i > 0 && i % 4 === 0) { // Nach 4 Bildern neue Seite
+          doc.addPage();
+          yPos = 30;
+          xPos = 10;
+          doc.text(`Name: ${name}`, 10, 20);
+        }
 
-        const imgType = bild.startsWith('data:image/png') ? 'PNG' : 'JPEG';
-        doc.addImage(bild, imgType, 10, yPos, pdfWidth, pdfHeight);
+        doc.addImage(bild, "JPEG", xPos, yPos, imgWidth, imgHeight);
 
-        yPos += pdfHeight + 10;
+        if (i % 2 === 0) {
+          xPos += maxWidth + margin;
+        } else {
+          xPos = 10;
+          yPos += maxHeight + margin;
+        }
       }
 
       doc.save(`formular_${name}.pdf`);
