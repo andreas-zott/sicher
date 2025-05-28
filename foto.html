@@ -64,10 +64,14 @@
     #foto {
       display: none;
     }
-    #vorschauContainer img {
-      margin: 10px;
-      max-width: 150px;
-      border-radius: 8px;
+    .vorschau-bild {
+      margin-top: 15px;
+      border-radius: 10px;
+      max-width: 100%;
+      height: auto;
+    }
+    #vorschauContainer img + img {
+      margin-top: 10px;
     }
     footer {
       text-align: center;
@@ -141,16 +145,17 @@
       const files = event.target.files;
       bilder = [];
       vorschauContainer.innerHTML = "";
-
       for (const file of files) {
         if (file && file.type.startsWith("image/")) {
           const reader = new FileReader();
           reader.onload = function (e) {
-            bilder.push(e.target.result);
-            const img = document.createElement("img");
-            img.src = e.target.result;
-            img.alt = "Vorschau";
-            vorschauContainer.appendChild(img);
+            const imageUrl = e.target.result;
+            bilder.push(imageUrl);
+
+            const imgElement = document.createElement("img");
+            imgElement.src = imageUrl;
+            imgElement.className = "vorschau-bild img-fluid";
+            vorschauContainer.appendChild(imgElement);
           };
           reader.readAsDataURL(file);
         }
