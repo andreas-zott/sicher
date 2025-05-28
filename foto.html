@@ -64,6 +64,18 @@
     #foto {
       display: none;
     }
+    img {
+      border-radius: 10px;
+      max-width: 100%;
+      height: auto;
+      cursor: pointer;
+      margin-top: 10px;
+      border: 2px solid transparent;
+      transition: border-color 0.3s;
+    }
+    img:hover {
+      border-color: #007bff;
+    }
     footer {
       text-align: center;
       padding: 15px 10px;
@@ -106,7 +118,7 @@
       <label for="upload" class="form-label">Dateien auswählen:</label>
       <input type="file" id="upload" accept="image/*" class="form-control" multiple />
     </div>
-    <div class="mb-3" id="vorschauContainer"></div>
+    <div class="mb-3" id="vorschauContainer" title="Klicke ein Bild zum Löschen"></div>
     <button type="button" class="btn btn-success w-100 mt-3" onclick="speichernAlsPDF()">💾 Als PDF speichern</button>
   </form>
   <footer>
@@ -144,54 +156,26 @@
           reader.readAsDataURL(file);
         }
       }
-      // Clear the input value to allow re-upload of the same file(s) if needed
-      event.target.value = "";
     }
 
+    // Vorschau mit Klick zum Löschen
     function renderVorschau() {
       vorschauContainer.innerHTML = "";
       bilder.forEach((src, index) => {
-        const wrapper = document.createElement("div");
-        wrapper.style.position = "relative";
-        wrapper.style.display = "inline-block";
-        wrapper.style.marginRight = "10px";
-        wrapper.style.marginTop = "10px";
-        wrapper.style.maxWidth = "150px";
-
         const imgElement = document.createElement("img");
         imgElement.src = src;
         imgElement.className = "img-fluid";
-        imgElement.style.borderRadius = "10px";
+        imgElement.title = "Klicke zum Löschen";
         imgElement.style.maxHeight = "150px";
-        imgElement.style.display = "block";
+        imgElement.style.marginRight = "10px";
+        imgElement.style.cursor = "pointer";
 
-        // Rotes X zum Löschen
-        const deleteBtn = document.createElement("div");
-        deleteBtn.textContent = "✖";
-        deleteBtn.style.position = "absolute";
-        deleteBtn.style.top = "5px";
-        deleteBtn.style.right = "5px";
-        deleteBtn.style.backgroundColor = "rgba(255, 0, 0, 0.8)";
-        deleteBtn.style.color = "white";
-        deleteBtn.style.fontWeight = "bold";
-        deleteBtn.style.borderRadius = "50%";
-        deleteBtn.style.width = "24px";
-        deleteBtn.style.height = "24px";
-        deleteBtn.style.display = "flex";
-        deleteBtn.style.alignItems = "center";
-        deleteBtn.style.justifyContent = "center";
-        deleteBtn.style.cursor = "pointer";
-        deleteBtn.title = "Foto löschen";
-
-        deleteBtn.addEventListener("click", (e) => {
-          e.stopPropagation();
+        imgElement.addEventListener("click", () => {
           bilder.splice(index, 1);
           renderVorschau();
         });
 
-        wrapper.appendChild(imgElement);
-        wrapper.appendChild(deleteBtn);
-        vorschauContainer.appendChild(wrapper);
+        vorschauContainer.appendChild(imgElement);
       });
     }
 
@@ -204,41 +188,62 @@
         alert("Bitte gib deinen Namen ein.");
         return;
       }
+      if (bilder.length === 0) {
+        alert("Bitte lade mindestens ein Foto hoch, bevor du das PDF speicherst.");
+        return;
+      }
 
       doc.setFontSize(14);
       doc.text(`Name: ${name}`, 10, 20);
-      let xPos = 10;
-      let yPos = 30;
+
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
       const margin = 10;
-      const maxWidth = (doc.internal.pageSize.getWidth() - margin * 3) / 2; // Zwei Bilder pro Zeile
-      const maxHeight = (doc.internal.pageSize.getHeight() - margin * 4 - 20) / 2; // Zwei Bilder pro Spalte, 20 für Name Text
+
+      const cols = 2;
+      const rows = 2;
+
+      const yStart = 30;
+
+      const cellWidth = (pageWidth - margin * (cols + 1)) / cols;
+      const cellHeight = (pageHeight - yStart - margin * (rows + 1)) / rows;
 
       for (let i = 0; i < bilder.length; i++) {
-        const bild = bilder[i];
-        const imgProps = doc.getImageProperties(bild);
-        let imgWidth = maxWidth;
-        let imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+        const positionInPage = i % (cols * rows);
+        const col = positionInPage % cols;
+        const row = Math.floor(positionInPage / cols);
 
-        if (imgHeight > maxHeight) {
-          imgHeight = maxHeight;
-          imgWidth = (imgProps.width * imgHeight) / imgProps.height;
-        }
-
-        if (i > 0 && i % 4 === 0) { // Nach 4 Bildern neue Seite
+        if (i > 0 && positionInPage === 0) {
           doc.addPage();
-          yPos = 30;
-          xPos = 10;
+          doc.setFontSize(14);
           doc.text(`Name: ${name}`, 10, 20);
         }
 
-        doc.addImage(bild, "JPEG", xPos, yPos, imgWidth, imgHeight);
+        const bild = bilder[i];
+        const imgProps = doc.getImageProperties(bild);
 
-        if (i % 2 === 0) {
-          xPos += maxWidth + margin;
-        } else {
-          xPos = 10;
-          yPos += maxHeight + margin;
+        let width = cellWidth;
+        let height = (imgProps.height * width) / imgProps.width;
+
+        if (height > cellHeight) {
+          height = cellHeight;
+          width = (imgProps.width * height) / imgProps.height;
         }
+
+        const xPos = margin + col * (cellWidth + margin) + (cellWidth - width) / 2;
+        const yPos = yStart + margin + row * (cellHeight + margin) + (cellHeight - height) / 2;
+
+        doc.setFontSize(12);
+        doc.text(`Foto ${i + 1}:`, xPos, yPos - 3);
+
+        doc.addImage(
+          bild,
+          bild.startsWith('data:image/png') ? 'PNG' : 'JPEG',
+          xPos,
+          yPos,
+          width,
+          height
+        );
       }
 
       doc.save(`formular_${name}.pdf`);
