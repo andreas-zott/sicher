@@ -1,194 +1,133 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Kameraaufnahme & Bildvorschau</title>
-<style>
-  /* Grundfarben Hellmodus */
-  body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-    background: #cce7ff; /* hellblau */
-    color: #222;
-    transition: background-color 0.3s, color 0.3s;
-  }
-  h1 {
-    text-align: center;
-  }
-  form {
-    max-width: 600px;
-    margin: auto;
-    background: white;
-    padding: 15px 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
-    position: relative;
-    transition: background-color 0.3s, color 0.3s;
-  }
-  #fotoVorschau {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-top: 15px;
-    justify-content: center;
-  }
-  .previewBild {
-    position: relative;
-    width: 130px;
-    height: 130px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    overflow: hidden;
-    background: #eee;
-    transition: background-color 0.3s, border-color 0.3s;
-  }
-  .previewBild img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  .loeschenBtn {
-    position: absolute;
-    top: 3px;
-    right: 3px;
-    background: rgba(255,0,0,0.8);
-    border: none;
-    color: white;
-    font-weight: bold;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-    line-height: 22px;
-    text-align: center;
-    font-size: 18px;
-    transition: background-color 0.3s;
-  }
-  .loeschenBtn:hover {
-    background: rgba(255,0,0,1);
-  }
-  input[type="file"] {
-    display: none;
-  }
-  .buttonContainer {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 15px;
-  }
-  button.cameraBtn,
-  button#pdfBtn {
-    padding: 10px 20px;
-    font-size: 16px;
-    background: #007bff;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  button.cameraBtn:disabled,
-  button#pdfBtn:disabled {
-    background: #999;
-    cursor: not-allowed;
-  }
-  button.cameraBtn:hover:not(:disabled),
-  button#pdfBtn:hover:not(:disabled) {
-    background: #0056b3;
-  }
-  label {
-    font-weight: bold;
-    display: block;
-    margin-top: 15px;
-  }
-  input[type="text"], input[type="date"] {
-    width: 100%;
-    padding: 8px 10px;
-    font-size: 16px;
-    margin-top: 5px;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-  }
-  footer {
-    text-align: center;
-    margin-top: 60px;
-    font-size: 12px;
-    color: #777;
-    transition: color 0.3s;
-  }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kameraaufnahme & PDF Vorschau</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #cce7ff;
+      margin: 20px;
+      transition: background-color 0.3s, color 0.3s;
+      color: #222;
+    }
 
-  /* Dark Mode Styles */
-  body.dark-mode {
-    background: #121212;
-    color: #ddd;
-  }
-  body.dark-mode form {
-    background: #1e1e1e;
-    color: #ddd;
-    box-shadow: 0 0 15px rgba(255,255,255,0.1);
-  }
-  body.dark-mode .previewBild {
-    background: #333;
-    border-color: #555;
-  }
-  body.dark-mode .loeschenBtn {
-    background: rgba(255, 80, 80, 0.8);
-  }
-  body.dark-mode .loeschenBtn:hover {
-    background: rgba(255, 80, 80, 1);
-  }
-  body.dark-mode button.cameraBtn,
-  body.dark-mode button#pdfBtn {
-    background: #3399ff;
-    color: #eee;
-  }
-  body.dark-mode input[type="text"],
-  body.dark-mode input[type="date"] {
-    background: #2b2b2b;
-    color: #ddd;
-    border-color: #555;
-  }
-  body.dark-mode footer {
-    color: #aaa;
-  }
+    h1 {
+      text-align: center;
+    }
 
-  /* Dark Mode Toggle Button */
-  #darkModeToggle {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    background: #007bff;
-    border: none;
-    color: white;
-    padding: 6px 12px;
-    font-size: 12px;
-    border-radius: 20px;
-    cursor: pointer;
-    user-select: none;
-    transition: background-color 0.3s;
-  }
-  #darkModeToggle:hover {
-    background: #0056b3;
-  }
-  body.dark-mode #darkModeToggle {
-    background: #3399ff;
-    color: #222;
-  }
-  body.dark-mode #darkModeToggle:hover {
-    background: #66b2ff;
-  }
-</style>
+    form {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 15px 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 15px;
+    }
+
+    input[type="text"], input[type="date"] {
+      width: 100%;
+      padding: 8px;
+      font-size: 16px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .buttonContainer {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .cameraBtn {
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .cameraBtn:disabled {
+      background: #999;
+      cursor: not-allowed;
+    }
+
+    #fotoVorschau {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 15px;
+      justify-content: center;
+    }
+
+    .previewBild {
+      position: relative;
+      width: 130px;
+      height: 130px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      overflow: hidden;
+      background: #eee;
+    }
+
+    .previewBild img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .loeschenBtn {
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      background: rgba(255,0,0,0.8);
+      border: none;
+      color: white;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    button#generatePdfBtn {
+      margin: 30px auto 0 auto;
+      display: block;
+      padding: 10px 25px;
+      font-size: 18px;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 60px;
+      font-size: 12px;
+      color: #777;
+    }
+  </style>
 </head>
 <body>
 
-<h1>Checkliste mit Kameraaufnahme & Bildvorschau</h1>
+<h1>Checkliste mit Kameraaufnahme & PDF</h1>
 
 <form id="checklistForm">
-  <button type="button" id="darkModeToggle" aria-label="Dark Mode umschalten">🌙</button>
-
   <label for="datum">Datum:</label>
   <input type="date" id="datum" name="datum" required />
 
@@ -201,18 +140,18 @@
   <label for="sifa">SiFa:</label>
   <input type="text" id="sifa" name="sifa" required />
 
-  <label>Fotos (maximal 16 Bilder):</label>
+  <label>Fotos (max. 16):</label>
   <div class="buttonContainer">
     <button type="button" id="btnKamera" class="cameraBtn">Foto aufnehmen</button>
     <button type="button" id="btnGalerie" class="cameraBtn">Bild auswählen</button>
   </div>
 
-  <input type="file" id="fotoInputKamera" accept="image/*" capture="environment" />
-  <input type="file" id="fotoInputGalerie" accept="image/*" multiple />
+  <input type="file" id="fotoInputKamera" accept="image/*" capture="environment" hidden />
+  <input type="file" id="fotoInputGalerie" accept="image/*" multiple hidden />
 
   <div id="fotoVorschau"></div>
 
-  <button type="button" id="pdfBtn">PDF erzeugen</button>
+  <button type="button" id="generatePdfBtn">📄 PDF erzeugen</button>
 </form>
 
 <script>
@@ -221,109 +160,100 @@
   const fotoInputKamera = document.getElementById('fotoInputKamera');
   const fotoInputGalerie = document.getElementById('fotoInputGalerie');
   const fotoVorschau = document.getElementById('fotoVorschau');
-  const form = document.getElementById('checklistForm');
-  const darkModeToggle = document.getElementById('darkModeToggle');
-  const pdfBtn = document.getElementById('pdfBtn');
+  const generatePdfBtn = document.getElementById('generatePdfBtn');
 
   let gespeicherteBilder = [];
 
+  btnKamera.onclick = () => {
+    if (gespeicherteBilder.length >= 16) return alert('Maximal 16 Bilder erlaubt.');
+    fotoInputKamera.click();
+  };
+
+  btnGalerie.onclick = () => {
+    if (gespeicherteBilder.length >= 16) return alert('Maximal 16 Bilder erlaubt.');
+    fotoInputGalerie.click();
+  };
+
+  fotoInputKamera.onchange = (e) => {
+    if (!e.target.files.length) return;
+    gespeicherteBilder.push(e.target.files[0]);
+    zeigeVorschau();
+    fotoInputKamera.value = '';
+  };
+
+  fotoInputGalerie.onchange = (e) => {
+    const neue = Array.from(e.target.files);
+    if (gespeicherteBilder.length + neue.length > 16) {
+      alert('Maximal 16 Bilder erlaubt.');
+      return;
+    }
+    gespeicherteBilder.push(...neue);
+    zeigeVorschau();
+    fotoInputGalerie.value = '';
+  };
+
   function zeigeVorschau() {
     fotoVorschau.innerHTML = '';
-
-    gespeicherteBilder.forEach((file, index) => {
+    gespeicherteBilder.forEach((file, i) => {
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = e => {
         const div = document.createElement('div');
-        div.classList.add('previewBild');
-
+        div.className = 'previewBild';
         const img = document.createElement('img');
         img.src = e.target.result;
-        img.alt = `Foto ${index + 1}`;
-
-        const btnLoeschen = document.createElement('button');
-        btnLoeschen.classList.add('loeschenBtn');
-        btnLoeschen.innerHTML = '&times;';
-        btnLoeschen.title = 'Bild löschen';
-        btnLoeschen.onclick = (event) => {
-          event.preventDefault();
-          gespeicherteBilder.splice(index, 1);
+        const btn = document.createElement('button');
+        btn.className = 'loeschenBtn';
+        btn.innerHTML = '&times;';
+        btn.onclick = () => {
+          gespeicherteBilder.splice(i, 1);
           zeigeVorschau();
-          updateButtons();
         };
-
         div.appendChild(img);
-        div.appendChild(btnLoeschen);
+        div.appendChild(btn);
         fotoVorschau.appendChild(div);
       };
       reader.readAsDataURL(file);
     });
-
-    updateButtons();
   }
 
-  function updateButtons() {
-    const maxBilder = 16;
-    const istVoll = gespeicherteBilder.length >= maxBilder;
-    btnKamera.disabled = istVoll;
-    btnGalerie.disabled = istVoll;
+  generatePdfBtn.onclick = async () => {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF();
+
+    const datum = document.getElementById('datum').value;
+    const marktnummer = document.getElementById('marktnummer').value;
+    const name = document.getElementById('name').value;
+    const sifa = document.getElementById('sifa').value;
+
+    let y = 10;
+    pdf.setFontSize(14);
+    pdf.text(`Datum: ${datum}`, 10, y); y += 10;
+    pdf.text(`Marktnummer: ${marktnummer}`, 10, y); y += 10;
+    pdf.text(`Name: ${name}`, 10, y); y += 10;
+    pdf.text(`SiFa: ${sifa}`, 10, y); y += 20;
+
+    for (let i = 0; i < gespeicherteBilder.length; i++) {
+      if (i > 0 && i % 4 === 0) {
+        pdf.addPage();
+        y = 10;
+      }
+
+      const imgData = await fileToBase64(gespeicherteBilder[i]);
+      pdf.addImage(imgData, 'JPEG', 10 + (i % 2) * 100, y, 90, 70);
+      if (i % 2 === 1) y += 80;
+    }
+
+    pdf.output('dataurlnewwindow'); // Zeigt das PDF direkt im neuen Tab
+  };
+
+  function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = e => resolve(e.target.result);
+      reader.onerror = e => reject(e);
+      reader.readAsDataURL(file);
+    });
   }
-
-  btnKamera.addEventListener('click', () => {
-    if (gespeicherteBilder.length >= 16) {
-      alert('Maximal 16 Bilder erlaubt.');
-      return;
-    }
-    fotoInputKamera.click();
-  });
-
-  btnGalerie.addEventListener('click', () => {
-    if (gespeicherteBilder.length >= 16) {
-      alert('Maximal 16 Bilder erlaubt.');
-      return;
-    }
-    fotoInputGalerie.click();
-  });
-
-  fotoInputKamera.addEventListener('change', (event) => {
-    if (event.target.files.length === 0) return;
-    if (gespeicherteBilder.length >= 16) {
-      alert('Maximal 16 Bilder erlaubt.');
-      return;
-    }
-    gespeicherteBilder.push(event.target.files[0]);
-    zeigeVorschau();
-    fotoInputKamera.value = '';
-  });
-
-  fotoInputGalerie.addEventListener('change', (event) => {
-    const neueDateien = Array.from(event.target.files);
-    if (gespeicherteBilder.length + neueDateien.length > 16) {
-      alert('Maximal 16 Bilder erlaubt.');
-      fotoInputGalerie.value = '';
-      return;
-    }
-    gespeicherteBilder = gespeicherteBilder.concat(neueDateien);
-    zeigeVorschau();
-    fotoInputGalerie.value = '';
-  });
-
-  darkModeToggle.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-    if(document.body.classList.contains('dark-mode')){
-      darkModeToggle.textContent = '☀️';
-      darkModeToggle.title = 'Light Mode umschalten';
-    } else {
-      darkModeToggle.textContent = '🌙';
-      darkModeToggle.title = 'Dark Mode umschalten';
-    }
-  });
-
-  pdfBtn.addEventListener('click', () => {
-    alert("Hier folgt die Funktion zum Erzeugen des PDFs – wird noch integriert.");
-    // PDF-Generierung folgt, ggf. mit jsPDF und html2canvas oder über Server
-  });
-
-  updateButtons();
 </script>
 
 <footer>
