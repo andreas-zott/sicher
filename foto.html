@@ -16,9 +16,11 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      background-color: #f4f4f4;
+      background-color: #d0e7ff; /* hellblauer Hintergrund */
       color: #333;
       transition: background-color 0.3s, color 0.3s;
+      min-height: 100vh;
+      position: relative;
     }
     body.dark-mode {
       background-color: #121212;
@@ -73,50 +75,73 @@
       text-align: center;
       padding: 15px 10px;
       font-size: 13px;
-      color: #888;
-      background-color: #f4f4f4;
+      color: #555;
+      background-color: #d0e7ff; /* hellblauer Footer */
       margin-top: 40px;
       width: 100%;
       transition: background-color 0.3s, color 0.3s;
+      position: relative;
+      bottom: 0;
     }
     body.dark-mode footer {
       background-color: #121212;
       color: #aaa;
     }
     #darkModeToggle {
-      position: absolute;
+      position: fixed;
       top: 15px;
       right: 15px;
-      padding: 4px 10px;
+      padding: 6px 10px;
       font-size: 16px;
+      border-radius: 50%;
+      background-color: transparent;
+      border: 2px solid currentColor;
+      cursor: pointer;
       z-index: 1000;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    }
+    #darkModeToggle:hover {
+      background-color: rgba(0,0,0,0.1);
     }
   </style>
 </head>
 <body>
-  <button id="darkModeToggle" class="btn btn-sm btn-outline-secondary" title="Dark Mode umschalten">🌙</button>
+  <button id="darkModeToggle" title="Dark Mode umschalten">🌙</button>
+
   <h1>Arbeitssicherheit-Checkliste-2025</h1>
   <form id="formular">
     <h2 class="text-center mb-4">Fotoformular</h2>
+
     <div class="mb-3">
       <label for="name" class="form-label">Name:</label>
       <input type="text" id="name" name="name" class="form-control" required />
     </div>
+
     <div class="mb-3">
       <label class="form-label">Foto aufnehmen:</label>
       <input type="file" id="foto" accept="image/*" capture="environment" multiple />
       <button type="button" id="fotoBtn" class="btn btn-primary w-100 mt-2">📷 Foto aufnehmen</button>
     </div>
+
     <div class="mb-3">
       <label for="upload" class="form-label">Dateien auswählen:</label>
       <input type="file" id="upload" accept="image/*" class="form-control" multiple />
     </div>
+
     <div class="mb-3" id="vorschauContainer"></div>
+
     <button type="button" class="btn btn-success w-100 mt-3" onclick="speichernAlsPDF()">💾 Als PDF speichern</button>
   </form>
+
   <footer>
     &copy; <span id="jahr1"></span> Andreas Zott. Alle Rechte vorbehalten. (Sifa) Arbeitssicherheit <span id="jahr2"></span>
   </footer>
+
   <script>
     const fotoInput = document.getElementById("foto");
     const uploadInput = document.getElementById("upload");
