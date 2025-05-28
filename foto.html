@@ -16,9 +16,11 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      background-color: #f4f4f4;
+      background-color: #e0f0ff; /* hellblauer Hintergrund */
       color: #333;
       transition: background-color 0.3s, color 0.3s;
+      min-height: 100vh;
+      position: relative;
     }
     body.dark-mode {
       background-color: #121212;
@@ -34,9 +36,10 @@
       padding: 40px 50px;
       border-radius: 20px;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-      max-width: 600px;
+      max-width: 800px;
       width: 100%;
       transition: background-color 0.3s, color 0.3s;
+      box-sizing: border-box;
     }
     body.dark-mode #formular {
       background: #1e1e1e;
@@ -44,7 +47,8 @@
       box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
     }
     input[type="text"],
-    input[type="file"] {
+    input[type="file"],
+    input[type="date"] {
       padding: 14px;
       margin-top: 10px;
       font-size: 16px;
@@ -54,9 +58,11 @@
       transition: background-color 0.3s, color 0.3s, border-color 0.3s;
       background-color: white;
       color: #333;
+      box-sizing: border-box;
     }
     body.dark-mode input[type="text"],
-    body.dark-mode input[type="file"] {
+    body.dark-mode input[type="file"],
+    body.dark-mode input[type="date"] {
       background-color: #333;
       color: #ddd;
       border-color: #555;
@@ -64,54 +70,136 @@
     #foto {
       display: none;
     }
+    #vorschauContainer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+      justify-content: center;
+    }
+    #vorschauContainer div {
+      position: relative;
+      max-width: 150px;
+    }
+    #vorschauContainer img {
+      border-radius: 10px;
+      max-height: 150px;
+      width: 100%;
+      display: block;
+      object-fit: cover;
+    }
+    /* Löschen-Button */
+    #vorschauContainer div > div {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background-color: rgba(255, 0, 0, 0.8);
+      color: white;
+      font-weight: bold;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      font-size: 16px;
+      line-height: 1;
+    }
     footer {
       text-align: center;
       padding: 15px 10px;
-      font-size: 13px;
-      color: #888;
-      background-color: #f4f4f4;
+      font-size: 12px;
+      color: #bbb;
+      background-color: #e0f0ff;
       margin-top: 40px;
       width: 100%;
       transition: background-color 0.3s, color 0.3s;
+      user-select: none;
     }
     body.dark-mode footer {
       background-color: #121212;
-      color: #aaa;
+      color: #666;
     }
+    /* Dark Mode Toggle Button rund und klein */
     #darkModeToggle {
-      position: absolute;
+      position: fixed;
       top: 15px;
       right: 15px;
-      padding: 4px 10px;
-      font-size: 16px;
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      font-size: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
       z-index: 1000;
+      border: 1px solid #888;
+      background-color: transparent;
+      transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    }
+    #darkModeToggle:hover {
+      background-color: #cce4ff;
+      border-color: #666;
+    }
+    body.dark-mode #darkModeToggle:hover {
+      background-color: #333;
+      border-color: #aaa;
+      color: #fff;
     }
   </style>
 </head>
 <body>
-  <button id="darkModeToggle" class="btn btn-sm btn-outline-secondary" title="Dark Mode umschalten">🌙</button>
+  <button id="darkModeToggle" class="btn btn-outline-secondary" title="Dark Mode umschalten">🌙</button>
+  
   <h1>Arbeitssicherheit-Checkliste-2025</h1>
+  
   <form id="formular">
     <h2 class="text-center mb-4">Fotoformular</h2>
+
+    <div class="mb-3">
+      <label for="datum" class="form-label">Datum:</label>
+      <input type="date" id="datum" name="datum" required />
+    </div>
+
+    <div class="mb-3">
+      <label for="marktnummer" class="form-label">Marktnummer:</label>
+      <input type="text" id="marktnummer" name="marktnummer" required />
+    </div>
+
     <div class="mb-3">
       <label for="name" class="form-label">Name:</label>
-      <input type="text" id="name" name="name" class="form-control" required />
+      <input type="text" id="name" name="name" required />
     </div>
+
+    <div class="mb-3">
+      <label for="sifa" class="form-label">SiFa:</label>
+      <input type="text" id="sifa" name="sifa" required />
+    </div>
+
     <div class="mb-3">
       <label class="form-label">Foto aufnehmen:</label>
       <input type="file" id="foto" accept="image/*" capture="environment" multiple />
       <button type="button" id="fotoBtn" class="btn btn-primary w-100 mt-2">📷 Foto aufnehmen</button>
     </div>
+
     <div class="mb-3">
       <label for="upload" class="form-label">Dateien auswählen:</label>
-      <input type="file" id="upload" accept="image/*" class="form-control" multiple />
+      <input type="file" id="upload" accept="image/*" multiple />
     </div>
+
     <div class="mb-3" id="vorschauContainer"></div>
+
     <button type="button" class="btn btn-success w-100 mt-3" onclick="speichernAlsPDF()">💾 Als PDF speichern</button>
   </form>
+
   <footer>
-    &copy; <span id="jahr1"></span> Andreas Zott. Alle Rechte vorbehalten. (Sifa) Arbeitssicherheit <span id="jahr2"></span>
+    &copy; <span id="jahr1"></span> Andreas Zott. Alle Rechte vorbehalten. (SiFa) Arbeitssicherheit <span id="jahr2"></span>
   </footer>
+
   <script>
     const fotoInput = document.getElementById("foto");
     const uploadInput = document.getElementById("upload");
@@ -144,7 +232,6 @@
           reader.readAsDataURL(file);
         }
       }
-      // Clear the input value to allow re-upload of the same file(s) if needed
       event.target.value = "";
     }
 
@@ -152,35 +239,13 @@
       vorschauContainer.innerHTML = "";
       bilder.forEach((src, index) => {
         const wrapper = document.createElement("div");
-        wrapper.style.position = "relative";
-        wrapper.style.display = "inline-block";
-        wrapper.style.marginRight = "10px";
-        wrapper.style.marginTop = "10px";
-        wrapper.style.maxWidth = "150px";
 
         const imgElement = document.createElement("img");
         imgElement.src = src;
-        imgElement.className = "img-fluid";
-        imgElement.style.borderRadius = "10px";
-        imgElement.style.maxHeight = "150px";
-        imgElement.style.display = "block";
+        imgElement.alt = `Foto ${index + 1}`;
 
-        // Rotes X zum Löschen
         const deleteBtn = document.createElement("div");
         deleteBtn.textContent = "✖";
-        deleteBtn.style.position = "absolute";
-        deleteBtn.style.top = "5px";
-        deleteBtn.style.right = "5px";
-        deleteBtn.style.backgroundColor = "rgba(255, 0, 0, 0.8)";
-        deleteBtn.style.color = "white";
-        deleteBtn.style.fontWeight = "bold";
-        deleteBtn.style.borderRadius = "50%";
-        deleteBtn.style.width = "24px";
-        deleteBtn.style.height = "24px";
-        deleteBtn.style.display = "flex";
-        deleteBtn.style.alignItems = "center";
-        deleteBtn.style.justifyContent = "center";
-        deleteBtn.style.cursor = "pointer";
         deleteBtn.title = "Foto löschen";
 
         deleteBtn.addEventListener("click", (e) => {
@@ -199,19 +264,27 @@
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
 
+      const datum = document.getElementById("datum").value.trim();
+      const marktnummer = document.getElementById("marktnummer").value.trim();
       const name = document.getElementById("name").value.trim();
-      if (!name) {
-        alert("Bitte gib deinen Namen ein.");
+      const sifa = document.getElementById("sifa").value.trim();
+
+      if (!datum || !marktnummer || !name || !sifa) {
+        alert("Bitte fülle alle Pflichtfelder aus: Datum, Marktnummer, Name, SiFa.");
         return;
       }
 
       doc.setFontSize(14);
-      doc.text(`Name: ${name}`, 10, 20);
+      doc.text(`Datum: ${datum}`, 10, 20);
+      doc.text(`Marktnummer: ${marktnummer}`, 10, 30);
+      doc.text(`Name: ${name}`, 10, 40);
+      doc.text(`SiFa: ${sifa}`, 10, 50);
+
       let xPos = 10;
-      let yPos = 30;
+      let yPos = 60;
       const margin = 10;
-      const maxWidth = (doc.internal.pageSize.getWidth() - margin * 3) / 2; // Zwei Bilder pro Zeile
-      const maxHeight = (doc.internal.pageSize.getHeight() - margin * 4 - 20) / 2; // Zwei Bilder pro Spalte, 20 für Name Text
+      const maxWidth = (doc.internal.pageSize.getWidth() - margin * 3) / 2; // zwei Bilder pro Reihe
+      const maxHeight = (doc.internal.pageSize.getHeight() - margin * 4 - yPos) / 2; // zwei Bilder pro Spalte
 
       for (let i = 0; i < bilder.length; i++) {
         const bild = bilder[i];
@@ -224,11 +297,14 @@
           imgWidth = (imgProps.width * imgHeight) / imgProps.height;
         }
 
-        if (i > 0 && i % 4 === 0) { // Nach 4 Bildern neue Seite
+        if (i > 0 && i % 4 === 0) { // neue Seite nach 4 Bildern
           doc.addPage();
-          yPos = 30;
+          yPos = 60;
           xPos = 10;
-          doc.text(`Name: ${name}`, 10, 20);
+          doc.text(`Datum: ${datum}`, 10, 20);
+          doc.text(`Marktnummer: ${marktnummer}`, 10, 30);
+          doc.text(`Name: ${name}`, 10, 40);
+          doc.text(`SiFa: ${sifa}`, 10, 50);
         }
 
         doc.addImage(bild, "JPEG", xPos, yPos, imgWidth, imgHeight);
