@@ -64,11 +64,10 @@
     #foto {
       display: none;
     }
-    .bild-vorschau img {
-      margin-top: 10px;
-      border-radius: 10px;
-      max-width: 100%;
-      height: auto;
+    #vorschauContainer img {
+      margin: 10px;
+      max-width: 150px;
+      border-radius: 8px;
     }
     footer {
       text-align: center;
@@ -112,7 +111,7 @@
       <label for="upload" class="form-label">Dateien auswählen:</label>
       <input type="file" id="upload" accept="image/*" class="form-control" multiple />
     </div>
-    <div id="vorschauContainer" class="mb-3 bild-vorschau"></div>
+    <div class="mb-3" id="vorschauContainer"></div>
     <button type="button" class="btn btn-success w-100 mt-3" onclick="speichernAlsPDF()">💾 Als PDF speichern</button>
   </form>
   <footer>
@@ -142,6 +141,7 @@
       const files = event.target.files;
       bilder = [];
       vorschauContainer.innerHTML = "";
+
       for (const file of files) {
         if (file && file.type.startsWith("image/")) {
           const reader = new FileReader();
@@ -149,6 +149,7 @@
             bilder.push(e.target.result);
             const img = document.createElement("img");
             img.src = e.target.result;
+            img.alt = "Vorschau";
             vorschauContainer.appendChild(img);
           };
           reader.readAsDataURL(file);
@@ -185,13 +186,6 @@
         yPos += 5;
         doc.addImage(bild, "JPEG", 10, yPos, pdfWidth, pdfHeight);
         yPos += pdfHeight + 10;
-      }
-
-      const totalPages = doc.getNumberOfPages();
-      for (let i = 1; i <= totalPages; i++) {
-        doc.setPage(i);
-        doc.setFontSize(10);
-        doc.text(`Seite ${i} von ${totalPages}`, doc.internal.pageSize.getWidth() - 50, doc.internal.pageSize.getHeight() - 10);
       }
 
       doc.save(`formular_${name}.pdf`);
