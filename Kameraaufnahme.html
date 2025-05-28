@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Kameraaufnahme & Bildvorschau</title>
+<title>Kameraaufnahme & Bildvorschau mit PDF Export</title>
 <style>
-  /* Grundfarben Hellmodus */
+  /* Hellmodus */
   body {
     font-family: Arial, sans-serif;
     margin: 20px;
-    background: #cce7ff; /* hellblau */
+    background: #cce7ff;
     color: #222;
     transition: background-color 0.3s, color 0.3s;
   }
@@ -94,7 +94,7 @@
   button.cameraBtn:hover:not(:disabled) {
     background: #0056b3;
   }
-  button#submitBtn {
+  button#submitBtn, button#pdfBtn {
     display: block;
     margin: 30px auto 0 auto;
     padding: 10px 25px;
@@ -106,7 +106,7 @@
     cursor: pointer;
     transition: background-color 0.3s;
   }
-  button#submitBtn:hover {
+  button#submitBtn:hover, button#pdfBtn:hover {
     background: #1e7e34;
   }
   label {
@@ -162,11 +162,11 @@
   body.dark-mode button.cameraBtn:hover:not(:disabled) {
     background: #66b2ff;
   }
-  body.dark-mode button#submitBtn {
+  body.dark-mode button#submitBtn, body.dark-mode button#pdfBtn {
     background: #28a745;
     color: #eee;
   }
-  body.dark-mode button#submitBtn:hover {
+  body.dark-mode button#submitBtn:hover, body.dark-mode button#pdfBtn:hover {
     background: #1e7e34;
   }
   body.dark-mode input[type="text"], body.dark-mode input[type="date"] {
@@ -237,9 +237,14 @@
   <div id="fotoVorschau"></div>
 
   <button type="submit" id="submitBtn">Absenden</button>
+  <button type="button" id="pdfBtn">PDF erzeugen</button>
 </form>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <script>
+  const { jsPDF } = window.jspdf;
+
   const btnKamera = document.getElementById('btnKamera');
   const btnGalerie = document.getElementById('btnGalerie');
   const fotoInputKamera = document.getElementById('fotoInputKamera');
@@ -247,6 +252,7 @@
   const fotoVorschau = document.getElementById('fotoVorschau');
   const form = document.getElementById('checklistForm');
   const darkModeToggle = document.getElementById('darkModeToggle');
+  const pdfBtn = document.getElementById('pdfBtn');
 
   let gespeicherteBilder = [];
 
@@ -341,12 +347,10 @@
       }
     }
 
+    alert('Formular wurde abgesendet. Siehe Konsole für Details.');
+    // Hier kann Server-Upload oder weitere Verarbeitung erfolgen
     const formData = new FormData(form);
-
-    gespeicherteBilder.forEach((file) => {
-      formData.append('fotos[]', file);
-    });
-
+    gespeicherteBilder.forEach(file => formData.append('fotos[]', file));
     console.log('Formulardaten:');
     for (let pair of formData.entries()) {
       if(pair[0] === 'fotos[]'){
@@ -355,14 +359,10 @@
         console.log(pair[0] + ':', pair[1]);
       }
     }
-
-    alert('Formular wurde abgesendet. Siehe Konsole für Details.');
   });
 
-  // Dark Mode Toggle
   darkModeToggle.addEventListener('click', () => {
     document.body.classList.toggle('dark-mode');
-    // Icon ändern
     if(document.body.classList.contains('dark-mode')){
       darkModeToggle.textContent = '☀️';
       darkModeToggle.title = 'Light Mode umschalten';
@@ -372,11 +372,85 @@
     }
   });
 
+  pdfBtn.addEventListener('click', () => {
+    if (gespeicherteBilder.length === 0) {
+      alert('Bitte mindestens ein Foto hinzufügen, um das PDF zu erzeugen.');
+      return;
+    }
+
+    const datum = document.getElementById('datum').value;
+    const marktnummer = document.getElementById('marktnummer').value;
+    const name = document.getElementById('name').value;
+    const sifa = document.getElementById('sifa').value;
+
+    if(!datum || !marktnummer || !name || !sifa){
+      alert('Bitte alle Pflichtfelder ausfüllen.');
+      return;
+    }
+
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+
+    const margin = 15;
+    const imageSize = 80; // Breite/Höhe der Fotos
+    const imagesPerPage = 4;
+    const padding = 10;
+
+    // Text oben
+    pdf.setFontSize(16);
+    pdf.text('Checkliste mit Fotos', pageWidth / 2, margin + 10, { align: 'center' });
+
+    pdf.setFontSize(12);
+    pdf.text(`Datum: ${datum}`, margin, margin + 25);
+    pdf.text(`Marktnummer: ${marktnummer}`, margin, margin + 35);
+    pdf.text(`Name: ${name}`, margin, margin + 45);
+    pdf.text(`SiFa: ${sifa}`, margin, margin + 55);
+
+    // Fotos werden nach 4 pro Seite gruppiert
+    let xPositions = [margin, margin + imageSize + padding];
+    let yPositions = [margin + 70, margin + 70 + imageSize + padding];
+
+    const addImageToPDF = (imgData, x, y, size) => {
+      pdf.addImage(imgData, 'JPEG', x, y, size, size);
+    };
+
+    // Funktion um Bilder als DataURL zu laden (Promise)
+    function readFileAsDataURL(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = e => resolve(e.target.result);
+        reader.onerror = e => reject(e);
+        reader.readAsDataURL(file);
+      });
+    }
+
+    (async () => {
+      for(let i = 0; i < gespeicherteBilder.length; i++) {
+        if(i > 0 && i % imagesPerPage === 0) {
+          pdf.addPage();
+          // Seitenkopf
+          pdf.setFontSize(16);
+          pdf.text('Checkliste mit Fotos (Fortsetzung)', pageWidth / 2, margin + 10, { align: 'center' });
+        }
+
+        const imgData = await readFileAsDataURL(gespeicherteBilder[i]);
+        const posIndex = i % imagesPerPage;
+        const x = xPositions[posIndex % 2];
+        const y = yPositions[Math.floor(posIndex / 2)];
+
+        addImageToPDF(imgData, x, y, imageSize);
+      }
+
+      pdf.output('dataurlnewwindow'); // PDF im neuen Tab/Fenster anzeigen
+    })();
+  });
+
   updateButtons();
 </script>
 
 <footer>
-  &copy; 2025 Andreas Zott. Alle Rechte vorbehalten. (Sifa) Arbeitssicherheit 2025
+  &copy; 2025 Andreas Zott. Alle Rechte vorbehalten. (SiFa) Arbeitssicherheit 2025
 </footer>
 
 </body>
