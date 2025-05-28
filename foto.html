@@ -64,10 +64,22 @@
     #foto {
       display: none;
     }
-    img {
+    #vorschauContainer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      max-height: 300px;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      padding: 10px;
       border-radius: 10px;
-      max-width: 100%;
-      height: auto;
+      background: #fafafa;
+      margin-top: 10px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    body.dark-mode #vorschauContainer {
+      background: #2c2c2c;
+      border-color: #555;
     }
     footer {
       text-align: center;
@@ -144,14 +156,51 @@
           const reader = new FileReader();
           reader.onload = function (e) {
             bilder.push(e.target.result);
+
+            const wrapper = document.createElement("div");
+            wrapper.style.position = "relative";
+            wrapper.style.display = "inline-block";
+            wrapper.style.marginRight = "10px";
+            wrapper.style.marginBottom = "10px";
+
             const imgElement = document.createElement("img");
             imgElement.src = e.target.result;
             imgElement.className = "img-fluid mt-2";
-            vorschauContainer.appendChild(imgElement);
+            imgElement.style.borderRadius = "10px";
+            imgElement.style.maxWidth = "150px";
+            imgElement.style.height = "auto";
+            wrapper.appendChild(imgElement);
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "✖";
+            deleteBtn.style.position = "absolute";
+            deleteBtn.style.top = "5px";
+            deleteBtn.style.right = "5px";
+            deleteBtn.style.background = "rgba(255, 0, 0, 0.7)";
+            deleteBtn.style.border = "none";
+            deleteBtn.style.color = "white";
+            deleteBtn.style.borderRadius = "50%";
+            deleteBtn.style.width = "24px";
+            deleteBtn.style.height = "24px";
+            deleteBtn.style.cursor = "pointer";
+            deleteBtn.title = "Bild löschen";
+
+            deleteBtn.addEventListener("click", () => {
+              const index = bilder.indexOf(e.target.result);
+              if (index > -1) {
+                bilder.splice(index, 1);
+              }
+              wrapper.remove();
+            });
+
+            wrapper.appendChild(deleteBtn);
+            vorschauContainer.appendChild(wrapper);
           };
           reader.readAsDataURL(file);
         }
       }
+      // Form resetten, damit dieselbe Datei später nochmal gewählt werden kann
+      event.target.value = "";
     }
 
     async function speichernAlsPDF() {
@@ -161,6 +210,10 @@
       const name = document.getElementById("name").value.trim();
       if (!name) {
         alert("Bitte gib deinen Namen ein.");
+        return;
+      }
+      if (bilder.length === 0) {
+        alert("Bitte lade mindestens ein Foto hoch, bevor du das PDF speicherst.");
         return;
       }
 
@@ -181,7 +234,10 @@
 
         doc.text(`Foto ${i + 1}:`, 10, yPos);
         yPos += 5;
-        doc.addImage(bild, "JPEG", 10, yPos, pdfWidth, pdfHeight);
+
+        const imgType = bild.startsWith('data:image/png') ? 'PNG' : 'JPEG';
+        doc.addImage(bild, imgType, 10, yPos, pdfWidth, pdfHeight);
+
         yPos += pdfHeight + 10;
       }
 
