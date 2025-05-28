@@ -16,11 +16,9 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      background-color: #d0e7ff; /* hellblauer Hintergrund */
+      background-color: #add8e6; /* hellblau */
       color: #333;
       transition: background-color 0.3s, color 0.3s;
-      min-height: 100vh;
-      position: relative;
     }
     body.dark-mode {
       background-color: #121212;
@@ -75,73 +73,55 @@
       text-align: center;
       padding: 15px 10px;
       font-size: 13px;
-      color: #555;
-      background-color: #d0e7ff; /* hellblauer Footer */
+      color: #888;
+      background-color: #add8e6;
       margin-top: 40px;
       width: 100%;
       transition: background-color 0.3s, color 0.3s;
-      position: relative;
-      bottom: 0;
     }
     body.dark-mode footer {
       background-color: #121212;
       color: #aaa;
     }
     #darkModeToggle {
-      position: fixed;
+      position: absolute;
       top: 15px;
       right: 15px;
-      padding: 6px 10px;
+      padding: 4px 10px;
       font-size: 16px;
-      border-radius: 50%;
-      background-color: transparent;
-      border: 2px solid currentColor;
-      cursor: pointer;
       z-index: 1000;
+      border-radius: 20px;
       width: 40px;
       height: 40px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-    }
-    #darkModeToggle:hover {
-      background-color: rgba(0,0,0,0.1);
+      text-align: center;
+      line-height: 30px;
     }
   </style>
 </head>
 <body>
-  <button id="darkModeToggle" title="Dark Mode umschalten">🌙</button>
-
+  <button id="darkModeToggle" class="btn btn-outline-secondary" title="Dark Mode umschalten">🌙</button>
   <h1>Arbeitssicherheit-Checkliste-2025</h1>
   <form id="formular">
     <h2 class="text-center mb-4">Fotoformular</h2>
-
     <div class="mb-3">
       <label for="name" class="form-label">Name:</label>
       <input type="text" id="name" name="name" class="form-control" required />
     </div>
-
     <div class="mb-3">
       <label class="form-label">Foto aufnehmen:</label>
       <input type="file" id="foto" accept="image/*" capture="environment" multiple />
       <button type="button" id="fotoBtn" class="btn btn-primary w-100 mt-2">📷 Foto aufnehmen</button>
     </div>
-
     <div class="mb-3">
       <label for="upload" class="form-label">Dateien auswählen:</label>
       <input type="file" id="upload" accept="image/*" class="form-control" multiple />
     </div>
-
     <div class="mb-3" id="vorschauContainer"></div>
-
     <button type="button" class="btn btn-success w-100 mt-3" onclick="speichernAlsPDF()">💾 Als PDF speichern</button>
   </form>
-
   <footer>
     &copy; <span id="jahr1"></span> Andreas Zott. Alle Rechte vorbehalten. (Sifa) Arbeitssicherheit <span id="jahr2"></span>
   </footer>
-
   <script>
     const fotoInput = document.getElementById("foto");
     const uploadInput = document.getElementById("upload");
@@ -191,23 +171,47 @@
 
       doc.setFontSize(14);
       doc.text(`Name: ${name}`, 10, 20);
-      let yPos = 30;
+
+      // Bilder-Layout: 2x2 Fotos pro Seite
+      const margin = 10;
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const imgWidth = (pageWidth - margin * 3) / 2;   // 2 Bilder nebeneinander + Margin
+      const imgHeightMax = (pageHeight - 60) / 2;      // 2 Bilder untereinander + Text + Margin
+      let x = margin;
+      let y = 30;
+      let fotosAufSeite = 0;
 
       for (let i = 0; i < bilder.length; i++) {
         const bild = bilder[i];
         const imgProps = doc.getImageProperties(bild);
-        const pdfWidth = doc.internal.pageSize.getWidth() - 20;
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        // Proportional skalieren, so dass Breite max imgWidth ist, Höhe max imgHeightMax
+        let ratio = Math.min(imgWidth / imgProps.width, imgHeightMax / imgProps.height);
+        let width = imgProps.width * ratio;
+        let height = imgProps.height * ratio;
 
-        if (yPos + pdfHeight > doc.internal.pageSize.getHeight() - 20) {
-          doc.addPage();
-          yPos = 20;
+        // Text über dem Bild
+        doc.setFontSize(12);
+        doc.text(`Foto ${i + 1}:`, x, y - 2);
+
+        doc.addImage(bild, "JPEG", x, y, width, height);
+
+        fotosAufSeite++;
+        if (fotosAufSeite % 2 === 1) {
+          // Nach dem ersten Bild in der Reihe verschieben wir x nach rechts
+          x += imgWidth + margin;
+        } else {
+          // Nach dem zweiten Bild in der Reihe zurück zu x links, y nach unten für nächste Reihe
+          x = margin;
+          y += imgHeightMax + margin + 10; // +10 für Text Abstände
+
+          if (fotosAufSeite === 4) {
+            // Nach 4 Fotos neue Seite
+            doc.addPage();
+            y = 30;
+            fotosAufSeite = 0;
+          }
         }
-
-        doc.text(`Foto ${i + 1}:`, 10, yPos);
-        yPos += 5;
-        doc.addImage(bild, "JPEG", 10, yPos, pdfWidth, pdfHeight);
-        yPos += pdfHeight + 10;
       }
 
       doc.save(`formular_${name}.pdf`);
