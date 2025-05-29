@@ -3,10 +3,10 @@ self.addEventListener('install', event => {
     caches.open('checkliste-cache-v1').then(cache => {
       return cache.addAll([
         '/',
-        '/index.html',
-        '/manifest.json',
-        '/icon.png',
-        '/favicon.ico',
+        '//sicher/index.html',
+        '//sicher/manifest.json',
+        '//sicher/icon.png',
+        '//sicher/favicon.ico',
         'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css'
       ]);
     })
