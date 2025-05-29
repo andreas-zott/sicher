@@ -4,8 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Arbeitssicherheit 2025</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="icon" href="/sicher/favicon.ico" type="image/x-icon" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+ <link rel="icon" href="/sicher/favicon.ico" type="image/x-icon" />
   <link rel="manifest" href="/sicher/manifest.json" />
   <style>
     * {
@@ -13,27 +16,26 @@
       margin: 0;
       padding: 0;
     }
-
-    html, body {
+    html,
+    body {
       height: 100%;
       font-family: Arial, sans-serif;
       background-color: #d6eaff;
       color: #333;
-      transition: background-color 0.3s, color 0.3s;
     }
-
     .wrapper {
       display: flex;
       flex-direction: column;
       min-height: 100vh;
     }
-
     main {
       flex: 1;
       padding: 40px;
       text-align: center;
+      position: relative;
     }
 
+    /* Dark Mode Button klein, rund, fixiert oben rechts */
     #toggle-dark {
       position: fixed;
       top: 16px;
@@ -52,11 +54,11 @@
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
       transition: background-color 0.3s;
     }
-
     #toggle-dark:hover {
       background-color: #555;
     }
 
+    /* Tile-Container: immer 3 Tiles nebeneinander, mit Abstand */
     .tile-container {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -64,7 +66,6 @@
       max-width: 1200px;
       margin: 0 auto;
     }
-
     @media (max-width: 700px) {
       .tile-container {
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -79,7 +80,7 @@
       text-decoration: none;
       color: #333;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s, color 0.3s;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
       text-align: center;
     }
 
@@ -117,6 +118,7 @@
       opacity: 1;
     }
 
+    /* Beschreibung-Container mit gleicher Breite wie Tile-Container */
     .description-box {
       max-width: 1200px;
       margin: 40px auto;
@@ -126,7 +128,6 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       font-size: 1.1em;
       text-align: left;
-      transition: background-color 0.3s, color 0.3s;
     }
 
     .description-box li {
@@ -139,13 +140,56 @@
       font-size: 0.75em;
       color: #888;
       margin-top: 20px;
-      transition: background-color 0.3s, color 0.3s;
     }
 
     footer a {
       color: #007bff;
       text-decoration: underline;
       margin: 0 8px;
+    }
+
+    /* Dark Mode Styles */
+    body.dark {
+      background-color: #1e1e1e;
+      color: #eee;
+    }
+
+    body.dark .tile {
+      background-color: #2c2c2c;
+      color: #eee;
+    }
+
+    body.dark .tile:hover {
+      box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+    }
+
+    body.dark .tile .icon {
+      color: #66b2ff;
+    }
+
+    body.dark .description-box {
+      background-color: #2a2a2a;
+      color: #ddd;
+    }
+
+    body.dark .tooltip {
+      background-color: #555;
+    }
+
+    body.dark footer {
+      color: #aaa;
+    }
+
+    body.dark #privacyModal div,
+    body.dark #impressumModal div {
+      background: #2a2a2a;
+      color: #eee;
+    }
+
+    body.dark #privacyModal button,
+    body.dark #impressumModal button {
+      background: #66b2ff;
+      color: #111;
     }
 
     .modal {
@@ -167,7 +211,6 @@
       border-radius: 10px;
       position: relative;
       color: #333;
-      transition: background-color 0.3s, color 0.3s;
     }
 
     .modal-content button {
@@ -178,63 +221,6 @@
       border: none;
       border-radius: 6px;
       cursor: pointer;
-    }
-
-    /* ✅ Dark Mode Styles */
-    body.dark {
-      background-color: #1e1e1e;
-      color: #eee;
-    }
-
-    body.dark .wrapper,
-    body.dark main {
-      background-color: #1e1e1e;
-    }
-
-    body.dark .tile {
-      background-color: #2c2c2c;
-      color: #eee;
-    }
-
-    body.dark .tile:hover {
-      box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
-    }
-
-    body.dark .tile .icon {
-      color: #66b2ff;
-    }
-
-    body.dark .tooltip {
-      background-color: #555;
-      color: #fff;
-    }
-
-    body.dark .description-box {
-      background-color: #2a2a2a;
-      color: #ddd;
-    }
-
-    body.dark footer {
-      background-color: #1e1e1e;
-      color: #aaa;
-    }
-
-    body.dark footer a {
-      color: #66b2ff;
-    }
-
-    body.dark .modal {
-      background-color: rgba(0, 0, 0, 0.6);
-    }
-
-    body.dark .modal-content {
-      background-color: #2a2a2a;
-      color: #eee;
-    }
-
-    body.dark .modal-content button {
-      background-color: #66b2ff;
-      color: #111;
     }
   </style>
 </head>
@@ -325,15 +311,75 @@
     </main>
 
     <footer>
-      <p>
-        &copy; <span id="jahr1"></span> Arbeitssicherheit | <a href="#">Datenschutz</a> | <a href="#">Impressum</a>
-      </p>
+      &copy; <span id="jahr1"></span> Andreas Zott. Alle Rechte vorbehalten. (Sifa)
+      Arbeitssicherheit <span id="jahr2"></span><br />
+      <a href="#" onclick="document.getElementById('privacyModal').style.display='block'">Datenschutzerklärung</a>
+      |
+      <a href="#" onclick="document.getElementById('impressumModal').style.display='block'">Impressum</a>
     </footer>
+  </div>
+
+  <!-- Datenschutzerklärung Modal -->
+  <div id="privacyModal" class="modal">
+    <div class="modal-content">
+      <h2>Datenschutzerklärung</h2>
+      <p>
+        Der Schutz Ihrer persönlichen Daten ist uns ein wichtiges Anliegen. <br />
+        Diese Website verarbeitet keinerlei personenbezogene Daten und speichert
+        keine Eingaben, Unterschriften oder Fotos dauerhaft. Die Nutzung erfolgt
+        vollständig lokal im Browser (Client-seitig), ohne Serververbindung oder
+        Datenübertragung an Dritte.
+      </p>
+
+      <ul>
+        <p>
+          Diese Website verarbeitet keinerlei personenbezogene Daten. <br />
+          Alle eingegebenen Informationen, Fotos und Unterschriften werden
+          ausschließlich lokal im Browser verarbeitet und nicht gespeichert oder
+          übertragen.
+        </p>
+        <ul>
+          <li>✅ Keine Serververbindung</li>
+          <li>✅ Keine Speicherung von Daten</li>
+          <li>✅ Keine Cookies oder Analyse-Tools</li>
+        </ul>
+        <p>
+          Die erzeugten PDFs werden nur lokal erstellt und können manuell
+          gespeichert oder versendet werden.<br />
+          Für die Versendung sind Sie selbst verantwortlich.
+        </p>
+        <p>
+          Verantwortlich gemäß DSGVO:<br />
+          Andreas Zott<br />
+          E-Mail: [quadzott@gmail.com]
+        </p>
+        <button onclick="document.getElementById('privacyModal').style.display='none'">Schließen</button>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Impressum Modal -->
+  <div id="impressumModal" class="modal">
+    <div class="modal-content">
+      <h2>Impressum</h2>
+      <p>Angaben gemäß § 5 TMG:</p>
+      <p>
+        Andreas Zott<br />
+        [58513]<br />
+        E-Mail: [quadzott@gmail.com]
+      </p>
+      <p>
+        Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
+        Andreas Zott, [Adresse wie oben]
+      </p>
+      <button onclick="document.getElementById('impressumModal').style.display='none'">Schließen</button>
+    </div>
   </div>
 
   <script>
     const jahr = new Date().getFullYear();
     document.getElementById("jahr1").textContent = jahr;
+    document.getElementById("jahr2").textContent = jahr;
 
     const toggleButton = document.getElementById("toggle-dark");
     const prefersDark = localStorage.getItem("dark-mode") === "true";
