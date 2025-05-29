@@ -1,251 +1,233 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Arbeitssicherheit 2025</title>
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-/>
-<link rel="icon" href="favicon.ico" type="image/x-icon" />
-<style>
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-  html,
-  body {
-    height: 100%;
-    font-family: Arial, sans-serif;
-    background-color: #d6eaff;
-    color: #333;
-    transition: background-color 0.3s, color 0.3s;
-  }
-  .wrapper {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-  main {
-    flex: 1;
-    padding: 40px;
-    text-align: center;
-    position: relative;
-  }
-
-  /* Dark Mode Button klein, rund, fixiert oben rechts */
-  #toggle-dark {
-    position: fixed;
-    top: 16px;
-    right: 16px;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: #333;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5em;
-    transition: background-color 0.3s;
-    z-index: 10000;
-    overflow: hidden;
-  }
-  #toggle-dark:hover {
-    background-color: #555;
-  }
-  /* Icon Animation: Fade Out/In */
-  #toggle-dark .icon {
-    position: absolute;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-  }
-  #toggle-dark .icon.hide {
-    opacity: 0;
-    transform: scale(0.5);
-  }
-  #toggle-dark .icon.show {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  /* Tile-Container: immer 3 Tiles nebeneinander, mit Abstand */
-  .tile-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  @media (max-width: 700px) {
-    .tile-container {
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Arbeitssicherheit 2025</title>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+<link rel="apple-touch-icon" sizes="192x192" href="/icon.png" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
-  }
+    html,
+    body {
+      height: 100%;
+      font-family: Arial, sans-serif;
+      background-color: #d6eaff;
+      color: #333;
+    }
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    main {
+      flex: 1;
+      padding: 40px;
+      text-align: center;
+      position: relative;
+    }
 
-  .tile {
-    position: relative;
-    background-color: #fff;
-    border-radius: 16px;
-    padding: 24px;
-    text-decoration: none;
-    color: #333;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    text-align: center;
-  }
+    /* Dark Mode Button klein, rund, fixiert oben rechts */
+    #toggle-dark {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      padding: 6px 10px;
+      border-radius: 50%;
+      background: #333;
+      color: #fff;
+      cursor: pointer;
+      font-size: 1.2em;
+      width: 40px;
+      height: 40px;
+      line-height: 26px;
+      text-align: center;
+      border: none;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      transition: background-color 0.3s;
+    }
+    #toggle-dark:hover {
+      background-color: #555;
+    }
 
-  .tile:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-  }
+    /* Tile-Container: immer 3 Tiles nebeneinander, mit Abstand */
+    .tile-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    @media (max-width: 700px) {
+      .tile-container {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      }
+    }
 
-  .tile .icon {
-    font-size: 36px;
-    margin-bottom: 12px;
-    color: #007bff;
-  }
+    .tile {
+      position: relative;
+      background-color: #fff;
+      border-radius: 16px;
+      padding: 24px;
+      text-decoration: none;
+      color: #333;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      text-align: center;
+    }
 
-  .tooltip {
-    visibility: hidden;
-    opacity: 0;
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    border-radius: 8px;
-    padding: 8px;
-    position: absolute;
-    z-index: 1;
-    bottom: 110%;
-    left: 50%;
-    transform: translateX(-50%);
-    transition: opacity 0.3s;
-    white-space: nowrap;
-    font-size: 0.85em;
-  }
+    .tile:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
 
-  .tile:hover .tooltip {
-    visibility: visible;
-    opacity: 1;
-  }
+    .tile .icon {
+      font-size: 36px;
+      margin-bottom: 12px;
+      color: #007bff;
+    }
 
-  /* Beschreibung-Container mit gleicher Breite wie Tile-Container */
-  .description-box {
-    max-width: 1200px;
-    margin: 40px auto;
-    padding: 24px;
-    background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    font-size: 1.1em;
-    text-align: left;
-  }
+    .tooltip {
+      visibility: hidden;
+      opacity: 0;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 8px;
+      padding: 8px;
+      position: absolute;
+      z-index: 1;
+      bottom: 110%;
+      left: 50%;
+      transform: translateX(-50%);
+      transition: opacity 0.3s;
+      white-space: nowrap;
+      font-size: 0.85em;
+    }
 
-  .description-box li {
-    margin-bottom: 10px;
-  }
+    .tile:hover .tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
 
-  footer {
-    text-align: center;
-    padding: 10px 0;
-    font-size: 0.75em;
-    color: #888;
-    margin-top: 20px;
-  }
+    /* Beschreibung-Container mit gleicher Breite wie Tile-Container */
+    .description-box {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 24px;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      font-size: 1.1em;
+      text-align: left;
+    }
 
-  footer a {
-    color: #007bff;
-    text-decoration: underline;
-    margin: 0 8px;
-  }
+    .description-box li {
+      margin-bottom: 10px;
+    }
 
-  /* Dark Mode Styles */
-  body.dark {
-    background-color: #1e1e1e;
-    color: #eee;
-  }
+    footer {
+      text-align: center;
+      padding: 10px 0;
+      font-size: 0.75em;
+      color: #888;
+      margin-top: 20px;
+    }
 
-  body.dark .tile {
-    background-color: #2c2c2c;
-    color: #eee;
-  }
+    footer a {
+      color: #007bff;
+      text-decoration: underline;
+      margin: 0 8px;
+    }
 
-  body.dark .tile:hover {
-    box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
-  }
+    /* Dark Mode Styles */
+    body.dark {
+      background-color: #1e1e1e;
+      color: #eee;
+    }
 
-  body.dark .tile .icon {
-    color: #66b2ff;
-  }
+    body.dark .tile {
+      background-color: #2c2c2c;
+      color: #eee;
+    }
 
-  body.dark .description-box {
-    background-color: #2a2a2a;
-    color: #ddd;
-  }
+    body.dark .tile:hover {
+      box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+    }
 
-  body.dark .tooltip {
-    background-color: #555;
-  }
+    body.dark .tile .icon {
+      color: #66b2ff;
+    }
 
-  body.dark footer {
-    color: #aaa;
-  }
+    body.dark .description-box {
+      background-color: #2a2a2a;
+      color: #ddd;
+    }
 
-  body.dark #privacyModal div,
-  body.dark #impressumModal div {
-    background: #2a2a2a;
-    color: #eee;
-  }
+    body.dark .tooltip {
+      background-color: #555;
+    }
 
-  body.dark #privacyModal button,
-  body.dark #impressumModal button {
-    background: #66b2ff;
-    color: #111;
-  }
+    body.dark footer {
+      color: #aaa;
+    }
 
-  .modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 9999;
-  }
+    body.dark #privacyModal div,
+    body.dark #impressumModal div {
+      background: #2a2a2a;
+      color: #eee;
+    }
 
-  .modal-content {
-    background: white;
-    max-width: 800px;
-    margin: 5% auto;
-    padding: 2em;
-    border-radius: 10px;
-    position: relative;
-    color: #333;
-  }
+    body.dark #privacyModal button,
+    body.dark #impressumModal button {
+      background: #66b2ff;
+      color: #111;
+    }
 
-  .modal-content button {
-    margin-top: 2em;
-    padding: 8px 16px;
-    background: #007bff;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-</style>
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 9999;
+    }
+
+    .modal-content {
+      background: white;
+      max-width: 800px;
+      margin: 5% auto;
+      padding: 2em;
+      border-radius: 10px;
+      position: relative;
+      color: #333;
+    }
+
+    .modal-content button {
+      margin-top: 2em;
+      padding: 8px 16px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
   <div class="wrapper">
     <main>
-      <button id="toggle-dark" aria-label="Dark Mode umschalten" title="Dark Mode umschalten" >
-        <i class="fas fa-moon icon show" id="icon-moon"></i>
-        <i class="fas fa-sun icon hide" id="icon-sun"></i>
-      </button>
+      <button id="toggle-dark" aria-label="Dark Mode umschalten" title="Dark Mode umschalten">🌙</button>
 
       <h1>Arbeitssicherheit 2025</h1>
       <br /><br /><br />
@@ -285,8 +267,7 @@
           <p>Kamera & PDF</p>
           <span class="tooltip">Fotos aufnehmen und speichern</span>
         </a>
-
-        <a href="Kameraaufnahme.html" class="tile">
+<a href="Kameraaufnahme.html" class="tile">
           <div class="icon"><i class="fas fa-camera"></i></div>
           <h2>Kamera</h2>
           <p>Kamera & PDF</p>
@@ -342,118 +323,80 @@
   <div id="privacyModal" class="modal">
     <div class="modal-content">
       <h2>Datenschutzerklärung</h2>
-<div style="height: 20px;"></div> <!-- Leerzeile mit 20px Höhe -->
       <p>
         Der Schutz Ihrer persönlichen Daten ist uns ein wichtiges Anliegen. <br />
-<div style="height: 20px;"></div> <!-- Leerzeile mit 20px Höhe -->
         Diese Website verarbeitet keinerlei personenbezogene Daten und speichert
         keine Eingaben, Unterschriften oder Fotos dauerhaft. Die Nutzung erfolgt
         vollständig lokal im Browser (Client-seitig), ohne Serververbindung oder
         Datenübertragung an Dritte.
-
       </p>
-<div style="height: 20px;"></div> <!-- Leerzeile mit 20px Höhe -->
 
       <ul>
         <p>
-          Diese Website verarbeitet keinerlei personenbezogene Daten. <br /><div style="height: 20px;"></div> <!-- Leerzeile mit 20px Höhe -->
-          Alle eingegebenen Informationen, Fotos und Unterschriften <br />werden
-          ausschließlich lokal im Browser verarbeitet und<br /> nicht gespeichert oder
+          Diese Website verarbeitet keinerlei personenbezogene Daten. <br />
+          Alle eingegebenen Informationen, Fotos und Unterschriften werden
+          ausschließlich lokal im Browser verarbeitet und nicht gespeichert oder
           übertragen.
         </p>
-<div style="height: 20px;"></div> <!-- Leerzeile mit 20px Höhe -->
         <ul>
           <li>✅ Keine Serververbindung</li>
-          <li>✅ Keine Speicherung personenbezogener Daten</li>
-          <li>✅ Datenschutzfreundlich und sicher</li>
+          <li>✅ Keine Speicherung von Daten</li>
+          <li>✅ Keine Cookies oder Analyse-Tools</li>
         </ul>
+        <p>
+          Die erzeugten PDFs werden nur lokal erstellt und können manuell
+          gespeichert oder versendet werden.<br />
+          Für die Versendung sind Sie selbst verantwortlich.
+        </p>
+        <p>
+          Verantwortlich gemäß DSGVO:<br />
+          Andreas Zott<br />
+          E-Mail: [quadzott@gmail.com]
+        </p>
+        <button onclick="document.getElementById('privacyModal').style.display='none'">Schließen</button>
       </ul>
-
-      <button onclick="document.getElementById('privacyModal').style.display='none'">Schließen</button>
     </div>
   </div>
 
-<!-- Impressum Modal -->
+  <!-- Impressum Modal -->
   <div id="impressumModal" class="modal">
     <div class="modal-content">
       <h2>Impressum</h2>
-<div style="height: 20px;"></div> <!-- Leerzeile mit 20px Höhe -->
-      <p>Angaben gemäß rein privater Webseite</p>
-<div style="height: 20px;"></div> <!-- Leerzeile mit 20px Höhe -->
+      <p>Angaben gemäß § 5 TMG:</p>
       <p>
         Andreas Zott<br />
-      
-<div style="height: 20px;"></div> <!-- Leerzeile mit 20px Höhe -->
-        E-Mail: quadzott(at)gmail.com
+        [58513]<br />
+        E-Mail: [quadzott@gmail.com]
       </p>
-<div style="height: 20px;"></div> <!-- Leerzeile mit 20px Höhe -->
       <p>
         Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
-        Andreas Zott
+        Andreas Zott, [Adresse wie oben]
       </p>
-
- 
       <button onclick="document.getElementById('impressumModal').style.display='none'">Schließen</button>
     </div>
   </div>
 
-<script>
-  // Jahr dynamisch im Footer anzeigen
-  const now = new Date();
-  document.getElementById("jahr1").textContent = now.getFullYear();
-  document.getElementById("jahr2").textContent = now.getFullYear();
+  <script>
+    const jahr = new Date().getFullYear();
+    document.getElementById("jahr1").textContent = jahr;
+    document.getElementById("jahr2").textContent = jahr;
 
-  const toggleDarkButton = document.getElementById("toggle-dark");
-  const iconMoon = document.getElementById("icon-moon");
-  const iconSun = document.getElementById("icon-sun");
+    const toggleButton = document.getElementById("toggle-dark");
+    const prefersDark = localStorage.getItem("dark-mode") === "true";
 
-  function applyDarkMode(isDark) {
-    document.body.classList.toggle("dark", isDark);
-
-    if (isDark) {
-      iconMoon.classList.remove("show");
-      iconMoon.classList.add("hide");
-
-      iconSun.classList.remove("hide");
-      iconSun.classList.add("show");
-
-      toggleDarkButton.title = "Light Mode umschalten";
-    } else {
-      iconSun.classList.remove("show");
-      iconSun.classList.add("hide");
-
-      iconMoon.classList.remove("hide");
-      iconMoon.classList.add("show");
-
-      toggleDarkButton.title = "Dark Mode umschalten";
+    if (prefersDark) {
+      document.body.classList.add("dark");
+      toggleButton.textContent = "☀️";
+      toggleButton.title = "Light Mode umschalten";
     }
-  }
 
-  // Dark Mode aus localStorage beim Laden auslesen
-  const darkModeStored = localStorage.getItem("dark-mode") === "true";
-  applyDarkMode(darkModeStored);
-
-  toggleDarkButton.addEventListener("click", () => {
-    const isDark = !document.body.classList.contains("dark");
-    applyDarkMode(isDark);
-    localStorage.setItem("dark-mode", isDark);
-  });
-
-  // Modal schließen wenn außerhalb geklickt
-  window.addEventListener("click", (e) => {
-    if (e.target.classList.contains("modal")) {
-      e.target.style.display = "none";
-    }
-  });
-
-  // Modal schließen mit ESC-Taste
-  window.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
-      document.querySelectorAll(".modal").forEach((modal) => {
-        modal.style.display = "none";
-      });
-    }
-  });
-</script>
+    toggleButton.addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+      const isDark = document.body.classList.contains("dark");
+      toggleButton.textContent = isDark ? "☀️" : "🌙";
+      toggleButton.title = isDark ? "Light Mode umschalten" : "Dark Mode umschalten";
+      localStorage.setItem("dark-mode", isDark);
+    });
+  </script>
 </body>
 </html>
