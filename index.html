@@ -4,12 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Arbeitssicherheit 2025</title>
+  
+  <!-- Manifest und Theme-Color -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#007bff" />
+  
+  <!-- Favicon -->
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  
+  <!-- Font Awesome -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
   />
-  <link rel="icon" href="favicon.ico" type="image/x-icon" />
-<link rel="apple-touch-icon" sizes="192x192" href="/icon.png" />
+  
   <style>
     * {
       box-sizing: border-box;
@@ -34,7 +42,6 @@
       text-align: center;
       position: relative;
     }
-
     /* Dark Mode Button klein, rund, fixiert oben rechts */
     #toggle-dark {
       position: fixed;
@@ -57,8 +64,7 @@
     #toggle-dark:hover {
       background-color: #555;
     }
-
-    /* Tile-Container: immer 3 Tiles nebeneinander, mit Abstand */
+    /* Tile-Container: 3 Tiles nebeneinander, mit Abstand */
     .tile-container {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -71,7 +77,6 @@
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       }
     }
-
     .tile {
       position: relative;
       background-color: #fff;
@@ -83,18 +88,15 @@
       transition: transform 0.2s ease, box-shadow 0.2s ease;
       text-align: center;
     }
-
     .tile:hover {
       transform: translateY(-5px);
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
     }
-
     .tile .icon {
       font-size: 36px;
       margin-bottom: 12px;
       color: #007bff;
     }
-
     .tooltip {
       visibility: hidden;
       opacity: 0;
@@ -112,13 +114,11 @@
       white-space: nowrap;
       font-size: 0.85em;
     }
-
     .tile:hover .tooltip {
       visibility: visible;
       opacity: 1;
     }
-
-    /* Beschreibung-Container mit gleicher Breite wie Tile-Container */
+    /* Beschreibung-Container */
     .description-box {
       max-width: 1200px;
       margin: 40px auto;
@@ -129,11 +129,9 @@
       font-size: 1.1em;
       text-align: left;
     }
-
     .description-box li {
       margin-bottom: 10px;
     }
-
     footer {
       text-align: center;
       padding: 10px 0;
@@ -141,57 +139,46 @@
       color: #888;
       margin-top: 20px;
     }
-
     footer a {
       color: #007bff;
       text-decoration: underline;
       margin: 0 8px;
     }
-
     /* Dark Mode Styles */
     body.dark {
       background-color: #1e1e1e;
       color: #eee;
     }
-
     body.dark .tile {
       background-color: #2c2c2c;
       color: #eee;
     }
-
     body.dark .tile:hover {
       box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
     }
-
     body.dark .tile .icon {
       color: #66b2ff;
     }
-
     body.dark .description-box {
       background-color: #2a2a2a;
       color: #ddd;
     }
-
     body.dark .tooltip {
       background-color: #555;
     }
-
     body.dark footer {
       color: #aaa;
     }
-
     body.dark #privacyModal div,
     body.dark #impressumModal div {
       background: #2a2a2a;
       color: #eee;
     }
-
     body.dark #privacyModal button,
     body.dark #impressumModal button {
       background: #66b2ff;
       color: #111;
     }
-
     .modal {
       display: none;
       position: fixed;
@@ -202,7 +189,6 @@
       background: rgba(0, 0, 0, 0.6);
       z-index: 9999;
     }
-
     .modal-content {
       background: white;
       max-width: 800px;
@@ -212,7 +198,6 @@
       position: relative;
       color: #333;
     }
-
     .modal-content button {
       margin-top: 2em;
       padding: 8px 16px;
@@ -225,6 +210,23 @@
   </style>
 </head>
 <body>
+  <!-- Offline-Banner -->
+  <div id="offline-banner" style="
+    display: none;
+    background: #ffc107;
+    color: #000;
+    padding: 12px;
+    text-align: center;
+    font-weight: bold;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 9999;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  ">
+    🔌 Du bist offline. Inhalte werden aus dem Cache geladen.
+  </div>
+  
   <div class="wrapper">
     <main>
       <button id="toggle-dark" aria-label="Dark Mode umschalten" title="Dark Mode umschalten">🌙</button>
@@ -267,7 +269,8 @@
           <p>Kamera & PDF</p>
           <span class="tooltip">Fotos aufnehmen und speichern</span>
         </a>
-<a href="Kameraaufnahme.html" class="tile">
+        
+        <a href="Kameraaufnahme.html" class="tile">
           <div class="icon"><i class="fas fa-camera"></i></div>
           <h2>Kamera</h2>
           <p>Kamera & PDF</p>
@@ -279,32 +282,32 @@
         <strong>Beschreibung:</strong><br /><br />
         <ul>
           <li>
-            <i class="fas fa-check-circle" style="color:#007bff;"></i> Checklisten für
-            den Einzelhandel
+            <i class="fas fa-check-circle" style="color:#007bff;"></i>
+            Checklisten für den Einzelhandel
           </li>
           <li>
-            <i class="fas fa-check-circle" style="color:#007bff;"></i> Farbig
-            unterteilt oder klassische Unterteilung
+            <i class="fas fa-check-circle" style="color:#007bff;"></i>
+            Farbig unterteilt oder klassische Unterteilung
           </li>
           <li>
-            <i class="fas fa-check-circle" style="color:#007bff;"></i> Mit
-            Unterschriftenfeld oben oder unten
+            <i class="fas fa-check-circle" style="color:#007bff;"></i>
+            Mit Unterschriftenfeld oben oder unten
           </li>
           <li>
-            <i class="fas fa-check-circle" style="color:#007bff;"></i> Stabile
-            Darstellung auf dem iPad (kein Scrollen beim Unterschreiben)
+            <i class="fas fa-check-circle" style="color:#007bff;"></i>
+            Stabile Darstellung auf dem iPad (kein Scrollen beim Unterschreiben)
           </li>
           <li>
-            <i class="fas fa-check-circle" style="color:#007bff;"></i> Detailliertere
-            Checkliste 2025 enthalten
+            <i class="fas fa-check-circle" style="color:#007bff;"></i>
+            Detailliertere Checkliste 2025 enthalten
           </li>
           <li>
-            <i class="fas fa-check-circle" style="color:#007bff;"></i> Fotoformular zur
-            Bildaufnahme und PDF-Versand
+            <i class="fas fa-check-circle" style="color:#007bff;"></i>
+            Fotoformular zur Bildaufnahme und PDF-Versand
           </li>
           <li>
-            <i class="fas fa-check-circle" style="color:#007bff;"></i> Erweiterbar
-            mit weiteren Bereichen &amp; Fragen
+            <i class="fas fa-check-circle" style="color:#007bff;"></i>
+            Erweiterbar mit weiteren Bereichen &amp; Fragen
           </li>
         </ul>
       </div>
@@ -313,27 +316,30 @@
     <footer>
       &copy; <span id="jahr1"></span> Andreas Zott. Alle Rechte vorbehalten. (Sifa)
       Arbeitssicherheit <span id="jahr2"></span><br />
-      <a href="#" onclick="document.getElementById('privacyModal').style.display='block'">Datenschutzerklärung</a>
+      <a href="#" role="button" onclick="document.getElementById('privacyModal').style.display='block'">
+        Datenschutzerklärung
+      </a>
       |
-      <a href="#" onclick="document.getElementById('impressumModal').style.display='block'">Impressum</a>
+      <a href="#" role="button" onclick="document.getElementById('impressumModal').style.display='block'">
+        Impressum
+      </a>
     </footer>
   </div>
 
   <!-- Datenschutzerklärung Modal -->
-  <div id="privacyModal" class="modal">
+  <div id="privacyModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="privacyModalTitle">
     <div class="modal-content">
-      <h2>Datenschutzerklärung</h2>
+      <h2 id="privacyModalTitle">Datenschutzerklärung</h2>
       <p>
-        Der Schutz Ihrer persönlichen Daten ist uns ein wichtiges Anliegen. <br />
+        Der Schutz Ihrer persönlichen Daten ist uns ein wichtiges Anliegen.<br />
         Diese Website verarbeitet keinerlei personenbezogene Daten und speichert
         keine Eingaben, Unterschriften oder Fotos dauerhaft. Die Nutzung erfolgt
         vollständig lokal im Browser (Client-seitig), ohne Serververbindung oder
         Datenübertragung an Dritte.
       </p>
-
       <ul>
         <p>
-          Diese Website verarbeitet keinerlei personenbezogene Daten. <br />
+          Diese Website verarbeitet keinerlei personenbezogene Daten.<br />
           Alle eingegebenen Informationen, Fotos und Unterschriften werden
           ausschließlich lokal im Browser verarbeitet und nicht gespeichert oder
           übertragen.
@@ -353,15 +359,17 @@
           Andreas Zott<br />
           E-Mail: [quadzott@gmail.com]
         </p>
-        <button onclick="document.getElementById('privacyModal').style.display='none'">Schließen</button>
+        <button onclick="document.getElementById('privacyModal').style.display='none'">
+          Schließen
+        </button>
       </ul>
     </div>
   </div>
 
   <!-- Impressum Modal -->
-  <div id="impressumModal" class="modal">
+  <div id="impressumModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="impressumModalTitle">
     <div class="modal-content">
-      <h2>Impressum</h2>
+      <h2 id="impressumModalTitle">Impressum</h2>
       <p>Angaben gemäß § 5 TMG:</p>
       <p>
         Andreas Zott<br />
@@ -372,24 +380,27 @@
         Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
         Andreas Zott, [Adresse wie oben]
       </p>
-      <button onclick="document.getElementById('impressumModal').style.display='none'">Schließen</button>
+      <button onclick="document.getElementById('impressumModal').style.display='none'">
+        Schließen
+      </button>
     </div>
   </div>
 
+  <!-- Skripte -->
   <script>
+    // Jahr aktualisieren
     const jahr = new Date().getFullYear();
     document.getElementById("jahr1").textContent = jahr;
     document.getElementById("jahr2").textContent = jahr;
 
+    // Dark Mode Toggle
     const toggleButton = document.getElementById("toggle-dark");
     const prefersDark = localStorage.getItem("dark-mode") === "true";
-
     if (prefersDark) {
       document.body.classList.add("dark");
       toggleButton.textContent = "☀️";
       toggleButton.title = "Light Mode umschalten";
     }
-
     toggleButton.addEventListener("click", () => {
       document.body.classList.toggle("dark");
       const isDark = document.body.classList.contains("dark");
@@ -397,6 +408,29 @@
       toggleButton.title = isDark ? "Light Mode umschalten" : "Dark Mode umschalten";
       localStorage.setItem("dark-mode", isDark);
     });
+
+    // Offline-Banner aktualisieren
+    function updateOnlineStatus() {
+      const banner = document.getElementById('offline-banner');
+      if (!navigator.onLine) {
+        banner.style.display = 'block';
+      } else {
+        banner.style.display = 'none';
+      }
+    }
+    window.addEventListener('load', updateOnlineStatus);
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+
+    // Service Worker registrieren
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker
+          .register('/sw.js')
+          .then(reg => console.log('✅ Service Worker registriert', reg))
+          .catch(err => console.error('❌ Fehler beim Registrieren:', err));
+      });
+    }
   </script>
 </body>
 </html>
