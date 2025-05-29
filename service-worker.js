@@ -2,10 +2,10 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches.open('checkliste-cache-v1').then(cache => {
       return cache.addAll([
-        '/',
-        '/index.html',
-        '/manifest.json',
-        '/icon.png'
+        '/sicher/',
+        '/sicher/index.html',
+        '/sicher/manifest.json',
+        '/sicher/icon.png'
       ]);
     })
   );
