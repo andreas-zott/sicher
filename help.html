@@ -5,14 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Anleitung: Webseite in Safari öffnen und als PDF versenden (iPad)</title>
 <style>
-  footer {
-    font-size: 0.8rem;       /* Text kleiner */
-    text-align: center;      /* Text zentrieren */
-    padding: 1rem 0;         /* Optional: etwas Abstand oben und unten */
-    color: #555;             /* Optional: etwas hellere Farbe für dezenteren Look */
-  }
-</style>
-<style>
   body {
     font-family: Arial, sans-serif;
     max-width: 700px;
@@ -20,15 +12,18 @@
     padding: 1rem;
     line-height: 1.6;
     color: #222;
-    background: #f9f9f9;
+    background: #add8e6; /* Hellblauer Hintergrund */
   }
+
   h1, h2 {
     color: #004080;
   }
+
   h1 {
     text-align: center;
     margin-bottom: 2rem;
   }
+
   section {
     background: white;
     border-radius: 8px;
@@ -36,20 +31,74 @@
     margin-bottom: 1.5rem;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   }
+
   ul {
     list-style: none;
     padding-left: 0;
   }
+
   ul li {
     margin-bottom: 0.7rem;
   }
+
   .emoji {
     font-size: 1.2rem;
     margin-right: 0.6rem;
   }
+
+  footer {
+    font-size: 0.8rem;
+    text-align: center;
+    padding: 1rem 0;
+    color: #555;
+  }
+
+  /* Dark Mode Styles */
+  body.dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
+  }
+
+  body.dark-mode section {
+    background-color: #1e1e1e;
+    box-shadow: 0 2px 6px rgba(255,255,255,0.1);
+  }
+
+  body.dark-mode h1,
+  body.dark-mode h2 {
+    color: #80b3ff;
+  }
+
+  body.dark-mode footer {
+    color: #aaa;
+  }
+
+  body.dark-mode button#darkModeToggle {
+    background: #444;
+    color: #eee;
+  }
 </style>
 </head>
 <body>
+
+<!-- 🌙 Dark Mode Toggle Button -->
+<button id="darkModeToggle" aria-label="Dark Mode umschalten" title="Dark Mode umschalten" style="
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  width: 36px;
+  height: 36px;
+  background: #add8e6;
+  color: #004080;
+  border: none;
+  border-radius: 50%;
+  font-size: 1rem;
+  cursor: pointer;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+">🌙</button>
 
 <h1>Anleitung: Webseite in Safari öffnen und als PDF versenden (iPad)</h1>
 
@@ -75,29 +124,51 @@
     <li><span class="emoji">🖨️</span>Tippe im Teilen-Menü auf „Drucken“.</li>
     <li><span class="emoji">⚙️</span>Tippe oben auf „Optionen“.<br>Stelle sicher, dass „PDF“ ausgewählt ist (nicht „Web-Archiv“). Tippe auf „Fertig“.</li>
     <li><span class="emoji">📎</span>Es erscheint eine Vorschau mit dem PDF, z. B. „Arbeitssicherheit-2025.pdf“.</li>
-<li><span class="emoji">🖨️</span>Es erscheint eine Druckvorschau, es werden nur Drucker angezeigt die im selben Wifi Netz eingebunden sind“.</li>
+    <li><span class="emoji">🖨️</span>Es erscheint eine Druckvorschau, es werden nur Drucker angezeigt die im selben Wifi Netz eingebunden sind“.</li>
   </ul>
 </section>
 
 <section>
   <h2>4. PDF per E-Mail versenden</h2>
   <ul>
-<li><span class="emoji">⚙️</span>Tippe oben auf „Optionen“.<br>Stelle sicher, dass „PDF“ ausgewählt ist (nicht „Web-Archiv“). Tippe auf „Fertig“.</li>
+    <li><span class="emoji">⚙️</span>Tippe oben auf „Optionen“.<br>Stelle sicher, dass „PDF“ ausgewählt ist (nicht „Web-Archiv“). Tippe auf „Fertig“.</li>
     <li><span class="emoji">📧</span>Tippe im Teilen-Menü auf „Mail“.</li>
     <li><span class="emoji">📝</span>Eine neue E-Mail öffnet sich mit dem PDF als Anhang.<br>Gib Empfänger, Betreff und Nachricht ein.</li>
     <li><span class="emoji">📨</span>Tippe oben rechts auf das Senden-Symbol (Pfeil), um die Mail zu verschicken.</li>
   </ul>
 </section>
- <footer>
-      © <span id="jahr1">2025</span> Andreas Zott. Alle Rechte vorbehalten. (Sifa) Arbeitssicherheit <span id="jahr2">2025</span>
-    </footer>
-  </div>
 
-  <script>
-    const jahr = new Date().getFullYear();
-    document.getElementById('jahr1').textContent = jahr;
-    document.getElementById('jahr2').textContent = jahr;
-  </script>
+<footer>
+  © <span id="jahr1">2025</span> Andreas Zott. Alle Rechte vorbehalten. (Sifa) Arbeitssicherheit <span id="jahr2">2025</span>
+</footer>
+
+<script>
+  // Jahr automatisch setzen
+  const jahr = new Date().getFullYear();
+  document.getElementById('jahr1').textContent = jahr;
+  document.getElementById('jahr2').textContent = jahr;
+
+  // Dark Mode Umschalten
+  const toggle = document.getElementById('darkModeToggle');
+  const body = document.body;
+
+  if (localStorage.getItem('darkMode') === 'enabled') {
+    body.classList.add('dark-mode');
+    toggle.textContent = '☀️';
+  }
+
+  toggle.addEventListener('click', () => {
+    if (body.classList.contains('dark-mode')) {
+      body.classList.remove('dark-mode');
+      localStorage.setItem('darkMode', 'disabled');
+      toggle.textContent = '🌙';
+    } else {
+      body.classList.add('dark-mode');
+      localStorage.setItem('darkMode', 'enabled');
+      toggle.textContent = '☀️';
+    }
+  });
+</script>
+
 </body>
 </html>
-
