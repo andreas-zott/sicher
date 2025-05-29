@@ -741,12 +741,31 @@
     const ctx = canvas.getContext('2d');
     let drawing = false;
 
-    function resizeCanvas() {
-      const ratio = Math.max(window.devicePixelRatio || 1, 1);
-      canvas.width = canvas.offsetWidth * ratio;
-      canvas.height = canvas.offsetHeight * ratio;
-      ctx.scale(ratio, ratio);
+    let savedData;
+
+function resizeCanvas() {
+  if (canvas.width && canvas.height) {
+    try {
+      savedData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    } catch (e) {
+      console.warn("Canvas ImageData konnte nicht gespeichert werden:", e);
     }
+  }
+
+  const ratio = Math.max(window.devicePixelRatio || 1, 1);
+  canvas.width = canvas.offsetWidth * ratio;
+  canvas.height = canvas.offsetHeight * ratio;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.scale(ratio, ratio);
+
+  if (savedData) {
+    try {
+      ctx.putImageData(savedData, 0, 0);
+    } catch (e) {
+      console.warn("Canvas ImageData konnte nicht wiederhergestellt werden:", e);
+    }
+  }
+}
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
 
