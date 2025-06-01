@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Checkliste für Arbeitssicherheiten für Einzelhandel/Marktumgebungen</title>
+  <title>heckliste für Arbeitssicherheiten für Einzelhandel/Marktumgebungen</title>
 
   <style>
     /* Custom Radio Button Styling */
@@ -416,7 +416,7 @@
   </div>
 
   <div style="flex: 1; text-align: center;">
-    <h1 style="margin: 0;">Checkliste für Arbeitssicherheiten für Einzelhandel/Marktumgebungen</h1>
+    <h1 style="margin: 0;">heckliste für Arbeitssicherheiten für Einzelhandel/Marktumgebungen</h1>
   </div>
 
   <div class="form-section">
@@ -1650,6 +1650,63 @@ geprüft und gegen unbefugte Benutzung gesichert. <br>Sicherheitsschuhe werden g
     const jahr = new Date().getFullYear();
     document.getElementById('jahr1').textContent = jahr;
     document.getElementById('jahr2').textContent = jahr;
-  </script>
+<script>
+  const canvas = document.getElementById('signature-pad');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    let drawing = false;
+
+    function getTouchPos(e) {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: e.touches[0].clientX - rect.left,
+        y: e.touches[0].clientY - rect.top
+      };
+    }
+
+    canvas.addEventListener('touchstart', function (e) {
+      e.preventDefault();
+      const pos = getTouchPos(e);
+      drawing = true;
+      ctx.beginPath();
+      ctx.moveTo(pos.x, pos.y);
+    });
+
+    canvas.addEventListener('touchmove', function (e) {
+      e.preventDefault();
+      if (!drawing) return;
+      const pos = getTouchPos(e);
+      ctx.lineTo(pos.x, pos.y);
+      ctx.stroke();
+    });
+
+    canvas.addEventListener('touchend', function () {
+      drawing = false;
+    });
+
+    canvas.addEventListener('mousedown', function (e) {
+      drawing = true;
+      ctx.beginPath();
+      ctx.moveTo(e.offsetX, e.offsetY);
+    });
+
+    canvas.addEventListener('mousemove', function (e) {
+      if (!drawing) return;
+      ctx.lineTo(e.offsetX, e.offsetY);
+      ctx.stroke();
+    });
+
+    canvas.addEventListener('mouseup', function () {
+      drawing = false;
+    });
+
+    function clearSignature() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    window.clearSignature = clearSignature;
+  }
+</script>
+
 </body>
 </html>
