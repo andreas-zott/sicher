@@ -2,7 +2,8 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
   <title>Umfassende Gefährdungsbeurteilung für den Einzelhandel</title>
 
   <style>
@@ -1995,13 +1996,10 @@
       </tr>
     </tbody>
   </table>
-
-
-
         
   <div style="margin: 30px 0;">
     <h4 style="color: #8b2635; text-align: center;">Bestätigung der Kenntnisnahme</h4>
-    <div style="text-align: left; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #8b2635; border-radius: 8px; background-color: #fdf5f5;">
+    <div style="text-align: left; max-width: 700px; margin: 0 auto; padding: 20px; border: 1px solid #8b2635; border-radius: 8px; background-color: #fdf5f5;">
       <label style="display: flex; align-items: center; margin-bottom: 10px;">
         <input type="checkbox" style="margin-right: 10px; transform: scale(1.2);"/>
         <span>Hiermit bestätige ich, dass alle festgestellten Mängel zur Kenntnis genommen wurden.</span>
@@ -2023,8 +2021,8 @@
 
    <h3 style="color: #8b2635; text-align: center;">Unterschrift</h3>
 
- <div id="signature-container" style="width: 650px; margin: 0 auto;">
-  <canvas height="154" id="signature-pad" style="width: 650px; height: 154px; border: 2px solid #8b2635; border-radius: 8px; display: block;" width="604"></canvas>
+ <div id="signature-container" style="width: 740px; margin: 0 auto;">
+  <canvas height="154" id="signature-pad" style="width: 740px; height: 154px; border: 2px solid #8b2635; border-radius: 8px; display: block;" width="604"></canvas>
 </div>
 
 <h3 style="color: #8b2635; text-align: center;">Unterschrift</h3>
@@ -2137,6 +2135,8 @@
     restoreSignature();
   });
 
+  window.addEventListener("orientationchange", resizeCanvas);
+
   canvas.addEventListener('mousedown', startDrawing);
   canvas.addEventListener('mousemove', draw);
   canvas.addEventListener('mouseup', stopDrawing);
@@ -2145,14 +2145,3 @@
   canvas.addEventListener('touchmove', draw, {passive: false});
   canvas.addEventListener('touchend', stopDrawing);
 </script>
-  <footer>
-    <p>&copy; <span id="jahr"></span> Arbeitssicherheit-Checkliste Einzelhandel. Alle Rechte vorbehalten.</p>
-    <p style="font-size: 10px; margin-top: 5px;">
-      Diese Checkliste dient der systematischen Erfassung von Sicherheitsmängeln und ersetzt nicht die fachkundige Beratung durch Experten.
-    </p>
-  </footer>
-  <script>
-    document.getElementById('jahr').textContent = new Date().getFullYear();
-  </script>
-</body>
-</html>
