@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Umfassende Gefährdungsbeurteilung für den Einzelhandel</title>
-
   <style>
     /* Custom Radio Button Styling */
     input[type="radio"] {
@@ -223,25 +222,7 @@
       padding-bottom: 5px;
     }
 
-    /* Dark Mode Toggle */
-    .dark-mode-toggle {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      background: rgba(255, 255, 255, 0.8);
-      padding: 4px 6px;
-      border-radius: 50%;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-      cursor: pointer;
-      user-select: none;
-      z-index: 1000;
-      width: 20px;
-      height: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 10px;
-    }
+   
 
     /* Responsive Design */
     @media screen and (max-width: 768px) {
@@ -2017,14 +1998,10 @@
         <td style="text-align: center;"><input type="checkbox"/></td>
       </tr>
     </tbody>
-  </table>
-
-
-
-        
+  </table>        
   <div style="margin: 30px 0;">
     <h4 style="color: #8b2635; text-align: center;">Bestätigung der Kenntnisnahme</h4>
-    <div style="text-align: left; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #8b2635; border-radius: 8px; background-color: #fdf5f5;">
+    <div style="text-align: left; max-width: 650px; margin: 0 auto; padding: 20px; border: 1px solid #8b2635; border-radius: 8px; background-color: #fdf5f5;">
       <label style="display: flex; align-items: center; margin-bottom: 10px;">
         <input type="checkbox" style="margin-right: 10px; transform: scale(1.2);"/>
         <span>Hiermit bestätige ich, dass alle festgestellten Mängel zur Kenntnis genommen wurden.</span>
@@ -2045,15 +2022,34 @@
   </div>
 
    <h3 style="color: #8b2635; text-align: center;">Unterschrift</h3>
+<canvas id="signature-pad" width="650" height="154" style="width: 690px; height: 154px;"></canvas>
+<style>
+  canvas {
+    border: 1px solid #8b2635;
+    border-radius: 12px;
+    margin: 20px auto;
+    display: block;
+    touch-action: none;
+    background-color: #fff;
+  }
+</style>
 
-  <canvas height="154" id="signature-pad" style="width: 604px; height: 154px; border: 2px solid #8b2635; border-radius: 8px; margin: 20px auto; display: block;" width="604"></canvas>
-  <div style="margin-top: 15px; text-align: center;">
-  <div style="margin-top: 15px;">
-    <button onclick="clearSignature()" style="margin-right: 10px;">Unterschrift löschen</button>
-    <button onclick="prepareForPrint()" style="margin-right: 10px;">Als PDF drucken</button>
-    <button onclick="window.location.reload()">Formular zurücksetzen</button>
-  </div>
+  <div style="text-align: center; margin-top: 15px;">
+  <button onclick="clearSignature()">Unterschrift löschen</button>
+  <button onclick="prepareForPrint()">Als PDF drucken</button>
+
 </div>
+
+   <footer>
+    &copy; <span id="jahr1"></span> Andreas Zott. Alle Rechte vorbehalten. (Sifa) Arbeitssicherheit <span id="jahr2"></span>
+  </footer>
+  <script>
+    const jahr = new Date().getFullYear();
+    document.getElementById('jahr1').textContent = jahr;
+    document.getElementById('jahr2').textContent = jahr;
+  </script>
+
+
 
   <script>
     const canvas = document.getElementById('signature-pad');
@@ -2083,16 +2079,15 @@
     }
 
     function getX(e) {
-      return e.touches ? e.touches[0].clientX - canvas.getBoundingClientRect().left :
-                         e.clientX - canvas.getBoundingClientRect().left;
+      return e.clientX - canvas.getBoundingClientRect().left;
     }
 
     function getY(e) {
-      return e.touches ? e.touches[0].clientY - canvas.getBoundingClientRect().top :
-                         e.clientY - canvas.getBoundingClientRect().top;
+      return e.clientY - canvas.getBoundingClientRect().top;
     }
 
     function startDrawing(e) {
+      e.preventDefault();
       drawing = true;
       ctx.beginPath();
       ctx.moveTo(getX(e), getY(e));
@@ -2100,29 +2095,25 @@
 
     function draw(e) {
       if (!drawing) return;
+      e.preventDefault();
       ctx.lineTo(getX(e), getY(e));
       ctx.stroke();
     }
 
     function stopDrawing() {
+      if (!drawing) return;
       drawing = false;
       saveSignature();
-    }
-
-    function prepareForPrint() {
-      const dataURL = canvas.toDataURL();
-      const img = document.createElement("img");
-      img.src = dataURL;
-      img.style.border = "2px solid #000";
-      img.style.width = "100%";
-      img.style.maxWidth = "600px";
-      canvas.replaceWith(img);
-      window.print();
     }
 
     function clearSignature() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       localStorage.removeItem("signatureImage");
+    }
+
+    function resetForm() {
+      clearSignature();
+      // ggf. weitere Formularfelder hier zurücksetzen
     }
 
     function saveSignature() {
@@ -2141,19 +2132,29 @@
       }
     }
 
+    function prepareForPrint() {
+      const dataURL = canvas.toDataURL();
+      const img = document.createElement("img");
+      img.src = dataURL;
+      img.style.border = "2px solid #000";
+      img.style.width = "100%";
+      img.style.maxWidth = "600px";
+      canvas.replaceWith(img);
+      window.print();
+    }
+
+    // Pointer Events für alle Geräte
+    canvas.addEventListener('pointerdown', startDrawing);
+    canvas.addEventListener('pointermove', draw);
+    canvas.addEventListener('pointerup', stopDrawing);
+    canvas.addEventListener('pointerleave', stopDrawing);
+    canvas.addEventListener('pointercancel', stopDrawing);
+
     window.addEventListener("resize", resizeCanvas);
     window.addEventListener("load", () => {
       resizeCanvas();
       restoreSignature();
     });
-
-    canvas.addEventListener('mousedown', startDrawing);
-    canvas.addEventListener('mousemove', draw);
-    canvas.addEventListener('mouseup', stopDrawing);
-    canvas.addEventListener('mouseout', stopDrawing);
-    canvas.addEventListener('touchstart', startDrawing, {passive: false});
-    canvas.addEventListener('touchmove', draw, {passive: false});
-    canvas.addEventListener('touchend', stopDrawing);
 
     // Dark Mode Toggle
     const darkModeToggle = document.getElementById('darkModeToggle');
@@ -2166,24 +2167,15 @@
       localStorage.setItem('darkMode', isDark);
     });
 
-    // Load dark mode preference
     const savedDarkMode = localStorage.getItem('darkMode') === 'true';
     if (savedDarkMode) {
       document.body.classList.add('dark-mode');
       darkModeIcon.textContent = '☀️';
     }
-  </script>
 
-  <footer>
-    <p>&copy; <span id="jahr"></span> Arbeitssicherheit-Checkliste Einzelhandel. Alle Rechte vorbehalten.</p>
-    <p style="font-size: 10px; margin-top: 5px;">
-      Diese Checkliste dient der systematischen Erfassung von Sicherheitsmängeln und ersetzt nicht die fachkundige Beratung durch Experten.
-    </p>
-  </footer>
-
-  <script>
+    // Jahr setzen
     document.getElementById('jahr').textContent = new Date().getFullYear();
   </script>
-
 </body>
 </html>
+ 
