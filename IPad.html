@@ -429,6 +429,9 @@
 
     <label for="datum">Datum:</label>
     <div id="datum-wert" class="datum-wert"></div>
+
+
+
   </div>
 
   <script>
@@ -1649,5 +1652,61 @@ geprüft und gegen unbefugte Benutzung gesichert. <br>Sicherheitsschuhe werden g
     document.getElementById('jahr1').textContent = jahr;
     document.getElementById('jahr2').textContent = jahr;
   </script>
+
+<script>
+  const canvas = document.getElementById('signature-pad');
+  const ctx = canvas.getContext('2d');
+  let drawing = false;
+
+  function getTouchPos(touchEvent) {
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: touchEvent.touches[0].clientX - rect.left,
+      y: touchEvent.touches[0].clientY - rect.top
+    };
+  }
+
+  canvas.addEventListener('touchstart', function (e) {
+    e.preventDefault();
+    const pos = getTouchPos(e);
+    drawing = true;
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
+  });
+
+  canvas.addEventListener('touchmove', function (e) {
+    e.preventDefault();
+    if (!drawing) return;
+    const pos = getTouchPos(e);
+    ctx.lineTo(pos.x, pos.y);
+    ctx.stroke();
+  });
+
+  canvas.addEventListener('touchend', function (e) {
+    drawing = false;
+  });
+
+  // Maus-Unterstützung
+  canvas.addEventListener('mousedown', function (e) {
+    drawing = true;
+    ctx.beginPath();
+    ctx.moveTo(e.offsetX, e.offsetY);
+  });
+
+  canvas.addEventListener('mousemove', function (e) {
+    if (!drawing) return;
+    ctx.lineTo(e.offsetX, e.offsetY);
+    ctx.stroke();
+  });
+
+  canvas.addEventListener('mouseup', function () {
+    drawing = false;
+  });
+
+  function clearSignature() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+</script>
+
 </body>
 </html>
