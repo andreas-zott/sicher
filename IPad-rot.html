@@ -1,9 +1,9 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>heckliste für Arbeitssicherheiten für Einzelhandel/Marktumgebungen</title>
+  <title>Checkliste für Arbeitssicherheiten für Einzelhandel/Marktumgebungen</title>
 
   <style>
     /* Custom Radio Button Styling */
@@ -108,9 +108,9 @@
     footer {
       text-align: center;
       font-size: 12px;
-      color: #8b2635;
+      color: #555;
       padding: 10px;
-      border-top: 1px solid #d49999;
+      border-top: 1px solid #ccc;
       margin-top: 40px;
       font-family: Arial, sans-serif;
     }
@@ -128,12 +128,12 @@
 
     .datum-wert {
       font-weight: normal;
-      border: 1px solid #b83c47;
+      border: 1px solid #000;
       padding: 5px 10px;
       display: inline-block;
       margin-top: 5px;
       border-radius: 4px;
-      background-color: #fdf5f5;
+      background-color: #fff;
       min-width: 140px;
     }
 
@@ -153,7 +153,7 @@
       border-collapse: collapse;
       margin-bottom: 20px;
       background-color: #fef9f9;
-      box-shadow: 0 2px 8px rgba(184,60,71,0.15);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
 
     th {
@@ -170,7 +170,7 @@
     }
 
     tr:nth-child(even) {
-      background-color: #faf0f0;
+      background-color:  #faf0f0;
     }
 
     tr:hover {
@@ -178,12 +178,12 @@
     }
 
     .category-header {
-      background-color: #f0c8c8 !important;
+      background-color: #d1ecf1 !important;
       color: #8b2635;
       font-weight: bold;
       text-align: left;
       padding: 12px;
-    }
+     }
 
     input[type="text"], input[type="date"] {
       width: 100%;
@@ -208,7 +208,7 @@
     }
 
     button:hover {
-      background-color: #a63340;
+      background-color:  #a63340;
     }
 
     .form-section {
@@ -221,7 +221,6 @@
       display: block;
       margin-top: 15px;
       font-weight: bold;
-      color: #8b2635;
     }
 
     /* Dark Mode Styles */
@@ -431,6 +430,9 @@
 
     <label for="datum">Datum:</label>
     <div id="datum-wert" class="datum-wert"></div>
+
+
+
   </div>
 
   <script>
@@ -1543,106 +1545,61 @@ geprüft und gegen unbefugte Benutzung gesichert. <br>Sicherheitsschuhe werden g
   </div>
 </div>
 
+
 <script>
-    const canvas = document.getElementById('signature-pad');
-    const ctx = canvas.getContext('2d');
-    let drawing = false;
+  const canvas = document.getElementById('signature-pad');
+  const ctx = canvas.getContext('2d');
+  let drawing = false;
 
-    function resizeCanvas() {
-      const ratio = window.devicePixelRatio || 1;
-      const displayWidth = canvas.offsetWidth;
-      const displayHeight = canvas.offsetHeight;
+  function getTouchPos(touchEvent) {
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: touchEvent.touches[0].clientX - rect.left,
+      y: touchEvent.touches[0].clientY - rect.top
+    };
+  }
 
-      const oldImage = new Image();
-      oldImage.src = canvas.toDataURL();
+  canvas.addEventListener('touchstart', function (e) {
+    e.preventDefault();
+    const pos = getTouchPos(e);
+    drawing = true;
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
+  });
 
-      canvas.width = displayWidth * ratio;
-      canvas.height = displayHeight * ratio;
+  canvas.addEventListener('touchmove', function (e) {
+    e.preventDefault();
+    if (!drawing) return;
+    const pos = getTouchPos(e);
+    ctx.lineTo(pos.x, pos.y);
+    ctx.stroke();
+  });
 
-      canvas.style.width = displayWidth + "px";
-      canvas.style.height = displayHeight + "px";
+  canvas.addEventListener('touchend', function (e) {
+    drawing = false;
+  });
 
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.scale(ratio, ratio);
+  // Optional: für Desktop-Unterstützung
+  canvas.addEventListener('mousedown', function (e) {
+    drawing = true;
+    ctx.beginPath();
+    ctx.moveTo(e.offsetX, e.offsetY);
+  });
 
-      oldImage.onload = () => {
-        ctx.drawImage(oldImage, 0, 0, displayWidth, displayHeight);
-      };
-    }
+  canvas.addEventListener('mousemove', function (e) {
+    if (!drawing) return;
+    ctx.lineTo(e.offsetX, e.offsetY);
+    ctx.stroke();
+  });
 
-    function getX(e) {
-      return e.touches ? e.touches[0].clientX - canvas.getBoundingClientRect().left :
-                         e.clientX - canvas.getBoundingClientRect().left;
-    }
+  canvas.addEventListener('mouseup', function () {
+    drawing = false;
+  });
 
-    function getY(e) {
-      return e.touches ? e.touches[0].clientY - canvas.getBoundingClientRect().top :
-                         e.clientY - canvas.getBoundingClientRect().top;
-    }
-
-    function startDrawing(e) {
-      drawing = true;
-      ctx.beginPath();
-      ctx.moveTo(getX(e), getY(e));
-    }
-
-    function draw(e) {
-      if (!drawing) return;
-      ctx.lineTo(getX(e), getY(e));
-      ctx.stroke();
-    }
-
-    function stopDrawing() {
-      drawing = false;
-      saveSignature();
-    }
-
-    function prepareForPrint() {
-      const dataURL = canvas.toDataURL();
-      const img = document.createElement("img");
-      img.src = dataURL;
-      img.style.border = "2px solid #000";
-      img.style.width = "100%";
-      img.style.maxWidth = "600px";
-      canvas.replaceWith(img);
-      window.print();
-    }
-
-    function clearSignature() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      localStorage.removeItem("signatureImage");
-    }
-
-    function saveSignature() {
-      const dataURL = canvas.toDataURL();
-      localStorage.setItem("signatureImage", dataURL);
-    }
-
-    function restoreSignature() {
-      const dataURL = localStorage.getItem("signatureImage");
-      if (dataURL) {
-        const image = new Image();
-        image.onload = () => {
-          ctx.drawImage(image, 0, 0, canvas.offsetWidth, canvas.offsetHeight);
-        };
-        image.src = dataURL;
-      }
-    }
-
-    window.addEventListener("resize", resizeCanvas);
-    window.addEventListener("load", () => {
-      resizeCanvas();
-      restoreSignature();
-    });
-
-    canvas.addEventListener('mousedown', startDrawing);
-    canvas.addEventListener('mousemove', draw);
-    canvas.addEventListener('mouseup', stopDrawing);
-    canvas.addEventListener('mouseout', stopDrawing);
-    canvas.addEventListener('touchstart', startDrawing, {passive: false});
-    canvas.addEventListener('touchmove', draw, {passive: false});
-    canvas.addEventListener('touchend', stopDrawing);
-  </script>
+  function clearSignature() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+</script>
  <footer>
     &copy; <span id="jahr1"></span> Andreas Zott. Alle Rechte vorbehalten. (Sifa) Arbeitssicherheit <span id="jahr2"></span>
   </footer>
@@ -1650,63 +1607,61 @@ geprüft und gegen unbefugte Benutzung gesichert. <br>Sicherheitsschuhe werden g
     const jahr = new Date().getFullYear();
     document.getElementById('jahr1').textContent = jahr;
     document.getElementById('jahr2').textContent = jahr;
+  </script>
+
+
 <script>
   const canvas = document.getElementById('signature-pad');
-  if (canvas) {
-    const ctx = canvas.getContext('2d');
-    let drawing = false;
+  const ctx = canvas.getContext('2d');
+  let drawing = false;
 
-    function getTouchPos(e) {
-      const rect = canvas.getBoundingClientRect();
-      return {
-        x: e.touches[0].clientX - rect.left,
-        y: e.touches[0].clientY - rect.top
-      };
-    }
+  function getTouchPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: e.touches[0].clientX - rect.left,
+      y: e.touches[0].clientY - rect.top
+    };
+  }
 
-    canvas.addEventListener('touchstart', function (e) {
-      e.preventDefault();
-      const pos = getTouchPos(e);
-      drawing = true;
-      ctx.beginPath();
-      ctx.moveTo(pos.x, pos.y);
-    });
+  canvas.addEventListener('touchstart', function (e) {
+    e.preventDefault();
+    const pos = getTouchPos(e);
+    drawing = true;
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
+  });
 
-    canvas.addEventListener('touchmove', function (e) {
-      e.preventDefault();
-      if (!drawing) return;
-      const pos = getTouchPos(e);
-      ctx.lineTo(pos.x, pos.y);
-      ctx.stroke();
-    });
+  canvas.addEventListener('touchmove', function (e) {
+    e.preventDefault();
+    if (!drawing) return;
+    const pos = getTouchPos(e);
+    ctx.lineTo(pos.x, pos.y);
+    ctx.stroke();
+  });
 
-    canvas.addEventListener('touchend', function () {
-      drawing = false;
-    });
+  canvas.addEventListener('touchend', function () {
+    drawing = false;
+  });
 
-    canvas.addEventListener('mousedown', function (e) {
-      drawing = true;
-      ctx.beginPath();
-      ctx.moveTo(e.offsetX, e.offsetY);
-    });
+  canvas.addEventListener('mousedown', function (e) {
+    drawing = true;
+    ctx.beginPath();
+    ctx.moveTo(e.offsetX, e.offsetY);
+  });
 
-    canvas.addEventListener('mousemove', function (e) {
-      if (!drawing) return;
-      ctx.lineTo(e.offsetX, e.offsetY);
-      ctx.stroke();
-    });
+  canvas.addEventListener('mousemove', function (e) {
+    if (!drawing) return;
+    ctx.lineTo(e.offsetX, e.offsetY);
+    ctx.stroke();
+  });
 
-    canvas.addEventListener('mouseup', function () {
-      drawing = false;
-    });
+  canvas.addEventListener('mouseup', function () {
+    drawing = false;
+  });
 
-    function clearSignature() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-
-    window.clearSignature = clearSignature;
+  function clearSignature() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
 </script>
-
 </body>
 </html>
