@@ -7,24 +7,6 @@
 <title>Arbeitssicherheit-Checkliste-2025</title>
 
 <style>
-.custom-btn {
-  background-color: #007BFF;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 12px 20px;
-  margin: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  transition: background-color 0.3s ease;
-}
-
-.custom-btn:hover {
-  background-color: #0056b3;
-}
-
-
   body {
     font-family: Arial, sans-serif;
     background-color: #f8f9fa;
@@ -98,9 +80,7 @@
   }
 </style>
 </head>
-<header style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
 
-  
 
   <!-- Titel mittig -->
   <div style="flex: 1; text-align: center;">
@@ -780,12 +760,16 @@
 
     <h2>Unterschrift</h2>
     <canvas id="signature-pad"></canvas>
-
-  <div class="buttons" style="text-align: center; margin-top: 40px;">
+<div class="buttons" style="text-align: center; margin-top: 40px;">
   <button onclick="clearSignature()" class="custom-btn">🗑️ Löschen</button>
-  <button onclick="prepareForPrint()" class="custom-btn">📄 Als PDF speichern / Drucken</button>
+  <button onclick="auswertungAnzeigen()" class="custom-btn">📊 Auswerten</button>
+  <button onclick="prepareForPrint()" class="custom-btn">📄 Drucken / PDF</button>
 </div>
-  </div>
+
+<!-- Bereich für Auswertung -->
+<div id="auswertung-container" style="margin-top: 30px; text-align: center;">
+  <div id="auswertung" style="display: none;"></div>
+</div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
@@ -889,32 +873,8 @@
     canvas.addEventListener('touchmove', draw, {passive: false});
     canvas.addEventListener('touchend', stopDrawing);
   </script>
-<!-- Auswertung & Button zentriert -->
-<div style="text-align: center; margin-top: 40px;">
-  
-  <!-- Button -->
-  <button id="btnAuswerten" style="
-    padding: 12px 24px;
-    font-size: 18px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  ">
-    Antworten auswerten
-  </button>
-
-  <!-- Auswertungsbereich -->
-  <div id="auswertung-container" style="margin-top: 30px;">
-    <div id="auswertung" style="display: none;"></div>
-  </div>
-</div>
-
-<!-- Script -->
 <script>
-  document.getElementById('btnAuswerten').addEventListener('click', () => {
+  function auswertungAnzeigen() {
     const radios = document.querySelectorAll('input[type="radio"]:checked');
 
     const auswertung = {
@@ -952,7 +912,7 @@
         </ul>
       </div>
     `;
-  });
+  }
 </script>
 <footer style="text-align: center; margin-top: 60px; font-size: 12px; color: #777;">
      &copy; 2025 Andreas Zott. Alle Rechte vorbehalten. (Sifa) Arbeitssicherheit 2025
