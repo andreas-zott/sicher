@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Auswertung</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f8ff;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .box {
+      background-color: #eaf4ff;
+      border-left: 6px solid #007BFF;
+      border-radius: 12px;
+      padding: 30px;
+      display: inline-block;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      color: #004085;
+      max-width: 500px;
+      text-align: left;
+      margin-bottom: 40px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      font-size: 18px;
+    }
+
+    .warnung {
+      color: red;
+      font-weight: bold;
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    .druckbutton {
+      margin-top: 30px;
+    }
+
+    @media print {
+      .druckbutton {
+        display: none;
+      }
+      body {
+        background: white;
+        padding: 0;
+      }
+      .box {
+        box-shadow: none;
+        margin: 0 auto 40px;
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h2>📊 Alle Auswertungen</h2>
+  <div id="alle-auswertungen"></div>
+
+  <div class="druckbutton">
+    <button onclick="window.print()">📄 PDF speichern / Drucken</button>
+    <button onclick="alleAuswertungenLöschen()" style="margin-left: 10px;">🗑️ Alle löschen</button>
+  </div>
+
+  <script>
+    // Hilfsfunktion zum Erzeugen einer Auswertungsbox
+    function erstelleAuswertung(data) {
+      const ja = parseInt(data.ja) || 0;
+      const nein = parseInt(data.nein) || 0;
+      const nicht = parseInt(data.nicht_vorhanden) || 0;
+      const gesamt = ja + nein + nicht;
+
+      const jaProzent = gesamt ? ((ja / gesamt) * 100).toFixed(1) : "0.0";
+      const neinProzent = gesamt ? ((nein / gesamt) * 100).toFixed(1) : "0.0";
+      const nichtProzent = gesamt ? ((nicht / gesamt) * 100).toFixed(1) : "0.0";
+
+      const warnung = nein > 0 ? "⚠️ Achtung: Es besteht Handlungsbedarf!" : "";
+
+      const block = document.createElement("div");
+      block.className = "box";
+      block.innerHTML = `
+        <h3>📋 Neue Auswertung</h3>
+        <p><strong>Marktnummer:</strong> ${data.marktnummer || "–"}</p>
+        <p><strong>Name:</strong> ${data.name || "–"}</p>
+        <p><strong>SiFa:</strong> ${data.sifa || "–"}</p>
+        <ul>
+          <li>✅ <strong>Ja</strong>: ${ja}</li>
+          <li>❌ <strong>Nein</strong>: ${nein}</li>
+          <li>⚠️ <strong>Nicht vorhanden</strong>: ${nicht}</li>
+        </ul>
+        <hr>
+        <p><strong>Gesamt:</strong> ${gesamt}</p>
+        <p>✅ Ja-Anteil: ${jaProzent}%<br>
+           ❌ Nein-Anteil: ${neinProzent}%<br>
+           ⚠️ Nicht vorhanden: ${nichtProzent}%</p>
+        ${warnung ? `<div class="warnung">${warnung}</div>` : ""}
+      `;
+      document.getElementById("alle-auswertungen").appendChild(block);
+    }
+
+    // Speicher lesen und anzeigen
+    function ladeAlleAuswertungen() {
+      const gespeicherte = JSON.parse(localStorage.getItem("auswertungen") || "[]");
+      gespeicherte.forEach(eintrag => erstelleAuswertung(eintrag));
+    }
+
+    // Neue Auswertung von URL speichern und anzeigen
+    function neueAuswertungVonURL() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has("ja") || params.has("nein") || params.has("nicht_vorhanden")) {
+        const neueAuswertung = {
+          marktnummer: params.get("marktnummer"),
+          name: params.get("name"),
+          sifa: params.get("sifa"),
+          ja: params.get("ja"),
+          nein: params.get("nein"),
+          nicht_vorhanden: params.get("nicht_vorhanden")
+        };
+
+        // in localStorage speichern
+        const alle = JSON.parse(localStorage.getItem("auswertungen") || "[]");
+        alle.push(neueAuswertung);
+        localStorage.setItem("auswertungen", JSON.stringify(alle));
+
+        // anzeigen
+        erstelleAuswertung(neueAuswertung);
+      }
+    }
+
+    // Alles löschen
+    function alleAuswertungenLöschen() {
+      if (confirm("Möchtest du wirklich alle Auswertungen löschen?")) {
+        localStorage.removeItem("auswertungen");
+        location.reload();
+      }
+    }
+
+    // Initial: laden und ggf. neue speichern
+    ladeAlleAuswertungen();
+    neueAuswertungVonURL();
+  </script>
+</body>
+</html>
