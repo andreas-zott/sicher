@@ -1,85 +1,72 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Auswertungen mit Grafik</title>
+  <meta charset="UTF-8">
+  <title>Geschützte Auswertung</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background: #f0f8ff;
-      margin: 0;
       padding: 20px;
+      margin: 0;
       text-align: center;
     }
 
-    .login-container, .main-content {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .login-container {
-      background: white;
-      padding: 30px;
+    .login-container, .box {
+      background: #ffffff;
+      padding: 20px;
       border-radius: 12px;
-      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+      margin: 20px auto;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      max-width: 90%;
     }
 
-    input[type="password"] {
-      padding: 12px;
-      width: 80%;
+    input[type="password"], input[type="text"] {
+      padding: 10px;
       font-size: 16px;
       border-radius: 6px;
       border: 1px solid #ccc;
+      width: 100%;
+      max-width: 400px;
+      margin: 10px auto;
     }
 
     button {
-      padding: 12px 24px;
+      padding: 10px 20px;
       font-size: 16px;
+      margin: 10px 5px;
       border: none;
       border-radius: 6px;
       background-color: #007BFF;
       color: white;
-      margin: 10px 5px;
       cursor: pointer;
     }
 
-    .hidden { display: none; }
-
-    .box {
-      display: flex;
-      flex-wrap: wrap;
-      background: #fff;
-      border-left: 6px solid #007BFF;
-      border-radius: 10px;
-      padding: 16px;
-      margin: 20px auto;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      text-align: left;
+    button:hover {
+      background-color: #0056b3;
     }
 
-    .auswertung-text {
-      flex: 1 1 300px;
-      padding-right: 20px;
+    .hidden {
+      display: none;
     }
 
     .chart-container {
-      flex: 0 0 200px;
+      max-width: 300px;
+      margin: 10px auto;
     }
 
-    canvas {
-      width: 100%;
-      height: auto;
+    .box-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
-    .druckbutton {
-      margin-top: 30px;
-    }
-
-    .warnung {
-      color: red;
-      font-weight: bold;
+    @media (min-width: 768px) {
+      .box-content {
+        flex-direction: row;
+        justify-content: space-between;
+      }
     }
   </style>
 </head>
@@ -87,18 +74,20 @@
   <div id="login" class="login-container">
     <h2>🔒 Login erforderlich</h2>
     <p>Bitte Passwort eingeben, um die Auswertungen zu sehen.</p>
-    <input type="password" id="pw" placeholder="Passwort" />
-    <br />
+    <input type="password" id="pw" placeholder="Passwort">
     <button onclick="checkLogin()">Einloggen</button>
     <p id="error" style="color: red; display: none;">❌ Falsches Passwort</p>
   </div>
 
-  <div id="inhalt" class="main-content hidden">
+  <div id="inhalt" class="hidden">
     <h2>📊 Alle Auswertungen</h2>
+    <input type="text" id="suche" oninput="filtern()" placeholder="🔍 Nach Marktnummer suchen...">
     <div id="alle-auswertungen"></div>
-    <div class="druckbutton">
+
+    <div>
       <button onclick="window.print()">📄 PDF speichern / Drucken</button>
       <button onclick="alleAuswertungenLöschen()">🗑️ Alle löschen</button>
+      <button onclick="csvExport()">📅 Als CSV exportieren</button>
     </div>
   </div>
 
@@ -122,55 +111,62 @@
       const nein = parseInt(data.nein) || 0;
       const nicht = parseInt(data.nicht_vorhanden) || 0;
       const gesamt = ja + nein + nicht;
-      const warnung = nein > 0 ? "⚠️ Achtung: Es besteht Handlungsbedarf!" : "";
 
       const box = document.createElement("div");
       box.className = "box";
+      box.innerHTML = `
+        <div class="box-content">
+          <div>
+            <p><strong>Marktnummer:</strong> ${data.marktnummer}</p>
+            <p><strong>Name:</strong> ${data.name}</p>
+            <p><strong>SiFa:</strong> ${data.sifa}</p>
+            <ul>
+              <li>✅ Ja: ${ja}</li>
+              <li>❌ Nein: ${nein}</li>
+              <li>⚠️ Nicht vorhanden: ${nicht}</li>
+              <li><strong>Gesamt:</strong> ${gesamt}</li>
+            </ul>
+            <button onclick="bearbeiten(${index})">✏️ Bearbeiten</button>
+            <button onclick="eintragLöschen(${index})">🗑️ Löschen</button>
+          </div>
+          <div class="chart-container">
+            <canvas id="chart-${index}" width="200" height="200"></canvas>
+          </div>
+        </div>`;
 
-      const auswertungHTML = `
-        <div class="auswertung-text">
-          <p><strong>Marktnummer:</strong> ${data.marktnummer}</p>
-          <p><strong>Name:</strong> ${data.name}</p>
-          <p><strong>SiFa:</strong> ${data.sifa}</p>
-          <ul>
-            <li>✅ Ja: ${ja}</li>
-            <li>❌ Nein: ${nein}</li>
-            <li>⚠️ Nicht vorhanden: ${nicht}</li>
-          </ul>
-          <p><strong>Gesamt:</strong> ${gesamt}</p>
-          ${warnung ? `<div class="warnung">${warnung}</div>` : ""}
-          <button onclick="eintragLöschen(${index})">🗑️ Löschen</button>
-        </div>
-        <div class="chart-container">
-          <canvas id="chart-${index}"></canvas>
-        </div>
-      `;
-
-      box.innerHTML = auswertungHTML;
       document.getElementById("alle-auswertungen").appendChild(box);
 
-      // Grafik erzeugen
-      const ctx = document.getElementById(`chart-${index}`).getContext("2d");
-      new Chart(ctx, {
-        type: "doughnut",
+      new Chart(document.getElementById(`chart-${index}`), {
+        type: 'doughnut',
         data: {
-          labels: ["Ja", "Nein", "Nicht vorhanden"],
+          labels: ['Ja', 'Nein', 'Nicht vorhanden'],
           datasets: [{
             data: [ja, nein, nicht],
-            backgroundColor: ["#28a745", "#dc3545", "#ffc107"]
+            backgroundColor: ['#28a745', '#dc3545', '#ffc107']
           }]
         },
         options: {
           responsive: true,
-          plugins: { legend: { position: "bottom" } }
+          plugins: {
+            legend: {
+              position: 'bottom'
+            }
+          }
         }
       });
     }
 
     function ladeAlle() {
-      document.getElementById("alle-auswertungen").innerHTML = "";
+      const container = document.getElementById("alle-auswertungen");
+      container.innerHTML = "";
       const daten = JSON.parse(localStorage.getItem("auswertungen") || "[]");
-      daten.forEach((d, i) => erstelleAuswertung(d, i));
+      const suchbegriff = document.getElementById("suche")?.value.toLowerCase() || "";
+
+      daten.forEach((d, i) => {
+        if (!suchbegriff || d.marktnummer.toLowerCase().includes(suchbegriff)) {
+          erstelleAuswertung(d, i);
+        }
+      });
     }
 
     function neueAuswertungVonURL() {
@@ -198,11 +194,54 @@
       ladeAlle();
     }
 
+    function bearbeiten(index) {
+      const daten = JSON.parse(localStorage.getItem("auswertungen") || "[]");
+      const e = daten[index];
+      const neu = prompt("Bearbeite als CSV: marktnummer,name,sifa,ja,nein,nicht_vorhanden", `${e.marktnummer},${e.name},${e.sifa},${e.ja},${e.nein},${e.nicht_vorhanden}`);
+      if (neu) {
+        const teile = neu.split(",");
+        if (teile.length === 6) {
+          daten[index] = {
+            marktnummer: teile[0],
+            name: teile[1],
+            sifa: teile[2],
+            ja: teile[3],
+            nein: teile[4],
+            nicht_vorhanden: teile[5]
+          };
+          localStorage.setItem("auswertungen", JSON.stringify(daten));
+          ladeAlle();
+        } else {
+          alert("Ungültiges Format!");
+        }
+      }
+    }
+
     function alleAuswertungenLöschen() {
       if (confirm("Wirklich alle Auswertungen löschen?")) {
         localStorage.removeItem("auswertungen");
         ladeAlle();
       }
+    }
+
+    function csvExport() {
+      const daten = JSON.parse(localStorage.getItem("auswertungen") || "[]");
+      let csv = "Marktnummer,Name,SiFa,Ja,Nein,Nicht vorhanden\n";
+      daten.forEach(e => {
+        csv += `${e.marktnummer},${e.name},${e.sifa},${e.ja},${e.nein},${e.nicht_vorhanden}\n`;
+      });
+      const blob = new Blob([csv], { type: "text/csv" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "auswertungen.csv";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    function filtern() {
+      ladeAlle();
     }
   </script>
 </body>
