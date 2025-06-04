@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Auswertung</title>
+  <title>Geschützte Auswertung</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -11,108 +11,134 @@
       text-align: center;
     }
 
-    .box {
-      background-color: #eaf4ff;
-      border-left: 6px solid #007BFF;
-      border-radius: 12px;
+    .login-container {
+      background: white;
       padding: 30px;
+      border-radius: 10px;
       display: inline-block;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      color: #004085;
-      max-width: 500px;
-      text-align: left;
-      margin-bottom: 40px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
-    ul {
-      list-style: none;
-      padding: 0;
-      font-size: 18px;
+    input[type="password"] {
+      padding: 10px;
+      width: 200px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .box {
+      background: #ffffff;
+      border-left: 6px solid #007BFF;
+      border-radius: 8px;
+      margin: 20px auto;
+      padding: 20px;
+      max-width: 600px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      text-align: left;
+    }
+
+    .box ul {
+      padding-left: 20px;
+    }
+
+    .btn {
+      margin-top: 10px;
+      margin-right: 10px;
+      padding: 6px 12px;
+      font-size: 14px;
+    }
+
+    .druckbutton {
+      margin-top: 40px;
     }
 
     .warnung {
       color: red;
       font-weight: bold;
-      margin-top: 20px;
-      font-size: 18px;
-    }
-
-    .druckbutton {
-      margin-top: 30px;
-    }
-
-    @media print {
-      .druckbutton {
-        display: none;
-      }
-      body {
-        background: white;
-        padding: 0;
-      }
-      .box {
-        box-shadow: none;
-        margin: 0 auto 40px;
-        page-break-inside: avoid;
-      }
     }
   </style>
 </head>
 <body>
-  <h2>📊 Alle Auswertungen</h2>
-  <div id="alle-auswertungen"></div>
+  <div id="login" class="login-container">
+    <h2>🔒 Login erforderlich</h2>
+    <p>Bitte Passwort eingeben, um die Auswertungen zu sehen.</p>
+    <input type="password" id="pw" placeholder="Passwort"/>
+    <br/>
+    <button onclick="checkLogin()">Einloggen</button>
+    <p id="error" style="color: red; display: none;">❌ Falsches Passwort</p>
+  </div>
 
-  <div class="druckbutton">
-    <button onclick="window.print()">📄 PDF speichern / Drucken</button>
-    <button onclick="alleAuswertungenLöschen()" style="margin-left: 10px;">🗑️ Alle löschen</button>
+  <div id="inhalt" class="hidden">
+    <h2>📊 Alle Auswertungen</h2>
+    <div id="alle-auswertungen"></div>
+
+    <div class="druckbutton">
+      <button onclick="window.print()">📄 PDF speichern / Drucken</button>
+      <button onclick="alleAuswertungenLöschen()">🗑️ Alle löschen</button>
+      <button onclick="csvExport()">📅 Als CSV exportieren</button>
+    </div>
   </div>
 
   <script>
-    // Hilfsfunktion zum Erzeugen einer Auswertungsbox
-    function erstelleAuswertung(data) {
+    const passwort = "sifa"; // Passwort hier ändern
+
+    function checkLogin() {
+      const eingabe = document.getElementById("pw").value;
+      if (eingabe === passwort) {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("inhalt").classList.remove("hidden");
+        neueAuswertungVonURL();
+        ladeAlle();
+      } else {
+        document.getElementById("error").style.display = "block";
+      }
+    }
+
+    function erstelleAuswertung(data, index) {
       const ja = parseInt(data.ja) || 0;
       const nein = parseInt(data.nein) || 0;
       const nicht = parseInt(data.nicht_vorhanden) || 0;
       const gesamt = ja + nein + nicht;
-
-      const jaProzent = gesamt ? ((ja / gesamt) * 100).toFixed(1) : "0.0";
-      const neinProzent = gesamt ? ((nein / gesamt) * 100).toFixed(1) : "0.0";
-      const nichtProzent = gesamt ? ((nicht / gesamt) * 100).toFixed(1) : "0.0";
-
       const warnung = nein > 0 ? "⚠️ Achtung: Es besteht Handlungsbedarf!" : "";
 
-      const block = document.createElement("div");
-      block.className = "box";
-      block.innerHTML = `
-        <h3>📋 Neue Auswertung</h3>
-        <p><strong>Marktnummer:</strong> ${data.marktnummer || "–"}</p>
-        <p><strong>Name:</strong> ${data.name || "–"}</p>
-        <p><strong>SiFa:</strong> ${data.sifa || "–"}</p>
+      const box = document.createElement("div");
+      box.className = "box";
+      box.innerHTML = `
+        <p><strong>Marktnummer:</strong> ${data.marktnummer}</p>
+        <p><strong>Name:</strong> ${data.name}</p>
+        <p><strong>SiFa:</strong> ${data.sifa}</p>
         <ul>
-          <li>✅ <strong>Ja</strong>: ${ja}</li>
-          <li>❌ <strong>Nein</strong>: ${nein}</li>
-          <li>⚠️ <strong>Nicht vorhanden</strong>: ${nicht}</li>
+          <li>✅ Ja: ${ja}</li>
+          <li>❌ Nein: ${nein}</li>
+          <li>⚠️ Nicht vorhanden: ${nicht}</li>
         </ul>
-        <hr>
         <p><strong>Gesamt:</strong> ${gesamt}</p>
-        <p>✅ Ja-Anteil: ${jaProzent}%<br>
-           ❌ Nein-Anteil: ${neinProzent}%<br>
-           ⚠️ Nicht vorhanden: ${nichtProzent}%</p>
         ${warnung ? `<div class="warnung">${warnung}</div>` : ""}
+        <button class="btn" onclick="bearbeiten(${index})">✏️ Bearbeiten</button>
+        <button class="btn" onclick="eintragLöschen(${index})">🗑️ Löschen</button>
       `;
-      document.getElementById("alle-auswertungen").appendChild(block);
+      document.getElementById("alle-auswertungen").appendChild(box);
     }
 
-    // Speicher lesen und anzeigen
-    function ladeAlleAuswertungen() {
-      const gespeicherte = JSON.parse(localStorage.getItem("auswertungen") || "[]");
-      gespeicherte.forEach(eintrag => erstelleAuswertung(eintrag));
+    function ladeAlle() {
+      document.getElementById("alle-auswertungen").innerHTML = "";
+      const daten = JSON.parse(localStorage.getItem("auswertungen") || "[]");
+      daten.forEach((d, i) => erstelleAuswertung(d, i));
     }
 
-    // Neue Auswertung von URL speichern und anzeigen
     function neueAuswertungVonURL() {
-      const params = new URLSearchParams(window.location.search);
+      const params = new URLSearchParams(location.search);
       if (params.has("ja") || params.has("nein") || params.has("nicht_vorhanden")) {
-        const neueAuswertung = {
+        const neu = {
           marktnummer: params.get("marktnummer"),
           name: params.get("name"),
           sifa: params.get("sifa"),
@@ -120,28 +146,67 @@
           nein: params.get("nein"),
           nicht_vorhanden: params.get("nicht_vorhanden")
         };
-
-        // in localStorage speichern
-        const alle = JSON.parse(localStorage.getItem("auswertungen") || "[]");
-        alle.push(neueAuswertung);
-        localStorage.setItem("auswertungen", JSON.stringify(alle));
-
-        // anzeigen
-        erstelleAuswertung(neueAuswertung);
+        const daten = JSON.parse(localStorage.getItem("auswertungen") || "[]");
+        daten.push(neu);
+        localStorage.setItem("auswertungen", JSON.stringify(daten));
       }
     }
 
-    // Alles löschen
+    function eintragLöschen(index) {
+      const daten = JSON.parse(localStorage.getItem("auswertungen") || "[]");
+      daten.splice(index, 1);
+      localStorage.setItem("auswertungen", JSON.stringify(daten));
+      ladeAlle();
+if (!confirm("Willst du diesen Eintrag wirklich löschen?")) return;
+    }
+
+    function bearbeiten(index) {
+      const daten = JSON.parse(localStorage.getItem("auswertungen") || "[]");
+      const eintrag = daten[index];
+      const neu = prompt("Bearbeite als CSV: marktnummer,name,sifa,ja,nein,nicht_vorhanden", 
+        `${eintrag.marktnummer},${eintrag.name},${eintrag.sifa},${eintrag.ja},${eintrag.nein},${eintrag.nicht_vorhanden}`);
+      if (neu) {
+        const teile = neu.split(",");
+        if (teile.length === 6) {
+          daten[index] = {
+            marktnummer: teile[0],
+            name: teile[1],
+            sifa: teile[2],
+            ja: teile[3],
+            nein: teile[4],
+            nicht_vorhanden: teile[5]
+          };
+          localStorage.setItem("auswertungen", JSON.stringify(daten));
+          ladeAlle();
+        } else {
+          alert("Ungültiges Format!");
+        }
+      }
+    }
+
     function alleAuswertungenLöschen() {
-      if (confirm("Möchtest du wirklich alle Auswertungen löschen?")) {
+      if (confirm("Wirklich alle Auswertungen löschen?")) {
         localStorage.removeItem("auswertungen");
-        location.reload();
+        ladeAlle();
       }
     }
 
-    // Initial: laden und ggf. neue speichern
-    ladeAlleAuswertungen();
-    neueAuswertungVonURL();
+    function csvExport() {
+      const daten = JSON.parse(localStorage.getItem("auswertungen") || "[]");
+      let csv = "Marktnummer,Name,SiFa,Ja,Nein,Nicht vorhanden\n";
+      daten.forEach(e => {
+        csv += `${e.marktnummer},${e.name},${e.sifa},${e.ja},${e.nein},${e.nicht_vorhanden}\n`;
+      });
+
+      const blob = new Blob([csv], {type: "text/csv"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "auswertungen.csv";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
   </script>
 </body>
 </html>
