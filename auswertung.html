@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Geschützte Auswertung</title>
   <style>
     body {
@@ -9,45 +9,92 @@
       background: #f0f8ff;
       padding: 40px;
       text-align: center;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .login-container {
       background: white;
       padding: 30px;
       border-radius: 10px;
-      display: inline-block;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 400px;
+      width: 100%;
     }
 
     input[type="password"] {
       padding: 10px;
       width: 200px;
       font-size: 16px;
+      margin-top: 10px;
     }
 
     button {
       padding: 10px 20px;
       font-size: 16px;
       margin-top: 10px;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+      background-color: #007BFF;
+      color: white;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
     }
 
     .hidden {
       display: none;
     }
 
+    /* Container für Auswertungen + Chart */
+    #inhalt {
+      width: 100%;
+      max-width: 1000px;
+      margin-top: 20px;
+    }
+
+    #inhalt > .flex-container {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    #alle-auswertungen, #chartContainer {
+      flex: 1;
+      min-width: 300px;
+      border: 1px solid #007BFF;
+      border-radius: 8px;
+      padding: 20px;
+      background: #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      max-height: 600px;
+      overflow-y: auto;
+    }
+
+    #chartContainer {
+      max-height: none;
+    }
+
     .box {
-      background: #ffffff;
+      background: #f9fefd;
       border-left: 6px solid #007BFF;
       border-radius: 8px;
-      margin: 20px auto;
-      padding: 20px;
-      max-width: 600px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      padding: 15px 20px;
       text-align: left;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
 
     .box ul {
       padding-left: 20px;
+      margin-top: 5px;
     }
 
     .btn {
@@ -55,31 +102,58 @@
       margin-right: 10px;
       padding: 6px 12px;
       font-size: 14px;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+      background-color: #007BFF;
+      color: white;
+      transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #0056b3;
     }
 
     .druckbutton {
-      margin-top: 40px;
+      margin-top: 30px;
     }
 
     .warnung {
       color: red;
       font-weight: bold;
+      margin-top: 10px;
+    }
+
+    #error {
+      color: red;
+      margin-top: 10px;
+      font-weight: bold;
     }
   </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div id="login" class="login-container">
     <h2>🔒 Login erforderlich</h2>
     <p>Bitte Passwort eingeben, um die Auswertungen zu sehen.</p>
-    <input type="password" id="pw" placeholder="Passwort"/>
-    <br/>
+    <input type="password" id="pw" placeholder="Passwort" />
+    <br />
     <button onclick="checkLogin()">Einloggen</button>
-    <p id="error" style="color: red; display: none;">❌ Falsches Passwort</p>
+    <p id="error" style="display:none;">❌ Falsches Passwort</p>
   </div>
 
   <div id="inhalt" class="hidden">
     <h2>📊 Alle Auswertungen</h2>
-    <div id="alle-auswertungen"></div>
+    <div class="flex-container">
+      <div id="alle-auswertungen">
+        <!-- Auswertungen werden hier eingefügt -->
+      </div>
+      <div id="chartContainer">
+        <h3>Grafische Übersicht der Antworten</h3>
+        <canvas id="auswertungChart" width="400" height="400"></canvas>
+      </div>
+    </div>
 
     <div class="druckbutton">
       <button onclick="window.print()">📄 PDF speichern / Drucken</button>
@@ -89,17 +163,21 @@
   </div>
 
   <script>
-    const passwort = "sifa"; // Passwort hier ändern
+    const passwort = "sifa"; // Passwort hier anpassen
+
+    let chart; // Globale Chart-Instanz
 
     function checkLogin() {
       const eingabe = document.getElementById("pw").value;
+      const errorEl = document.getElementById("error");
       if (eingabe === passwort) {
         document.getElementById("login").style.display = "none";
         document.getElementById("inhalt").classList.remove("hidden");
+        errorEl.style.display = "none";
         neueAuswertungVonURL();
         ladeAlle();
       } else {
-        document.getElementById("error").style.display = "block";
+        errorEl.style.display = "block";
       }
     }
 
@@ -113,9 +191,9 @@
       const box = document.createElement("div");
       box.className = "box";
       box.innerHTML = `
-        <p><strong>Marktnummer:</strong> ${data.marktnummer}</p>
-        <p><strong>Name:</strong> ${data.name}</p>
-        <p><strong>SiFa:</strong> ${data.sifa}</p>
+        <p><strong>Marktnummer:</strong> ${data.marktnummer || "-"}</p>
+        <p><strong>Name:</strong> ${data.name || "-"}</p>
+        <p><strong>SiFa:</strong> ${data.sifa || "-"}</p>
         <ul>
           <li>✅ Ja: ${ja}</li>
           <li>❌ Nein: ${nein}</li>
@@ -126,25 +204,30 @@
         <button class="btn" onclick="bearbeiten(${index})">✏️ Bearbeiten</button>
         <button class="btn" onclick="eintragLöschen(${index})">🗑️ Löschen</button>
       `;
-      document.getElementById("alle-auswertungen").appendChild(box);
+      return box;
     }
 
     function ladeAlle() {
-      document.getElementById("alle-auswertungen").innerHTML = "";
+      const container = document.getElementById("alle-auswertungen");
+      container.innerHTML = "";
       const daten = JSON.parse(localStorage.getItem("auswertungen") || "[]");
-      daten.forEach((d, i) => erstelleAuswertung(d, i));
+      daten.forEach((d, i) => {
+        const box = erstelleAuswertung(d, i);
+        container.appendChild(box);
+      });
+      aktualisiereChart(daten);
     }
 
     function neueAuswertungVonURL() {
       const params = new URLSearchParams(location.search);
       if (params.has("ja") || params.has("nein") || params.has("nicht_vorhanden")) {
         const neu = {
-          marktnummer: params.get("marktnummer"),
-          name: params.get("name"),
-          sifa: params.get("sifa"),
-          ja: params.get("ja"),
-          nein: params.get("nein"),
-          nicht_vorhanden: params.get("nicht_vorhanden")
+          marktnummer: params.get("marktnummer") || "",
+          name: params.get("name") || "",
+          sifa: params.get("sifa") || "",
+          ja: params.get("ja") || "0",
+          nein: params.get("nein") || "0",
+          nicht_vorhanden: params.get("nicht_vorhanden") || "0"
         };
         const daten = JSON.parse(localStorage.getItem("auswertungen") || "[]");
         daten.push(neu);
@@ -153,18 +236,20 @@
     }
 
     function eintragLöschen(index) {
+      if (!confirm("Willst du diesen Eintrag wirklich löschen?")) return;
       const daten = JSON.parse(localStorage.getItem("auswertungen") || "[]");
       daten.splice(index, 1);
       localStorage.setItem("auswertungen", JSON.stringify(daten));
       ladeAlle();
-if (!confirm("Willst du diesen Eintrag wirklich löschen?")) return;
     }
 
     function bearbeiten(index) {
       const daten = JSON.parse(localStorage.getItem("auswertungen") || "[]");
       const eintrag = daten[index];
-      const neu = prompt("Bearbeite als CSV: marktnummer,name,sifa,ja,nein,nicht_vorhanden", 
-        `${eintrag.marktnummer},${eintrag.name},${eintrag.sifa},${eintrag.ja},${eintrag.nein},${eintrag.nicht_vorhanden}`);
+      const neu = prompt(
+        "Bearbeite als CSV: marktnummer,name,sifa,ja,nein,nicht_vorhanden",
+        `${eintrag.marktnummer},${eintrag.name},${eintrag.sifa},${eintrag.ja},${eintrag.nein},${eintrag.nicht_vorhanden}`
+      );
       if (neu) {
         const teile = neu.split(",");
         if (teile.length === 6) {
@@ -193,12 +278,16 @@ if (!confirm("Willst du diesen Eintrag wirklich löschen?")) return;
 
     function csvExport() {
       const daten = JSON.parse(localStorage.getItem("auswertungen") || "[]");
+      if (daten.length === 0) {
+        alert("Keine Auswertungen zum Exportieren vorhanden.");
+        return;
+      }
       let csv = "Marktnummer,Name,SiFa,Ja,Nein,Nicht vorhanden\n";
       daten.forEach(e => {
         csv += `${e.marktnummer},${e.name},${e.sifa},${e.ja},${e.nein},${e.nicht_vorhanden}\n`;
       });
 
-      const blob = new Blob([csv], {type: "text/csv"});
+      const blob = new Blob([csv], { type: "text/csv" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -206,6 +295,66 @@ if (!confirm("Willst du diesen Eintrag wirklich löschen?")) return;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
+    }
+
+    function aktualisiereChart(daten) {
+      // Gesamtwerte summieren
+      let sumJa = 0,
+          sumNein = 0,
+          sumNicht = 0;
+
+      daten.forEach(d => {
+        sumJa += parseInt(d.ja) || 0;
+        sumNein += parseInt(d.nein) || 0;
+        sumNicht += parseInt(d.nicht_vorhanden) || 0;
+      });
+
+      const ctx = document.getElementById('auswertungChart').getContext('2d');
+
+      const chartData = {
+        labels: ['Ja', 'Nein', 'Nicht vorhanden'],
+        datasets: [{
+          label: 'Antworten',
+          data: [sumJa, sumNein, sumNicht],
+          backgroundColor: [
+            'rgba(40, 167, 69, 0.7)',    // grün
+            'rgba(220, 53, 69, 0.7)',    // rot
+            'rgba(255, 193, 7, 0.7)'     // gelb
+          ],
+          borderColor: [
+            'rgba(40, 167, 69, 1)',
+            'rgba(220, 53, 69, 1)',
+            'rgba(255, 193, 7, 1)'
+          ],
+          borderWidth: 1
+        }]
+      };
+
+      if (chart) {
+        chart.data = chartData;
+        chart.update();
+      } else {
+        chart = new Chart(ctx, {
+          type: 'doughnut',
+          data: chartData,
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: {
+                  font: {
+                    size: 14
+                  }
+                }
+              },
+              tooltip: {
+                enabled: true
+              }
+            }
+          }
+        });
+      }
     }
   </script>
 </body>
