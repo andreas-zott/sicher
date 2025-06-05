@@ -94,8 +94,11 @@
 </header>
 <div class="form-section" style="max-width: 300px;">
 <div style="margin-bottom: 10px;">
-<label for="marktnummer">Marktnummer:</label><br/>
-<input id="marktnummer" style="width: 100%;" type="text"/>
+
+
+<label for="markt">Marktnummer:</label>
+<input type="text" id="markt" placeholder="z. B. M123" required>
+
 </div>
 <div style="margin-bottom: 10px;">
 <label for="name">Name:</label><br/>
@@ -755,130 +758,127 @@
 </head>
 <body>
   <div id="content">
-    <h1>Arbeitssicherheit-Checkliste-2025</h1>
-    <p>Bitte das Dokument durchlesen und unterschreiben.</p>
+   
+<h1>Arbeitssicherheit-Checkliste-2025</h1>
+  <p>Bitte das Dokument durchlesen und unterschreiben.</p>
 
-    <h2>Unterschrift</h2>
-    <canvas id="signature-pad"></canvas>
-<div class="buttons" style="text-align: center; margin-top: 40px;">
-  <button onclick="clearSignature()" class="custom-btn">🗑️ Löschen</button>
-  <button onclick="auswertungAnzeigen()" class="custom-btn">📊 Auswerten</button>
-  <button onclick="prepareForPrint()" class="custom-btn">📄 Drucken / PDF</button>
+  <h2>Unterschrift</h2>
+  <canvas id="signature-pad"></canvas>
+
+  <div class="buttons" style="text-align: center; margin-top: 40px;">
+    <button onclick="clearSignature()" class="custom-btn">🗑️ Löschen</button>
+    <button onclick="auswertungAnzeigen()" class="custom-btn">📊 Auswerten</button>
+    <button onclick="prepareForPrint()" class="custom-btn">📄 Drucken / PDF</button>
+  </div>
+
+  <div id="auswertung-container">
+    <div id="auswertung"></div>
+  </div>
+
+  <footer style="
+  text-align: center;
+  margin-top: 40px;
+  padding: 16px 8px;
+  font-size: 12px;
+  color: #999;
+  background-color: #fafafa;
+  border-top: 1px solid #eee;
+  border-radius: 0 0 10px 10px;
+">
+  &copy; 2025 Andreas Zott – Alle Rechte vorbehalten<br>
+  <span style="font-size: 11px;">(Sifa) Arbeitssicherheit 2025</span>
+</footer>
 </div>
 
-<!-- Bereich für Auswertung -->
-<div id="auswertung-container" style="margin-top: 30px; text-align: center;">
-  <div id="auswertung" style="display: none;"></div>
-</div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
-  <script>
-    const canvas = document.getElementById('signature-pad');
-    const ctx = canvas.getContext('2d');
-    let drawing = false;
-
-    function resizeCanvas() {
-      const ratio = window.devicePixelRatio || 1;
-      const displayWidth = canvas.offsetWidth;
-      const displayHeight = canvas.offsetHeight;
-
-      const oldImage = new Image();
-      oldImage.src = canvas.toDataURL();
-
-      canvas.width = displayWidth * ratio;
-      canvas.height = displayHeight * ratio;
-
-      canvas.style.width = displayWidth + "px";
-      canvas.style.height = displayHeight + "px";
-
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.scale(ratio, ratio);
-
-      oldImage.onload = () => {
-        ctx.drawImage(oldImage, 0, 0, displayWidth, displayHeight);
-      };
-    }
-
-    function getX(e) {
-      return e.touches ? e.touches[0].clientX - canvas.getBoundingClientRect().left :
-                         e.clientX - canvas.getBoundingClientRect().left;
-    }
-
-    function getY(e) {
-      return e.touches ? e.touches[0].clientY - canvas.getBoundingClientRect().top :
-                         e.clientY - canvas.getBoundingClientRect().top;
-    }
-
-    function startDrawing(e) {
-      drawing = true;
-      ctx.beginPath();
-      ctx.moveTo(getX(e), getY(e));
-    }
-
-    function draw(e) {
-      if (!drawing) return;
-      ctx.lineTo(getX(e), getY(e));
-      ctx.stroke();
-    }
-
-    function stopDrawing() {
-      drawing = false;
-      saveSignature();
-    }
-
-    function clearSignature() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      localStorage.removeItem("signatureImage");
-    }
-
-    function saveSignature() {
-      const dataURL = canvas.toDataURL();
-      localStorage.setItem("signatureImage", dataURL);
-    }
-
-    function restoreSignature() {
-      const dataURL = localStorage.getItem("signatureImage");
-      if (dataURL) {
-        const image = new Image();
-        image.onload = () => {
-          ctx.drawImage(image, 0, 0, canvas.offsetWidth, canvas.offsetHeight);
-        };
-        image.src = dataURL;
-      }
-    }
-
-    function prepareForPrint() {
-      const dataURL = canvas.toDataURL();
-      const img = document.createElement("img");
-      img.src = dataURL;
-      img.style.border = "2px solid #000";
-      img.style.width = "100%";
-      img.style.maxWidth = "600px";
-      canvas.replaceWith(img);
-      window.print();
-    }
-
-    window.addEventListener("resize", resizeCanvas);
-    window.addEventListener("load", () => {
-      resizeCanvas();
-      restoreSignature();
-    });
-
-    canvas.addEventListener('mousedown', startDrawing);
-    canvas.addEventListener('mousemove', draw);
-    canvas.addEventListener('mouseup', stopDrawing);
-    canvas.addEventListener('mouseout', stopDrawing);
-    canvas.addEventListener('touchstart', startDrawing, {passive: false});
-    canvas.addEventListener('touchmove', draw, {passive: false});
-    canvas.addEventListener('touchend', stopDrawing);
-  </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
-  
+  const canvas = document.getElementById('signature-pad');
+  const ctx = canvas.getContext('2d');
+  let drawing = false;
 
-function auswertungAnzeigen() {
+  function resizeCanvas() {
+    const ratio = window.devicePixelRatio || 1;
+    const displayWidth = canvas.offsetWidth;
+    const displayHeight = canvas.offsetHeight;
+    const oldImage = new Image();
+    oldImage.src = canvas.toDataURL();
+
+    canvas.width = displayWidth * ratio;
+    canvas.height = displayHeight * ratio;
+    canvas.style.width = displayWidth + "px";
+    canvas.style.height = displayHeight + "px";
+
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.scale(ratio, ratio);
+
+    oldImage.onload = () => {
+      ctx.drawImage(oldImage, 0, 0, displayWidth, displayHeight);
+    };
+  }
+
+  function getX(e) {
+    return e.touches ? e.touches[0].clientX - canvas.getBoundingClientRect().left :
+                       e.clientX - canvas.getBoundingClientRect().left;
+  }
+
+  function getY(e) {
+    return e.touches ? e.touches[0].clientY - canvas.getBoundingClientRect().top :
+                       e.clientY - canvas.getBoundingClientRect().top;
+  }
+
+  function startDrawing(e) {
+    drawing = true;
+    ctx.beginPath();
+    ctx.moveTo(getX(e), getY(e));
+  }
+
+  function draw(e) {
+    if (!drawing) return;
+    ctx.lineTo(getX(e), getY(e));
+    ctx.stroke();
+  }
+
+  function stopDrawing() {
+    drawing = false;
+    saveSignature();
+  }
+
+  function clearSignature() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    localStorage.removeItem("signatureImage");
+  }
+
+  function saveSignature() {
+    const dataURL = canvas.toDataURL();
+    localStorage.setItem("signatureImage", dataURL);
+  }
+
+  function restoreSignature() {
+    const dataURL = localStorage.getItem("signatureImage");
+    if (dataURL) {
+      const image = new Image();
+      image.onload = () => {
+        ctx.drawImage(image, 0, 0, canvas.offsetWidth, canvas.offsetHeight);
+      };
+      image.src = dataURL;
+    }
+  }
+
+  function prepareForPrint() {
+    const element = document.getElementById("content");
+    html2pdf().from(element).set({
+      margin: 1,
+      filename: 'arbeitssicherheit-checkliste.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+    }).save();
+  }
+
+  function auswertungAnzeigen() {
     const radios = document.querySelectorAll('input[type="radio"]:checked');
-    const datum = document.getElementById('datum').value || 'kein Datum angegeben';
+    const datum = document.getElementById('datum')?.value || 'kein Datum';
+    const markt = document.getElementById('markt')?.value || 'unbekannt';
 
     const auswertung = {
       ja: 0,
@@ -895,33 +895,42 @@ function auswertungAnzeigen() {
     const auswertungDiv = document.getElementById('auswertung');
     auswertungDiv.style.display = 'block';
     auswertungDiv.innerHTML = `
-      <div style="
-        max-width: 400px;
-        margin: 0 auto;
-        padding: 24px;
-        background-color: white;
-        border-left: 6px solid #007BFF;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        font-family: Arial, sans-serif;
-        text-align: left;
-      ">
-        <h3 style="margin-top: 0; color: #007BFF;">📊 Auswertung</h3>
-        <p style="margin-bottom: 10px;"><strong>Datum:</strong> ${datum}</p>
-        <p><strong>Gesamte Antworten:</strong> ${auswertung.ja + auswertung.nein + auswertung.nicht_vorhanden}</p>
-        <ul style="list-style-type: none; padding-left: 0; font-size: 16px;">
-          <li>✅ <strong>Ja:</strong> ${auswertung.ja}</li>
-          <li>❌ <strong>Nein:</strong> ${auswertung.nein}</li>
-          <li>⚠️ <strong>Nicht vorhanden:</strong> ${auswertung.nicht_vorhanden}</li>
-        </ul>
-        ${auswertung.nein > 0 ? `<p style="color: red;"><strong>⚠️ Es besteht Handlungsbedarf bei mindestens einer Frage!</strong></p>` : `<p style="color: green;"><strong>✔️ Kein akuter Handlungsbedarf.</strong></p>`}
-      </div>
+      <h3>📊 Auswertung</h3>
+      <p><strong>Markt:</strong> ${markt}</p>
+      <p><strong>Datum:</strong> ${datum}</p>
+      <hr style="margin: 16px 0;">
+      <p><strong>Ja:</strong> ${auswertung.ja}</p>
+      <p><strong>Nein:</strong> ${auswertung.nein}</p>
+      <p><strong>Nicht vorhanden:</strong> ${auswertung.nicht_vorhanden}</p>
     `;
-}
+
+    const auswertungWindow = window.open('auswertung-sifa.html', 'auswertung');
+    const daten = {
+      markt: markt,
+      datum: datum,
+      ja: auswertung.ja,
+      nein: auswertung.nein,
+      nicht_vorhanden: auswertung.nicht_vorhanden
+    };
+    setTimeout(() => {
+      auswertungWindow.postMessage(daten, "*");
+    }, 1000);
+  }
+
+  window.addEventListener("resize", resizeCanvas);
+  window.addEventListener("load", () => {
+    resizeCanvas();
+    restoreSignature();
+  });
+
+  canvas.addEventListener('mousedown', startDrawing);
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', stopDrawing);
+  canvas.addEventListener('mouseout', stopDrawing);
+  canvas.addEventListener('touchstart', startDrawing, {passive: false});
+  canvas.addEventListener('touchmove', draw, {passive: false});
+  canvas.addEventListener('touchend', stopDrawing);
 </script>
-<footer style="text-align: center; margin-top: 60px; font-size: 12px; color: #777;">
-     &copy; 2025 Andreas Zott. Alle Rechte vorbehalten. (Sifa) Arbeitssicherheit 2025
-  </footer>
-</div></body>
 </body>
 </html>
+
