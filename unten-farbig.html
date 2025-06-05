@@ -691,13 +691,13 @@
 </table>		
 <style>
     #signature-pad {
-      border: 2px solid #000;
-      border-radius: 8px;
-      width: 100%;
-      max-width: 600px;
-      height: 150px;
-      touch-action: none;
-    }
+  border: 2px solid #cccccc;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  height: 150px;
+  touch-action: none;
+}
     .buttons {
       margin-top: 10px;
     }
@@ -720,13 +720,13 @@
     }
 
     #signature-pad {
-      border: 2px solid #000;
-      border-radius: 8px;
-      width: 100%;
-      max-width: 600px;
-      height: 150px;
-      touch-action: none;
-    }
+  border: 2px solid #cccccc;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  height: 150px;
+  touch-action: none;
+}
 
     .buttons {
       margin-top: 10px;
@@ -874,7 +874,8 @@
     canvas.addEventListener('touchend', stopDrawing);
   </script>
 <script>
-  function auswertungAnzeigen() {
+  
+function auswertungAnzeigen() {
     const radios = document.querySelectorAll('input[type="radio"]:checked');
 
     const auswertung = {
@@ -892,28 +893,28 @@
     const auswertungDiv = document.getElementById('auswertung');
     auswertungDiv.style.display = 'block';
     auswertungDiv.innerHTML = `
-  <div style="
-    display: inline-block;
-    background-color: #eaf4ff;
-    border-left: 6px solid #007BFF;
-    border-radius: 12px;
-    padding: 24px 32px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    font-family: Arial, sans-serif;
-    color: #004085;
-    text-align: left;
-    max-width: 400px;
-  ">
-    <h3 style="margin-top: 0;">📊 Auswertung der Antworten</h3>
-    <ul style="list-style-type: none; padding-left: 0; font-size: 18px;">
-      <li>✅ <strong>Ja</strong>: ${auswertung.ja}</li>
-      <li>❌ <strong>Nein</strong>: ${auswertung.nein}</li>
-      <li>⚠️ <strong>Nicht vorhanden</strong>: ${auswertung.nicht_vorhanden}</li>
-    </ul>
-  </div>
-`;
-    
-  }
+      <div style="
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 24px;
+        background-color: white;
+        border-left: 6px solid #007BFF;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        font-family: Arial, sans-serif;
+        text-align: left;
+      ">
+        <h3 style="margin-top: 0; color: #007BFF;">📊 Auswertung</h3>
+        <p><strong>Gesamte Antworten:</strong> ${auswertung.ja + auswertung.nein + auswertung.nicht_vorhanden}</p>
+        <ul style="list-style-type: none; padding-left: 0; font-size: 16px;">
+          <li>✅ <strong>Ja:</strong> ${auswertung.ja}</li>
+          <li>❌ <strong>Nein:</strong> ${auswertung.nein}</li>
+          <li>⚠️ <strong>Nicht vorhanden:</strong> ${auswertung.nicht_vorhanden}</li>
+        </ul>
+        ${auswertung.nein > 0 ? `<p style="color: red;"><strong>⚠️ Es besteht Handlungsbedarf bei mindestens einer Frage!</strong></p>` : `<p style="color: green;"><strong>✔️ Kein akuter Handlungsbedarf.</strong></p>`}
+      </div>
+    `;
+}
 </script>
 <footer style="text-align: center; margin-top: 60px; font-size: 12px; color: #777;">
      &copy; 2025 Andreas Zott. Alle Rechte vorbehalten. (Sifa) Arbeitssicherheit 2025
