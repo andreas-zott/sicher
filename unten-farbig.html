@@ -875,8 +875,10 @@
   </script>
 <script>
   
+
 function auswertungAnzeigen() {
     const radios = document.querySelectorAll('input[type="radio"]:checked');
+    const datum = document.getElementById('datum').value || 'kein Datum angegeben';
 
     const auswertung = {
       ja: 0,
@@ -905,6 +907,7 @@ function auswertungAnzeigen() {
         text-align: left;
       ">
         <h3 style="margin-top: 0; color: #007BFF;">📊 Auswertung</h3>
+        <p style="margin-bottom: 10px;"><strong>Datum:</strong> ${datum}</p>
         <p><strong>Gesamte Antworten:</strong> ${auswertung.ja + auswertung.nein + auswertung.nicht_vorhanden}</p>
         <ul style="list-style-type: none; padding-left: 0; font-size: 16px;">
           <li>✅ <strong>Ja:</strong> ${auswertung.ja}</li>
