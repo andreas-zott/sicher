@@ -220,6 +220,7 @@
       <button onclick="alleAuswertungenLöschen()">🗑️ Alle löschen</button>
       </div>
   </div>
+<div id="gesamtauswertung" class="box" style="max-width: 500px; margin: 30px auto;"></div>
 
   <footer class="footer">
     <p>
@@ -240,6 +241,7 @@
         document.getElementById("login").style.display = "none";
         document.getElementById("auswertungen").style.display = "block";
         zeigeAuswertungen();
+berechneGesamtauswertung();
       } else {
         alert("Falsches Passwort!");
       }
@@ -346,6 +348,32 @@ function alleAuswertungenLöschen() {
     zeigeAuswertungen(); // Anzeige aktualisieren
   }
 }
+function berechneGesamtauswertung() {
+  const einträge = JSON.parse(localStorage.getItem("auswertungen") || "[]");
+
+  let gesamt = {
+    ja: 0,
+    nein: 0,
+    nicht_vorhanden: 0,
+    gesamtAnzahl: einträge.length
+  };
+
+  einträge.forEach(e => {
+    gesamt.ja += parseInt(e.ja || 0);
+    gesamt.nein += parseInt(e.nein || 0);
+    gesamt.nicht_vorhanden += parseInt(e.nicht_vorhanden || 0);
+  });
+
+  const container = document.getElementById("gesamtauswertung");
+  container.innerHTML = `
+    <h3>📊 Gesamtauswertung aller Einträge</h3>
+    <p><strong>Anzahl Auswertungen:</strong> ${gesamt.gesamtAnzahl}</p>
+    <p><strong>✅ Ja:</strong> ${gesamt.ja}</p>
+    <p><strong>❌ Nein:</strong> ${gesamt.nein}</p>
+    <p><strong>⚠️ Nicht vorhanden:</strong> ${gesamt.nicht_vorhanden}</p>
+  `;
+}
+
   </script>
 </body>
 </html>
