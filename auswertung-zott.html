@@ -213,17 +213,12 @@
     <div id="liste-wrapper">
       <div id="liste"></div>
     </div>
-
-    <!-- NEUER Bereich für Zusammenfassung -->
-    <div id="zusammenfassung" style="margin-top: 20px; font-size: 18px; color: #007BFF;"></div>
-
-    <div>
-      <br>
-      <div style="margin-top: 20px; text-align: center; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;">
-        <button onclick="window.print()">📄 PDF speichern / Drucken</button>
-        <button onclick="alleAuswertungenLöschen()">🗑️ Alle löschen</button>
+<div>
+<br>
+<div style="margin-top: 20px; text-align: center; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;">
+      <button onclick="window.print()">📄 PDF speichern / Drucken</button>
+      <button onclick="alleAuswertungenLöschen()">🗑️ Alle löschen</button>
       </div>
-    </div>
   </div>
 
   <footer class="footer">
@@ -273,7 +268,6 @@
 
       if (gefiltert.length === 0) {
         container.innerHTML = "<p>Keine passenden Auswertungen gefunden.</p>";
-        zeigeZusammenfassung(); // Zusammenfassung trotzdem aktualisieren (leer)
         return;
       }
 
@@ -331,50 +325,27 @@
           }
         });
       });
-
-      zeigeZusammenfassung();
     }
 
-    function zeigeZusammenfassung() {
-      const zusammenfassungDiv = document.getElementById("zusammenfassung");
-      const einträge = JSON.parse(localStorage.getItem("auswertungen") || "[]");
-
-      if (einträge.length === 0) {
-        zusammenfassungDiv.textContent = "Keine Auswertungen vorhanden.";
-        return;
-      }
-
-      let gesamtJa = 0;
-      let gesamtNein = 0;
-      let gesamtNichtVorhanden = 0;
-
-      einträge.forEach(e => {
-        gesamtJa += Number(e.ja) || 0;
-        gesamtNein += Number(e.nein) || 0;
-        gesamtNichtVorhanden += Number(e.nicht_vorhanden) || 0;
-      });
-
-      zusammenfassungDiv.innerHTML = `
-        <strong>Gesamtanzahl Auswertungen:</strong> ${einträge.length} <br>
-        <strong>Summe Ja:</strong> ${gesamtJa} &nbsp;&nbsp;
-        <strong>Summe Nein:</strong> ${gesamtNein} &nbsp;&nbsp;
-        <strong>Summe Nicht vorhanden:</strong> ${gesamtNichtVorhanden}
-      `;
-    }
-
-    function loesche(index) {
-      const einträge = JSON.parse(localStorage.getItem("auswertungen") || "[]");
-      einträge.splice(index, 1);
+    function loesche(originalIndex) {
+      let einträge = JSON.parse(localStorage.getItem("auswertungen") || "[]");
+      einträge.splice(originalIndex, 1);
       localStorage.setItem("auswertungen", JSON.stringify(einträge));
       zeigeAuswertungen();
     }
 
-    function alleAuswertungenLöschen() {
-      if (confirm("Sind Sie sicher, dass Sie alle Auswertungen löschen möchten?")) {
-        localStorage.removeItem("auswertungen");
+    window.addEventListener("message", function(event) {
+      if (event.data && event.data.datum && event.data.markt) {
+        speichereAuswertung(event.data);
         zeigeAuswertungen();
       }
-    }
+    });
+function alleAuswertungenLöschen() {
+  if (confirm("Möchten Sie wirklich alle Auswertungen löschen?")) {
+    localStorage.removeItem("auswertungen");
+    zeigeAuswertungen(); // Anzeige aktualisieren
+  }
+}
   </script>
 </body>
 </html>
