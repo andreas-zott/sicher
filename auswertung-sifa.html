@@ -188,6 +188,9 @@
       overflow-y: auto;
     }
   </style>
+
+  <!-- Chart.js einbinden -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div id="login" class="box">
@@ -277,6 +280,44 @@
           <canvas id="chart-${eintrag.originalIndex}" height="150"></canvas>
         `;
         container.appendChild(div);
+
+        // Chart zeichnen
+        const ctx = document.getElementById(`chart-${eintrag.originalIndex}`).getContext('2d');
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Ja', 'Nein', 'Nicht vorhanden'],
+            datasets: [{
+              label: 'Anzahl',
+              data: [eintrag.ja, eintrag.nein, eintrag.nicht_vorhanden],
+              backgroundColor: [
+                'rgba(0, 123, 255, 0.7)',
+                'rgba(220, 53, 69, 0.7)',
+                'rgba(255, 193, 7, 0.7)'
+              ],
+              borderColor: [
+                'rgba(0, 123, 255, 1)',
+                'rgba(220, 53, 69, 1)',
+                'rgba(255, 193, 7, 1)'
+              ],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+                precision: 0
+              }
+            },
+            plugins: {
+              legend: {
+                display: false
+              }
+            }
+          }
+        });
       });
     }
 
