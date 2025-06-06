@@ -240,6 +240,7 @@
       <p id="stat-nein">❌ Nein: 0</p>
       <p id="stat-nicht">⚠️ Nicht vorhanden: 0</p>
       <button onclick="exportCSV()">📥 Export als CSV</button>
+      <button onclick="druckeAuswertung()">🖨️ Drucken</button>
     </div>
   </div>
 
@@ -398,6 +399,32 @@
       ];
       localStorage.setItem("auswertungen", JSON.stringify(beispiel));
     }
+function druckeAuswertung() {
+  // Inhalt der Auswertungen + Statistik, aber ohne Login & Footer
+  const inhalt = document.getElementById("auswertungen").innerHTML;
+
+  const printWindow = window.open("", "_blank", "width=800,height=600");
+  printWindow.document.write(`
+    <html>
+      <head>
+        <title>Drucken - Auswertungen</title>
+        <style>
+          body { font-family: Arial, sans-serif; padding: 20px; background: #fff; color: #333; }
+          .entry { border: 1px solid #ccc; padding: 15px; margin-bottom: 15px; border-radius: 10px; }
+          h2, h3 { color: #007BFF; }
+          button { display: none; }
+        </style>
+      </head>
+      <body>
+        ${inhalt}
+      </body>
+    </html>
+  `);
+  printWindow.document.close();
+  printWindow.focus();
+  printWindow.print();
+  printWindow.close();
+}
   </script>
 </body>
 </html>
