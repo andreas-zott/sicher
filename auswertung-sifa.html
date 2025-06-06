@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <title>Auswertungen mit Suche</title>
+  <title>Auswertungen mit Suche & Statistik</title>
   <style>
     /* Grundlayout für Sticky Footer */
     html, body {
@@ -11,7 +11,6 @@
       padding: 0;
       font-family: Arial, sans-serif;
       background-color: #f4f4f4;
-
       display: flex;
       flex-direction: column;
     }
@@ -21,22 +20,22 @@
     }
 
     /* Footer fixieren */
-   .footer {
-  flex-shrink: 0;
-  text-align: center;
-  color: #aaa;              /* Helleres Grau als Textfarbe */
-  padding: 20px 0;
-  background-color: #f4f4f4; /* gleiche Farbe wie body */
-  font-size: 14px;
-  font-family: Arial, sans-serif;
-}
+    .footer {
+      flex-shrink: 0;
+      text-align: center;
+      color: #aaa;
+      padding: 20px 0;
+      background-color: #f4f4f4;
+      font-size: 14px;
+      font-family: Arial, sans-serif;
+    }
     .footer a {
-      color: #ddd;              /* Linkfarbe etwas heller */
-      text-decoration: none;    /* Keine Unterstreichung */
+      color: #ddd;
+      text-decoration: none;
       margin: 0 5px;
     }
     .footer a:hover {
-      text-decoration: underline; /* Unterstreichung bei Hover */
+      text-decoration: underline;
     }
 
     /* Box Styling */
@@ -187,10 +186,27 @@
       max-height: 60vh;
       overflow-y: auto;
     }
-  </style>
 
-  <!-- Chart.js einbinden -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    .statistics {
+      max-width: 700px;
+      margin: 10px auto 30px auto;
+      background: #fff;
+      border-radius: 15px;
+      padding: 20px 25px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      font-size: 18px;
+      color: #333;
+    }
+
+    .statistics p {
+      margin: 8px 0;
+      font-weight: 600;
+    }
+
+    .statistics button {
+      margin-top: 15px;
+    }
+  </style>
 </head>
 <body>
   <div id="login" class="box">
@@ -201,17 +217,29 @@
     <button onclick="checkPassword()">Login</button>
   </div>
 
-  <div id="auswertungen" class="box" style="display:none;">
-    <h2>📊 Gespeicherte Auswertungen</h2>
+  <div id="auswertungen" style="display:none;">
+    <div class="box">
+      <h2>📊 Gespeicherte Auswertungen</h2>
 
-    <div class="search">
-      <input type="text" id="marktSuche" placeholder="Marktnummer z. B. M123" />
-      <input type="date" id="datumSuche" />
-      <button onclick="zeigeAuswertungen()">🔍 Suchen</button>
+      <div class="search">
+        <input type="text" id="marktSuche" placeholder="Marktnummer z. B. M123" />
+        <input type="date" id="datumSuche" />
+        <button onclick="zeigeAuswertungen()">🔍 Suchen</button>
+      </div>
+
+      <div id="liste-wrapper">
+        <div id="liste"></div>
+      </div>
     </div>
 
-    <div id="liste-wrapper">
-      <div id="liste"></div>
+    <div class="statistics">
+      <h3>📈 Statistiken (Summe der aktuell gefilterten Einträge):</h3>
+      <p id="stat-anzahl">🗂 Anzahl Einträge: 0</p>
+      <p id="stat-marktanzahl">🔢 Anzahl unterschiedliche Marktnummern: 0</p>
+      <p id="stat-ja">✅ Ja: 0</p>
+      <p id="stat-nein">❌ Nein: 0</p>
+      <p id="stat-nicht">⚠️ Nicht vorhanden: 0</p>
+      <button onclick="exportCSV()">📥 Export als CSV</button>
     </div>
   </div>
 
@@ -262,6 +290,7 @@
 
       if (gefiltert.length === 0) {
         container.innerHTML = "<p>Keine passenden Auswertungen gefunden.</p>";
+        aktualisiereStatistik([]);
         return;
       }
 
@@ -277,63 +306,98 @@
           <p>✅ Ja: ${eintrag.ja}</p>
           <p>❌ Nein: ${eintrag.nein}</p>
           <p>⚠️ Nicht vorhanden: ${eintrag.nicht_vorhanden}</p>
-          <canvas id="chart-${eintrag.originalIndex}" height="150"></canvas>
         `;
         container.appendChild(div);
-
-        // Chart zeichnen
-        const ctx = document.getElementById(`chart-${eintrag.originalIndex}`).getContext('2d');
-        new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels: ['Ja', 'Nein', 'Nicht vorhanden'],
-            datasets: [{
-              label: 'Anzahl',
-              data: [eintrag.ja, eintrag.nein, eintrag.nicht_vorhanden],
-              backgroundColor: [
-                'rgba(0, 123, 255, 0.7)',
-                'rgba(220, 53, 69, 0.7)',
-                'rgba(255, 193, 7, 0.7)'
-              ],
-              borderColor: [
-                'rgba(0, 123, 255, 1)',
-                'rgba(220, 53, 69, 1)',
-                'rgba(255, 193, 7, 1)'
-              ],
-              borderWidth: 1
-            }]
-          },
-          options: {
-            responsive: true,
-            scales: {
-              y: {
-                beginAtZero: true,
-                precision: 0
-              }
-            },
-            plugins: {
-              legend: {
-                display: false
-              }
-            }
-          }
-        });
       });
+
+      aktualisiereStatistik(gefiltert);
     }
 
-    function loesche(originalIndex) {
-      let einträge = JSON.parse(localStorage.getItem("auswertungen") || "[]");
-      einträge.splice(originalIndex, 1);
+    function loesche(index) {
+      if (!confirm("Eintrag wirklich löschen?")) return;
+      const einträge = JSON.parse(localStorage.getItem("auswertungen") || "[]");
+      einträge.splice(index, 1);
       localStorage.setItem("auswertungen", JSON.stringify(einträge));
       zeigeAuswertungen();
     }
 
-    window.addEventListener("message", function(event) {
-      if (event.data && event.data.datum && event.data.markt) {
-        speichereAuswertung(event.data);
-        zeigeAuswertungen();
+    function aktualisiereStatistik(gefiltert) {
+      // Anzahl aller Einträge
+      const anzahlEintraege = gefiltert.length;
+
+      // Anzahl unterschiedlicher Marktnummern ermitteln
+      const einzigartigeMarktNummern = new Set(gefiltert.map(e => e.markt?.toLowerCase() || ""));
+      // Falls "" (leer) dabei ist, ignorieren
+      const anzahlMarktNummern = einzigartigeMarktNummern.has("") ? einzigartigeMarktNummern.size - 1 : einzigartigeMarktNummern.size;
+
+      // Summe der Werte
+      let sumJa = 0, sumNein = 0, sumNicht = 0;
+      gefiltert.forEach(e => {
+        sumJa += Number(e.ja) || 0;
+        sumNein += Number(e.nein) || 0;
+        sumNicht += Number(e.nicht_vorhanden) || 0;
+      });
+
+      document.getElementById("stat-anzahl").textContent = `🗂 Anzahl Einträge: ${anzahlEintraege}`;
+      document.getElementById("stat-marktanzahl").textContent = `🔢 Anzahl unterschiedliche Marktnummern: ${anzahlMarktNummern}`;
+      document.getElementById("stat-ja").textContent = `✅ Ja: ${sumJa}`;
+      document.getElementById("stat-nein").textContent = `❌ Nein: ${sumNein}`;
+      document.getElementById("stat-nicht").textContent = `⚠️ Nicht vorhanden: ${sumNicht}`;
+    }
+
+    function exportCSV() {
+      const marktFilter = document.getElementById("marktSuche").value.trim().toLowerCase();
+      const datumFilter = document.getElementById("datumSuche").value;
+      const einträge = JSON.parse(localStorage.getItem("auswertungen") || "[]");
+
+      const gefiltert = einträge.filter(e => {
+        const marktPasst = !marktFilter || (e.markt && e.markt.toLowerCase().includes(marktFilter));
+        const datumPasst = !datumFilter || e.datum === datumFilter;
+        return marktPasst && datumPasst;
+      });
+
+      if (gefiltert.length === 0) {
+        alert("Keine Daten zum Exportieren.");
+        return;
       }
-    });
+
+      // CSV-Header
+      const header = ["Markt", "Datum", "Name", "SiFa", "Ja", "Nein", "Nicht vorhanden"];
+      const rows = gefiltert.map(e => [
+        `"${e.markt || ''}"`,
+        `"${e.datum || ''}"`,
+        `"${e.name || ''}"`,
+        `"${e.sifa || ''}"`,
+        e.ja || 0,
+        e.nein || 0,
+        e.nicht_vorhanden || 0
+      ]);
+
+      let csvContent = header.join(",") + "\n" + rows.map(r => r.join(",")).join("\n");
+
+      // Download vorbereiten
+      const blob = new Blob([csvContent], {type: "text/csv;charset=utf-8;"});
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "auswertungen_export.csv";
+      a.style.display = "none";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // Optional: Beispiel-Daten zum Testen, falls localStorage leer ist
+    if (!localStorage.getItem("auswertungen")) {
+      const beispiel = [
+        { markt: "M123", datum: "2025-06-01", name: "Anna", sifa: "Ja", ja: 5, nein: 2, nicht_vorhanden: 1 },
+        { markt: "M234", datum: "2025-06-01", name: "Bernd", sifa: "Nein", ja: 3, nein: 4, nicht_vorhanden: 0 },
+        { markt: "M123", datum: "2025-06-02", name: "Clara", sifa: "Ja", ja: 6, nein: 1, nicht_vorhanden: 0 }
+      ];
+      localStorage.setItem("auswertungen", JSON.stringify(beispiel));
+    }
   </script>
 </body>
 </html>
