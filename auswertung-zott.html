@@ -218,8 +218,7 @@
 <div style="margin-top: 20px; text-align: center; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;">
       <button onclick="window.print()">📄 PDF speichern / Drucken</button>
       <button onclick="alleAuswertungenLöschen()">🗑️ Alle löschen</button>
-      <button onclick="csvExport()">📅 Als CSV exportieren</button>
-    </div>
+      </div>
   </div>
 
   <footer class="footer">
@@ -341,6 +340,12 @@
         zeigeAuswertungen();
       }
     });
+function alleAuswertungenLöschen() {
+  if (confirm("Möchten Sie wirklich alle Auswertungen löschen?")) {
+    localStorage.removeItem("auswertungen");
+    zeigeAuswertungen(); // Anzeige aktualisieren
+  }
+}
   </script>
 </body>
 </html>
