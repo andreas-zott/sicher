@@ -875,49 +875,56 @@
       window.print();
   }
 
-  function auswertungAnzeigen() {
-    const radios = document.querySelectorAll('input[type="radio"]:checked');
-    const datum = document.getElementById('datum')?.value || 'kein Datum';
-    const markt = document.getElementById('markt')?.value || 'unbekannt';
+  
+function auswertungAnzeigen() {
+  const radios = document.querySelectorAll('input[type="radio"]:checked');
+  const datum = document.getElementById('datum')?.value || 'kein Datum';
+  const markt = document.getElementById('markt')?.value || 'unbekannt';
+  const name = document.getElementById('name')?.value || 'unbekannt';
+  const sifa = document.getElementById('sifa')?.value || 'unbekannt';
 
-    const auswertung = {
-      ja: 0,
-      nein: 0,
-      nicht_vorhanden: 0
-    };
+  const auswertung = {
+    ja: 0,
+    nein: 0,
+    nicht_vorhanden: 0
+  };
 
-    radios.forEach(radio => {
-      if (auswertung.hasOwnProperty(radio.value)) {
-        auswertung[radio.value]++;
-      }
-    });
+  radios.forEach(radio => {
+    if (auswertung.hasOwnProperty(radio.value)) {
+      auswertung[radio.value]++;
+    }
+  });
 
-    const auswertungDiv = document.getElementById('auswertung');
-    auswertungDiv.style.display = 'block';
-    auswertungDiv.innerHTML = `
-      <h3>📊 Auswertung</h3>
-      <p><strong>Markt:</strong> ${markt}</p>
-      <p><strong>Datum:</strong> ${datum}</p>
-      <hr style="margin: 16px 0;">
-      <p><strong>Ja:</strong> ${auswertung.ja}</p>
-      <p><strong>Nein:</strong> ${auswertung.nein}</p>
-      <p><strong>Nicht vorhanden:</strong> ${auswertung.nicht_vorhanden}</p>
-    `;
+  const auswertungDiv = document.getElementById('auswertung');
+  auswertungDiv.style.display = 'block';
+  auswertungDiv.innerHTML = `
+    <h3>📊 Auswertung</h3>
+    <p><strong>Markt:</strong> ${markt}</p>
+    <p><strong>Datum:</strong> ${datum}</p>
+    <p><strong>Name:</strong> ${name}</p>
+    <p><strong>SiFa:</strong> ${sifa}</p>
+    <hr style="margin: 16px 0;">
+    <p><strong>Ja:</strong> ${auswertung.ja}</p>
+    <p><strong>Nein:</strong> ${auswertung.nein}</p>
+    <p><strong>Nicht vorhanden:</strong> ${auswertung.nicht_vorhanden}</p>
+  `;
 
-    const auswertungWindow = window.open('auswertung-sifa.html', 'auswertung');
-    const daten = {
-      markt: markt,
-      datum: datum,
-      ja: auswertung.ja,
-      nein: auswertung.nein,
-      nicht_vorhanden: auswertung.nicht_vorhanden
-    };
-    setTimeout(() => {
-      auswertungWindow.postMessage(daten, "*");
-    }, 1000);
-  }
+  const auswertungWindow = window.open('auswertung-sifa.html', 'auswertung');
+  const daten = {
+    markt: markt,
+    datum: datum,
+    name: name,
+    sifa: sifa,
+    ja: auswertung.ja,
+    nein: auswertung.nein,
+    nicht_vorhanden: auswertung.nicht_vorhanden
+  };
+  setTimeout(() => {
+    auswertungWindow.postMessage(daten, "*");
+  }, 1000);
+}
 
-  window.addEventListener("resize", resizeCanvas);
+window.addEventListener("resize", resizeCanvas);
   window.addEventListener("load", () => {
     resizeCanvas();
     restoreSignature();

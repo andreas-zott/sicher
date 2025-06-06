@@ -4,21 +4,42 @@
   <meta charset="UTF-8" />
   <title>Auswertungen mit Suche</title>
   <style>
+    /* Grundlayout für Sticky Footer */
     html, body {
       height: 100%;
       margin: 0;
       padding: 0;
       font-family: Arial, sans-serif;
       background-color: #f4f4f4;
-    }
 
-    body {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
+      flex-direction: column;
     }
 
+    body > div, #auswertungen, #login {
+      flex: 1 0 auto; /* Hauptinhalt nimmt Platz ein */
+    }
+
+    /* Footer fixieren */
+   .footer {
+  flex-shrink: 0;
+  text-align: center;
+  color: #aaa;              /* Helleres Grau als Textfarbe */
+  padding: 20px 0;
+  background-color: #f4f4f4; /* gleiche Farbe wie body */
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+}
+    .footer a {
+      color: #ddd;              /* Linkfarbe etwas heller */
+      text-decoration: none;    /* Keine Unterstreichung */
+      margin: 0 5px;
+    }
+    .footer a:hover {
+      text-decoration: underline; /* Unterstreichung bei Hover */
+    }
+
+    /* Box Styling */
     .box {
       max-width: 700px;
       width: 100%;
@@ -26,6 +47,7 @@
       padding: 30px 25px;
       border-radius: 15px;
       box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      margin: 20px auto;
     }
 
     /* Passwortbereich */
@@ -155,11 +177,22 @@
     .delete-button:hover {
       background-color: #a71d2a;
     }
+
+    #liste-wrapper {
+      border: 2px solid #007BFF;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+      background-color: #fdfdff;
+      max-height: 60vh;
+      overflow-y: auto;
+    }
   </style>
 </head>
 <body>
   <div id="login" class="box">
     <h2>🔐 Passwortgeschützt</h2>
+    <p>Bitte Passwort eingeben, um die Auswertungen zu sehen.</p>
     <input type="password" id="pw" placeholder="Passwort eingeben" />
     <br />
     <button onclick="checkPassword()">Login</button>
@@ -174,10 +207,22 @@
       <button onclick="zeigeAuswertungen()">🔍 Suchen</button>
     </div>
 
-    <div id="liste"></div>
+    <div id="liste-wrapper">
+      <div id="liste"></div>
+    </div>
   </div>
 
+  <footer class="footer">
+    <p>
+      © <span id="currentYear"></span> Andreas Zott. Alle Rechte vorbehalten.
+      <a href="datenschutz.html">Datenschutz</a> |
+      <a href="impressum.html">Impressum</a>
+    </p>
+  </footer>
+
   <script>
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+
     const PASSWORD = "sifa";
 
     function checkPassword() {
@@ -224,9 +269,13 @@
           <button class="delete-button" onclick="loesche(${eintrag.originalIndex})">🗑️ Löschen</button>
           <p><strong>Markt:</strong> ${eintrag.markt || 'unbekannt'}</p>
           <p><strong>Datum:</strong> ${eintrag.datum}</p>
+          <p><strong>Name:</strong> ${eintrag.name || 'unbekannt'}</p>
+          <p><strong>SiFa:</strong> ${eintrag.sifa || 'unbekannt'}</p>
           <p>✅ Ja: ${eintrag.ja}</p>
           <p>❌ Nein: ${eintrag.nein}</p>
-          <p>⚠️ Nicht vorhanden: ${eintrag.nicht_vorhanden}</p>`;
+          <p>⚠️ Nicht vorhanden: ${eintrag.nicht_vorhanden}</p>
+          <canvas id="chart-${eintrag.originalIndex}" height="150"></canvas>
+        `;
         container.appendChild(div);
       });
     }
