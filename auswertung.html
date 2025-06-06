@@ -187,16 +187,6 @@
       max-height: 60vh;
       overflow-y: auto;
     }
-
-    /* Zusammenfassung Box */
-    #zusammenfassung {
-      max-width: 700px;
-      margin: 0 auto 20px;
-      background: #e9f0ff;
-      padding: 15px 25px;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,123,255,0.2);
-    }
   </style>
 
   <!-- Chart.js einbinden -->
@@ -218,15 +208,6 @@
       <input type="text" id="marktSuche" placeholder="Marktnummer z. B. M123" />
       <input type="date" id="datumSuche" />
       <button onclick="zeigeAuswertungen()">🔍 Suchen</button>
-    </div>
-
-    <!-- Zusammenfassung der Auswertungen -->
-    <div id="zusammenfassung">
-      <h3>📈 Zusammenfassung</h3>
-      <p><strong>Gesamtanzahl Auswertungen:</strong> <span id="gesamtAnzahl">0</span></p>
-      <p><strong>Gesamt "Ja":</strong> <span id="gesamtJa">0</span></p>
-      <p><strong>Gesamt "Nein":</strong> <span id="gesamtNein">0</span></p>
-      <p><strong>Gesamt "Nicht vorhanden":</strong> <span id="gesamtNichtVorhanden">0</span></p>
     </div>
 
     <div id="liste-wrapper">
@@ -278,18 +259,6 @@
           const datumPasst = !datumFilter || e.datum === datumFilter;
           return marktPasst && datumPasst;
         });
-
-      // Zusammenfassung berechnen
-      const gesamtAnzahl = gefiltert.length;
-      const gesamtJa = gefiltert.reduce((sum, e) => sum + (Number(e.ja) || 0), 0);
-      const gesamtNein = gefiltert.reduce((sum, e) => sum + (Number(e.nein) || 0), 0);
-      const gesamtNichtVorhanden = gefiltert.reduce((sum, e) => sum + (Number(e.nicht_vorhanden) || 0), 0);
-
-      // Zusammenfassung anzeigen
-      document.getElementById("gesamtAnzahl").textContent = gesamtAnzahl;
-      document.getElementById("gesamtJa").textContent = gesamtJa;
-      document.getElementById("gesamtNein").textContent = gesamtNein;
-      document.getElementById("gesamtNichtVorhanden").textContent = gesamtNichtVorhanden;
 
       if (gefiltert.length === 0) {
         container.innerHTML = "<p>Keine passenden Auswertungen gefunden.</p>";
@@ -343,20 +312,28 @@
               }
             },
             plugins: {
-              legend: { display: false }
+              legend: {
+                display: false
+              }
             }
           }
         });
       });
     }
 
-    function loesche(index) {
-      if (!confirm("Willst du diesen Eintrag wirklich löschen?")) return;
-      const einträge = JSON.parse(localStorage.getItem("auswertungen") || "[]");
-      einträge.splice(index, 1);
+    function loesche(originalIndex) {
+      let einträge = JSON.parse(localStorage.getItem("auswertungen") || "[]");
+      einträge.splice(originalIndex, 1);
       localStorage.setItem("auswertungen", JSON.stringify(einträge));
       zeigeAuswertungen();
     }
+
+    window.addEventListener("message", function(event) {
+      if (event.data && event.data.datum && event.data.markt) {
+        speichereAuswertung(event.data);
+        zeigeAuswertungen();
+      }
+    });
   </script>
 </body>
 </html>
