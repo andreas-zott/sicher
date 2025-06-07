@@ -4,8 +4,49 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Checkliste für Arbeitssicherheiten für Einzelhandel/Marktumgebungen</title>
+<style>
+ h3 {
+  text-align: center;
+  margin-bottom: 10px;
+}
 
-  <style>
+#signature-pad {
+  display: block;
+  margin: 0 auto;
+  border: 1px solid #000;
+  border-radius: 8px;
+  width: 604px;
+  height: 154px;
+}
+
+.button-container {
+  width: 604px;          /* gleiche Breite wie Canvas */
+  margin: 15px auto 0;   /* zentrieren und Abstand oben */
+  display: flex;
+  justify-content: space-between; /* Buttons links und rechts ausrichten */
+  gap: 12px;
+}
+
+.button-container button {
+  flex: 1;                 /* beide Buttons gleich breit */
+  font-size: 14px;
+  padding: 8px 0;
+  cursor: pointer;
+  border-radius: 6px;
+  border: 1px solid #aaa;
+  background-color: #ddd;
+  color: #444;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  max-width: 48%;          /* verhindert, dass sie zu breit werden */
+}
+
+.button-container button:hover {
+  background-color: #bbb;
+  color: #222;
+}
+
+
+
     /* Custom Radio Button Styling */
     input[type="radio"] {
       appearance: none;
@@ -387,7 +428,64 @@
         color: black !important;
       }
     }
-  </style>
+  
+    button {
+      font-size: 18px;
+      padding: 14px 28px;
+      width: 100%;
+      max-width: 400px;
+      margin: 10px auto;
+      display: block;
+    }
+
+    input[type="radio"] {
+      width: 28px;
+      height: 28px;
+    }
+
+    input[type="radio"]:checked::after {
+      width: 14px;
+      height: 14px;
+    }
+
+/* Checkbox-Bereich nebeneinander zentriert */
+.confirmation-section {
+  margin: 40px auto;
+  max-width: 900px;
+  padding: 20px;
+  background: #f1f1f1;
+  border-radius: 8px;
+  text-align: center;
+}
+.confirmation-section h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+.confirmation-section .checkbox-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+.confirmation-section label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+}
+
+/* Footer unten halten */
+html, body {
+  height: 100%;
+}
+body {
+  display: flex;
+  flex-direction: column;
+}
+footer {
+  margin-top: auto;
+}
+</style>
 </head>
 <body>
 
@@ -1531,17 +1629,27 @@ geprüft und gegen unbefugte Benutzung gesichert. <br>Sicherheitsschuhe werden g
 </thead>
 <tbody>
 <tr><td style="text-align: left;">1</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">2</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">3</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">4</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">5</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">6</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">7</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">8</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">9</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">10</td><td contenteditable="true"></td></tr>
+
+
 </tbody>
 </table>
-
+<div class="confirmation-section">
+  <h2>Abschlussbestätigung</h2>
+  <div class="checkbox-row">
+    <label><input type="checkbox"/><span>Alle Mängel wurden zur Kenntnis genommen.</span></label>
+    <label><input type="checkbox"/><span>Maßnahmen gemäß Plan werden umgesetzt.</span></label>
+    <label><input type="checkbox"/><span>Nachkontrolle wird durchgeführt.</span></label>
+    <label><input type="checkbox"/><span>Mitarbeiter wurden informiert.</span></label>
+  </div>
 <div style="text-align: center; margin: 40px 0 20px 0;">
   <h3>Unterschrift</h3>
-  <canvas height="154" id="signature-pad" style="width: 604px; height: 154px; border: 2px solid #000; border-radius: 8px; margin: 0 auto; display: block;" width="604"></canvas>
+  <canvas height="154" id="signature-pad" style="width: 720px; height: 154px; border: 1px solid #000; border-radius: 8px; margin: 0 auto; display: block;" width="604"></canvas>
   <div style="margin-top: 15px;">
-    <button onclick="clearSignature()" style="margin-right: 10px;">Löschen</button>
-   
-    <button onclick="window.location.replace(window.location.href)">In Safari öffnen</button>
-  </div>
+<br>
+<div style="display: flex; justify-content: center; gap: 12px; margin: 30px 0;">
+  <button onclick="clearSignature()">Löschen</button>  
+ 
+  <button onclick="window.print()" style="font-size: 18px; padding: 12px 24px;">📄 Checkliste drucken</button>
 </div>
 
 
@@ -1662,5 +1770,12 @@ geprüft und gegen unbefugte Benutzung gesichert. <br>Sicherheitsschuhe werden g
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
 </script>
+
+
+</div>
+
+
+</div>
+
 </body>
 </html>
