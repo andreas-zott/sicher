@@ -6,7 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Arbeitssicherheit-Checkliste-2025</title>
 
-
 <style>
   body {
     font-family: Arial, sans-serif;
@@ -80,6 +79,86 @@
     background-color: #0056b3;
   }
 </style>
+
+<style>
+  input[type="radio"] {
+    width: 20px;
+    height: 20px;
+  }
+
+  @media (max-width: 768px) {
+    table, th, td {
+      font-size: 14px;
+    }
+
+    input[type="text"], input[type="date"] {
+      font-size: 18px;
+    }
+
+    button {
+      font-size: 18px;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    canvas {
+      height: 200px;
+    }
+  }
+</style>
+
+<script>
+  window.addEventListener('load', () => {
+    const dateInput = document.getElementById('datum');
+    if (dateInput) {
+      const today = new Date().toISOString().split('T')[0];
+      dateInput.value = today;
+    }
+  });
+</script>
+
+
+<style>
+  td input[type="radio"] {
+    transform: scale(1.5);
+    margin: 0 10px;
+  }
+
+  .selected-ja {
+    background-color: #d4edda !important;
+  }
+
+  .selected-nein {
+    background-color: #f8d7da !important;
+  }
+
+  .selected-nicht {
+    background-color: #e2e3e5 !important;
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const radios = document.querySelectorAll('input[type="radio"]');
+
+    radios.forEach(radio => {
+      radio.addEventListener("change", () => {
+        const name = radio.name;
+        const group = document.getElementsByName(name);
+
+        group.forEach(r => {
+          r.closest("tr")?.classList.remove("selected-ja", "selected-nein", "selected-nicht");
+        });
+
+        const row = radio.closest("tr");
+        if (radio.value === "ja") row?.classList.add("selected-ja");
+        if (radio.value === "nein") row?.classList.add("selected-nein");
+        if (radio.value === "nicht_vorhanden") row?.classList.add("selected-nicht");
+      });
+    });
+  });
+</script>
+
 </head>
 
 
@@ -95,8 +174,11 @@
 </header>
 <div class="form-section" style="max-width: 300px;">
 <div style="margin-bottom: 10px;">
-<label for="marktnummer">Marktnummer:</label><br/>
-<input id="marktnummer" style="width: 100%;" type="text"/>
+
+
+<label for="markt">Marktnummer:</label>
+<input type="text" id="markt" placeholder="z. B. M123" required>
+
 </div>
 <div style="margin-bottom: 10px;">
 <label for="name">Name:</label><br/>
@@ -692,13 +774,13 @@
 </table>		
 <style>
     #signature-pad {
-      border: 2px solid #000;
-      border-radius: 8px;
-      width: 100%;
-      max-width: 600px;
-      height: 150px;
-      touch-action: none;
-    }
+  border: 2px solid #cccccc;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  height: 150px;
+  touch-action: none;
+}
     .buttons {
       margin-top: 10px;
     }
@@ -708,6 +790,86 @@
       font-family: sans-serif;
     }
   </style>
+
+<style>
+  input[type="radio"] {
+    width: 20px;
+    height: 20px;
+  }
+
+  @media (max-width: 768px) {
+    table, th, td {
+      font-size: 14px;
+    }
+
+    input[type="text"], input[type="date"] {
+      font-size: 18px;
+    }
+
+    button {
+      font-size: 18px;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    canvas {
+      height: 200px;
+    }
+  }
+</style>
+
+<script>
+  window.addEventListener('load', () => {
+    const dateInput = document.getElementById('datum');
+    if (dateInput) {
+      const today = new Date().toISOString().split('T')[0];
+      dateInput.value = today;
+    }
+  });
+</script>
+
+
+<style>
+  td input[type="radio"] {
+    transform: scale(1.5);
+    margin: 0 10px;
+  }
+
+  .selected-ja {
+    background-color: #d4edda !important;
+  }
+
+  .selected-nein {
+    background-color: #f8d7da !important;
+  }
+
+  .selected-nicht {
+    background-color: #e2e3e5 !important;
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const radios = document.querySelectorAll('input[type="radio"]');
+
+    radios.forEach(radio => {
+      radio.addEventListener("change", () => {
+        const name = radio.name;
+        const group = document.getElementsByName(name);
+
+        group.forEach(r => {
+          r.closest("tr")?.classList.remove("selected-ja", "selected-nein", "selected-nicht");
+        });
+
+        const row = radio.closest("tr");
+        if (radio.value === "ja") row?.classList.add("selected-ja");
+        if (radio.value === "nein") row?.classList.add("selected-nein");
+        if (radio.value === "nicht_vorhanden") row?.classList.add("selected-nicht");
+      });
+    });
+  });
+</script>
+
 </head>
 </div>
 </body>
@@ -721,13 +883,13 @@
     }
 
     #signature-pad {
-      border: 2px solid #000;
-      border-radius: 8px;
-      width: 100%;
-      max-width: 600px;
-      height: 150px;
-      touch-action: none;
-    }
+  border: 2px solid #cccccc;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  height: 150px;
+  touch-action: none;
+}
 
     .buttons {
       margin-top: 10px;
@@ -753,144 +915,196 @@
       background-color: #0056b3;
     }
   </style>
+
+<style>
+  input[type="radio"] {
+    width: 20px;
+    height: 20px;
+  }
+
+  @media (max-width: 768px) {
+    table, th, td {
+      font-size: 14px;
+    }
+
+    input[type="text"], input[type="date"] {
+      font-size: 18px;
+    }
+
+    button {
+      font-size: 18px;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    canvas {
+      height: 200px;
+    }
+  }
+</style>
+
+<script>
+  window.addEventListener('load', () => {
+    const dateInput = document.getElementById('datum');
+    if (dateInput) {
+      const today = new Date().toISOString().split('T')[0];
+      dateInput.value = today;
+    }
+  });
+</script>
+
+
+<style>
+  td input[type="radio"] {
+    transform: scale(1.5);
+    margin: 0 10px;
+  }
+
+  .selected-ja {
+    background-color: #d4edda !important;
+  }
+
+  .selected-nein {
+    background-color: #f8d7da !important;
+  }
+
+  .selected-nicht {
+    background-color: #e2e3e5 !important;
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const radios = document.querySelectorAll('input[type="radio"]');
+
+    radios.forEach(radio => {
+      radio.addEventListener("change", () => {
+        const name = radio.name;
+        const group = document.getElementsByName(name);
+
+        group.forEach(r => {
+          r.closest("tr")?.classList.remove("selected-ja", "selected-nein", "selected-nicht");
+        });
+
+        const row = radio.closest("tr");
+        if (radio.value === "ja") row?.classList.add("selected-ja");
+        if (radio.value === "nein") row?.classList.add("selected-nein");
+        if (radio.value === "nicht_vorhanden") row?.classList.add("selected-nicht");
+      });
+    });
+  });
+</script>
+
 </head>
 <body>
   <div id="content">
-    <h1>Arbeitssicherheit-Checkliste-2025</h1>
-    <p>Bitte das Dokument durchlesen und unterschreiben.</p>
+   
+<h1>Arbeitssicherheit-Checkliste-2025</h1>
+  <p>Bitte das Dokument durchlesen und unterschreiben.</p>
 
-    <h2>Unterschrift</h2>
-    <canvas id="signature-pad"></canvas>
-<div class="buttons" style="text-align: center; margin-top: 40px;">
-  <button onclick="clearSignature()" class="custom-btn">🗑️ Löschen</button>
-  <button onclick="auswertungAnzeigen()" class="custom-btn">📊 Auswerten</button>
-  <button onclick="prepareForPrint()" class="custom-btn">📄 Drucken / PDF</button>
+  <h2>Unterschrift</h2>
+  <canvas id="signature-pad"></canvas>
+
+  <div class="buttons" style="text-align: center; margin-top: 40px;">
+    <button onclick="clearSignature()" class="custom-btn">🗑️ Unterschrift Löschen</button>
+    <button onclick="auswertungAnzeigen()" class="custom-btn">📊 Auswerten</button>
+    <button onclick="prepareForPrint()" class="custom-btn">📄 Drucken / PDF</button>
+  </div>
+
+  <div id="auswertung-container">
+    <div id="auswertung"></div>
+  </div>
+
+  <footer style="
+  text-align: center;
+  margin-top: 40px;
+  padding: 16px 8px;
+  font-size: 12px;
+  color: #999;
+  background-color: #fafafa;
+  border-top: 1px solid #eee;
+  border-radius: 0 0 10px 10px;
+">
+  &copy; 2025 Andreas Zott – Alle Rechte vorbehalten<br>
+  <span style="font-size: 11px;">(Sifa) Arbeitssicherheit 2025</span>
+</footer>
 </div>
 
-<!-- Bereich für Auswertung -->
-<div id="auswertung-container" style="margin-top: 30px; text-align: center;">
-  <div id="auswertung" style="display: none;"></div>
-</div>
-<div id="auswertungBox" style="display:none; margin-top: 40px; padding: 20px; border-left: 6px solid #007BFF; background-color: #eaf4ff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-  <h2>📊 Auswertung</h2>
-  <p><strong>Marktnummer:</strong> <span id="ausw-marktnummer"></span></p>
-  <p><strong>Name:</strong> <span id="ausw-name"></span></p>
-  <p><strong>SiFa:</strong> <span id="ausw-sifa"></span></p>
-  <hr/>
-  <ul style="list-style-type: none; font-size: 18px; padding-left: 0;">
-    <li>✅ Ja: <span id="jaCount">0</span></li>
-    <li>❌ Nein: <span id="neinCount">0</span></li>
-    <li>⚠️ Nicht vorhanden: <span id="nichtCount">0</span></li>
-  </ul>
-</div>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
-function auswertungAnzeigen() {
-  const radios = document.querySelectorAll('input[type="radio"]:checked');
+  const canvas = document.getElementById('signature-pad');
+  const ctx = canvas.getContext('2d');
+  let drawing = false;
 
-  let ja = 0, nein = 0, nicht_vorhanden = 0;
+  function resizeCanvas() {
+    const ratio = window.devicePixelRatio || 1;
+    const displayWidth = canvas.offsetWidth;
+    const displayHeight = canvas.offsetHeight;
+    const oldImage = new Image();
+    oldImage.src = canvas.toDataURL();
 
-  radios.forEach(radio => {
-    if (radio.value === "ja") ja++;
-    if (radio.value === "nein") nein++;
-    if (radio.value === "nicht_vorhanden") nicht_vorhanden++;
-  });
+    canvas.width = displayWidth * ratio;
+    canvas.height = displayHeight * ratio;
+    canvas.style.width = displayWidth + "px";
+    canvas.style.height = displayHeight + "px";
 
-  const marktnummer = document.getElementById("marktnummer").value;
-  const name = document.getElementById("name").value;
-  const sifa = document.getElementById("sifa").value;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.scale(ratio, ratio);
 
-  // Ausgabe aktualisieren
-  document.getElementById("jaCount").textContent = ja;
-  document.getElementById("neinCount").textContent = nein;
-  document.getElementById("nichtCount").textContent = nicht_vorhanden;
-  document.getElementById("ausw-marktnummer").textContent = marktnummer || "–";
-  document.getElementById("ausw-name").textContent = name || "–";
-  document.getElementById("ausw-sifa").textContent = sifa || "–";
+    oldImage.onload = () => {
+      ctx.drawImage(oldImage, 0, 0, displayWidth, displayHeight);
+    };
+  }
 
-  // Box anzeigen
-  document.getElementById("auswertungBox").style.display = "block";
-}
-</script>
+  function getX(e) {
+    return e.touches ? e.touches[0].clientX - canvas.getBoundingClientRect().left :
+                       e.clientX - canvas.getBoundingClientRect().left;
+  }
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  function getY(e) {
+    return e.touches ? e.touches[0].clientY - canvas.getBoundingClientRect().top :
+                       e.clientY - canvas.getBoundingClientRect().top;
+  }
 
-  <script>
-    const canvas = document.getElementById('signature-pad');
-    const ctx = canvas.getContext('2d');
-    let drawing = false;
+  function startDrawing(e) {
+    drawing = true;
+    ctx.beginPath();
+    ctx.moveTo(getX(e), getY(e));
+  }
 
-    function resizeCanvas() {
-      const ratio = window.devicePixelRatio || 1;
-      const displayWidth = canvas.offsetWidth;
-      const displayHeight = canvas.offsetHeight;
+  function draw(e) {
+    if (!drawing) return;
+    ctx.lineTo(getX(e), getY(e));
+    ctx.stroke();
+  }
 
-      const oldImage = new Image();
-      oldImage.src = canvas.toDataURL();
+  function stopDrawing() {
+    drawing = false;
+    saveSignature();
+  }
 
-      canvas.width = displayWidth * ratio;
-      canvas.height = displayHeight * ratio;
+  function clearSignature() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    localStorage.removeItem("signatureImage");
+  }
 
-      canvas.style.width = displayWidth + "px";
-      canvas.style.height = displayHeight + "px";
+  function saveSignature() {
+    const dataURL = canvas.toDataURL();
+    localStorage.setItem("signatureImage", dataURL);
+  }
 
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.scale(ratio, ratio);
-
-      oldImage.onload = () => {
-        ctx.drawImage(oldImage, 0, 0, displayWidth, displayHeight);
+  function restoreSignature() {
+    const dataURL = localStorage.getItem("signatureImage");
+    if (dataURL) {
+      const image = new Image();
+      image.onload = () => {
+        ctx.drawImage(image, 0, 0, canvas.offsetWidth, canvas.offsetHeight);
       };
+      image.src = dataURL;
     }
+  }
 
-    function getX(e) {
-      return e.touches ? e.touches[0].clientX - canvas.getBoundingClientRect().left :
-                         e.clientX - canvas.getBoundingClientRect().left;
-    }
-
-    function getY(e) {
-      return e.touches ? e.touches[0].clientY - canvas.getBoundingClientRect().top :
-                         e.clientY - canvas.getBoundingClientRect().top;
-    }
-
-    function startDrawing(e) {
-      drawing = true;
-      ctx.beginPath();
-      ctx.moveTo(getX(e), getY(e));
-    }
-
-    function draw(e) {
-      if (!drawing) return;
-      ctx.lineTo(getX(e), getY(e));
-      ctx.stroke();
-    }
-
-    function stopDrawing() {
-      drawing = false;
-      saveSignature();
-    }
-
-    function clearSignature() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      localStorage.removeItem("signatureImage");
-    }
-
-    function saveSignature() {
-      const dataURL = canvas.toDataURL();
-      localStorage.setItem("signatureImage", dataURL);
-    }
-
-    function restoreSignature() {
-      const dataURL = localStorage.getItem("signatureImage");
-      if (dataURL) {
-        const image = new Image();
-        image.onload = () => {
-          ctx.drawImage(image, 0, 0, canvas.offsetWidth, canvas.offsetHeight);
-        };
-        image.src = dataURL;
-      }
-    }
-
-    function prepareForPrint() {
+   function prepareForPrint() {
       const dataURL = canvas.toDataURL();
       const img = document.createElement("img");
       img.src = dataURL;
@@ -899,90 +1113,71 @@ function auswertungAnzeigen() {
       img.style.maxWidth = "600px";
       canvas.replaceWith(img);
       window.print();
-    }
-
-    window.addEventListener("resize", resizeCanvas);
-    window.addEventListener("load", () => {
-      resizeCanvas();
-      restoreSignature();
-    });
-
-    canvas.addEventListener('mousedown', startDrawing);
-    canvas.addEventListener('mousemove', draw);
-    canvas.addEventListener('mouseup', stopDrawing);
-    canvas.addEventListener('mouseout', stopDrawing);
-    canvas.addEventListener('touchstart', startDrawing, {passive: false});
-    canvas.addEventListener('touchmove', draw, {passive: false});
-    canvas.addEventListener('touchend', stopDrawing);
-  </script>
-
-
-
-<script>
-  function auswertungAnzeigen() {
-    const radios = document.querySelectorAll('input[type="radio"]:checked');
-
-    const auswertung = {
-      ja: 0,
-      nein: 0,
-      nicht_vorhanden: 0
-    };
-
-    radios.forEach(radio => {
-      if (auswertung.hasOwnProperty(radio.value)) {
-        auswertung[radio.value]++;
-      }
-    });
-
-    // Formulardaten lesen
-    const marktnummer = document.getElementById("marktnummer").value || "–";
-    const name = document.getElementById("name").value || "–";
-    const sifa = document.getElementById("sifa").value || "–";
-
-    // Live-Auswertung anzeigen
-    const auswertungDiv = document.getElementById('auswertung');
-    auswertungDiv.style.display = 'block';
-    auswertungDiv.innerHTML = `
-      <div style="
-        display: inline-block;
-        background-color: #eaf4ff;
-        border-left: 6px solid #007BFF;
-        border-radius: 12px;
-        padding: 24px 32px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        font-family: Arial, sans-serif;
-        color: #004085;
-        text-align: left;
-        max-width: 400px;
-      ">
-        <h3 style="margin-top: 0;">📊 Auswertung der Antworten</h3>
-        <p><strong>Marktnummer:</strong> ${marktnummer}</p>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>SiFa:</strong> ${sifa}</p>
-        <ul style="list-style-type: none; padding-left: 0; font-size: 18px;">
-          <li>✅ <strong>Ja</strong>: ${auswertung.ja}</li>
-          <li>❌ <strong>Nein</strong>: ${auswertung.nein}</li>
-          <li>⚠️ <strong>Nicht vorhanden</strong>: ${auswertung.nicht_vorhanden}</li>
-        </ul>
-      </div>
-    `;
-
-    // Daten für Weitergabe in URL kodieren
-    const params = new URLSearchParams({
-      marktnummer,
-      name,
-      sifa,
-      ja: auswertung.ja,
-      nein: auswertung.nein,
-      nicht_vorhanden: auswertung.nicht_vorhanden
-    });
-
-    // Neue Seite mit Parametern öffnen
-    window.open("auswertung.html?" + params.toString(), "_blank");
   }
+
+  
+function auswertungAnzeigen() {
+  const radios = document.querySelectorAll('input[type="radio"]:checked');
+  const datum = document.getElementById('datum')?.value || 'kein Datum';
+  const markt = document.getElementById('markt')?.value || 'unbekannt';
+  const name = document.getElementById('name')?.value || 'unbekannt';
+  const sifa = document.getElementById('sifa')?.value || 'unbekannt';
+
+  const auswertung = {
+    ja: 0,
+    nein: 0,
+    nicht_vorhanden: 0
+  };
+
+  radios.forEach(radio => {
+    if (auswertung.hasOwnProperty(radio.value)) {
+      auswertung[radio.value]++;
+    }
+  });
+
+  const auswertungDiv = document.getElementById('auswertung');
+  auswertungDiv.style.display = 'block';
+  auswertungDiv.innerHTML = `
+    <h3>📊 Auswertung</h3>
+    <p><strong>Markt:</strong> ${markt}</p>
+    <p><strong>Datum:</strong> ${datum}</p>
+    <p><strong>Name:</strong> ${name}</p>
+    <p><strong>SiFa:</strong> ${sifa}</p>
+    <hr style="margin: 16px 0;">
+    <p><strong>Ja:</strong> ${auswertung.ja}</p>
+    <p><strong>Nein:</strong> ${auswertung.nein}</p>
+    <p><strong>Nicht vorhanden:</strong> ${auswertung.nicht_vorhanden}</p>
+  `;
+
+  const auswertungWindow = window.open('auswertung-zott.html', 'auswertung');
+  const daten = {
+    markt: markt,
+    datum: datum,
+    name: name,
+    sifa: sifa,
+    ja: auswertung.ja,
+    nein: auswertung.nein,
+    nicht_vorhanden: auswertung.nicht_vorhanden
+  };
+  setTimeout(() => {
+    auswertungWindow.postMessage(daten, "*");
+  }, 1000);
+}
+
+window.addEventListener("resize", resizeCanvas);
+  window.addEventListener("load", () => {
+    resizeCanvas();
+    restoreSignature();
+  });
+
+  canvas.addEventListener('mousedown', startDrawing);
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', stopDrawing);
+  canvas.addEventListener('mouseout', stopDrawing);
+  canvas.addEventListener('touchstart', startDrawing, {passive: false});
+  canvas.addEventListener('touchmove', draw, {passive: false});
+  canvas.addEventListener('touchend', stopDrawing);
 </script>
-<footer style="text-align: center; margin-top: 60px; font-size: 12px; color: #777;">
-     &copy; 2025 Andreas Zott. Alle Rechte vorbehalten. (Sifa) Arbeitssicherheit 2025
-  </footer>
 </body>
 </html>
+
