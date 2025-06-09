@@ -123,33 +123,40 @@
 
     footer.footer {
       max-width: 700px;
-      margin: 0 auto 1rem auto;
-      padding: 0 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
+      margin: 0 auto 2rem auto;
+      padding: 1rem;
+      text-align: center;
       font-size: clamp(0.85rem, 1.8vw, 1rem);
       color: #555;
-      text-align: center;
-      line-height: 1.4;
-      user-select: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.8rem;
     }
 
-    footer.footer p {
-      margin: 0;
+    .footer-links {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.4rem;
       justify-content: center;
+      gap: 1rem;
     }
 
-    footer.footer a {
+    .footer-links a {
       color: #2563eb;
       text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.3s ease;
     }
 
-    footer.footer a:hover {
+    .footer-links a i {
+      font-size: 1.1rem;
+    }
+
+    .footer-links a:hover {
+      color: #1d4ed8;
+      transform: scale(1.05);
       text-decoration: underline;
     }
   </style>
@@ -184,11 +191,15 @@
   </div>
 
   <footer class="footer">
-    <p>
-      © <span id="currentYear"></span> Andreas Zott. Alle Rechte vorbehalten.
-      <a href="datenschutz.html" target="_blank" rel="noopener noreferrer">Datenschutz</a> |
-      <a href="impressum.html" target="_blank" rel="noopener noreferrer">Impressum</a>
-    </p>
+    <p>© <span id="currentYear"></span> Andreas Zott. Alle Rechte vorbehalten.</p>
+    <div class="footer-links">
+      <a href="datenschutz.html" target="_blank" rel="noopener noreferrer">
+        <i class="fas fa-user-shield"></i> Datenschutz
+      </a>
+      <a href="impressum.html" target="_blank" rel="noopener noreferrer">
+        <i class="fas fa-info-circle"></i> Impressum
+      </a>
+    </div>
   </footer>
 
   <script>
