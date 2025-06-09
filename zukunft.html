@@ -64,6 +64,7 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             -webkit-tap-highlight-color: transparent;
+            color: #1e293b;
         }
 
         .theme-toggle:hover,
@@ -75,6 +76,7 @@
         body.dark .theme-toggle {
             background: rgba(30, 41, 59, 0.8);
             border-color: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
         }
 
         /* Header */
@@ -355,7 +357,7 @@
         </div>
 
         <div class="tiles-grid">
-            <a href="#" class="tile" tabindex="0" aria-label="Sicherheitsausrüstung">
+            <a href="Sicherheitsausrüstung am Arbeitsplatz.html" class="tile" tabindex="0" aria-label="Sicherheitsausrüstung">
                 <div class="tile-icon">
                     <i class="fas fa-gloves"></i>
                 </div>
@@ -363,7 +365,7 @@
                <p>Alles, was Sie zum Schutz benötigen – von Handschuhen bis Helmen.</p>
             </a>
 
-            <a href="#" class="tile" tabindex="0" aria-label="Arbeitsplatzgestaltung">
+            <a href="Arbeitsplatzgestaltung.html" class="tile" tabindex="0" aria-label="Arbeitsplatzgestaltung">
                 <div class="tile-icon">
                     <i class="fas fa-chair"></i>
                 </div>
@@ -371,7 +373,7 @@
                 <p>Ergonomische und sichere Gestaltung für maximalen Komfort und Sicherheit.</p>
             </a>
 
-            <a href="#" class="tile" tabindex="0" aria-label="Notfallmanagement">
+            <a href="Notfallmanagement .html" class="tile" tabindex="0" aria-label="Notfallmanagement">
                 <div class="tile-icon">
                     <i class="fas fa-ambulance"></i>
                 </div>
@@ -379,65 +381,70 @@
                 <p>Vorbereitung und schnelle Reaktion bei Unfällen und Notfällen.</p>
             </a>
 
-            <a href="#" class="tile" tabindex="0" aria-label="Schulungen und Trainings">
-                <div class="tile-icon">
-                    <i class="fas fa-chalkboard-teacher"></i>
-                </div>
-                <h3>Schulungen und Trainings</h3>
-                <p>Wissen und Fähigkeiten, die Leben retten können.</p>
-            </a>
-
-            <a href="#" class="tile" tabindex="0" aria-label="Gesundheit am Arbeitsplatz">
-                <div class="tile-icon">
-                    <i class="fas fa-heartbeat"></i>
-                </div>
-                <h3>Gesundheit am Arbeitsplatz</h3>
-                <p>Maßnahmen zur Förderung der körperlichen und geistigen Gesundheit.</p>
-            </a>
-
-            <a href="#" class="tile" tabindex="0" aria-label="Gesetzliche Vorschriften">
+            <a href="Gesetzliche Vorschriften im Einzelhandel.html" class="tile" tabindex="0" aria-label="Arbeitsschutzgesetz">
                 <div class="tile-icon">
                     <i class="fas fa-balance-scale"></i>
                 </div>
-                <h3>Gesetzliche Vorschriften</h3>
-                <p>Wichtige Gesetze und Regelungen zur Einhaltung der Arbeitssicherheit.</p>
+                <h3>Arbeitsschutzgesetz</h3>
+                <p>Rechtliche Grundlagen und Pflichten für Arbeitgeber und Arbeitnehmer.</p>
+            </a>
+
+            <a href="Schulung und Trainings am Arbeitsplatz.html" class="tile" tabindex="0" aria-label="Schulung und Weiterbildung">
+                <div class="tile-icon">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                </div>
+                <h3>Schulung &amp; Weiterbildung</h3>
+                <p>Kontinuierliche Weiterbildung für ein sicheres Arbeitsumfeld.</p>
+            </a>
+
+            <a href="Gesundheit am Arbeitsplatz.html" class="tile" tabindex="0" aria-label="Gesundheitsschutz">
+                <div class="tile-icon">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <h3>Gesundheitsschutz</h3>
+                <p>Maßnahmen zur Förderung von Gesundheit und Wohlbefinden.</p>
             </a>
         </div>
     </div>
 
+    <button class="theme-toggle" aria-label="Toggle Dark Mode" title="Toggle Dark Mode">
+      <i class="fas fa-moon"></i>
+    </button>
+
     <footer>
-        &copy; 2025 Arbeitssicherheit 2025 - Alle Rechte vorbehalten.
+        &copy; 2025 Arbeitssicherheit GmbH. Alle Rechte vorbehalten.
     </footer>
 </div>
 
-<button class="theme-toggle" aria-label="Toggle Dark Mode" title="Toggle Dark Mode">🌓</button>
-
 <script>
-    const toggleButton = document.querySelector('.theme-toggle');
-    const body = document.body;
-    const icon = toggleButton.querySelector('i');
+const toggleButton = document.querySelector('.theme-toggle');
+const body = document.body;
+const icon = toggleButton.querySelector('i');
 
-    // Prüfen, ob ein Theme in localStorage gespeichert ist
-    const savedTheme = localStorage.getItem('theme');
+const savedTheme = localStorage.getItem('theme');
 
-    if (savedTheme === 'dark') {
-        body.classList.add('dark');
+if (savedTheme === 'dark') {
+    body.classList.add('dark');
+    icon.classList.remove('fa-moon');
+    icon.classList.add('fa-sun');
+} else {
+    icon.classList.remove('fa-sun');
+    icon.classList.add('fa-moon');
+}
+
+toggleButton.addEventListener('click', () => {
+    body.classList.toggle('dark');
+    if (body.classList.contains('dark')) {
         icon.classList.remove('fa-moon');
         icon.classList.add('fa-sun');
+        localStorage.setItem('theme', 'dark');
+    } else {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+        localStorage.setItem('theme', 'light');
     }
-
-    toggleButton.addEventListener('click', () => {
-        body.classList.toggle('dark');
-        if (body.classList.contains('dark')) {
-            icon.classList.remove('fa-moon');
-            icon.classList.add('fa-sun');
-            localStorage.setItem('theme', 'dark');
-        } else {
-            icon.classList.remove('fa-sun');
-            icon.classList.add('fa-moon');
-            localStorage.setItem('theme', 'light');
-        }
-    });
+});
 </script>
+
 </body>
 </html>
