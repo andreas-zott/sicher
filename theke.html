@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Arbeitssicherheit Metzgerei Checkliste</title>
+  <style>
+ /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+
+        body.dark .footer {
+            border-top-color: rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+        }
+
+        .footer a {
+            color: #3b82f6;
+            text-decoration: none;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+
+        body.dark .footer a {
+            color: #60a5fa;
+        }
+
+        body.dark .footer a:hover {
+            color: #93c5fd;
+        }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #eaf3fc;
+      margin: 20px;
+      color: #003366;
+    }
+
+    table {
+      width: 100%;
+      max-width: 900px;
+      border-collapse: collapse;
+      margin: auto;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    th, td {
+      padding: 10px 15px;
+      border-bottom: 1px solid #c5d0e6;
+      text-align: left;
+    }
+
+    th {
+      background-color: #9cc3f5;
+      color: #00264d;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    input[type="radio"] {
+      transform: scale(1.2);
+      margin: 0 10px;
+      cursor: pointer;
+    }
+
+    input[type="text"], input[type="date"] {
+      padding: 6px 10px;
+      border: 1px solid #9cc3f5;
+      border-radius: 6px;
+      font-size: 1rem;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    label {
+      user-select: none;
+      font-weight: bold;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background-color: #0078d7;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #005ea1;
+    }
+
+    .top-inputs {
+      max-width: 900px;
+      margin: 0 auto 30px auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px 40px;
+    }
+
+    .sign-btn-container {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    canvas#unterschrift {
+      border: 1px solid #0078d7;
+      border-radius: 8px;
+      background-color: #f9fbfe;
+      width: 100%;
+      max-width: 600px;
+      height: 150px;
+      display: block;
+      margin: 0 auto 10px auto;
+      touch-action: none;
+    }
+  </style>
+</head>
+<body>
+  <h1 style="text-align: center;">Arbeitssicherheit – Fleischverarbeitung / Metzgerei Theke</h1>
+<br>
+  <form>
+    <div class="top-inputs">
+      <label for="datum">Datum:</label>
+      <input type="date" id="datum" name="datum" readonly />
+
+      <label for="marktnummer">Marktnummer:</label>
+      <input type="text" id="marktnummer" name="marktnummer" placeholder="Marktnummer" />
+
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" placeholder="Name" />
+
+      <label for="Sifa">Sifa:</label>
+      <input type="text" id="Sifa" name="Sifa" placeholder="SIFA" />
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Frage</th>
+          <th>Ja</th>
+          <th>Nein</th>
+          <th>Nicht vorhanden</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+  <th colspan="4" style="text-align:left; background:#ddd;">1. Hygiene & Infektionsschutz</th>
+</tr>
+
+<tr>
+  <td>Werden persönliche Schutzkleidung und Handschuhe getragen?</td>
+  <td><input type="radio" name="schutzkleidung" value="ja" required></td>
+  <td><input type="radio" name="schutzkleidung" value="nein"></td>
+  <td><input type="radio" name="schutzkleidung" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Werden Hände regelmäßig und gründlich gewaschen?</td>
+  <td><input type="radio" name="handwaschen" value="ja" required></td>
+  <td><input type="radio" name="handwaschen" value="nein"></td>
+  <td><input type="radio" name="handwaschen" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Ist eine hygienische Reinigung der Arbeitsflächen gewährleistet?</td>
+  <td><input type="radio" name="arbeitsflaechen_reinigung" value="ja" required></td>
+  <td><input type="radio" name="arbeitsflaechen_reinigung" value="nein"></td>
+  <td><input type="radio" name="arbeitsflaechen_reinigung" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Sind Reinigungs- und Desinfektionsmittel vorhanden und richtig gelagert?</td>
+  <td><input type="radio" name="desinfektionsmittel" value="ja" required></td>
+  <td><input type="radio" name="desinfektionsmittel" value="nein"></td>
+  <td><input type="radio" name="desinfektionsmittel" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Werden Pflegeprodukte (z.B. Handcreme) den Mitarbeitenden zur Verfügung gestellt?</td>
+  <td><input type="radio" name="pflegeprodukte" value="ja" required></td>
+  <td><input type="radio" name="pflegeprodukte" value="nein"></td>
+  <td><input type="radio" name="pflegeprodukte" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Sind Hygieneeimer (z.B. für Handschuhe oder Tücher) vorhanden und werden sie genutzt?</td>
+  <td><input type="radio" name="hygieneeimer" value="ja" required></td>
+  <td><input type="radio" name="hygieneeimer" value="nein"></td>
+  <td><input type="radio" name="hygieneeimer" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <th colspan="4" style="text-align:left; background:#ddd;">2. Arbeitssicherheit / Schutzmaßnahmen</th>
+</tr>
+
+<tr>
+  <td>Werden scharfe Werkzeuge (Messer, Maschinen) sicher verwendet?</td>
+  <td><input type="radio" name="scharfe_werkzeuge" value="ja" required></td>
+  <td><input type="radio" name="scharfe_werkzeuge" value="nein"></td>
+  <td><input type="radio" name="scharfe_werkzeuge" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Sind Messer und Werkzeuge ordentlich gelagert und gepflegt?</td>
+  <td><input type="radio" name="messer_lagerung" value="ja" required></td>
+  <td><input type="radio" name="messer_lagerung" value="nein"></td>
+  <td><input type="radio" name="messer_lagerung" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Ist die Theke rutschfest und sauber gehalten?</td>
+  <td><input type="radio" name="theke_rutschfest" value="ja" required></td>
+  <td><input type="radio" name="theke_rutschfest" value="nein"></td>
+  <td><input type="radio" name="theke_rutschfest" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Werden Arbeitsunfälle und Verletzungen dokumentiert?</td>
+  <td><input type="radio" name="unfaelle_dokumentation" value="ja" required></td>
+  <td><input type="radio" name="unfaelle_dokumentation" value="nein"></td>
+  <td><input type="radio" name="unfaelle_dokumentation" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Werden die Aufschnittschneidemaschine sicher bedient und regelmäßig gereinigt?</td>
+  <td><input type="radio" name="aufschnittschneidemaschine_sicherheit" value="ja" required></td>
+  <td><input type="radio" name="aufschnittschneidemaschine_sicherheit" value="nein"></td>
+  <td><input type="radio" name="aufschnittschneidemaschine_sicherheit" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Wird der Kutter vorschriftsmäßig verwendet und gewartet?</td>
+  <td><input type="radio" name="kutter_sicherheit" value="ja" required></td>
+  <td><input type="radio" name="kutter_sicherheit" value="nein"></td>
+  <td><input type="radio" name="kutter_sicherheit" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Ist der Fleischwolf sicher bedient und nach Gebrauch gründlich gereinigt?</td>
+  <td><input type="radio" name="fleischwolf_sicherheit" value="ja" required></td>
+  <td><input type="radio" name="fleischwolf_sicherheit" value="nein"></td>
+  <td><input type="radio" name="fleischwolf_sicherheit" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <th colspan="4" style="text-align:left; background:#ddd;">3. Kühlkette und Lagerung</th>
+</tr>
+
+<tr>
+  <td>Ist die Kühlkette durchgehend gewährleistet?</td>
+  <td><input type="radio" name="kuehlkette" value="ja" required></td>
+  <td><input type="radio" name="kuehlkette" value="nein"></td>
+  <td><input type="radio" name="kuehlkette" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Sind Kühlschränke und Kühlräume sauber und funktionieren einwandfrei?</td>
+  <td><input type="radio" name="kuehlschrank_sauber" value="ja" required></td>
+  <td><input type="radio" name="kuehlschrank_sauber" value="nein"></td>
+  <td><input type="radio" name="kuehlschrank_sauber" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Werden Lebensmittel korrekt und sicher gelagert?</td>
+  <td><input type="radio" name="lebensmittel_lagerung" value="ja" required></td>
+  <td><input type="radio" name="lebensmittel_lagerung" value="nein"></td>
+  <td><input type="radio" name="lebensmittel_lagerung" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <th colspan="4" style="text-align:left; background:#ddd;">4. Brandschutz</th>
+</tr>
+
+<tr>
+  <td>Sind Feuerlöscher vorhanden und regelmäßig geprüft?</td>
+  <td><input type="radio" name="feuerloescher" value="ja" required></td>
+  <td><input type="radio" name="feuerloescher" value="nein"></td>
+  <td><input type="radio" name="feuerloescher" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Gibt es Maßnahmen zur Vermeidung von Fettbränden?</td>
+  <td><input type="radio" name="fettbrand_massnahmen" value="ja" required></td>
+  <td><input type="radio" name="fettbrand_massnahmen" value="nein"></td>
+  <td><input type="radio" name="fettbrand_massnahmen" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <th colspan="4" style="text-align:left; background:#ddd;">5. Psychische Gesundheit / Stressmanagement</th>
+</tr>
+
+<tr>
+  <td>Gibt es Angebote zur Stressbewältigung und psychischen Unterstützung?</td>
+  <td><input type="radio" name="stressmanagement" value="ja" required></td>
+  <td><input type="radio" name="stressmanagement" value="nein"></td>
+  <td><input type="radio" name="stressmanagement" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Wird auf angemessene Pausen und Erholungszeiten geachtet?</td>
+  <td><input type="radio" name="pausen" value="ja" required></td>
+  <td><input type="radio" name="pausen" value="nein"></td>
+  <td><input type="radio" name="pausen" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <th colspan="4" style="text-align:left; background:#ddd;">6. Umgang mit Kunden</th>
+</tr>
+
+<tr>
+  <td>Gibt es Schulungen zum Umgang mit aggressiven Kunden?</td>
+  <td><input type="radio" name="kunden_aggression" value="ja" required></td>
+  <td><input type="radio" name="kunden_aggression" value="nein"></td>
+  <td><input type="radio" name="kunden_aggression" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Wird ein Konfliktmanagementsystem angewendet?</td>
+  <td><input type="radio" name="konfliktmanagement" value="ja" required></td>
+  <td><input type="radio" name="konfliktmanagement" value="nein"></td>
+  <td><input type="radio" name="konfliktmanagement" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <th colspan="4" style="text-align:left; background:#ddd;">7. Laderampe & Lagerung</th>
+</tr>
+
+<tr>
+  <td>Ist die Laderampe sicher begehbar und gut beleuchtet?</td>
+  <td><input type="radio" name="laderampe_sicherheit" value="ja" required></td>
+  <td><input type="radio" name="laderampe_sicherheit" value="nein"></td>
+  <td><input type="radio" name="laderampe_sicherheit" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Sind Schwerlastregale ordnungsgemäß installiert und belastbar?</td>
+  <td><input type="radio" name="schwerlastregale" value="ja" required></td>
+  <td><input type="radio" name="schwerlastregale" value="nein"></td>
+  <td><input type="radio" name="schwerlastregale" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <th colspan="4" style="text-align:left; background:#ddd;">8. Weitere Gefahren</th>
+</tr>
+
+<tr>
+  <td>Besteht Rutschgefahr am Arbeitsplatz?</td>
+  <td><input type="radio" name="gefahr_rutschgefahr" value="ja" required></td>
+  <td><input type="radio" name="gefahr_rutschgefahr" value="nein"></td>
+  <td><input type="radio" name="gefahr_rutschgefahr" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Werden hygienische Maßnahmen zur Vermeidung biologischer Kontaminationen konsequent eingehalten?</td>
+  <td><input type="radio" name="gefahr_biologische_kontamination" value="ja" required></td>
+  <td><input type="radio" name="gefahr_biologische_kontamination" value="nein"></td>
+  <td><input type="radio" name="gefahr_biologische_kontamination" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Werden Reinigungs- und Desinfektionsmittel sicher gelagert und unter Beachtung des Arbeitsschutzes verwendet?</td>
+  <td><input type="radio" name="gefahr_chemikalien" value="ja" required></td>
+  <td><input type="radio" name="gefahr_chemikalien" value="nein"></td>
+  <td><input type="radio" name="gefahr_chemikalien" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Gibt es ergonomische Arbeitsplätze und wird auf rückenschonende Arbeitsweisen geachtet?</td>
+  <td><input type="radio" name="gefahr_ergonomie" value="ja" required></td>
+  <td><input type="radio" name="gefahr_ergonomie" value="nein"></td>
+  <td><input type="radio" name="gefahr_ergonomie" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Wird Lärm und Vibrationen durch Maschinen regelmäßig kontrolliert und auf Schutzmaßnahmen geachtet?</td>
+  <td><input type="radio" name="gefahr_laerm_vibration" value="ja" required></td>
+  <td><input type="radio" name="gefahr_laerm_vibration" value="nein"></td>
+  <td><input type="radio" name="gefahr_laerm_vibration" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Werden elektrische Geräte regelmäßig geprüft und ist die elektrische Sicherheit gewährleistet?</td>
+  <td><input type="radio" name="gefahr_elektrisch" value="ja" required></td>
+  <td><input type="radio" name="gefahr_elektrisch" value="nein"></td>
+  <td><input type="radio" name="gefahr_elektrisch" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Ist der Arbeitsbereich gegen Kältebelastung in Kühlräumen ausreichend geschützt?</td>
+  <td><input type="radio" name="gefahr_kältebelastung" value="ja" required></td>
+  <td><input type="radio" name="gefahr_kältebelastung" value="nein"></td>
+  <td><input type="radio" name="gefahr_kältebelastung" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Gibt es Maßnahmen zur Vermeidung von Fettbränden und sind entsprechende Feuerlöscher vorhanden?</td>
+  <td><input type="radio" name="gefahr_fettbrand" value="ja" required></td>
+  <td><input type="radio" name="gefahr_fettbrand" value="nein"></td>
+  <td><input type="radio" name="gefahr_fettbrand" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Werden schwere Lasten richtig gehoben und gibt es Hilfsmittel zum Transport?</td>
+  <td><input type="radio" name="gefahr_heben" value="ja" required></td>
+  <td><input type="radio" name="gefahr_heben" value="nein"></td>
+  <td><input type="radio" name="gefahr_heben" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <th colspan="4" style="text-align:left; background:#ddd;">9. Metzgerei Maschinen</th>
+</tr>
+
+<tr>
+  <td>Sind alle Maschinen (Aufschnittschneidemaschine, Kutter, Fleischwolf) regelmäßig gewartet und geprüft?</td>
+  <td><input type="radio" name="maschinen_gewartet" value="ja" required></td>
+  <td><input type="radio" name="maschinen_gewartet" value="nein"></td>
+  <td><input type="radio" name="maschinen_gewartet" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Verfügen alle Maschinen über funktionierende Sicherheitsvorrichtungen (Not-Aus, Schutzabdeckungen)?</td>
+  <td><input type="radio" name="maschinen_sicherheitsvorrichtungen" value="ja" required></td>
+  <td><input type="radio" name="maschinen_sicherheitsvorrichtungen" value="nein"></td>
+  <td><input type="radio" name="maschinen_sicherheitsvorrichtungen" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Werden Maschinen nur von geschultem Personal bedient?</td>
+  <td><input type="radio" name="maschinen_schulung" value="ja" required></td>
+  <td><input type="radio" name="maschinen_schulung" value="nein"></td>
+  <td><input type="radio" name="maschinen_schulung" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Sind Bedienungsanleitungen gut zugänglich und werden Sicherheitsanweisungen eingehalten?</td>
+  <td><input type="radio" name="maschinen_anleitungen" value="ja" required></td>
+  <td><input type="radio" name="maschinen_anleitungen" value="nein"></td>
+  <td><input type="radio" name="maschinen_anleitungen" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Werden Maschinen nach Gebrauch gründlich gereinigt und desinfiziert?</td>
+  <td><input type="radio" name="maschinen_reinigung" value="ja" required></td>
+  <td><input type="radio" name="maschinen_reinigung" value="nein"></td>
+  <td><input type="radio" name="maschinen_reinigung" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Gibt es klare Anweisungen für das sichere Ein- und Ausschalten der Maschinen?</td>
+  <td><input type="radio" name="maschinen_anweisung" value="ja" required></td>
+  <td><input type="radio" name="maschinen_anweisung" value="nein"></td>
+  <td><input type="radio" name="maschinen_anweisung" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Sind elektrische Anschlüsse und Kabel der Maschinen sicher und ohne Beschädigungen?</td>
+  <td><input type="radio" name="maschinen_elektrik" value="ja" required></td>
+  <td><input type="radio" name="maschinen_elektrik" value="nein"></td>
+  <td><input type="radio" name="maschinen_elektrik" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Sind alle beweglichen Teile der Maschinen regelmäßig geschmiert und gewartet?</td>
+  <td><input type="radio" name="maschinen_schmierung" value="ja" required></td>
+  <td><input type="radio" name="maschinen_schmierung" value="nein"></td>
+  <td><input type="radio" name="maschinen_schmierung" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Gibt es einen festgelegten Bereich für Maschinen mit ausreichendem Sicherheitsabstand?</td>
+  <td><input type="radio" name="maschinen_bereich" value="ja" required></td>
+  <td><input type="radio" name="maschinen_bereich" value="nein"></td>
+  <td><input type="radio" name="maschinen_bereich" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Werden Maschinen regelmäßig auf Funktionsfähigkeit und Sauberkeit geprüft?</td>
+  <td><input type="radio" name="maschinen_pruefung" value="ja" required></td>
+  <td><input type="radio" name="maschinen_pruefung" value="nein"></td>
+  <td><input type="radio" name="maschinen_pruefung" value="nicht_vorhanden"></td>
+</tr>
+<tr>
+  <th colspan="4" style="text-align:left; background:#ddd;">10. Service- und Heiße Theke</th>
+</tr>
+
+<tr>
+  <td>Werden Temperaturvorgaben für heiße und kalte Speisen eingehalten (z. B. >60 °C heiß / <7 °C kalt)?</td>
+  <td><input type="radio" name="theke_temperaturvorgabe" value="ja" required></td>
+  <td><input type="radio" name="theke_temperaturvorgabe" value="nein"></td>
+  <td><input type="radio" name="theke_temperaturvorgabe" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Wird die Temperatur dokumentiert und regelmäßig kontrolliert?</td>
+  <td><input type="radio" name="theke_temperaturkontrolle" value="ja" required></td>
+  <td><input type="radio" name="theke_temperaturkontrolle" value="nein"></td>
+  <td><input type="radio" name="theke_temperaturkontrolle" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Werden warme Speisen nicht zu lange in Warmhaltegeräten aufbewahrt (z. B. max. 2 Stunden)?</td>
+  <td><input type="radio" name="theke_warmhaltezeit" value="ja" required></td>
+  <td><input type="radio" name="theke_warmhaltezeit" value="nein"></td>
+  <td><input type="radio" name="theke_warmhaltezeit" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Werden Schneidbretter und Messer regelmäßig gereinigt und farbcodiert verwendet?</td>
+  <td><input type="radio" name="theke_schneidbretter" value="ja" required></td>
+  <td><input type="radio" name="theke_schneidbretter" value="nein"></td>
+  <td><input type="radio" name="theke_schneidbretter" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Sind alle Heißgeräte (z. B. Heißtheken, Fritteusen) in technisch einwandfreiem Zustand?</td>
+  <td><input type="radio" name="theke_heissgeraete_zustand" value="ja" required></td>
+  <td><input type="radio" name="theke_heissgeraete_zustand" value="nein"></td>
+  <td><input type="radio" name="theke_heissgeraete_zustand" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Gibt es Schutzvorrichtungen (z. B. Spritzschutz) bei heißen Geräten oder Grillbereichen?</td>
+  <td><input type="radio" name="theke_schutzvorrichtungen" value="ja" required></td>
+  <td><input type="radio" name="theke_schutzvorrichtungen" value="nein"></td>
+  <td><input type="radio" name="theke_schutzvorrichtungen" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Werden regelmäßig Reinigungspläne für heiße und kalte Thekenbereiche durchgeführt?</td>
+  <td><input type="radio" name="theke_reinigung" value="ja" required></td>
+  <td><input type="radio" name="theke_reinigung" value="nein"></td>
+  <td><input type="radio" name="theke_reinigung" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Ist der Umgang mit allergenen Stoffen gekennzeichnet und wird Mitarbeitenden geschult?</td>
+  <td><input type="radio" name="theke_allergene" value="ja" required></td>
+  <td><input type="radio" name="theke_allergene" value="nein"></td>
+  <td><input type="radio" name="theke_allergene" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Gibt es geeignete Handschuhe, Pinzetten oder andere Hilfsmittel zur hygienischen Entnahme?</td>
+  <td><input type="radio" name="theke_hilfsmittel" value="ja" required></td>
+  <td><input type="radio" name="theke_hilfsmittel" value="nein"></td>
+  <td><input type="radio" name="theke_hilfsmittel" value="nicht_vorhanden"></td>
+</tr>
+
+<tr>
+  <td>Ist die Ausgabefläche (Thekenbereich zum Kunden) frei von Verschmutzungen?</td>
+  <td><input type="radio" name="theke_ausgabeflaeche" value="ja" required></td>
+  <td><input type="radio" name="theke_ausgabeflaeche" value="nein"></td>
+  <td><input type="radio" name="theke_ausgabeflaeche" value="nicht_vorhanden"></td>
+</tr>
+
+ <tr><th colspan="4" style="background:#ddd;">11. Lager</th></tr>
+        <tr><td>Ist das Lager sauber, trocken und gut belüftet?</td><td><input type="radio" name="lager_sauberkeit" value="ja"></td><td><input type="radio" name="lager_sauberkeit" value="nein"></td><td><input type="radio" name="lager_sauberkeit" value="nicht_vorhanden"></td></tr>
+        <tr><td>Werden Regale sicher beladen und ist der Zugang nicht versperrt?</td><td><input type="radio" name="lager_regale" value="ja"></td><td><input type="radio" name="lager_regale" value="nein"></td><td><input type="radio" name="lager_regale" value="nicht_vorhanden"></td></tr>
+        <tr><td>Gibt es geeignete Hebehilfen oder Leitern für höhere Regale?</td><td><input type="radio" name="lager_hebehilfen" value="ja"></td><td><input type="radio" name="lager_hebehilfen" value="nein"></td><td><input type="radio" name="lager_hebehilfen" value="nicht_vorhanden"></td></tr>
+
+        <tr><th colspan="4" style="background:#ddd;">12. Personalräume</th></tr>
+        <tr><td>Sind Umkleideräume vorhanden und sauber?</td><td><input type="radio" name="personal_umkleide" value="ja"></td><td><input type="radio" name="personal_umkleide" value="nein"></td><td><input type="radio" name="personal_umkleide" value="nicht_vorhanden"></td></tr>
+        <tr><td>Werden Hygieneartikel wie Seife und Papierhandtücher bereitgestellt?</td><td><input type="radio" name="personal_hygieneartikel" value="ja"></td><td><input type="radio" name="personal_hygieneartikel" value="nein"></td><td><input type="radio" name="personal_hygieneartikel" value="nicht_vorhanden"></td></tr>
+
+        <tr><th colspan="4" style="background:#ddd;">13. Kassenbüro</th></tr>
+        <tr><td>Ist der Arbeitsplatz ergonomisch eingerichtet (Stuhl, Monitorhöhe)?</td><td><input type="radio" name="kasse_ergonomie" value="ja"></td><td><input type="radio" name="kasse_ergonomie" value="nein"></td><td><input type="radio" name="kasse_ergonomie" value="nicht_vorhanden"></td></tr>
+        <tr><td>Gibt es Sicherheitsvorkehrungen für Bargeldaufbewahrung?</td><td><input type="radio" name="kasse_sicherheit" value="ja"></td><td><input type="radio" name="kasse_sicherheit" value="nein"></td><td><input type="radio" name="kasse_sicherheit" value="nicht_vorhanden"></td></tr>
+
+        <tr><th colspan="4" style="background:#ddd;">14. Verkaufsfläche</th></tr>
+        <tr><td>Ist der Boden rutschfest und frei von Stolperfallen?</td><td><input type="radio" name="verkauf_boden" value="ja"></td><td><input type="radio" name="verkauf_boden" value="nein"></td><td><input type="radio" name="verkauf_boden" value="nicht_vorhanden"></td></tr>
+        <tr><td>Sind Flucht- und Rettungswege klar gekennzeichnet und nicht blockiert?</td><td><input type="radio" name="verkauf_fluchtwege" value="ja"></td><td><input type="radio" name="verkauf_fluchtwege" value="nein"></td><td><input type="radio" name="verkauf_fluchtwege" value="nicht_vorhanden"></td></tr>
+
+        <tr><th colspan="4" style="background:#ddd;">15. Heizungsraum</th></tr>
+        <tr><td>Ist der Heizungsraum frei zugänglich und nicht als Lager zweckentfremdet?</td><td><input type="radio" name="heizung_zugang" value="ja"></td><td><input type="radio" name="heizung_zugang" value="nein"></td><td><input type="radio" name="heizung_zugang" value="nicht_vorhanden"></td></tr>
+        <tr><td>Werden regelmäßige Wartungen durch Fachpersonal durchgeführt?</td><td><input type="radio" name="heizung_wartung" value="ja"></td><td><input type="radio" name="heizung_wartung" value="nein"></td><td><input type="radio" name="heizung_wartung" value="nicht_vorhanden"></td></tr>
+
+        <tr><th colspan="4" style="background:#ddd;">16. Lüftung</th></tr>
+        <tr><td>Funktionieren alle Lüftungssysteme einwandfrei und ohne Verunreinigungen?</td><td><input type="radio" name="lueftung_funktion" value="ja"></td><td><input type="radio" name="lueftung_funktion" value="nein"></td><td><input type="radio" name="lueftung_funktion" value="nicht_vorhanden"></td></tr>
+        <tr><td>Werden Filteranlagen regelmäßig geprüft und gereinigt?</td><td><input type="radio" name="lueftung_filter" value="ja"></td><td><input type="radio" name="lueftung_filter" value="nein"></td><td><input type="radio" name="lueftung_filter" value="nicht_vorhanden"></td></tr>
+
+        <tr><th colspan="4" style="background:#ddd;">17. Maschinenraum / Kühlung</th></tr>
+        <tr><td>Ist der Zugang zum Kühlmaschinenraum nur autorisiertem Personal erlaubt?</td><td><input type="radio" name="kuehlung_zugang" value="ja"></td><td><input type="radio" name="kuehlung_zugang" value="nein"></td><td><input type="radio" name="kuehlung_zugang" value="nicht_vorhanden"></td></tr>
+        <tr><td>Gibt es Hinweise zu Not-Aus-Schaltern und deren Funktion?</td><td><input type="radio" name="kuehlung_notaus" value="ja"></td><td><input type="radio" name="kuehlung_notaus" value="nein"></td><td><input type="radio" name="kuehlung_notaus" value="nicht_vorhanden"></td></tr>
+    <tr><th colspan="4" style="background:#ddd;">18. Kühlhäuser</th></tr>
+<tr>
+  <td>Sind die Türen der Kühlhäuser eindeutig und gut sichtbar gekennzeichnet?</td>
+  <td><input type="radio" name="kuehlhaus_tueren" value="ja"></td>
+  <td><input type="radio" name="kuehlhaus_tueren" value="nein"></td>
+  <td><input type="radio" name="kuehlhaus_tueren" value="nicht_vorhanden"></td>
+</tr>
+<tr>
+  <td>Funktioniert die Notruffunktion innerhalb der Kühlhäuser einwandfrei?</td>
+  <td><input type="radio" name="kuehlhaus_notruf" value="ja"></td>
+  <td><input type="radio" name="kuehlhaus_notruf" value="nein"></td>
+  <td><input type="radio" name="kuehlhaus_notruf" value="nicht_vorhanden"></td>
+</tr>
+<tr>
+  <td>Ist die Beleuchtung in den Kühlhäusern ausreichend und funktioniert zuverlässig?</td>
+  <td><input type="radio" name="kuehlhaus_beleuchtung" value="ja"></td>
+  <td><input type="radio" name="kuehlhaus_beleuchtung" value="nein"></td>
+  <td><input type="radio" name="kuehlhaus_beleuchtung" value="nicht_vorhanden"></td>
+ </tr>
+ <th colspan="4" style="text-align:left; background:#ddd;"></th>
+      </tbody>
+ <br>
+<!-- Unterschriftenbereich ganz unten vor dem </form> schließen -->
+  <!-- Unterschriftenfeld -->
+        <tr><th colspan="4">Unterschrift</th></tr>
+        <tr>
+          <td colspan="4" style="text-align:center; padding: 20px;">
+            <canvas id="unterschrift"></canvas>
+            <div class="sign-btn-container">
+              <button type="button" id="clearSign" class="btn">Unterschrift löschen</button>
+              <button type="button" class="btn print-button" onclick="window.print()">Drucken</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+
+  <script>
+    // Automatisches heutiges Datum im Eingabefeld eintragen
+    window.addEventListener('DOMContentLoaded', () => {
+      const datumInput = document.getElementById('datum');
+      const heute = new Date();
+      const jahr = heute.getFullYear();
+      const monat = String(heute.getMonth() + 1).padStart(2, '0');
+      const tag = String(heute.getDate()).padStart(2, '0');
+      datumInput.value = `${jahr}-${monat}-${tag}`;
+    });
+
+    // Unterschrift Canvas Setup
+    const canvas = document.getElementById('unterschrift');
+    const ctx = canvas.getContext('2d');
+    let drawing = false;
+    let lastX = 0;
+    let lastY = 0;
+
+    function resizeCanvas() {
+      const ratio = window.devicePixelRatio || 1;
+      canvas.width = canvas.offsetWidth * ratio;
+      canvas.height = canvas.offsetHeight * ratio;
+      ctx.scale(ratio, ratio);
+      ctx.lineWidth = 2;
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = '#004a80';
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    function startPosition(e) {
+      drawing = true;
+      [lastX, lastY] = getXY(e);
+    }
+    function finishedPosition() {
+      drawing = false;
+      ctx.beginPath();
+    }
+    function draw(e) {
+      if (!drawing) return;
+      e.preventDefault();
+      const [x, y] = getXY(e);
+      ctx.beginPath();
+      ctx.moveTo(lastX, lastY);
+      ctx.lineTo(x, y);
+      ctx.stroke();
+      [lastX, lastY] = [x, y];
+    }
+    function getXY(e) {
+      if (e.touches && e.touches.length > 0) {
+        const rect = canvas.getBoundingClientRect();
+        return [
+          e.touches[0].clientX - rect.left,
+          e.touches[0].clientY - rect.top
+        ];
+      } else {
+        const rect = canvas.getBoundingClientRect();
+        return [
+          e.clientX - rect.left,
+          e.clientY - rect.top
+        ];
+      }
+    }
+
+    canvas.addEventListener('mousedown', startPosition);
+    canvas.addEventListener('mouseup', finishedPosition);
+    canvas.addEventListener('mouseout', finishedPosition);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('touchstart', startPosition);
+    canvas.addEventListener('touchend', finishedPosition);
+    canvas.addEventListener('touchcancel', finishedPosition);
+    canvas.addEventListener('touchmove', draw);
+
+    document.getElementById('clearSign').addEventListener('click', () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    });
+  </script>
+<footer class="footer">
+<p>
+                © <span id="currentYear"></span> Andreas Zott. Alle Rechte vorbehalten.
+                <a href="datenschutz.html" rel="noopener noreferrer" target="_blank">Datenschutz</a> |
+                <a href="impressum.html" rel="noopener noreferrer" target="_blank">Impressum</a>
+</p>
+</footer>
+</body>
+</html>
