@@ -1092,14 +1092,15 @@ window.addEventListener("resize", resizeCanvas);
   canvas.addEventListener('touchstart', startDrawing, {passive: false});
   canvas.addEventListener('touchmove', draw, {passive: false});
   canvas.addEventListener('touchend', stopDrawing);
+
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker
-      .register('sw.js')
-      .then(() => console.log("✅ Service Worker registriert"))
-      .catch((err) => console.error("❌ Service Worker Fehler:", err));
-  });
-}
+    window.addEventListener('load', () => {
+      navigator.serviceWorker
+        navigator.serviceWorker.register('/sicher/sw.js')
+        .then(() => console.log("✅ Service Worker registriert"))
+        .catch((err) => console.error("❌ Service Worker Fehler:", err));
+    });
+  }
 </script>
 </body>
 </html>
