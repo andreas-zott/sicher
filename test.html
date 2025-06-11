@@ -771,10 +771,6 @@
     button:hover {
       background-color: #0056b3;
     }
-.buttons button:last-child {
-  flex-basis: 100%;
-  margin-top: 10px;
-}
   </style>
 
 
@@ -786,7 +782,7 @@
   <h2>Unterschrift</h2>
   <canvas id="signature-pad"></canvas>
 
-<div class="buttons" style="text-align: center; margin-top: 40px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+  <div class="buttons" style="text-align: center; margin-top: 40px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
   <button onclick="clearSignature()" class="custom-btn">🗑️ Unterschrift Löschen</button>
   <button onclick="auswertungAnzeigen()" class="custom-btn">📊 Auswerten</button>
   <button onclick="prepareForPrint()" class="custom-btn">📄 Drucken / PDF</button>
@@ -977,6 +973,19 @@ if ('serviceWorker' in navigator) {
       .catch((err) => console.error("❌ Service Worker Fehler:", err));
   });
 }
+</script>
+
+
+
+<script>
+  // Automatisches Datum oben rechts setzen
+  window.addEventListener('DOMContentLoaded', () => {
+    const datumsfeld = document.getElementById('datum');
+    if (datumsfeld) {
+      const heute = new Date().toISOString().split('T')[0];
+      datumsfeld.value = heute;
+    }
+  });
 async function pdfTeilen() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: "pt", format: "a4" });
@@ -1073,19 +1082,6 @@ async function pdfTeilen() {
   }
 }
 
-</script>
-
-
-
-<script>
-  // Automatisches Datum oben rechts setzen
-  window.addEventListener('DOMContentLoaded', () => {
-    const datumsfeld = document.getElementById('datum');
-    if (datumsfeld) {
-      const heute = new Date().toISOString().split('T')[0];
-      datumsfeld.value = heute;
-    }
-  });
 </script>
 </body>
 </html>
