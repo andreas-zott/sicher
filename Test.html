@@ -990,6 +990,7 @@ if ('serviceWorker' in navigator) {
       datumsfeld.value = heute;
     }
   });
+const bilder = []; // notwendig, damit der Teilen-Code nicht abstürzt
 async function pdfTeilen() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: "pt", format: "a4" });
@@ -1021,7 +1022,8 @@ async function pdfTeilen() {
   }
 
   let page = 0;
-  for (let i = 0; i < bilder.length; i += imagesPerPage) {
+  drawHeader();
+doc.text("Hinweis: Kein Bildmaterial vorhanden", margin, margin + 70);
     if (page > 0) doc.addPage();
     drawHeader();
 
