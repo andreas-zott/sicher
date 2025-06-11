@@ -1,12 +1,32 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Arbeitssicherheit-Checkliste-2025</title>
+</head>
+<body>
  <!DOCTYPE html>
 
 <html lang="de">
-<head>
+
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Arbeitssicherheit-Checkliste-2025</title>
 
 <style>
+@media print {
+    /* Alle Buttons (auch ohne .btn-Klasse) ausblenden */
+    button,      /* alle <button>-Elemente */
+    .btn,       /* Bootstrap-Buttons, falls verwendet */
+    footer,     /* <footer>-Element */
+    .footer     /* Elemente mit Klasse "footer" */
+    {
+      display: none !important;
+    }
+  }
+
+
   body {
     font-family: Arial, sans-serif;
     background-color: #f8f9fa;
@@ -79,18 +99,15 @@
     background-color: #0056b3;
   }
 </style>
-</head>
 
 
-  <!-- Titel mittig -->
-  <div style="flex: 1; text-align: center;">
-    <h1 style="margin: 0;">Arbeitssicherheit-Checkliste-2025</h1>
-  </div>
 
-  <!-- Datum rechts -->
-  <div style="text-align: right;">
-    <input id="datum" type="date" style="padding: 8px; font-size: 16px;"/>
-  </div>
+  
+<div style="display: flex; justify-content: space-between; align-items: center;">
+  <h1 style="margin: 0;">Arbeitssicherheit-Checkliste-2025</h1>
+  <input id="datum" type="date" style="padding: 8px; font-size: 16px;" />
+</div>
+
 </header>
 <div class="form-section" style="max-width: 300px;">
 <div style="margin-bottom: 10px;">
@@ -676,9 +693,9 @@
   <td style="text-align: left;"></td>
 </tr>
 </tr>
-
 </tbody>
 </table>
+<br>
 <h2 style="text-align: center;">Beschreibung der Maßnahmen zur Beseitigung von Defiziten</h2>
 <tr><td colspan="3" style="height: 20px;">&nbsp;</td></tr>
 <table>
@@ -710,9 +727,9 @@
       font-family: sans-serif;
     }
   </style>
-</head>
+
 </div>
-</body>
+
 </tbody>
 </table>		
 <style>
@@ -755,10 +772,10 @@
       background-color: #0056b3;
     }
   </style>
-</head>
-<body>
+
+
   <div id="content">
-   
+   <br>
 <h1>Arbeitssicherheit-Checkliste-2025</h1>
   <p>Bitte das Dokument durchlesen und unterschreiben.</p>
 
@@ -790,7 +807,18 @@
 </footer>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js">
+
+// Automatisches Einfügen des heutigen Datums in das Datumsfeld oben rechts
+window.addEventListener('DOMContentLoaded', () => {
+  const datumsfeld = document.getElementById('datum');
+  if (datumsfeld) {
+    const heute = new Date().toISOString().split('T')[0]; // Format: yyyy-mm-dd
+    datumsfeld.value = heute;
+  }
+});
+
+</script>
 <script>
   const canvas = document.getElementById('signature-pad');
   const ctx = canvas.getContext('2d');
@@ -937,7 +965,26 @@ window.addEventListener("resize", resizeCanvas);
   canvas.addEventListener('touchstart', startDrawing, {passive: false});
   canvas.addEventListener('touchmove', draw, {passive: false});
   canvas.addEventListener('touchend', stopDrawing);
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sicher/sw.js')
+      .then(() => console.log("✅ Service Worker registriert"))
+      .catch((err) => console.error("❌ Service Worker Fehler:", err));
+  });
+}
+</script>
+
+
+
+<script>
+  // Automatisches Datum oben rechts setzen
+  window.addEventListener('DOMContentLoaded', () => {
+    const datumsfeld = document.getElementById('datum');
+    if (datumsfeld) {
+      const heute = new Date().toISOString().split('T')[0];
+      datumsfeld.value = heute;
+    }
+  });
 </script>
 </body>
 </html>
-
