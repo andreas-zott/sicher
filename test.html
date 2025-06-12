@@ -770,226 +770,121 @@
    <br>
 <h1>Arbeitssicherheit-Checkliste-2025</h1>
   <p>Bitte das Dokument durchlesen und unterschreiben.</p>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Arbeitssicherheit Checkliste 2025</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #fff;
+    color: #333;
+  }
+  #content {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fafafa;
+  }
+  canvas#signature-pad {
+    border: 1px solid #ccc;
+    width: 100%;
+    height: 150px;
+    touch-action: none;
+  }
+  .custom-btn {
+    margin: 5px;
+    padding: 10px 16px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    background-color: #007bff;
+    color: white;
+    user-select: none;
+  }
+  .custom-btn:hover {
+    background-color: #0056b3;
+  }
+  label {
+    display: inline-block;
+    width: 70px;
+    margin-right: 10px;
+  }
+  input[type="text"], input[type="date"] {
+    padding: 6px 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  #auswertung {
+    margin-top: 20px;
+    background: #e9ecef;
+    padding: 15px;
+    border-radius: 6px;
+    display: none;
+  }
+  footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 16px 8px;
+    font-size: 12px;
+    color: #999;
+    background-color: #fafafa;
+    border-top: 1px solid #eee;
+    border-radius: 0 0 10px 10px;
+  }
+</style>
+</head>
+<body>
+
+<div id="content">
 
   <h2>Unterschrift</h2>
   <canvas id="signature-pad"></canvas>
 
+  <div style="margin-top: 30px;">
+    <label for="datum">Datum:</label>
+    <input type="date" id="datum" name="datum" />
+    <br /><br />
+    <label for="markt">Markt:</label>
+    <input type="text" id="markt" name="markt" />
+    <br /><br />
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" />
+    <br /><br />
+    <label for="sifa">SiFa:</label>
+    <input type="text" id="sifa" name="sifa" />
+  </div>
+
   <div class="buttons" style="text-align: center; margin-top: 40px;">
-   <button onclick="clearSignature()" class="custom-btn">🗑️ Unterschrift Löschen</button>
-<button onclick="auswertungAnzeigen()" class="custom-btn">📊 Auswerten</button>
+    <button onclick="clearSignature()" class="custom-btn">🗑️ Unterschrift Löschen</button>
+    <button onclick="auswertungAnzeigen()" class="custom-btn">📊 Auswerten</button>
     <button onclick="prepareForPrint()" class="custom-btn">📄 Drucken / PDF</button>
-<button onclick="sharePDF()">📤 Teilen</button>
-<button onclick="testShare()">Test Share</button>
-
-<script>
-function testShare() {
-  if (navigator.share) {
-    navigator.share({
-      title: 'Test',
-      text: 'Dies ist ein Test',
-      url: window.location.href
-    }).then(() => console.log('Geteilt!'))
-    .catch(console.error);
-  } else {
-    alert('Teilen wird nicht unterstützt');
-  }
-}
-</script>
-
-
-
+    <button onclick="sharePDF()" class="custom-btn">📤 Teilen</button>
+    <button onclick="testShare()" class="custom-btn">Test Share</button>
   </div>
 
   <div id="auswertung-container">
     <div id="auswertung"></div>
   </div>
 
-  <footer style="
-  text-align: center;
-  margin-top: 40px;
-  padding: 16px 8px;
-  font-size: 12px;
-  color: #999;
-  background-color: #fafafa;
-  border-top: 1px solid #eee;
-  border-radius: 0 0 10px 10px;
-">
-  &copy; 2025 Andreas Zott – Alle Rechte vorbehalten<br>
-  <span style="font-size: 11px;">(Sifa) Arbeitssicherheit 2025</span>
-</footer>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js">
+<footer>
+  &copy; 2025 Andreas Zott – Alle Rechte vorbehalten<br />
+  <span style="font-size: 11px;">(SiFa) Arbeitssicherheit 2025</span>
+</footer>
 
-// Automatisches Einfügen des heutigen Datums in das Datumsfeld oben rechts
-window.addEventListener('DOMContentLoaded', () => {
-  const datumsfeld = document.getElementById('datum');
-  if (datumsfeld) {
-    const heute = new Date().toISOString().split('T')[0]; // Format: yyyy-mm-dd
-    datumsfeld.value = heute;
-  }
-});
-
-</script>
-<script>
-  const canvas = document.getElementById('signature-pad');
-  const ctx = canvas.getContext('2d');
-  let drawing = false;
-
-  function resizeCanvas() {
-    const ratio = window.devicePixelRatio || 1;
-    const displayWidth = canvas.offsetWidth;
-    const displayHeight = canvas.offsetHeight;
-    const oldImage = new Image();
-    oldImage.src = canvas.toDataURL();
-
-    canvas.width = displayWidth * ratio;
-    canvas.height = displayHeight * ratio;
-    canvas.style.width = displayWidth + "px";
-    canvas.style.height = displayHeight + "px";
-
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.scale(ratio, ratio);
-
-    oldImage.onload = () => {
-      ctx.drawImage(oldImage, 0, 0, displayWidth, displayHeight);
-    };
-  }
-
-  function getX(e) {
-    return e.touches ? e.touches[0].clientX - canvas.getBoundingClientRect().left :
-                       e.clientX - canvas.getBoundingClientRect().left;
-  }
-
-  function getY(e) {
-    return e.touches ? e.touches[0].clientY - canvas.getBoundingClientRect().top :
-                       e.clientY - canvas.getBoundingClientRect().top;
-  }
-
-  function startDrawing(e) {
-    drawing = true;
-    ctx.beginPath();
-    ctx.moveTo(getX(e), getY(e));
-  }
-
-  function draw(e) {
-    if (!drawing) return;
-    ctx.lineTo(getX(e), getY(e));
-    ctx.stroke();
-  }
-
-  function stopDrawing() {
-    drawing = false;
-    saveSignature();
-  }
-
-  function clearSignature() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    localStorage.removeItem("signatureImage");
-  }
-
-  function saveSignature() {
-    const dataURL = canvas.toDataURL();
-    localStorage.setItem("signatureImage", dataURL);
-  }
-
-  function restoreSignature() {
-    const dataURL = localStorage.getItem("signatureImage");
-    if (dataURL) {
-      const image = new Image();
-      image.onload = () => {
-        ctx.drawImage(image, 0, 0, canvas.offsetWidth, canvas.offsetHeight);
-      };
-      image.src = dataURL;
-    }
-  }
-
-   function prepareForPrint() {
-      const dataURL = canvas.toDataURL();
-      const img = document.createElement("img");
-      img.src = dataURL;
-      img.style.border = "2px solid #000";
-      img.style.width = "100%";
-      img.style.maxWidth = "600px";
-      canvas.replaceWith(img);
-      window.print();
-  }
-
-  
-function auswertungAnzeigen() {
-  const radios = document.querySelectorAll('input[type="radio"]:checked');
-  const datum = document.getElementById('datum')?.value || 'kein Datum';
-  const markt = document.getElementById('markt')?.value || 'unbekannt';
-  const name = document.getElementById('name')?.value || 'unbekannt';
-  const sifa = document.getElementById('sifa')?.value || 'unbekannt';
-
-  const auswertung = {
-    ja: 0,
-    nein: 0,
-    nicht_vorhanden: 0
-  };
-
-  radios.forEach(radio => {
-    if (auswertung.hasOwnProperty(radio.value)) {
-      auswertung[radio.value]++;
-    }
-  });
-
-  const auswertungDiv = document.getElementById('auswertung');
-  auswertungDiv.style.display = 'block';
-  auswertungDiv.innerHTML = `
-    <h3>📊 Auswertung</h3>
-    <p><strong>Markt:</strong> ${markt}</p>
-    <p><strong>Datum:</strong> ${datum}</p>
-    <p><strong>Name:</strong> ${name}</p>
-    <p><strong>SiFa:</strong> ${sifa}</p>
-    <hr style="margin: 16px 0;">
-    <p><strong>Ja:</strong> ${auswertung.ja}</p>
-    <p><strong>Nein:</strong> ${auswertung.nein}</p>
-    <p><strong>Nicht vorhanden:</strong> ${auswertung.nicht_vorhanden}</p>
-  `;
-
-  const auswertungWindow = window.open('auswertung-sifa.html', 'auswertung');
-  const daten = {
-    markt: markt,
-    datum: datum,
-    name: name,
-    sifa: sifa,
-    ja: auswertung.ja,
-    nein: auswertung.nein,
-    nicht_vorhanden: auswertung.nicht_vorhanden
-  };
-  setTimeout(() => {
-    auswertungWindow.postMessage(daten, "*");
-  }, 1000);
-}
-
-window.addEventListener("resize", resizeCanvas);
-  window.addEventListener("load", () => {
-    resizeCanvas();
-    restoreSignature();
-  });
-
-  canvas.addEventListener('mousedown', startDrawing);
-  canvas.addEventListener('mousemove', draw);
-  canvas.addEventListener('mouseup', stopDrawing);
-  canvas.addEventListener('mouseout', stopDrawing);
-  canvas.addEventListener('touchstart', startDrawing, {passive: false});
-  canvas.addEventListener('touchmove', draw, {passive: false});
-  canvas.addEventListener('touchend', stopDrawing);
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sicher/sw.js')
-      .then(() => console.log("✅ Service Worker registriert"))
-      .catch((err) => console.error("❌ Service Worker Fehler:", err));
-  });
-}
-</script>
-
-
+<!-- html2pdf Bibliothek -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <script>
-  // Automatisches Datum oben rechts setzen
+  // Automatisches Einfügen des heutigen Datums in das Datumsfeld
   window.addEventListener('DOMContentLoaded', () => {
     const datumsfeld = document.getElementById('datum');
     if (datumsfeld) {
@@ -997,8 +892,8 @@ if ('serviceWorker' in navigator) {
       datumsfeld.value = heute;
     }
   });
-</script>
-<script>
+
+  // Canvas Unterschrift
   const canvas = document.getElementById('signature-pad');
   const ctx = canvas.getContext('2d');
   let drawing = false;
@@ -1007,6 +902,8 @@ if ('serviceWorker' in navigator) {
     const ratio = window.devicePixelRatio || 1;
     const displayWidth = canvas.offsetWidth;
     const displayHeight = canvas.offsetHeight;
+
+    // Temporär Bild sichern
     const oldImage = new Image();
     oldImage.src = canvas.toDataURL();
 
@@ -1024,13 +921,11 @@ if ('serviceWorker' in navigator) {
   }
 
   function getX(e) {
-    return e.touches ? e.touches[0].clientX - canvas.getBoundingClientRect().left :
-                       e.clientX - canvas.getBoundingClientRect().left;
+    return e.touches ? e.touches[0].clientX - canvas.getBoundingClientRect().left : e.clientX - canvas.getBoundingClientRect().left;
   }
 
   function getY(e) {
-    return e.touches ? e.touches[0].clientY - canvas.getBoundingClientRect().top :
-                       e.clientY - canvas.getBoundingClientRect().top;
+    return e.touches ? e.touches[0].clientY - canvas.getBoundingClientRect().top : e.clientY - canvas.getBoundingClientRect().top;
   }
 
   function startDrawing(e) {
@@ -1071,40 +966,19 @@ if ('serviceWorker' in navigator) {
     }
   }
 
-  async function speichernAlsPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-
-    doc.setFontSize(18);
-    doc.text("Arbeitssicherheit-Checkliste-2025", 10, 20);
-
-    doc.setFontSize(12);
-    doc.text("Bitte das Dokument durchlesen und unterschreiben.", 10, 40);
-
-    const dataURL = canvas.toDataURL("image/png");
-    doc.addImage(dataURL, "PNG", 10, 50, 180, 60);
-
-    doc.save("checkliste_mit_unterschrift.pdf");
+  // PDF Drucken (Popup-Druckdialog)
+  function prepareForPrint() {
+    const dataURL = canvas.toDataURL();
+    const img = document.createElement("img");
+    img.src = dataURL;
+    img.style.border = "2px solid #000";
+    img.style.width = "100%";
+    img.style.maxWidth = "600px";
+    canvas.replaceWith(img);
+    window.print();
   }
 
-  async function pdfTeilen() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-
-    doc.setFontSize(18);
-    doc.text("Arbeitssicherheit-Checkliste-2025", 10, 20);
-
-    doc.setFontSize(12);
-    doc.text("Bitte das Dokument durchlesen und unterschreiben.", 10, 40);
-
-    const dataURL = canvas.toDataURL("image/png");
-    doc.addImage(dataURL, "PNG", 10, 50, 180, 60);
-
-    const pdfBlob = doc.output('blob');
-    const url = URL.createObjectURL(pdfBlob);
-    window.open(url, "_blank");
-  }
-
+  // Auswertung anzeigen
   function auswertungAnzeigen() {
     const radios = document.querySelectorAll('input[type="radio"]:checked');
     const datum = document.getElementById('datum')?.value || 'kein Datum';
@@ -1112,11 +986,7 @@ if ('serviceWorker' in navigator) {
     const name = document.getElementById('name')?.value || 'unbekannt';
     const sifa = document.getElementById('sifa')?.value || 'unbekannt';
 
-    const auswertung = {
-      ja: 0,
-      nein: 0,
-      nicht_vorhanden: 0
-    };
+    const auswertung = { ja: 0, nein: 0, nicht_vorhanden: 0 };
 
     radios.forEach(radio => {
       if (auswertung.hasOwnProperty(radio.value)) {
@@ -1139,20 +1009,56 @@ if ('serviceWorker' in navigator) {
     `;
 
     const auswertungWindow = window.open('auswertung-sifa.html', 'auswertung');
-    const daten = {
-      markt: markt,
-      datum: datum,
-      name: name,
-      sifa: sifa,
-      ja: auswertung.ja,
-      nein: auswertung.nein,
-      nicht_vorhanden: auswertung.nicht_vorhanden
-    };
+    const daten = { markt, datum, name, sifa, ...auswertung };
     setTimeout(() => {
       auswertungWindow.postMessage(daten, "*");
     }, 1000);
   }
 
+  // PDF erstellen & teilen (Web Share API)
+  function sharePDF() {
+    const element = document.getElementById('content');
+
+    const opt = {
+      margin: 0.5,
+      filename: 'arbeitssicherheit-checkliste.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+    };
+
+    html2pdf().set(opt).from(element).outputPdf('blob').then((pdfBlob) => {
+      if (navigator.canShare && navigator.canShare({ files: [new File([pdfBlob], opt.filename, { type: pdfBlob.type })] })) {
+        const file = new File([pdfBlob], opt.filename, { type: pdfBlob.type });
+        navigator.share({
+          files: [file],
+          title: 'Arbeitssicherheit Checkliste 2025',
+          text: 'Hier ist die Arbeitssicherheit-Checkliste als PDF.'
+        })
+        .then(() => console.log('PDF erfolgreich geteilt'))
+        .catch((error) => console.error('Fehler beim Teilen:', error));
+      } else {
+        alert('Dein Browser unterstützt das Teilen von Dateien nicht.');
+      }
+    });
+  }
+
+  // Test Share (einfacher Text+URL)
+  function testShare() {
+    if (navigator.share) {
+      navigator.share({
+        title: 'Test',
+        text: 'Dies ist ein Test',
+        url: window.location.href
+      })
+      .then(() => console.log('Geteilt!'))
+      .catch(console.error);
+    } else {
+      alert('Teilen wird nicht unterstützt');
+    }
+  }
+
+  // Canvas Event-Listener
   window.addEventListener("resize", resizeCanvas);
   window.addEventListener("load", () => {
     resizeCanvas();
@@ -1163,10 +1069,11 @@ if ('serviceWorker' in navigator) {
   canvas.addEventListener('mousemove', draw);
   canvas.addEventListener('mouseup', stopDrawing);
   canvas.addEventListener('mouseout', stopDrawing);
-  canvas.addEventListener('touchstart', startDrawing, {passive: false});
-  canvas.addEventListener('touchmove', draw, {passive: false});
+  canvas.addEventListener('touchstart', startDrawing, { passive: false });
+  canvas.addEventListener('touchmove', draw, { passive: false });
   canvas.addEventListener('touchend', stopDrawing);
 
+  // Service Worker Registrierung (optional)
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/sicher/sw.js')
@@ -1174,43 +1081,9 @@ if ('serviceWorker' in navigator) {
         .catch((err) => console.error("❌ Service Worker Fehler:", err));
     });
   }
-
-  // Automatisches Datum oben rechts setzen
-  window.addEventListener('DOMContentLoaded', () => {
-    const datumsfeld = document.getElementById('datum');
-    if (datumsfeld) {
-      const heute = new Date().toISOString().split('T')[0];
-      datumsfeld.value = heute;
-    }
-  });
-function sharePDF() {
-  const element = document.getElementById('content'); // Der Bereich, der als PDF generiert wird
-
-  // html2pdf Optionen, PDF in Blob umwandeln
-  const opt = {
-    margin:       0.5,
-    filename:     'arbeitssicherheit-checkliste.pdf',
-    image:        { type: 'jpeg', quality: 0.98 },
-    html2canvas:  { scale: 2 },
-    jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
-  };
-
-  html2pdf().set(opt).from(element).outputPdf('blob').then((pdfBlob) => {
-    // Prüfen, ob Web Share API mit Dateien unterstützt wird
-    if (navigator.canShare && navigator.canShare({ files: [new File([pdfBlob], opt.filename, { type: pdfBlob.type })] })) {
-      const file = new File([pdfBlob], opt.filename, { type: pdfBlob.type });
-      navigator.share({
-        files: [file],
-        title: 'Arbeitssicherheit Checkliste 2025',
-        text: 'Hier ist die Arbeitssicherheit-Checkliste als PDF.'
-      })
-      .then(() => console.log('PDF erfolgreich geteilt'))
-      .catch((error) => console.error('Fehler beim Teilen:', error));
-    } else {
-      alert('Dein Browser unterstützt das Teilen von Dateien nicht.');
-    }
-  });
-}
 </script>
+
 </body>
 </html>
+
+   
