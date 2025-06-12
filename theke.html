@@ -5,6 +5,68 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Arbeitssicherheit Metzgerei Checkliste</title>
   <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+    }
+
+    form {
+      flex: 1;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+
+    #unterschrift {
+      border: 1px solid #ccc;
+      width: 100%;
+      max-width: 500px;
+      height: 150px;
+      touch-action: none;
+    }
+
+    .sign-btn-container {
+      margin-top: 10px;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      margin: 5px;
+      background-color: #004a80;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .btn:hover {
+      background-color: #00335a;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      padding: 20px;
+      font-size: 0.9em;
+      background-color: #f2f2f2;
+    }
+
+    @media print {
+      .print-button, #clearSign {
+        display: none;
+      }
+    }
+  </style>
+  <style>
 @media print {
   /* Nur Buttons und Footer ausblenden, Radio-Buttons bleiben sichtbar */
   .btn,
@@ -635,8 +697,7 @@
       </tbody>
  <br>
 <!-- Unterschriftenbereich ganz unten vor dem </form> schließen -->
-  <!-- Unterschriftenfeld -->
-        <tr><th colspan="4">Unterschrift</th></tr>
+  <tr><th colspan="4">Unterschrift</th></tr>
         <tr>
           <td colspan="4" style="text-align:center; padding: 20px;">
             <canvas id="unterschrift"></canvas>
@@ -650,15 +711,25 @@
     </table>
   </form>
 
+  <footer class="footer">
+    <p>
+      © <span id="currentYear"></span> Andreas Zott. Alle Rechte vorbehalten.
+      <a href="datenschutz.html" rel="noopener noreferrer" target="_blank">Datenschutz</a> |
+      <a href="impressum.html" rel="noopener noreferrer" target="_blank">Impressum</a>
+    </p>
+  </footer>
+
   <script>
     // Automatisches heutiges Datum im Eingabefeld eintragen
     window.addEventListener('DOMContentLoaded', () => {
       const datumInput = document.getElementById('datum');
-      const heute = new Date();
-      const jahr = heute.getFullYear();
-      const monat = String(heute.getMonth() + 1).padStart(2, '0');
-      const tag = String(heute.getDate()).padStart(2, '0');
-      datumInput.value = `${jahr}-${monat}-${tag}`;
+      if (datumInput) {
+        const heute = new Date();
+        const jahr = heute.getFullYear();
+        const monat = String(heute.getMonth() + 1).padStart(2, '0');
+        const tag = String(heute.getDate()).padStart(2, '0');
+        datumInput.value = `${jahr}-${monat}-${tag}`;
+      }
     });
 
     // Unterschrift Canvas Setup
@@ -672,6 +743,7 @@
       const ratio = window.devicePixelRatio || 1;
       canvas.width = canvas.offsetWidth * ratio;
       canvas.height = canvas.offsetHeight * ratio;
+      ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset Transform
       ctx.scale(ratio, ratio);
       ctx.lineWidth = 2;
       ctx.lineJoin = 'round';
@@ -679,17 +751,22 @@
       ctx.strokeStyle = '#004a80';
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
-    resizeCanvas();
+
+    window.addEventListener('load', () => {
+      setTimeout(resizeCanvas, 100);
+    });
     window.addEventListener('resize', resizeCanvas);
 
     function startPosition(e) {
       drawing = true;
       [lastX, lastY] = getXY(e);
     }
+
     function finishedPosition() {
       drawing = false;
       ctx.beginPath();
     }
+
     function draw(e) {
       if (!drawing) return;
       e.preventDefault();
@@ -700,15 +777,15 @@
       ctx.stroke();
       [lastX, lastY] = [x, y];
     }
+
     function getXY(e) {
+      const rect = canvas.getBoundingClientRect();
       if (e.touches && e.touches.length > 0) {
-        const rect = canvas.getBoundingClientRect();
         return [
           e.touches[0].clientX - rect.left,
           e.touches[0].clientY - rect.top
         ];
       } else {
-        const rect = canvas.getBoundingClientRect();
         return [
           e.clientX - rect.left,
           e.clientY - rect.top
@@ -728,13 +805,9 @@
     document.getElementById('clearSign').addEventListener('click', () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     });
+
+    // Aktuelles Jahr im Footer
+    document.getElementById("currentYear").textContent = new Date().getFullYear();
   </script>
-<footer class="footer">
-<p>
-                © <span id="currentYear"></span> Andreas Zott. Alle Rechte vorbehalten.
-                <a href="datenschutz.html" rel="noopener noreferrer" target="_blank">Datenschutz</a> |
-                <a href="impressum.html" rel="noopener noreferrer" target="_blank">Impressum</a>
-</p>
-</footer>
 </body>
 </html>
