@@ -777,6 +777,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Arbeitssicherheit Checkliste 2025</title>
 <style>
+function generatePDFAndOpenMail() {
+  const element = document.getElementById('content'); // der gesamte Inhalt
+  const opt = {
+    margin: 0.5,
+    filename: 'arbeitssicherheit-checkliste.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+  };
+
+  html2pdf().set(opt).from(element).outputPdf('blob').then((pdfBlob) => {
+    // PDF speichern
+    const url = URL.createObjectURL(pdfBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'arbeitssicherheit-checkliste.pdf';
+    link.click();
+
+    // Mail vorbereiten (ohne Anhang)
+    const subject = encodeURIComponent('Arbeitssicherheit Checkliste 2025');
+    const body = encodeURIComponent(`Hallo,\n\nim Anhang befindet sich die ausgefüllte Arbeitssicherheit-Checkliste.\n\n(Du musst sie ggf. aus dem Download-Ordner anhängen)\n\nViele Grüße`);
+    const mailtoLink = `mailto:?subject=${subject}&body=${body}`;
+
+    window.location.href = mailtoLink;
+  });
   body {
     font-family: Arial, sans-serif;
     background: #fff;
@@ -866,7 +891,7 @@
     <button onclick="auswertungAnzeigen()" class="custom-btn">📊 Auswerten</button>
     <button onclick="prepareForPrint()" class="custom-btn">📄 Drucken / PDF</button>
     <button onclick="sharePDF()" class="custom-btn">📤 Teilen</button>
-    <button onclick="testShare()" class="custom-btn">Test Share</button>
+<button onclick="generatePDFAndOpenMail()" class="custom-btn">📧 Per E-Mail versenden</button>
   </div>
 
   <div id="auswertung-container">
