@@ -5,13 +5,35 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Beseitigung von Defiziten</title>
 <style>
+  /* Footer kleiner und mittig */
+  footer {
+    font-size: 12px;
+    text-align: center;
+    margin-top: 40px;
+    color: #888;
+    border-top: 1px solid #444;
+    padding-top: 8px;
+  }
+
+  /* Signaturbereich mittig */
+  #signature-container {
+    text-align: center;
+    margin: 40px 0;
+  }
+
+  #signature-pad {
+    margin: 0 auto;
+    display: block;
+  }
+</style>
+<body>
+<style>
 @media print {
   .page-break {
     page-break-before: always;
   }
 }
 @media print {
-    /* Alle Buttons (auch ohne .btn-Klasse) ausblenden */
     button, .btn, footer, .footer {
       display: none !important;
     }
@@ -29,8 +51,8 @@ header h1 {
 
 table {
     width: 100%;
-    border-collapse: separate;      /* wichtig für Abstand und abgerundete Ecken */
-    border-spacing: 0 12px;          /* Abstand zwischen Zeilen */
+    border-collapse: separate;
+    border-spacing: 0 12px;
     margin-bottom: 20px;
     background-color: white;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
@@ -41,7 +63,7 @@ th {
     color: white;
     padding: 12px;
     text-align: center;
-    border-radius: 10px 10px 0 0;   /* abgerundete obere Ecken für Header */
+    border-radius: 10px 10px 0 0;
 }
 
 td {
@@ -50,7 +72,6 @@ td {
     background-color: white;
 }
 
-/* Rahmen und abgerundete Ecken für Zellen pro Zeile */
 tbody tr td {
     border: 2px solid #007BFF;
     border-radius: 10px;
@@ -60,7 +81,6 @@ tbody tr td {
     z-index: 0;
 }
 
-/* Zwischen den Zellen Rahmen anpassen, um doppelten Rahmen zu vermeiden */
 tbody tr td:first-child {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
@@ -74,7 +94,6 @@ tbody tr td:last-child {
     border-bottom-left-radius: 0;
 }
 
-/* Zeilen-Hintergrund transparent, um keinen Konflikt mit Zellen zu haben */
 tbody tr {
     background: transparent !important;
 }
@@ -123,28 +142,93 @@ button:hover {
   max-width: 600px;
   height: 150px;
   touch-action: none;
+  background-color: white;
 }
 
-.buttons {
-  margin-top: 10px;
+/* Darkmode Styles */
+body.darkmode {
+  background-color: #121212;
+  color: #eee;
+}
+body.darkmode header h2,
+body.darkmode h1, 
+body.darkmode h2 {
+  color: #ddd;
+}
+body.darkmode table {
+  background-color: #222;
+  box-shadow: 0 2px 8px rgba(255,255,255,0.1);
+}
+body.darkmode th {
+  background-color: #555;
+  color: #eee;
+}
+body.darkmode td {
+  background-color: #333;
+  color: #ddd;
+  border-color: #777;
+}
+body.darkmode tbody tr:hover td {
+  background-color: #444;
+}
+body.darkmode .info-box {
+  background-color: #1e1e1e;
+  border-color: #555;
+  box-shadow: 0 4px 8px rgba(255,255,255,0.05);
+  color: #ccc;
+}
+body.darkmode input[type="text"],
+body.darkmode input[type="date"] {
+  background-color: #222;
+  color: #eee;
+  border: 1px solid #555;
 }
 
-#content {
-  max-width: 600px;
-  margin: auto;
-  font-family: sans-serif;
+/* Darkmode Buttons */
+body.darkmode button {
+  background-color: #444;
+  color: #eee;
+}
+body.darkmode button:hover {
+  background-color: #666;
+}
+body.darkmode footer {
+  background-color: #1a1a1a;
+  color: #888;
+  border-top: 1px solid #444;
 }
 
-footer {
+/* Darkmode Signaturfeld */
+body.darkmode #signature-pad {
+  background-color: #222;
+  border: 2px solid #888;
+}
+
+/* Darkmode Toggle Button */
+#darkmode-toggle {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  color: #666;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 32px;
   text-align: center;
-  margin-top: 40px;
-  padding: 16px 8px;
-  font-size: 12px;
-  color: #999;
-  background-color: #fafafa;
-  border-top: 1px solid #eee;
-  border-radius: 0 0 10px 10px;
+  user-select: none;
+  transition: color 0.3s;
+  z-index: 1000;
+  box-shadow: none;
 }
+
+#darkmode-toggle:hover {
+  color: #222;
+}
+
 .info-box {
   border: 2px solid #007BFF;
   border-radius: 12px;
@@ -154,14 +238,18 @@ footer {
   margin: 0 auto 20px auto;
   box-shadow: 0 4px 8px rgba(0,123,255,0.1);
 }
+
 td:first-child {
     padding-left: 30px;
-    width: 50px; /* optional, um Platz sicherzustellen */
+    width: 50px;
 }
-
 </style>
 </head>
+
 <body>
+  <!-- Darkmode Toggle Button -->
+  <button id="darkmode-toggle" aria-label="Toggle Darkmode">🌙</button>
+
 <header>
  <h2 style="text-align: center; font-size: 32px;">Arbeitssicherheit 2025</h2>
   <div class="info-box">
@@ -212,13 +300,14 @@ td:first-child {
 </tbody>
 </table>
 
-<div id="content">
-  <br>
-  <h1>Arbeitssicherheit-Checkliste-2025</h1>
-  <p>Bitte das Dokument durchlesen und unterschreiben.</p>
+ <div id="content">
+    <h1 style="text-align: center;">Arbeitssicherheit-Checkliste-2025</h1>
+    <p style="text-align: center;">Bitte das Dokument durchlesen und unterschreiben.</p>
 
-  <h2>Unterschrift</h2>
-  <canvas id="signature-pad"></canvas>
+    <div id="signature-container">
+      <h2>Unterschrift</h2>
+      <canvas id="signature-pad"></canvas>
+    </div>
 
   <div class="buttons" style="text-align: center; margin-top: 40px;">
     <button onclick="clearSignature()" class="custom-btn">🗑️ Unterschrift Löschen</button>
@@ -248,32 +337,36 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Canvas-Signatur-Skript (gleiche Funktionen wie in deinem Original)
 const canvas = document.getElementById('signature-pad');
 const ctx = canvas.getContext('2d');
 let drawing = false;
+
+function updateStrokeStyle() {
+  if(document.body.classList.contains('darkmode')){
+    ctx.strokeStyle = '#eee';  // helle Linienfarbe im Darkmode
+  } else {
+    ctx.strokeStyle = 'black'; // dunkle Linienfarbe im Hellmodus
+  }
+}
 
 function resizeCanvas() {
   const ratio = window.devicePixelRatio || 1;
   const displayWidth = canvas.offsetWidth;
   const displayHeight = canvas.offsetHeight;
-  const oldImage = new Image();
-  oldImage.src = canvas.toDataURL();
 
   canvas.width = displayWidth * ratio;
   canvas.height = displayHeight * ratio;
   canvas.style.width = displayWidth + "px";
   canvas.style.height = displayHeight + "px";
+
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.scale(ratio, ratio);
+
   ctx.lineCap = "round";
   ctx.lineJoin = "round";
   ctx.lineWidth = 3;
-  ctx.strokeStyle = "black";
 
-  oldImage.onload = function() {
-    ctx.drawImage(oldImage, 0, 0);
-  };
+  updateStrokeStyle();
 }
 
 window.addEventListener('resize', resizeCanvas);
@@ -312,13 +405,19 @@ function clearSignature() {
 }
 
 function auswertungAnzeigen() {
-  // Beispiel-Auswertung (hier kannst du die Logik selbst ergänzen)
   alert("Auswertung anzeigen (funktioniert noch nicht im Beispiel).");
 }
 
 function prepareForPrint() {
   window.print();
 }
+
+const toggleBtn = document.getElementById('darkmode-toggle');
+toggleBtn.addEventListener('click', () => {
+  document.body.classList.toggle('darkmode');
+  updateStrokeStyle();
+  toggleBtn.textContent = document.body.classList.contains('darkmode') ? '☀️' : '🌙';
+});
 </script>
 
 </body>
