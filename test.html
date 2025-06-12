@@ -779,6 +779,23 @@
 <button onclick="auswertungAnzeigen()" class="custom-btn">📊 Auswerten</button>
     <button onclick="prepareForPrint()" class="custom-btn">📄 Drucken / PDF</button>
 <button onclick="sharePDF()">📤 Teilen</button>
+<button onclick="testShare()">Test Share</button>
+
+<script>
+function testShare() {
+  if (navigator.share) {
+    navigator.share({
+      title: 'Test',
+      text: 'Dies ist ein Test',
+      url: window.location.href
+    }).then(() => console.log('Geteilt!'))
+    .catch(console.error);
+  } else {
+    alert('Teilen wird nicht unterstützt');
+  }
+}
+</script>
+
 
 
   </div>
