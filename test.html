@@ -778,7 +778,7 @@
    <button onclick="clearSignature()" class="custom-btn">🗑️ Unterschrift Löschen</button>
 <button onclick="auswertungAnzeigen()" class="custom-btn">📊 Auswerten</button>
     <button onclick="prepareForPrint()" class="custom-btn">📄 Drucken / PDF</button>
-<button onclick="pdfTeilen()" class="custom-btn">📤 PDF teilen / öffnen</button>
+<button onclick="sharePDF()">📤 Teilen</button>
 
 
   </div>
@@ -1166,6 +1166,34 @@ if ('serviceWorker' in navigator) {
       datumsfeld.value = heute;
     }
   });
+function sharePDF() {
+  const element = document.getElementById('content'); // Der Bereich, der als PDF generiert wird
+
+  // html2pdf Optionen, PDF in Blob umwandeln
+  const opt = {
+    margin:       0.5,
+    filename:     'arbeitssicherheit-checkliste.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2 },
+    jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+  };
+
+  html2pdf().set(opt).from(element).outputPdf('blob').then((pdfBlob) => {
+    // Prüfen, ob Web Share API mit Dateien unterstützt wird
+    if (navigator.canShare && navigator.canShare({ files: [new File([pdfBlob], opt.filename, { type: pdfBlob.type })] })) {
+      const file = new File([pdfBlob], opt.filename, { type: pdfBlob.type });
+      navigator.share({
+        files: [file],
+        title: 'Arbeitssicherheit Checkliste 2025',
+        text: 'Hier ist die Arbeitssicherheit-Checkliste als PDF.'
+      })
+      .then(() => console.log('PDF erfolgreich geteilt'))
+      .catch((error) => console.error('Fehler beim Teilen:', error));
+    } else {
+      alert('Dein Browser unterstützt das Teilen von Dateien nicht.');
+    }
+  });
+}
 </script>
 </body>
 </html>
