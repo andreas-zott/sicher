@@ -1,35 +1,167 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Arbeitssicherheit-Checkliste-2025</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-</head>
-<body class="p-3">
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Arbeitssicherheit-Checkliste-2025</title>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 20mm;
+  }
 
-  <div class="container">
-    <h1 class="mb-4 text-center">Arbeitssicherheit-Checkliste-2025</h1>
-    <form id="formular" class="mb-4">
-      <div class="mb-3">
-        <label for="datum" class="form-label">Datum:</label>
-        <input type="date" id="datum" name="datum" class="form-control" required />
-      </div>
-      <div class="mb-3">
-        <label for="marktnummer" class="form-label">Marktnummer:</label>
-        <input type="text" id="marktnummer" name="marktnummer" class="form-control" required />
-      </div>
-      <div class="mb-3">
-        <label for="name" class="form-label">Name:</label>
-        <input type="text" id="name" name="name" class="form-control" required />
-      </div>
-      <div class="mb-3">
-        <label for="sifa" class="form-label">SiFa:</label>
-        <input type="text" id="sifa" name="sifa" class="form-control" required />
-      </div>
-      <table>
+  button,
+  .btn,
+  footer,
+  .footer {
+    display: none !important;
+  }
+
+  input[type="text"],
+  input[type="date"] {
+    border: none;
+    background: transparent;
+    font-weight: bold;
+    color: black;
+  }
+
+  input[type="radio"] {
+    transform: scale(1.2);
+  }
+
+  th, .category-header {
+    background-color: #ccc !important;
+    color: black !important;
+  }
+
+  tr:nth-child(even) {
+    background-color: #eee !important;
+  }
+
+  body {
+    background: white;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page-break {
+    page-break-before: always;
+  }
+}
+@media print {
+    /* Alle Buttons (auch ohne .btn-Klasse) ausblenden */
+    button,      /* alle <button>-Elemente */
+    .btn,       /* Bootstrap-Buttons, falls verwendet */
+    footer,     /* <footer>-Element */
+    .footer     /* Elemente mit Klasse "footer" */
+    {
+      display: none !important;
+    }
+  }
+
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    padding: 20px;
+  }
+
+  header h1 {
+    color: #212529;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+
+  th {
+    background-color: #007BFF;
+    color: white;
+    padding: 12px;
+    text-align: center;
+  }
+
+  td {
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    text-align: left;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  tr:hover {
+    background-color: #e6f0ff;
+  }
+
+  .category-header {
+    background-color: #d1ecf1 !important;
+    color: #0c5460;
+    font-weight: bold;
+    text-align: left;
+    padding: 12px;
+  }
+
+  input[type="text"], input[type="date"] {
+    width: 100%;
+    max-width: 300px;
+    padding: 8px;
+    font-size: 16px;
+    margin-top: 5px;
+    box-sizing: border-box;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+  }
+
+  button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  button:hover {
+    background-color: #0056b3;
+  }
+</style>  
+<div style="display: flex; justify-content: space-between; align-items: center;">
+  <h1 style="margin: 0;">Arbeitssicherheit-Checkliste-2025</h1>
+  <input id="datum" type="date" style="padding: 8px; font-size: 16px;" />
+</div>
+
+</header>
+<div class="form-section" style="max-width: 300px;">
+<div style="margin-bottom: 10px;">
+<label for="markt">Marktnummer:</label>
+<input type="text" id="markt" placeholder="z. B. M123" required>
+</div>
+<div style="margin-bottom: 10px;">
+<label for="name">Name:</label><br/>
+<input id="name" style="width: 100%;" type="text"/>
+</div>
+<div style="margin-bottom: 10px;">
+<label for="sifa">SiFa:</label><br/>
+<input id="sifa" style="width: 100%;" type="text"/>
+</div>
+<tr><td colspan="3" style="height: 20px;">&nbsp;</td></tr>
+</div>
+<div style="text-align: center; margin: 40px 0; font-size: 20px;">
+  <strong>Teil der Gefährdungsbeurteilung / Wirksamkeitskontrolle</strong><br/>
+  Wenn eine Frage mit „nein“ beantwortet wurde, besteht Handlungsbedarf.
+</div>
+<tr><td colspan="3" style="height: 20px;">&nbsp;</td></tr>
+<tr>
+  <td style="text-align: left;"></td>
+</tr>
+<table>
 <thead>
 <tr>
 <th>Frage</th>
@@ -644,212 +776,319 @@
 <tbody>
 <tr><td style="text-align: left;">1</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">2</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">3</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">4</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">5</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">6</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">7</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">8</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">9</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">10</td><td contenteditable="true"></td></tr>
 </tbody>
-      </div>
+</table>		
+<style>
+    #signature-pad {
+  border: 2px solid #cccccc;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  height: 150px;
+  touch-action: none;
+}
+    .buttons {
+      margin-top: 10px;
+    }
+    #content {
+      max-width: 600px;
+      margin: auto;
+      font-family: sans-serif;
+    }
+  </style>
 
-      <div class="mb-3">
-        <label for="upload" class="form-label">Fotos (max 16):</label>
-        <input type="file" id="upload" accept="image/*" multiple class="form-control" />
-      </div>
-      <div id="vorschauContainer" class="mb-3"></div>
-      <button type="button" class="btn btn-success w-100 mb-2" onclick="speichernAlsPDF()">💾 Als PDF speichern</button>
-      <button type="button" class="btn btn-warning w-100" onclick="zeigeDebugInfo()">🧪 Debug: Gerät & Browser</button>
-    </form>
+</div>
+
+</tbody>
+</table>		
+<style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      padding: 20px;
+    }
+
+    #signature-pad {
+  border: 2px solid #cccccc;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  height: 150px;
+  touch-action: none;
+}
+
+    .buttons {
+      margin-top: 10px;
+    }
+
+    #content {
+      max-width: 600px;
+      margin: auto;
+    }
+
+    button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-right: 10px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+
+
+  <div id="content">
+   <br>
+<h1>Arbeitssicherheit-Checkliste-2025</h1>
+  <p>Bitte das Dokument durchlesen und unterschreiben.</p>
+
+  <h2>Unterschrift</h2>
+  <canvas id="signature-pad"></canvas>
+
+  <div class="buttons" style="text-align: center; margin-top: 40px;">
+    <button onclick="clearSignature()" class="custom-btn">🗑️ Unterschrift Löschen</button>
+    <button onclick="auswertungAnzeigen()" class="custom-btn">📊 Auswerten</button>
+    <button onclick="prepareForPrint()" class="custom-btn">📄 Drucken / PDF</button>
+ <button onclick="generatePDF()">PDF generieren & teilen</button>
+  </div>
+ <script>
+    function generatePDF() {
+      const checklist = document.getElementById("checklist");
+      const clone = checklist.cloneNode(true);
+      const inputs = clone.querySelectorAll('input');
+
+      inputs.forEach(input => {
+        if (input.checked) {
+          const td = input.parentElement;
+          td.innerText = input.value;
+        } else {
+          input.remove();
+        }
+      });
+
+      const wrapper = document.createElement('div');
+      const title = document.createElement('h3');
+      title.innerText = 'Checkliste Sicherheitsprüfung – PDF';
+      wrapper.appendChild(title);
+      wrapper.appendChild(clone);
+
+      const opt = {
+        margin:       0.5,
+        filename:     'checkliste-sicherheitspruefung.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+      };
+
+      html2pdf().from(wrapper).set(opt).outputPdf('blob').then((blob) => {
+        const url = URL.createObjectURL(blob);
+        window.open(url); // iPad: Öffnet PDF und erlaubt Teilen/Speichern
+      });
+    }
+  </script>
+
+  <div id="auswertung-container">
+    <div id="auswertung"></div>
   </div>
 
-  <script>
-    // Beispiel Fragen-Array (pass auf, dass die Anzahl und Indizes zu den Radio-Gruppen passen)
-    const fragen = [
-      
-      // Füge hier weitere Fragen hinzu...
-    ];
+  <footer style="
+  text-align: center;
+  margin-top: 40px;
+  padding: 16px 8px;
+  font-size: 12px;
+  color: #999;
+  background-color: #fafafa;
+  border-top: 1px solid #eee;
+  border-radius: 0 0 10px 10px;
+">
+  &copy; 2025 Andreas Zott – Alle Rechte vorbehalten<br>
+  <span style="font-size: 11px;">(Sifa) Arbeitssicherheit 2025</span>
+</footer>
+</div>
 
-    const uploadInput = document.getElementById("upload");
-    const vorschauContainer = document.getElementById("vorschauContainer");
-    let bilder = [];
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js">
 
-    uploadInput.addEventListener("change", handleFile);
+// Automatisches Einfügen des heutigen Datums in das Datumsfeld oben rechts
+window.addEventListener('DOMContentLoaded', () => {
+  const datumsfeld = document.getElementById('datum');
+  if (datumsfeld) {
+    const heute = new Date().toISOString().split('T')[0]; // Format: yyyy-mm-dd
+    datumsfeld.value = heute;
+  }
+});
 
-    function handleFile(event) {
-      const files = event.target.files;
-      for (const file of files) {
-        if (file && file.type.startsWith("image/") && bilder.length < 16) {
-          const reader = new FileReader();
-          reader.onload = function (e) {
-            bilder.push(e.target.result);
-            renderVorschau();
-          };
-          reader.readAsDataURL(file);
-        }
-      }
-      event.target.value = "";
+</script>
+<script>
+  const canvas = document.getElementById('signature-pad');
+  const ctx = canvas.getContext('2d');
+  let drawing = false;
+
+  function resizeCanvas() {
+    const ratio = window.devicePixelRatio || 1;
+    const displayWidth = canvas.offsetWidth;
+    const displayHeight = canvas.offsetHeight;
+    const oldImage = new Image();
+    oldImage.src = canvas.toDataURL();
+
+    canvas.width = displayWidth * ratio;
+    canvas.height = displayHeight * ratio;
+    canvas.style.width = displayWidth + "px";
+    canvas.style.height = displayHeight + "px";
+
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.scale(ratio, ratio);
+
+    oldImage.onload = () => {
+      ctx.drawImage(oldImage, 0, 0, displayWidth, displayHeight);
+    };
+  }
+
+  function getX(e) {
+    return e.touches ? e.touches[0].clientX - canvas.getBoundingClientRect().left :
+                       e.clientX - canvas.getBoundingClientRect().left;
+  }
+
+  function getY(e) {
+    return e.touches ? e.touches[0].clientY - canvas.getBoundingClientRect().top :
+                       e.clientY - canvas.getBoundingClientRect().top;
+  }
+
+  function startDrawing(e) {
+    drawing = true;
+    ctx.beginPath();
+    ctx.moveTo(getX(e), getY(e));
+  }
+
+  function draw(e) {
+    if (!drawing) return;
+    ctx.lineTo(getX(e), getY(e));
+    ctx.stroke();
+  }
+
+  function stopDrawing() {
+    drawing = false;
+    saveSignature();
+  }
+
+  function clearSignature() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    localStorage.removeItem("signatureImage");
+  }
+
+  function saveSignature() {
+    const dataURL = canvas.toDataURL();
+    localStorage.setItem("signatureImage", dataURL);
+  }
+
+  function restoreSignature() {
+    const dataURL = localStorage.getItem("signatureImage");
+    if (dataURL) {
+      const image = new Image();
+      image.onload = () => {
+        ctx.drawImage(image, 0, 0, canvas.offsetWidth, canvas.offsetHeight);
+      };
+      image.src = dataURL;
     }
+  }
 
-    function renderVorschau() {
-      vorschauContainer.innerHTML = "";
-      bilder.forEach((src, index) => {
-        const img = document.createElement("img");
-        img.src = src;
-        img.alt = "Bild " + (index + 1);
-        img.style.maxHeight = "100px";
-        img.style.marginRight = "10px";
-        vorschauContainer.appendChild(img);
-      });
+   function prepareForPrint() {
+      const dataURL = canvas.toDataURL();
+      const img = document.createElement("img");
+      img.src = dataURL;
+      img.style.border = "2px solid #000";
+      img.style.width = "100%";
+      img.style.maxWidth = "600px";
+      canvas.replaceWith(img);
+      window.print();
+  }
+
+  
+function auswertungAnzeigen() {
+  const radios = document.querySelectorAll('input[type="radio"]:checked');
+  const datum = document.getElementById('datum')?.value || 'kein Datum';
+  const markt = document.getElementById('markt')?.value || 'unbekannt';
+  const name = document.getElementById('name')?.value || 'unbekannt';
+  const sifa = document.getElementById('sifa')?.value || 'unbekannt';
+
+  const auswertung = {
+    ja: 0,
+    nein: 0,
+    nicht_vorhanden: 0
+  };
+
+  radios.forEach(radio => {
+    if (auswertung.hasOwnProperty(radio.value)) {
+      auswertung[radio.value]++;
     }
+  });
 
-    function isSafariOniPad() {
-      const ua = navigator.userAgent;
-      const isIOS = /iPad|Macintosh/.test(ua) && 'ontouchend' in document;
-      const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
-      return isIOS && isSafari;
+  const auswertungDiv = document.getElementById('auswertung');
+  auswertungDiv.style.display = 'block';
+  auswertungDiv.innerHTML = `
+    <h3>📊 Auswertung</h3>
+    <p><strong>Markt:</strong> ${markt}</p>
+    <p><strong>Datum:</strong> ${datum}</p>
+    <p><strong>Name:</strong> ${name}</p>
+    <p><strong>SiFa:</strong> ${sifa}</p>
+    <hr style="margin: 16px 0;">
+    <p><strong>Ja:</strong> ${auswertung.ja}</p>
+    <p><strong>Nein:</strong> ${auswertung.nein}</p>
+    <p><strong>Nicht vorhanden:</strong> ${auswertung.nicht_vorhanden}</p>
+  `;
+
+  const auswertungWindow = window.open('auswertung-sifa.html', 'auswertung');
+  const daten = {
+    markt: markt,
+    datum: datum,
+    name: name,
+    sifa: sifa,
+    ja: auswertung.ja,
+    nein: auswertung.nein,
+    nicht_vorhanden: auswertung.nicht_vorhanden
+  };
+  setTimeout(() => {
+    auswertungWindow.postMessage(daten, "*");
+  }, 1000);
+}
+
+window.addEventListener("resize", resizeCanvas);
+  window.addEventListener("load", () => {
+    resizeCanvas();
+    restoreSignature();
+  });
+
+  canvas.addEventListener('mousedown', startDrawing);
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', stopDrawing);
+  canvas.addEventListener('mouseout', stopDrawing);
+  canvas.addEventListener('touchstart', startDrawing, {passive: false});
+  canvas.addEventListener('touchmove', draw, {passive: false});
+  canvas.addEventListener('touchend', stopDrawing);
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sicher/sw.js')
+      .then(() => console.log("✅ Service Worker registriert"))
+      .catch((err) => console.error("❌ Service Worker Fehler:", err));
+  });
+}
+</script>
+
+
+
+<script>
+  // Automatisches Datum oben rechts setzen
+  window.addEventListener('DOMContentLoaded', () => {
+    const datumsfeld = document.getElementById('datum');
+    if (datumsfeld) {
+      const heute = new Date().toISOString().split('T')[0];
+      datumsfeld.value = heute;
     }
-
-    function zeigeDebugInfo() {
-      const ua = navigator.userAgent;
-      const istSafariOniPad = isSafariOniPad();
-      const kannTeilen = navigator.canShare ? navigator.canShare({ files: [] }) : false;
-
-      alert(
-        `📱 User-Agent:
-${ua}
-
-` +
-        `🧠 isSafariOniPad(): ${istSafariOniPad}
-` +
-        `📤 navigator.canShare(): ${kannTeilen}`
-      );
-    }
-
-    async function speichernAlsPDF() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-
-      const datum = document.getElementById("datum").value.trim();
-      const marktnummer = document.getElementById("marktnummer").value.trim();
-      const name = document.getElementById("name").value.trim();
-      const sifa = document.getElementById("sifa").value.trim();
-
-      if (!datum || !marktnummer || !name || !sifa) {
-        alert("Bitte fülle alle Pflichtfelder aus.");
-        return;
-      }
-
-      // Prüfe, ob alle Fragen beantwortet sind
-      for (let i = 0; i < fragen.length; i++) {
-        const radios = document.getElementsByName(`frage${i}`);
-        if (![...radios].some(r => r.checked)) {
-          alert(`Bitte beantworte Frage ${i + 1}: "${fragen[i]}"`);
-          return;
-        }
-      }
-
-      // Kopfzeile
-      doc.setFontSize(14);
-      doc.text(`Datum: ${datum}`, 10, 20);
-      doc.text(`Marktnummer: ${marktnummer}`, 10, 30);
-      doc.text(`Name: ${name}`, 10, 40);
-      doc.text(`SiFa: ${sifa}`, 10, 50);
-
-      // Tabelle mit Fragen und Antworten vorbereiten
-      const tableColumn = ["Frage", "Antwort"];
-      const tableRows = [];
-
-      for (let i = 0; i < fragen.length; i++) {
-        const radios = document.getElementsByName(`frage${i}`);
-        let antwort = "";
-        for (const r of radios) {
-          if (r.checked) {
-            antwort = r.value;
-            break;
-          }
-        }
-        tableRows.push([`${i + 1}. ${fragen[i]}`, antwort]);
-      }
-
-      // jsPDF-AutoTable für Checkliste (mit Rahmen)
-      doc.autoTable({
-        startY: 60,
-        head: [tableColumn],
-        body: tableRows,
-        styles: { fontSize: 10, cellPadding: 3 },
-        headStyles: { fillColor: [220, 220, 220], textColor: 0, fontStyle: 'bold' },
-        theme: 'grid',
-        columnStyles: {
-          0: { cellWidth: 130 }, // Breite Frage
-          1: { cellWidth: 40, halign: 'center' } // Breite Antwort
-        },
-        margin: { left: 10, right: 10 }
-      });
-
-      // Bilder nach der Tabelle positionieren
-      let finalY = doc.lastAutoTable.finalY || 60;
-      const pageHeight = doc.internal.pageSize.getHeight();
-
-      const maxImgWidth = (doc.internal.pageSize.getWidth() - 30) / 2;
-      const maxImgHeight = 60;
-      let imgX = 10;
-      let imgY = finalY + 10;
-
-      for (let i = 0; i < bilder.length; i++) {
-        const img = bilder[i];
-        try {
-          const imgProps = doc.getImageProperties(img);
-          let imgWidth = maxImgWidth;
-          let imgHeight = (imgProps.height * imgWidth) / imgProps.width;
-          if (imgHeight > maxImgHeight) {
-            imgHeight = maxImgHeight;
-            imgWidth = (imgProps.width * imgHeight) / imgProps.height;
-          }
-
-          if (imgY + imgHeight > pageHeight - 10) {
-            doc.addPage();
-            imgY = 10;
-            imgX = 10;
-          }
-
-          doc.addImage(img, 'JPEG', imgX, imgY, imgWidth, imgHeight);
-
-          if (imgX + imgWidth * 2 + 10 <= doc.internal.pageSize.getWidth()) {
-            imgX += imgWidth + 10;
-          } else {
-            imgX = 10;
-            imgY += imgHeight + 10;
-          }
-        } catch (e) {
-          console.warn("Bild konnte nicht hinzugefügt werden", e);
-        }
-      }
-
-      // PDF speichern / teilen (iPad Safari Support)
-      const blob = doc.output("blob");
-      const file = new File([blob], `Checkliste-${datum}.pdf`, { type: "application/pdf" });
-
-      if (isSafariOniPad() && navigator.canShare && navigator.canShare({ files: [file] })) {
-        try {
-          await navigator.share({
-            title: "Checkliste Arbeitssicherheit",
-            text: "Hier ist die generierte PDF-Datei.",
-            files: [file]
-          });
-        } catch (err) {
-          console.error("Teilen abgebrochen oder fehlgeschlagen:", err);
-          alert("Teilen wurde abgebrochen oder ist fehlgeschlagen.");
-        }
-      } else {
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = `Checkliste-${datum}.pdf`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
-
-      document.getElementById("formular").reset();
-      bilder = [];
-      renderVorschau();
-    }
-
-    // Datum auf heute setzen
-    document.getElementById("datum").valueAsDate = new Date();
-  </script>
+  });
+</script>
 </body>
 </html>
