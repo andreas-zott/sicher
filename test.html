@@ -1,15 +1,57 @@
 <!DOCTYPE html>
 <html lang="de">
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Arbeitssicherheit-Checkliste-2025</title>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Arbeitssicherheit-Checkliste-2025</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon" />
-  <link href="/sicher/manifest.json" rel="manifest" />
+</head>
 <style>
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 20mm;
+  }
+
+  button,
+  .btn,
+  footer,
+  .footer {
+    display: none !important;
+  }
+
+  input[type="text"],
+  input[type="date"] {
+    border: none;
+    background: transparent;
+    font-weight: bold;
+    color: black;
+  }
+
+  input[type="radio"] {
+    transform: scale(1.2);
+  }
+
+  th, .category-header {
+    background-color: #ccc !important;
+    color: black !important;
+  }
+
+  tr:nth-child(even) {
+    background-color: #eee !important;
+  }
+
+  body {
+    background: white;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page-break {
+    page-break-before: always;
+  }
+}
 @media print {
     /* Alle Buttons (auch ohne .btn-Klasse) ausblenden */
     button,      /* alle <button>-Elemente */
@@ -20,7 +62,6 @@
       display: none !important;
     }
   }
-
 
   body {
     font-family: Arial, sans-serif;
@@ -93,40 +134,37 @@
   button:hover {
     background-color: #0056b3;
   }
-</style>
-  
-<div style="display: flex; justify-content: space-between; align-items: center;">
-  <h1 style="margin: 0;">Arbeitssicherheit-Checkliste-2025</h1>
-  <input id="datum" type="date" style="padding: 8px; font-size: 16px;" />
-</div>
+</style>  
+<body class="p-3">
 
-</header>
-<div class="form-section" style="max-width: 300px;">
-<div style="margin-bottom: 10px;">
-
-
-<label for="markt">Marktnummer:</label>
-<input type="text" id="markt" placeholder="z. B. M123" required>
-
-</div>
-<div style="margin-bottom: 10px;">
-<label for="name">Name:</label><br/>
-<input id="name" style="width: 100%;" type="text"/>
-</div>
-<div style="margin-bottom: 10px;">
-<label for="sifa">SiFa:</label><br/>
-<input id="sifa" style="width: 100%;" type="text"/>
-</div>
-<tr><td colspan="3" style="height: 20px;">&nbsp;</td></tr>
-</div>
-<div style="text-align: center; margin: 40px 0; font-size: 20px;">
-  <strong>Teil der Gefährdungsbeurteilung / Wirksamkeitskontrolle</strong><br/>
-  Wenn eine Frage mit „nein“ beantwortet wurde, besteht Handlungsbedarf.
-</div>
-<tr><td colspan="3" style="height: 20px;">&nbsp;</td></tr>
-<tr>
-  <td style="text-align: left;"></td>
-</tr>
+  <div class="container">
+    <h1 class="mb-4 text-center">Arbeitssicherheit-Checkliste-2025</h1>
+    <form id="formular" class="mb-4">
+      <div class="mb-3">
+        <label for="datum" class="form-label">Datum:</label>
+        <input type="date" id="datum" name="datum" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label for="marktnummer" class="form-label">Marktnummer:</label>
+        <input type="text" id="marktnummer" name="marktnummer" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label for="name" class="form-label">Name:</label>
+        <input type="text" id="name" name="name" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label for="sifa" class="form-label">SiFa:</label>
+        <input type="text" id="sifa" name="sifa" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label for="upload" class="form-label">Fotos (max 16):</label>
+        <input type="file" id="upload" accept="image/*" multiple class="form-control" />
+      </div>
+      <div id="vorschauContainer" class="mb-3"></div>
+      <button type="button" class="btn btn-success w-100 mb-2" onclick="speichernAlsPDF()">💾 Als PDF speichern</button>
+      <button type="button" class="btn btn-warning w-100" onclick="zeigeDebugInfo()">🧪 Debug: Gerät & Browser</button>
+    </form>
+  </div>
 <table>
 <thead>
 <tr>
@@ -214,64 +252,76 @@
 <td><input name="1.0 Gesamtmarkt-11" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;"> Flucht- und Rettungsplan vorhanden (aktueller Stand)</td>
+<td style="text-align: left;">Die Türhaltevorrichtungen und der Schließfolgeregler des Feuerschutzabschlusses sind in Ordnung</td>
 <td><input name="1.0 Gesamtmarkt-12" type="radio" value="ja"/></td>
 <td><input name="1.0 Gesamtmarkt-12" type="radio" value="nein"/></td>
 <td><input name="1.0 Gesamtmarkt-12" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;"> Notausgangsbeleuchtung ohne Defekte</td>
-<td><input name="1.0 Gesamtmarkt-21" type="radio" value="ja"/></td>
-<td><input name="1.0 Gesamtmarkt-21" type="radio" value="nein"/></td>
-<td><input name="1.0 Gesamtmarkt-21" type="radio" value="nicht_vorhanden"/></td>
-</tr>
-<tr>
-<td style="text-align: left;">Die Türhaltevorrichtungen und der Schließfolgeregler des Feuerschutzabschlusses sind in Ordnung</td>
+<td style="text-align: left;">Die Brandschutztüren sind ohne Beschädigungen</td>
 <td><input name="1.0 Gesamtmarkt-13" type="radio" value="ja"/></td>
 <td><input name="1.0 Gesamtmarkt-13" type="radio" value="nein"/></td>
 <td><input name="1.0 Gesamtmarkt-13" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Notausgänge sind nicht zugestellt und frei zugänglich</td>
+<td style="text-align: left;">Flucht- und Rettungsplan vorhanden (aktueller Stand)</td>
 <td><input name="1.0 Gesamtmarkt-14" type="radio" value="ja"/></td>
 <td><input name="1.0 Gesamtmarkt-14" type="radio" value="nein"/></td>
 <td><input name="1.0 Gesamtmarkt-14" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Die Notausgänge/-ausstiege sind ohne fremde Hilfe von innen zu öffnen und nicht zugestellt</td>
+<td style="text-align: left;">Notausgangsbeleuchtung ohne Defekte</td>
 <td><input name="1.0 Gesamtmarkt-15" type="radio" value="ja"/></td>
 <td><input name="1.0 Gesamtmarkt-15" type="radio" value="nein"/></td>
 <td><input name="1.0 Gesamtmarkt-15" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Notausgänge führen in sichere Bereiche, Notausgangbeleuchtung ohne Defekte</td>
+<td style="text-align: left;">Notausgänge sind nicht zugestellt und frei zugänglich</td>
 <td><input name="1.0 Gesamtmarkt-16" type="radio" value="ja"/></td>
 <td><input name="1.0 Gesamtmarkt-16" type="radio" value="nein"/></td>
 <td><input name="1.0 Gesamtmarkt-16" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Verkehrswege sind so beschaffen das es nicht zu Unfällen kommen könnte, (stolpern, ausrutschen oder umknicken)</td>
+<td style="text-align: left;">Die Notausgänge/-ausstiege sind ohne fremde Hilfe von innen zu öffnen und nicht zugestellt</td>
 <td><input name="1.0 Gesamtmarkt-17" type="radio" value="ja"/></td>
 <td><input name="1.0 Gesamtmarkt-17" type="radio" value="nein"/></td>
 <td><input name="1.0 Gesamtmarkt-17" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;"> Die Treppen sind unbeschädigt und frei von Gegenständen</td>
+<td style="text-align: left;">Notausgänge führen in sichere Bereiche</td>
 <td><input name="1.0 Gesamtmarkt-18" type="radio" value="ja"/></td>
 <td><input name="1.0 Gesamtmarkt-18" type="radio" value="nein"/></td>
 <td><input name="1.0 Gesamtmarkt-18" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Es wird die passende persönliche Schutzausrüstung für Tätigkeiten mit Gefahrstoffen zur Verfügung gestellt (Schutzbrille, Handschuhe)</td>
+<td style="text-align: left;">Verkehrswege sind so beschaffen das es nicht zu Unfällen kommen könnte, (stolpern, ausrutschen oder umknicken)</td>
 <td><input name="1.0 Gesamtmarkt-19" type="radio" value="ja"/></td>
 <td><input name="1.0 Gesamtmarkt-19" type="radio" value="nein"/></td>
 <td><input name="1.0 Gesamtmarkt-19" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Technik- und Heizräume werden nicht als Lagerräume genutzt. In diesen Räumen ist kein brennbares Material (Kisten, Kartons ...) vorhanden</td>
+<td style="text-align: left;">Die Treppen sind unbeschädigt und frei von Gegenständen</td>
 <td><input name="1.0 Gesamtmarkt-20" type="radio" value="ja"/></td>
 <td><input name="1.0 Gesamtmarkt-20" type="radio" value="nein"/></td>
 <td><input name="1.0 Gesamtmarkt-20" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Es wird die passende persönliche Schutzausrüstung für Tätigkeiten mit Gefahrstoffen zur Verfügung gestellt (Schutzbrille, Handschuhe)</td>
+<td><input name="1.0 Gesamtmarkt-21" type="radio" value="ja"/></td>
+<td><input name="1.0 Gesamtmarkt-21" type="radio" value="nein"/></td>
+<td><input name="1.0 Gesamtmarkt-21" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Technik- und Heizräume werden nicht als Lagerräume genutzt. In diesen Räumen ist kein brennbares Material (Kisten, Kartons ...) vorhanden</td>
+<td><input name="1.0 Gesamtmarkt-22" type="radio" value="ja"/></td>
+<td><input name="1.0 Gesamtmarkt-22" type="radio" value="nein"/></td>
+<td><input name="1.0 Gesamtmarkt-22" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind Betriebsanweisungen gut zugänglich und werden Sicherheitsanweisungen eingehalten?</td>
+<td><input name="1.0 Gesamtmarkt-23" type="radio" value="ja"/></td>
+<td><input name="1.0 Gesamtmarkt-23" type="radio" value="nein"/></td>
+<td><input name="1.0 Gesamtmarkt-23" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
   <td style="text-align: left;"></td>
@@ -296,6 +346,12 @@
 <td><input name="2.0 Backstation-2" type="radio" value="ja"/></td>
 <td><input name="2.0 Backstation-2" type="radio" value="nein"/></td>
 <td><input name="2.0 Backstation-2" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind alle Heißgeräte (z. B. Heißtheken, Fritteusen) in technisch einwandfreiem Zustand?</td>
+<td><input name="2.0 Backstation-3" type="radio" value="ja"/></td>
+<td><input name="2.0 Backstation-3" type="radio" value="nein"/></td>
+<td><input name="2.0 Backstation-3" type="radio" value="nicht_vorhanden"/></td>
 <tr>
   <td style="text-align: left;"></td>
 </tr>
@@ -335,10 +391,28 @@
 <td><input name="3.0 Serviceabteilung-4" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Convenience-Geräte sind in einem ordnungsgemäßen Zustand</td>
+<td style="text-align: left;">Werden Schneidbretter und Messer regelmäßig gereinigt und farbcodiert verwendet?</td>
 <td><input name="3.0 Serviceabteilung-5" type="radio" value="ja"/></td>
 <td><input name="3.0 Serviceabteilung-5" type="radio" value="nein"/></td>
 <td><input name="3.0 Serviceabteilung-5" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Werden Schneidbretter mit Messereinschub verwendet?</td>
+<td><input name="3.0 Serviceabteilung-6" type="radio" value="ja"/></td>
+<td><input name="3.0 Serviceabteilung-6" type="radio" value="nein"/></td>
+<td><input name="3.0 Serviceabteilung-6" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Werden Messerhalter verwendet?</td>
+<td><input name="3.0 Serviceabteilung-7" type="radio" value="ja"/></td>
+<td><input name="3.0 Serviceabteilung-7" type="radio" value="nein"/></td>
+<td><input name="3.0 Serviceabteilung-7" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Convenience-Geräte sind in einem ordnungsgemäßen Zustand</td>
+<td><input name="3.0 Serviceabteilung-8" type="radio" value="ja"/></td>
+<td><input name="3.0 Serviceabteilung-8" type="radio" value="nein"/></td>
+<td><input name="3.0 Serviceabteilung-8" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
   <td style="text-align: left;"></td>
@@ -391,10 +465,16 @@
 <td><input name="5.0 Kühlhaus-1" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Beleuchtung funktioniert, Notruf Funktion, (wenn vorhanden) in Ordnung und ohne Beschädigungen</td>
+<td style="text-align: left;">Die Kühlhaustüren sind von innen gekennzeichnet mit dem Rettungswegschild ISO 7010</td>
 <td><input name="5.0 Kühlhaus-2" type="radio" value="ja"/></td>
 <td><input name="5.0 Kühlhaus-2" type="radio" value="nein"/></td>
 <td><input name="5.0 Kühlhaus-2" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Beleuchtung funktioniert, Notruf Funktion, (wenn vorhanden) in Ordnung und ohne Beschädigungen</td>
+<td><input name="5.0 Kühlhaus-3" type="radio" value="ja"/></td>
+<td><input name="5.0 Kühlhaus-3" type="radio" value="nein"/></td>
+<td><input name="5.0 Kühlhaus-3" type="radio" value="nicht_vorhanden"/></td>
 <tr>
   <td style="text-align: left;"></td>
 </tr>
@@ -700,415 +780,142 @@
 <tbody>
 <tr><td style="text-align: left;">1</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">2</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">3</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">4</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">5</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">6</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">7</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">8</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">9</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">10</td><td contenteditable="true"></td></tr>
 </tbody>
-</table>		
-<style>
-    #signature-pad {
-  border: 2px solid #cccccc;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 600px;
-  height: 150px;
-  touch-action: none;
-}
-    .buttons {
-      margin-top: 10px;
-    }
-    #content {
-      max-width: 600px;
-      margin: auto;
-      font-family: sans-serif;
-    }
-  </style>
 
-</div>
+  <script>
+    const uploadInput = document.getElementById("upload");
+    const vorschauContainer = document.getElementById("vorschauContainer");
+    let bilder = [];
 
-</tbody>
-</table>		
-<style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f8f9fa;
-      padding: 20px;
-    }
+    uploadInput.addEventListener("change", handleFile);
 
-    #signature-pad {
-  border: 2px solid #cccccc;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 600px;
-  height: 150px;
-  touch-action: none;
-}
-
-    .buttons {
-      margin-top: 10px;
-    }
-
-    #content {
-      max-width: 600px;
-      margin: auto;
-    }
-
-    button {
-      background-color: #007BFF;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      padding: 10px 20px;
-      cursor: pointer;
-      font-size: 16px;
-      margin-right: 10px;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-  </style>
-
-
-  <div id="content">
-   <br>
-<h1>Arbeitssicherheit-Checkliste-2025</h1>
-  <p>Bitte das Dokument durchlesen und unterschreiben.</p>
-<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Arbeitssicherheit Checkliste 2025</title>
-<style>
-function generatePDFAndOpenMail() {
-  const element = document.getElementById('content'); // der gesamte Inhalt
-  const opt = {
-    margin: 0.5,
-    filename: 'arbeitssicherheit-checkliste.pdf',
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2 },
-    jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-  };
-
-  html2pdf().set(opt).from(element).outputPdf('blob').then((pdfBlob) => {
-    // PDF speichern
-    const url = URL.createObjectURL(pdfBlob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'arbeitssicherheit-checkliste.pdf';
-    link.click();
-
-    // Mail vorbereiten (ohne Anhang)
-    const subject = encodeURIComponent('Arbeitssicherheit Checkliste 2025');
-    const body = encodeURIComponent(`Hallo,\n\nim Anhang befindet sich die ausgefüllte Arbeitssicherheit-Checkliste.\n\n(Du musst sie ggf. aus dem Download-Ordner anhängen)\n\nViele Grüße`);
-    const mailtoLink = `mailto:?subject=${subject}&body=${body}`;
-
-    window.location.href = mailtoLink;
-  });
-  body {
-    font-family: Arial, sans-serif;
-    background: #fff;
-    color: #333;
-  }
-  #content {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background: #fafafa;
-  }
-  canvas#signature-pad {
-    border: 1px solid #ccc;
-    width: 100%;
-    height: 150px;
-    touch-action: none;
-  }
-  .custom-btn {
-    margin: 5px;
-    padding: 10px 16px;
-    font-size: 16px;
-    cursor: pointer;
-    border: none;
-    border-radius: 6px;
-    background-color: #007bff;
-    color: white;
-    user-select: none;
-  }
-  .custom-btn:hover {
-    background-color: #0056b3;
-  }
-  label {
-    display: inline-block;
-    width: 70px;
-    margin-right: 10px;
-  }
-  input[type="text"], input[type="date"] {
-    padding: 6px 8px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  #auswertung {
-    margin-top: 20px;
-    background: #e9ecef;
-    padding: 15px;
-    border-radius: 6px;
-    display: none;
-  }
-  footer {
-    text-align: center;
-    margin-top: 40px;
-    padding: 16px 8px;
-    font-size: 12px;
-    color: #999;
-    background-color: #fafafa;
-    border-top: 1px solid #eee;
-    border-radius: 0 0 10px 10px;
-  }
-</style>
-</head>
-<body>
-
-<div id="content">
-
-  <h2>Unterschrift</h2>
-  <canvas id="signature-pad"></canvas>
-
-  <div style="margin-top: 30px;">
-    <label for="datum">Datum:</label>
-    <input type="date" id="datum" name="datum" />
-    <br /><br />
-    <label for="markt">Markt:</label>
-    <input type="text" id="markt" name="markt" />
-    <br /><br />
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="name" />
-    <br /><br />
-    <label for="sifa">SiFa:</label>
-    <input type="text" id="sifa" name="sifa" />
-  </div>
-
-  <div class="buttons" style="text-align: center; margin-top: 40px;">
-    <button onclick="clearSignature()" class="custom-btn">🗑️ Unterschrift Löschen</button>
-    <button onclick="auswertungAnzeigen()" class="custom-btn">📊 Auswerten</button>
-    <button onclick="prepareForPrint()" class="custom-btn">📄 Drucken / PDF</button>
-    <button onclick="sharePDF()" class="custom-btn">📤 Teilen</button>
-<button onclick="generatePDFAndOpenMail()" class="custom-btn">📧 Per E-Mail versenden</button>
-  </div>
-
-  <div id="auswertung-container">
-    <div id="auswertung"></div>
-  </div>
-
-</div>
-
-<footer>
-  &copy; 2025 Andreas Zott – Alle Rechte vorbehalten<br />
-  <span style="font-size: 11px;">(SiFa) Arbeitssicherheit 2025</span>
-</footer>
-
-<!-- html2pdf Bibliothek -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
-<script>
-  // Automatisches Einfügen des heutigen Datums in das Datumsfeld
-  window.addEventListener('DOMContentLoaded', () => {
-    const datumsfeld = document.getElementById('datum');
-    if (datumsfeld) {
-      const heute = new Date().toISOString().split('T')[0];
-      datumsfeld.value = heute;
-    }
-  });
-
-  // Canvas Unterschrift
-  const canvas = document.getElementById('signature-pad');
-  const ctx = canvas.getContext('2d');
-  let drawing = false;
-
-  function resizeCanvas() {
-    const ratio = window.devicePixelRatio || 1;
-    const displayWidth = canvas.offsetWidth;
-    const displayHeight = canvas.offsetHeight;
-
-    // Temporär Bild sichern
-    const oldImage = new Image();
-    oldImage.src = canvas.toDataURL();
-
-    canvas.width = displayWidth * ratio;
-    canvas.height = displayHeight * ratio;
-    canvas.style.width = displayWidth + "px";
-    canvas.style.height = displayHeight + "px";
-
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.scale(ratio, ratio);
-
-    oldImage.onload = () => {
-      ctx.drawImage(oldImage, 0, 0, displayWidth, displayHeight);
-    };
-  }
-
-  function getX(e) {
-    return e.touches ? e.touches[0].clientX - canvas.getBoundingClientRect().left : e.clientX - canvas.getBoundingClientRect().left;
-  }
-
-  function getY(e) {
-    return e.touches ? e.touches[0].clientY - canvas.getBoundingClientRect().top : e.clientY - canvas.getBoundingClientRect().top;
-  }
-
-  function startDrawing(e) {
-    drawing = true;
-    ctx.beginPath();
-    ctx.moveTo(getX(e), getY(e));
-  }
-
-  function draw(e) {
-    if (!drawing) return;
-    ctx.lineTo(getX(e), getY(e));
-    ctx.stroke();
-  }
-
-  function stopDrawing() {
-    drawing = false;
-    saveSignature();
-  }
-
-  function clearSignature() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    localStorage.removeItem("signatureImage");
-  }
-
-  function saveSignature() {
-    const dataURL = canvas.toDataURL();
-    localStorage.setItem("signatureImage", dataURL);
-  }
-
-  function restoreSignature() {
-    const dataURL = localStorage.getItem("signatureImage");
-    if (dataURL) {
-      const image = new Image();
-      image.onload = () => {
-        ctx.drawImage(image, 0, 0, canvas.offsetWidth, canvas.offsetHeight);
-      };
-      image.src = dataURL;
-    }
-  }
-
-  // PDF Drucken (Popup-Druckdialog)
-  function prepareForPrint() {
-    const dataURL = canvas.toDataURL();
-    const img = document.createElement("img");
-    img.src = dataURL;
-    img.style.border = "2px solid #000";
-    img.style.width = "100%";
-    img.style.maxWidth = "600px";
-    canvas.replaceWith(img);
-    window.print();
-  }
-
-  // Auswertung anzeigen
-  function auswertungAnzeigen() {
-    const radios = document.querySelectorAll('input[type="radio"]:checked');
-    const datum = document.getElementById('datum')?.value || 'kein Datum';
-    const markt = document.getElementById('markt')?.value || 'unbekannt';
-    const name = document.getElementById('name')?.value || 'unbekannt';
-    const sifa = document.getElementById('sifa')?.value || 'unbekannt';
-
-    const auswertung = { ja: 0, nein: 0, nicht_vorhanden: 0 };
-
-    radios.forEach(radio => {
-      if (auswertung.hasOwnProperty(radio.value)) {
-        auswertung[radio.value]++;
+    function handleFile(event) {
+      const files = event.target.files;
+      for (const file of files) {
+        if (file && file.type.startsWith("image/") && bilder.length < 16) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            bilder.push(e.target.result);
+            renderVorschau();
+          };
+          reader.readAsDataURL(file);
+        }
       }
-    });
+      event.target.value = "";
+    }
 
-    const auswertungDiv = document.getElementById('auswertung');
-    auswertungDiv.style.display = 'block';
-    auswertungDiv.innerHTML = `
-      <h3>📊 Auswertung</h3>
-      <p><strong>Markt:</strong> ${markt}</p>
-      <p><strong>Datum:</strong> ${datum}</p>
-      <p><strong>Name:</strong> ${name}</p>
-      <p><strong>SiFa:</strong> ${sifa}</p>
-      <hr style="margin: 16px 0;">
-      <p><strong>Ja:</strong> ${auswertung.ja}</p>
-      <p><strong>Nein:</strong> ${auswertung.nein}</p>
-      <p><strong>Nicht vorhanden:</strong> ${auswertung.nicht_vorhanden}</p>
-    `;
+    function renderVorschau() {
+      vorschauContainer.innerHTML = "";
+      bilder.forEach((src, index) => {
+        const img = document.createElement("img");
+        img.src = src;
+        img.alt = "Bild " + (index + 1);
+        img.style.maxHeight = "100px";
+        img.style.marginRight = "10px";
+        vorschauContainer.appendChild(img);
+      });
+    }
 
-    const auswertungWindow = window.open('auswertung-sifa.html', 'auswertung');
-    const daten = { markt, datum, name, sifa, ...auswertung };
-    setTimeout(() => {
-      auswertungWindow.postMessage(daten, "*");
-    }, 1000);
-  }
+    function isSafariOniPad() {
+      const ua = navigator.userAgent;
+      const isIOS = /iPad|Macintosh/.test(ua) && 'ontouchend' in document;
+      const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+      return isIOS && isSafari;
+    }
 
-  // PDF erstellen & teilen (Web Share API)
-  function sharePDF() {
-    const element = document.getElementById('content');
+    function zeigeDebugInfo() {
+      const ua = navigator.userAgent;
+      const istSafariOniPad = isSafariOniPad();
+      const kannTeilen = navigator.canShare ? navigator.canShare({ files: [] }) : false;
 
-    const opt = {
-      margin: 0.5,
-      filename: 'arbeitssicherheit-checkliste.pdf',
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-    };
+      alert(
+        `📱 User-Agent:
+${ua}
 
-    html2pdf().set(opt).from(element).outputPdf('blob').then((pdfBlob) => {
-      if (navigator.canShare && navigator.canShare({ files: [new File([pdfBlob], opt.filename, { type: pdfBlob.type })] })) {
-        const file = new File([pdfBlob], opt.filename, { type: pdfBlob.type });
-        navigator.share({
-          files: [file],
-          title: 'Arbeitssicherheit Checkliste 2025',
-          text: 'Hier ist die Arbeitssicherheit-Checkliste als PDF.'
-        })
-        .then(() => console.log('PDF erfolgreich geteilt'))
-        .catch((error) => console.error('Fehler beim Teilen:', error));
+` +
+        `🧠 isSafariOniPad(): ${istSafariOniPad}
+` +
+        `📤 navigator.canShare(): ${kannTeilen}`
+      );
+    }
+
+    async function speichernAlsPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const datum = document.getElementById("datum").value.trim();
+      const marktnummer = document.getElementById("marktnummer").value.trim();
+      const name = document.getElementById("name").value.trim();
+      const sifa = document.getElementById("sifa").value.trim();
+
+      if (!datum || !marktnummer || !name || !sifa) {
+        alert("Bitte fülle alle Pflichtfelder aus.");
+        return;
+      }
+
+      doc.setFontSize(14);
+      let yPos = 20;
+      doc.text(`Datum: ${datum}`, 10, yPos); yPos += 10;
+      doc.text(`Marktnummer: ${marktnummer}`, 10, yPos); yPos += 10;
+      doc.text(`Name: ${name}`, 10, yPos); yPos += 10;
+      doc.text(`SiFa: ${sifa}`, 10, yPos); yPos += 15;
+
+      const margin = 10;
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const maxWidth = (pageWidth - margin * 3) / 2;
+      const maxHeight = (pageHeight - yPos - margin * 3) / 2;
+      let xPos = margin;
+
+      for (let i = 0; i < bilder.length; i++) {
+        const img = bilder[i];
+        const imgProps = doc.getImageProperties(img);
+        let imgWidth = maxWidth;
+        let imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+        if (imgHeight > maxHeight) {
+          imgHeight = maxHeight;
+          imgWidth = (imgProps.width * imgHeight) / imgProps.height;
+        }
+        if (yPos + imgHeight + margin > pageHeight) {
+          doc.addPage();
+          yPos = 20;
+          xPos = margin;
+        }
+        doc.addImage(img, 'JPEG', xPos, yPos, imgWidth, imgHeight);
+        if (xPos + imgWidth * 2 <= pageWidth) {
+          xPos += imgWidth + margin;
+        } else {
+          xPos = margin;
+          yPos += imgHeight + margin;
+        }
+      }
+
+      const blob = doc.output("blob");
+      const file = new File([blob], `Checkliste-${datum}.pdf`, { type: "application/pdf" });
+
+      if (isSafariOniPad() && navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            title: "Checkliste Arbeitssicherheit",
+            text: "Hier ist die generierte PDF-Datei.",
+            files: [file]
+          });
+        } catch (err) {
+          console.error("Teilen abgebrochen oder fehlgeschlagen:", err);
+          alert("Teilen wurde abgebrochen oder ist fehlgeschlagen.");
+        }
       } else {
-        alert('Dein Browser unterstützt das Teilen von Dateien nicht.');
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `Checkliste-${datum}.pdf`;
+        link.click();
       }
-    });
-  }
 
-  // Test Share (einfacher Text+URL)
-  function testShare() {
-    if (navigator.share) {
-      navigator.share({
-        title: 'Test',
-        text: 'Dies ist ein Test',
-        url: window.location.href
-      })
-      .then(() => console.log('Geteilt!'))
-      .catch(console.error);
-    } else {
-      alert('Teilen wird nicht unterstützt');
+      document.getElementById("formular").reset();
+      bilder = [];
+      renderVorschau();
     }
-  }
 
-  // Canvas Event-Listener
-  window.addEventListener("resize", resizeCanvas);
-  window.addEventListener("load", () => {
-    resizeCanvas();
-    restoreSignature();
-  });
-
-  canvas.addEventListener('mousedown', startDrawing);
-  canvas.addEventListener('mousemove', draw);
-  canvas.addEventListener('mouseup', stopDrawing);
-  canvas.addEventListener('mouseout', stopDrawing);
-  canvas.addEventListener('touchstart', startDrawing, { passive: false });
-  canvas.addEventListener('touchmove', draw, { passive: false });
-  canvas.addEventListener('touchend', stopDrawing);
-
-  // Service Worker Registrierung (optional)
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sicher/sw.js')
-        .then(() => console.log("✅ Service Worker registriert"))
-        .catch((err) => console.error("❌ Service Worker Fehler:", err));
-    });
-  }
-</script>
-
+    document.getElementById("datum").valueAsDate = new Date();
+  </script>
 </body>
 </html>
-
-   
