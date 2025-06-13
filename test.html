@@ -1089,6 +1089,27 @@ if ('serviceWorker' in navigator) {
       datumsfeld.value = heute;
     }
   });
+  // Nach Blob-Erzeugung
+  const blob = doc.output("blob");
+  const file = new File([blob], `Checkliste-${datum}.pdf`, { type: "application/pdf" });
+
+  if (isSafariOniPad() && navigator.canShare && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({
+        title: "Checkliste Arbeitssicherheit",
+        text: "Hier ist die generierte PDF-Datei.",
+        files: [file]
+      });
+    } catch (err) {
+      console.error("Teilen abgebrochen oder fehlgeschlagen:", err);
+    }
+  } else {
+    // Fallback: PDF-Download
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `Checkliste-${datum}.pdf`;
+    link.click();
+  }
 </script>
 </body>
 </html>
