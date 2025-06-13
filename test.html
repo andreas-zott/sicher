@@ -162,6 +162,9 @@
           <th>Nein</th>
           <th>Nicht vorhanden</th>
         </tr>
+</tr>
+<tr><td class="category-header" colspan="4" style="text-align: left;">1.0 Gesamtmarkt</td></tr>
+<tr><tr>
       </tr>
 <td style="text-align: left;">Im gesamten Markt wird geeignetes Schuhwerk getragen (feste, geschlossene, flache Schuhe)</td>
 <td><input name="1.0 Gesamtmarkt-0" type="radio" value="ja"/></td>
@@ -754,177 +757,178 @@
   </div>
 
   <script>
+  let bilder = [];
+  const uploadInput = document.getElementById("uploadInput");
+  const vorschauContainer = document.getElementById("vorschauContainer");
 
-
-    uploadInput.addEventListener("change", handleFile);
-    function handleFile(event) {
-      const files = event.target.files;
-      for (const file of files) {
-        if (file && file.type.startsWith("image/") && bilder.length < 16) {
-          const reader = new FileReader();
-          reader.onload = function (e) {
-            bilder.push(e.target.result);
-            renderVorschau();
-          };
-          reader.readAsDataURL(file);
-        }
+  uploadInput.addEventListener("change", handleFile);
+  function handleFile(event) {
+    const files = event.target.files;
+    for (const file of files) {
+      if (file && file.type.startsWith("image/") && bilder.length < 16) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          bilder.push(e.target.result);
+          renderVorschau();
+        };
+        reader.readAsDataURL(file);
       }
-      event.target.value = "";
+    }
+    event.target.value = "";
+  }
+
+  function renderVorschau() {
+    vorschauContainer.innerHTML = "";
+    bilder.forEach((src, index) => {
+      const img = document.createElement("img");
+      img.src = src;
+      img.alt = "Bild " + (index + 1);
+      img.style.maxHeight = "100px";
+      img.style.marginRight = "10px";
+      vorschauContainer.appendChild(img);
+    });
+  }
+
+  function isSafariOniPad() {
+    const ua = navigator.userAgent;
+    return /iPad|Macintosh/.test(ua) && 'ontouchend' in document && /^((?!chrome|android).)*safari/i.test(ua);
+  }
+
+  async function speichernAlsPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    const datum = document.getElementById("datum").value.trim();
+    const marktnummer = document.getElementById("marktnummer").value.trim();
+    const name = document.getElementById("name").value.trim();
+    const sifa = document.getElementById("sifa").value.trim();
+
+    if (!datum || !marktnummer || !name || !sifa) {
+      alert("Bitte fülle alle Pflichtfelder aus.");
+      return;
     }
 
-    function renderVorschau() {
-      vorschauContainer.innerHTML = "";
-      bilder.forEach((src, index) => {
-        const img = document.createElement("img");
-        img.src = src;
-        img.alt = "Bild " + (index + 1);
-        img.style.maxHeight = "100px";
-        img.style.marginRight = "10px";
-        vorschauContainer.appendChild(img);
-      });
-    }
+    doc.setFontSize(12);
+    let yPos = 20;
+    doc.text(`Datum: ${datum}`, 10, yPos); yPos += 7;
+    doc.text(`Marktnummer: ${marktnummer}`, 10, yPos); yPos += 7;
+    doc.text(`Name: ${name}`, 10, yPos); yPos += 7;
+    doc.text(`SiFa: ${sifa}`, 10, yPos); yPos += 10;
 
-    function isSafariOniPad() {
-      const ua = navigator.userAgent;
-      const isIOS = /iPad|Macintosh/.test(ua) && 'ontouchend' in document;
-      const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
-      return isIOS && isSafari;
-    }
+    const fragenTabelle = document.getElementById("fragenTabelle");
+    const rows = fragenTabelle.querySelectorAll("tr");
+    const colWidths = [110, 25, 25, 40];
+    const cellPadding = 2;
 
-    function zeigeDebugInfo() {
-      const ua = navigator.userAgent;
-      const istSafariOniPad = isSafariOniPad();
-      const kannTeilen = navigator.canShare ? navigator.canShare({ files: [] }) : false;
-
-      alert(`📱 User-Agent:\n${ua}\n\n🧠 isSafariOniPad(): ${istSafariOniPad}\n📤 navigator.canShare(): ${kannTeilen}`);
-    }
-
-    async function speichernAlsPDF() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-
-      const datum = document.getElementById("datum").value.trim();
-      const marktnummer = document.getElementById("marktnummer").value.trim();
-      const name = document.getElementById("name").value.trim();
-      const sifa = document.getElementById("sifa").value.trim();
-
-      if (!datum || !marktnummer || !name || !sifa) {
-        alert("Bitte fülle alle Pflichtfelder aus.");
-        return;
-      }
-
-      doc.setFontSize(12);
-      let yPos = 20;
-      doc.text(`Datum: ${datum}`, 10, yPos); yPos += 7;
-      doc.text(`Marktnummer: ${marktnummer}`, 10, yPos); yPos += 7;
-      doc.text(`Name: ${name}`, 10, yPos); yPos += 7;
-      doc.text(`SiFa: ${sifa}`, 10, yPos); yPos += 10;
-
-      const fragenTabelle = document.getElementById("fragenTabelle");
-      const rows = fragenTabelle.querySelectorAll("tr");
-
-      const colWidths = [110, 25, 25, 40];
-      const cellHeight = 10;
-
-      doc.setDrawColor(0);
-      doc.setLineWidth(0.1);
-      doc.setFont("helvetica", "normal");
-
+    const drawHeader = () => {
       let x = 10;
       const headers = ["Frage", "Ja", "Nein", "Nicht vorhanden"];
+      doc.setFont("helvetica", "bold");
       for (let i = 0; i < headers.length; i++) {
-        doc.rect(x, yPos, colWidths[i], cellHeight);
-        doc.text(headers[i], x + 2, yPos + 7);
+        doc.rect(x, yPos, colWidths[i], 10);
+        doc.text(headers[i], x + cellPadding, yPos + 7);
         x += colWidths[i];
       }
-      yPos += cellHeight;
+      yPos += 10;
+      doc.setFont("helvetica", "normal");
+    };
 
-      rows.forEach(row => {
-        const frage = row.querySelector("td")?.innerText?.trim();
-        if (!frage) return;
+    drawHeader();
 
-        const inputs = row.querySelectorAll("input[type='radio']");
-        const name = inputs[0]?.name;
-        const selected = document.querySelector(`input[name="${name}"]:checked`)?.value;
+    rows.forEach(row => {
+      const frage = row.querySelector("td")?.innerText?.trim();
+      if (!frage) return;
 
-        const values = ["ja", "nein", "nicht_vorhanden"];
-        const symbols = values.map(val => (selected === val ? "●" : ""));
+      const inputs = row.querySelectorAll("input[type='radio']");
+      const name = inputs[0]?.name;
+      const selected = document.querySelector(`input[name="${name}"]:checked`)?.value;
 
-        x = 10;
-        doc.rect(x, yPos, colWidths[0], cellHeight);
-        doc.text(frage, x + 2, yPos + 7);
-        x += colWidths[0];
+      const values = ["ja", "nein", "nicht_vorhanden"];
+      const symbols = values.map(val => (selected === val ? "X" : ""));
 
-        for (let i = 0; i < 3; i++) {
-          doc.rect(x, yPos, colWidths[i + 1], cellHeight);
-          if (symbols[i]) doc.text(symbols[i], x + colWidths[i + 1] / 2 - 2, yPos + 7);
-          x += colWidths[i + 1];
-        }
+      const maxTextWidth = colWidths[0] - cellPadding * 2;
+      const frageText = doc.splitTextToSize(frage, maxTextWidth);
+      const frageHeight = frageText.length * 6;
 
-        yPos += cellHeight;
-        if (yPos > 270) {
-          doc.addPage();
-          yPos = 20;
-        }
-      });
-
-      // Bilder
-      const margin = 10;
-      const pageWidth = doc.internal.pageSize.getWidth();
-      const pageHeight = doc.internal.pageSize.getHeight();
-      const maxWidth = (pageWidth - margin * 3) / 2;
-      const maxHeight = 70;
-      let xPos = margin;
-
-      for (let i = 0; i < bilder.length; i++) {
-        const img = bilder[i];
-        const imgProps = doc.getImageProperties(img);
-        let imgWidth = maxWidth;
-        let imgHeight = (imgProps.height * imgWidth) / imgProps.width;
-        if (imgHeight > maxHeight) {
-          imgHeight = maxHeight;
-          imgWidth = (imgProps.width * imgHeight) / imgProps.height;
-        }
-        if (yPos + imgHeight + margin > pageHeight) {
-          doc.addPage();
-          yPos = 20;
-          xPos = margin;
-        }
-        doc.addImage(img, 'JPEG', xPos, yPos, imgWidth, imgHeight);
-        if (xPos + imgWidth * 2 <= pageWidth) {
-          xPos += imgWidth + margin;
-        } else {
-          xPos = margin;
-          yPos += imgHeight + margin;
-        }
+      if (yPos + frageHeight > 270) {
+        doc.addPage();
+        yPos = 20;
+        drawHeader();
       }
 
-      const blob = doc.output("blob");
-      const file = new File([blob], `Checkliste-${datum}.pdf`, { type: "application/pdf" });
+      let x = 10;
+      doc.rect(x, yPos, colWidths[0], frageHeight);
+      doc.text(frageText, x + cellPadding, yPos + 6);
+      x += colWidths[0];
 
-      if (isSafariOniPad() && navigator.canShare && navigator.canShare({ files: [file] })) {
-        try {
-          await navigator.share({
-            title: "Checkliste Arbeitssicherheit",
-            text: "Hier ist die generierte PDF-Datei.",
-            files: [file]
-          });
-        } catch (err) {
-          alert("Teilen wurde abgebrochen oder ist fehlgeschlagen.");
+      for (let i = 0; i < 3; i++) {
+        doc.rect(x, yPos, colWidths[i + 1], frageHeight);
+        if (symbols[i]) {
+          doc.text(symbols[i], x + colWidths[i + 1] / 2 - 2, yPos + 6);
         }
+        x += colWidths[i + 1];
+      }
+
+      yPos += frageHeight;
+    });
+
+    const margin = 10;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const maxWidth = (pageWidth - margin * 3) / 2;
+    const maxHeight = 70;
+    let xPos = margin;
+
+    for (let i = 0; i < bilder.length; i++) {
+      const img = bilder[i];
+      const imgProps = doc.getImageProperties(img);
+      let imgWidth = maxWidth;
+      let imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+      if (imgHeight > maxHeight) {
+        imgHeight = maxHeight;
+        imgWidth = (imgProps.width * imgHeight) / imgProps.height;
+      }
+      if (yPos + imgHeight + margin > pageHeight) {
+        doc.addPage();
+        yPos = 20;
+        xPos = margin;
+      }
+      doc.addImage(img, 'JPEG', xPos, yPos, imgWidth, imgHeight);
+      if (xPos + imgWidth * 2 <= pageWidth) {
+        xPos += imgWidth + margin;
       } else {
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = `Checkliste-${datum}.pdf`;
-        link.click();
+        xPos = margin;
+        yPos += imgHeight + margin;
       }
-
-      document.getElementById("formular").reset();
-      bilder = [];
-      renderVorschau();
     }
 
-    document.getElementById("datum").valueAsDate = new Date();
-  </script>
+    const blob = doc.output("blob");
+    const file = new File([blob], `Checkliste-${datum}.pdf`, { type: "application/pdf" });
+
+    if (isSafariOniPad() && navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({
+          title: "Checkliste Arbeitssicherheit",
+          text: "Hier ist die generierte PDF-Datei.",
+          files: [file]
+        });
+      } catch (err) {
+        alert("Teilen wurde abgebrochen oder ist fehlgeschlagen.");
+      }
+    } else {
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `Checkliste-${datum}.pdf`;
+      link.click();
+    }
+
+    document.getElementById("formular").reset();
+    bilder = [];
+    renderVorschau();
+  }
+
+  document.getElementById("datum").valueAsDate = new Date();
+</script>
+
 </body>
 </html>
