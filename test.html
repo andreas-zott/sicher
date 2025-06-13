@@ -1,111 +1,325 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>Checkliste Sicherheitsprüfung</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Arbeitssicherheit-Checkliste-2025</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-    th { background-color: #f0f0f0; }
-    td.center { text-align: center; }
-    button { margin-top: 20px; padding: 10px 20px; background-color: #007acc; color: white; border: none; font-size: 16px; border-radius: 5px; cursor: pointer; }
-    button:hover { background-color: #005fa3; }
+    /* Scrollbar für Tabelle (kleinere Geräte) */
+    #checklist-container {
+      max-height: 400px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      border-radius: 0.25rem;
+      background: #f8f9fa;
+    }
+    table th, table td {
+      vertical-align: middle;
+      text-align: center;
+    }
+    table td:first-child {
+      text-align: left;
+    }
   </style>
 </head>
-<body>
+<body class="p-3">
 
-  <h2>Checkliste Sicherheitsprüfung – Gesamtmarkt</h2>
+  <div class="container">
+    <h1 class="mb-4 text-center">Arbeitssicherheit-Checkliste-2025</h1>
+    <form id="formular" class="mb-4">
+      <div class="mb-3">
+        <label for="datum" class="form-label">Datum:</label>
+        <input type="date" id="datum" name="datum" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label for="marktnummer" class="form-label">Marktnummer:</label>
+        <input type="text" id="marktnummer" name="marktnummer" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label for="name" class="form-label">Name:</label>
+        <input type="text" id="name" name="name" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label for="sifa" class="form-label">SiFa:</label>
+        <input type="text" id="sifa" name="sifa" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label for="upload" class="form-label">Fotos (max 16):</label>
+        <input type="file" id="upload" accept="image/*" multiple class="form-control" />
+      </div>
+      <div id="vorschauContainer" class="mb-3 d-flex flex-wrap gap-2"></div>
 
-  <table id="checklist">
-    <thead>
-      <tr>
-        <th>Frage</th>
-        <th class="center">Ja</th>
-        <th class="center">Nein</th>
-        <th class="center">Nicht vorhanden</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Fragen automatisch generiert -->
-      <script>
-        const fragen = [
-          "Im gesamten Markt wird geeignetes Schuhwerk getragen (feste, geschlossene, flache Schuhe)",
-          "Automatiktüren, Rolltore, Schnelllauftore sind geprüft und ohne sichtbare Beschädigungen",
-          "Die Aufzugsanlage ist geprüft und in einem ordnungsgemäßen Zustand",
-          "Die Leergutrücknahme ist in einem ordnungsgemäßen Zustand",
-          "Die Leitern sind geprüft und dokumentiert",
-          "Es werden geeignete Sicherheitsmesser verwendet",
-          "Keine sichtbaren Beschädigungen an Schaltern/Steckdosen",
-          "Gabelhubwagen ist in einem ordnungsgemäßen Zustand",
-          "Elektrischer Hubwagen ist geprüft und gesichert",
-          "Feuerlöscheinrichtungen sind frei zugänglich",
-          "Feuerlöscher sind geprüft (Prüffristen eingehalten)",
-          "Brandschutztüren sind nicht zugestellt",
-          "Türhaltevorrichtungen sind in Ordnung",
-          "Brandschutztüren sind ohne Beschädigung",
-          "Flucht- und Rettungsplan ist aktuell vorhanden",
-          "Notausgangsbeleuchtung ohne Defekte",
-          "Notausgänge sind frei zugänglich",
-          "Notausgänge sind von innen ohne fremde Hilfe zu öffnen",
-          "Notausgänge führen in sichere Bereiche",
-          "Verkehrswege sind sicher (keine Stolperstellen)",
-          "Treppen sind unbeschädigt und frei",
-          "Persönliche Schutzausrüstung ist verfügbar",
-          "Technikräume werden nicht als Lagerräume genutzt",
-          "Betriebsanweisungen sind gut zugänglich"
-        ];
+      <div id="checklist-container">
+        <table id="checklist" class="table table-striped table-bordered mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Frage</th>
+              <th>Ja</th>
+              <th>Nein</th>
+              <th>Nicht vorhanden</th>
+            </tr>
+          </thead>
+          <tbody id="checklist-body">
+            <!-- Fragen kommen per JS -->
+          </tbody>
+        </table>
+      </div>
 
-        document.write(fragen.map((frage, i) => `
-          <tr>
-            <td>${frage}</td>
-            <td class="center"><input type="radio" name="frage${i}" value="Ja"></td>
-            <td class="center"><input type="radio" name="frage${i}" value="Nein"></td>
-            <td class="center"><input type="radio" name="frage${i}" value="Nicht vorhanden"></td>
-          </tr>
-        `).join(''));
-      </script>
-    </tbody>
-  </table>
-
-  <button onclick="generatePDF()">PDF generieren & teilen</button>
+      <button type="button" class="btn btn-success w-100 mb-2" onclick="speichernAlsPDF()">💾 Als PDF speichern</button>
+      <button type="button" class="btn btn-warning w-100" onclick="zeigeDebugInfo()">🧪 Debug: Gerät & Browser</button>
+    </form>
+  </div>
 
   <script>
-    function generatePDF() {
-      const checklist = document.getElementById("checklist");
-      const clone = checklist.cloneNode(true);
-      const inputs = clone.querySelectorAll('input');
+    // Fragen-Array
+    const fragen = [
+      "Im gesamten Markt wird geeignetes Schuhwerk getragen (feste, geschlossene, flache Schuhe)",
+      "Automatiktüren, Rolltore, Schnelllauftore sind geprüft und ohne sichtbare Beschädigungen",
+      "Die Aufzugsanlage ist geprüft und in einem ordnungsgemäßen Zustand",
+      "Die Leergutrücknahme ist in einem ordnungsgemäßen Zustand",
+      "Die Leitern sind geprüft und dokumentiert",
+      "Es werden geeignete Sicherheitsmesser verwendet",
+      "Keine sichtbaren Beschädigungen an Schaltern/Steckdosen",
+      "Gabelhubwagen ist in einem ordnungsgemäßen Zustand",
+      "Elektrischer Hubwagen ist geprüft und gesichert",
+      "Feuerlöscheinrichtungen sind frei zugänglich",
+      "Feuerlöscher sind geprüft (Prüffristen eingehalten)",
+      "Brandschutztüren sind nicht zugestellt",
+      "Türhaltevorrichtungen sind in Ordnung",
+      "Brandschutztüren sind ohne Beschädigung",
+      "Flucht- und Rettungsplan ist aktuell vorhanden",
+      "Notausgangsbeleuchtung ohne Defekte",
+      "Notausgänge sind frei zugänglich",
+      "Notausgänge sind von innen ohne fremde Hilfe zu öffnen",
+      "Notausgänge führen in sichere Bereiche",
+      "Verkehrswege sind sicher (keine Stolperstellen)",
+      "Treppen sind unbeschädigt und frei",
+      "Persönliche Schutzausrüstung ist verfügbar",
+      "Technikräume werden nicht als Lagerräume genutzt",
+      "Betriebsanweisungen sind gut zugänglich"
+    ];
 
-      inputs.forEach(input => {
-        if (input.checked) {
-          const td = input.parentElement;
-          td.innerText = input.value;
-        } else {
-          input.remove();
+    // Checkliste in Tabelle rendern
+    const tbody = document.getElementById("checklist-body");
+    fragen.forEach((frage, i) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="text-start">${frage}</td>
+        <td><input type="radio" name="frage${i}" value="Ja" required></td>
+        <td><input type="radio" name="frage${i}" value="Nein"></td>
+        <td><input type="radio" name="frage${i}" value="Nicht vorhanden"></td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    // Bilder Upload & Vorschau
+    const uploadInput = document.getElementById("upload");
+    const vorschauContainer = document.getElementById("vorschauContainer");
+    let bilder = [];
+
+    uploadInput.addEventListener("change", handleFile);
+
+    function handleFile(event) {
+      const files = event.target.files;
+      for (const file of files) {
+        if (file && file.type.startsWith("image/") && bilder.length < 16) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            bilder.push(e.target.result);
+            renderVorschau();
+          };
+          reader.readAsDataURL(file);
         }
-      });
+      }
+      event.target.value = "";
+    }
 
-      const wrapper = document.createElement('div');
-      const title = document.createElement('h3');
-      title.innerText = 'Checkliste Sicherheitsprüfung – PDF';
-      wrapper.appendChild(title);
-      wrapper.appendChild(clone);
-
-      const opt = {
-        margin:       0.5,
-        filename:     'checkliste-sicherheitspruefung.pdf',
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2 },
-        jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
-      };
-
-      html2pdf().from(wrapper).set(opt).outputPdf('blob').then((blob) => {
-        const url = URL.createObjectURL(blob);
-        window.open(url); // iPad: Öffnet PDF und erlaubt Teilen/Speichern
+    function renderVorschau() {
+      vorschauContainer.innerHTML = "";
+      bilder.forEach((src, index) => {
+        const img = document.createElement("img");
+        img.src = src;
+        img.alt = "Bild " + (index + 1);
+        img.style.maxHeight = "100px";
+        img.style.borderRadius = "4px";
+        img.style.boxShadow = "0 0 5px rgba(0,0,0,0.1)";
+        vorschauContainer.appendChild(img);
       });
     }
-  </script>
 
+    // iPad Safari Check
+    function isSafariOniPad() {
+      const ua = navigator.userAgent;
+      const isIOS = /iPad|Macintosh/.test(ua) && 'ontouchend' in document;
+      const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+      return isIOS && isSafari;
+    }
+
+    // Debug Info anzeigen
+    function zeigeDebugInfo() {
+      const ua = navigator.userAgent;
+      const istSafariOniPad = isSafariOniPad();
+      const kannTeilen = navigator.canShare ? navigator.canShare({ files: [] }) : false;
+
+      alert(
+        `📱 User-Agent:\n${ua}\n\n` +
+        `🧠 isSafariOniPad(): ${istSafariOniPad}\n` +
+        `📤 navigator.canShare(): ${kannTeilen}`
+      );
+    }
+
+    async function speichernAlsPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      // Pflichtfelder prüfen
+      const datum = document.getElementById("datum").value.trim();
+      const marktnummer = document.getElementById("marktnummer").value.trim();
+      const name = document.getElementById("name").value.trim();
+      const sifa = document.getElementById("sifa").value.trim();
+
+      if (!datum || !marktnummer || !name || !sifa) {
+        alert("Bitte fülle alle Pflichtfelder aus.");
+        return;
+      }
+
+      // Prüfen, ob alle Fragen beantwortet sind
+      for (let i = 0; i < fragen.length; i++) {
+        const radios = document.getElementsByName(`frage${i}`);
+        if (![...radios].some(r => r.checked)) {
+          alert(`Bitte beantworte Frage ${i+1}: "${fragen[i]}"`);
+          return;
+        }
+      }
+
+      // Kopfzeile
+      doc.setFontSize(14);
+      let yPos = 20;
+      doc.text(`Datum: ${datum}`, 10, yPos); yPos += 10;
+      doc.text(`Marktnummer: ${marktnummer}`, 10, yPos); yPos += 10;
+      doc.text(`Name: ${name}`, 10, yPos); yPos += 10;
+      doc.text(`SiFa: ${sifa}`, 10, yPos); yPos += 15;
+
+      // Checkliste auslesen und ins PDF schreiben (zweispaltig)
+      doc.setFontSize(12);
+      const margin = 10;
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+
+      const lineHeight = 7;
+      let xPos = margin;
+      let startY = yPos;
+      const colWidth = (pageWidth - 3 * margin) / 2;
+
+      for (let i = 0; i < fragen.length; i++) {
+        // Frage
+        const frageText = fragen[i];
+        // Antwort ermitteln
+        const radios = document.getElementsByName(`frage${i}`);
+        let antwort = "";
+        for (const r of radios) {
+          if (r.checked) {
+            antwort = r.value;
+            break;
+          }
+        }
+
+        // Frage + Antwort in einer Zeile
+        let text = `${i+1}. ${frageText}: ${antwort}`;
+
+        // Text in Spalte einpassen (Zeilenumbruch)
+        const splitted = doc.splitTextToSize(text, colWidth);
+
+        // Seitenumbruch prüfen
+        if (startY + lineHeight * splitted.length > pageHeight - margin) {
+          doc.addPage();
+          startY = margin;
+        }
+
+        doc.text(splitted, xPos, startY);
+        startY += lineHeight * splitted.length;
+
+        // Spaltenwechsel nach Hälfte der Fragen
+        if (i === Math.floor(fragen.length/2) -1) {
+          xPos = colWidth + 2 * margin;
+          startY = yPos;
+        }
+      }
+
+      // Bilder hinzufügen (max 16), max 2 pro Reihe
+      const maxImgWidth = (pageWidth - margin * 3) / 2;
+      const maxImgHeight = 60;
+      let imgX = margin;
+      let imgY = startY + 10;
+
+      for (let i = 0; i < bilder.length; i++) {
+        const img = bilder[i];
+        try {
+          const imgProps = doc.getImageProperties(img);
+          let imgWidth = maxImgWidth;
+          let imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+          if (imgHeight > maxImgHeight) {
+            imgHeight = maxImgHeight;
+            imgWidth = (imgProps.width * imgHeight) / imgProps.height;
+          }
+
+          if (imgY + imgHeight > pageHeight - margin) {
+            doc.addPage();
+            imgY = margin;
+            imgX = margin;
+          }
+
+          doc.addImage(img, 'JPEG', imgX, imgY, imgWidth, imgHeight);
+
+          if (imgX + imgWidth * 2 + margin <= pageWidth) {
+            imgX += imgWidth + margin;
+          } else {
+            imgX = margin;
+            imgY += imgHeight + margin;
+          }
+        } catch (e) {
+          console.warn("Bild konnte nicht hinzugefügt werden", e);
+        }
+      }
+
+      // PDF als Blob erzeugen
+      const blob = doc.output("blob");
+      const file = new File([blob], `Checkliste-${datum}.pdf`, { type: "application/pdf" });
+
+      // Teilen-Funktion bei Safari auf iPad
+      if (isSafariOniPad() && navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            title: "Checkliste Arbeitssicherheit",
+            text: "Hier ist die generierte PDF-Datei.",
+            files: [file]
+          });
+        } catch (err) {
+          console.error("Teilen abgebrochen oder fehlgeschlagen:", err);
+          alert("Teilen wurde abgebrochen oder ist fehlgeschlagen.");
+        }
+      } else {
+        // Herunterladen für andere Geräte/Browsers
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `Checkliste-${datum}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      // Formular zurücksetzen und Bilder löschen
+      document.getElementById("formular").reset();
+      bilder = [];
+      renderVorschau();
+    }
+
+    // Setze Datum auf heute
+    document.getElementById("datum").valueAsDate = new Date();
+  </script>
 </body>
 </html>
