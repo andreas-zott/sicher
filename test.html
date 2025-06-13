@@ -753,184 +753,187 @@
 
       <button type="button" class="btn btn-success w-100 mb-2" onclick="speichernAlsPDF()">📤 PDF teilen (iPad)</button>
       <button type="button" class="btn btn-warning w-100" onclick="zeigeDebugInfo()">🧪 Gerät & Browser</button>
+ 
     </form>
   </div>
 
- <script>
-    const uploadInput = document.getElementById("uploadInput");
-    const vorschauContainer = document.getElementById("vorschauContainer");
-    let bilder = [];
 
-    uploadInput.addEventListener("change", handleFile);
+<!-- Unterschriftenfeld -->
+<div style="margin-top: 20px; display: flex; justify-content: center;">
+  <div>
+    <label for="signaturePad" style="display: block; text-align: center; margin-bottom: 8px;">Unterschrift:</label>
+    <div id="signatureContainer" style="border: 2px solid #333; border-radius: 12px; width: 604px; height: 204px; touch-action: none; box-sizing: border-box;">
+      <canvas id="signaturePad" width="600" height="200" style="border-radius: 12px; background: #fff; display: block;"></canvas>
+    </div>
+    <button type="button" id="clearSignature" style="margin-top: 10px; display: block; margin-left: auto; margin-right: auto;">Unterschrift löschen</button>
+  </div>
+</div>
 
-    function handleFile(event) {
-      const files = event.target.files;
-      for (const file of files) {
-        if (file && file.type.startsWith("image/") && bilder.length < 16) {
-          const reader = new FileReader();
-          reader.onload = function (e) {
-            bilder.push(e.target.result);
-            renderVorschau();
-          };
-          reader.readAsDataURL(file);
-        }
-      }
-      event.target.value = "";
+<script>
+  (() => {
+    const canvas = document.getElementById('signaturePad');
+    const ctx = canvas.getContext('2d');
+    let drawing = false;
+    let lastPos = { x: 0, y: 0 };
+
+    // Setze Zeichenstil
+    ctx.strokeStyle = "#000";
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+
+    function getTouchPos(canvas, evt) {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: evt.touches[0].clientX - rect.left,
+        y: evt.touches[0].clientY - rect.top
+      };
     }
 
-    function renderVorschau() {
-      vorschauContainer.innerHTML = "";
-      bilder.forEach((src, index) => {
-        const img = document.createElement("img");
-        img.src = src;
-        img.alt = "Bild " + (index + 1);
-        img.style.maxHeight = "100px";
-        img.style.marginRight = "10px";
-        vorschauContainer.appendChild(img);
-      });
+    function getMousePos(canvas, evt) {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: evt.clientX - rect.left,
+        y: evt.clientY - rect.top
+      };
     }
 
-    function isSafariOniPad() {
-      const ua = navigator.userAgent;
-      const isIOS = /iPad|Macintosh/.test(ua) && 'ontouchend' in document;
-      const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
-      return isIOS && isSafari;
+    function startDrawing(pos) {
+      drawing = true;
+      lastPos = pos;
     }
 
-    async function speichernAlsPDF() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-
-      const datum = document.getElementById("datum").value.trim();
-      const marktnummer = document.getElementById("marktnummer").value.trim();
-      const name = document.getElementById("name").value.trim();
-      const sifa = document.getElementById("sifa").value.trim();
-
-      if (!datum || !marktnummer || !name || !sifa) {
-        alert("Bitte fülle alle Pflichtfelder aus.");
-        return;
-      }
-
-      doc.setFontSize(12);
-      let yPos = 20;
-      doc.text(`Datum: ${datum}`, 10, yPos); yPos += 7;
-      doc.text(`Marktnummer: ${marktnummer}`, 10, yPos); yPos += 7;
-      doc.text(`Name: ${name}`, 10, yPos); yPos += 7;
-      doc.text(`SiFa: ${sifa}`, 10, yPos); yPos += 10;
-
-      const fragenTabelle = document.getElementById("fragenTabelle");
-      const rows = fragenTabelle.querySelectorAll("tr");
-
-      const colWidths = [140, 15, 15, 30];
-      const pageHeight = doc.internal.pageSize.getHeight();
-      const lineSpacing = 6;
-const zeilenAbstand = 4;
-      const marginLeft = 10;
-
-      // Tabellenkopf
-      const headers = ["Frage", "Ja", "Nein", "Nicht vorhanden"];
-      let x = marginLeft;
-      for (let i = 0; i < headers.length; i++) {
-        doc.rect(x, yPos, colWidths[i], 10);
-        doc.text(headers[i], x + 2, yPos + 7);
-        x += colWidths[i];
-      }
-      yPos += 10;
-
-      rows.forEach(row => {
-        const frage = row.querySelector("td")?.innerText?.trim();
-        if (!frage) return;
-
-        const inputs = row.querySelectorAll("input[type='radio']");
-        const name = inputs[0]?.name;
-        const selected = document.querySelector(`input[name="${name}"]:checked`)?.value;
-        const values = ["ja", "nein", "nicht_vorhanden"];
-        const symbols = values.map(val => (selected === val ? "X" : ""));
-
-        const textLines = doc.splitTextToSize(frage, colWidths[0] - 4);
-        const cellHeight = textLines.length * lineSpacing;
-
-        if (yPos + cellHeight > pageHeight - 20) {
-          doc.addPage();
-          yPos = 20;
-        }
-
-        x = marginLeft;
-        doc.rect(x, yPos, colWidths[0], cellHeight);
-        doc.text(textLines, x + 2, yPos + 5);
-        x += colWidths[0];
-
-        for (let i = 0; i < 3; i++) {
-          doc.rect(x, yPos, colWidths[i + 1], cellHeight);
-          if (symbols[i]) {
-            doc.text(symbols[i], x + colWidths[i + 1] / 2 - 2, yPos + (cellHeight / 2) + 2);
-          }
-          x += colWidths[i + 1];
-        }
-
-        yPos += cellHeight + zeilenAbstand;
-      });
-
-      // Bilder einfügen
-      const margin = 10;
-      const pageWidth = doc.internal.pageSize.getWidth();
-      const maxWidth = (pageWidth - margin * 3) / 2;
-      const maxHeight = 70;
-      let xPos = margin;
-
-      for (let i = 0; i < bilder.length; i++) {
-        const img = bilder[i];
-        const imgProps = doc.getImageProperties(img);
-        let imgWidth = maxWidth;
-        let imgHeight = (imgProps.height * imgWidth) / imgProps.width;
-        if (imgHeight > maxHeight) {
-          imgHeight = maxHeight;
-          imgWidth = (imgProps.width * imgHeight) / imgProps.height;
-        }
-        if (yPos + imgHeight + margin > pageHeight) {
-          doc.addPage();
-          yPos = 20;
-          xPos = margin;
-        }
-        doc.addImage(img, 'JPEG', xPos, yPos, imgWidth, imgHeight);
-        if (xPos + imgWidth * 2 <= pageWidth) {
-          xPos += imgWidth + margin;
-        } else {
-          xPos = margin;
-          yPos += imgHeight + margin;
-        }
-      }
-
-      const blob = doc.output("blob");
-      const file = new File([blob], `Checkliste-${datum}.pdf`, { type: "application/pdf" });
-
-      if (isSafariOniPad() && navigator.canShare && navigator.canShare({ files: [file] })) {
-        try {
-          await navigator.share({
-            title: "Checkliste Arbeitssicherheit",
-            text: "Hier ist die generierte PDF-Datei.",
-            files: [file]
-          });
-        } catch (err) {
-          alert("Teilen wurde abgebrochen oder ist fehlgeschlagen.");
-        }
-      } else {
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = `Checkliste-${datum}.pdf`;
-        link.click();
-      }
-
-      document.getElementById("formular").reset();
-      bilder = [];
-      renderVorschau();
+    function draw(pos) {
+      if (!drawing) return;
+      ctx.beginPath();
+      ctx.moveTo(lastPos.x, lastPos.y);
+      ctx.lineTo(pos.x, pos.y);
+      ctx.stroke();
+      lastPos = pos;
     }
-if (yPos + cellHeight + zeilenAbstand > pageHeight - 20) {
-  doc.addPage();
-  yPos = 20;
-}
 
-    document.getElementById("datum").valueAsDate = new Date();
-  </script>
+    function stopDrawing() {
+      drawing = false;
+      saveSignature();
+    }
+
+    // Touch Events
+    canvas.addEventListener('touchstart', e => {
+      e.preventDefault();
+      startDrawing(getTouchPos(canvas, e));
+    });
+
+    canvas.addEventListener('touchmove', e => {
+      e.preventDefault();
+      draw(getTouchPos(canvas, e));
+    });
+
+    canvas.addEventListener('touchend', e => {
+      e.preventDefault();
+      stopDrawing();
+    });
+
+    // Mouse Events (für Desktop)
+    canvas.addEventListener('mousedown', e => {
+      startDrawing(getMousePos(canvas, e));
+    });
+
+    canvas.addEventListener('mousemove', e => {
+      draw(getMousePos(canvas, e));
+    });
+
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mouseout', stopDrawing);
+
+    // Signatur im localStorage speichern, damit sie beim Scrollen erhalten bleibt
+    function saveSignature() {
+      try {
+        const dataUrl = canvas.toDataURL();
+        localStorage.setItem('savedSignature', dataUrl);
+      } catch(e) {
+        console.warn("Signature saving failed", e);
+      }
+    }
+
+    function loadSignature() {
+      const dataUrl = localStorage.getItem('savedSignature');
+      if (dataUrl) {
+        const img = new Image();
+        img.onload = () => ctx.drawImage(img, 0, 0);
+        img.src = dataUrl;
+      }
+    }
+
+    // Beim Laden Signatur laden
+    window.addEventListener('load', loadSignature);
+
+    // Button zum Löschen der Unterschrift
+    document.getElementById('clearSignature').addEventListener('click', () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      localStorage.removeItem('savedSignature');
+    });
+  })();
+</script>
+
+<script>
+  const uploadInput = document.getElementById("uploadInput");
+  const vorschauContainer = document.getElementById("vorschauContainer");
+  let bilder = [];
+
+  uploadInput.addEventListener("change", function (event) {
+    const files = event.target.files;
+    for (const file of files) {
+      if (file && file.type.startsWith("image/") && bilder.length < 16) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          bilder.push(e.target.result);
+          renderVorschau();
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+    event.target.value = "";
+  });
+
+  function renderVorschau() {
+    vorschauContainer.innerHTML = "";
+    bilder.forEach((src) => {
+      const img = document.createElement("img");
+      img.src = src;
+      vorschauContainer.appendChild(img);
+    });
+  }
+
+  async function speichernAlsPDF() {
+    const datum = document.getElementById("datum").value.trim();
+    const marktnummer = document.getElementById("marktnummer").value.trim();
+    const name = document.getElementById("name").value.trim();
+    const sifa = document.getElementById("sifa").value.trim();
+
+    if (!datum || !marktnummer || !name || !sifa) {
+      alert("Bitte fülle alle Pflichtfelder aus.");
+      return;
+    }
+
+    const element = document.getElementById("formular");
+
+    await html2pdf()
+      .set({
+        margin: [10, 10, 10, 10],
+        filename: `Checkliste-${datum}.pdf`,
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+      })
+      .from(element)
+      .save();
+
+    document.getElementById("formular").reset();
+    bilder = [];
+    renderVorschau();
+  }
+
+  document.getElementById("datum").valueAsDate = new Date();
+</script>
+
 </body>
 </html>
