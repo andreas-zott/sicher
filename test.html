@@ -750,190 +750,237 @@
 <tr>
       </table>
 
+<!-- Button zum Foto aufnehmen -->
+<button type="button" id="fotoMachenBtn" class="btn btn-primary w-100 mb-3">📸 Foto aufnehmen (iPad Kamera)</button>
 
-      <button type="button" class="btn btn-success w-100 mb-2" onclick="speichernAlsPDF()">📤 PDF teilen (iPad)</button>
-      <button type="button" class="btn btn-warning w-100" onclick="zeigeDebugInfo()">🧪 Gerät & Browser</button>
+<!-- Vorschau der Fotos -->
+<div id="vorschauContainer" style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;"></div>
+
+<!-- PDF teilen & Debug Buttons -->
+<button type="button" class="btn btn-success w-100 mb-2" onclick="speichernAlsPDF()">📤 PDF teilen (iPad)</button>
+<button type="button" class="btn btn-warning w-100" onclick="zeigeDebugInfo()">🧪 Gerät & Browser</button>
+
+
  
     </form>
   </div>
-
-
-<!-- Unterschriftenfeld -->
-<div style="margin-top: 20px; display: flex; justify-content: center;">
-  <div>
-    <label for="signaturePad" style="display: block; text-align: center; margin-bottom: 8px;">Unterschrift:</label>
-    <div id="signatureContainer" style="border: 2px solid #333; border-radius: 12px; width: 604px; height: 204px; touch-action: none; box-sizing: border-box;">
-      <canvas id="signaturePad" width="600" height="200" style="border-radius: 12px; background: #fff; display: block;"></canvas>
+ <!-- Unterschriftenfeld -->
+  <div style="margin-top: 20px; display: flex; justify-content: center;">
+    <div>
+      <label for="signaturePad" style="display: block; text-align: center; margin-bottom: 8px;">Unterschrift:</label>
+      <div id="signatureContainer" style="border: 2px solid #333; border-radius: 12px; width: 604px; height: 204px; touch-action: none; box-sizing: border-box;">
+        <canvas id="signaturePad" width="600" height="200" style="border-radius: 12px; background: #fff; display: block;"></canvas>
+      </div>
+      <button type="button" id="clearSignature" style="margin-top: 10px; display: block; margin-left: auto; margin-right: auto;">Unterschrift löschen</button>
     </div>
-    <button type="button" id="clearSignature" style="margin-top: 10px; display: block; margin-left: auto; margin-right: auto;">Unterschrift löschen</button>
   </div>
-</div>
 
-<script>
-  (() => {
-    const canvas = document.getElementById('signaturePad');
-    const ctx = canvas.getContext('2d');
-    let drawing = false;
-    let lastPos = { x: 0, y: 0 };
+  <script>
+    (() => {
+      const canvas = document.getElementById('signaturePad');
+      const ctx = canvas.getContext('2d');
+      let drawing = false;
+      let lastPos = { x: 0, y: 0 };
 
-    // Setze Zeichenstil
-    ctx.strokeStyle = "#000";
-    ctx.lineWidth = 2;
-    ctx.lineCap = 'round';
+      ctx.strokeStyle = "#000";
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
 
-    function getTouchPos(canvas, evt) {
-      const rect = canvas.getBoundingClientRect();
-      return {
-        x: evt.touches[0].clientX - rect.left,
-        y: evt.touches[0].clientY - rect.top
-      };
-    }
-
-    function getMousePos(canvas, evt) {
-      const rect = canvas.getBoundingClientRect();
-      return {
-        x: evt.clientX - rect.left,
-        y: evt.clientY - rect.top
-      };
-    }
-
-    function startDrawing(pos) {
-      drawing = true;
-      lastPos = pos;
-    }
-
-    function draw(pos) {
-      if (!drawing) return;
-      ctx.beginPath();
-      ctx.moveTo(lastPos.x, lastPos.y);
-      ctx.lineTo(pos.x, pos.y);
-      ctx.stroke();
-      lastPos = pos;
-    }
-
-    function stopDrawing() {
-      drawing = false;
-      saveSignature();
-    }
-
-    // Touch Events
-    canvas.addEventListener('touchstart', e => {
-      e.preventDefault();
-      startDrawing(getTouchPos(canvas, e));
-    });
-
-    canvas.addEventListener('touchmove', e => {
-      e.preventDefault();
-      draw(getTouchPos(canvas, e));
-    });
-
-    canvas.addEventListener('touchend', e => {
-      e.preventDefault();
-      stopDrawing();
-    });
-
-    // Mouse Events (für Desktop)
-    canvas.addEventListener('mousedown', e => {
-      startDrawing(getMousePos(canvas, e));
-    });
-
-    canvas.addEventListener('mousemove', e => {
-      draw(getMousePos(canvas, e));
-    });
-
-    canvas.addEventListener('mouseup', stopDrawing);
-    canvas.addEventListener('mouseout', stopDrawing);
-
-    // Signatur im localStorage speichern, damit sie beim Scrollen erhalten bleibt
-    function saveSignature() {
-      try {
-        const dataUrl = canvas.toDataURL();
-        localStorage.setItem('savedSignature', dataUrl);
-      } catch(e) {
-        console.warn("Signature saving failed", e);
-      }
-    }
-
-    function loadSignature() {
-      const dataUrl = localStorage.getItem('savedSignature');
-      if (dataUrl) {
-        const img = new Image();
-        img.onload = () => ctx.drawImage(img, 0, 0);
-        img.src = dataUrl;
-      }
-    }
-
-    // Beim Laden Signatur laden
-    window.addEventListener('load', loadSignature);
-
-    // Button zum Löschen der Unterschrift
-    document.getElementById('clearSignature').addEventListener('click', () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      localStorage.removeItem('savedSignature');
-    });
-  })();
-</script>
-
-<script>
-  const uploadInput = document.getElementById("uploadInput");
-  const vorschauContainer = document.getElementById("vorschauContainer");
-  let bilder = [];
-
-  uploadInput.addEventListener("change", function (event) {
-    const files = event.target.files;
-    for (const file of files) {
-      if (file && file.type.startsWith("image/") && bilder.length < 16) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          bilder.push(e.target.result);
-          renderVorschau();
+      function getTouchPos(canvas, evt) {
+        const rect = canvas.getBoundingClientRect();
+        return {
+          x: evt.touches[0].clientX - rect.left,
+          y: evt.touches[0].clientY - rect.top
         };
-        reader.readAsDataURL(file);
       }
-    }
-    event.target.value = "";
-  });
 
-  function renderVorschau() {
-    vorschauContainer.innerHTML = "";
-    bilder.forEach((src) => {
-      const img = document.createElement("img");
-      img.src = src;
-      vorschauContainer.appendChild(img);
+      function getMousePos(canvas, evt) {
+        const rect = canvas.getBoundingClientRect();
+        return {
+          x: evt.clientX - rect.left,
+          y: evt.clientY - rect.top
+        };
+      }
+
+      function startDrawing(pos) {
+        drawing = true;
+        lastPos = pos;
+      }
+
+      function draw(pos) {
+        if (!drawing) return;
+        ctx.beginPath();
+        ctx.moveTo(lastPos.x, lastPos.y);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+        lastPos = pos;
+      }
+
+      function stopDrawing() {
+        drawing = false;
+        saveSignature();
+      }
+
+      canvas.addEventListener('touchstart', e => {
+        e.preventDefault();
+        startDrawing(getTouchPos(canvas, e));
+      });
+
+      canvas.addEventListener('touchmove', e => {
+        e.preventDefault();
+        draw(getTouchPos(canvas, e));
+      });
+
+      canvas.addEventListener('touchend', e => {
+        e.preventDefault();
+        stopDrawing();
+      });
+
+      canvas.addEventListener('mousedown', e => {
+        startDrawing(getMousePos(canvas, e));
+      });
+
+      canvas.addEventListener('mousemove', e => {
+        draw(getMousePos(canvas, e));
+      });
+
+      canvas.addEventListener('mouseup', stopDrawing);
+      canvas.addEventListener('mouseout', stopDrawing);
+
+      function saveSignature() {
+        try {
+          const dataUrl = canvas.toDataURL();
+          localStorage.setItem('savedSignature', dataUrl);
+        } catch(e) {
+          console.warn("Signature saving failed", e);
+        }
+      }
+
+      function loadSignature() {
+        const dataUrl = localStorage.getItem('savedSignature');
+        if (dataUrl) {
+          const img = new Image();
+          img.onload = () => ctx.drawImage(img, 0, 0);
+          img.src = dataUrl;
+        }
+      }
+
+      window.addEventListener('load', loadSignature);
+
+      document.getElementById('clearSignature').addEventListener('click', () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        localStorage.removeItem('savedSignature');
+      });
+    })();
+
+    // Fotos aufnehmen + Vorschau + löschen
+    const fotoMachenBtn = document.getElementById('fotoMachenBtn');
+    const vorschauContainer = document.getElementById('vorschauContainer');
+    let bilder = [];
+
+    function renderVorschau() {
+      vorschauContainer.innerHTML = '';
+      bilder.forEach((src, index) => {
+        const div = document.createElement('div');
+        div.style.position = 'relative';
+        div.style.width = '100px';
+        div.style.height = '100px';
+
+        const img = document.createElement('img');
+        img.src = src;
+        img.style.width = '100%';
+        img.style.height = '100%';
+        img.style.objectFit = 'cover';
+        img.style.borderRadius = '8px';
+        div.appendChild(img);
+
+        const btn = document.createElement('button');
+        btn.textContent = '✖';
+        btn.style.position = 'absolute';
+        btn.style.top = '2px';
+        btn.style.right = '2px';
+        btn.style.background = 'rgba(255, 0, 0, 0.7)';
+        btn.style.color = 'white';
+        btn.style.border = 'none';
+        btn.style.borderRadius = '50%';
+        btn.style.width = '20px';
+        btn.style.height = '20px';
+        btn.style.cursor = 'pointer';
+        btn.addEventListener('click', () => {
+          bilder.splice(index, 1);
+          renderVorschau();
+        });
+        div.appendChild(btn);
+
+        vorschauContainer.appendChild(div);
+      });
+    }
+
+    fotoMachenBtn.addEventListener('click', () => {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/*';
+      input.capture = 'environment';
+      input.style.display = 'none';
+
+      input.addEventListener('change', () => {
+        const file = input.files[0];
+        if (file && bilder.length < 16) {
+          const reader = new FileReader();
+          reader.onload = e => {
+            bilder.push(e.target.result);
+            renderVorschau();
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      document.body.appendChild(input);
+      input.click();
+      document.body.removeChild(input);
     });
-  }
 
-  async function speichernAlsPDF() {
-    const datum = document.getElementById("datum").value.trim();
-    const marktnummer = document.getElementById("marktnummer").value.trim();
-    const name = document.getElementById("name").value.trim();
-    const sifa = document.getElementById("sifa").value.trim();
+    // PDF speichern Funktion (deine Originalfunktion)
+    async function speichernAlsPDF() {
+      const datum = document.getElementById("datum").value.trim();
+      const marktnummer = document.getElementById("marktnummer").value.trim();
+      const name = document.getElementById("name").value.trim();
+      const sifa = document.getElementById("sifa").value.trim();
 
-    if (!datum || !marktnummer || !name || !sifa) {
-      alert("Bitte fülle alle Pflichtfelder aus.");
-      return;
+      if (!datum || !marktnummer || !name || !sifa) {
+        alert("Bitte fülle alle Pflichtfelder aus.");
+        return;
+      }
+
+      const element = document.getElementById("formular");
+
+      // Hier html2pdf.js muss eingebunden sein, ansonsten Fehler
+      await html2pdf()
+        .set({
+          margin: [10, 10, 10, 10],
+          filename: `Checkliste-${datum}.pdf`,
+          image: { type: "jpeg", quality: 0.98 },
+          html2canvas: { scale: 2, useCORS: true },
+          jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+        })
+        .from(element)
+        .save();
+
+      document.getElementById("formular").reset();
+      bilder = [];
+      renderVorschau();
     }
 
-    const element = document.getElementById("formular");
+    // Setze Datum auf heute
+    document.getElementById("datum").valueAsDate = new Date();
 
-    await html2pdf()
-      .set({
-        margin: [10, 10, 10, 10],
-        filename: `Checkliste-${datum}.pdf`,
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-      })
-      .from(element)
-      .save();
+    // Platzhalter für Debug Info Funktion
+    function zeigeDebugInfo() {
+      alert("Debug Info (Platzhalter)");
+    }
+  </script>
 
-    document.getElementById("formular").reset();
-    bilder = [];
-    renderVorschau();
-  }
-
-  document.getElementById("datum").valueAsDate = new Date();
-</script>
-
+  <!-- html2pdf.js Bibliothek einbinden, falls noch nicht geschehen -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </body>
 </html>
