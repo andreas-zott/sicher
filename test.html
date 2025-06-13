@@ -28,6 +28,11 @@
         <input type="text" id="sifa" name="sifa" class="form-control" required />
       </div>
 
+      <div class="mb-3">
+        <label class="form-label">Foto aufnehmen (Kamera):</label>
+        <input type="file" id="foto" accept="image/*" capture="environment" multiple style="display:none;" />
+        <button type="button" id="fotoBtn" class="btn btn-primary w-100">📷 Foto aufnehmen</button>
+      </div>
       <!-- Fragen-Tabelle -->
       <table id="fragenTabelle" class="table table-bordered">
         <tr>
@@ -633,9 +638,7 @@
   </div>
 
   <script>
-    const uploadInput = document.getElementById("upload");
-    const vorschauContainer = document.getElementById("vorschauContainer");
-    let bilder = [];
+
 
     uploadInput.addEventListener("change", handleFile);
     function handleFile(event) {
@@ -806,6 +809,271 @@
     }
 
     document.getElementById("datum").valueAsDate = new Date();
+  </script>
+<script>
+    const fotoInput = document.getElementById("foto");
+    const uploadInput = document.getElementById("upload");
+    const fotoButton = document.getElementById("fotoBtn");
+    const vorschauContainer = document.getElementById("vorschauContainer");
+    const darkModeToggle = document.getElementById("darkModeToggle");
+    let bilder = [];
+
+    // Dark Mode Umschalter
+    darkModeToggle.addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+      darkModeToggle.textContent = document.body.classList.contains("dark-mode") ? "☀️" : "🌙";
+    });
+
+    // Kamera-Button öffnet verstecktes File Input
+    fotoButton.addEventListener("click", () => {
+      fotoInput.click();
+    });
+
+    fotoInput.addEventListener("change", handleFile);
+    uploadInput.addEventListener("change", handleFile);
+
+    // Bilder laden und Vorschau anzeigen
+    function handleFile(event) {
+      const files = event.target.files;
+      for (const file of files) {
+        if (file && file.type.startsWith("image/")) {
+          if (bilder.length >= 16) {
+            alert("Maximal 16 Bilder erlaubt.");
+            break;
+          }
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            bilder.push({ src: e.target.result, kommentar: "" });
+            renderVorschau();
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+      // Input zurücksetzen, damit gleiche Dateien nochmal ausgewählt werden können
+      event.target.value = "";
+    }
+
+    // Vorschau mit Lösch-Button und Kommentarfeld rendern
+    function renderVorschau() {
+      vorschauContainer.innerHTML = "";
+      bilder.forEach((bildObj, index) => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "img-wrapper";
+
+        const imgElement = document.createElement("img");
+        imgElement.src = bildObj.src;
+        imgElement.alt = `Foto ${index + 1}`;
+
+        const deleteBtn = document.createElement("div");
+        deleteBtn.textContent = "✖";
+        deleteBtn.className = "delete-btn";
+        deleteBtn.title = "Foto löschen";
+        deleteBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          bilder.splice(index, 1);
+          renderVorschau();
+        });
+
+        const kommentar = document.createElement("textarea");
+        kommentar.placeholder = "Kommentar hier eingeben...";
+        kommentar.value = bildObj.kommentar;
+        kommentar.addEventListener("input", (e) => {
+          bilder[index].kommentar = e.target.value;
+        });
+
+        wrapper.appendChild(imgElement);
+        wrapper.appendChild(deleteBtn);
+        wrapper.appendChild(kommentar);
+        vorschauContainer.appendChild(wrapper);
+      });
+    }
+
+    async function speichernAlsPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ unit: "pt", format: "a4" });
+      const margin = 40;
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+
+      // 2 Spalten x 2 Reihen = 4 Bilder pro Seite
+      const cols = 2;
+      const rows = 2;
+      const imagesPerPage = cols * rows;
+      const availableWidth = pageWidth - margin * 2;
+      const availableHeight = pageHeight - margin * 2;
+      const cellWidth = availableWidth / cols;
+      const cellHeight = availableHeight / rows;
+
+      // Formularwerte
+      const datum = document.getElementById("datum").value || "";
+      const marktnummer = document.getElementById("marktnummer").value || "";
+      const name = document.getElementById("name").value || "";
+      const sifa = document.getElementById("sifa").value || "";
+
+      // Kopfzeile (auf jeder Seite)
+      function drawHeader() {
+        doc.setFontSize(20);
+        doc.text("Arbeitssicherheit-Checkliste-2025", margin, margin - 10);
+        doc.setFontSize(12);
+        doc.text(`Datum: ${datum}`, margin, margin + 10);
+        doc.text(`Marktnummer: ${marktnummer}`, margin + 200, margin + 10);
+        doc.text(`Name: ${name}`, margin, margin + 30);
+        doc.text(`SiFa: ${sifa}`, margin + 200, margin + 30);
+      }
+
+      let page = 0;
+      for (let i = 0; i < bilder.length; i += imagesPerPage) {
+        if (page > 0) doc.addPage();
+        drawHeader();
+
+        const bilderSeite = bilder.slice(i, i + imagesPerPage);
+
+        for (let j = 0; j < bilderSeite.length; j++) {
+          const bildObj = bilderSeite[j];
+          const img = bildObj.src;
+          const kommentarText = bildObj.kommentar || "";
+
+          // Position (2 Spalten, 2 Reihen)
+          const col = j % cols;
+          const row = Math.floor(j / cols);
+
+          // Bildgröße: 70% der Zelle Höhe, 90% der Zelle Breite
+          const maxImgHeight = cellHeight * 0.7;
+          const maxImgWidth = cellWidth * 0.9;
+
+          let imgProps;
+          try {
+            imgProps = doc.getImageProperties(img);
+          } catch {
+            continue;
+          }
+
+          let imgWidth = maxImgWidth;
+          let imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+          if (imgHeight > maxImgHeight) {
+            imgHeight = maxImgHeight;
+            imgWidth = (imgProps.width * imgHeight) / imgProps.height;
+          }
+
+          const x = margin + col * cellWidth + (cellWidth - imgWidth) / 2;
+          const y = margin + 50 + row * cellHeight;
+
+          doc.addImage(img, "JPEG", x, y, imgWidth, imgHeight);
+
+          // Kommentar unter Bild
+          if (kommentarText) {
+            doc.setFontSize(10);
+            const textX = x;
+            const textY = y + imgHeight + 12;
+            const maxTextWidth = imgWidth;
+            doc.text(doc.splitTextToSize(kommentarText, maxTextWidth), textX, textY);
+          }
+        }
+        page++;
+      }
+
+      doc.save("arbeitssicherheit-checkliste-2025.pdf");
+    }
+
+    // Aktuelles Jahr in Footer
+    document.getElementById("jahr1").textContent = new Date().getFullYear();
+    document.getElementById("jahr2").textContent = new Date().getFullYear();
+async function pdfTeilen() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: "pt", format: "a4" });
+
+  const margin = 40;
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const cols = 2;
+  const rows = 2;
+  const imagesPerPage = cols * rows;
+  const availableWidth = pageWidth - margin * 2;
+  const availableHeight = pageHeight - margin * 2;
+  const cellWidth = availableWidth / cols;
+  const cellHeight = availableHeight / rows;
+
+  const datum = document.getElementById("datum").value || "";
+  const marktnummer = document.getElementById("marktnummer").value || "";
+  const name = document.getElementById("name").value || "";
+  const sifa = document.getElementById("sifa").value || "";
+
+  function drawHeader() {
+    doc.setFontSize(20);
+    doc.text("Arbeitssicherheit-Checkliste-2025", margin, margin - 10);
+    doc.setFontSize(12);
+    doc.text(`Datum: ${datum}`, margin, margin + 10);
+    doc.text(`Marktnummer: ${marktnummer}`, margin + 200, margin + 10);
+    doc.text(`Name: ${name}`, margin, margin + 30);
+    doc.text(`SiFa: ${sifa}`, margin + 200, margin + 30);
+  }
+
+  let page = 0;
+  for (let i = 0; i < bilder.length; i += imagesPerPage) {
+    if (page > 0) doc.addPage();
+    drawHeader();
+
+    const bilderSeite = bilder.slice(i, i + imagesPerPage);
+
+    for (let j = 0; j < bilderSeite.length; j++) {
+      const bildObj = bilderSeite[j];
+      const img = bildObj.src;
+      const kommentarText = bildObj.kommentar || "";
+
+      const col = j % cols;
+      const row = Math.floor(j / cols);
+      const maxImgHeight = cellHeight * 0.7;
+      const maxImgWidth = cellWidth * 0.9;
+
+      let imgProps;
+      try {
+        imgProps = doc.getImageProperties(img);
+      } catch {
+        continue;
+      }
+
+      let imgWidth = maxImgWidth;
+      let imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+      if (imgHeight > maxImgHeight) {
+        imgHeight = maxImgHeight;
+        imgWidth = (imgProps.width * imgHeight) / imgProps.height;
+      }
+
+      const x = margin + col * cellWidth + (cellWidth - imgWidth) / 2;
+      const y = margin + 50 + row * cellHeight;
+
+      doc.addImage(img, "JPEG", x, y, imgWidth, imgHeight);
+
+      if (kommentarText) {
+        doc.setFontSize(10);
+        const textX = x;
+        const textY = y + imgHeight + 12;
+        const maxTextWidth = imgWidth;
+        doc.text(doc.splitTextToSize(kommentarText, maxTextWidth), textX, textY);
+      }
+    }
+    page++;
+  }
+
+  const pdfBlob = doc.output("blob");
+  const file = new File([pdfBlob], "arbeitssicherheit-checkliste-2025.pdf", { type: "application/pdf" });
+
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({
+        title: "Checkliste 2025",
+        text: "PDF der Arbeitssicherheits-Checkliste",
+        files: [file],
+      });
+    } catch (error) {
+      alert("Teilen wurde abgebrochen oder ist fehlgeschlagen.");
+      console.error(error);
+    }
+  } else {
+    alert("Dieses Gerät unterstützt das Teilen von Dateien nicht.");
+  }
+}
+
   </script>
 </body>
 </html>
