@@ -3,6 +3,9 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Arbeitssicherheit-Checkliste-2025</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon" />
+  <link href="/sicher/manifest-unten-farbig.json" rel="manifest" />
 <style>
 @media print {
   @page {
@@ -1094,6 +1097,16 @@ if ('serviceWorker' in navigator) {
       link.download = "arbeitssicherheit-checkliste.pdf";
       link.click();
     }
+  }
+</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker
+        .register('sw.js')
+        .then(() => console.log("✅ Service Worker registriert"))
+        .catch((err) => console.error("❌ Service Worker Fehler:", err));
+    });
   }
 </script>
 
