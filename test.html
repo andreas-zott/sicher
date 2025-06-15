@@ -8,6 +8,12 @@
   <link href="/sicher/manifest-unten-farbig.json" rel="manifest" />
 <style>
 @media print {
+  .page-break-before {
+    page-break-before: always;
+    break-before: page;
+  }
+}
+@media print {
   @page {
     size: A4 portrait;
     margin: 20mm;
@@ -172,6 +178,7 @@
 <th>Nicht vorhanden</th>
 </tr>
 </thead>
+<table id="fragenTabelle">
 <tbody>
 <tr><td class="category-header" colspan="4" style="text-align: left;">1.0 Gesamtmarkt</td></tr>
 <tr>
@@ -766,7 +773,12 @@
 </tbody>
 </table>
 <br>
+
+<h2 class="page-break-before" style="text-align: center;">
 <h2 style="text-align: center;">Beschreibung der Maßnahmen zur Beseitigung von Defiziten</h2>
+<div style="text-align: center; margin: 20px 0;">
+  <button onclick="neinFragenInMaßnahmen()">⛔ Nein-Fragen automatisch einfügen</button>
+</div>
 <tr><td colspan="3" style="height: 20px;">&nbsp;</td></tr>
 <table>
 <thead>
@@ -1108,6 +1120,37 @@ if ('serviceWorker' in navigator) {
         .catch((err) => console.error("❌ Service Worker Fehler:", err));
     });
   }
+function neinFragenInMaßnahmen() {
+  const fragenzeilen = document.querySelectorAll('#fragenTabelle tr');
+  const maßnahmenZeilen = document.querySelectorAll("table tbody tr td[contenteditable='true']");
+  
+  // Leeren aller Beschreibungseinträge
+  maßnahmenZeilen.forEach(cell => cell.textContent = '');
+
+  let index = 0;
+
+  fragenzeilen.forEach(row => {
+    const frageText = row.cells[0]?.innerText;
+    const radios = row.querySelectorAll('input[type="radio"]');
+    let selected = null;
+
+    radios.forEach(r => {
+      if (r.checked) selected = r.value;
+    });
+
+    if (selected === 'nein' && index < maßnahmenZeilen.length) {
+      maßnahmenZeilen[index].textContent = frageText;
+      index++;
+    }
+  });
+
+  if (index === 0) {
+    alert("✅ Es wurden keine Fragen mit 'nein' beantwortet.");
+  } else if (index >= maßnahmenZeilen.length) {
+    alert("⚠️ Mehr als 10 'nein'-Antworten – nur die ersten 10 wurden übernommen.");
+  }
+}
+
 </script>
 
 </body>
