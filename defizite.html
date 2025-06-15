@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Maßnahmen bei Nein-Antworten</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+  </style>
+<style>
+@media print {
+  .page-break-before {
+    page-break-before: always;
+    break-before: page;
+  }
+}
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 20mm;
+  }
+
+  button,
+  .btn,
+  footer,
+  .footer {
+    display: none !important;
+  }
+
+  input[type="text"],
+  input[type="date"] {
+    border: none;
+    background: transparent;
+    font-weight: bold;
+    color: black;
+  }
+
+  input[type="radio"] {
+    transform: scale(1.2);
+  }
+
+  th, .category-header {
+    background-color: #ccc !important;
+    color: black !important;
+  }
+
+  tr:nth-child(even) {
+    background-color: #eee !important;
+  }
+
+  body {
+    background: white;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page-break {
+    page-break-before: always;
+  }
+}
+@media print {
+    /* Alle Buttons (auch ohne .btn-Klasse) ausblenden */
+    button,      /* alle <button>-Elemente */
+    .btn,       /* Bootstrap-Buttons, falls verwendet */
+    footer,     /* <footer>-Element */
+    .footer     /* Elemente mit Klasse "footer" */
+    {
+      display: none !important;
+    }
+  }
+
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    padding: 20px;
+  }
+
+  header h1 {
+    color: #212529;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+
+  th {
+    background-color: #007BFF;
+    color: white;
+    padding: 12px;
+    text-align: center;
+  }
+
+  td {
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    text-align: left;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  tr:hover {
+    background-color: #e6f0ff;
+  }
+
+  .category-header {
+    background-color: #d1ecf1 !important;
+    color: #0c5460;
+    font-weight: bold;
+    text-align: left;
+    padding: 12px;
+  }
+
+  input[type="text"], input[type="date"] {
+    width: 100%;
+    max-width: 300px;
+    padding: 8px;
+    font-size: 16px;
+    margin-top: 5px;
+    box-sizing: border-box;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+  }
+
+  button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  button:hover {
+    background-color: #0056b3;
+  }
+</style>  
+<div style="display: flex; justify-content: space-between; align-items: center;">
+  <h1 style="margin: 0;">Arbeitssicherheit-Checkliste-2025</h1>
+  <input id="datum" type="date" style="padding: 8px; font-size: 16px;" />
+</div>
+
+</header>
+<div class="form-section" style="max-width: 300px;">
+<div style="margin-bottom: 10px;">
+<label for="markt">Marktnummer:</label>
+<input type="text" id="markt" placeholder="z. B. M123" required>
+</div>
+<div style="margin-bottom: 10px;">
+<label for="name">Name:</label><br/>
+<input id="name" style="width: 100%;" type="text"/>
+</div>
+<div style="margin-bottom: 10px;">
+<label for="sifa">SiFa:</label><br/>
+<input id="sifa" style="width: 100%;" type="text"/>
+</div>
+<tr><td colspan="3" style="height: 20px;">&nbsp;</td></tr>
+</div>
+<tr><td colspan="3" style="height: 20px;">&nbsp;</td></tr>
+<tr>
+  <td style="text-align: left;"></td>
+</tr>
+<table>
+<thead>
+
+</head>
+<body>
+  <h1>Maßnahmen zu "Nein"-Antworten</h1>
+  <table id="ausgabe">
+    <thead>
+      <tr><th>Nr.</th><th>Beschreibung</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    window.addEventListener("message", (event) => {
+      const daten = event.data?.neinAntworten || [];
+      const tbody = document.querySelector("#ausgabe tbody");
+      tbody.innerHTML = "";
+
+      daten.forEach((text, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `<td>${index + 1}</td><td>${text}</td>`;
+        tbody.appendChild(row);
+      });
+    });
+  </script>
+</table>		
+<style>
+    #signature-pad {
+  border: 2px solid #cccccc;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  height: 150px;
+  touch-action: none;
+}
+    .buttons {
+      margin-top: 10px;
+    }
+    #content {
+      max-width: 600px;
+      margin: auto;
+      font-family: sans-serif;
+    }
+  </style>
+
+</div>
+
+</tbody>
+</table>		
+<style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      padding: 20px;
+    }
+
+    #signature-pad {
+  border: 2px solid #cccccc;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  height: 150px;
+  touch-action: none;
+}
+
+    .buttons {
+      margin-top: 10px;
+    }
+
+    #content {
+      max-width: 600px;
+      margin: auto;
+    }
+
+    button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-right: 10px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+
+
+  <div id="content">
+   <br>
+<h1>Arbeitssicherheit-Checkliste-2025</h1>
+  <p>Bitte das Dokument durchlesen und unterschreiben.</p>
+
+  <h2>Unterschrift</h2>
+  <canvas id="signature-pad"></canvas>
+
+  <div class="buttons" style="text-align: center; margin-top: 40px;">
+    <button onclick="clearSignature()" class="custom-btn">🗑️ Unterschrift Löschen</button>
+    <button onclick="auswertungAnzeigen()" class="custom-btn">📊 Auswerten</button>
+    <button onclick="prepareForPrint()" class="custom-btn">📄 Drucken / PDF</button>
+  </div>
+
+  <div id="auswertung-container">
+    <div id="auswertung"></div>
+  </div>
+
+  <footer style="
+  text-align: center;
+  margin-top: 40px;
+  padding: 16px 8px;
+  font-size: 12px;
+  color: #999;
+  background-color: #fafafa;
+  border-top: 1px solid #eee;
+  border-radius: 0 0 10px 10px;
+">
+  &copy; 2025 Andreas Zott – Alle Rechte vorbehalten<br>
+  <span style="font-size: 11px;">(Sifa) Arbeitssicherheit 2025</span>
+</footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js">
+
+// Automatisches Einfügen des heutigen Datums in das Datumsfeld oben rechts
+window.addEventListener('DOMContentLoaded', () => {
+  const datumsfeld = document.getElementById('datum');
+  if (datumsfeld) {
+    const heute = new Date().toISOString().split('T')[0]; // Format: yyyy-mm-dd
+    datumsfeld.value = heute;
+  }
+});
+
+</script>
+<script>
+  const canvas = document.getElementById('signature-pad');
+  const ctx = canvas.getContext('2d');
+  let drawing = false;
+
+  function resizeCanvas() {
+    const ratio = window.devicePixelRatio || 1;
+    const displayWidth = canvas.offsetWidth;
+    const displayHeight = canvas.offsetHeight;
+    const oldImage = new Image();
+    oldImage.src = canvas.toDataURL();
+
+    canvas.width = displayWidth * ratio;
+    canvas.height = displayHeight * ratio;
+    canvas.style.width = displayWidth + "px";
+    canvas.style.height = displayHeight + "px";
+
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.scale(ratio, ratio);
+
+    oldImage.onload = () => {
+      ctx.drawImage(oldImage, 0, 0, displayWidth, displayHeight);
+    };
+  }
+
+  function getX(e) {
+    return e.touches ? e.touches[0].clientX - canvas.getBoundingClientRect().left :
+                       e.clientX - canvas.getBoundingClientRect().left;
+  }
+
+  function getY(e) {
+    return e.touches ? e.touches[0].clientY - canvas.getBoundingClientRect().top :
+                       e.clientY - canvas.getBoundingClientRect().top;
+  }
+
+  function startDrawing(e) {
+    drawing = true;
+    ctx.beginPath();
+    ctx.moveTo(getX(e), getY(e));
+  }
+
+  function draw(e) {
+    if (!drawing) return;
+    ctx.lineTo(getX(e), getY(e));
+    ctx.stroke();
+  }
+
+  function stopDrawing() {
+    drawing = false;
+    saveSignature();
+  }
+
+  function clearSignature() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    localStorage.removeItem("signatureImage");
+  }
+
+  function saveSignature() {
+    const dataURL = canvas.toDataURL();
+    localStorage.setItem("signatureImage", dataURL);
+  }
+
+  function restoreSignature() {
+    const dataURL = localStorage.getItem("signatureImage");
+    if (dataURL) {
+      const image = new Image();
+      image.onload = () => {
+        ctx.drawImage(image, 0, 0, canvas.offsetWidth, canvas.offsetHeight);
+      };
+      image.src = dataURL;
+    }
+  }
+
+   function prepareForPrint() {
+      const dataURL = canvas.toDataURL();
+      const img = document.createElement("img");
+      img.src = dataURL;
+      img.style.border = "2px solid #000";
+      img.style.width = "100%";
+      img.style.maxWidth = "600px";
+      canvas.replaceWith(img);
+      window.print();
+  }
+
+  
+function auswertungAnzeigen() {
+  const radios = document.querySelectorAll('input[type="radio"]:checked');
+  const datum = document.getElementById('datum')?.value || 'kein Datum';
+  const markt = document.getElementById('markt')?.value || 'unbekannt';
+  const name = document.getElementById('name')?.value || 'unbekannt';
+  const sifa = document.getElementById('sifa')?.value || 'unbekannt';
+
+  const auswertung = {
+    ja: 0,
+    nein: 0,
+    nicht_vorhanden: 0
+  };
+
+  radios.forEach(radio => {
+    if (auswertung.hasOwnProperty(radio.value)) {
+      auswertung[radio.value]++;
+    }
+  });
+
+  const auswertungDiv = document.getElementById('auswertung');
+  auswertungDiv.style.display = 'block';
+  auswertungDiv.innerHTML = `
+    <h3>📊 Auswertung</h3>
+    <p><strong>Markt:</strong> ${markt}</p>
+    <p><strong>Datum:</strong> ${datum}</p>
+    <p><strong>Name:</strong> ${name}</p>
+    <p><strong>SiFa:</strong> ${sifa}</p>
+    <hr style="margin: 16px 0;">
+    <p><strong>Ja:</strong> ${auswertung.ja}</p>
+    <p><strong>Nein:</strong> ${auswertung.nein}</p>
+    <p><strong>Nicht vorhanden:</strong> ${auswertung.nicht_vorhanden}</p>
+  `;
+
+  const auswertungWindow = window.open('auswertung-sifa.html', 'auswertung');
+  const daten = {
+    markt: markt,
+    datum: datum,
+    name: name,
+    sifa: sifa,
+    ja: auswertung.ja,
+    nein: auswertung.nein,
+    nicht_vorhanden: auswertung.nicht_vorhanden
+  };
+  setTimeout(() => {
+    auswertungWindow.postMessage(daten, "*");
+  }, 1000);
+}
+
+window.addEventListener("resize", resizeCanvas);
+  window.addEventListener("load", () => {
+    resizeCanvas();
+    restoreSignature();
+  });
+
+  canvas.addEventListener('mousedown', startDrawing);
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', stopDrawing);
+  canvas.addEventListener('mouseout', stopDrawing);
+  canvas.addEventListener('touchstart', startDrawing, {passive: false});
+  canvas.addEventListener('touchmove', draw, {passive: false});
+  canvas.addEventListener('touchend', stopDrawing);
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sicher/sw.js')
+      .then(() => console.log("✅ Service Worker registriert"))
+      .catch((err) => console.error("❌ Service Worker Fehler:", err));
+  });
+}
+function neinFragenInMaßnahmen() {
+  const fragenzeilen = document.querySelectorAll('#fragenTabelle tr');
+  const maßnahmenZeilen = document.querySelectorAll("table tbody tr td[contenteditable='true']");
+  
+  // Leeren aller Beschreibungseinträge
+  maßnahmenZeilen.forEach(cell => cell.textContent = '');
+
+  let index = 0;
+
+  fragenzeilen.forEach(row => {
+    const frageText = row.cells[0]?.innerText;
+    const radios = row.querySelectorAll('input[type="radio"]');
+    let selected = null;
+
+    radios.forEach(r => {
+      if (r.checked) selected = r.value;
+    });
+
+    if (selected === 'nein' && index < maßnahmenZeilen.length) {
+      maßnahmenZeilen[index].textContent = frageText;
+      index++;
+    }
+  });
+
+  if (index === 0) {
+    alert("✅ Es wurden keine Fragen mit 'nein' beantwortet.");
+  } else if (index >= maßnahmenZeilen.length) {
+    alert("⚠️ Mehr als 10 'nein'-Antworten – nur die ersten 10 wurden übernommen.");
+  }
+}
+
+</script>
+
+
+
+<script>
+  // Automatisches Datum oben rechts setzen
+  window.addEventListener('DOMContentLoaded', () => {
+    const datumsfeld = document.getElementById('datum');
+    if (datumsfeld) {
+      const heute = new Date().toISOString().split('T')[0];
+      datumsfeld.value = heute;
+    }
+  });
+</script>
+</body>
+</html>
+

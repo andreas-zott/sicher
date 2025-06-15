@@ -776,8 +776,46 @@
 <h2 class="page-break-before" style="text-align: center;">
   Beschreibung der Maßnahmen zur Beseitigung von Defiziten
 </h2>
-<div style="text-align: center; margin: 20px 0;">
+<div style="display: flex; justify-content: center; gap: 16px; margin: 20px 0;">
   <button onclick="neinFragenInMaßnahmen()">⛔ Nein-Fragen automatisch einfügen</button>
+  <button onclick="neinAntwortenEinfügenUndÖffnen()">📝 „Nein“-Antworten übernehmen & anzeigen</button>
+</div>
+<script>
+function neinAntwortenEinfügenUndÖffnen() {
+  const alleZeilen = document.querySelectorAll("table tr");
+  const neinAntworten = [];
+
+  // Alle Fragen mit "nein"
+  alleZeilen.forEach(row => {
+    const zellen = row.querySelectorAll("td");
+    if (zellen.length >= 4) {
+      const frageText = zellen[0]?.innerText.trim();
+      const radios = row.querySelectorAll("input[type='radio']");
+      radios.forEach(radio => {
+        if (radio.checked && radio.value === "nein") {
+          neinAntworten.push(frageText);
+        }
+      });
+    }
+  });
+
+  // In lokale Tabelle einfügen
+  const maßnahmenZeilen = document.querySelectorAll(
+    '#maßnahmen-tabelle td[contenteditable]'
+  );
+  neinAntworten.forEach((text, index) => {
+    if (maßnahmenZeilen[index]) {
+      maßnahmenZeilen[index].innerText = text;
+    }
+  });
+
+  // In neues Fenster schicken
+  const win = window.open('defizite.html', '_blank');
+  setTimeout(() => {
+    win.postMessage({ neinAntworten }, "*");
+  }, 500);
+}
+</script>
 </div>
 <tr><td colspan="3" style="height: 20px;">&nbsp;</td></tr>
 <table>
