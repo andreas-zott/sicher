@@ -139,11 +139,44 @@
   button:hover {
     background-color: #0056b3;
   }
+<style>
+  .btn-container {
+    text-align: center;
+    margin: 20px 0;
+  }
+
+  .btn-large {
+    padding: 12px 24px;
+    font-size: 1.2em;
+    width: 100%;
+    max-width: 600px;
+    background-color: #d9534f; /* ein dezentes Rot für "Nein" */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-large:hover {
+    background-color: #c9302c;
+  }
+
+  .btn-description {
+    font-size: 1em;
+    color: #555;
+    margin-top: 10px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+</style>
 </style>  
 <div style="display: flex; justify-content: space-between; align-items: center;">
   <h1 style="margin: 0;">Arbeitssicherheit-Checkliste-2025</h1>
   <input id="datum" type="date" style="padding: 8px; font-size: 16px;" />
 </div>
+
 
 </header>
 <div class="form-section" style="max-width: 300px;">
@@ -773,12 +806,13 @@
 </tbody>
 </table>
 <br>
-<div style="text-align: center; margin: 20px 0;">
-  <button onclick="neinFragenInMaßnahmen()" style="padding: 10px 20px; font-size: 1.1em; width: 600px; max-width: 100%;">
+<div class="btn-container">
+<div class="buttons" style="text-align: center; margin-top: 40px; max-width: 600px; margin-left: auto; margin-right: auto;">
+  <button onclick="neinFragenInMaßnahmen()" class="btn-large">
     ⛔ Nein-Fragen automatisch einfügen
   </button>
-  <p style="font-size: 0.9em; color: #555; margin-top: 8px;">
-    Es werden 10 Antworten automatisch übernommen.
+  <p class="btn-description">
+    Es werden bis zu 10 Antworten mit "Nein" automatisch übernommen.
   </p>
 </div>
 <br>
