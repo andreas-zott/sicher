@@ -4,23 +4,24 @@
   <meta charset="UTF-8" />
   <title>Unterschrift</title>
   <style>
-    /* Hellblauer Seitenhintergrund */
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden; /* verhindert Scrollen */
+    }
+
     body {
       background-color: #ADD8E6;
       font-family: Arial, sans-serif;
-      padding: 20px;
-      margin: 0;
-
       display: flex;
-      justify-content: center; /* horizontal zentrieren */
-      align-items: flex-start; /* weiter oben statt vertikal mittig */
-      min-height: 100vh;
-      padding-top: 60px; /* Abstand von oben */
-      overscroll-behavior: none; /* verhindert scroll-bounce */
-      user-select: none; /* keine Textauswahl */
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: env(safe-area-inset-top) 20px 60px env(safe-area-inset-bottom);
+      user-select: none;
     }
 
-    /* Weißer Container für Text und Canvas */
     .container {
       background-color: #fff;
       padding: 20px 30px;
@@ -28,11 +29,10 @@
       box-shadow: 0 6px 20px rgba(0,0,0,0.1);
       max-width: 600px;
       width: 100%;
-      position: relative;
       text-align: center;
+      position: relative;
     }
 
-    /* Canvas mit weißem Hintergrund und Schatten */
     canvas {
       background-color: #fff;
       border: 2px solid #000;
@@ -40,10 +40,10 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
       width: 80vw;
       max-width: 600px;
-      height: 300px;
+      height: 400px;
       touch-action: none;
       display: block;
-      margin: 0 auto;
+      margin: 20px auto 0 auto;
       user-select: none;
     }
 
@@ -64,7 +64,6 @@
       background-color: #0056b3;
     }
 
-    /* Dark Mode Toggle oben rechts, klein */
     .dark-mode-toggle {
       position: absolute;
       top: 8px;
@@ -82,7 +81,6 @@
       cursor: pointer;
     }
 
-    /* Dark Mode Styles */
     body.dark-mode {
       background-color: #121212;
       color: #ddd;
@@ -108,6 +106,40 @@
     body.dark-mode button:hover {
       background-color: #155ab6;
     }
+
+    .footer {
+      position: fixed;
+      bottom: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      color: #444;
+      background: transparent;
+      padding: 4px 10px;
+      text-align: center;
+      z-index: 999;
+      width: 100%;
+      max-width: 90%;
+    }
+
+    .footer a {
+      color: #007BFF;
+      text-decoration: none;
+      margin: 0 4px;
+      font-weight: 500;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    body.dark-mode .footer {
+      color: #ccc;
+    }
+
+    body.dark-mode .footer a {
+      color: #89c4ff;
+    }
   </style>
 </head>
 <body>
@@ -125,6 +157,14 @@
     </div>
   </div>
 
+  <footer class="footer">
+    <p>
+      © <span id="currentYear"></span> Andreas Zott. Alle Rechte vorbehalten.
+      <a href="datenschutz.html" rel="noopener noreferrer" target="_blank">Datenschutz</a> |
+      <a href="impressum.html" rel="noopener noreferrer" target="_blank">Impressum</a>
+    </p>
+  </footer>
+
   <script>
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
@@ -136,11 +176,7 @@
     let drawing = false;
 
     function updateStrokeStyle() {
-      if (document.body.classList.contains('dark-mode')) {
-        ctx.strokeStyle = '#fff'; // helle Linien im Dark Mode
-      } else {
-        ctx.strokeStyle = '#000'; // dunkle Linien im Light Mode
-      }
+      ctx.strokeStyle = document.body.classList.contains('dark-mode') ? '#fff' : '#000';
     }
 
     function resize() {
@@ -200,7 +236,9 @@
     window.addEventListener('load', () => {
       resize();
       updateStrokeStyle();
+      document.getElementById('currentYear').textContent = new Date().getFullYear();
     });
+
     window.addEventListener('resize', resize);
 
     canvas.addEventListener('mousedown', start);
@@ -214,11 +252,7 @@
 
     const toggle = document.getElementById('darkModeToggle');
     toggle.addEventListener('change', () => {
-      if (toggle.checked) {
-        document.body.classList.add('dark-mode');
-      } else {
-        document.body.classList.remove('dark-mode');
-      }
+      document.body.classList.toggle('dark-mode', toggle.checked);
       updateStrokeStyle();
     });
   </script>
