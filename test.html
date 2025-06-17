@@ -7,217 +7,156 @@
   <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon" />
   <link href="/sicher/manifest-unten-farbig.json" rel="manifest" />
 <style>
-@media print {
-  .page-break-before {
-    page-break-before: always;
-    break-before: page;
-  }
-}
-@media print {
-  @page {
-    size: A4 portrait;
-    margin: 20mm;
-  }
-
-  button,
-  .btn,
-  footer,
-  .footer {
-    display: none !important;
-  }
-
-  input[type="text"],
-  input[type="date"] {
-    border: none;
-    background: transparent;
-    font-weight: bold;
-    color: black;
-  }
-
-  input[type="radio"] {
-    transform: scale(1.2);
-  }
-
-  th, .category-header {
-    background-color: #ccc !important;
-    color: black !important;
-  }
-
-  tr:nth-child(even) {
-    background-color: #eee !important;
-  }
-
-  body {
-    background: white;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-
-  .page-break {
-    page-break-before: always;
-  }
-}
-@media print {
-    /* Alle Buttons (auch ohne .btn-Klasse) ausblenden */
-    button,      /* alle <button>-Elemente */
-    .btn,       /* Bootstrap-Buttons, falls verwendet */
-    footer,     /* <footer>-Element */
-    .footer     /* Elemente mit Klasse "footer" */
-    {
-      display: none !important;
+    @media print {
+      .page-break-before {
+        page-break-before: always;
+  margin-top: 0;
+        break-before: page;
+      }
+      @page {
+        size: A4 portrait;
+        margin: 20mm;
+      }
+      button, .btn, footer, .footer {
+        display: none !important;
+      }
+      input[type="text"], input[type="date"] {
+        border: none;
+        background: transparent;
+        font-weight: bold;
+        color: black;
+      }
+      input[type="radio"] {
+        transform: scale(1.2);
+      }
+      th, .category-header {
+        background-color: #ccc !important;
+        color: black !important;
+      }
+      tr:nth-child(even) {
+        background-color: #eee !important;
+      }
+      body {
+        background: white;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
     }
-  }
 
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
-    padding: 20px;
-  }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      padding: 20px;
+    }
 
-  header h1 {
-    color: #212529;
-  }
+    header h1 {
+      color: #212529;
+    }
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-    background-color: white;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      background-color: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
 
-  th {
-    background-color: #007BFF;
-    color: white;
-    padding: 12px;
-    text-align: center;
-  }
+    th {
+      background-color: #007BFF;
+      color: white;
+      padding: 12px;
+      text-align: center;
+    }
 
-  td {
-    padding: 10px;
-    border: 1px solid #dee2e6;
-    text-align: left;
-  }
+    td {
+      padding: 10px;
+      border: 1px solid #dee2e6;
+      text-align: left;
+    }
 
-  tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
 
-  tr:hover {
-    background-color: #e6f0ff;
-  }
+    tr:hover {
+      background-color: #e6f0ff;
+    }
 
-  .category-header {
-    background-color: #d1ecf1 !important;
-    color: #0c5460;
-    font-weight: bold;
-    text-align: left;
-    padding: 12px;
-  }
+    .category-header {
+      background-color: #d1ecf1 !important;
+      color: #0c5460;
+      font-weight: bold;
+      text-align: left;
+      padding: 12px;
+    }
 
-  input[type="text"], input[type="date"] {
-    width: 100%;
-    max-width: 300px;
-    padding: 8px;
-    font-size: 16px;
-    margin-top: 5px;
-    box-sizing: border-box;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-  }
+    input[type="text"], input[type="date"] {
+      width: 100%;
+      max-width: 300px;
+      padding: 8px;
+      font-size: 16px;
+      margin-top: 5px;
+      box-sizing: border-box;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+    }
 
-  button {
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 16px;
-  }
+    button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 16px;
+    }
 
-  button:hover {
-    background-color: #0056b3;
-  }
-<style>
-  .btn-container {
-    text-align: center;
-    margin: 20px 0;
-  }
-
-  .btn-large {
-    padding: 12px 24px;
-    font-size: 1.2em;
-    width: 100%;
-    max-width: 600px;
-    background-color: #d9534f; /* ein dezentes Rot für "Nein" */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-
-  .btn-large:hover {
-    background-color: #c9302c;
-  }
-
-  .btn-description {
-    font-size: 1em;
-    color: #555;
-    margin-top: 10px;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-</style>
-</style>  
-<div style="display: flex; justify-content: space-between; align-items: center;">
-  <h1 style="margin: 0;">Arbeitssicherheit-Checkliste-2025</h1>
-  <input id="datum" type="date" style="padding: 8px; font-size: 16px;" />
-</div>
-
-
+    button:hover {
+      background-color: #0056b3;
+  </style>
+</head>
+<body>
+<div class="print-wrapper">
+<header>
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <h1 style="margin: 0;">Arbeitssicherheit-Checkliste-2025</h1>
+    <input id="datum" type="date" style="padding: 8px; font-size: 16px;" />
+  </div>
 </header>
+
 <div class="form-section" style="max-width: 300px;">
-<div style="margin-bottom: 10px;">
-<label for="markt">Marktnummer:</label>
-<input type="text" id="markt" placeholder="z. B. M123" required>
+  <div style="margin-bottom: 10px;">
+    <label for="markt">Marktnummer:</label>
+    <input type="text" id="markt" placeholder="z. B. M123" required>
+  </div>
+  <div style="margin-bottom: 10px;">
+    <label for="name">Name:</label><br/>
+    <input id="name" style="width: 100%;" type="text"/>
+  </div>
+  <div style="margin-bottom: 10px;">
+    <label for="sifa">SiFa:</label><br/>
+    <input id="sifa" style="width: 100%;" type="text"/>
+  </div>
 </div>
-<div style="margin-bottom: 10px;">
-<label for="name">Name:</label><br/>
-<input id="name" style="width: 100%;" type="text"/>
-</div>
-<div style="margin-bottom: 10px;">
-<label for="sifa">SiFa:</label><br/>
-<input id="sifa" style="width: 100%;" type="text"/>
-</div>
-<tr><td colspan="3" style="height: 20px;">&nbsp;</td></tr>
-</div>
+
 <div style="text-align: center; margin: 40px 0; font-size: 20px;">
   <strong>Teil der Gefährdungsbeurteilung / Wirksamkeitskontrolle</strong><br/>
   Wenn eine Frage mit „nein“ beantwortet wurde, besteht Handlungsbedarf.
 </div>
-<tr><td colspan="3" style="height: 20px;">&nbsp;</td></tr>
-<tr>
-  <td style="text-align: left;"></td>
-</tr>
-<table>
-<thead>
-<tr>
-<th>Frage</th>
-<th>Ja</th>
-<th>Nein</th>
-<th>Nicht vorhanden</th>
-</tr>
-</thead>
 <table id="fragenTabelle">
-<tbody>
-<tr><td class="category-header" colspan="4" style="text-align: left;">1.0 Gesamtmarkt</td></tr>
-<tr>
-<tr>
-  <td style="text-align: left;"></td>
-</tr>
+  <thead>
+    <tr>
+      <th>Frage</th>
+      <th>Ja</th>
+      <th>Nein</th>
+      <th>Nicht vorhanden</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="category-header" colspan="4">1.0 Gesamtmarkt</td>
+    </tr>
+   </tr>
 <td style="text-align: left;">Im gesamten Markt wird geeignetes Schuhwerk getragen (feste, geschlossene, flache Schuhe)</td>
 <td><input name="1.0 Gesamtmarkt-0" type="radio" value="ja"/></td>
 <td><input name="1.0 Gesamtmarkt-0" type="radio" value="nein"/></td>
@@ -361,13 +300,9 @@
 <td><input name="1.0 Gesamtmarkt-23" type="radio" value="nein"/></td>
 <td><input name="1.0 Gesamtmarkt-23" type="radio" value="nicht_vorhanden"/></td>
 </tr>
-<tr>
-  <td style="text-align: left;"></td>
-</tr>
+
 <tr><td class="category-header" colspan="4" style="text-align: left;">2.0 Backstation</td></tr>
-<tr><tr>
-  <td style="text-align: left;"></td>
-</tr>
+<tr>
 <td style="text-align: left;">An der Backstation sind die Arbeitsgeräte (Backofen, Backbleche, Brotschneidemaschine) in einem ordnungsgemäßen Zustand</td>
 <td><input name="2.0 Backstation-0" type="radio" value="ja"/></td>
 <td><input name="2.0 Backstation-0" type="radio" value="nein"/></td>
@@ -390,14 +325,10 @@
 <td><input name="2.0 Backstation-3" type="radio" value="ja"/></td>
 <td><input name="2.0 Backstation-3" type="radio" value="nein"/></td>
 <td><input name="2.0 Backstation-3" type="radio" value="nicht_vorhanden"/></td>
-<tr>
-  <td style="text-align: left;"></td>
+
 </tr>
-</tr>
-<tr><td class="category-header" colspan="4" style="text-align: left;">3.0 Serviceabteilung</td></tr>
-<tr>
-  <td style="text-align: left;"></td>
-</tr>
+<tr><td class="category-header" colspan="4" style="text-align: left;" class="page-break-before">3.0 Serviceabteilung</td></tr>
+
 <tr>
 <td style="text-align: left;">Hautschutzplan hängt aus</td>
 <td><input name="3.0 Serviceabteilung-0" type="radio" value="ja"/></td>
@@ -452,13 +383,9 @@
 <td><input name="3.0 Serviceabteilung-8" type="radio" value="nein"/></td>
 <td><input name="3.0 Serviceabteilung-8" type="radio" value="nicht_vorhanden"/></td>
 </tr>
-<tr>
-  <td style="text-align: left;"></td>
-</tr>
+
 <tr><td class="category-header" colspan="4" style="text-align: left;">4.0 Kassenzone</td></tr>
-<tr>
-  <td style="text-align: left;"></td>
-</tr>
+
 <tr>
 <td style="text-align: left;">Der Fußboden in der Kasse ist in einem ordnungsgemäßen Zustand (sichtbare Beschädigung), der Fußraum ist frei von Gegenständen</td>
 <td><input name="4.0 Kassenzone-0" type="radio" value="ja"/></td>
@@ -482,14 +409,10 @@
 <td><input name="4.0 Kassenzone-3" type="radio" value="ja"/></td>
 <td><input name="4.0 Kassenzone-3" type="radio" value="nein"/></td>
 <td><input name="4.0 Kassenzone-3" type="radio" value="nicht_vorhanden"/></td>
-<tr>
-  <td style="text-align: left;"></td>
+
 </tr>
-</tr>
-<tr><td class="category-header" colspan="4" style="text-align: left;">5.0 Kühlhaus</td></tr>
-<tr>
-  <td style="text-align: left;"></td>
-</tr>
+<tr><td class="category-header" colspan="4" style="text-align: left;" class="page-break-before">5.0 Kühlhaus</td></tr>
+
 <tr>
 <td style="text-align: left;">In den Kühlhäusern ist die Überglocke an der Beleuchtung vorhanden</td>
 <td><input name="5.0 Kühlhaus-0" type="radio" value="ja"/></td>
@@ -513,14 +436,10 @@
 <td><input name="5.0 Kühlhaus-3" type="radio" value="ja"/></td>
 <td><input name="5.0 Kühlhaus-3" type="radio" value="nein"/></td>
 <td><input name="5.0 Kühlhaus-3" type="radio" value="nicht_vorhanden"/></td>
-<tr>
-  <td style="text-align: left;"></td>
-</tr>
+
 </tr>
 <tr><td class="category-header" colspan="4" style="text-align: left;">6.0 Lager</td></tr>
-<tr>
-  <td style="text-align: left;"></td>
-</tr>
+
 <tr>
 <td style="text-align: left;">Schwerlastregale sind geprüft, Anfahrschutz und die Traglastangabe ist vorhanden</td>
 <td><input name="6.0 Lager-0" type="radio" value="ja"/></td>
@@ -544,14 +463,10 @@
 <td><input name="6.0 Lager-3" type="radio" value="ja"/></td>
 <td><input name="6.0 Lager-3" type="radio" value="nein"/></td>
 <td><input name="6.0 Lager-3" type="radio" value="nicht_vorhanden"/></td>
-<tr>
-  <td style="text-align: left;"></td>
-</tr>
+
 </tr>
 <tr><td class="category-header" colspan="4" style="text-align: left;">7.0 Sozialräume</td></tr>
-<tr>
-  <td style="text-align: left;"></td>
-</tr>
+
 <tr>
 <td style="text-align: left;">Die aktuellen aushangpflichtigen Gesetze und Unfallverhütungsvorschriften sowie die Brandschutzordnung Teil-A hängen im Sozialbereich aus</td>
 <td><input name="7.0 Sozialräume-0" type="radio" value="ja"/></td>
@@ -575,14 +490,10 @@
 <td><input name="7.0 Sozialräume-3" type="radio" value="ja"/></td>
 <td><input name="7.0 Sozialräume-3" type="radio" value="nein"/></td>
 <td><input name="7.0 Sozialräume-3" type="radio" value="nicht_vorhanden"/></td>
-<tr>
-  <td style="text-align: left;"></td>
-</tr>
+
 </tr>
 <tr><td class="category-header" colspan="4" style="text-align: left;">8.0 Marktleiterbüro</td></tr>
-<tr>
-  <td style="text-align: left;"></td>
-</tr>
+
 <tr>
 <td style="text-align: left;">Liegt eine aktuelle Liste, sowie Prüfberichte prüfungsbedürftiger Einrichtungen vor</td>
 <td><input name="8.0 Marktleiterbüro-0" type="radio" value="ja"/></td>
@@ -636,14 +547,10 @@
 <td><input name="8.0 Marktleiterbüro-8" type="radio" value="ja"/></td>
 <td><input name="8.0 Marktleiterbüro-8" type="radio" value="nein"/></td>
 <td><input name="8.0 Marktleiterbüro-8" type="radio" value="nicht_vorhanden"/></td>
-<tr>
-  <td style="text-align: left;"></td>
-</tr>
+
 </tr>
 <tr><td class="category-header" colspan="4" style="text-align: left;">9.0 CO2 Kühleinrichtungen</td></tr>
-<tr>
-  <td style="text-align: left;"></td>
-</tr>
+
 <tr>
 <td style="text-align: left;">Wurden Personen, die sich im Bereich von Kühlanlagen oder Kühlhäusern aufhalten, unterwiesen?</td>
 <td><input name="9.0 CO2 Kühleinrichtungen-0" type="radio" value="ja"/></td>
@@ -663,9 +570,7 @@
 <td><input name="9.0 CO2 Kühleinrichtungen-2" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr><td class="category-header" colspan="4" style="text-align: left;">10.0 Praktikanten</td></tr>
-<tr>
-  <td style="text-align: left;"></td>
-</tr>
+
 <tr>
 <td style="text-align: left;">Wurde die Unterweisung von Praktikanten und Schüleraushilfen durchgeführt?</td>
 <td><input name="10.0 Praktikanten-0" type="radio" value="ja"/></td>
@@ -677,14 +582,10 @@
 <td><input name="10.0 Praktikanten-1" type="radio" value="ja"/></td>
 <td><input name="10.0 Praktikanten-1" type="radio" value="nein"/></td>
 <td><input name="10.0 Praktikanten-1" type="radio" value="nicht_vorhanden"/></td>
-<tr>
-  <td style="text-align: left;"></td>
-</tr>
+
 </tr>
 <tr><td class="category-header" colspan="4" style="text-align: left;">11.0 Arbeitsmedizin</td></tr>
-<tr>
-  <td style="text-align: left;"></td>
-</tr>
+
 <tr>
 <td style="text-align: left;">Wird den Beschäftigten arbeitsmedizinische Vorsorge angeboten?</td>
 <td><input name="11.0 Arbeitsmedizin-0" type="radio" value="ja"/></td>
@@ -697,13 +598,9 @@
 <td><input name="11.0 Arbeitsmedizin-1" type="radio" value="nein"/></td>
 <td><input name="11.0 Arbeitsmedizin-1" type="radio" value="nicht_vorhanden"/></td>
 </tr>
-<tr>
-  <td style="text-align: left;"></td>
-</tr>
+
 <tr><td class="category-header" colspan="4" style="text-align: left;">12.0 Psychische Belastung</td></tr>
-<tr>
-  <td style="text-align: left;"></td>
-</tr>
+
 <tr>
 <td style="text-align: left;">Werden Wünsche bei der Arbeitsplanung berücksichtigt?</td>
 <td><input name="12.0 Psychische Belastung-0" type="radio" value="ja"/></td>
@@ -799,162 +696,276 @@
 <td><input name="12.0 Psychische Belastung-15" type="radio" value="ja"/></td>
 <td><input name="12.0 Psychische Belastung-15" type="radio" value="nein"/></td>
 <td><input name="12.0 Psychische Belastung-15" type="radio" value="nicht_vorhanden"/></td>
-<tr>
-  <td style="text-align: left;"></td>
-</tr>
+
 </tr>
 </tbody>
 </table>
 <br>
-<div class="btn-container">
-<div class="buttons" style="text-align: center; margin-top: 40px; max-width: 600px; margin-left: auto; margin-right: auto;">
-  <button onclick="neinFragenInMaßnahmen()" class="btn-large">
-    ⛔ Nein-Fragen automatisch einfügen
-  </button>
-  <p class="btn-description">
-    Es werden bis zu 10 Antworten mit "Nein" automatisch übernommen.
-  </p>
+<div style="display: flex; justify-content: center; gap: 16px; margin: 20px 0;">
+  <button onclick="neinFragenInMaßnahmen()">⛔ Nein-Fragen automatisch einfügen</button>
+  <button onclick="neinAntwortenEinfügenUndÖffnen()">📝 „Nein“-Antworten übernehmen & anzeigen</button>
 </div>
 <br>
 <h2 class="page-break-before" style="text-align: center;">
-<h2 style="text-align: center;">Beschreibung der Maßnahmen zur Beseitigung von Defiziten</h2>
-<div style="text-align: center; margin: 20px 0;">
+  Beschreibung der Maßnahmen zur Beseitigung von Defiziten
+</h2>
 
-</div>
-<tr><td colspan="3" style="height: 20px;">&nbsp;</td></tr>
 <table>
-<thead>
-<tr>
-<th>Nr.</th>
-<th>Beschreibung</th>
-</tr>
-</thead>
-<tbody>
-<tr><td style="text-align: left;">1</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">2</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">3</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">4</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">5</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">6</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">7</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">8</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">9</td><td contenteditable="true"></td></tr><tr><td style="text-align: left;">10</td><td contenteditable="true"></td></tr>
-</tbody>
-</table>		
+  <thead>
+    <tr>
+      <th>Nr.</th>
+      <th>Beschreibung</th>
+    </tr>
+  </thead>
+  <tbody id="maßnahmen-tabelle">
+    <tr><td>1</td><td contenteditable="true"></td></tr>
+    <tr><td>2</td><td contenteditable="true"></td></tr>
+    <tr><td>3</td><td contenteditable="true"></td></tr>
+    <tr><td>4</td><td contenteditable="true"></td></tr>
+    <tr><td>5</td><td contenteditable="true"></td></tr>
+    <tr><td>6</td><td contenteditable="true"></td></tr>
+    <tr><td>7</td><td contenteditable="true"></td></tr>
+    <tr><td>8</td><td contenteditable="true"></td></tr>
+    <tr><td>9</td><td contenteditable="true"></td></tr>
+    <tr><td>10</td><td contenteditable="true"></td></tr>
+<tr><td>11</td><td contenteditable="true"></td></tr>
+<tr><td>12</td><td contenteditable="true"></td></tr>
+<tr><td>13</td><td contenteditable="true"></td></tr>
+<tr><td>14</td><td contenteditable="true"></td></tr>
+<tr><td>15</td><td contenteditable="true"></td></tr>
+  </tbody>
+</table>
 <style>
-    #signature-pad {
-  border: 2px solid #cccccc;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 600px;
-  height: 150px;
-  touch-action: none;
-}
-    .buttons {
-      margin-top: 10px;
-    }
-    #content {
-      max-width: 600px;
-      margin: auto;
-      font-family: sans-serif;
-    }
-  </style>
+  #signature-pad {
+    border: 2px solid #cccccc;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 600px;
+    height: 150px;
+    touch-action: none;
+  }
 
-</div>
+  .buttons {
+    margin-top: 10px;
+  }
 
-</tbody>
-</table>		
+  #content {
+    max-width: 600px;
+    margin: auto;
+    font-family: Arial, sans-serif;
+  }
+
+  button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 10px;
+  }
+
+  button:hover {
+    background-color: #0056b3;
+  }
+</style>
 <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f8f9fa;
-      padding: 20px;
-    }
+  .confirmation-section {
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+    max-width: 700px;
+    margin: 40px auto;
+  }
 
-    #signature-pad {
-  border: 2px solid #cccccc;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 600px;
-  height: 150px;
-  touch-action: none;
+  .checkbox-row {
+    display: flex;
+    gap: 40px; /* Abstand zwischen den Spalten */
+    margin-top: 16px;
+    justify-content: space-between;
+  }
+
+  .checkbox-column {
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Abstand zwischen Checkboxen in einer Spalte */
+    flex: 1;
+  }
+
+  label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+/* Gemeinsame Button-Grundform */
+button.custom-btn,
+button.btn-large,
+button.btn-medium {
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  margin: 10px auto;
+  display: block;
+  font-family: inherit;
 }
 
-    .buttons {
-      margin-top: 10px;
-    }
+/* Große Buttons (600px) */
+button.btn-large {
+  width: 600px;
+}
 
-    #content {
-      max-width: 600px;
-      margin: auto;
-    }
+/* Mittlere Buttons (280px) */
+button.btn-medium {
+  width: 280px;
+}
 
-    button {
-      background-color: #007BFF;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      padding: 10px 20px;
-      cursor: pointer;
-      font-size: 16px;
-      margin-right: 10px;
-    }
+/* Spezielle Farben */
+button.btn-blue {
+  background-color: #007bff;
+  color: white;
+}
+button.btn-green {
+  background-color: #28a745;
+  color: white;
+}
+button.btn-gray {
+  background-color: #6c757d;
+  color: white;
+}
 
-    button:hover {
-      background-color: #0056b3;
-    }
-  </style>
+/* Unterschriftsbild */
+#signature-image {
+  max-width: 600px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  display: block;
+  min-height: 150px;
+  margin: 10px auto;
+}
+button.custom-btn,
+button.btn-large,
+button.btn-medium {
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  margin: 10px auto;
+  display: block;
+  font-family: inherit;
+}
 
+/* Kleine Buttons 
 
-  <div id="content">
-   <br>
-<h1>Arbeitssicherheit-Checkliste-2025</h1>
-  <p>Bitte das Dokument durchlesen und unterschreiben.</p>
-
-  <h2>Unterschrift</h2>
-  <canvas id="signature-pad"></canvas>
-
-<div class="buttons" style="text-align: center; margin-top: 40px; max-width: 600px; margin-left: auto; margin-right: auto;">
-  <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 10px;">
-    <button onclick="clearSignature()" class="custom-btn" style="flex: 1; min-width: 0;">🗑️ Unterschrift Löschen</button>
-    <button onclick="auswertungAnzeigen()" class="custom-btn" style="flex: 1; min-width: 0;">📊 Auswerten</button>
-    <button onclick="prepareForPrint()" class="custom-btn" style="flex: 1; min-width: 0;">📄 Drucken / PDF</button>
+</style>
+<div class="page-break-before confirmation-section">
+  <h2>Abschlussbestätigung</h2>
+  <div class="checkbox-row">
+    <div class="column">
+      <label for="mangel">
+        <input type="checkbox" id="mangel"/>
+        <span>Alle Mängel wurden zur Kenntnis genommen.</span>
+      </label>
+      <label for="massnahmen">
+        <input type="checkbox" id="massnahmen"/>
+        <span>Maßnahmen gemäß Plan werden umgesetzt.</span>
+      </label>
+    </div>
+    <div class="column">
+      <label for="nachkontrolle">
+        <input type="checkbox" id="nachkontrolle"/>
+        <span>Nachkontrolle wird durchgeführt.</span>
+      </label>
+      <label for="mitarbeiter">
+        <input type="checkbox" id="mitarbeiter"/>
+        <span>Mitarbeiter wurden informiert.</span>
+      </label>
+    </div>
   </div>
-  <button onclick="generateAndSharePDF()" class="custom-btn" style="background-color: #28a745; width: 100%; margin-bottom: 20px;">
-    📤 PDF teilen (iPad)
-  </button>
-  <button type="button" onclick="location.reload();" class="custom-btn" style="font-size: 0.8em; padding: 5px 10px; width: auto;">
-    Seite neu laden
-  </button>
 </div>
+
+<div id="content">
+  <h2 style="text-align: center;">Unterschrift</h2>
+  <br />
+  <canvas id="signature-pad"></canvas> 
+<button onclick="clearSignature()" class="btn-large btn-gray">🗑️ Unterschrift löschen</button>
+<img id="signature-image" alt="Unterschrift" />
+<button onclick="unterschriftExtern()" class="btn-large btn-blue">✍️ Unterschrift erfassen</button>
+
+<div class="buttons" style="text-align: center; margin-top: 40px;">
+  <button onclick="auswertungAnzeigen()" class="btn-medium btn-gray">📊 Auswerten</button>
+  <button onclick="prepareForPrint()" class="btn-medium btn-gray">📄 Drucken / PDF</button>
+ 
 </div>
 
   </div>
-
+  <button onclick="generateAndSharePDF()" class="custom-btn" style="background-color: #28a745; width: 600px; margin: 10px auto; display: block;">📤 PDF teilen (iPad)</button>
+<button type="button" onclick="location.reload();" class="btn-medium btn-gray" style="font-size: 0.9em;">
+  🔄 Seite neu laden
+</button>
+</div>
   <div id="auswertung-container">
     <div id="auswertung"></div>
   </div>
-
   <footer style="
-  text-align: center;
-  margin-top: 40px;
-  padding: 16px 8px;
-  font-size: 12px;
-  color: #999;
-  background-color: #fafafa;
-  border-top: 1px solid #eee;
-  border-radius: 0 0 10px 10px;
-">
-  &copy; 2025 Andreas Zott – Alle Rechte vorbehalten<br>
-  <span style="font-size: 11px;">(Sifa) Arbeitssicherheit 2025</span>
-</footer>
+    text-align: center;
+    margin-top: 40px;
+    padding: 16px 8px;
+    font-size: 12px;
+    color: #999;
+    background-color: #fafafa;
+    border-top: 1px solid #eee;
+    border-radius: 0 0 10px 10px;">
+    &copy; 2025 Andreas Zott – Alle Rechte vorbehalten<br>
+    <span style="font-size: 11px;">(Sifa) Arbeitssicherheit 2025</span>
+  </footer>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+  async function generateAndSharePDF() {
+    const element = document.body;
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js">
+    const opt = {
+      margin:       0,
+      filename:     'arbeitssicherheit-checkliste.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, scrollY: 0 },
+      jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' }
+    };
 
-// Automatisches Einfügen des heutigen Datums in das Datumsfeld oben rechts
-window.addEventListener('DOMContentLoaded', () => {
-  const datumsfeld = document.getElementById('datum');
-  if (datumsfeld) {
-    const heute = new Date().toISOString().split('T')[0]; // Format: yyyy-mm-dd
-    datumsfeld.value = heute;
+    const blob = await html2pdf().set(opt).from(element).outputPdf('blob');
+
+    const file = new File([blob], "arbeitssicherheit-checkliste.pdf", {
+      type: "application/pdf",
+    });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({
+          title: 'Checkliste Arbeitssicherheit',
+          text: 'Anbei die ausgefüllte Arbeitssicherheits-Checkliste als PDF.',
+          files: [file],
+        });
+        console.log("✅ Teilen abgeschlossen");
+      } catch (err) {
+        console.error("❌ Teilen abgebrochen oder fehlgeschlagen:", err);
+      }
+    } else {
+      alert("📤 Teilen nicht unterstützt – bitte manuell PDF herunterladen.");
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "arbeitssicherheit-checkliste.pdf";
+      link.click();
+    }
   }
-});
-
 </script>
 <script>
+  // Signatur-Canvas Setup
   const canvas = document.getElementById('signature-pad');
   const ctx = canvas.getContext('2d');
   let drawing = false;
@@ -1027,52 +1038,50 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-   function prepareForPrint() {
-      const dataURL = canvas.toDataURL();
-      const img = document.createElement("img");
-      img.src = dataURL;
-      img.style.border = "2px solid #000";
-      img.style.width = "100%";
-      img.style.maxWidth = "600px";
-      canvas.replaceWith(img);
-      window.print();
+  function prepareForPrint() {
+    const dataURL = canvas.toDataURL();
+    const img = document.createElement("img");
+    img.src = dataURL;
+    img.style.border = "2px solid #000";
+    img.style.width = "100%";
+    img.style.maxWidth = "600px";
+    canvas.replaceWith(img);
+    window.print();
   }
 
-  
-function auswertungAnzeigen() {
-  const radios = document.querySelectorAll('input[type="radio"]:checked');
-  const datum = document.getElementById('datum')?.value || 'kein Datum';
-  const markt = document.getElementById('markt')?.value || 'unbekannt';
-  const name = document.getElementById('name')?.value || 'unbekannt';
-  const sifa = document.getElementById('sifa')?.value || 'unbekannt';
+  function auswertungAnzeigen() {
+    const radios = document.querySelectorAll('input[type="radio"]:checked');
+    const datum = document.getElementById('datum')?.value || 'kein Datum';
+    const markt = document.getElementById('markt')?.value || 'unbekannt';
+    const name = document.getElementById('name')?.value || 'unbekannt';
+    const sifa = document.getElementById('sifa')?.value || 'unbekannt';
 
-  const auswertung = {
-    ja: 0,
-    nein: 0,
-    nicht_vorhanden: 0
-  };
+    const auswertung = {
+      ja: 0,
+      nein: 0,
+      nicht_vorhanden: 0
+    };
 
-  radios.forEach(radio => {
-    if (auswertung.hasOwnProperty(radio.value)) {
-      auswertung[radio.value]++;
-    }
-  });
+    radios.forEach(radio => {
+      if (auswertung.hasOwnProperty(radio.value)) {
+        auswertung[radio.value]++;
+      }
+    });
 
-  const auswertungDiv = document.getElementById('auswertung');
-  auswertungDiv.style.display = 'block';
-  auswertungDiv.innerHTML = `
-    <h3>📊 Auswertung</h3>
-    <p><strong>Markt:</strong> ${markt}</p>
-    <p><strong>Datum:</strong> ${datum}</p>
-    <p><strong>Name:</strong> ${name}</p>
-    <p><strong>SiFa:</strong> ${sifa}</p>
-    <hr style="margin: 16px 0;">
-    <p><strong>Ja:</strong> ${auswertung.ja}</p>
-    <p><strong>Nein:</strong> ${auswertung.nein}</p>
-    <p><strong>Nicht vorhanden:</strong> ${auswertung.nicht_vorhanden}</p>
-  `;
-
-  const auswertungWindow = window.open('auswertung-sifa.html', 'auswertung');
+    const auswertungDiv = document.getElementById('auswertung');
+    auswertungDiv.style.display = 'block';
+    auswertungDiv.innerHTML = `
+      <h3>📊 Auswertung</h3>
+      <p><strong>Markt:</strong> ${markt}</p>
+      <p><strong>Datum:</strong> ${datum}</p>
+      <p><strong>Name:</strong> ${name}</p>
+      <p><strong>SiFa:</strong> ${sifa}</p>
+      <hr style="margin: 16px 0;">
+      <p><strong>Ja:</strong> ${auswertung.ja}</p>
+      <p><strong>Nein:</strong> ${auswertung.nein}</p>
+      <p><strong>Nicht vorhanden:</strong> ${auswertung.nicht_vorhanden}</p>
+    `;
+ const auswertungWindow = window.open('auswertung-sifa.html', 'auswertung');
   const daten = {
     markt: markt,
     datum: datum,
@@ -1085,122 +1094,108 @@ function auswertungAnzeigen() {
   setTimeout(() => {
     auswertungWindow.postMessage(daten, "*");
   }, 1000);
-}
 
-window.addEventListener("resize", resizeCanvas);
+  }
+
+  function neinFragenInMaßnahmen() {
+    const fragenzeilen = document.querySelectorAll('#fragenTabelle tr');
+    const maßnahmenZeilen = document.querySelectorAll("#maßnahmen-tabelle td[contenteditable='true']");
+    maßnahmenZeilen.forEach(cell => cell.textContent = '');
+
+    let index = 0;
+    fragenzeilen.forEach(row => {
+      const frageText = row.cells[0]?.innerText;
+      const radios = row.querySelectorAll('input[type="radio"]');
+      let selected = null;
+
+      radios.forEach(r => {
+        if (r.checked) selected = r.value;
+      });
+
+      if (selected === 'nein' && index < maßnahmenZeilen.length) {
+        maßnahmenZeilen[index].textContent = frageText;
+        index++;
+      }
+    });
+
+    if (index === 0) {
+      alert("✅ Es wurden keine Fragen mit 'nein' beantwortet.");
+    } else if (index >= maßnahmenZeilen.length) {
+      alert("⚠️ Mehr als 15 'nein'-Antworten – nur die ersten 15 wurden übernommen.");
+    }
+  }
+
+  function neinAntwortenEinfügenUndÖffnen() {
+    const alleZeilen = document.querySelectorAll("#fragenTabelle tr");
+    const neinAntworten = [];
+
+    alleZeilen.forEach(row => {
+      const zellen = row.querySelectorAll("td");
+      if (zellen.length >= 4) {
+        const frageText = zellen[0]?.innerText.trim();
+        const radios = row.querySelectorAll("input[type='radio']");
+        radios.forEach(radio => {
+          if (radio.checked && radio.value === "nein") {
+            neinAntworten.push(frageText);
+          }
+        });
+      }
+    });
+
+    const maßnahmenZeilen = document.querySelectorAll('#maßnahmen-tabelle td[contenteditable]');
+    neinAntworten.forEach((text, index) => {
+      if (maßnahmenZeilen[index]) {
+        maßnahmenZeilen[index].innerText = text;
+      }
+    });
+
+    const win = window.open('defizite.html', '_blank');
+    setTimeout(() => {
+      win?.postMessage({ neinAntworten }, "*");
+    }, 500);
+  }
+
+  // Init
+  window.addEventListener("resize", resizeCanvas);
   window.addEventListener("load", () => {
     resizeCanvas();
     restoreSignature();
-  });
 
-  canvas.addEventListener('mousedown', startDrawing);
-  canvas.addEventListener('mousemove', draw);
-  canvas.addEventListener('mouseup', stopDrawing);
-  canvas.addEventListener('mouseout', stopDrawing);
-  canvas.addEventListener('touchstart', startDrawing, {passive: false});
-  canvas.addEventListener('touchmove', draw, {passive: false});
-  canvas.addEventListener('touchend', stopDrawing);
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sicher/sw.js')
-      .then(() => console.log("✅ Service Worker registriert"))
-      .catch((err) => console.error("❌ Service Worker Fehler:", err));
-  });
-}
-</script>
-
-
-
-<script>
-  // Automatisches Datum oben rechts setzen
-  window.addEventListener('DOMContentLoaded', () => {
     const datumsfeld = document.getElementById('datum');
     if (datumsfeld) {
       const heute = new Date().toISOString().split('T')[0];
       datumsfeld.value = heute;
     }
   });
-</script>
 
-<script>
-  async function generateAndSharePDF() {
-    const element = document.body;
+  canvas.addEventListener('mousedown', startDrawing);
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', stopDrawing);
+  canvas.addEventListener('mouseout', stopDrawing);
+  canvas.addEventListener('touchstart', startDrawing, { passive: false });
+  canvas.addEventListener('touchmove', draw, { passive: false });
+  canvas.addEventListener('touchend', stopDrawing);
 
-    const opt = {
-      margin:       0,
-      filename:     'arbeitssicherheit-checkliste.pdf',
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2, scrollY: 0 },
-      jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' }
-    };
-
-    const blob = await html2pdf().set(opt).from(element).outputPdf('blob');
-
-    const file = new File([blob], "arbeitssicherheit-checkliste.pdf", {
-      type: "application/pdf",
-    });
-
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      try {
-        await navigator.share({
-          title: 'Checkliste Arbeitssicherheit',
-          text: 'Anbei die ausgefüllte Arbeitssicherheits-Checkliste als PDF.',
-          files: [file],
-        });
-        console.log("✅ Teilen abgeschlossen");
-      } catch (err) {
-        console.error("❌ Teilen abgebrochen oder fehlgeschlagen:", err);
-      }
-    } else {
-      alert("📤 Teilen nicht unterstützt – bitte manuell PDF herunterladen.");
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "arbeitssicherheit-checkliste.pdf";
-      link.click();
-    }
-  }
-</script>
-<script>
+  // Service Worker optional
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker
-        .register('sw.js')
+      navigator.serviceWorker.register('/sicher/sw.js')
         .then(() => console.log("✅ Service Worker registriert"))
-        .catch((err) => console.error("❌ Service Worker Fehler:", err));
+        .catch(err => console.error("❌ Service Worker Fehler:", err));
     });
   }
-function neinFragenInMaßnahmen() {
-  const fragenzeilen = document.querySelectorAll('#fragenTabelle tr');
-  const maßnahmenZeilen = document.querySelectorAll("table tbody tr td[contenteditable='true']");
-  
-  // Leeren aller Beschreibungseinträge
-  maßnahmenZeilen.forEach(cell => cell.textContent = '');
-
-  let index = 0;
-
-  fragenzeilen.forEach(row => {
-    const frageText = row.cells[0]?.innerText;
-    const radios = row.querySelectorAll('input[type="radio"]');
-    let selected = null;
-
-    radios.forEach(r => {
-      if (r.checked) selected = r.value;
-    });
-
-    if (selected === 'nein' && index < maßnahmenZeilen.length) {
-      maßnahmenZeilen[index].textContent = frageText;
-      index++;
-    }
-  });
-
-  if (index === 0) {
-    alert("✅ Es wurden keine Fragen mit 'nein' beantwortet.");
-  } else if (index >= maßnahmenZeilen.length) {
-    alert("⚠️ Mehr als 10 'nein'-Antworten – nur die ersten 10 wurden übernommen.");
-  }
+function unterschriftExtern() {
+  window.open('signatur.html', 'Signatur', 'width=700,height=400');
 }
 
-</script>
+window.addEventListener("message", (event) => {
+  if (event.data?.type === 'signature') {
+    const img = document.getElementById('signature-image');
+    img.src = event.data.dataUrl;
+    img.style.display = 'block';
+  }
+});
 
+</script>
 </body>
 </html>
