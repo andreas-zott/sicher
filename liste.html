@@ -114,10 +114,10 @@
 
     button:hover {
       background-color: #0056b3;
-    }
   </style>
 </head>
 <body>
+<div class="print-wrapper">
 <header>
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <h1 style="margin: 0;">Arbeitssicherheit-Checkliste-2025</h1>
@@ -328,7 +328,7 @@
 <td><input name="2.0 Backstation-3" type="radio" value="nicht_vorhanden"/></td>
 
 </tr>
-<tr><td class="category-header" colspan="4" style="text-align: left;">3.0 Serviceabteilung</td></tr>
+<tr><td class="category-header" colspan="4" style="text-align: left;" class="page-break-before">3.0 Serviceabteilung</td></tr>
 
 <tr>
 <td style="text-align: left;">Hautschutzplan hängt aus</td>
@@ -412,7 +412,7 @@
 <td><input name="4.0 Kassenzone-3" type="radio" value="nicht_vorhanden"/></td>
 
 </tr>
-<tr><td class="category-header" colspan="4" style="text-align: left;">5.0 Kühlhaus</td></tr>
+<tr><td class="category-header" colspan="4" style="text-align: left;" class="page-break-before">5.0 Kühlhaus</td></tr>
 
 <tr>
 <td style="text-align: left;">In den Kühlhäusern ist die Überglocke an der Beleuchtung vorhanden</td>
@@ -801,8 +801,56 @@
     align-items: center;
     gap: 8px;
   }
+/* Gemeinsame Button-Grundform */
+button.custom-btn,
+button.btn-large,
+button.btn-medium {
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  margin: 10px auto;
+  display: block;
+  font-family: inherit;
+}
+
+/* Große Buttons (600px) */
+button.btn-large {
+  width: 600px;
+}
+
+/* Mittlere Buttons (280px) */
+button.btn-medium {
+  width: 280px;
+}
+
+/* Spezielle Farben */
+button.btn-blue {
+  background-color: #007bff;
+  color: white;
+}
+button.btn-green {
+  background-color: #28a745;
+  color: white;
+}
+button.btn-gray {
+  background-color: #6c757d;
+  color: white;
+}
+
+/* Unterschriftsbild */
+#signature-image {
+  max-width: 600px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  display: block;
+  min-height: 150px;
+  margin: 10px auto;
+}
+
 </style>
-<div class="confirmation-section">
+<div class="page-break-before confirmation-section">
   <h2>Abschlussbestätigung</h2>
   <div class="checkbox-row">
     <div class="column">
@@ -829,22 +877,25 @@
 </div>
 
 <div id="content">
-  <br />
   <h2 style="text-align: center;">Unterschrift</h2>
-  <canvas id="signature-pad"></canvas>
+  <br />
+  <canvas id="signature-pad"></canvas> 
+<button onclick="clearSignature()" class="btn-large btn-gray">🗑️ Unterschrift löschen</button>
+<img id="signature-image" alt="Unterschrift" />
+<button onclick="unterschriftExtern()" class="btn-large btn-blue">✍️ Unterschrift erfassen</button>
 
-  <div class="buttons" style="text-align: center; margin-top: 40px;">
-    <button onclick="clearSignature()">🗑️ Unterschrift löschen</button>
-    <button onclick="auswertungAnzeigen()">📊 Auswerten</button>
-    <button onclick="prepareForPrint()">📄 Drucken / PDF</button>
- <button onclick="generateAndSharePDF()" class="custom-btn" style="background-color: #28a745; width: calc(100% - 20px); margin-top: 10px;">📤 PDF teilen (iPad)</button>
+<div class="buttons" style="text-align: center; margin-top: 40px;">
+  <button onclick="auswertungAnzeigen()" class="btn-medium btn-gray">📊 Auswerten</button>
+  <button onclick="prepareForPrint()" class="btn-medium btn-gray">📄 Drucken / PDF</button>
+ 
+</div>
 
   </div>
-
+  <button onclick="generateAndSharePDF()" class="custom-btn" style="background-color: #28a745; width: 600px; margin: 10px auto; display: block;">📤 PDF teilen (iPad)</button>
+</div>
   <div id="auswertung-container">
     <div id="auswertung"></div>
   </div>
-
   <footer style="
     text-align: center;
     margin-top: 40px;
@@ -1117,11 +1168,18 @@
         .catch(err => console.error("❌ Service Worker Fehler:", err));
     });
   }
+function unterschriftExtern() {
+  window.open('signatur.html', 'Signatur', 'width=700,height=400');
+}
+
+window.addEventListener("message", (event) => {
+  if (event.data?.type === 'signature') {
+    const img = document.getElementById('signature-image');
+    img.src = event.data.dataUrl;
+    img.style.display = 'block';
+  }
+});
+
 </script>
 </body>
 </html>
-
-
-
-
-
