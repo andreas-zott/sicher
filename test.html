@@ -839,6 +839,7 @@ button.btn-medium {
 <h2 class="page-break-before" style="text-align: center;">
   Beschreibung der Maßnahmen zur Beseitigung von Defiziten
 </h2>
+<br>
 
 <table>
   <thead>
@@ -855,9 +856,9 @@ button.btn-medium {
     <tr><td>5</td><td contenteditable="true"></td></tr>
     <tr><td>6</td><td contenteditable="true"></td></tr>
     <tr><td>7</td><td contenteditable="true"></td></tr>
-    <tr><td>8</td><td contenteditable="true"></td></tr>
-    <tr><td>9</td><td contenteditable="true"></td></tr>
-    <tr><td>10</td><td contenteditable="true"></td></tr>
+<tr><td>8</td><td contenteditable="true"></td></tr>
+<tr><td>9</td><td contenteditable="true"></td></tr>
+<tr><td>10</td><td contenteditable="true"></td></tr>
 <tr><td>11</td><td contenteditable="true"></td></tr>
 <tr><td>12</td><td contenteditable="true"></td></tr>
 <tr><td>13</td><td contenteditable="true"></td></tr>
@@ -865,7 +866,6 @@ button.btn-medium {
 <tr><td>15</td><td contenteditable="true"></td></tr>
   </tbody>
 </table>
-
 <div class="page-break-before confirmation-section">
   <h2>Abschlussbestätigung</h2>
   <div class="checkbox-row">
@@ -892,24 +892,52 @@ button.btn-medium {
   </div>
 </div>
 
-<div id="content">
-  <h2 style="text-align: center;">Unterschrift</h2>
-  <br />
-  <canvas id="signature-pad"></canvas> 
-<button onclick="clearSignature()" class="btn-large btn-gray">🗑️ Unterschrift löschen</button>
-<img id="signature-image" alt="Unterschrift" />
-<button onclick="unterschriftExtern()" class="btn-large btn-blue">✍️ Unterschrift erfassen</button>
-  <button onclick="generateAndSharePDF()" class="custom-btn" style="background-color: #28a745; width: 600px; margin: 10px auto; display: block;">📤 PDF teilen (iPad)</button>
-<div class="buttons" style="text-align: center; margin-top: 40px;">
-  <button onclick="auswertungAnzeigen()" class="btn-medium btn-gray">📊 Auswerten</button>
-  <button onclick="prepareForPrint()" class="btn-medium btn-gray">📄 Drucken / PDF</button> 
+<div>
+ 
+ 
+<!-- Unterschriftenfeld mit oben links platziertem "Unterschrift"-Label -->
+<div class="signature-container" style="position: relative; max-width: 600px; margin: 0 auto 20px auto;">
+  <label style="
+    position: absolute;
+    top: 8px;
+    left: 12px;
+    background: white;
+    padding: 0 6px;
+    font-weight: bold;
+    font-size: 14px;
+    color: #212529;
+    pointer-events: none;
+    user-select: none;
+    z-index: 10;
+  ">Unterschrift</label>
+
+  <canvas id="signature-pad" style="
+    border: 2px solid #ddd;
+    border-radius: 16px;
+    width: 100%;
+    height: 150px;
+    touch-action: none;
+    display: block;
+  "></canvas>
+</div>
+ 
+
+<button onclick="clearSignature()" class="btn-large btn-gray" style="display: block; width: 600px; margin: 10px auto;">
+  🗑️ Unterschrift löschen
+</button>
+
+<div class="buttons" style="display: flex; justify-content: center; gap: 20px; max-width: 600px; margin: 0 auto 40px auto;">
+  <button onclick="auswertungAnzeigen()" class="btn-medium btn-gray" style="flex: 1; max-width: 280px;">
+    📊 Auswerten
+  </button>
+  <button onclick="prepareForPrint()" class="btn-medium btn-gray" style="flex: 1; max-width: 280px;">
+    📄 Drucken / PDF
+  </button>
 </div>
 
-  </div>
-<button type="button" onclick="location.reload();" class="btn-medium btn-gray" style="font-size: 0.9em;">
-  🔄 Seite neu laden
+<button onclick="generateAndSharePDF()" class="custom-btn" style="background-color: #28a745; width: 600px; margin: 10px auto 40px auto; display: block;">
+  📤 PDF teilen (iPad)
 </button>
-</div>
   <div id="auswertung-container">
     <div id="auswertung"></div>
   </div>
@@ -1285,6 +1313,5 @@ window.addEventListener("message", (event) => {
     }
   }
 </script>
-
 </body>
 </html>
