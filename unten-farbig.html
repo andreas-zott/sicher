@@ -846,7 +846,12 @@
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
+  
   async function generateAndSharePDF() {
+    // Elemente verstecken
+    const buttons = document.querySelectorAll('button, .btn, .custom-btn, footer, .footer');
+    buttons.forEach(el => el.style.display = 'none');
+
     const element = document.body;
 
     const opt = {
@@ -858,6 +863,9 @@
     };
 
     const blob = await html2pdf().set(opt).from(element).outputPdf('blob');
+
+    // Elemente wieder anzeigen
+    buttons.forEach(el => el.style.display = '');
 
     const file = new File([blob], "arbeitssicherheit-checkliste.pdf", {
       type: "application/pdf",
@@ -882,6 +890,7 @@
       link.click();
     }
   }
+
 </script>
 <script>
   // Signatur-Canvas Setup
