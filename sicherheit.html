@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sicherheits-Checkliste</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <style>
+  <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon" />
+  <link href="/sicher/manifest-unten-farbig.json" rel="manifest" />
+<style>
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -354,6 +356,14 @@
       }
     });
   });
+ // Service Worker optional
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sicher/sw.js')
+        .then(() => console.log("✅ Service Worker registriert"))
+        .catch(err => console.error("❌ Service Worker Fehler:", err));
+    });
+  }
   </script>
 </body>
 </html>
