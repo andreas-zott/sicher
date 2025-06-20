@@ -1,176 +1,132 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Sicherheits-Checkliste">
-    <title>Sicherheits- und Betriebs-Checkliste</title>
-   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
-<link href="/sicher/favicon.ico" rel="icon" type="image/x-icon" />
-<link href="/sicher/manifest.json" rel="manifest"/>
-<style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #e6f7ff; }
-        .container { max-width: 1000px; margin: auto; background: #f0fbff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        h1 { text-align: center; }
-        #header-fields { display: flex; justify-content: flex-start; align-items: center; gap: 20px; margin-bottom: 10px; }
-        #header-fields div { display: flex; flex-direction: column; }
-        #header-fields label { font-weight: bold; margin-bottom: 4px; }
-        #header-fields input { padding: 6px; border: 1px solid #ccc; border-radius: 4px; width: 150px; }
-        #ipad-instructions { background: #e7f3fe; border: 1px solid #8ebfef; padding: 10px; border-radius: 5px; margin-bottom: 10px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid #333; padding: 8px; text-align: left; vertical-align: top; }
-        th { background-color: #d9f2ff; }
-        .checkbox { width: 30px; text-align: center; }
-        textarea { width: 100%; height: 2em; }
-        #controls { display: flex; justify-content: flex-start; gap: 10px; margin-top: 10px; }
-        button { padding: 8px 12px; font-size: 1em; }
-        #mailBtn { position: fixed; bottom: 20px; right: 20px; }
-        .custom-btn { background-color: #28a745; color: white; border: none; border-radius: 4px; }
-    </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sicherheits-Checkliste</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #e6f7ff;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      background: #f0fbff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+    }
+    #header-fields {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 10px;
+    }
+    #header-fields div {
+      display: flex;
+      flex-direction: column;
+    }
+    label {
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+    input {
+      padding: 6px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 150px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      border: 1px solid #333;
+      padding: 6px;
+      vertical-align: top;
+    }
+    th {
+      background-color: #d9f2ff;
+    }
+    .checkbox {
+      width: 20px;
+      text-align: center;
+    }
+    .checkbox input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+    }
+    textarea {
+      width: 100%;
+      height: 2em;
+    }
+    .btn {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 10px;
+      width: 100%;
+      margin: 20px 0;
+      font-size: 1em;
+      cursor: pointer;
+    }
+    .btn.green { background-color: #28a745; }
+    .btn.red { background-color: #dc3545; }
+  </style>
 </head>
 <body>
-<div class="container">
+  <div class="container">
     <h1>Sicherheits- und Betriebs-Checkliste</h1>
+
     <div id="header-fields">
-        <div>
-            <label for="date">Datum</label>
-            <input type="text" id="date" readonly>
-        </div>
-        <div>
-            <label for="marktnummer">Marktnummer</label>
-            <input type="text" id="marktnummer" placeholder="Eingabe...">
-        </div>
-        <div>
-            <label for="sifa">Sicherheitsbeauftragter</label>
-            <input type="text" id="sifa" placeholder="Eingabe...">
-        </div>
+      <div>
+        <label for="date">Datum</label>
+        <input type="text" id="date" readonly />
+      </div>
+      <div>
+        <label for="marktnummer">Marktnummer</label>
+        <input type="text" id="marktnummer" placeholder="Eingabe..." />
+      </div>
+      <div>
+        <label for="sifa">Sicherheitsbeauftragter</label>
+        <input type="text" id="sifa" placeholder="Eingabe..." />
+      </div>
     </div>
-    <div id="ipad-instructions">
-        <strong>Hinweis für iPad-Nutzer:</strong> In Safari auf das Teilen-Symbol tippen und <em>Zum Home-Bildschirm</em> wählen, um die Checkliste als App zu nutzen.
-    </div>
+
     <table id="checklist">
-        <thead>
-            <tr>
-                <th>Nr.</th>
-                <th>Prüffrage</th>
-                <th class="checkbox">Ja</th>
-                <th class="checkbox">Nein</th>
-                <th>Bemerkung</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
+      <thead>
+        <tr>
+          <th>Nr.</th>
+          <th>Prüffrage</th>
+          <th class="checkbox">Ja</th>
+          <th class="checkbox">Nein</th>
+          <th>Bemerkung</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
     </table>
-    <div id="controls">
-        <button id="shareBtn" style="display:none;">Teilen</button>
-        <button id="printBtn">Drucken</button>
-        <button id="pdfBtn">PDF generieren</button>
-    </div>
-        <!-- ... innerhalb der .container ... -->
-    
-<!-- Unterschriftenfeld -->
-<div style="margin-top: 30px;">
-    <label for="signature" style="font-weight: bold;">Unterschrift:</label>
-    <div style="
-        margin-top: 8px;
-        width: 100%;
-        max-width: 600px;
-        height: 150px;
-        border: 2px dashed #aaa;
-        border-radius: 12px;
-        background-color: #fff;
-        position: relative;
-    ">
-        <canvas id="signatureCanvas" width="600" height="150" style="width: 100%; height: 100%; border-radius: 12px;"></canvas>
-    </div>
-    <button onclick="clearSignature()" style="margin-top: 10px; background-color: #dc3545; color: white; border: none; border-radius: 4px; padding: 6px 12px;">
-        Unterschrift löschen
-    </button>
-</div>
-<script>
-function clearSignature() {
-    const canvas = document.getElementById('signatureCanvas');
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-}
-window.addEventListener('load', () => {
-    const canvas = document.getElementById('signatureCanvas');
-    const ctx = canvas.getContext('2d');
-    let drawing = false;
 
-    function startDraw(e) {
-        drawing = true;
-        ctx.beginPath();
-        ctx.moveTo(e.offsetX, e.offsetY);
-    }
-    function draw(e) {
-        if (!drawing) return;
-        ctx.lineTo(e.offsetX, e.offsetY);
-        ctx.stroke();
-    }
-    function endDraw() {
-        drawing = false;
-    }
+    <!-- PDF Teilen Button -->
+    <button id="sharePdfBtn" class="btn green">📤 PDF teilen / drucken (iPad Safari)</button>
 
-    canvas.addEventListener('mousedown', startDraw);
-    canvas.addEventListener('mousemove', draw);
-    canvas.addEventListener('mouseup', endDraw);
-    canvas.addEventListener('mouseout', endDraw);
+    <!-- Seite neu laden -->
+    <button onclick="window.location.reload();" class="btn red">🔄 Seite neu laden</button>
+  </div>
 
-    // Touch support
-    canvas.addEventListener('touchstart', e => {
-        const rect = canvas.getBoundingClientRect();
-        const touch = e.touches[0];
-        const x = touch.clientX - rect.left;
-        const y = touch.clientY - rect.top;
-        drawing = true;
-        ctx.beginPath();
-        ctx.moveTo(x, y);
-        e.preventDefault();
-    });
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('date').value = new Date().toLocaleDateString('de-DE');
 
-    canvas.addEventListener('touchmove', e => {
-        if (!drawing) return;
-        const rect = canvas.getBoundingClientRect();
-        const touch = e.touches[0];
-        const x = touch.clientX - rect.left;
-        const y = touch.clientY - rect.top;
-        ctx.lineTo(x, y);
-        ctx.stroke();
-        e.preventDefault();
-    });
-
-    canvas.addEventListener('touchend', () => {
-        drawing = false;
-    });
-});
-</script>
-
-    
-<button onclick="window.location.reload();" class="custom-btn" style="width:100%; margin:10px 0 20px; background-color: #007bff;">
-  🔄 Seite neu laden
-</button>
-
-    <button onclick="generateAndSharePDF()" class="custom-btn" style="width:100%; margin:10px 0 20px;">
-      📤 PDF teilen (iPad)
-    </button>
-</div>
-
-<script>
-// Sicherstellen, dass das DOM vollständig geladen ist
-window.addEventListener('DOMContentLoaded', () => {
-    // Auto-Datum
-    document.getElementById('date').value = new Date().toLocaleDateString('de-DE');
-
-    // Prüffragen-Array
-    const fragen = [
-        /* Alle Fragen hier */ 
-
-
-    
-  "Werden Technik- und Heizräume als Lagerräume genutzt?",
+      const fragen = [
+        "Werden Technik- und Heizräume als Lagerräume genutzt?",
   "Befindet sich brennbares Material (z. B. Kisten, Kartons) in den Technik- oder Heizräumen?",
   "Sind die Treppen unbeschädigt und frei von Gegenständen?",
   "Sind die Verkehrswege so beschaffen, dass kein Risiko zum Stolpern, Ausrutschen oder Umknicken besteht?",
@@ -270,83 +226,50 @@ window.addEventListener('DOMContentLoaded', () => {
   "Wird Alleinarbeit vermieden?",
   "Ist die Betreuung nach einem Überfall organisiert?",
   "Werden Schulungen für den Umgang mit gewalttätigen Situationen ermöglicht?"
-];
- // Tabelle befüllen
-    const tbody = document.querySelector('#checklist tbody');
-    fragen.forEach((f, i) => {
+        // Weitere Fragen nach Bedarf ergänzen
+      ];
+
+      const tbody = document.querySelector('#checklist tbody');
+      fragen.forEach((f, i) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td>${i + 1}</td>
-            <td>${f}</td>
-            <td class="checkbox"><input type="checkbox"></td>
-            <td class="checkbox"><input type="checkbox"></td>
-            <td><textarea></textarea></td>`;
+          <td>${i + 1}</td>
+          <td>${f}</td>
+          <td class="checkbox"><input type="checkbox" /></td>
+          <td class="checkbox"><input type="checkbox" /></td>
+          <td><textarea></textarea></td>`;
         tbody.appendChild(tr);
+      });
     });
 
-    // Safari Share API
-    const shareBtn = document.getElementById('shareBtn');
-    if (navigator.share) {
-        shareBtn.style.display = 'inline-block';
-        shareBtn.addEventListener('click', async () => {
-            try { await navigator.share({ title: 'Sicherheits-Checkliste', url: window.location.href }); }
-            catch (err) { console.error(err); }
-        });
-    }
+    document.getElementById('sharePdfBtn').addEventListener('click', async () => {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF('p', 'pt', 'a4');
 
-    // Druckfunktion
-    document.getElementById('printBtn').addEventListener('click', () => window.print());
+      await doc.html(document.querySelector('.container'), {
+        x: 20,
+        y: 20,
+        html2canvas: { scale: 0.5 }
+      });
 
-    // PDF-Generierung per Button
-    document.getElementById('pdfBtn').addEventListener('click', () => generatePDF(false));
+      const blob = doc.output('blob');
+      const file = new File([blob], 'Sicherheits-Checkliste.pdf', { type: 'application/pdf' });
 
-    // Generieren und Teilen auf iPad
-    async function generateAndSharePDF() {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF('p','pt','a4');
-        await doc.html(document.querySelector('.container'), { x:20, y:20, html2canvas:{scale:0.5} });
-        const blob = doc.output('blob');
-        const file = new File([blob], 'Sicherheits-Checkliste.pdf', { type: 'application/pdf' });
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-            try {
-                await navigator.share({ files: [file], title: 'Sicherheits-Checkliste', text: 'Hier ist die Checkliste.' });
-            } catch (err) { console.error('Teilen fehlgeschlagen', err); }
-        } else {
-            alert('Teilen nicht unterstützt.');
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            files: [file],
+            title: 'Sicherheits-Checkliste',
+            text: 'Hier ist die generierte Checkliste als PDF.'
+          });
+        } catch (err) {
+          alert('Teilen abgebrochen oder fehlgeschlagen.');
+          console.error(err);
         }
-    }
-
-    // PDF-G nur speichern oder öffnen
-    function generatePDF(open) {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF('p','pt','a4');
-        doc.html(document.querySelector('.container'), {
-            callback: pdf => {
-                if (open) window.open(pdf.output('bloburl')); else pdf.save('Sicherheits-Checkliste.pdf');
-            }, x:20, y:20, html2canvas:{scale:0.5}
-        });
-    }
-
-    // Mail-Funktion
-    document.getElementById('mailBtn').addEventListener('click', () => {
-        const subject = encodeURIComponent('Sicherheits-Checkliste');
-        const body = encodeURIComponent(window.location.href);
-        window.location.href = `mailto:?subject=${subject}&body=${body}`;
+      } else {
+        alert('Teilen wird auf diesem Gerät/Browser nicht unterstützt.');
+      }
     });
-
-    // PDF teilen Shortcut für iPad-Button
-    document.querySelector('.custom-btn').addEventListener('click', generateAndSharePDF);
-});
-</script>
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker
-        .register('sw.js')
-        .then(() => console.log("✅ Service Worker registriert"))
-        .catch((err) => console.error("❌ Service Worker Fehler:", err));
-    });
-  }
-</script>
+  </script>
 </body>
 </html>
