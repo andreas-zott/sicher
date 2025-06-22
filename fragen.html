@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" />
+<title>Sicherheits-Check Fragen & Maßnahmen</title>
+<style>
+th.response-header .label-above {
+  font-size: 0.75em;
+  color: #888;
+  text-align: center;
+}
+.label-above {
+  font-size: 0.7em;
+  color: #aaa;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 0.3em;
+  line-height: 1.2;
+}
+body {
+  font-family: Arial, sans-serif;
+  margin: 1em;
+  background: #d6ecff;
+}
+.container {
+  max-width: 1300px;
+  margin: auto;
+  background: #fff;
+  padding: 1.5em 2em;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+}
+h1, h2 {
+  color: #003366;
+  user-select: none;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5em;
+  flex-wrap: wrap;
+}
+.header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8em;
+  min-width: 280px;
+}
+.header-left label {
+  font-weight: 600;
+  margin-bottom: 0.25em;
+  user-select: none;
+  color: #2c3e50;
+}
+.header-left input[type="text"] {
+  padding: 0.4em 0.6em;
+  font-size: 1.1em;
+  border: 1.5px solid #ccc;
+  border-radius: 6px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.header-right {
+  font-weight: 600;
+  font-size: 1.2em;
+  color: #2c3e50;
+  user-select: none;
+  min-width: 160px;
+  text-align: right;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2em;
+  font-size: 1.1em;
+}
+th, td {
+  border: 1px solid #ccc;
+  padding: 0.75em 1em;
+  vertical-align: top;
+}
+th {
+  background-color: #e2e8f0;
+  color: #1a202c;
+  user-select: none;
+}
+label {
+  margin-right: 1.2em;
+  cursor: pointer;
+  user-select: none;
+}
+input[type="radio"] {
+  transform: scale(1.3);
+  margin-right: 0.3em;
+  vertical-align: middle;
+}
+tbody tr {
+  height: 3.2em;
+}
+#questionsTable th:nth-child(2),
+#questionsTable td:nth-child(2) {
+  width: 60%;
+}
+
+/* Optimierungen für iPad / Touch-Geräte */
+@media (max-width: 1024px) {
+  body {
+    margin: 0.5em;
+  }
+  .container {
+    padding: 1em 1.2em;
+    border-radius: 10px;
+  }
+  table {
+    font-size: 1.2em;
+  }
+  label {
+    margin-right: 1.5em;
+  }
+  input[type="radio"] {
+    transform: scale(1.4);
+  }
+  #questionsTable th:nth-child(2),
+  #questionsTable td:nth-child(2) {
+    width: 60%;
+  }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Sicherheits-Check</h1>
+
+  <div class="header" role="region" aria-label="Marktdaten und aktuelles Datum">
+    <div class="header-left">
+      <div>
+        <label for="marktnummer">Marktnummer</label><br />
+        <input type="text" id="marktnummer" name="marktnummer" placeholder="Marktnummer eingeben" autocomplete="off" />
+      </div>
+      <div>
+        <label for="name">Name</label><br />
+        <input type="text" id="name" name="name" placeholder="Name eingeben" autocomplete="off" />
+      </div>
+      <div>
+        <label for="sifa">Sifa</label><br />
+        <input type="text" id="sifa" name="sifa" placeholder="Sifa eingeben" autocomplete="off" />
+      </div>
+    </div>
+    <div class="header-right" id="currentDate" aria-live="polite" aria-atomic="true"></div>
+  </div>
+
+  <h2>Fragen</h2>
+  <table id="questionsTable" role="grid" aria-label="Fragen und Antwortoptionen">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Frage</th>
+        <th class="response-header"><div class="label-above">Ja</div></th>
+        <th class="response-header"><div class="label-above">Nein</div></th>
+        <th class="response-header"><div class="label-above">Nicht vorhanden</div></th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Fragen werden dynamisch eingefügt -->
+    </tbody>
+  </table>
+
+  <h2>Maßnahmen bei "Nein"-Antworten</h2>
+  <table id="measuresTable" role="grid" aria-label="Maßnahmen für nicht erfüllte Fragen">
+    <thead>
+      <tr>
+        <th scope="col">Frage</th>
+        <th scope="col">Maßnahme</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Maßnahmen erscheinen hier -->
+    </tbody>
+  </table>
+</div>
+<br>
+<div style="text-align: center; margin-bottom: 1em;">
+  <button id="openMeasuresBtn" style="font-size:1em; padding:0.5em 1em; border-radius:6px; background:#d3d3d3; color:#000; border:none; cursor:pointer; user-select:none;">
+    Maßnahmen in neuer Seite anzeigen
+  </button>
+<button onclick="generateAndSharePDF()" class="custom-btn" style="background-color: #28a745; width: 600px; margin: 10px auto 40px auto; display: block;">
+  📤 PDF teilen (iPad)
+</button>
+</div>
+</div>
+<script>
+// Datum setzen
+function formatDate(date) {
+  return date.toLocaleDateString('de-DE', { year: 'numeric', month: '2-digit', day: '2-digit' });
+}
+document.getElementById("currentDate").textContent = "Datum: " + formatDate(new Date());
+
+// Alle Fragen und Maßnahmen
+const questionsMeasures = {
+"Werden Technik- und Heizräume als Lagerräume genutzt?": "Technik- und Heizräume dürfen nicht als Lagerräume genutzt werden.",
+  "Befindet sich brennbares Material (z. B. Kisten, Kartons) in den Technik- oder Heizräumen?": "Brennbares Material muss aus Technik- und Heizräumen entfernt werden.",
+  "Sind die Treppen unbeschädigt und frei von Gegenständen?": "Treppen müssen frei und unbeschädigt sein.",
+  "Sind die Verkehrswege so beschaffen, dass kein Risiko zum Stolpern, Ausrutschen oder Umknicken besteht?": "Verkehrswege müssen sicher und ohne Stolperfallen sein.",
+  "Wird im gesamten Markt geeignetes Schuhwerk getragen (feste, geschlossene, flache Schuhe)?": "Es muss geeignetes Schuhwerk getragen werden.",
+  "Sind Automatiktüren, Rolltore und Schnelllauftore geprüft und ohne sichtbare Beschädigungen?": "Türen und Tore müssen geprüft und unbeschädigt sein.",
+  "Ist die Aufzugsanlage geprüft und in einem ordnungsgemäßen Zustand (keine sichtbare Beschädigung, funktionsfähige Schutzeinrichtungen)?": "Die Aufzugsanlage muss funktionstüchtig und geprüft sein.",
+  "Ist die Leergutrücknahme in einem ordnungsgemäßen Zustand (intakte Schutzeinrichtungen, gesicherte Einzugsstellen, keine Glasscherben)?": "Leergutrücknahme muss sicher und funktionsfähig sein.",
+  "Stehen geeignete Handschuhe für die Leergutrücknahme zur Verfügung?": "Geeignete Handschuhe müssen bereitgestellt werden.",
+  "Sind Leitern geprüft gemäß 'Leitern und Tritte' (BGV D36 bzw. GUV-VD360)?": "Leitern müssen regelmäßig geprüft werden.",
+  "Ist das Leiter-Kontrollblatt im Ordner Arbeitssicherheit abgelegt?": "Leiter-Kontrollblatt muss ordnungsgemäß abgelegt sein.",
+  "Werden aus dem Ordersatz geeignete Sicherheitsmesser verwendet?": "Nur geeignete Sicherheitsmesser dürfen verwendet werden.",
+  "Sind zur Zeit der Begehung keine sichtbaren Beschädigungen an Schaltern und Steckdosen vorhanden?": "Schalter und Steckdosen dürfen keine sichtbaren Mängel aufweisen.",
+  "Ist der Gabelhubwagen in einem ordnungsgemäßen Zustand ohne sichtbare Beschädigungen?": "Der Gabelhubwagen muss geprüft und intakt sein.",
+  "Ist der elektrische Hubwagen geprüft und in einem ordnungsgemäßen Zustand (keine sichtbaren Beschädigungen, funktionsfähige Schutzeinrichtungen)?": "Der elektrische Hubwagen muss betriebsbereit und geprüft sein.",
+  "Ist der elektrische Hubwagen gegen unbefugte Benutzung gesichert?": "Der Hubwagen muss vor unbefugtem Zugriff geschützt werden.",
+  "Werden Sicherheitsschuhe getragen?": "Sicherheitsschuhe sind Pflicht.",
+  "Sind die Feuerlöscheinrichtungen frei zugänglich und nicht blockiert?": "Feuerlöscheinrichtungen müssen stets zugänglich sein.",
+  "Sind die Feuerlöscheinrichtungen geprüft und werden Prüffristen eingehalten?": "Feuerlöscher müssen regelmäßig geprüft werden.",
+  "Sind Brandschutztüren frei von Zugestellungen und wird ihre Funktion nicht gestört?": "Brandschutztüren dürfen nicht blockiert sein.",
+  "Sind Türhaltevorrichtungen und Schließfolgeregler des Feuerschutzabschlusses in Ordnung?": "Türtechnik muss voll funktionsfähig sein.",
+  "Sind Brandschutztüren ohne Beschädigungen?": "Beschädigte Brandschutztüren müssen instandgesetzt werden.",
+  "Ist ein aktueller Flucht- und Rettungsplan vorhanden?": "Ein aktueller Fluchtplan muss vorliegen.",
+  "Ist die Notausgangsbeleuchtung ohne Defekte?": "Notbeleuchtung muss funktionstüchtig sein.",
+  "Sind Notausgänge frei zugänglich und nicht zugestellt?": "Notausgänge dürfen nicht verstellt sein.",
+  "Sind Notausgänge und -ausstiege von innen ohne fremde Hilfe zu öffnen und nicht zugestellt?": "Notausstiege müssen jederzeit frei nutzbar sein.",
+  "Führen Notausgänge in sichere Bereiche?": "Notausgänge müssen in sichere Bereiche führen.",
+  "Wird passende persönliche Schutzausrüstung für Tätigkeiten mit Gefahrstoffen (z.B. Schutzbrille, Handschuhe) gestellt?": "Geeignete PSA muss vorhanden sein.",
+  "Sind Betriebsanweisungen gut zugänglich?": "Betriebsanweisungen müssen zugänglich sein.",
+  "Werden Sicherheitsanweisungen eingehalten?": "Sicherheitsanweisungen sind strikt einzuhalten.",
+  "Sind die Arbeitsgeräte an der Backstation intakt und funktionsfähig?": "Arbeitsgeräte müssen funktionstüchtig sein.",
+  "Sind alle elektrischen Geräte mit Schutzkontaktsteckern versehen?": "Elektrische Geräte müssen geerdet sein.",
+  "Sind die Steckdosen nicht überlastet?": "Überlastung von Steckdosen vermeiden.",
+  "Sind Kabel so verlegt, dass keine Stolperfallen entstehen?": "Kabel sicher verlegen.",
+  "Ist die Beleuchtung in Arbeitsbereichen ausreichend und funktionstüchtig?": "Beleuchtung muss angemessen sein.",
+  "Sind Mitarbeiter für Gefahrstoffe geschult?": "Schulungen zum Gefahrstoffschutz durchführen.",
+  "Sind Gefahrstoffe ordnungsgemäß gekennzeichnet und gelagert?": "Gefahrstoffe korrekt kennzeichnen und lagern.",
+  "Sind Feuerlöscher ausreichend vorhanden und am richtigen Standort?": "Feuerlöscher an geeigneten Stellen platzieren.",
+  "Sind Rauchmelder installiert und funktionsfähig?": "Rauchmelder müssen vorhanden sein.",
+  "Sind Fluchtwege regelmäßig geprüft und nicht blockiert?": "Fluchtwege freihalten und prüfen.",
+  "Werden elektrische Leitungen regelmäßig auf Beschädigungen geprüft?": "Leitungen regelmäßig kontrollieren.",
+  "Sind Arbeitsplätze ergonomisch eingerichtet?": "Ergonomie der Arbeitsplätze sicherstellen.",
+  "Werden Lärmpegel überwacht und Schutzmaßnahmen getroffen?": "Lärmschutz gewährleisten.",
+  "Sind Sicherheitskennzeichnungen gut sichtbar und aktuell?": "Kennzeichnungen aktuell halten.",
+  "Werden Arbeitsmittel regelmäßig gewartet?": "Regelmäßige Wartung sicherstellen.",
+  "Sind Stolperfallen (z.B. Kabel, Schläuche) entfernt?": "Stolperfallen beseitigen.",
+  "Sind Leitern und Tritte sicher und geprüft?": "Leitern müssen geprüft sein.",
+  "Sind Container und Abfallbehälter regelmäßig entleert?": "Regelmäßige Entleerung gewährleisten.",
+  "Werden Lasten richtig gehoben und Transporthilfen genutzt?": "Richtiges Heben und Transportieren beachten.",
+  "Sind Arbeitsanweisungen aktuell und für Mitarbeiter zugänglich?": "Arbeitsanweisungen bereitstellen.",
+  "Sind Mitarbeiter über Erste-Hilfe-Standorte informiert?": "Information über Erste-Hilfe sicherstellen.",
+  "Sind Kinder und Unbefugte vom Betriebsgelände ausgeschlossen?": "Zutritt regeln und kontrollieren.",
+  "Werden Gefahrstoffe sachgerecht entsorgt?": "Gefahrstoffentsorgung beachten.",
+  "Sind alle Türen und Tore funktionsfähig und sicher?": "Türen und Tore warten und sichern.",
+  "Sind Sicherheitsbeleuchtungen und Notbeleuchtungen geprüft?": "Beleuchtung prüfen.",
+  "Sind die Schutzeinrichtungen der Maschinen vollständig?": "Schutzeinrichtungen sicherstellen.",
+  "Sind Mitarbeiter bei Arbeiten in der Höhe gesichert?": "Sicherung bei Höhenarbeiten gewährleisten.",
+  "Ist der Brandschutzplan aktuell und bekannt?": "Brandschutzplan aktuell halten.",
+  "Sind Fluchtwege mit Notausgangsschildern gut sichtbar gekennzeichnet?": "Kennzeichnung der Fluchtwege prüfen.",
+  "Ist der Zugang zu Feuerlöschern jederzeit frei?": "Zugang freihalten.",
+  "Sind Sicherheitsunterweisungen dokumentiert?": "Unterweisungen dokumentieren.",
+  "Sind alle Sicherheitskennzeichnungen gut lesbar?": "Lesbarkeit der Kennzeichnungen sicherstellen.",
+  "Sind Mitarbeiter bei der Nutzung von Gefahrstoffen richtig geschützt?": "Schutzmaßnahmen einhalten.",
+  "Sind Maschinen vor unbeabsichtigtem Start geschützt?": "Maschinen sicher machen.",
+  "Sind Aufzüge geprüft und dürfen benutzt werden?": "Aufzugsprüfung gewährleisten.",
+  "Sind persönliche Schutzausrüstungen (PSA) ausreichend vorhanden?": "PSA muss ausreichend zur Verfügung stehen.",
+  "Werden regelmäßig Brandschutzübungen durchgeführt?": "Brandschutzübungen sind durchzuführen.",
+  "Sind Flucht- und Rettungswege ausreichend beleuchtet?": "Beleuchtung der Fluchtwege sicherstellen.",
+  "Sind alle Notfallkontakte sichtbar und aktuell?": "Notfallkontakte sichtbar halten.",
+  "Sind Gefahrstoffdatenblätter an den Arbeitsplätzen verfügbar?": "Gefahrstoffdatenblätter bereitstellen.",
+  "Werden Arbeitsmittel regelmäßig auf Mängel überprüft?": "Arbeitsmittel müssen geprüft werden.",
+  "Sind Erste-Hilfe-Kästen vollständig und zugänglich?": "Erste-Hilfe-Kästen bereitstellen und prüfen.",
+  "Sind Maschinen ordnungsgemäß geerdet?": "Maschinen müssen geerdet sein.",
+  "Werden Arbeiten mit gefährlichen Maschinen nur von geschultem Personal durchgeführt?": "Schulungen sicherstellen.",
+  "Sind Warnschilder an gefährlichen Stellen gut sichtbar?": "Warnschilder müssen vorhanden sein.",
+  "Ist die Temperatur in Arbeitsbereichen angenehm und sicher?": "Angenehme und sichere Temperatur sicherstellen.",
+  "Sind Chemikalien sicher und vorschriftsmäßig gelagert?": "Chemikalien ordnungsgemäß lagern.",
+  "Sind Arbeitsplätze sauber und ordentlich?": "Sauberkeit gewährleisten.",
+  "Werden Abfälle ordnungsgemäß getrennt und entsorgt?": "Abfalltrennung einhalten.",
+  "Sind Schutzvorrichtungen an Maschinen funktionstüchtig?": "Schutzvorrichtungen regelmäßig prüfen.",
+  "Sind elektrische Schaltkästen verschlossen und gesichert?": "Schaltkästen müssen sicher verschlossen sein.",
+  "Sind Mitarbeitende über das Verhalten im Brandfall informiert?": "Brandverhalten kommunizieren.",
+  "Sind Gefahrstoffe mit Gefahrstoffsymbolen gekennzeichnet?": "Gefahrstoffkennzeichnung beachten.",
+  "Werden Druckbehälter regelmäßig geprüft?": "Prüfung von Druckbehältern sicherstellen.",
+  "Sind Arbeitszeitregelungen eingehalten?": "Arbeitszeitregelungen beachten.",
+  "Sind Mitarbeiter vor Überlastung geschützt?": "Überlastung vermeiden.",
+  "Sind Ergonomie-Regeln an Bildschirmarbeitsplätzen umgesetzt?": "Ergonomie sicherstellen.",
+  "Sind Beleuchtungsstärken an Bildschirmarbeitsplätzen ausreichend?": "Beleuchtung anpassen.",
+  "Sind die Erste-Hilfe-Maßnahmen dokumentiert?": "Dokumentation sicherstellen.",
+  "Sind Gefahrenhinweise für Arbeitsmittel vorhanden?": "Gefahrenhinweise bereitstellen.",
+  "Ist eine regelmäßige Gefährdungsbeurteilung durchgeführt?": "Gefährdungsbeurteilung aktuell halten.",
+  "Sind die Verantwortlichkeiten für Arbeitssicherheit klar definiert?": "Verantwortlichkeiten klären.",
+  "Sind elektrische Geräte regelmäßig geprüft?": "Geräteprüfungen durchführen.",
+  "Werden Sicherheitsvorschriften bei Wartungsarbeiten eingehalten?": "Vorschriften beachten.",
+  "Sind Ladestationen für Elektrofahrzeuge sicher?": "Sicherheit bei Ladestationen gewährleisten.",
+  "Sind Mitarbeiter in Brandschutz und Evakuierung geschult?": "Schulungen durchführen.",
+  "Sind Mitarbeiter im Umgang mit Gefahrstoffen unterwiesen?": "Unterweisungen sicherstellen.",
+  "Sind die Maschinen gegen unbeabsichtigtes Starten gesichert?": "Maschinensicherungen prüfen.",
+  "Sind Fluchtwege barrierefrei?": "Barrierefreiheit sicherstellen.",
+  "Ist die Arbeitsschutzbeleuchtung ausreichend?": "Arbeitsschutzbeleuchtung prüfen.",
+  "Sind alle Sicherheitseinrichtungen an Maschinen intakt?": "Sicherheitseinrichtungen prüfen.",
+  "Werden Schutzhelme bei Bedarf getragen?": "Schutzhelmpflicht einhalten.",
+  "Sind Sicherheitsgurte für Arbeiten in der Höhe vorhanden?": "Sicherheitsgurte bereitstellen.",
+  "Sind elektrische Anlagen fachgerecht installiert?": "Installation prüfen.",
+  "Sind ausreichend Feuerlöscher für den Betrieb vorhanden?": "Feuerlöscher bereitstellen.",
+  "Ist eine Notfallbeleuchtung installiert?": "Notfallbeleuchtung sicherstellen.",
+  "Sind Fluchtwege in regelmäßigen Abständen kontrolliert?": "Kontrolle der Fluchtwege durchführen.",
+  "Sind Arbeitsplätze frei von Gefahrenquellen?": "Gefahrenquellen beseitigen.",
+  "Sind Mitarbeitende über die Gefahren im Betrieb informiert?": "Informationen bereitstellen.",
+  "Sind Schutzausrüstungen in gutem Zustand?": "Zustand der PSA prüfen.",
+  "Werden Arbeitsmittel regelmäßig gereinigt?": "Reinigung sicherstellen.",
+  "Sind die Pausenräume sauber und sicher?": "Sauberkeit der Pausenräume gewährleisten.",
+  "Ist die Notrufnummer gut sichtbar angebracht?": "Notrufnummer sichtbar machen.",
+  "Sind Maschinen mit Not-Aus-Schaltern ausgestattet?": "Not-Aus-Schalter prüfen.",
+  "Werden Mitarbeiter bei Gefahrstoffunfällen richtig versorgt?": "Versorgung sicherstellen.",
+  "Sind Feueralarmsysteme funktionsfähig?": "Feueralarmsysteme prüfen.",
+  "Sind Erste-Hilfe-Maßnahmen allen bekannt?": "Bekanntheit sicherstellen.",
+  "Sind Betriebsanweisungen für Maschinen aktuell?": "Aktualität prüfen.",
+  "Sind Abfallbehälter regelmäßig geleert?": "Regelmäßige Leerung sicherstellen.",
+  "Sind Gefahrenstoffe richtig gelagert?": "Lagerung kontrollieren.",
+  "Sind Maschinen vor Wartungsbeginn gesichert?": "Sicherung vor Wartung beachten.",
+  "Sind die Arbeitsplätze ergonomisch gestaltet?": "Ergonomie sicherstellen.",
+  "Sind alle Personen im Betrieb über Notfallmaßnahmen informiert?": "Information bereitstellen.",
+  "Ist die Beleuchtung an Arbeitsplätzen ausreichend?": "Beleuchtung prüfen.",
+  "Sind Maschinen regelmäßig gewartet?": "Wartung sicherstellen.",
+  "Sind Arbeitsmittel korrekt gekennzeichnet?": "Kennzeichnung kontrollieren.",
+  "Sind Notausgänge eindeutig gekennzeichnet?": "Kennzeichnung prüfen.",
+  "Ist die Arbeitsschutzunterweisung dokumentiert?": "Dokumentation sicherstellen.",
+  "Sind elektrische Anlagen gegen Überlast geschützt?": "Schutz gewährleisten.",
+ };
+
+const questionsTableBody = document.querySelector('#questionsTable tbody');
+    const measuresTableBody = document.querySelector('#measuresTable tbody');
+
+    // Fragen dynamisch einfügen
+    Object.entries(questionsMeasures).forEach(([questionText], index) => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${questionText}</td>
+        <td><label><input type="radio" name="question${index}" value="ja"></label></td>
+        <td><label><input type="radio" name="question${index}" value="nein"></label></td>
+        <td><label><input type="radio" name="question${index}" value="nicht vorhanden"></label></td>
+      `;
+      questionsTableBody.appendChild(row);
+    });
+
+    // Maßnahmen aktualisieren
+    function updateMeasuresTable() {
+      measuresTableBody.innerHTML = '';
+      const rows = questionsTableBody.querySelectorAll('tr');
+
+      rows.forEach((row, index) => {
+        const inputs = row.querySelectorAll('input[type="radio"]');
+        const questionText = row.cells[1].textContent;
+        const selected = Array.from(inputs).find(i => i.checked)?.value;
+
+        if (selected === 'nein') {
+          const measureText = questionsMeasures[questionText];
+          const measureRow = document.createElement('tr');
+          measureRow.innerHTML = `
+            <td>${questionText}</td>
+            <td>${measureText}</td>
+          `;
+          measuresTableBody.appendChild(measureRow);
+        }
+      });
+    }
+
+    // Event Listener auf alle Inputs
+    document.addEventListener('change', event => {
+      if (event.target.type === 'radio') {
+        updateMeasuresTable();
+      }
+    });
+
+    // Maßnahmen in neuem Fenster anzeigen
+    document.getElementById('openMeasuresBtn').addEventListener('click', () => {
+      const newWindow = window.open('', '_blank');
+      const style = `
+        <style>
+          body { font-family: Arial; padding: 2em; background: #f9f9f9; }
+          h1 { color: #003366; }
+          table { width: 100%; border-collapse: collapse; margin-top: 1em; }
+          th, td { border: 1px solid #ccc; padding: 0.8em; text-align: left; }
+          th { background: #e2e8f0; }
+        </style>
+      `;
+      let html = `<html><head><title>Maßnahmen</title>${style}</head><body><h1>Maßnahmen</h1><table><thead><tr><th>Frage</th><th>Maßnahme</th></tr></thead><tbody>`;
+      const rows = measuresTableBody.querySelectorAll('tr');
+      rows.forEach(row => {
+        html += `<tr><td>${row.cells[0].textContent}</td><td>${row.cells[1].textContent}</td></tr>`;
+      });
+      html += `</tbody></table></body></html>`;
+      newWindow.document.write(html);
+      newWindow.document.close();
+    });
+  </script>
+<script>
+  // Maßnahmen zu Fragen (Beispiel-Daten)
+  const questionsMeasures = {
+    'Ist das Feuer gelöscht?': 'Feuer löschen oder Brand melden.',
+    'Wurde der Bereich evakuiert?': 'Evakuierung sicherstellen und Personen zählen.'
+  };
+
+  document.getElementById('openMeasuresBtn').addEventListener('click', () => {
+    const rows = document.querySelectorAll('#questionsTable tbody tr');
+    const measures = [];
+
+    rows.forEach(row => {
+      const frage = row.cells[1].textContent.trim();
+      const inputs = row.querySelectorAll('input[type="radio"]');
+      const selected = Array.from(inputs).find(i => i.checked)?.value;
+      if (selected === 'nein') {
+        measures.push({ frage, massnahme: questionsMeasures[frage] || 'Keine Maßnahme definiert.' });
+      }
+    });
+
+    // Speichere Maßnahmen im localStorage
+    localStorage.setItem('measuresData', JSON.stringify(measures));
+
+    // Öffne die bestehende Datei massnahmen.html in neuem Tab
+    window.open('massnahmen.html', '_blank');
+  });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+  async function generateAndSharePDF() {
+    const { jsPDF } = window.jspdf;
+
+    const doc = new jsPDF();
+    doc.text("Maßnahmen PDF", 10, 10);
+    
+    // Beispielinhalt – passe das hier an!
+    const date = document.getElementById("date")?.textContent || "Datum";
+    const market = document.getElementById("marketNumber")?.textContent || "Marktnummer";
+    const name = document.getElementById("name")?.textContent || "Name";
+
+    doc.text(`Datum: ${date}`, 10, 20);
+    doc.text(`Marktnummer: ${market}`, 10, 30);
+    doc.text(`Name: ${name}`, 10, 40);
+
+    // PDF in Blob umwandeln
+    const pdfBlob = doc.output("blob");
+
+    // Web Share API aufrufen
+    if (navigator.canShare && navigator.canShare({ files: [new File([pdfBlob], 'massnahmen.pdf', { type: 'application/pdf' })] })) {
+      const file = new File([pdfBlob], "massnahmen.pdf", { type: "application/pdf" });
+
+      try {
+        await navigator.share({
+          title: "Maßnahmen PDF",
+          text: "Hier ist die PDF-Datei mit den Maßnahmen.",
+          files: [file]
+        });
+      } catch (error) {
+        console.error("Teilen fehlgeschlagen:", error);
+        alert("Teilen abgebrochen oder nicht möglich.");
+      }
+    } else {
+      alert("Teilen wird auf diesem Gerät oder Browser nicht unterstützt.");
+    }
+  }
+</script>
+</body>
+</html>
