@@ -5,6 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" />
 <title>Sicherheits-Check Fragen & Maßnahmen</title>
 <style>
+.footer {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #888; /* blasser Grauton */
+  padding: 20px 0;
+}
+
+.footer a {
+  color: #888;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
 th.response-header .label-above {
   font-size: 0.75em;
   color: #888;
@@ -213,6 +228,7 @@ tbody tr {
   ">
     📤 PDF teilen (iPad)
   </button>
+
 </div> 
 </div>
 </div>
@@ -489,5 +505,32 @@ const questionsTableBody = document.querySelector('#questionsTable tbody');
     }
   }
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+function generateAndSharePDF() {
+  const element = document.getElementById('measuresSection');
+  const opt = {
+    margin:       0.5,
+    filename:     'massnahmen.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2 },
+    jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+  };
+
+  html2pdf().set(opt).from(element).save();
+}
+</script>
+<footer class="footer">
+  <p>
+    © <span id="currentYear"></span> Andreas Zott. Alle Rechte vorbehalten.
+    <a href="datenschutz.html" rel="noopener noreferrer" target="_blank">Datenschutz</a> |
+    <a href="impressum.html" rel="noopener noreferrer" target="_blank">Impressum</a>
+  </p>
+</footer>
+
+<script>
+  document.getElementById("currentYear").textContent = new Date().getFullYear();
+</script>
+
 </body>
 </html>
