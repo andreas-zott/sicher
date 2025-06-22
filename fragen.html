@@ -214,6 +214,12 @@ tbody tr {
     Maßnahmen in neuer Seite anzeigen
   </button>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+</head>
+<body>
+
   <button onclick="generateAndSharePDF()" style="
     flex: 1;
     max-width: 300px;
@@ -466,30 +472,24 @@ const questionsTableBody = document.querySelector('#questionsTable tbody');
     window.open('massnahmen.html', '_blank');
   });
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
   async function generateAndSharePDF() {
-    const { jsPDF } = window.jspdf;
+    const element = document.getElementById('measuresSection') || document.body; // Fallback für demo
+    const opt = {
+      margin: 0.5,
+      filename: 'massnahmen.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+    };
 
-    const doc = new jsPDF();
-    doc.text("Maßnahmen PDF", 10, 10);
-    
-    // Beispielinhalt – passe das hier an!
-    const date = document.getElementById("date")?.textContent || "Datum";
-    const market = document.getElementById("marketNumber")?.textContent || "Marktnummer";
-    const name = document.getElementById("name")?.textContent || "Name";
+    // PDF mit html2pdf generieren, dann als Blob extrahieren
+    const worker = html2pdf().set(opt).from(element);
+    const pdfBlob = await worker.outputPdf('blob');
 
-    doc.text(`Datum: ${date}`, 10, 20);
-    doc.text(`Marktnummer: ${market}`, 10, 30);
-    doc.text(`Name: ${name}`, 10, 40);
+    const file = new File([pdfBlob], "massnahmen.pdf", { type: "application/pdf" });
 
-    // PDF in Blob umwandeln
-    const pdfBlob = doc.output("blob");
-
-    // Web Share API aufrufen
-    if (navigator.canShare && navigator.canShare({ files: [new File([pdfBlob], 'massnahmen.pdf', { type: 'application/pdf' })] })) {
-      const file = new File([pdfBlob], "massnahmen.pdf", { type: "application/pdf" });
-
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
       try {
         await navigator.share({
           title: "Maßnahmen PDF",
@@ -501,24 +501,10 @@ const questionsTableBody = document.querySelector('#questionsTable tbody');
         alert("Teilen abgebrochen oder nicht möglich.");
       }
     } else {
-      alert("Teilen wird auf diesem Gerät oder Browser nicht unterstützt.");
+      // Fallback: PDF herunterladen
+      await worker.save(); // lädt die Datei herunter
     }
   }
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script>
-function generateAndSharePDF() {
-  const element = document.getElementById('measuresSection');
-  const opt = {
-    margin:       0.5,
-    filename:     'massnahmen.pdf',
-    image:        { type: 'jpeg', quality: 0.98 },
-    html2canvas:  { scale: 2 },
-    jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
-  };
-
-  html2pdf().set(opt).from(element).save();
-}
 </script>
 <footer class="footer">
   <p>
