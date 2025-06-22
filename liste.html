@@ -1073,7 +1073,7 @@ button.btn-medium {
   }
 </script>
 <script>
-  // Signatur-Canvas Setup
+  // ==== SIGNATURFELD ====
   const canvas = document.getElementById('signature-pad');
   const ctx = canvas.getContext('2d');
   let drawing = false;
@@ -1084,28 +1084,20 @@ button.btn-medium {
     const displayHeight = canvas.offsetHeight;
     const oldImage = new Image();
     oldImage.src = canvas.toDataURL();
-
     canvas.width = displayWidth * ratio;
     canvas.height = displayHeight * ratio;
     canvas.style.width = displayWidth + "px";
     canvas.style.height = displayHeight + "px";
-
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.scale(ratio, ratio);
-
-    oldImage.onload = () => {
-      ctx.drawImage(oldImage, 0, 0, displayWidth, displayHeight);
-    };
+    oldImage.onload = () => ctx.drawImage(oldImage, 0, 0, displayWidth, displayHeight);
   }
 
   function getX(e) {
-    return e.touches ? e.touches[0].clientX - canvas.getBoundingClientRect().left :
-                       e.clientX - canvas.getBoundingClientRect().left;
+    return e.touches ? e.touches[0].clientX - canvas.getBoundingClientRect().left : e.clientX - canvas.getBoundingClientRect().left;
   }
-
   function getY(e) {
-    return e.touches ? e.touches[0].clientY - canvas.getBoundingClientRect().top :
-                       e.clientY - canvas.getBoundingClientRect().top;
+    return e.touches ? e.touches[0].clientY - canvas.getBoundingClientRect().top : e.clientY - canvas.getBoundingClientRect().top;
   }
 
   function startDrawing(e) {
@@ -1113,13 +1105,11 @@ button.btn-medium {
     ctx.beginPath();
     ctx.moveTo(getX(e), getY(e));
   }
-
   function draw(e) {
     if (!drawing) return;
     ctx.lineTo(getX(e), getY(e));
     ctx.stroke();
   }
-
   function stopDrawing() {
     drawing = false;
     saveSignature();
@@ -1139,141 +1129,18 @@ button.btn-medium {
     const dataURL = localStorage.getItem("signatureImage");
     if (dataURL) {
       const image = new Image();
-      image.onload = () => {
-        ctx.drawImage(image, 0, 0, canvas.offsetWidth, canvas.offsetHeight);
-      };
+      image.onload = () => ctx.drawImage(image, 0, 0, canvas.offsetWidth, canvas.offsetHeight);
       image.src = dataURL;
     }
   }
 
-  function prepareForPrint() {
-    const dataURL = canvas.toDataURL();
-    const img = document.createElement("img");
-    img.src = dataURL;
-    img.style.border = "2px solid #000";
-    img.style.width = "100%";
-    img.style.maxWidth = "600px";
-    canvas.replaceWith(img);
-    window.print();
-  }
-
-  function auswertungAnzeigen() {
-    const radios = document.querySelectorAll('input[type="radio"]:checked');
-    const datum = document.getElementById('datum')?.value || 'kein Datum';
-    const markt = document.getElementById('markt')?.value || 'unbekannt';
-    const name = document.getElementById('name')?.value || 'unbekannt';
-    const sifa = document.getElementById('sifa')?.value || 'unbekannt';
-
-    const auswertung = {
-      ja: 0,
-      nein: 0,
-      nicht_vorhanden: 0
-    };
-
-    radios.forEach(radio => {
-      if (auswertung.hasOwnProperty(radio.value)) {
-        auswertung[radio.value]++;
-      }
-    });
-
-    const auswertungDiv = document.getElementById('auswertung');
-    auswertungDiv.style.display = 'block';
-    auswertungDiv.innerHTML = `
-      <h3>📊 Auswertung</h3>
-      <p><strong>Markt:</strong> ${markt}</p>
-      <p><strong>Datum:</strong> ${datum}</p>
-      <p><strong>Name:</strong> ${name}</p>
-      <p><strong>SiFa:</strong> ${sifa}</p>
-      <hr style="margin: 16px 0;">
-      <p><strong>Ja:</strong> ${auswertung.ja}</p>
-      <p><strong>Nein:</strong> ${auswertung.nein}</p>
-      <p><strong>Nicht vorhanden:</strong> ${auswertung.nicht_vorhanden}</p>
-    `;
- const auswertungWindow = window.open('auswertung-sifa.html', 'auswertung');
-  const daten = {
-    markt: markt,
-    datum: datum,
-    name: name,
-    sifa: sifa,
-    ja: auswertung.ja,
-    nein: auswertung.nein,
-    nicht_vorhanden: auswertung.nicht_vorhanden
-  };
-  setTimeout(() => {
-    auswertungWindow.postMessage(daten, "*");
-  }, 1000);
-
-  }
-
-  function neinFragenInMaßnahmen() {
-    const fragenzeilen = document.querySelectorAll('#fragenTabelle tr');
-    const maßnahmenZeilen = document.querySelectorAll("#maßnahmen-tabelle td[contenteditable='true']");
-    maßnahmenZeilen.forEach(cell => cell.textContent = '');
-
-    let index = 0;
-    fragenzeilen.forEach(row => {
-      const frageText = row.cells[0]?.innerText;
-      const radios = row.querySelectorAll('input[type="radio"]');
-      let selected = null;
-
-      radios.forEach(r => {
-        if (r.checked) selected = r.value;
-      });
-
-      if (selected === 'nein' && index < maßnahmenZeilen.length) {
-        maßnahmenZeilen[index].textContent = frageText;
-        index++;
-      }
-    });
-
-    if (index === 0) {
-      alert("✅ Es wurden keine Fragen mit 'nein' beantwortet.");
-    } else if (index >= maßnahmenZeilen.length) {
-      alert("⚠️ Mehr als 15 'nein'-Antworten – nur die ersten 15 wurden übernommen.");
-    }
-  }
-
-  function neinAntwortenEinfügenUndÖffnen() {
-    const alleZeilen = document.querySelectorAll("#fragenTabelle tr");
-    const neinAntworten = [];
-
-    alleZeilen.forEach(row => {
-      const zellen = row.querySelectorAll("td");
-      if (zellen.length >= 4) {
-        const frageText = zellen[0]?.innerText.trim();
-        const radios = row.querySelectorAll("input[type='radio']");
-        radios.forEach(radio => {
-          if (radio.checked && radio.value === "nein") {
-            neinAntworten.push(frageText);
-          }
-        });
-      }
-    });
-
-    const maßnahmenZeilen = document.querySelectorAll('#maßnahmen-tabelle td[contenteditable]');
-    neinAntworten.forEach((text, index) => {
-      if (maßnahmenZeilen[index]) {
-        maßnahmenZeilen[index].innerText = text;
-      }
-    });
-
-    const win = window.open('defizite.html', '_blank');
-    setTimeout(() => {
-      win?.postMessage({ neinAntworten }, "*");
-    }, 500);
-  }
-
-  // Init
+  // ==== INIT & HANDLER ====
   window.addEventListener("resize", resizeCanvas);
   window.addEventListener("load", () => {
     resizeCanvas();
     restoreSignature();
-
     const datumsfeld = document.getElementById('datum');
-    if (datumsfeld) {
-      const heute = new Date().toISOString().split('T')[0];
-      datumsfeld.value = heute;
-    }
+    if (datumsfeld) datumsfeld.value = new Date().toISOString().split('T')[0];
   });
 
   canvas.addEventListener('mousedown', startDrawing);
@@ -1284,27 +1151,38 @@ button.btn-medium {
   canvas.addEventListener('touchmove', draw, { passive: false });
   canvas.addEventListener('touchend', stopDrawing);
 
-  // Service Worker optional
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sicher/sw.js')
-        .then(() => console.log("✅ Service Worker registriert"))
-        .catch(err => console.error("❌ Service Worker Fehler:", err));
-    });
-  }
-function unterschriftExtern() {
-  window.open('signatur.html', 'Signatur', 'width=700,height=400');
-}
+  // ==== AUSWERTUNG ====
+  function auswertungAnzeigen() {
+    const radios = document.querySelectorAll('input[type="radio"]:checked');
+    const datum = document.getElementById('datum')?.value || 'kein Datum';
+    const markt = document.getElementById('markt')?.value || 'unbekannt';
+    const name = document.getElementById('name')?.value || 'unbekannt';
+    const sifa = document.getElementById('sifa')?.value || 'unbekannt';
 
-window.addEventListener("message", (event) => {
-  if (event.data?.type === 'signature') {
-    const img = document.getElementById('signature-image');
-    img.src = event.data.dataUrl;
-    img.style.display = 'block';
-  }
-});
+    const auswertung = { ja: 0, nein: 0, nicht_vorhanden: 0 };
+    radios.forEach(radio => auswertung[radio.value]++);
 
-function frageVerneinen(satz) {
+    const auswertungDiv = document.getElementById('auswertung');
+    auswertungDiv.style.display = 'block';
+    auswertungDiv.innerHTML = `
+      <h3>📊 Auswertung</h3>
+      <p><strong>Markt:</strong> ${markt}</p>
+      <p><strong>Datum:</strong> ${datum}</p>
+      <p><strong>Name:</strong> ${name}</p>
+      <p><strong>SiFa:</strong> ${sifa}</p>
+      <hr><p><strong>Ja:</strong> ${auswertung.ja}</p>
+      <p><strong>Nein:</strong> ${auswertung.nein}</p>
+      <p><strong>Nicht vorhanden:</strong> ${auswertung.nicht_vorhanden}</p>
+    `;
+
+    const win = window.open('auswertung-sifa.html', 'auswertung');
+    setTimeout(() => {
+      win?.postMessage({ markt, datum, name, sifa, ...auswertung }, "*");
+    }, 1000);
+  }
+
+  // ==== UMFORMULIERUNG ====
+ function frageVerneinen(satz) {
   return satz
     .replace(/\bist\b/g, "ist nicht")
     .replace(/\bsind\b/g, "sind nicht")
@@ -1318,62 +1196,65 @@ function frageVerneinen(satz) {
     .replace(/\bgesichert\b/g, "nicht gesichert");
 }
 
-
 function umformulieren(frage) {
   const original = frage.trim();
   const lower = original.toLowerCase();
   let umformuliert = "";
 
-  // ===== SPEZIFISCHE FALLREGELN (formell) =====
+  // FORMELLE UMFORMULIERUNGEN
   if (lower.includes("geprüft") && lower.includes("ordnungsgemäß")) {
-    umformuliert = "Die Einrichtung wurde nicht geprüft oder befindet sich nicht in ordnungsgemäßem Zustand: " + frageVerneinen(original);
+    umformuliert = "Die betreffenden Einrichtungen wurden nicht gemäß den vorgeschriebenen Prüfkriterien kontrolliert oder befinden sich nicht in einem ordnungsgemäßen Zustand. (" + frageVerneinen(original) + ")";
   } else if (lower.includes("beschädigung") || lower.includes("defekt") || lower.includes("nicht funktionsfähig")) {
-    umformuliert = "Es liegen erkennbare technische Mängel oder Beschädigungen vor: " + frageVerneinen(original);
+    umformuliert = "Technische Mängel oder Funktionsdefizite wurden festgestellt und bedürfen einer umgehenden Instandsetzung. (" + frageVerneinen(original) + ")";
   } else if (lower.includes("funktionsfähig") || lower.includes("funktion")) {
-    umformuliert = "Die Funktionsfähigkeit ist nicht gewährleistet: " + frageVerneinen(original);
+    umformuliert = "Die bestimmungsgemäße Funktionsfähigkeit der betreffenden Komponente ist aktuell nicht sichergestellt. (" + frageVerneinen(original) + ")";
   } else if (lower.includes("frei zugänglich") || lower.includes("nicht zugänglich") || lower.includes("zugestellt")) {
-    umformuliert = "Der uneingeschränkte Zugang ist nicht sichergestellt: " + frageVerneinen(original);
+    umformuliert = "Zugänge oder Durchgänge sind nicht barrierefrei zugänglich und müssen freigeräumt werden. (" + frageVerneinen(original) + ")";
   } else if (lower.includes("gekennzeichnet") && lower.includes("sichtbar")) {
-    umformuliert = "Kennzeichnung ist unzureichend oder nicht sichtbar: " + frageVerneinen(original);
-  } else if (lower.includes("schuhwerk") || lower.includes("schutzbrille") || lower.includes("handschuhe")) {
-    umformuliert = "PSA wird nicht bereitgestellt oder nicht ordnungsgemäß verwendet: " + frageVerneinen(original);
-  } else if (lower.includes("sicherheitsmesser")) {
-    umformuliert = "Verwendung von Sicherheitsmessern ist nicht sichergestellt: " + frageVerneinen(original);
+    umformuliert = "Die erforderliche Kennzeichnung ist unzureichend angebracht oder nicht eindeutig sichtbar und muss gemäß Vorschrift nachgebessert werden. (" + frageVerneinen(original) + ")";
+  } else if (lower.includes("schutzbrille") || lower.includes("schuhwerk") || lower.includes("handschuhe")) {
+    umformuliert = "Die Persönliche Schutzausrüstung (PSA) wurde nicht oder nicht vorschriftsgemäß verwendet. Bereitstellung und Anwendung sind sicherzustellen. (" + frageVerneinen(original) + ")";
   } else if (lower.includes("feuerlöscher") || lower.includes("feuerlöscheinrichtung")) {
-    umformuliert = "Funktionssicherheit oder Zugänglichkeit der Feuerlöscher ist nicht gegeben: " + frageVerneinen(original);
+    umformuliert = "Die Funktionalität und Zugänglichkeit der Feuerlöscheinrichtungen entspricht nicht den Sicherheitsanforderungen und ist unverzüglich sicherzustellen. (" + frageVerneinen(original) + ")";
   } else if (lower.includes("brandschutztür") || lower.includes("türhaltevorrichtung")) {
-    umformuliert = "Brandschutzeinrichtungen entsprechen nicht den Anforderungen: " + frageVerneinen(original);
+    umformuliert = "Die Wirksamkeit der Brandschutzeinrichtungen ist eingeschränkt. Eine Überprüfung und Instandsetzung ist durchzuführen. (" + frageVerneinen(original) + ")";
   } else if (lower.includes("notausgang") || lower.includes("fluchtweg")) {
-    umformuliert = "Die sichere Nutzung der Fluchtwege ist nicht gewährleistet: " + frageVerneinen(original);
+    umformuliert = "Die sichere Nutzbarkeit von Notausgängen oder Fluchtwegen ist nicht gewährleistet. Hindernisse sind zu beseitigen. (" + frageVerneinen(original) + ")";
   } else if (lower.includes("unterwiesen") || lower.includes("eingearbeitet")) {
-    umformuliert = "Mitarbeitende wurden nicht ordnungsgemäß unterwiesen oder eingearbeitet: " + frageVerneinen(original);
+    umformuliert = "Mitarbeitende wurden nicht ordnungsgemäß unterwiesen oder eingearbeitet. Die Einhaltung der Schulungs- und Dokumentationspflicht ist sicherzustellen. (" + frageVerneinen(original) + ")";
   } else if (lower.includes("ersthelfer") || lower.includes("brandschutzhelfer")) {
-    umformuliert = "Personelle Besetzung durch Erst-/Brandschutzhelfer ist nicht gewährleistet: " + frageVerneinen(original);
-  } else if (lower.includes("pausen") || lower.includes("überstunden") || lower.includes("rückmeldung")) {
-    umformuliert = "Organisatorische Mängel im Bereich Arbeitszeit oder Rückmeldungen bestehen: " + frageVerneinen(original);
+    umformuliert = "Die erforderliche Anzahl an ausgebildeten Erst- oder Brandschutzhelfern ist nicht vorhanden. Schulungen sind kurzfristig nachzuholen. (" + frageVerneinen(original) + ")";
   } else if (lower.includes("kommunikation") || lower.includes("entscheidung")) {
-    umformuliert = "Kommunikation oder Entscheidungsprozesse sind unzureichend: " + frageVerneinen(original);
-  }
-
-  // ===== ALLGEMEINE FORMELLE REGELN =====
-  else if (/^Die |^Der |^Das /i.test(original)) {
-    umformuliert = "Es wurde festgestellt, dass " + frageVerneinen(original[0].toLowerCase() + original.slice(1));
-  } else if (/^Im |^In |^An |^Auf /i.test(original)) {
-    umformuliert = "Die folgende Feststellung trifft nicht zu: " + frageVerneinen(original);
-  } else if (original.trim().endsWith("?")) {
-    umformuliert = "Die Fragestellung ist aktuell nicht mit 'Ja' zu beantworten: " + frageVerneinen(original);
-  } else {
-    umformuliert = "Abweichung festgestellt: " + frageVerneinen(original);
-  }
-
-  if (!umformuliert.endsWith(".")) {
-    umformuliert += ".";
-  }
-
-  return umformuliert;
+    umformuliert = "Kommunikations- oder Entscheidungsprozesse sind unklar oder unzureichend strukturiert. Es besteht organisatorischer Handlungsbedarf. (" + frageVerneinen(original) + ")";
+  }if (lower.includes("beleuchtung") || lower.includes("lichtverhältnisse")) {
+  umformuliert = "Die Beleuchtung entspricht nicht den arbeitsplatzbezogenen Anforderungen. Es ist eine Optimierung der Lichtverhältnisse vorzunehmen. (" + frageVerneinen(original) + ")";
+} else if (lower.includes("ordnung") || lower.includes("sauberkeit")) {
+  umformuliert = "Die betrieblichen Anforderungen an Ordnung und Sauberkeit sind nicht erfüllt. Es ist für einen aufgeräumten, sicheren Zustand zu sorgen. (" + frageVerneinen(original) + ")";
+} else if (lower.includes("arbeitsmittel") || lower.includes("geräte")) {
+  umformuliert = "Die eingesetzten Arbeitsmittel sind entweder nicht vollständig funktionstüchtig oder nicht vorschriftsgemäß bereitgestellt. Überprüfung und Instandhaltung sind erforderlich. (" + frageVerneinen(original) + ")";
+} else if (lower.includes("erste-hilfe") || lower.includes("verbandskasten")) {
+  umformuliert = "Die Erste-Hilfe-Einrichtungen sind unvollständig, abgelaufen oder nicht zugänglich. Eine sofortige Kontrolle und Nachrüstung ist erforderlich. (" + frageVerneinen(original) + ")";
+} else if (lower.includes("abfall") || lower.includes("müll")) {
+  umformuliert = "Die Entsorgung von Abfällen erfolgt nicht ordnungsgemäß. Eine sichere und umweltgerechte Entsorgungsweise ist sicherzustellen. (" + frageVerneinen(original) + ")";
+} else if (lower.includes("lagerung") || lower.includes("regale") || lower.includes("paletten")) {
+  umformuliert = "Die Lagerbedingungen entsprechen nicht den Sicherheitsstandards. Stapelhöhen, Traglasten und Zugänglichkeit sind zu beachten. (" + frageVerneinen(original) + ")";
+} else if (lower.includes("kennzeichnung") || lower.includes("hinweis")) {
+  umformuliert = "Kennzeichnungen und Sicherheitshinweise sind nicht vorhanden oder unzureichend angebracht. Eine ordnungsgemäße Beschilderung ist unverzüglich anzubringen. (" + frageVerneinen(original) + ")";
+} else if (lower.includes("arbeitsanweisung") || lower.includes("bedienungsanleitung")) {
+  umformuliert = "Erforderliche Arbeits- oder Bedienungsanweisungen sind nicht zugänglich oder fehlen. Sie sind bereitzustellen und den Mitarbeitenden bekannt zu machen. (" + frageVerneinen(original) + ")";
 }
 
 
+  // GENERISCHER FALL
+  else {
+    umformuliert = "Die Anforderungen der folgenden Feststellung werden derzeit nicht erfüllt: " + frageVerneinen(original);
+  }
+
+  if (!umformuliert.endsWith(".")) umformuliert += ".";
+  return umformuliert;
+
+
+  }
 
   function neinFragenInMaßnahmen() {
     const fragenzeilen = document.querySelectorAll('#fragenTabelle tr');
@@ -1385,24 +1266,51 @@ function umformulieren(frage) {
       const frageText = row.cells[0]?.innerText;
       const radios = row.querySelectorAll('input[type="radio"]');
       let selected = null;
+      radios.forEach(r => { if (r.checked) selected = r.value; });
 
-      radios.forEach(r => {
-        if (r.checked) selected = r.value;
-      });
-
-      if (selected === 'nein' && index < maßnahmenZeilen.length) {
-        const umformulierteFrage = umformulieren(frageText);
-        maßnahmenZeilen[index].textContent = umformulierteFrage;
+      if (selected === 'nein' && frageText && index < maßnahmenZeilen.length) {
+        const umformuliert = umformulieren(frageText);
+        maßnahmenZeilen[index].textContent = umformuliert;
         index++;
       }
     });
 
-    if (index === 0) {
-      alert("✅ Es wurden keine Fragen mit 'nein' beantwortet.");
-    } else if (index >= maßnahmenZeilen.length) {
-      alert("⚠️ Mehr als 15 'nein'-Antworten – nur die ersten 15 wurden übernommen.");
+    alert(index === 0
+      ? "✅ Keine Fragen mit 'nein' beantwortet."
+      : (index >= maßnahmenZeilen.length
+        ? "⚠️ Nur die ersten 15 'nein'-Antworten übernommen."
+        : ""));
+  }
+
+  function prepareForPrint() {
+    const dataURL = canvas.toDataURL();
+    const img = document.createElement("img");
+    img.src = dataURL;
+    img.style.border = "2px solid #000";
+    img.style.width = "100%";
+    img.style.maxWidth = "600px";
+    canvas.replaceWith(img);
+    window.print();
+  }
+
+  function unterschriftExtern() {
+    window.open('signatur.html', 'Signatur', 'width=700,height=400');
+  }
+
+  window.addEventListener("message", (event) => {
+    if (event.data?.type === 'signature') {
+      const img = document.getElementById('signature-image');
+      img.src = event.data.dataUrl;
+      img.style.display = 'block';
     }
+  });
+
+  // ==== SERVICE WORKER ====
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sicher/sw.js')
+        .then(() => console.log("✅ Service Worker registriert"))
+        .catch(err => console.error("❌ Service Worker Fehler:", err));
+    });
   }
 </script>
-</body>
-</html>
