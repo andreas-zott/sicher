@@ -2380,16 +2380,15 @@
             </div>
         </div>
 
-        <!-- Action Buttons am Ende -->
-        <div class="action-buttons">
-            <h3 style="margin-bottom: 20px; color: #2d3748;">Export-Optionen</h3>
-            <button class="btn" onclick="generatePDF()">📄 Vollständiges PDF</button>
-            <button class="btn btn-success" onclick="generateMeasuresDocument()">📋 Maßnahmen-PDF</button>
-            <button class="btn btn-warning" onclick="generateMeasuresHTML()">🌐 Maßnahmen-HTML</button>
-            <button class="btn btn-secondary" onclick="printForm()">🖨️ Drucken</button>
-            <button class="btn btn-secondary" onclick="shareForm()">📤 Teilen</button>
-        </div>
-    </div>
+      <!-- Action Buttons am Ende -->
+<div class="action-buttons">
+  <h3 style="margin-bottom: 20px; color: #2d3748;">Export-Optionen</h3>
+
+  <button class="btn" onclick="generatePDF()">📄 Vollständiges PDF</button>
+  <button class="btn btn-success" onclick="generateMeasuresDocument()">📋 Maßnahmen-PDF</button>
+  <button class="btn btn-secondary" onclick="printForm()">🖨️ Drucken</button>
+  <button class="btn btn-share" onclick="createAndSharePDF()">📤 PDF teilen (iPad)</button>
+</div>
 
     <!-- Footer -->
     <footer class="footer">
@@ -3088,5 +3087,26 @@
             }
         }
     </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+  async function createAndSharePDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    doc.text("Dies ist ein PDF für das Teilen auf dem iPad.", 10, 10);
+    const pdfBlob = doc.output("blob");
+    const blobUrl = URL.createObjectURL(pdfBlob);
+
+    const a = document.createElement("a");
+    a.href = blobUrl;
+    a.download = "Teilen-Dokument.pdf";
+
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+  }
+</script>
 </body>
 </html>	
