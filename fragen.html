@@ -2380,15 +2380,16 @@
             </div>
         </div>
 
-      <!-- Action Buttons am Ende -->
-<div class="action-buttons">
-  <h3 style="margin-bottom: 20px; color: #2d3748;">Export-Optionen</h3>
-
-  <button class="btn" onclick="generatePDF()">📄 Vollständiges PDF</button>
-  <button class="btn btn-success" onclick="generateMeasuresDocument()">📋 Maßnahmen-PDF</button>
-  <button class="btn btn-secondary" onclick="printForm()">🖨️ Drucken</button>
-  <button class="btn btn-share" onclick="createAndSharePDF()">📤 PDF teilen (iPad)</button>
-</div>
+        <!-- Action Buttons am Ende -->
+        <div class="action-buttons">
+            <h3 style="margin-bottom: 20px; color: #2d3748;">Export-Optionen</h3>
+            <button class="btn" onclick="generatePDF()">📄 Vollständiges PDF</button>
+            <button class="btn btn-success" onclick="generateMeasuresDocument()">📋 Maßnahmen-PDF</button>
+            <button class="btn btn-warning" onclick="generateMeasuresHTML()">🌐 Maßnahmen-HTML</button>
+            <button class="btn btn-secondary" onclick="printForm()">🖨️ Drucken</button>
+            <button class="btn btn-secondary" onclick="shareForm()">📤 Teilen</button>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="footer">
@@ -3087,25 +3088,43 @@
             }
         }
     </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
-  async function createAndSharePDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
+  async function generateAndSharePDF() {
+    const element = document.body;
 
-    doc.text("Dies ist ein PDF für das Teilen auf dem iPad.", 10, 10);
-    const pdfBlob = doc.output("blob");
-    const blobUrl = URL.createObjectURL(pdfBlob);
+    const opt = {
+      margin:       0,
+      filename:     'arbeitssicherheit-checkliste.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, scrollY: 0 },
+      jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' }
+    };
 
-    const a = document.createElement("a");
-    a.href = blobUrl;
-    a.download = "Teilen-Dokument.pdf";
+    const blob = await html2pdf().set(opt).from(element).outputPdf('blob');
 
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    const file = new File([blob], "arbeitssicherheit-checkliste.pdf", {
+      type: "application/pdf",
+    });
 
-    setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({
+          title: 'Checkliste Arbeitssicherheit',
+          text: 'Anbei die ausgefüllte Arbeitssicherheits-Checkliste als PDF.',
+          files: [file],
+        });
+        console.log("✅ Teilen abgeschlossen");
+      } catch (err) {
+        console.error("❌ Teilen abgebrochen oder fehlgeschlagen:", err);
+      }
+    } else {
+      alert("📤 Teilen nicht unterstützt – bitte manuell PDF herunterladen.");
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "arbeitssicherheit-checkliste.pdf";
+      link.click();
+    }
   }
 </script>
 </body>
