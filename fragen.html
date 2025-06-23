@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arbeitssicherheit-Sicherheits-Fragebogen</title>
-    <style>
+ <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon" />
+  <link href="/sicher/fragen.json" rel="manifest" />
+<style>
+
         * {
             margin: 0;
             padding: 0;
@@ -3139,6 +3142,14 @@ async function generateAndSharePDF() {
 }
 
 document.getElementById('sharePdfBtn').addEventListener('click', generateAndSharePDF);
+  // Service Worker optional
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sicher/sw.js')
+        .then(() => console.log("✅ Service Worker registriert"))
+        .catch(err => console.error("❌ Service Worker Fehler:", err));
+    });
+  }
 </script>
 </script>
 </body>
