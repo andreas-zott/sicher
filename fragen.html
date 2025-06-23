@@ -2387,7 +2387,20 @@
             <button class="btn btn-success" onclick="generateMeasuresDocument()">📋 Maßnahmen-PDF</button>
             <button class="btn btn-warning" onclick="generateMeasuresHTML()">🌐 Maßnahmen-HTML</button>
             <button class="btn btn-secondary" onclick="printForm()">🖨️ Drucken</button>
-            <button class="btn btn-secondary" onclick="shareForm()">📤 Teilen</button>
+          <button onclick="generateAndSharePDF()" class="custom-btn" style="
+  background-color: #28a745; 
+  color: white;
+  width: 600px; 
+  margin: 10px auto 40px auto; 
+  display: block; 
+  padding: 12px; 
+  font-size: 16px; 
+  border: none; 
+  border-radius: 6px; 
+  cursor: pointer;">
+  📤 PDF teilen (iPad)
+</button>
+</button>
         </div>
     </div>
 
@@ -3088,44 +3101,45 @@
             }
         }
     </script>
+<button id="sharePdfBtn">PDF erzeugen & teilen</button>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
-  async function generateAndSharePDF() {
-    const element = document.body;
+async function generateAndSharePDF() {
+  const element = document.body;
 
-    const opt = {
-      margin:       0,
-      filename:     'arbeitssicherheit-checkliste.pdf',
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2, scrollY: 0 },
-      jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' }
-    };
+  const opt = {
+    margin: 0,
+    filename: 'arbeitssicherheit-checkliste.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, scrollY: 0 },
+    jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
+  };
 
+  try {
     const blob = await html2pdf().set(opt).from(element).outputPdf('blob');
-
-    const file = new File([blob], "arbeitssicherheit-checkliste.pdf", {
-      type: "application/pdf",
-    });
+    const file = new File([blob], "arbeitssicherheit-checkliste.pdf", { type: "application/pdf" });
 
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      try {
-        await navigator.share({
-          title: 'Checkliste Arbeitssicherheit',
-          text: 'Anbei die ausgefüllte Arbeitssicherheits-Checkliste als PDF.',
-          files: [file],
-        });
-        console.log("✅ Teilen abgeschlossen");
-      } catch (err) {
-        console.error("❌ Teilen abgebrochen oder fehlgeschlagen:", err);
-      }
+      await navigator.share({
+        title: 'Checkliste Arbeitssicherheit',
+        text: 'Hier ist die ausgefüllte Arbeitssicherheits-Checkliste.',
+        files: [file],
+      });
     } else {
-      alert("📤 Teilen nicht unterstützt – bitte manuell PDF herunterladen.");
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "arbeitssicherheit-checkliste.pdf";
-      link.click();
+      const blobUrl = URL.createObjectURL(blob);
+      window.open(blobUrl, '_blank');
+      alert("📄 PDF geöffnet. Tippe oben rechts im Safari-Browser auf den Teilen-Button, um das PDF zu teilen.");
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
     }
+  } catch (error) {
+    console.error('Fehler beim Generieren oder Teilen der PDF:', error);
+    alert('Beim Teilen der PDF ist ein Fehler aufgetreten. Versuche es bitte erneut.');
   }
+}
+
+document.getElementById('sharePdfBtn').addEventListener('click', generateAndSharePDF);
+</script>
 </script>
 </body>
 </html>	
