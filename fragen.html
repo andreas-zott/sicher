@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arbeitssicherheit-Sicherheits-Fragebogen</title>
+    <title>Sicherheits-Fragebogen</title>
     <style>
         * {
             margin: 0;
@@ -497,7 +497,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Arbeitssicherheit-Sicherheits-Fragebogen</h1>
+            <h1>Sicherheits-Fragebogen</h1>
             <p>Beantworten Sie die folgenden Fragen mit Ja, Nein oder Nicht zutreffend</p>
         </div>
 
@@ -2898,169 +2898,6 @@
             }
         }
 
-        // Separate HTML-Datei für Maßnahmen generieren
-        function generateMeasuresHTML() {
-            if (activeMeasures.length === 0) {
-                alert('Keine Maßnahmen vorhanden. Beantworten Sie zuerst einige Fragen mit "Nein".');
-                return;
-            }
-
-            // Formulardaten sammeln
-            const datum = document.getElementById('datum').value;
-            const marktnummer = document.getElementById('marktnummer').value;
-            const name = document.getElementById('name').value;
-            const sifa = document.getElementById('sifa').value;
-
-            // Maßnahmen nach Priorität sortieren
-            const priorityOrder = { 'high': 1, 'medium': 2, 'low': 3 };
-            const sortedMeasures = [...activeMeasures].sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
-
-            // HTML-Inhalt erstellen
-            let htmlContent = `
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maßnahmen-Dokument</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-            border-radius: 10px;
-            margin-bottom: 30px;
-        }
-        .info-section {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-        }
-        .measure {
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .priority {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8em;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-        .priority.high { background: #fed7d7; color: #c53030; }
-        .priority.medium { background: #feebc8; color: #dd6b20; }
-        .priority.low { background: #c6f6d5; color: #2f855a; }
-        .signature-section {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 30px;
-        }
-        .signature-line {
-            border-bottom: 1px solid #333;
-            width: 200px;
-            margin: 20px 0;
-        }
-        @media print {
-            .no-print { display: none; }
-        }
-    </style>
-</head>
-<body>
-    <div class="header">
-        <h1>Maßnahmen-Dokument</h1>
-        <p>Erforderliche Sicherheitsmaßnahmen</p>
-    </div>
-
-    <div class="info-section">
-        <h2>Allgemeine Informationen</h2>
-        <p><strong>Datum:</strong> ${datum}</p>
-        <p><strong>Marktnummer:</strong> ${marktnummer}</p>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>SIFA:</strong> ${sifa}</p>
-        <p><strong>Anzahl Maßnahmen:</strong> ${activeMeasures.length}</p>
-    </div>
-
-    <h2>Erforderliche Maßnahmen</h2>
-`;
-
-            let currentPriority = '';
-            sortedMeasures.forEach((measure, index) => {
-                if (measure.priority !== currentPriority) {
-                    currentPriority = measure.priority;
-                    const priorityText = {
-                        'high': 'HOHE PRIORITÄT',
-                        'medium': 'MITTLERE PRIORITÄT',
-                        'low': 'NIEDRIGE PRIORITÄT'
-                    };
-                    htmlContent += `<h3>${priorityText[measure.priority]}</h3>`;
-                }
-
-                htmlContent += `
-    <div class="measure">
-        <span class="priority ${measure.priority}">${measure.priority === 'high' ? 'Hoch' : measure.priority === 'medium' ? 'Mittel' : 'Niedrig'}</span>
-        <h4>Maßnahme ${index + 1}</h4>
-        <p><strong>${measure.measure}</strong></p>
-        <p><em>Bezug: ${measure.question}</em></p>
-    </div>
-`;
-            });
-
-            htmlContent += `
-    <div class="signature-section">
-        <h3>Bestätigung</h3>
-        <p>Hiermit bestätige ich die Kenntnisnahme der erforderlichen Maßnahmen:</p>
-        
-        <div style="display: flex; justify-content: space-between; margin-top: 40px;">
-            <div>
-                <p>Marktleiter/in:</p>
-                <div class="signature-line"></div>
-                <p>Datum: ___________</p>
-            </div>
-            <div>
-                <p>SIFA:</p>
-                <div class="signature-line"></div>
-                <p>Datum: ___________</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="no-print" style="text-align: center; margin-top: 30px;">
-        <button onclick="window.print()" style="padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">Drucken</button>
-    </div>
-</body>
-</html>
-`;
-
-            // HTML-Datei zum Download anbieten
-            const blob = new Blob([htmlContent], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `Massnahmen_${marktnummer || 'unbekannt'}_${datum}.html`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-
-            alert('Maßnahmen-HTML wurde erfolgreich erstellt!');
-        }
-
         // Druckfunktion
         function printForm() {
             window.print();
@@ -3087,6 +2924,6 @@
                 await generatePDF();
             }
         }
-    </script>
+</script>
 </body>
-</html>	
+</html>
