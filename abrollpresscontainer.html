@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gefährdungsbeurteilung Presscontainer</title>
+<style>
+.risiko-feld {
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+.risiko-feld.niedrig {
+  color: green;
+}
+.risiko-feld.mittel {
+  color: orange;
+}
+.risiko-feld.hoch {
+  color: red;
+}
+  /* --- Dein CSS von oben --- */
+
+  @media print {
+    footer.footer {
+      display: none !important;
+    }
+    button, #buttonContainer {
+      display: none !important;
+    }
+    @page {
+      size: A4 portrait;
+      margin: 1cm;
+    }
+    table, tr, td, th {
+      page-break-inside: avoid !important;
+    }
+    thead {
+      display: table-header-group;
+    }
+  }
+  .footer {
+    text-align: center;
+    font-size: 12px;
+    color: #888888; /* blasses Grau */
+    margin-top: 20px;
+    font-weight: 400;
+  }
+  .footer p {
+    margin: 0 0 5px 0;
+  }
+  .footer-links a {
+    color: #888888;
+    margin: 0 8px;
+    font-size: 12px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+  }
+  .footer-links a:hover {
+    color: #555555;
+  }
+  .footer-links i {
+    margin-right: 4px;
+  }
+  button {
+    background-color: #6c757d; /* Grauton */
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    margin: 5px 8px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    min-width: 120px;      
+    height: 36px;          
+    box-sizing: border-box;
+    transition: background-color 0.2s ease;
+  }
+  button:hover {
+    background-color: #5a6268; /* dunkleres Grau beim Hover */
+  }
+  #buttonContainer {
+    text-align: center;
+    margin-top: 15px;
+  }
+  @media (max-width: 600px) {
+    table, thead, tbody, th, td, tr {
+      display: block;
+    }
+    td {
+      text-align: left;
+      padding-left: 50%;
+      position: relative;
+    }
+    td::before {
+      position: absolute;
+      left: 10px;
+      white-space: nowrap;
+      font-weight: bold;
+      content: attr(data-label);
+    }
+  }
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 30px;
+    font-size: 16px;
+  }
+  form {
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 960px;
+    margin: auto;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  }
+  h1, h2, h3 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+  }
+  label {
+    font-weight: bold;
+    display: block;
+    margin-top: 25px;
+    font-size: 17px;
+  }
+  textarea, input, select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 6px;
+    font-size: 16px;
+    box-sizing: border-box;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+  .submit-btn {
+    background-color: #6c757d !important;
+    color: white !important;
+    border: none !important;
+    padding: 6px 14px !important;
+    font-size: 14px !important;
+    min-width: 120px !important;
+    height: 36px !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    margin: 5px 8px !important;
+    box-sizing: border-box !important;
+    transition: background-color 0.2s ease !important;
+  }
+  .submit-btn:hover {
+    background-color: #5a6268 !important;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 16px;
+    background-color: #fdfdfd;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  table th, table td {
+    border: 1px solid #ccc;
+    padding: 14px;
+    text-align: left;
+  }
+  table th {
+    background-color: #ecf0f1;
+    font-size: 17px;
+  }
+  select {
+    font-size: 16px;
+  }
+
+  /* Risikomatrix Styles */
+  .risikomatrix {
+    max-width: 500px;
+    margin: 30px auto;
+    border-radius: 10px;
+  }
+  .risikomatrix td {
+    text-align: center;
+    font-weight: 700;
+    color: white;
+    cursor: default;
+    min-width: 60px;
+    padding: 12px;
+  }
+  .risiko-niedrig {
+    background-color: #4CAF50; /* grün */
+  }
+  .risiko-mittel {
+    background-color: #FFC107; /* gelb */
+    color: black;
+  }
+  .risiko-hoch {
+    background-color: #F44336; /* rot */
+  }
+  .risiko-sehrhoch {
+    background-color: #800000; /* dunkelrot */
+  }
+</style>
+</head>
+
+<body>
+  <form id="kopfFormular" style="display: flex; flex-wrap: wrap; gap: 20px; max-width: 1020px; margin: auto; padding: 20px 0;">
+
+    <!-- Erste Zeile: Unternehmer -->
+    <div style="flex: 1 1 300px; min-width: 300px;">
+      <label for="unternehmen">Unternehmer</label>
+      <input type="text" id="unternehmen" name="unternehmen" placeholder="Unternehmer" style="padding: 14px; width: 100%;">
+    </div>
+
+    <!-- Erste Zeile: Abteilung / Standort -->
+    <div style="flex: 1 1 300px; min-width: 300px;">
+      <label for="standort">Abteilung / Standort</label>
+      <input type="text" id="standort" name="standort" placeholder="Abteilung / Standort" style="padding: 14px; width: 100%;">
+    </div>
+
+    <!-- Zweite Zeile: Beurteiler (Name / Funktion) -->
+    <div style="flex: 1 1 300px; min-width: 300px;">
+      <label for="beurteiler">Beurteiler (Name / Funktion)</label>
+      <input type="text" id="beurteiler" name="beurteiler" placeholder="Name / Funktion" style="padding: 14px; width: 100%;">
+    </div>
+
+    <!-- Zweite Zeile: Datum -->
+    <div style="flex: 0 1 160px; min-width: 160px;">
+      <label for="datum">Datum</label>
+      <input type="date" id="datum" name="datum" style="padding: 10px 12px; font-size: 16px; width: 100%;">
+    </div>
+
+  </form>
+  <br>
+  <br>
+  <form>
+
+  <h1>Gefährdungsbeurteilung Presscontainer</h1>
+
+  <h2>1. Gefahrenanalyse</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Gefahr</th>
+        <th>Beschreibung</th>
+        <th>Mögliche Folgen</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-label="Gefahr">Einklemm- und Quetschgefahr</td>
+        <td data-label="Beschreibung">Mechanische Teile des Containers und der Presse können Hände oder Gliedmaßen einklemmen.</td>
+        <td data-label="Mögliche Folgen">Schwere Verletzungen, Amputationen, Quetschungen</td>
+      </tr>
+      <tr>
+        <td data-label="Gefahr">Sturzgefahr</td>
+        <td data-label="Beschreibung">Personen können beim Be- oder Entladen ausrutschen oder fallen.</td>
+        <td data-label="Mögliche Folgen">Prellungen, Knochenbrüche, Kopfverletzungen</td>
+      </tr>
+<tr>
+  <td data-label="Gefahr">Absturzgefahr</td>
+  <td data-label="Beschreibung">Beim Nachdrücken oder Stopfen des Pressguts kann es zu Abstürzen kommen.</td>
+  <td data-label="Mögliche Folgen">Verstauchungen, Knochenbrüche, schwere Verletzungen</td>
+</tr>
+<tr>
+  <td data-label="Gefahr">Stolper-, Rutsch- oder Quetschgefahr</td>
+  <td data-label="Beschreibung">Beim Beschicken der Presse besteht die Gefahr des Ausrutschens, Stolperns oder Quetschens.</td>
+  <td data-label="Mögliche Folgen">Quetschungen, Schnittwunden, Knochenbrüche</td>
+</tr>
+<tr>
+  <td data-label="Gefahr">Infektionsgefahr</td>
+  <td data-label="Beschreibung">Kontakt mit kontaminiertem Pressgut kann zu Infektionen führen.</td>
+  <td data-label="Mögliche Folgen">Hautinfektionen, Atemwegserkrankungen, systemische Infektionen</td>
+</tr>
+<tr>
+  <td data-label="Gefahr">Kreislaufbelastung</td>
+  <td data-label="Beschreibung">Hitzearbeit im Sommerbetrieb im Freien kann den Kreislauf stark belasten.</td>
+  <td data-label="Mögliche Folgen">Kreislaufkollaps, Hitzeschlag, Dehydration</td>
+</tr>
+<tr>
+  <td data-label="Gefahr">Kälteeinwirkung</td>
+  <td data-label="Beschreibung">Arbeiten im Winter können durch Kälteeinwirkung zu gesundheitlichen Problemen führen.</td>
+  <td data-label="Mögliche Folgen">Erfrierungen, Unterkühlung, eingeschränkte Beweglichkeit</td>
+</tr>
+      <tr>
+        <td data-label="Gefahr">Unzureichende Sicherung der Last</td>
+        <td data-label="Beschreibung">Material kann herausfallen oder umstürzen.</td>
+        <td data-label="Mögliche Folgen">Verletzungen durch herabfallende Gegenstände</td>
+      </tr>
+      <tr>
+        <td data-label="Gefahr">Mechanische Fehlfunktionen</td>
+        <td data-label="Beschreibung">Defekte an der Presse können zu unkontrolliertem Betrieb führen.</td>
+        <td data-label="Mögliche Folgen">Verletzungen durch bewegliche Teile, Materialschäden</td>
+      </tr>
+      <tr>
+        <td data-label="Gefahr">Elektrische Gefährdung</td>
+        <td data-label="Beschreibung">Defekte elektrische Anlagen am Container oder Presse.</td>
+        <td data-label="Mögliche Folgen">Elektrischer Schlag, Brandgefahr</td>
+      </tr>
+      <tr>
+        <td data-label="Gefahr">Lärmbelastung</td>
+        <td data-label="Beschreibung">Hohe Betriebsgeräusche der Presse.</td>
+        <td data-label="Mögliche Folgen">Hörschäden, Stress</td>
+      </tr>
+      <tr>
+        <td data-label="Gefahr">Staub- und Schmutzbelastung</td>
+        <td data-label="Beschreibung">Entstehung von Staub beim Pressen.</td>
+        <td data-label="Mögliche Folgen">Atemwegserkrankungen, Reizungen</td>
+      </tr>
+<tr>
+  <td>Hineinfallen / Klettern in die Pressöffnung</td>
+  <td>Betriebs- oder betriebsfremde Personen (z. B. Kinder, Reinigungspersonal) können in die Beschickungsöffnung steigen oder stürzen – besonders bei Blockaden­beseitigung oder Reinigungsarbeiten.</td>
+  <td>Tödliche Quetschungen, Amputationen, schwere innere Verletzungen</td>
+</tr>
+    </tbody>
+  </table>
+
+  <h2>2. Schutzmaßnahmen</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Gefahr</th>
+        <th>Schutzmaßnahme</th>
+        <th>Beschreibung</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-label="Gefahr">Einklemm- und Quetschgefahr</td>
+        <td data-label="Schutzmaßnahme">Schutzverkleidungen & Not-Aus-Schalter</td>
+        <td data-label="Beschreibung">Abdeckungen an beweglichen Teilen montieren; Not-Aus-Schalter gut erreichbar anbringen.</td>
+      </tr>
+      <tr>
+        <td data-label="Gefahr">Sturzgefahr</td>
+        <td data-label="Schutzmaßnahme">Rutschfeste Böden & Absperrungen</td>
+        <td data-label="Beschreibung">Rutschhemmende Beläge verwenden; Gefahrenstellen absperren.</td>
+      </tr>
+<tr>
+  <td data-label="Gefahr">Absturz beim Nachdrücken / Stopfen</td>
+  <td data-label="Schutzmaßnahme">Absicherung & Schulung</td>
+  <td data-label="Beschreibung">Absturzsicherungen an Gefahrenstellen; Schulungen für sicheres Nachdrücken und Stopfen.</td>
+</tr>
+<tr>
+  <td data-label="Gefahr">Stolper-, Rutsch- oder Quetschgefahr beim Beschicken</td>
+  <td data-label="Schutzmaßnahme">Rutschfeste Böden & klare Wege</td>
+  <td data-label="Beschreibung">Rutschfeste Beläge und freie, gut markierte Laufwege schaffen.</td>
+</tr>
+<tr>
+  <td data-label="Gefahr">Infektionsgefahr durch kontaminiertes Pressgut</td>
+  <td data-label="Schutzmaßnahme">Schutzausrüstung & Hygiene</td>
+  <td data-label="Beschreibung">Handschuhe, Schutzkleidung und Hygienemaßnahmen strikt einhalten.</td>
+</tr>
+<tr>
+  <td data-label="Gefahr">Kreislaufbelastung bei Hitzearbeit (Sommerbetrieb im Freien)</td>
+  <td data-label="Schutzmaßnahme">Pausen & Flüssigkeitszufuhr</td>
+  <td data-label="Beschreibung">Regelmäßige Pausen, schattige Ruhebereiche und ausreichende Flüssigkeitszufuhr sicherstellen.</td>
+</tr>
+<tr>
+  <td data-label="Gefahr">Kälteeinwirkung im Winter</td>
+  <td data-label="Schutzmaßnahme">Warme Arbeitskleidung & Pausen</td>
+  <td data-label="Beschreibung">Wärmeisolierende Kleidung tragen; Pausen in beheizten Räumen ermöglichen.</td>
+</tr>
+      <tr>
+        <td data-label="Gefahr">Unzureichende Sicherung der Last</td>
+        <td data-label="Schutzmaßnahme">Regelmäßige Kontrolle & Schulung</td>
+        <td data-label="Beschreibung">Lasten ordnungsgemäß sichern; Mitarbeitende über korrektes Handling schulen.</td>
+      </tr>
+      <tr>
+        <td data-label="Gefahr">Mechanische Fehlfunktionen</td>
+        <td data-label="Schutzmaßnahme">Wartung & Prüfung</td>
+        <td data-label="Beschreibung">Regelmäßige Inspektion und Wartung der Anlage gemäß Herstellerangaben.</td>
+      </tr>
+      <tr>
+        <td data-label="Gefahr">Elektrische Gefährdung</td>
+        <td data-label="Schutzmaßnahme">Fachgerechte Installation & Prüfung</td>
+        <td data-label="Beschreibung">Elektroanlagen nur von Fachpersonal installieren lassen; regelmäßige Sicherheitsprüfungen.</td>
+      </tr>
+      <tr>
+        <td data-label="Gefahr">Lärmbelastung</td>
+        <td data-label="Schutzmaßnahme">Gehörschutz & Wartung</td>
+        <td data-label="Beschreibung">Bereitstellung von Gehörschutz; Wartung zur Reduzierung von Lärm.</td>
+      </tr>
+      <tr>
+        <td data-label="Gefahr">Staub- und Schmutzbelastung</td>
+        <td data-label="Schutzmaßnahme">Absaugung & Atemschutz</td>
+        <td data-label="Beschreibung">Absauganlagen installieren; bei hoher Belastung Atemschutzmasken tragen.</td>
+      </tr>
+<tr>
+  <td>Hineinfallen / Klettern in die Pressöffnung</td>
+  <td>Physische Zugangssicherung & verriegelte Klappsysteme</td>
+  <td>
+    • Einwurfklappe mit elektrisch verriegelter Zuhaltung<br>
+    • Schlüssel-/LoTo-System: Zugang erst nach vollständigem Stillstand<br>
+    • Lichtschranken / Präsenzsensor zur Abschaltung bei Öffnung<br>
+    • Fest installierte Geländer/Abdeckungen; Warn- & Verbots­schilder<br>
+    • Unterweisung: Reinigung & Störungsbeseitigung nur nach Freischaltung
+  </td>
+</tr>
+    </tbody>
+  </table>
+<h3 style="margin-top: 40px;">Dynamische Risikobewertung (Ampelsystem)</h3>
+
+<table id="risikoTabelle">
+  <thead>
+    <tr>
+      <th>Gefährdung</th>
+      <th>Eintrittswahrscheinlichkeit (1–5)</th>
+      <th>Schadensschwere (1–5)</th>
+      <th>Risikozahl</th>
+      <th>Risikostufe</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Quetschung durch Pressmechanik</td>
+      <td>
+        <select onchange="berechneRisiko(this)">
+          <option value="1">1 – selten</option>
+          <option value="2">2</option>
+          <option value="3" selected>3</option>
+          <option value="4">4</option>
+          <option value="5">5 – sehr häufig</option>
+        </select>
+      </td>
+      <td>
+        <select onchange="berechneRisiko(this)">
+          <option value="1">1 – gering</option>
+          <option value="2">2</option>
+          <option value="3" selected>3</option>
+          <option value="4">4</option>
+          <option value="5">5 – katastrophal</option>
+        </select>
+      </td>
+      <td class="risikozahl">9</td>
+      <td class="risiko-feld" style="font-weight:bold;">Mittel</td>
+    </tr>
+
+    <tr>
+      <td>Stromschlag durch defektes Kabel</td>
+      <td>
+        <select onchange="berechneRisiko(this)">
+          <option value="1">1 – selten</option>
+          <option value="2">2</option>
+          <option value="3" selected>3</option>
+          <option value="4">4</option>
+          <option value="5">5 – sehr häufig</option>
+        </select>
+      </td>
+      <td>
+        <select onchange="berechneRisiko(this)">
+          <option value="1">1 – gering</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4" selected>4</option>
+          <option value="5">5 – katastrophal</option>
+        </select>
+      </td>
+      <td class="risikozahl">12</td>
+      <td class="risiko-feld" style="font-weight:bold;">Mittel</td>
+    </tr>
+<tr>
+  <td>Hineinfallen in Pressöffnung</td>
+  <td>
+    <select onchange="berechneRisiko(this)">
+      <option value="1">1 – selten</option>
+      <option value="2">2</option>
+      <option value="3" selected>3</option>
+      <option value="4">4</option>
+      <option value="5">5 – sehr häufig</option>
+    </select>
+  </td>
+  <td>
+    <select onchange="berechneRisiko(this)">
+      <option value="1">1 – gering</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4" selected>4</option>
+      <option value="5">5 – katastrophal</option>
+    </select>
+  </td>
+  <td class="risikozahl">12</td>
+  <td class="risiko-feld" style="font-weight:bold;">Mittel</td>
+</tr>
+    <tr>
+      <td>Rückspritzender Müll beim Einwurf</td>
+      <td>
+        <select onchange="berechneRisiko(this)">
+          <option value="1">1 – selten</option>
+          <option value="2">2</option>
+          <option value="3" selected>3</option>
+          <option value="4">4</option>
+          <option value="5">5 – sehr häufig</option>
+        </select>
+      </td>
+      <td>
+        <select onchange="berechneRisiko(this)">
+          <option value="1">1 – gering</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4" selected>4</option>
+          <option value="5">5 – katastrophal</option>
+        </select>
+      </td>
+      <td class="risikozahl">12</td>
+      <td class="risiko-feld" style="font-weight:bold;">Mittel</td>
+    </tr>
+<tr>
+  <td>Absturz beim Nachdrücken / Stopfen</td>
+  <td>
+    <select onchange="berechneRisiko(this)">
+      <option value="1">1 – selten</option>
+      <option value="2">2</option>
+      <option value="3" selected>3</option>
+      <option value="4">4</option>
+      <option value="5">5 – sehr häufig</option>
+    </select>
+  </td>
+  <td>
+    <select onchange="berechneRisiko(this)">
+      <option value="1">1 – gering</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4" selected>4</option>
+      <option value="5">5 – katastrophal</option>
+    </select>
+  </td>
+  <td class="risikozahl">12</td>
+  <td class="risiko-feld" style="font-weight:bold;">Mittel</td>
+</tr>
+<tr>
+  <td>Stolper-, Rutsch- oder Quetschgefahr beim Beschicken</td>
+  <td>
+    <select onchange="berechneRisiko(this)">
+      <option value="1">1 – selten</option>
+      <option value="2">2</option>
+      <option value="3" selected>3</option>
+      <option value="4">4</option>
+      <option value="5">5 – sehr häufig</option>
+    </select>
+  </td>
+  <td>
+    <select onchange="berechneRisiko(this)">
+      <option value="1">1 – gering</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4" selected>4</option>
+      <option value="5">5 – katastrophal</option>
+    </select>
+  </td>
+  <td class="risikozahl">12</td>
+  <td class="risiko-feld" style="font-weight:bold;">Mittel</td>
+</tr>
+<tr>
+  <td>Infektionsgefahr durch kontaminiertes Pressgut</td>
+  <td>
+    <select onchange="berechneRisiko(this)">
+      <option value="1">1 – selten</option>
+      <option value="2">2</option>
+      <option value="3" selected>3</option>
+      <option value="4">4</option>
+      <option value="5">5 – sehr häufig</option>
+    </select>
+  </td>
+  <td>
+    <select onchange="berechneRisiko(this)">
+      <option value="1">1 – gering</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4" selected>4</option>
+      <option value="5">5 – katastrophal</option>
+    </select>
+  </td>
+  <td class="risikozahl">12</td>
+  <td class="risiko-feld" style="font-weight:bold;">Mittel</td>
+</tr>
+<tr>
+  <td>Kreislaufbelastung bei Hitzearbeit (Sommerbetrieb im Freien)</td>
+  <td>
+    <select onchange="berechneRisiko(this)">
+      <option value="1">1 – selten</option>
+      <option value="2">2</option>
+      <option value="3" selected>3</option>
+      <option value="4">4</option>
+      <option value="5">5 – sehr häufig</option>
+    </select>
+  </td>
+  <td>
+    <select onchange="berechneRisiko(this)">
+      <option value="1">1 – gering</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4" selected>4</option>
+      <option value="5">5 – katastrophal</option>
+    </select>
+  </td>
+  <td class="risikozahl">12</td>
+  <td class="risiko-feld" style="font-weight:bold;">Mittel</td>
+</tr>
+<tr>
+  <td>Kälteeinwirkung im Winter</td>
+  <td>
+    <select onchange="berechneRisiko(this)">
+      <option value="1">1 – selten</option>
+      <option value="2">2</option>
+      <option value="3" selected>3</option>
+      <option value="4">4</option>
+      <option value="5">5 – sehr häufig</option>
+    </select>
+  </td>
+  <td>
+    <select onchange="berechneRisiko(this)">
+      <option value="1">1 – gering</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4" selected>4</option>
+      <option value="5">5 – katastrophal</option>
+    </select>
+  </td>
+  <td class="risikozahl">12</td>
+  <td class="risiko-feld" style="font-weight:bold;">Mittel</td>
+</tr>
+  </tbody>
+</table>
+<script>
+function berechneRisiko(selectElement) {
+  const row = selectElement.closest("tr");
+  const wahrscheinlichkeit = parseInt(row.children[1].querySelector("select").value);
+  const schwere = parseInt(row.children[2].querySelector("select").value);
+  const risikozahl = wahrscheinlichkeit * schwere;
+
+  const risikozahlZelle = row.querySelector(".risikozahl");
+  const risikoFeld = row.querySelector(".risiko-feld");
+
+  risikozahlZelle.textContent = risikozahl;
+
+  let stufe = "";
+  let farbe = "";
+
+  if (risikozahl <= 6) {
+    stufe = "Niedrig";
+    farbe = "#2ecc71"; // grün
+  } else if (risikozahl <= 12) {
+    stufe = "Mittel";
+    farbe = "#f1c40f"; // gelb
+  } else {
+    stufe = "Hoch";
+    farbe = "#e74c3c"; // rot
+  }
+
+  risikoFeld.textContent = stufe;
+  risikoFeld.style.backgroundColor = farbe;
+  risikoFeld.style.color = "#fff";
+  risikoFeld.style.padding = "4px 8px";
+  risikoFeld.style.borderRadius = "6px";
+}
+</script>
+
+  <div id="buttonContainer">
+    <button type="button" onclick="window.print()">Drucken</button>
+  </div>
+</form>
+
+
+ <footer class="footer">
+    <p>© <span id="currentYear"></span> Andreas Zott. Alle Rechte vorbehalten.</p>
+    <div class="footer-links">
+      <a href="datenschutz.html" target="_blank" rel="noopener noreferrer">
+        <i class="fas fa-user-shield"></i> Datenschutz
+      </a>
+      <a href="impressum.html" target="_blank" rel="noopener noreferrer">
+        <i class="fas fa-info-circle"></i> Impressum
+      </a>
+    </div>
+  </footer>
+</footer>
+</body>
+</html>
