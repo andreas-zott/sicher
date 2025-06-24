@@ -7,6 +7,7 @@
 <title>Arbeitssicherheit-Sicherheits-Fragebogen</title>
 <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon"/>
 <link href="/sicher/fragen.json" rel="manifest"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
 
         * {
@@ -529,8 +530,36 @@
 
 </style>
 <!-- PDF Generation Library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+function downloadPDF() {
+  const element = document.querySelector('.container');
+  html2canvas(element).then(canvas => {
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+    const imgProps = pdf.getImageProperties(imgData);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    pdf.save('fragebogen.pdf');
+  });
+}
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
+function downloadPDF() {
+  const element = document.querySelector('.container');
+  html2canvas(element).then(canvas => {
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+    const imgProps = pdf.getImageProperties(imgData);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    pdf.save('fragebogen.pdf');
+  });
+}
+
+</script>
 </head>
 <body>
 <div class="container">
@@ -2320,6 +2349,7 @@
   cursor: pointer;">
   📤 PDF teilen (iPad)
 </button>
+
 </div>
 </div>
 <!-- Footer -->
@@ -3066,7 +3096,21 @@ function downloadPDF() {
 }
 
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js">
+function downloadPDF() {
+  const element = document.querySelector('.container');
+  html2canvas(element).then(canvas => {
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+    const imgProps = pdf.getImageProperties(imgData);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    pdf.save('fragebogen.pdf');
+  });
+}
+
+</script>
 <script>
 async function generateAndSharePDF() {
   const element = document.body;
@@ -3125,43 +3169,23 @@ function downloadPDF() {
 }
 
 </script>
-<div class="no-print" style="text-align:center; margin:30px;">
-<button class="btn" onclick="downloadAndSharePDF()">PDF speichern oder teilen 📤</button>
-</div>
+  <!-- PDF-Export-Button -->
+  <div class="no-print" style="text-align:center; margin:30px;">
+    <button class="btn" onclick="generatePDF()">PDF generieren (zuverlässig)</button>
+  </div>
 
-
-<script>
-async function downloadAndSharePDF() {
-  const element = document.querySelector('.container');
-  const canvas = await html2canvas(element);
-  const imgData = canvas.toDataURL('image/png');
-  const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
-  const imgProps = pdf.getImageProperties(imgData);
-  const pdfWidth = pdf.internal.pageSize.getWidth();
-  const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-  pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-
-  const arrayBuffer = pdf.output('arraybuffer');
-  const file = new File([arrayBuffer], 'fragebogen.pdf', { type: 'application/pdf' });
-
-  if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    try {
-      await navigator.share({
-        files: [file],
-        title: 'Sicherheitsfragebogen',
-        text: 'Bitte als PDF weiterleiten.'
-      });
-    } catch (err) {
-      alert('Teilen abgebrochen oder nicht verfügbar.');
+  <script>
+    function generatePDF() {
+      const element = document.getElementById('pdf-content');
+      const opt = {
+        margin:       0.5,
+        filename:     'fragebogen.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+      };
+      html2pdf().set(opt).from(element).save();
     }
-  } else {
-    const blob = new Blob([arrayBuffer], { type: 'application/pdf' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'fragebogen.pdf';
-    link.click();
-  }
-}
-</script>
+  </script>
 </body>
 </html> 
