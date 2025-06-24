@@ -3125,10 +3125,10 @@ function downloadPDF() {
 }
 
 </script>
-
 <div class="no-print" style="text-align:center; margin:30px;">
 <button class="btn" onclick="downloadAndSharePDF()">PDF speichern oder teilen 📤</button>
 </div>
+
 
 <script>
 async function downloadAndSharePDF() {
@@ -3141,10 +3141,10 @@ async function downloadAndSharePDF() {
   const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
   pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
 
-  const blob = pdf.output('blob');
+  const arrayBuffer = pdf.output('arraybuffer');
+  const file = new File([arrayBuffer], 'fragebogen.pdf', { type: 'application/pdf' });
 
-  if (navigator.canShare && navigator.canShare({ files: [new File([blob], 'fragebogen.pdf', { type: 'application/pdf' })] })) {
-    const file = new File([blob], 'fragebogen.pdf', { type: 'application/pdf' });
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
     try {
       await navigator.share({
         files: [file],
@@ -3155,6 +3155,7 @@ async function downloadAndSharePDF() {
       alert('Teilen abgebrochen oder nicht verfügbar.');
     }
   } else {
+    const blob = new Blob([arrayBuffer], { type: 'application/pdf' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = 'fragebogen.pdf';
