@@ -200,36 +200,62 @@
   .risiko-sehrhoch {
     background-color: #800000; /* dunkelrot */
   }
+.form-row {
+  flex: 1 1 300px;
+  min-width: 300px;
+}
+
+.form-row-sm {
+  flex: 0 1 160px;
+  min-width: 160px;
+}
+
+.margin-left-20 {
+  margin-left: 20px;
+}
+
+.margin-left-40 {
+  margin-left: 40px;
+}
+
+.margin-right-40 {
+  margin-right: 40px;
+}
+
+.row-separator {
+  flex-basis: 100%;
+  height: 10px;
+}
+
 </style>
 </head>
 
 <body>
-  <form id="kopfFormular" style="display: flex; flex-wrap: wrap; gap: 20px; max-width: 1020px; margin: auto; padding: 20px 0;">
+<form id="kopfFormular" style="display: flex; flex-wrap: wrap; gap: 20px; max-width: 1020px; margin: auto; padding: 20px 0;">
 
-    <!-- Erste Zeile: Unternehmer -->
-    <div style="flex: 1 1 300px; min-width: 300px;">
-      <label for="unternehmen">Unternehmer</label>
-      <input type="text" id="unternehmen" name="unternehmen" placeholder="Unternehmer" style="padding: 14px; width: 100%;">
-    </div>
+  <!-- Erste Zeile -->
+  <div class="form-row margin-left-40">
+    <label for="unternehmen">Unternehmer</label>
+    <input type="text" id="unternehmen" name="unternehmen" placeholder="Unternehmer" style="padding: 14px; width: 80;">
+  </div>
 
-    <!-- Erste Zeile: Abteilung / Standort -->
-    <div style="flex: 1 1 300px; min-width: 300px;">
-      <label for="standort">Abteilung / Standort</label>
-      <input type="text" id="standort" name="standort" placeholder="Abteilung / Standort" style="padding: 14px; width: 100%;">
-    </div>
+  <div class="form-row margin-left-20">
+    <label for="standort">Abteilung / Standort</label>
+    <input type="text" id="standort" name="standort" placeholder="Abteilung / Standort" style="padding: 14px; width: 80%;">
+  </div>
 
-    <!-- Zweite Zeile: Beurteiler (Name / Funktion) -->
-    <div style="flex: 1 1 300px; min-width: 300px;">
-      <label for="beurteiler">Beurteiler (Name / Funktion)</label>
-      <input type="text" id="beurteiler" name="beurteiler" placeholder="Name / Funktion" style="padding: 14px; width: 100%;">
-    </div>
+  <div class="row-separator"></div>
 
-    <!-- Zweite Zeile: Datum -->
-    <div style="flex: 0 1 160px; min-width: 160px;">
-      <label for="datum">Datum</label>
-      <input type="date" id="datum" name="datum" style="padding: 10px 12px; font-size: 16px; width: 100%;">
-    </div>
-  </form>
+  <!-- Zweite Zeile -->
+  <div class="form-row margin-left-40">
+    <label for="beurteiler">Beurteiler (Name / Funktion)</label>
+    <input type="text" id="beurteiler" name="beurteiler" placeholder="Name / Funktion" style="padding: 14px; width: 80%;">
+  </div>
+<div class="form-row-sm margin-right-40">
+  <label for="datum">Datum</label>
+  <input type="date" id="datum" name="datum" style="padding: 10px 12px; font-size: 16px; width: 100%;">
+</div>
+</form>
   <br>
   <br>
 
@@ -404,9 +430,12 @@
 <tr>
   <td>Klettern in die Pressöffnung</td>
   <td>Personen könnten in die Einfüllöffnung klettern oder stürzen - <br>besonders bei Blockaden oder Reinigungsarbeiten.</td>
-  <td>Nur freigeschaltete Personen dürfen Wartung oder Störungsbeseitigung durchführen – <br>mit eindeutiger Kennzeichnung.</td>
-    
-  </td>
+  <td>  • Warn- und Verbotsschilder: <br>„Einsteigen verboten“, „Lebensgefahr“<br>
+    • Nur autorisiertes Personal mit Schlüsselschalter(LoTo-Prinzip)<br>
+    • Absperrbügel, Geländer oder feste Barrieren<br> an der Öffnung<br>
+    • Schulung und Unterweisung zur<br> sicheren Blockadenbeseitigung bei Stillstand
+
+</td>
 </tr>
     </tbody>
   </table>
@@ -632,7 +661,25 @@
   <td class="risiko-feld" style="font-weight:bold;">Mittel</td>
 </tr>
   </tbody>
+  <br>
 </table>
+<div style="background-color: #ffffff; border: 1px solid #ccc; border-radius: 10px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin-bottom: 30px;">
+  <h2 style="margin-top: 0;">4. Dokumentation</h2>
+  
+
+    <label>Unterweisung durchgeführt?</label>
+    <select>
+      <option selected>Ja</option>
+      <option>Nein</option>
+    </select>
+
+    <label>Datum der nächsten Prüfung:</label>
+    <input type="date" value="2025-12-31">
+
+    <label>Bemerkungen:</label>
+    <textarea>Gefährdungsbeurteilung wird jährlich oder bei Änderung der Maschine/Arbeitsabläufe aktualisiert.</textarea>
+  </ul>
+</div>
 <script>
 function berechneRisiko(selectElement) {
   const row = selectElement.closest("tr");
@@ -666,13 +713,10 @@ function berechneRisiko(selectElement) {
   risikoFeld.style.borderRadius = "6px";
 }
 </script>
-
   <div id="buttonContainer">
     <button type="button" onclick="window.print()">Drucken</button>
   </div>
 </form>
-
-
  <footer class="footer">
     <p>© <span id="currentYear"></span> Andreas Zott. Alle Rechte vorbehalten.</p>
     <div class="footer-links">
