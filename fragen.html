@@ -2380,15 +2380,19 @@
             </div>
         </div>
 
-        <!-- Action Buttons am Ende -->
-        <div class="action-buttons">
-            <h3 style="margin-bottom: 20px; color: #2d3748;">Export-Optionen</h3>
-            
-            <button class="btn btn-success" onclick="generateMeasuresDocument()">📋 Maßnahmen-PDF</button>
-            
-            <button class="btn btn-secondary" onclick="printForm()">🖨️ Drucken</button>
-            
-        </div>
+       <!-- Action Buttons am Ende -->
+<div class="action-buttons">
+    <h3 style="margin-bottom: 20px; color: #2d3748;">Export-Optionen</h3>
+
+    <!-- Maßnahmen-PDF generieren -->
+    <button class="btn btn-success" onclick="generateMeasuresDocument()">📋 Maßnahmen-PDF</button>
+
+    <!-- Drucken -->
+    <button class="btn btn-secondary" onclick="printForm()">🖨️ Drucken</button>
+
+    <!-- PDF teilen (öffnet Share-Menü auf iPad) -->
+    <button class="btn btn-primary" onclick="shareForm()">📤 Formular teilen</button>
+</div>
     </div>
 
     <!-- Footer -->
@@ -2904,26 +2908,89 @@
         }
 
         // Safari Teilen-Funktion
-        async function shareForm() {
-            try {
-                if (navigator.share) {
-                    // Native Web Share API (Safari auf iOS)
-                    await generatePDF();
-                    await navigator.share({
-                        title: 'Sicherheits-Fragebogen',
-                        text: 'Ausgefüllter Sicherheits-Fragebogen',
-                        url: window.location.href
-                    });
-                } else {
-                    // Fallback: PDF generieren
-                    await generatePDF();
+       async function shareForm() {
+    try {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p', 'mm', 'a4');
+
+        // Titel
+        pdf.setFontSize(20);
+        pdf.text('Sicherheits-Fragebogen', 20, 20);
+
+        // Formularinfos
+        const datum = document.getElementById('datum').value;
+        const marktnummer = document.getElementById('marktnummer').value;
+        const name = document.getElementById('name').value;
+        const sifa = document.getElementById('sifa').value;
+
+        pdf.setFontSize(12);
+        let yPos = 40;
+        pdf.text(`Datum: ${datum}`, 20, yPos);
+        pdf.text(`Marktnummer: ${marktnummer}`, 20, yPos + 10);
+        pdf.text(`Name: ${name}`, 20, yPos + 20);
+        pdf.text(`SIFA: ${sifa}`, 20, yPos + 30);
+
+        yPos += 50;
+        pdf.setFontSize(16);
+        pdf.text('Zusammenfassung', 20, yPos);
+        yPos += 15;
+
+        pdf.setFontSize(12);
+        pdf.text(`Fragen gesamt: 97`, 20, yPos);
+        pdf.text(`Beantwortet: ${Object.keys(answers).length}`, 20, yPos + 10);
+        pdf.text(`Maßnahmen: ${activeMeasures.length}`, 20, yPos + 20);
+        yPos += 40;
+
+        if (activeMeasures.length > 0) {
+            pdf.setFontSize(16);
+            pdf.text('Erforderliche Maßnahmen', 20, yPos);
+            yPos += 15;
+
+            pdf.setFontSize(10);
+            activeMeasures.forEach((measure, index) => {
+                if (yPos > 250) {
+                    pdf.addPage();
+                    yPos = 20;
                 }
-            } catch (error) {
-                console.error('Teilen fehlgeschlagen:', error);
-                // Fallback: PDF generieren
-                await generatePDF();
-            }
+
+                pdf.text(`${index + 1}. ${measure.measure}`, 20, yPos);
+                pdf.text(`Priorität: ${measure.priority === 'high' ? 'Hoch' : measure.priority === 'medium' ? 'Mittel' : 'Niedrig'}`, 20, yPos + 5);
+                yPos += 15;
+            });
         }
+
+        if (canvas) {
+            const signatureData = canvas.toDataURL('image/png');
+            pdf.addPage();
+            pdf.setFontSize(16);
+            pdf.text('Unterschrift', 20, 20);
+            pdf.addImage(signatureData, 'PNG', 20, 30, 100, 40);
+        }
+
+        // → PDF als Blob erzeugen
+        const pdfBlob = pdf.output('blob');
+        const pdfFile = new File([pdfBlob], `Sicherheitsfragebogen_${marktnummer || 'unbekannt'}_${datum}.pdf`, { type: 'application/pdf' });
+
+        // Teilen nur möglich, wenn Web Share API mit Dateien unterstützt wird
+        if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+            await navigator.share({
+                title: 'Sicherheits-Fragebogen',
+                text: 'Hier ist der ausgefüllte Sicherheitsfragebogen als PDF.',
+                files: [pdfFile]
+            });
+        } else {
+            alert('Teilen wird auf diesem Gerät nicht unterstützt. PDF wird heruntergeladen.');
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(pdfBlob);
+            link.download = pdfFile.name;
+            link.click();
+        }
+    } catch (error) {
+        console.error('Teilen fehlgeschlagen:', error);
+        alert('Teilen fehlgeschlagen. Bitte erneut versuchen.');
+    }
+}
+
 </script>
 </body>
 </html>
