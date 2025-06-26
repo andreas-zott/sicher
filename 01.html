@@ -507,7 +507,7 @@
         <div class="header">
             <h1>Sicherheits-Fragebogen</h1>
             <p>Beantworten Sie die folgenden Fragen mit Ja, Nein oder Nicht zutreffend</p>
-        
+        <button class="btn" onclick="sharePDF()">PDF teilen</button>
 </div>
 
         <div class="form-info">
@@ -2401,7 +2401,6 @@
 
     <!-- PDF teilen (öffnet Share-Menü auf iPad) -->
     <button class="btn btn-primary" onclick="shareForm()">📤 Formular teilen</button>
-<button class="btn" onclick="sharePDF()">📤 PDF teilen</button>
 </div>
     </div>
 
@@ -3011,6 +3010,9 @@
 
 </script>
 
+
+
+
 <script>
     async function sharePDF() {
         const element = document.querySelector('.container');
@@ -3025,21 +3027,9 @@
         pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
 
         const pdfBlob = pdf.output('blob');
-        const file = new File([pdfBlob], 'fragebogen.pdf', { type: 'application/pdf' });
+        const url = URL.createObjectURL(pdfBlob);
 
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-            try {
-                await navigator.share({
-                    title: 'Sicherheitsfragebogen',
-                    files: [file],
-                });
-            } catch (error) {
-                alert('Teilen abgebrochen oder fehlgeschlagen: ' + error.message);
-            }
-        } else {
-            const url = URL.createObjectURL(pdfBlob);
-            window.open(url);
-        }
+        window.open(url, '_blank'); // Im neuen Tab öffnen (Teilen/Speichern manuell möglich)
     }
 </script>
 
