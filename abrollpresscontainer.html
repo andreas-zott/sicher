@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Gefährdungsbeurteilung Presscontainer</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
 .risiko-feld {
   font-weight: bold;
@@ -719,11 +720,72 @@ function berechneRisiko(selectElement) {
   risikoFeld.style.padding = "4px 8px";
   risikoFeld.style.borderRadius = "6px";
 }
+function fensterDrucken() {
+  window.print();
+}
+
+async function teileRisiko() {
+  const element = document.getElementById("risikoTabelle");
+  
+  // Versuch, PDF zu erzeugen und zu teilen (Web Share API mit Dateien)
+  const opt = {
+    margin: 0.5,
+    filename: 'risikomatrix.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+  };
+
+  try {
+    const pdfBlob = await html2pdf().set(opt).from(element).outputPdf('blob');
+
+    if (navigator.canShare && navigator.canShare({ files: [new File([pdfBlob], 'risikomatrix.pdf', { type: 'application/pdf' })] })) {
+      await navigator.share({
+        files: [new File([pdfBlob], 'risikomatrix.pdf', { type: 'application/pdf' })],
+        title: 'Risiko-Matrix',
+        text: 'Hier ist die Risiko-Matrix als PDF.'
+      });
+    } else {
+      alert("Teilen wird von deinem Gerät/Browser nicht unterstützt.");
+    }
+  } catch (error) {
+    alert("Fehler beim Teilen: " + error);
+  }
+}
+function speichereUndDrucke() {
+  speichereMatrix();
+  fensterDrucken();
+}
+
+function speichereMatrix() {
+  const tbody = document.querySelector("table tbody");
+  // Speichere kompletten HTML-Inhalt der Tabelle (nur tbody)
+  localStorage.setItem('risikomatrix', tbody.innerHTML);
+  alert("Risiko-Matrix wurde gespeichert!");
+}
+
+function ladeMatrix() {
+  const gespeicherteMatrix = localStorage.getItem('risikomatrix');
+  if (gespeicherteMatrix) {
+    const tbody = document.querySelector("table tbody");
+    tbody.innerHTML = gespeicherteMatrix;
+
+    // Alle Risiko-Berechnungen neu ausführen, da select onchange nicht automatisch feuert
+    tbody.querySelectorAll("select").forEach(select => berechneRisiko(select));
+  }
+}
+
+// Beim Laden der Seite die gespeicherte Matrix laden
+window.onload = () => {
+  ladeMatrix();
+};
 </script>
   <div id="buttonContainer">
-    <button type="button" onclick="window.print()">Drucken</button>
-  </div>
-</form>
+  <button class="submit-btn" type="button" onclick="speichereUndDrucke()">💾 Speichern & Drucken</button>
+  <button type="button" onclick="fensterDrucken()">🖨️ Drucken</button>
+  <button type="button" onclick="teileRisiko()">📤 Teilen</button>
+</div>
+  </form>
  <footer class="footer">
     <p>© <span id="currentYear"></span> Andreas Zott. Alle Rechte vorbehalten.</p>
     <div class="footer-links">
