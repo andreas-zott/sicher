@@ -5,6 +5,28 @@
   <title>Gefährdungsbeurteilung – Aufschnittschneidemaschine</title>
  <style>
 @media print {
+  .page-break {
+    page-break-before: always;
+    break-before: always; /* Für moderne Browser */
+  }
+}
+@media print {
+  h1, h2, h3, label, textarea, input, select, form {
+    page-break-inside: avoid;
+  }
+  
+  /* Gruppiere Abschnitte sinnvoll */
+  form > * {
+    page-break-after: auto;
+  }
+  
+  /* Optional: Bereich immer zusammenhalten */
+  .no-break {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+}
+@media print {
   footer.footer {
     display: none !important;
   }
@@ -223,12 +245,13 @@ button:hover {
     <label>Baujahr / Seriennummer:</label>
     <input type="text" value="2021 / 123456789">
     <label>Verwendungszweck:</label>
-    <textarea>Schneiden von Wurst, Käse, Schinken und Brot in Scheiben</textarea>
+    <textarea>
+Schneiden von Wurst, Käse, Schinken und Brot in Scheiben</textarea>
 
     <h2>3. Gefährdungen</h2>
 
     <label>Mechanische Gefährdungen:</label>
-    <textarea>
+    <textarea id="textarea" rows="5" cols="60">
 - Schneiden mit rotierender Klinge: hohe Schnittgefahr
 - Quetschgefahr beim Vorschubschlitten
 - Einklemmgefahr bei beweglichen Teilen
@@ -236,40 +259,40 @@ button:hover {
     </textarea>
 
     <label>Elektrische Gefährdungen:</label>
-    <textarea>
+     <textarea id="textarea" rows="4" cols="60">
 - Stromschlag bei beschädigtem Netzkabel
 - Mangelhafte Erdung
 - Defekte Schalter oder Isolierungen
     </textarea>
 
     <label>Thermische Gefährdungen:</label>
-    <textarea>
+     <textarea id="textarea" rows="3" cols="60">
 - Erwärmung von Motorteilen bei Dauerbetrieb
 - Verbrühungsgefahr beim Reinigen mit Heißwasser
     </textarea>
 
     <label>Lärmbelastung:</label>
-    <textarea>
+     <textarea id="textarea" rows="3" cols="60">
 - Dauerbetrieb kann Lärmbelastung verursachen (>70 dB(A))
 - Erhöhte Geräuschentwicklung bei hartem Schneidgut
     </textarea>
 
     <label>Ergonomische Gefährdungen:</label>
-    <textarea>
+     <textarea id="textarea" rows="4" cols="60">
 - Zwangshaltungen bei zu niedriger / hoher Arbeitshöhe
 - Wiederholte Bewegungsabläufe (Repetitivarbeit)
 - Hohes Gewicht bei Reinigung oder Transport
     </textarea>
 
     <label>Gefährdung bei Reinigung / Wartung:</label>
-    <textarea>
+    <textarea id="textarea" rows="4" cols="60">
 - Schnittgefahr bei Reinigung der Messer
 - Gefahr durch versehentliches Einschalten
 - Umgang mit Reinigungschemikalien (Haut-/Augenreizung)
     </textarea>
 
     <label>Sonstige Gefährdungen:</label>
-    <textarea>
+      <textarea id="textarea" rows="3" cols="60">
 - Rutschgefahr durch herabfallende Lebensmittelreste
 - Infektionsrisiko durch unzureichende Hygiene
     </textarea>
@@ -277,7 +300,7 @@ button:hover {
     <h2>4. Schutzmaßnahmen</h2>
 
     <label>Technische Schutzmaßnahmen:</label>
-    <textarea>
+    <textarea id="textarea" rows="6" cols="60">
 - Abdeckung des Messers im Ruhezustand
 - Messer-Nachlaufbremse
 - Not-Aus-Schalter gut erreichbar
@@ -286,7 +309,7 @@ button:hover {
     </textarea>
 
     <label>Organisatorische Schutzmaßnahmen:</label>
-    <textarea>
+     <textarea id="textarea" rows="7" cols="60">
 - Nur eingewiesenes Personal darf Maschine bedienen
 - Regelmäßige Unterweisung (mind. 1x jährlich)
 - Betriebsanweisung in Sichtweite der Maschine
@@ -296,7 +319,7 @@ button:hover {
     </textarea>
 
     <label>Persönliche Schutzausrüstung (PSA):</label>
-    <textarea>
+     <textarea id="textarea" rows="5" cols="60">
 - Schnittschutzhandschuhe beim Reinigen
 - Rutschfeste Arbeitsschuhe
 - Schürze gegen Lebensmittelkontakt
@@ -306,13 +329,13 @@ button:hover {
     <h2>5. Bewertung der Risiken</h2>
 
     <label>Restgefährdung nach Maßnahmen:</label>
-    <textarea>
+    <textarea id="textarea" rows="3" cols="60">
 Minimale Schnittgefahr bei Missachtung der Sicherheitsvorkehrungen (z. B. Reinigung ohne Handschuhe).
 Restliches Risiko als akzeptabel bewertet.
     </textarea>
 
    
-
+<div class="page-break"></div>
 
 <h3>Dynamische Risikobewertung (Ampelsystem)</h3>
 <table>
