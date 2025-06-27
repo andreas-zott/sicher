@@ -576,7 +576,8 @@ async function teileRisiko() {
   };
 
   try {
-    const pdfBlob = await html2pdf().set(opt).from(element).outputPdf('blob');
+  html2pdf().set(opt).from(document.querySelector("form")).outputPdf('blob');  
+
 
     if (navigator.canShare && navigator.canShare({ files: [new File([pdfBlob], 'risikomatrix.pdf', { type: 'application/pdf' })] })) {
       await navigator.share({
@@ -618,6 +619,11 @@ function ladeMatrix() {
 window.onload = () => {
   ladeMatrix();
 };
+
+    function generatePDF() {
+      const element = document.getElementById('content');
+      html2pdf().from(element).save();
+    }
   </script>
   <footer class="footer">
     <p>© <span id="currentYear"></span> Andreas Zott. Alle Rechte vorbehalten.</p>
