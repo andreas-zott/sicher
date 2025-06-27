@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Gefährdungsbeurteilung – Aufschnittschneidemaschine</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
- <style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
 @media print {
   .page-break {
     page-break-before: always;
@@ -228,7 +228,8 @@ button:hover {
   <form>
     <h1>Gefährdungsbeurteilung – Aufschnittschneidemaschine</h1>
 
-    <h2>1. Allgemeine Angaben</h2>
+    <!-- ... restliches Formular bleibt unverändert ... -->
+ <h2>1. Allgemeine Angaben</h2>
     <label>Unternehmen:</label>
     <input type="text" value="Muster GmbH">
     <label>Abteilung / Standort:</label>
@@ -251,8 +252,17 @@ Schneiden von Wurst, Käse, Schinken und Brot in Scheiben</textarea>
 
     <h2>3. Gefährdungen</h2>
 
+    
     <label>Mechanische Gefährdungen:</label>
-    <textarea id="textarea" rows="5" cols="60">
+    <textarea class="risikofeld" rows="5">- Schneiden mit rotierender Klinge: hohe Schnittgefahr
+- Quetschgefahr beim Vorschubschlitten
+- Einklemmgefahr bei beweglichen Teilen
+- Nachlaufgefahr der Klinge nach Ausschalten</textarea>
+
+    <!-- Gleiche Änderung bei allen anderen Textareas: class statt id -->
+
+  <label>Mechanische Gefährdungen:</label>
+    <textarea id="risikofeld" rows="5" cols="60">
 - Schneiden mit rotierender Klinge: hohe Schnittgefahr
 - Quetschgefahr beim Vorschubschlitten
 - Einklemmgefahr bei beweglichen Teilen
@@ -260,40 +270,40 @@ Schneiden von Wurst, Käse, Schinken und Brot in Scheiben</textarea>
     </textarea>
 
     <label>Elektrische Gefährdungen:</label>
-     <textarea id="textarea" rows="4" cols="60">
+     <textarea id="risikofeld" rows="4" cols="60">
 - Stromschlag bei beschädigtem Netzkabel
 - Mangelhafte Erdung
 - Defekte Schalter oder Isolierungen
     </textarea>
 
     <label>Thermische Gefährdungen:</label>
-     <textarea id="textarea" rows="3" cols="60">
+     <textarea id="risikofeld" rows="3" cols="60">
 - Erwärmung von Motorteilen bei Dauerbetrieb
 - Verbrühungsgefahr beim Reinigen mit Heißwasser
     </textarea>
 
     <label>Lärmbelastung:</label>
-     <textarea id="textarea" rows="3" cols="60">
+     <textarea id="risikofeld" rows="3" cols="60">
 - Dauerbetrieb kann Lärmbelastung verursachen (>70 dB(A))
 - Erhöhte Geräuschentwicklung bei hartem Schneidgut
     </textarea>
 
     <label>Ergonomische Gefährdungen:</label>
-     <textarea id="textarea" rows="4" cols="60">
+     <textarea id="risikofeld" rows="4" cols="60">
 - Zwangshaltungen bei zu niedriger / hoher Arbeitshöhe
 - Wiederholte Bewegungsabläufe (Repetitivarbeit)
 - Hohes Gewicht bei Reinigung oder Transport
     </textarea>
 
     <label>Gefährdung bei Reinigung / Wartung:</label>
-    <textarea id="textarea" rows="4" cols="60">
+    <textarea id="risikofeld" rows="4" cols="60">
 - Schnittgefahr bei Reinigung der Messer
 - Gefahr durch versehentliches Einschalten
 - Umgang mit Reinigungschemikalien (Haut-/Augenreizung)
     </textarea>
 
     <label>Sonstige Gefährdungen:</label>
-      <textarea id="textarea" rows="3" cols="60">
+      <textarea id="risikofeld" rows="3" cols="60">
 - Rutschgefahr durch herabfallende Lebensmittelreste
 - Infektionsrisiko durch unzureichende Hygiene
     </textarea>
@@ -301,7 +311,7 @@ Schneiden von Wurst, Käse, Schinken und Brot in Scheiben</textarea>
     <h2>4. Schutzmaßnahmen</h2>
 
     <label>Technische Schutzmaßnahmen:</label>
-    <textarea id="textarea" rows="6" cols="60">
+    <textarea id="risikofeld" rows="6" cols="60">
 - Abdeckung des Messers im Ruhezustand
 - Messer-Nachlaufbremse
 - Not-Aus-Schalter gut erreichbar
@@ -310,7 +320,7 @@ Schneiden von Wurst, Käse, Schinken und Brot in Scheiben</textarea>
     </textarea>
 
     <label>Organisatorische Schutzmaßnahmen:</label>
-     <textarea id="textarea" rows="7" cols="60">
+     <textarea id="risikofeld" rows="7" cols="60">
 - Nur eingewiesenes Personal darf Maschine bedienen
 - Regelmäßige Unterweisung (mind. 1x jährlich)
 - Betriebsanweisung in Sichtweite der Maschine
@@ -320,7 +330,7 @@ Schneiden von Wurst, Käse, Schinken und Brot in Scheiben</textarea>
     </textarea>
 
     <label>Persönliche Schutzausrüstung (PSA):</label>
-     <textarea id="textarea" rows="5" cols="60">
+     <textarea id="risikofeld" rows="5" cols="60">
 - Schnittschutzhandschuhe beim Reinigen
 - Rutschfeste Arbeitsschuhe
 - Schürze gegen Lebensmittelkontakt
@@ -330,46 +340,44 @@ Schneiden von Wurst, Käse, Schinken und Brot in Scheiben</textarea>
     <h2>5. Bewertung der Risiken</h2>
 
     <label>Restgefährdung nach Maßnahmen:</label>
-    <textarea id="textarea" rows="3" cols="60">
+    <textarea id="risikofeld" rows="3" cols="60">
 Minimale Schnittgefahr bei Missachtung der Sicherheitsvorkehrungen (z. B. Reinigung ohne Handschuhe).
 Restliches Risiko als akzeptabel bewertet.
-    </textarea>
-
-   
+    </textarea>   
 <div class="page-break"></div>
-
-<h3>Dynamische Risikobewertung (Ampelsystem)</h3>
-<table>
-  <thead>
-    <tr>
-      <th>Gefährdung</th>
-      <th>Eintrittswahrscheinlichkeit (1–5)</th>
-      <th>Schadensschwere (1–5)</th>
-      <th>Risikozahl</th>
-      <th>Risikostufe</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Schnittverletzung am Messer</td>
-      <td><select onchange="berechneRisiko(this)">
-        <option value="1">1 – selten</option>
-        <option value="2">2</option>
-        <option value="3" selected>3</option>
-        <option value="4">4</option>
-        <option value="5">5 – sehr häufig</option>
-      </select></td>
-      <td><select onchange="berechneRisiko(this)">
-        <option value="1">1 – gering</option>
-        <option value="2">2</option>
-        <option value="3" selected>3</option>
-        <option value="4">4</option>
-        <option value="5">5 – katastrophal</option>
-      </select></td>
-      <td class="risikozahl">9</td>
-      <td class="risiko-feld" style="font-weight:bold;">Mittel</td>
-    </tr>
-    <tr>
+    <!-- Tabelle -->
+    <h3>Dynamische Risikobewertung (Ampelsystem)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Gefährdung</th>
+          <th>Eintrittswahrscheinlichkeit (1–5)</th>
+          <th>Schadensschwere (1–5)</th>
+          <th>Risikozahl</th>
+          <th>Risikostufe</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Schnittverletzung am Messer</td>
+          <td><select onchange="berechneRisiko(this)">
+            <option value="1">1 – selten</option>
+            <option value="2">2</option>
+            <option value="3" selected>3</option>
+            <option value="4">4</option>
+            <option value="5">5 – sehr häufig</option>
+          </select></td>
+          <td><select onchange="berechneRisiko(this)">
+            <option value="1">1 – gering</option>
+            <option value="2">2</option>
+            <option value="3" selected>3</option>
+            <option value="4">4</option>
+            <option value="5">5 – katastrophal</option>
+          </select></td>
+          <td class="risikozahl">9</td>
+          <td class="risiko-feld" style="font-weight:bold;">Mittel</td>
+        </tr>
+ <tr>
       <td>Stromschlag bei Reinigung</td>
       <td><select onchange="berechneRisiko(this)">
         <option value="1">1 – selten</option>
@@ -407,7 +415,6 @@ Restliches Risiko als akzeptabel bewertet.
       <td class="risikozahl">12</td>
       <td class="risiko-feld" style="font-weight:bold;">Mittel</td>
     </tr>
-
     <tr>
       <td>Nichtbenutzung des Restehalters</td>
       <td><select onchange="berechneRisiko(this)">
@@ -429,43 +436,7 @@ Restliches Risiko als akzeptabel bewertet.
     </tr>
   
 </table>
-
-<script>
-  function berechneRisiko(selectElement) {
-    const row = selectElement.closest('tr');
-    const selects = row.querySelectorAll('select');
-    const w = parseInt(selects[0].value);
-    const s = parseInt(selects[1].value);
-    const risiko = w * s;
-
-    const zahlFeld = row.querySelector('.risikozahl');
-    const risikoFeld = row.querySelector('.risiko-feld');
-
-    zahlFeld.textContent = risiko;
-
-    if (risiko <= 4) {
-      risikoFeld.textContent = 'Niedrig';
-      risikoFeld.style.backgroundColor = '#2ecc71'; // grün
-      risikoFeld.style.color = '#fff';
-    } else if (risiko <= 12) {
-      risikoFeld.textContent = 'Mittel';
-      risikoFeld.style.backgroundColor = '#f1c40f'; // gelb
-      risikoFeld.style.color = '#000';
-    } else {
-      risikoFeld.textContent = 'Hoch';
-      risikoFeld.style.backgroundColor = '#e74c3c'; // rot
-      risikoFeld.style.color = '#fff';
-    }
-  }
-
-  // Initialisierung bei Laden
-  document.querySelectorAll('select').forEach(sel => {
-    if (sel.closest('tr')) berechneRisiko(sel);
-  });
-</script>
-
-        <!-- Weitere Risiken können hier ergänzt werden -->
-      </tbody>
+</tbody>
     </table>
 
     <label>Restrisiko vertretbar?</label>
@@ -489,48 +460,26 @@ Restliches Risiko als akzeptabel bewertet.
 
     <label>Bemerkungen:</label>
     <textarea>Gefährdungsbeurteilung wird jährlich oder bei Änderung der Maschine/Arbeitsabläufe aktualisiert.</textarea>
+      
 
-<div id="buttonContainer">
-  <button class="submit-btn" type="button" onclick="speichereUndDrucke()">💾 Speichern & Drucken</button>
-  <button type="button" onclick="fensterDrucken()">🖨️ Drucken</button>
-  <button type="button" onclick="teileRisiko()">📤 Teilen</button>
-</div>
+
+
+    <div id="buttonContainer">
+      <button class="submit-btn" type="button" onclick="speichereUndDrucke()">💾 Speichern & Drucken</button>
+      <button type="button" onclick="fensterDrucken()">🖨️ Drucken</button>
+      <button type="button" onclick="teileRisiko()">📤 Teilen</button>
+    </div>
   </form>
 
+  <footer class="footer">
+    <p>© <span id="currentYear"></span> Andreas Zott. Alle Rechte vorbehalten.</p>
+    <div class="footer-links">
+      <a href="datenschutz.html" target="_blank" rel="noopener noreferrer">Datenschutz</a>
+      <a href="impressum.html" target="_blank" rel="noopener noreferrer">Impressum</a>
+    </div>
+  </footer>
+
   <script>
-
-  function berechneRisiko(selectElement) {
-    const row = selectElement.closest('tr');
-    const selects = row.querySelectorAll('select');
-    const w = parseInt(selects[0].value);
-    const s = parseInt(selects[1].value);
-    const risiko = w * s;
-
-    const zahlFeld = row.querySelector('.risikozahl');
-    const risikoFeld = row.querySelector('.risiko-feld');
-
-    zahlFeld.textContent = risiko;
-
-    if (risiko <= 4) {
-      risikoFeld.textContent = 'Niedrig';
-      risikoFeld.style.backgroundColor = '#2ecc71'; // Grün
-      risikoFeld.style.color = '#fff';
-    } else if (risiko <= 12) {
-      risikoFeld.textContent = 'Mittel';
-      risikoFeld.style.backgroundColor = '#f1c40f'; // Gelb
-      risikoFeld.style.color = '#000';
-    } else {
-      risikoFeld.textContent = 'Hoch';
-      risikoFeld.style.backgroundColor = '#e74c3c'; // Rot
-      risikoFeld.style.color = '#fff';
-    }
-  }
-
-  // Initialberechnung beim Laden
-  document.querySelectorAll('select').forEach(sel => {
-    if (sel.closest('tr')) berechneRisiko(sel);
-  });
-
     function berechneRisiko(selectElement) {
       const row = selectElement.closest('tr');
       const selects = row.querySelectorAll('select');
@@ -545,98 +494,80 @@ Restliches Risiko als akzeptabel bewertet.
 
       if (risiko <= 4) {
         risikoFeld.textContent = 'Niedrig';
-        risikoFeld.style.backgroundColor = '#2ecc71'; // grün
+        risikoFeld.style.backgroundColor = '#2ecc71';
+        risikoFeld.style.color = '#fff';
       } else if (risiko <= 12) {
         risikoFeld.textContent = 'Mittel';
-        risikoFeld.style.backgroundColor = '#f1c40f'; // gelb
+        risikoFeld.style.backgroundColor = '#f1c40f';
+        risikoFeld.style.color = '#000';
       } else {
         risikoFeld.textContent = 'Hoch';
-        risikoFeld.style.backgroundColor = '#e74c3c'; // rot
+        risikoFeld.style.backgroundColor = '#e74c3c';
+        risikoFeld.style.color = '#fff';
       }
     }
 
-    // Initialbewertung
-    document.querySelectorAll('select').forEach(sel => {
-      if (sel.closest('tr')) berechneRisiko(sel);
-    });
-function fensterDrucken() {
-  window.print();
-}
-
-async function teileRisiko() {
-}
- 
-  
-  // Versuch, PDF zu erzeugen und zu teilen (Web Share API mit Dateien)
-  const opt = {
-    margin: 0.5,
-    filename: 'risikomatrix.pdf',
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2 },
-    jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-  };
-
-try {
-  const element = document.querySelector("form"); // oder ein spezifischeres Element
-  const pdfBlob = await html2pdf().set(opt).from(element).outputPdf('blob');
-
-  const file = new File([pdfBlob], 'risikomatrix.pdf', { type: 'application/pdf' });
-
-  if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    await navigator.share({
-      files: [file],
-      title: 'Risiko-Matrix',
-      text: 'Hier ist die Risiko-Matrix als PDF.'
-    });
-  } else {
-    alert("Teilen wird von deinem Gerät/Browser nicht unterstützt.");
-  }
-} catch (error) {
-  alert("Fehler beim Teilen: " + error);
-}
-function speichereUndDrucke() {
-  speichereMatrix();
-  fensterDrucken();
-}
-
-function speichereMatrix() {
-  const tbody = document.querySelector("table tbody");
-  // Speichere kompletten HTML-Inhalt der Tabelle (nur tbody)
-  localStorage.setItem('risikomatrix', tbody.innerHTML);
-  alert("Risiko-Matrix wurde gespeichert!");
-}
-
-function ladeMatrix() {
-  const gespeicherteMatrix = localStorage.getItem('risikomatrix');
-  if (gespeicherteMatrix) {
-    const tbody = document.querySelector("table tbody");
-    tbody.innerHTML = gespeicherteMatrix;
-
-    // Alle Risiko-Berechnungen neu ausführen, da select onchange nicht automatisch feuert
-    tbody.querySelectorAll("select").forEach(select => berechneRisiko(select));
-  }
-}
-
-// Beim Laden der Seite die gespeicherte Matrix laden
-window.onload = () => {
-  ladeMatrix();
-};
-
-    function generatePDF() {
-      const element = document.getElementById('content');
-      html2pdf().from(element).save();
+    function fensterDrucken() {
+      window.print();
     }
+
+    function speichereMatrix() {
+      const tbody = document.querySelector("table tbody");
+      localStorage.setItem('risikomatrix', tbody.innerHTML);
+      alert("Risiko-Matrix wurde gespeichert!");
+    }
+
+    function ladeMatrix() {
+      const gespeicherteMatrix = localStorage.getItem('risikomatrix');
+      if (gespeicherteMatrix) {
+        const tbody = document.querySelector("table tbody");
+        tbody.innerHTML = gespeicherteMatrix;
+        tbody.querySelectorAll("select").forEach(select => berechneRisiko(select));
+      }
+    }
+
+    function speichereUndDrucke() {
+      speichereMatrix();
+      fensterDrucken();
+    }
+
+    async function teileRisiko() {
+      const element = document.querySelector("form");
+      const opt = {
+        margin: 0.5,
+        filename: 'risikomatrix.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+      };
+
+      try {
+        const worker = html2pdf().set(opt).from(element);
+        const blob = await worker.output('blob');
+
+        const file = new File([blob], 'risikomatrix.pdf', { type: 'application/pdf' });
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: 'Risiko-Matrix',
+            text: 'Hier ist die Risiko-Matrix als PDF.'
+          });
+        } else {
+          alert("Teilen wird von deinem Gerät/Browser nicht unterstützt.");
+        }
+      } catch (error) {
+        alert("Fehler beim Teilen: " + error.message);
+      }
+    }
+
+    window.onload = () => {
+      ladeMatrix();
+      document.querySelectorAll('select').forEach(sel => {
+        if (sel.closest('tr')) berechneRisiko(sel);
+      });
+      document.getElementById('currentYear').textContent = new Date().getFullYear();
+    };
   </script>
-  <footer class="footer">
-    <p>© <span id="currentYear"></span> Andreas Zott. Alle Rechte vorbehalten.</p>
-    <div class="footer-links">
-      <a href="datenschutz.html" target="_blank" rel="noopener noreferrer">
-        <i class="fas fa-user-shield"></i> Datenschutz
-      </a>
-      <a href="impressum.html" target="_blank" rel="noopener noreferrer">
-        <i class="fas fa-info-circle"></i> Impressum
-      </a>
-    </div>
-  </footer>
 </body>
 </html>
