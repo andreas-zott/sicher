@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sicherheits-Fragebogen</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
-  <link href="/sicher/fragen.json" rel="icon" type="image/x-icon" />
+  <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon">
+<link href="/sicher/fragen.json" rel="icon" type="image/x-icon" />
       <style>
         * {
             margin: 0;
@@ -507,8 +508,7 @@
         <div class="header">
             <h1>Sicherheits-Fragebogen</h1>
             <p>Beantworten Sie die folgenden Fragen mit Ja, Nein oder Nicht zutreffend</p>
-        <button class="btn" onclick="sharePDF()">PDF teilen</button>
-</div>
+        </div>
 
         <div class="form-info">
             <h2>Allgemeine Informationen</h2>
@@ -2401,6 +2401,7 @@
 
     <!-- PDF teilen (öffnet Share-Menü auf iPad) -->
     <button class="btn btn-primary" onclick="shareForm()">📤 Formular teilen</button>
+<button class="btn btn-success" onclick="generateFullFormPDF()">Formular inkl. Unterschrift als PDF speichern</button>
 </div>
     </div>
 
@@ -2689,6 +2690,50 @@
         }
 
         // PDF-Generierung
+async function generateFullFormPDF() {
+        const container = document.querySelector('.container');
+        const signatureCanvas = document.getElementById('signature-canvas');
+        
+        // Erstellt Screenshot vom gesamten Formular
+        const canvas = await html2canvas(container, { scale: 2 });
+        const imgData = canvas.toDataURL('image/png');
+
+        // PDF initialisieren
+        const pdf = new jspdf.jsPDF({
+            orientation: 'portrait',
+            unit: 'mm',
+            format: 'a4'
+        });
+
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+
+        const imgWidth = pageWidth;
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+
+        let y = 0;
+        if (imgHeight < pageHeight) {
+            pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+        } else {
+            let position = 0;
+            while (position < imgHeight) {
+                pdf.addImage(imgData, 'PNG', 0, position === 0 ? 0 : -position, imgWidth, imgHeight);
+                position += pageHeight;
+                if (position < imgHeight) pdf.addPage();
+            }
+        }
+
+        // Wenn Signatur vorhanden, einfügen
+        if (signatureCanvas) {
+            const sigData = signatureCanvas.toDataURL('image/png');
+            pdf.addPage();
+            pdf.setFontSize(16);
+            pdf.text('Unterschrift:', 10, 20);
+            pdf.addImage(sigData, 'PNG', 10, 30, 100, 40); // Position & Größe anpassen
+        }
+
+        pdf.save('Sicherheits-Fragebogen.pdf');
+    }
         async function generatePDF() {
             try {
                 const { jsPDF } = window.jspdf;
@@ -3006,32 +3051,7 @@
         .then(() => console.log("✅ Service Worker registriert"))
         .catch(err => console.error("❌ Service Worker Fehler:", err));
     });
-  }
-
+  } 
 </script>
-
-
-
-
-<script>
-    async function sharePDF() {
-        const element = document.querySelector('.container');
-        const canvas = await html2canvas(element, { scale: 2 });
-
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
-        const imgProps = pdf.getImageProperties(imgData);
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-
-        const pdfBlob = pdf.output('blob');
-        const url = URL.createObjectURL(pdfBlob);
-
-        window.open(url, '_blank'); // Im neuen Tab öffnen (Teilen/Speichern manuell möglich)
-    }
-</script>
-
 </body>
 </html>
