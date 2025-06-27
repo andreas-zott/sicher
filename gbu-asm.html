@@ -564,7 +564,8 @@ function fensterDrucken() {
 }
 
 async function teileRisiko() {
-  const element = document.getElementById("risikoTabelle");
+}
+ 
   
   // Versuch, PDF zu erzeugen und zu teilen (Web Share API mit Dateien)
   const opt = {
@@ -575,22 +576,23 @@ async function teileRisiko() {
     jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
   };
 
-  try {
-  html2pdf().set(opt).from(document.querySelector("form")).outputPdf('blob');  
+try {
+  const element = document.querySelector("form"); // oder ein spezifischeres Element
+  const pdfBlob = await html2pdf().set(opt).from(element).outputPdf('blob');
 
+  const file = new File([pdfBlob], 'risikomatrix.pdf', { type: 'application/pdf' });
 
-    if (navigator.canShare && navigator.canShare({ files: [new File([pdfBlob], 'risikomatrix.pdf', { type: 'application/pdf' })] })) {
-      await navigator.share({
-        files: [new File([pdfBlob], 'risikomatrix.pdf', { type: 'application/pdf' })],
-        title: 'Risiko-Matrix',
-        text: 'Hier ist die Risiko-Matrix als PDF.'
-      });
-    } else {
-      alert("Teilen wird von deinem Gerät/Browser nicht unterstützt.");
-    }
-  } catch (error) {
-    alert("Fehler beim Teilen: " + error);
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    await navigator.share({
+      files: [file],
+      title: 'Risiko-Matrix',
+      text: 'Hier ist die Risiko-Matrix als PDF.'
+    });
+  } else {
+    alert("Teilen wird von deinem Gerät/Browser nicht unterstützt.");
   }
+} catch (error) {
+  alert("Fehler beim Teilen: " + error);
 }
 function speichereUndDrucke() {
   speichereMatrix();
