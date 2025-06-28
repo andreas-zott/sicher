@@ -563,6 +563,109 @@ function getRotatedImage(img, orientation, maxWidth, maxHeight) {
 
   return canvas.toDataURL("image/jpeg", 0.9);
 }
+// Funktion zum Laden, Drehen und Skalieren des Bildes anhand von EXIF-Orientation
+function loadAndRotateImage(src, maxWidth, maxHeight) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous"; // Falls Bilder extern sind
+
+    img.onload = () => {
+      EXIF.getData(img, function () {
+        const orientation = EXIF.getTag(this, "Orientation") || 1;
+
+        let canvas = document.createElement("canvas");
+        let ctx = canvas.getContext("2d");
+
+        let width = img.width;
+        let height = img.height;
+
+        // Skalierung der Bildgröße, maxWidth & maxHeight beachten
+        let drawWidth = width;
+        let drawHeight = height;
+
+        if (width > maxWidth) {
+          drawWidth = maxWidth;
+          drawHeight = (height * maxWidth) / width;
+        }
+        if (drawHeight > maxHeight) {
+          drawWidth = (drawWidth * maxHeight) / drawHeight;
+          drawHeight = maxHeight;
+        }
+
+        // Canvas-Größe an Orientation anpassen (bei 90° Drehungen tauschen)
+        if ([5, 6, 7, 8].includes(orientation)) {
+          canvas.width = drawHeight;
+          canvas.height = drawWidth;
+        } else {
+          canvas.width = drawWidth;
+          canvas.height = drawHeight;
+        }
+
+        // Transformation anwenden
+        switch (orientation) {
+          case 2:
+            ctx.transform(-1, 0, 0, 1, drawWidth, 0);
+            break; // horizontal flip
+          case 3:
+            ctx.transform(-1, 0, 0, -1, drawWidth, drawHeight);
+            break; // 180°
+          case 4:
+            ctx.transform(1, 0, 0, -1, 0, drawHeight);
+            break; // vertical flip
+          case 5:
+            ctx.transform(0, 1, 1, 0, 0, 0);
+            break; // 90° CW + horizontal flip
+          case 6:
+            ctx.transform(0, 1, -1, 0, drawHeight, 0);
+            break; // 90° CW
+          case 7:
+            ctx.transform(0, -1, -1, 0, drawHeight, drawWidth);
+            break; // 90° CCW + horizontal flip
+          case 8:
+            ctx.transform(0, -1, 1, 0, 0, drawWidth);
+            break; // 90° CCW
+          default:
+            break; // normal (keine Drehung)
+        }
+
+        ctx.drawImage(img, 0, 0, width, height, 0, 0, drawWidth, drawHeight);
+
+        resolve(canvas.toDataURL("image/jpeg", 0.9));
+      });
+    };
+
+    img.onerror = (e) => reject(e);
+    img.src = src;
+  });
+}
+
+// Hauptfunktion zur PDF-Erzeugung, asynchron wegen Bildbearbeitung
+async function speichernAlsPDF() {
+  const pdf = new jsPDF();
+
+  const cellWidth = 50;  // Beispielbreite für Zellen im PDF
+  const cellHeight = 60; // Beispielhöhe
+
+  for (let i = 0; i < bilderArray.length; i++) {
+    let imgSrc = bilderArray[i]; // Bildquelle (DataURL oder URL)
+
+    try {
+      // Bild laden, drehen und skalieren
+      let rotatedDataUrl = await loadAndRotateImage(imgSrc, cellWidth * 0.9, cellHeight * 0.7);
+
+      // Bild ins PDF einfügen
+      // Beispielposition, hier nebeneinander 2 pro Reihe
+      const x = (i % 2) * cellWidth;
+      const y = Math.floor(i / 2) * cellHeight;
+
+      pdf.addImage(rotatedDataUrl, "JPEG", x, y, cellWidth * 0.9, cellHeight * 0.7);
+    } catch (err) {
+      console.error("Fehler beim Laden/Drehen des Bildes", err);
+    }
+  }
+
+  pdf.save("mein_dokument.pdf");
+}
 
 
   </script>
