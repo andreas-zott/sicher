@@ -160,7 +160,25 @@
   align-items: center;
   justify-content: center;
 ">🌙</button>
-
+<div id="formatHinweis" style="
+  position: fixed;
+  top: 250px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ffc;
+  border: 1px solid #cca;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  font-weight: bold;
+  z-index: 2000;
+  max-width: 600px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  cursor: pointer;
+">
+ Bitte nehmen Sie ausschließlich Fotos im <span style="color:#007bff;">Querformat</span> auf. <br><small>Klick zum Schließen</small>
+</div>
   <div class="container-box">
 
     <h1 class="mb-4 text-center">Arbeitssicherheit-Checkliste-2025</h1>
@@ -348,38 +366,17 @@
             continue;
           }
 
-          
-let imgWidth = maxImgWidth;
-let imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+          let imgWidth = maxImgWidth;
+          let imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+          if (imgHeight > maxImgHeight) {
+            imgHeight = maxImgHeight;
+            imgWidth = (imgProps.width * imgHeight) / imgProps.height;
+          }
 
-// Drehe Bild bei Hochformat
-let rotate = false;
-if (imgProps.height > imgProps.width) {
-  rotate = true;
-  imgHeight = maxImgHeight;
-  imgWidth = (imgProps.width * imgHeight) / imgProps.height;
-}
+          const x = margin + col * cellWidth + (cellWidth - imgWidth) / 2;
+          const y = margin + 50 + row * cellHeight;
 
-// Begrenze Größe
-if (!rotate && imgHeight > maxImgHeight) {
-  imgHeight = maxImgHeight;
-  imgWidth = (imgProps.width * imgHeight) / imgProps.height;
-}
-
-const x = margin + col * cellWidth + (cellWidth - imgWidth) / 2;
-const y = margin + 50 + row * cellHeight;
-
-// Drehen, falls Hochformat
-if (rotate) {
-  doc.saveGraphicsState();
-  doc.translate(x + imgHeight, y);
-  doc.rotate((90 * Math.PI) / 180);
-  doc.addImage(img, "JPEG", 0, 0, imgHeight, imgWidth);
-  doc.restoreGraphicsState();
-} else {
-  doc.addImage(img, "JPEG", x, y, imgWidth, imgHeight);
-}
-
+          doc.addImage(img, "JPEG", x, y, imgWidth, imgHeight);
 
           // Kommentar unter Bild
           if (kommentarText) {
@@ -460,38 +457,17 @@ async function pdfTeilen() {
         continue;
       }
 
-      
-let imgWidth = maxImgWidth;
-let imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+      let imgWidth = maxImgWidth;
+      let imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+      if (imgHeight > maxImgHeight) {
+        imgHeight = maxImgHeight;
+        imgWidth = (imgProps.width * imgHeight) / imgProps.height;
+      }
 
-// Drehe Bild bei Hochformat
-let rotate = false;
-if (imgProps.height > imgProps.width) {
-  rotate = true;
-  imgHeight = maxImgHeight;
-  imgWidth = (imgProps.width * imgHeight) / imgProps.height;
-}
+      const x = margin + col * cellWidth + (cellWidth - imgWidth) / 2;
+      const y = margin + 50 + row * cellHeight;
 
-// Begrenze Größe
-if (!rotate && imgHeight > maxImgHeight) {
-  imgHeight = maxImgHeight;
-  imgWidth = (imgProps.width * imgHeight) / imgProps.height;
-}
-
-const x = margin + col * cellWidth + (cellWidth - imgWidth) / 2;
-const y = margin + 50 + row * cellHeight;
-
-// Drehen, falls Hochformat
-if (rotate) {
-  doc.saveGraphicsState();
-  doc.translate(x + imgHeight, y);
-  doc.rotate((90 * Math.PI) / 180);
-  doc.addImage(img, "JPEG", 0, 0, imgHeight, imgWidth);
-  doc.restoreGraphicsState();
-} else {
-  doc.addImage(img, "JPEG", x, y, imgWidth, imgHeight);
-}
-
+      doc.addImage(img, "JPEG", x, y, imgWidth, imgHeight);
 
       if (kommentarText) {
         doc.setFontSize(10);
@@ -522,6 +498,17 @@ if (rotate) {
     alert("Dieses Gerät unterstützt das Teilen von Dateien nicht.");
   }
 }
+const hinweis = document.getElementById("formatHinweis");
+
+// Hinweis nach 7 Sekunden automatisch ausblenden
+setTimeout(() => {
+  if (hinweis) hinweis.style.display = "none";
+}, 5000);
+
+// Hinweis bei Klick ausblenden
+hinweis.addEventListener("click", () => {
+  hinweis.style.display = "none";
+});
 
   </script>
 </body>
