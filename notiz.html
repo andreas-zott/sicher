@@ -1,137 +1,159 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Marktformular mit PDF Export</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Marktformular mit PDF Export</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+  body {
+    font-family: sans-serif;
+    background: #f0f0f5;
+    padding: 2rem;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
 
-  <style>
-    body {
-      font-family: sans-serif;
-      background: #f0f0f5;
-      padding: 2rem;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
+  .form-wrapper {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    padding: 2rem;
+    max-width: 1000px;
+    margin: auto;
+    user-select: none;
+    flex-grow: 1;
+  }
 
-    .form-wrapper {
-      background: white;
-      border-radius: 20px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-      padding: 2rem;
-      max-width: 1000px;
-      margin: auto;
-      user-select: none;
-      flex-grow: 1;
-    }
+  h1 {
+    text-align: center;
+    margin-bottom: 1rem;
+    user-select: text;
+  }
 
-    h1 {
-      text-align: center;
-      margin-bottom: 1rem;
-      user-select: text;
-    }
+  .info-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
 
-    .info-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
+  .info-row > div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
 
-    .info-row input {
-      flex: 1;
-      padding: 0.75rem;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      user-select: text;
-    }
+  .info-row input {
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 0.75rem;
+    user-select: text;
+    font-family: inherit;
+    height: 2.5rem;
+  }
 
-    .canvas-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
-    }
+  .canvas-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
 
-    .canvas-box {
-      background: #fafafa;
-      border: 2px solid #ddd;
-      border-radius: 15px;
-      padding: 0.5rem;
-      user-select: none;
-    }
+  .canvas-box {
+    background: #fafafa;
+    border: 2px solid #ddd;
+    border-radius: 15px;
+    padding: 0.5rem;
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
-    .canvas-box strong {
-      display: block;
-      margin-bottom: 0.3rem;
-      user-select: text;
-    }
+  .canvas-box strong {
+    display: block;
+    margin-bottom: 0.3rem;
+    user-select: text;
+  }
 
-    canvas {
-      width: 100%;
-      height: 250px;
-      border-radius: 10px;
-      background: white;
-      border: 1px solid #ccc;
-      touch-action: none;
-      user-select: none;
-    }
+  .canvas-box canvas {
+    width: 100%;
+    height: 250px;
+    border-radius: 10px;
+    background: white;
+    border: 1px solid #ccc;
+    touch-action: none;
+    user-select: none;
+    display: block;
+  }
 
+  .canvas-box textarea {
+    width: 90%;
+    margin: 0.5rem auto 0 auto;
+    display: block;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    padding: 0.5rem;
+    font-family: inherit;
+    font-size: 1rem;
+    resize: vertical;
+    min-height: 3.5rem;
+  }
+
+  .button-row {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  button {
+    flex: 1;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: none;
+    background-color: #007aff;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+    min-width: 120px;
+  }
+
+  button.clear {
+    background-color: #ccc;
+    color: black;
+  }
+
+  @media print {
     .button-row {
-      margin-top: 1.5rem;
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
+      display: none !important;
     }
+  }
 
-    button {
-      flex: 1;
-      padding: 0.75rem;
-      font-size: 1rem;
-      border-radius: 10px;
-      border: none;
-      background-color: #007aff;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      user-select: none;
-      min-width: 120px;
-    }
+  footer.footer {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #999;
+    margin: 2rem auto 1rem auto;
+    user-select: none;
+    max-width: 1000px;
+  }
 
-    button.clear {
-      background-color: #ccc;
-      color: black;
-    }
+  footer.footer a {
+    color: #999;
+    text-decoration: none;
+    margin: 0 0.25rem;
+  }
 
-    /* Verstecke Buttons beim Drucken oder PDF-Export */
-    @media print {
-      .button-row {
-        display: none !important;
-      }
-    }
-
-    footer.footer {
-      text-align: center;
-      font-size: 0.8rem;
-      color: #999;
-      margin: 2rem auto 1rem auto;
-      user-select: none;
-      max-width: 1000px;
-    }
-
-    footer.footer a {
-      color: #999;
-      text-decoration: none;
-      margin: 0 0.25rem;
-    }
-
-    footer.footer a:hover {
-      text-decoration: underline;
-    }
-  </style>
+  footer.footer a:hover {
+    text-decoration: underline;
+  }
+</style>
 </head>
 <body>
 
@@ -139,35 +161,47 @@
   <h1>📋 Marktformular</h1>
 
   <div class="info-row">
-    <input type="text" id="name" placeholder="🧑‍💼 Name" autocomplete="off" />
-    <input type="text" id="markt" placeholder="🛒 Marktnummer" autocomplete="off" />
-    <input type="date" id="datum" />
+    <div>
+      <input type="text" id="name" placeholder="🧑‍💼 Name" autocomplete="off" />
+    </div>
+    <div>
+      <input type="text" id="markt" placeholder="🛒 Marktnummer" autocomplete="off" />
+    </div>
+    <div>
+      <input type="date" id="datum" />
+    </div>
   </div>
 
   <div class="canvas-grid">
     <div class="canvas-box">
       <strong>🔹 Notiz 1</strong>
       <canvas id="canvas1"></canvas>
+      <textarea id="canvas-note1" placeholder="Zusätzliche Notizen zu Notiz 1..." rows="3"></textarea>
     </div>
     <div class="canvas-box">
       <strong>🔹 Notiz 2</strong>
       <canvas id="canvas2"></canvas>
+      <textarea id="canvas-note2" placeholder="Zusätzliche Notizen zu Notiz 2..." rows="3"></textarea>
     </div>
     <div class="canvas-box">
       <strong>🔹 Notiz 3</strong>
       <canvas id="canvas3"></canvas>
+      <textarea id="canvas-note3" placeholder="Zusätzliche Notizen zu Notiz 3..." rows="3"></textarea>
     </div>
     <div class="canvas-box">
       <strong>🔹 Notiz 4</strong>
       <canvas id="canvas4"></canvas>
+      <textarea id="canvas-note4" placeholder="Zusätzliche Notizen zu Notiz 4..." rows="3"></textarea>
     </div>
     <div class="canvas-box">
       <strong>🔹 Notiz 5</strong>
       <canvas id="canvas5"></canvas>
+      <textarea id="canvas-note5" placeholder="Zusätzliche Notizen zu Notiz 5..." rows="3"></textarea>
     </div>
     <div class="canvas-box">
       <strong>🔹 Notiz 6</strong>
       <canvas id="canvas6"></canvas>
+      <textarea id="canvas-note6" placeholder="Zusätzliche Notizen zu Notiz 6..." rows="3"></textarea>
     </div>
   </div>
 
@@ -203,11 +237,8 @@
 
   window.addEventListener('resize', resizeAll);
   window.addEventListener('load', () => {
-    // Automatisches Datum heute
     const today = new Date().toISOString().slice(0,10);
     document.getElementById('datum').value = today;
-
-    // Aktuelles Jahr im Footer
     document.getElementById('currentYear').textContent = new Date().getFullYear();
 
     canvasIds.forEach(id => {
@@ -257,67 +288,99 @@
       canvas.addEventListener('touchend', endDraw);
       canvas.addEventListener('touchcancel', endDraw);
       canvas.addEventListener('touchmove', draw);
+
+      // Resize & clear
+      canvas.width = canvas.clientWidth * window.devicePixelRatio;
+      canvas.height = canvas.clientHeight * window.devicePixelRatio;
+      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
     });
 
-    resizeAll();
-
-    // Daten aus localStorage laden
-    const saved = localStorage.getItem('marktformular');
-    if (saved) {
-      const data = JSON.parse(saved);
-      document.getElementById('name').value = data.name || '';
-      document.getElementById('markt').value = data.markt || '';
-      document.getElementById('datum').value = data.datum || today;
-      canvasIds.forEach((id, i) => {
-        if (data[`canvas${i+1}`]) {
-          const img = new Image();
-          img.onload = () => {
-            ctxs[id].clearRect(0,0,canvases[id].width, canvases[id].height);
-            ctxs[id].drawImage(img, 0, 0, canvases[id].width / window.devicePixelRatio, canvases[id].height / window.devicePixelRatio);
-          };
-          img.src = data[`canvas${i+1}`];
-        }
-      });
-    }
+    load();
   });
 
-  function clearCanvases() {
+  function save() {
+    // Speichere alle Canvas als DataURL
     canvasIds.forEach(id => {
-      ctxs[id].clearRect(0, 0, canvases[id].width, canvases[id].height);
+      const dataUrl = canvases[id].toDataURL();
+      localStorage.setItem(id, dataUrl);
     });
+    // Speichere alle Textareas
+    canvasIds.forEach((id, idx) => {
+      const note = document.getElementById('canvas-note' + (idx+1)).value;
+      localStorage.setItem('canvas-note' + (idx+1), note);
+    });
+    // Speichere Infos
+    localStorage.setItem('name', document.getElementById('name').value);
+    localStorage.setItem('markt', document.getElementById('markt').value);
+    localStorage.setItem('datum', document.getElementById('datum').value);
+
+    alert('Daten gespeichert ✅');
   }
 
-  function save() {
-    const data = {
-      name: document.getElementById('name').value,
-      markt: document.getElementById('markt').value,
-      datum: document.getElementById('datum').value,
-    };
-
-    canvasIds.forEach((id, i) => {
-      data[`canvas${i+1}`] = canvases[id].toDataURL();
+  function load() {
+    // Lade Canvas-Bilder
+    canvasIds.forEach(id => {
+      const dataUrl = localStorage.getItem(id);
+      if (dataUrl) {
+        const img = new Image();
+        img.onload = () => {
+          const ctx = ctxs[id];
+          ctx.clearRect(0, 0, canvases[id].width, canvases[id].height);
+          ctx.drawImage(img, 0, 0, canvases[id].width / window.devicePixelRatio, canvases[id].height / window.devicePixelRatio);
+        };
+        img.src = dataUrl;
+      }
     });
+    // Lade Textareas
+    canvasIds.forEach((id, idx) => {
+      const note = localStorage.getItem('canvas-note' + (idx+1));
+      if(note) {
+        document.getElementById('canvas-note' + (idx+1)).value = note;
+      }
+    });
+    // Lade Infos
+    const name = localStorage.getItem('name');
+    if (name) document.getElementById('name').value = name;
+    const markt = localStorage.getItem('markt');
+    if (markt) document.getElementById('markt').value = markt;
+    const datum = localStorage.getItem('datum');
+    if (datum) document.getElementById('datum').value = datum;
+  }
 
-    localStorage.setItem('marktformular', JSON.stringify(data));
-    alert("Gespeichert!");
+  function clearCanvases() {
+    if(!confirm('Alle Zeichnungen und Notizen löschen?')) return;
+    canvasIds.forEach(id => {
+      const ctx = ctxs[id];
+      ctx.clearRect(0, 0, canvases[id].width, canvases[id].height);
+      localStorage.removeItem(id);
+    });
+    canvasIds.forEach((id, idx) => {
+      const ta = document.getElementById('canvas-note' + (idx+1));
+      ta.value = '';
+      localStorage.removeItem('canvas-note' + (idx+1));
+    });
+    ['name','markt','datum'].forEach(k => localStorage.removeItem(k));
   }
 
   function generatePDF() {
-    const element = document.getElementById('form-wrapper');
+    // Button ausblenden beim PDF-Export
+    document.querySelectorAll('.button-row').forEach(el => el.style.display = 'none');
 
+    // PDF Optionen
     const opt = {
-      margin:       0.5,
-      filename:     `Marktformular_${new Date().toISOString().slice(0,10)}.pdf`,
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2, useCORS: true },
-      jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+      margin: 0.5,
+      filename: `Marktformular_${document.getElementById('datum').value || 'heute'}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, logging: false },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
     };
 
-    html2pdf().set(opt).from(element).save().then(() => {
-      alert('PDF wurde erzeugt und zum Download bereitgestellt.\nÜber das Teilen-Menü kannst du die PDF per Mail versenden.');
+    html2pdf().set(opt).from(document.getElementById('form-wrapper')).save().then(() => {
+      // Buttons wieder anzeigen
+      document.querySelectorAll('.button-row').forEach(el => el.style.display = 'flex');
     });
   }
 </script>
-
 </body>
 </html>
