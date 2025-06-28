@@ -116,7 +116,7 @@
     footer {
       font-size: 0.8rem;
       color: #666c7a; /* helles Grau */
-      margin-top: 1.5rem;
+      margin-top: 2.5rem;
     }
     body.dark-mode footer {
       color: #aaa; /* heller im Dark Mode */
@@ -375,9 +375,16 @@
       doc.save("arbeitssicherheit-checkliste-2025.pdf");
     }
 
-    // Aktuelles Jahr in Footer
-    document.getElementById("jahr1").textContent = new Date().getFullYear();
-    document.getElementById("jahr2").textContent = new Date().getFullYear();
+   // Aktuelles Jahr in Footer
+document.getElementById("jahr1").textContent = new Date().getFullYear();
+document.getElementById("jahr2").textContent = new Date().getFullYear();
+
+// Aktuelles Datum automatisch setzen (Format YYYY-MM-DD für <input type="date">)
+const datumInput = document.getElementById("datum");
+const heute = new Date();
+const heuteStr = heute.toISOString().split('T')[0]; // "YYYY-MM-DD"
+datumInput.value = heuteStr;
+
 async function pdfTeilen() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: "pt", format: "a4" });
