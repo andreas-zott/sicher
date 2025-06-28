@@ -462,7 +462,29 @@ Restliches Risiko als akzeptabel bewertet.
     <label>Bemerkungen:</label>
     <textarea>Gefährdungsbeurteilung wird jährlich oder bei Änderung der Maschine/Arbeitsabläufe aktualisiert.</textarea>
       
-
+<h2>7. Unterschriften</h2>
+<table style="margin-top: 20px;">
+  <tr>
+    <th style="width: 50%;">Name / Funktion</th>
+    <th style="width: 50%;">Unterschrift</th>
+  </tr>
+  <tr>
+    <td><input type="text" placeholder="z. B. Max Muster / Fachkraft f. Arbeitssicherheit"></td>
+    <td>
+      <canvas id="sign1" width="400" height="120" style="border:1px solid #ccc; border-radius: 6px;"></canvas>
+      <br>
+      <button type="button" onclick="clearCanvas('sign1')">🧹 Löschen</button>
+    </td>
+  </tr>
+  <tr>
+    <td><input type="text" placeholder="z. B. Bereichsleitung / Maschinenverantwortliche"></td>
+    <td>
+      <canvas id="sign2" width="400" height="120" style="border:1px solid #ccc; border-radius: 6px;"></canvas>
+      <br>
+      <button type="button" onclick="clearCanvas('sign2')">🧹 Löschen</button>
+    </td>
+  </tr>
+</table>
 
 
     <div id="buttonContainer">
@@ -480,95 +502,115 @@ Restliches Risiko als akzeptabel bewertet.
     </div>
   </footer>
 
-  <script>
-    function berechneRisiko(selectElement) {
-      const row = selectElement.closest('tr');
-      const selects = row.querySelectorAll('select');
-      const w = parseInt(selects[0].value);
-      const s = parseInt(selects[1].value);
-      const risiko = w * s;
-
-      const zahlFeld = row.querySelector('.risikozahl');
-      const risikoFeld = row.querySelector('.risiko-feld');
-
-      zahlFeld.textContent = risiko;
-
-      if (risiko <= 4) {
-        risikoFeld.textContent = 'Niedrig';
-        risikoFeld.style.backgroundColor = '#2ecc71';
-        risikoFeld.style.color = '#fff';
-      } else if (risiko <= 12) {
-        risikoFeld.textContent = 'Mittel';
-        risikoFeld.style.backgroundColor = '#f1c40f';
-        risikoFeld.style.color = '#000';
-      } else {
-        risikoFeld.textContent = 'Hoch';
-        risikoFeld.style.backgroundColor = '#e74c3c';
-        risikoFeld.style.color = '#fff';
-      }
+ <script>
+  function berechneRisiko(selectElement) {
+    const row = selectElement.closest('tr');
+    const selects = row.querySelectorAll('select');
+    const w = parseInt(selects[0].value);
+    const s = parseInt(selects[1].value);
+    const risiko = w * s;
+    const zahlFeld = row.querySelector('.risikozahl');
+    const risikoFeld = row.querySelector('.risiko-feld');
+    zahlFeld.textContent = risiko;
+    if (risiko <= 4) {
+      risikoFeld.textContent = 'Niedrig';
+      risikoFeld.style.backgroundColor = '#2ecc71';
+      risikoFeld.style.color = '#fff';
+    } else if (risiko <= 12) {
+      risikoFeld.textContent = 'Mittel';
+      risikoFeld.style.backgroundColor = '#f1c40f';
+      risikoFeld.style.color = '#000';
+    } else {
+      risikoFeld.textContent = 'Hoch';
+      risikoFeld.style.backgroundColor = '#e74c3c';
+      risikoFeld.style.color = '#fff';
     }
+  }
 
-    function fensterDrucken() {
-      window.print();
-    }
+  function fensterDrucken() { window.print(); }
+  function speichereUndDrucke() { fensterDrucken(); }
 
-    function speichereMatrix() {
-      const tbody = document.querySelector("table tbody");
-      localStorage.setItem('risikomatrix', tbody.innerHTML);
-      alert("Risiko-Matrix wurde gespeichert!");
-    }
-
-    function ladeMatrix() {
-      const gespeicherteMatrix = localStorage.getItem('risikomatrix');
-      if (gespeicherteMatrix) {
-        const tbody = document.querySelector("table tbody");
-        tbody.innerHTML = gespeicherteMatrix;
-        tbody.querySelectorAll("select").forEach(select => berechneRisiko(select));
-      }
-    }
-
-    function speichereUndDrucke() {
-      speichereMatrix();
-      fensterDrucken();
-    }
-
-    async function teileRisiko() {
-      const element = document.querySelector("form");
-      const opt = {
-        margin: 0.5,
-        filename: 'risikomatrix.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-      };
-
-      try {
-        const worker = html2pdf().set(opt).from(element);
-        const blob = await worker.output('blob');
-
-        const file = new File([blob], 'risikomatrix.pdf', { type: 'application/pdf' });
-
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-          await navigator.share({
-            files: [file],
-            title: 'Risiko-Matrix',
-            text: 'Hier ist die Risiko-Matrix als PDF.'
-          });
-        } else {
-          alert("Teilen wird von deinem Gerät/Browser nicht unterstützt.");
-        }
-      } catch (error) {
-        alert("Fehler beim Teilen: " + error.message);
-      }
-    }
-
-    window.onload = () => {
-      ladeMatrix();
-      document.querySelectorAll('select').forEach(sel => {
-        if (sel.closest('tr')) berechneRisiko(sel);
-      });
-      document.getElementById('currentYear').textContent = new Date().getFullYear();
+  async function teileRisiko() {
+    const element = document.querySelector("form");
+    const opt = {
+      margin: 0.5,
+      filename: 'aufschnittschneidemaschine.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
     };
-  </script>
+    try {
+      const worker = html2pdf().set(opt).from(element);
+      const blob = await worker.output('blob');
+      const file = new File([blob], 'aufschnittschneidemaschine.pdf', { type: 'application/pdf' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], title: 'Gefährdungsbeurteilung', text: 'PDF der Aufschnittschneidemaschine' });
+      } else {
+        alert("Teilen wird von deinem Gerät nicht unterstützt.");
+      }
+    } catch (error) {
+      alert("Fehler beim Teilen: " + error.message);
+    }
+  }
+
+  function setupSignatureCanvas(id) {
+    const canvas = document.getElementById(id);
+    const ctx = canvas.getContext("2d");
+    let painting = false;
+
+    function getPos(evt) {
+      const rect = canvas.getBoundingClientRect();
+      const x = (evt.touches ? evt.touches[0].clientX : evt.clientX) - rect.left;
+      const y = (evt.touches ? evt.touches[0].clientY : evt.clientY) - rect.top;
+      return { x, y };
+    }
+
+    function start(evt) {
+      painting = true;
+      const pos = getPos(evt);
+      ctx.beginPath();
+      ctx.moveTo(pos.x, pos.y);
+      evt.preventDefault();
+    }
+
+    function draw(evt) {
+      if (!painting) return;
+      const pos = getPos(evt);
+      ctx.lineTo(pos.x, pos.y);
+      ctx.strokeStyle = "#000";
+      ctx.lineWidth = 2;
+      ctx.lineCap = "round";
+      ctx.stroke();
+      evt.preventDefault();
+    }
+
+    function stop() {
+      painting = false;
+      ctx.beginPath();
+    }
+
+    canvas.addEventListener("mousedown", start);
+    canvas.addEventListener("touchstart", start);
+    canvas.addEventListener("mousemove", draw);
+    canvas.addEventListener("touchmove", draw);
+    canvas.addEventListener("mouseup", stop);
+    canvas.addEventListener("touchend", stop);
+  }
+
+  function clearCanvas(id) {
+    const canvas = document.getElementById(id);
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
+  document.getElementById('currentYear').textContent = new Date().getFullYear();
+  window.onload = () => {
+    document.querySelectorAll('select').forEach(sel => {
+      if (sel.closest('tr')) berechneRisiko(sel);
+    });
+    setupSignatureCanvas("sign1");
+    setupSignatureCanvas("sign2");
+  };
+</script>
 </body>
 </html>
