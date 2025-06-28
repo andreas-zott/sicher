@@ -6,6 +6,7 @@
   <title>Arbeitssicherheit-Checkliste-2025</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
   <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon" />
   <link href="/sicher/manifest.json" rel="manifest" />
   <style>
@@ -288,9 +289,7 @@
       });
     }
 
-   
-
-async function speichernAlsPDF() {
+ async function speichernAlsPDF() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: "pt", format: "a4" });
   const margin = 40;
@@ -320,6 +319,21 @@ async function speichernAlsPDF() {
     doc.text(`SiFa: ${sifa}`, margin + 200, margin + 30);
   }
 
+  async function getImageDataURLWithOrientation(src) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        EXIF.getData(img, function() {
+          const orientation = EXIF.getTag(this, "Orientation") || 1;
+          const rotatedDataUrl = getRotatedImage(img, orientation, cellWidth * 0.9, cellHeight * 0.7);
+          resolve(rotatedDataUrl);
+        });
+      };
+      img.onerror = reject;
+      img.src = src;
+    });
+  }
+
   let page = 0;
   for (let i = 0; i < bilder.length; i += imagesPerPage) {
     if (page > 0) doc.addPage();
@@ -329,8 +343,14 @@ async function speichernAlsPDF() {
 
     for (let j = 0; j < bilderSeite.length; j++) {
       const bildObj = bilderSeite[j];
-      const img = bildObj.src;
+      let img = bildObj.src;
       const kommentarText = bildObj.kommentar || "";
+
+      try {
+        img = await getImageDataURLWithOrientation(img);
+      } catch (e) {
+        console.warn("Bild konnte nicht gedreht werden", e);
+      }
 
       const col = j % cols;
       const row = Math.floor(j / cols);
@@ -348,7 +368,6 @@ async function speichernAlsPDF() {
 
       let imgWidth, imgHeight;
       if (aspectRatio > 1) {
-        // Querformat
         imgWidth = maxImgWidth;
         imgHeight = imgWidth / aspectRatio;
         if (imgHeight > maxImgHeight) {
@@ -356,7 +375,6 @@ async function speichernAlsPDF() {
           imgWidth = imgHeight * aspectRatio;
         }
       } else {
-        // Hochformat
         imgHeight = maxImgHeight;
         imgWidth = imgHeight * aspectRatio;
         if (imgWidth > maxImgWidth) {
@@ -502,6 +520,50 @@ async function pdfTeilen() {
     alert("Dieses Gerät unterstützt das Teilen von Dateien nicht.");
   }
 }
+function getRotatedImage(img, orientation, maxWidth, maxHeight) {
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+
+  let width = img.width;
+  let height = img.height;
+  let drawWidth = width;
+  let drawHeight = height;
+
+  // Skalierung, damit max Abmessungen nicht überschritten werden
+  if (width > maxWidth) {
+    drawWidth = maxWidth;
+    drawHeight = (height * maxWidth) / width;
+  }
+  if (drawHeight > maxHeight) {
+    drawWidth = (drawWidth * maxHeight) / drawHeight;
+    drawHeight = maxHeight;
+  }
+
+  if ([5,6,7,8].includes(orientation)) {
+    canvas.width = drawHeight;
+    canvas.height = drawWidth;
+  } else {
+    canvas.width = drawWidth;
+    canvas.height = drawHeight;
+  }
+
+  // Rotation anhand EXIF-Orientation
+  switch(orientation) {
+    case 2: ctx.transform(-1, 0, 0, 1, drawWidth, 0); break;       // horizontal flip
+    case 3: ctx.transform(-1, 0, 0, -1, drawWidth, drawHeight); break; // 180°
+    case 4: ctx.transform(1, 0, 0, -1, 0, drawHeight); break;       // vertical flip
+    case 5: ctx.transform(0, 1, 1, 0, 0, 0); break;                 // 90° CW + horizontal flip
+    case 6: ctx.transform(0, 1, -1, 0, drawHeight, 0); break;       // 90° CW
+    case 7: ctx.transform(0, -1, -1, 0, drawHeight, drawWidth); break; // 90° CCW + horizontal flip
+    case 8: ctx.transform(0, -1, 1, 0, 0, drawWidth); break;        // 90° CCW
+    default: break; // normal 1
+  }
+
+  ctx.drawImage(img, 0, 0, width, height, 0, 0, drawWidth, drawHeight);
+
+  return canvas.toDataURL("image/jpeg", 0.9);
+}
+
 
   </script>
 </body>
