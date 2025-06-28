@@ -348,17 +348,38 @@
             continue;
           }
 
-          let imgWidth = maxImgWidth;
-          let imgHeight = (imgProps.height * imgWidth) / imgProps.width;
-          if (imgHeight > maxImgHeight) {
-            imgHeight = maxImgHeight;
-            imgWidth = (imgProps.width * imgHeight) / imgProps.height;
-          }
+          
+let imgWidth = maxImgWidth;
+let imgHeight = (imgProps.height * imgWidth) / imgProps.width;
 
-          const x = margin + col * cellWidth + (cellWidth - imgWidth) / 2;
-          const y = margin + 50 + row * cellHeight;
+// Drehe Bild bei Hochformat
+let rotate = false;
+if (imgProps.height > imgProps.width) {
+  rotate = true;
+  imgHeight = maxImgHeight;
+  imgWidth = (imgProps.width * imgHeight) / imgProps.height;
+}
 
-          doc.addImage(img, "JPEG", x, y, imgWidth, imgHeight);
+// Begrenze Größe
+if (!rotate && imgHeight > maxImgHeight) {
+  imgHeight = maxImgHeight;
+  imgWidth = (imgProps.width * imgHeight) / imgProps.height;
+}
+
+const x = margin + col * cellWidth + (cellWidth - imgWidth) / 2;
+const y = margin + 50 + row * cellHeight;
+
+// Drehen, falls Hochformat
+if (rotate) {
+  doc.saveGraphicsState();
+  doc.translate(x + imgHeight, y);
+  doc.rotate((90 * Math.PI) / 180);
+  doc.addImage(img, "JPEG", 0, 0, imgHeight, imgWidth);
+  doc.restoreGraphicsState();
+} else {
+  doc.addImage(img, "JPEG", x, y, imgWidth, imgHeight);
+}
+
 
           // Kommentar unter Bild
           if (kommentarText) {
@@ -439,17 +460,38 @@ async function pdfTeilen() {
         continue;
       }
 
-      let imgWidth = maxImgWidth;
-      let imgHeight = (imgProps.height * imgWidth) / imgProps.width;
-      if (imgHeight > maxImgHeight) {
-        imgHeight = maxImgHeight;
-        imgWidth = (imgProps.width * imgHeight) / imgProps.height;
-      }
+      
+let imgWidth = maxImgWidth;
+let imgHeight = (imgProps.height * imgWidth) / imgProps.width;
 
-      const x = margin + col * cellWidth + (cellWidth - imgWidth) / 2;
-      const y = margin + 50 + row * cellHeight;
+// Drehe Bild bei Hochformat
+let rotate = false;
+if (imgProps.height > imgProps.width) {
+  rotate = true;
+  imgHeight = maxImgHeight;
+  imgWidth = (imgProps.width * imgHeight) / imgProps.height;
+}
 
-      doc.addImage(img, "JPEG", x, y, imgWidth, imgHeight);
+// Begrenze Größe
+if (!rotate && imgHeight > maxImgHeight) {
+  imgHeight = maxImgHeight;
+  imgWidth = (imgProps.width * imgHeight) / imgProps.height;
+}
+
+const x = margin + col * cellWidth + (cellWidth - imgWidth) / 2;
+const y = margin + 50 + row * cellHeight;
+
+// Drehen, falls Hochformat
+if (rotate) {
+  doc.saveGraphicsState();
+  doc.translate(x + imgHeight, y);
+  doc.rotate((90 * Math.PI) / 180);
+  doc.addImage(img, "JPEG", 0, 0, imgHeight, imgWidth);
+  doc.restoreGraphicsState();
+} else {
+  doc.addImage(img, "JPEG", x, y, imgWidth, imgHeight);
+}
+
 
       if (kommentarText) {
         doc.setFontSize(10);
