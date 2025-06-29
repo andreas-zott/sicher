@@ -5,6 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" />
 <title>Sicherheits-Check Fragen & Maßnahmen</title>
 <style>
+.button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  min-width: 180px;
+  text-align: center;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
 @media print {
   button, input[type="radio"], .no-print {
     display: none !important;
@@ -217,14 +233,17 @@ tbody tr {
     </table>
   </div>
 </div>
-
-<!-- Buttons -->
+<!-- Druck & PDF-Teilen Buttons -->
 <div style="text-align: center; margin-bottom: 1em;">
   <div style="display: flex; justify-content: center; gap: 20px; margin: 20px 0;">
-        <button onclick="window.print()">🖨️ Drucken</button>
-    <button onclick="updateMeasuresTable(); generateAndSharePDF()">📤 PDF teilen (iPad)</button>   
+    <button onclick="window.print()" class="button">
+      🖨️ Drucken
+    </button>
+    <button onclick="updateMeasuresTable(); generateAndSharePDF()" class="button">
+      📤 PDF teilen (iPad)
+    </button>
   </div>
-</div>
+
 
 <!-- Scripts -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -430,6 +449,118 @@ function updateMeasuresTable() {
 }
 
 </script>
+<div style="display: flex; justify-content: center; margin: 20px 0;">
+  <canvas id="signature-pad" style="
+    border: 2px solid #333; 
+    border-radius: 12px; 
+    box-shadow: 2px 4px 8px rgba(0,0,0,0.2); 
+    touch-action: none;
+    background-color: #fff;
+    width: 90vw;     /* responsive Breite */
+    max-width: 600px; /* max Breite */
+    height: 200px;   /* feste Höhe */
+  "></canvas>
+</div>
+<!-- Unterschriften-Buttons -->
+<div style="text-align: center; margin-bottom: 30px;">
+  <button id="clear-signature" class="button" style="margin-right: 10px;">
+    Unterschrift löschen
+  </button>
+  <button id="save-signature" class="button">
+    Unterschrift speichern
+  </button>
+</div>
+
+
+</div>
+
+<script>
+  const canvas = document.getElementById('signature-pad');
+  const ctx = canvas.getContext('2d');
+  let drawing = false;
+
+  // Größe des Canvas dynamisch anpassen (für scharfe Linien auf High-DPI Displays)
+  function resizeCanvas() {
+    const ratio = window.devicePixelRatio || 1;
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+    canvas.width = width * ratio;
+    canvas.height = height * ratio;
+    ctx.scale(ratio, ratio);
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = '#000';
+  }
+
+  window.addEventListener('resize', () => {
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    resizeCanvas();
+    ctx.putImageData(imageData, 0, 0);
+  });
+
+  resizeCanvas();
+
+  function getPointerPos(evt) {
+    const rect = canvas.getBoundingClientRect();
+    if (evt.touches) {
+      return {
+        x: evt.touches[0].clientX - rect.left,
+        y: evt.touches[0].clientY - rect.top
+      };
+    } else {
+      return {
+        x: evt.clientX - rect.left,
+        y: evt.clientY - rect.top
+      };
+    }
+  }
+
+  canvas.addEventListener('pointerdown', (e) => {
+    drawing = true;
+    const pos = getPointerPos(e);
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
+  });
+
+  canvas.addEventListener('pointermove', (e) => {
+    if (!drawing) return;
+    const pos = getPointerPos(e);
+    ctx.lineTo(pos.x, pos.y);
+    ctx.stroke();
+  });
+
+  canvas.addEventListener('pointerup', () => {
+    drawing = false;
+  });
+
+  canvas.addEventListener('pointerleave', () => {
+    drawing = false;
+  });
+
+  document.getElementById('clear-signature').addEventListener('click', () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  });
+
+  document.getElementById('save-signature').addEventListener('click', () => {
+    if (isCanvasBlank(canvas)) {
+      alert('Bitte erst unterschreiben, bevor du speicherst!');
+      return;
+    }
+    const dataURL = canvas.toDataURL('image/png');
+    const link = document.createElement('a');
+    link.href = dataURL;
+    link.download = 'unterschrift.png';
+    link.click();
+  });
+
+  function isCanvasBlank(cnv) {
+    const blank = document.createElement('canvas');
+    blank.width = cnv.width;
+    blank.height = cnv.height;
+    return cnv.toDataURL() === blank.toDataURL();
+  }
+</script>
+
 </script>
 <footer class="footer">
   <p>
@@ -459,6 +590,47 @@ function updateMeasuresTable() {
 
   // Optional: Datum alle 60 Sekunden aktualisieren (wenn Seite lange offen bleibt)
   setInterval(updateCurrentDate, 60000);
+</script>
+<script>
+async function generateAndSharePDF() {
+  updateMeasuresTable();
+
+  // Warten, damit DOM-Updates abgeschlossen sind
+  await new Promise(resolve => setTimeout(resolve, 100));
+
+  const element = document.getElementById('pdfContent');
+  const opt = {
+    margin: 0.3,
+    filename: 'sicherheitscheck.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, scrollY: 0 },
+    jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+  };
+
+  const worker = html2pdf().set(opt).from(element);
+  const pdfBlob = await worker.outputPdf('blob');
+
+  const file = new File([pdfBlob], "sicherheitscheck.pdf", {
+    type: "application/pdf"
+  });
+
+  // iPad/iOS teilen
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({
+        title: "Sicherheitscheck PDF",
+        text: "Hier ist die PDF-Datei mit Fragen und Maßnahmen.",
+        files: [file]
+      });
+    } catch (error) {
+      console.error("Teilen abgebrochen oder fehlgeschlagen:", error);
+      alert("Teilen wurde abgebrochen oder ist nicht möglich.");
+    }
+  } else {
+    // Fallback: speichern
+    await worker.save();
+  }
+}
 </script>
 
 </body>
