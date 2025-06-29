@@ -2687,6 +2687,30 @@
             document.getElementById('answered-questions').textContent = Object.keys(answers).length;
             document.getElementById('measures-count').textContent = activeMeasures.length;
         }
+// Alle Antworten auflisten
+pdf.setFontSize(16);
+pdf.text('Fragen & Antworten', 20, yPos);
+yPos += 10;
+
+pdf.setFontSize(10);
+
+// Hole alle Frage-Elemente aus dem DOM (sofern sie im HTML bleiben)
+const questionElements = document.querySelectorAll('.question');
+
+questionElements.forEach((el, i) => {
+    const qId = el.dataset.id; // z. B. question-5
+    const questionText = el.querySelector('.question-text')?.textContent || `Frage ${i + 1}`;
+    const answer = answers[qId] || '—';
+
+    if (yPos > 270) {
+        pdf.addPage();
+        yPos = 20;
+    }
+
+    pdf.text(`${i + 1}. ${questionText}`, 20, yPos);
+    pdf.text(`Antwort: ${answer === 'yes' ? 'Ja' : answer === 'no' ? 'Nein' : 'Nicht vorhanden'}`, 20, yPos + 5);
+    yPos += 12;
+});
 
         // PDF-Generierung
         async function generatePDF() {
@@ -2917,20 +2941,20 @@
         }
 
         // Safari Teilen-Funktion
-       async function shareForm() {
+      async function shareForm() {
     try {
         const { jsPDF } = window.jspdf;
         const pdf = new jsPDF('p', 'mm', 'a4');
-
-        // Titel
-        pdf.setFontSize(20);
-        pdf.text('Sicherheits-Fragebogen', 20, 20);
 
         // Formularinfos
         const datum = document.getElementById('datum').value;
         const marktnummer = document.getElementById('marktnummer').value;
         const name = document.getElementById('name').value;
         const sifa = document.getElementById('sifa').value;
+
+        // Titel
+        pdf.setFontSize(20);
+        pdf.text('Sicherheits-Fragebogen', 20, 20);
 
         pdf.setFontSize(12);
         let yPos = 40;
@@ -2940,6 +2964,8 @@
         pdf.text(`SIFA: ${sifa}`, 20, yPos + 30);
 
         yPos += 50;
+
+        // Zusammenfassung
         pdf.setFontSize(16);
         pdf.text('Zusammenfassung', 20, yPos);
         yPos += 15;
@@ -2948,8 +2974,37 @@
         pdf.text(`Fragen gesamt: 97`, 20, yPos);
         pdf.text(`Beantwortet: ${Object.keys(answers).length}`, 20, yPos + 10);
         pdf.text(`Maßnahmen: ${activeMeasures.length}`, 20, yPos + 20);
+
         yPos += 40;
 
+        // Fragen & Antworten
+        pdf.setFontSize(16);
+        pdf.text('Fragen & Antworten', 20, yPos);
+        yPos += 10;
+
+        pdf.setFontSize(10);
+
+        const questionElements = document.querySelectorAll('.question');
+
+        questionElements.forEach((el, i) => {
+            const qId = el.dataset.id; // e.g. "question-1"
+            const questionText = el.querySelector('.question-text')?.textContent || `Frage ${i + 1}`;
+            const answer = answers[qId] || '—';
+            const answerText = answer === 'yes' ? 'Ja' : answer === 'no' ? 'Nein' : answer === 'na' ? 'Nicht vorhanden' : '—';
+
+            if (yPos > 270) {
+                pdf.addPage();
+                yPos = 20;
+            }
+
+            pdf.text(`${i + 1}. ${questionText}`, 20, yPos);
+            pdf.text(`Antwort: ${answerText}`, 20, yPos + 5);
+            yPos += 12;
+        });
+
+        yPos += 10;
+
+        // Maßnahmen
         if (activeMeasures.length > 0) {
             pdf.setFontSize(16);
             pdf.text('Erforderliche Maßnahmen', 20, yPos);
@@ -2968,6 +3023,7 @@
             });
         }
 
+        // Unterschrift
         if (canvas) {
             const signatureData = canvas.toDataURL('image/png');
             pdf.addPage();
@@ -2976,11 +3032,13 @@
             pdf.addImage(signatureData, 'PNG', 20, 30, 100, 40);
         }
 
-        // → PDF als Blob erzeugen
+        // PDF erzeugen
         const pdfBlob = pdf.output('blob');
-        const pdfFile = new File([pdfBlob], `Sicherheitsfragebogen_${marktnummer || 'unbekannt'}_${datum}.pdf`, { type: 'application/pdf' });
+        const pdfFile = new File([pdfBlob], `Sicherheitsfragebogen_${marktnummer || 'unbekannt'}_${datum}.pdf`, {
+            type: 'application/pdf'
+        });
 
-        // Teilen nur möglich, wenn Web Share API mit Dateien unterstützt wird
+        // Teilen oder Speichern
         if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
             await navigator.share({
                 title: 'Sicherheits-Fragebogen',
@@ -2988,12 +3046,13 @@
                 files: [pdfFile]
             });
         } else {
-            alert('Teilen wird auf diesem Gerät nicht unterstützt. PDF wird heruntergeladen.');
+            alert('Teilen wird auf diesem Gerät nicht unterstützt. PDF wird stattdessen heruntergeladen.');
             const link = document.createElement('a');
             link.href = URL.createObjectURL(pdfBlob);
             link.download = pdfFile.name;
             link.click();
         }
+
     } catch (error) {
         console.error('Teilen fehlgeschlagen:', error);
         alert('Teilen fehlgeschlagen. Bitte erneut versuchen.');
