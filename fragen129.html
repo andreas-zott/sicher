@@ -5,6 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" />
 <title>Sicherheits-Check Fragen & Maßnahmen</title>
 <style>
+@media print {
+  button, input[type="radio"], .no-print {
+    display: none !important;
+  }
+
+  /* Druck-Inhalt zentrieren */
+  body {
+    margin: 0;
+    padding: 0;
+    text-align: center; /* horizontal zentriert */
+  }
+
+  /* Tabelle zentrieren und Breite anpassen */
+  #printableContent {
+    display: inline-block;
+    text-align: left; /* damit Text in Tabelle linksbündig bleibt */
+    margin: 0 auto;
+  }
+}
 .footer {
   text-align: center;
   font-size: 0.8rem;
@@ -146,106 +165,72 @@ tbody tr {
 </style>
 </head>
 <body>
-<div class="container">
-  <h1>Sicherheits-Check</h1>
+<div id="pdfContent"> <!-- NEU: Wrapper um den gesamten exportierbaren Bereich -->
+  <div class="container">
+    <h1>Sicherheits-Check</h1>
 
-  <div class="header" role="region" aria-label="Marktdaten und aktuelles Datum">
-    <div class="header-left">
-      <div>
-        <label for="marktnummer">Marktnummer</label><br />
-        <input type="text" id="marktnummer" name="marktnummer" placeholder="Marktnummer eingeben" autocomplete="off" />
-      </div>
-      <div>
-        <label for="name">Name</label><br />
-        <input type="text" id="name" name="name" placeholder="Name eingeben" autocomplete="off" />
-      </div>
-      <div>
-        <label for="sifa">Sifa</label><br />
-        <input type="text" id="sifa" name="sifa" placeholder="Sifa eingeben" autocomplete="off" />
-      </div>
+ <div class="header" role="region" aria-label="Marktdaten und aktuelles Datum">
+  <div class="header-left">
+    <div>
+      <label for="marktnummer">Marktnummer</label><br />
+      <input type="text" id="marktnummer" name="marktnummer" placeholder="Marktnummer eingeben" autocomplete="off" />
     </div>
-    <div class="header-right" id="currentDate" aria-live="polite" aria-atomic="true"></div>
+    <div>
+      <label for="name">Name</label><br />
+      <input type="text" id="name" name="name" placeholder="Name eingeben" autocomplete="off" />
+    </div>
+    <div>
+      <label for="sifa">Sifa</label><br />
+      <input type="text" id="sifa" name="sifa" placeholder="Sifa eingeben" autocomplete="off" />
+    </div>
   </div>
-
-  <h2>Fragen</h2>
-  <table id="questionsTable" role="grid" aria-label="Fragen und Antwortoptionen">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Frage</th>
-        <th class="response-header"><div class="label-above">Ja</div></th>
-        <th class="response-header"><div class="label-above">Nein</div></th>
-        <th class="response-header"><div class="label-above">Nicht vorhanden</div></th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Fragen werden dynamisch eingefügt -->
-    </tbody>
-  </table>
-
-  <h2>Maßnahmen bei "Nein"-Antworten</h2>
-  <table id="measuresTable" role="grid" aria-label="Maßnahmen für nicht erfüllte Fragen">
-    <thead>
-      <tr>
-        <th scope="col">Frage</th>
-        <th scope="col">Maßnahme</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Maßnahmen erscheinen hier -->
-    </tbody>
-  </table>
+  <div class="header-right" id="currentDate" aria-live="polite" aria-atomic="true"></div>
 </div>
-<br>
-<div style="text-align: center; margin-bottom: 1em;">
- <div style="display: flex; justify-content: center; gap: 20px; margin: 20px 0;">
-  <button id="openMeasuresBtn" style="
-    flex: 1;
-    max-width: 300px;
-    font-size: 1em;
-    padding: 0.5em 1em;
-    border-radius: 6px;
-    background: #d3d3d3;
-    color: #000;
-    border: none;
-    cursor: pointer;
-    user-select: none;
-  ">
-    Maßnahmen in neuer Seite anzeigen
-  </button>
 
+    <h2>Fragen</h2>
+    <table id="questionsTable" role="grid" aria-label="Fragen und Antwortoptionen">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Frage</th>
+          <th class="response-header"><div class="label-above">Ja</div></th>
+          <th class="response-header"><div class="label-above">Nein</div></th>
+          <th class="response-header"><div class="label-above">Nicht vorhanden</div></th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Fragen werden dynamisch eingefügt -->
+      </tbody>
+    </table>
+
+    <h2>Maßnahmen bei "Nein"-Antworten</h2>
+    <table id="measuresTable" role="grid" aria-label="Maßnahmen für nicht erfüllte Fragen">
+      <thead>
+        <tr>
+          <th scope="col">Frage</th>
+          <th scope="col">Maßnahme</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Maßnahmen erscheinen hier -->
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Buttons -->
+<div style="text-align: center; margin-bottom: 1em;">
+  <div style="display: flex; justify-content: center; gap: 20px; margin: 20px 0;">
+        <button onclick="window.print()">🖨️ Drucken</button>
+    <button onclick="updateMeasuresTable(); generateAndSharePDF()">📤 PDF teilen (iPad)</button>   
+  </div>
+</div>
+
+<!-- Scripts -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
-</head>
-<body>
-
-  <button onclick="generateAndSharePDF()" style="
-    flex: 1;
-    max-width: 300px;
-    font-size: 1em;
-    padding: 0.5em 1em;
-    border-radius: 6px;
-    background: #d3d3d3;
-    color: #000;
-    border: none;
-    cursor: pointer;
-    user-select: none;
-  ">
-    📤 PDF teilen (iPad)
-  </button>
-
-</div> 
-</div>
-</div>
 <script>
-// Datum setzen
-function formatDate(date) {
-  return date.toLocaleDateString('de-DE', { year: 'numeric', month: '2-digit', day: '2-digit' });
-}
-document.getElementById("currentDate").textContent = "Datum: " + formatDate(new Date());
-
-// Alle Fragen und Maßnahmen
+// KOMPLETTE FRAGENLISTE (abgeschnitten wegen Länge, aber vollständig in realem Code)
 const questionsMeasures = {
 "Werden Technik- und Heizräume als Lagerräume genutzt?": "Technik- und Heizräume dürfen nicht als Lagerräume genutzt werden.",
   "Befindet sich brennbares Material (z. B. Kisten, Kartons) in den Technik- oder Heizräumen?": "Brennbares Material muss aus Technik- und Heizräumen entfernt werden.",
@@ -379,132 +364,72 @@ const questionsMeasures = {
  };
 
 const questionsTableBody = document.querySelector('#questionsTable tbody');
-    const measuresTableBody = document.querySelector('#measuresTable tbody');
+Object.entries(questionsMeasures).forEach(([questionText], index) => {
+  const row = document.createElement('tr');
+  row.innerHTML = `
+    <td>${index + 1}</td>
+    <td>${questionText}</td>
+    <td><label><input type="radio" name="question${index}" value="ja"></label></td>
+    <td><label><input type="radio" name="question${index}" value="nein"></label></td>
+    <td><label><input type="radio" name="question${index}" value="nicht vorhanden"></label></td>
+  `;
+  questionsTableBody.appendChild(row);
+});
 
-    // Fragen dynamisch einfügen
-    Object.entries(questionsMeasures).forEach(([questionText], index) => {
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td>${index + 1}</td>
+function updateMeasuresTable() {
+  const measuresTableBody = document.querySelector('#measuresTable tbody');
+  measuresTableBody.innerHTML = '';
+  const rows = questionsTableBody.querySelectorAll('tr');
+  rows.forEach((row, index) => {
+    const inputs = row.querySelectorAll('input[type="radio"]');
+    const questionText = row.cells[1].textContent;
+    const selected = Array.from(inputs).find(i => i.checked)?.value;
+    if (selected === 'nein') {
+      const measureText = questionsMeasures[questionText];
+      const measureRow = document.createElement('tr');
+      measureRow.innerHTML = `
         <td>${questionText}</td>
-        <td><label><input type="radio" name="question${index}" value="ja"></label></td>
-        <td><label><input type="radio" name="question${index}" value="nein"></label></td>
-        <td><label><input type="radio" name="question${index}" value="nicht vorhanden"></label></td>
+        <td>${measureText}</td>
       `;
-      questionsTableBody.appendChild(row);
-    });
-
-    // Maßnahmen aktualisieren
-    function updateMeasuresTable() {
-      measuresTableBody.innerHTML = '';
-      const rows = questionsTableBody.querySelectorAll('tr');
-
-      rows.forEach((row, index) => {
-        const inputs = row.querySelectorAll('input[type="radio"]');
-        const questionText = row.cells[1].textContent;
-        const selected = Array.from(inputs).find(i => i.checked)?.value;
-
-        if (selected === 'nein') {
-          const measureText = questionsMeasures[questionText];
-          const measureRow = document.createElement('tr');
-          measureRow.innerHTML = `
-            <td>${questionText}</td>
-            <td>${measureText}</td>
-          `;
-          measuresTableBody.appendChild(measureRow);
-        }
-      });
+      measuresTableBody.appendChild(measureRow);
     }
-
-    // Event Listener auf alle Inputs
-    document.addEventListener('change', event => {
-      if (event.target.type === 'radio') {
-        updateMeasuresTable();
-      }
-    });
-
-    // Maßnahmen in neuem Fenster anzeigen
-    document.getElementById('openMeasuresBtn').addEventListener('click', () => {
-      const newWindow = window.open('', '_blank');
-      const style = `
-        <style>
-          body { font-family: Arial; padding: 2em; background: #f9f9f9; }
-          h1 { color: #003366; }
-          table { width: 100%; border-collapse: collapse; margin-top: 1em; }
-          th, td { border: 1px solid #ccc; padding: 0.8em; text-align: left; }
-          th { background: #e2e8f0; }
-        </style>
-      `;
-      let html = `<html><head><title>Maßnahmen</title>${style}</head><body><h1>Maßnahmen</h1><table><thead><tr><th>Frage</th><th>Maßnahme</th></tr></thead><tbody>`;
-      const rows = measuresTableBody.querySelectorAll('tr');
-      rows.forEach(row => {
-        html += `<tr><td>${row.cells[0].textContent}</td><td>${row.cells[1].textContent}</td></tr>`;
-      });
-      html += `</tbody></table></body></html>`;
-      newWindow.document.write(html);
-      newWindow.document.close();
-    });
-  </script>
-<script>
-  // Maßnahmen zu Fragen (Beispiel-Daten)
-  const questionsMeasures = {
-    'Ist das Feuer gelöscht?': 'Feuer löschen oder Brand melden.',
-    'Wurde der Bereich evakuiert?': 'Evakuierung sicherstellen und Personen zählen.'
-  };
-
-  document.getElementById('openMeasuresBtn').addEventListener('click', () => {
-    const rows = document.querySelectorAll('#questionsTable tbody tr');
-    const measures = [];
-
-    rows.forEach(row => {
-      const frage = row.cells[1].textContent.trim();
-      const inputs = row.querySelectorAll('input[type="radio"]');
-      const selected = Array.from(inputs).find(i => i.checked)?.value;
-      if (selected === 'nein') {
-        measures.push({ frage, massnahme: questionsMeasures[frage] || 'Keine Maßnahme definiert.' });
-      }
-    });
-
-    // Speichere Maßnahmen im localStorage
-    localStorage.setItem('measuresData', JSON.stringify(measures));
-
-    // Öffne die bestehende Datei massnahmen.html in neuem Tab
-    window.open('massnahmen.html', '_blank');
   });
-</script>
-<script>
-  async function generateAndSharePDF() {
-    const element = document.getElementById('measuresSection') || document.body; // Fallback für demo
-    const opt = {
-      margin: 0.5,
-      filename: 'massnahmen.pdf',
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-    };
+}
+document.querySelectorAll('#questionsTable input[type="radio"]').forEach(input => {
+  input.addEventListener('change', updateMeasuresTable);
+});
 
-    // PDF mit html2pdf generieren, dann als Blob extrahieren
-    const worker = html2pdf().set(opt).from(element);
-    const pdfBlob = await worker.outputPdf('blob');
+function updateMeasuresTable() {
+  const measuresTableBody = document.querySelector('#measuresTable tbody');
+  measuresTableBody.innerHTML = ''; // Tabelle leeren
 
-    const file = new File([pdfBlob], "massnahmen.pdf", { type: "application/pdf" });
+  const rows = questionsTableBody.querySelectorAll('tr');
 
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      try {
-        await navigator.share({
-          title: "Maßnahmen PDF",
-          text: "Hier ist die PDF-Datei mit den Maßnahmen.",
-          files: [file]
-        });
-      } catch (error) {
-        console.error("Teilen fehlgeschlagen:", error);
-        alert("Teilen abgebrochen oder nicht möglich.");
+  rows.forEach((row, index) => {
+    const inputs = row.querySelectorAll('input[type="radio"]');
+    const questionText = row.cells[1].textContent.trim();
+
+    // Suche den ausgewählten Radio-Button
+    const selected = Array.from(inputs).find(input => input.checked)?.value;
+
+    if (selected === 'nein') {
+      const measureText = questionsMeasures[questionText];
+
+      if (measureText) {
+        const measureRow = document.createElement('tr');
+        measureRow.innerHTML = `
+          <td>${questionText}</td>
+          <td>${measureText}</td>
+        `;
+        measuresTableBody.appendChild(measureRow);
+      } else {
+        console.warn(`Keine Maßnahme für Frage gefunden: "${questionText}"`);
       }
-    } else {
-      // Fallback: PDF herunterladen
-      await worker.save(); // lädt die Datei herunter
     }
-  }
+  });
+}
+
+</script>
 </script>
 <footer class="footer">
   <p>
@@ -516,6 +441,24 @@ const questionsTableBody = document.querySelector('#questionsTable tbody');
 
 <script>
   document.getElementById("currentYear").textContent = new Date().getFullYear();
+</script>
+<script>
+  function updateCurrentDate() {
+    const dateElement = document.getElementById('currentDate');
+    const now = new Date();
+
+    // Deutsches Datumsformat, z.B. "Montag, 29. Juni 2025"
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const formattedDate = now.toLocaleDateString('de-DE', options);
+
+    dateElement.textContent = formattedDate;
+  }
+
+  // Datum beim Laden setzen
+  updateCurrentDate();
+
+  // Optional: Datum alle 60 Sekunden aktualisieren (wenn Seite lange offen bleibt)
+  setInterval(updateCurrentDate, 60000);
 </script>
 
 </body>
