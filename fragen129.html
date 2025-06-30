@@ -250,11 +250,8 @@ tbody tr {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
 // KOMPLETTE FRAGENLISTE (abgeschnitten wegen Länge, aber vollständig in realem Code)
-const questionsMeasures = {
-"Werden Technik- und Heizräume als Lagerräume genutzt?": "Technik- und Heizräume dürfen nicht als Lagerräume genutzt werden.",
-  "Befindet sich brennbares Material (z. B. Kisten, Kartons) in den Technik- oder Heizräumen?": "Brennbares Material muss aus Technik- und Heizräumen entfernt werden.",
-  "Sind die Treppen unbeschädigt und frei von Gegenständen?": "Treppen müssen frei und unbeschädigt sein.",
-  "Sind die Verkehrswege so beschaffen, dass kein Risiko zum Stolpern, Ausrutschen oder Umknicken besteht?": "Verkehrswege müssen sicher und ohne Stolperfallen sein.",
+
+const questionsMeasures ={
   "Wird im gesamten Markt geeignetes Schuhwerk getragen (feste, geschlossene, flache Schuhe)?": "Es muss geeignetes Schuhwerk getragen werden.",
   "Sind Automatiktüren, Rolltore und Schnelllauftore geprüft und ohne sichtbare Beschädigungen?": "Türen und Tore müssen geprüft und unbeschädigt sein.",
   "Ist die Aufzugsanlage geprüft und in einem ordnungsgemäßen Zustand (keine sichtbare Beschädigung, funktionsfähige Schutzeinrichtungen)?": "Die Aufzugsanlage muss funktionstüchtig und geprüft sein.",
@@ -270,7 +267,7 @@ const questionsMeasures = {
   "Werden Sicherheitsschuhe getragen?": "Sicherheitsschuhe sind Pflicht.",
   "Sind die Feuerlöscheinrichtungen frei zugänglich und nicht blockiert?": "Feuerlöscheinrichtungen müssen stets zugänglich sein.",
   "Sind die Feuerlöscheinrichtungen geprüft und werden Prüffristen eingehalten?": "Feuerlöscher müssen regelmäßig geprüft werden.",
-  "Sind Brandschutztüren frei von Zugestellungen und wird ihre Funktion nicht gestört?": "Brandschutztüren dürfen nicht blockiert sein.",
+  "Befinden sich keine Gegenstände im Bereich der Brandschutztüren, und ist deren Funktionsfähigkeit vollständig gewährleistet?": "Brandschutztüren dürfen nicht blockiert sein.",
   "Sind Türhaltevorrichtungen und Schließfolgeregler des Feuerschutzabschlusses in Ordnung?": "Türtechnik muss voll funktionsfähig sein.",
   "Sind Brandschutztüren ohne Beschädigungen?": "Beschädigte Brandschutztüren müssen instandgesetzt werden.",
   "Ist ein aktueller Flucht- und Rettungsplan vorhanden?": "Ein aktueller Fluchtplan muss vorliegen.",
@@ -281,12 +278,13 @@ const questionsMeasures = {
   "Wird passende persönliche Schutzausrüstung für Tätigkeiten mit Gefahrstoffen (z.B. Schutzbrille, Handschuhe) gestellt?": "Geeignete PSA muss vorhanden sein.",
   "Sind Betriebsanweisungen gut zugänglich?": "Betriebsanweisungen müssen zugänglich sein.",
   "Werden Sicherheitsanweisungen eingehalten?": "Sicherheitsanweisungen sind strikt einzuhalten.",
-  "Sind die Arbeitsgeräte an der Backstation intakt und funktionsfähig?": "Arbeitsgeräte müssen funktionstüchtig sein.",
+"Liegen Steckverbindungen auf dem Boden?": "Steckverbindungen nicht auf dem Boden liegen lassen, nach oben befestigen.",
+ "Sind die Arbeitsgeräte an der Backstation intakt und funktionsfähig?": "Arbeitsgeräte müssen funktionstüchtig sein.",
   "Sind alle elektrischen Geräte mit Schutzkontaktsteckern versehen?": "Elektrische Geräte müssen geerdet sein.",
   "Sind die Steckdosen nicht überlastet?": "Überlastung von Steckdosen vermeiden.",
   "Sind Kabel so verlegt, dass keine Stolperfallen entstehen?": "Kabel sicher verlegen.",
-  "Ist die Beleuchtung in Arbeitsbereichen ausreichend und funktionstüchtig?": "Beleuchtung muss angemessen sein.",
-  "Sind Mitarbeiter für Gefahrstoffe geschult?": "Schulungen zum Gefahrstoffschutz durchführen.",
+ "Ist die Beleuchtung in Arbeitsbereichen ausreichend und funktionstüchtig?": "Beleuchtung muss angemessen sein.",
+"Sind Mitarbeiter für Gefahrstoffe geschult?": "Schulungen zum Gefahrstoffschutz durchführen.",
   "Sind Gefahrstoffe ordnungsgemäß gekennzeichnet und gelagert?": "Gefahrstoffe korrekt kennzeichnen und lagern.",
   "Sind Feuerlöscher ausreichend vorhanden und am richtigen Standort?": "Feuerlöscher an geeigneten Stellen platzieren.",
   "Sind Rauchmelder installiert und funktionsfähig?": "Rauchmelder müssen vorhanden sein.",
@@ -380,7 +378,13 @@ const questionsMeasures = {
   "Sind Notausgänge eindeutig gekennzeichnet?": "Kennzeichnung prüfen.",
   "Ist die Arbeitsschutzunterweisung dokumentiert?": "Dokumentation sicherstellen.",
   "Sind elektrische Anlagen gegen Überlast geschützt?": "Schutz gewährleisten.",
+"Werden Technik- und Heizräume als Lagerräume genutzt?": "Technik- und Heizräume dürfen nicht als Lagerräume genutzt werden.",
+  "Befindet sich brennbares Material (z. B. Kisten, Kartons) in den Technik- oder Heizräumen?": "Brennbares Material muss aus Technik- und Heizräumen entfernt werden.",
+  "Sind die Treppen unbeschädigt und frei von Gegenständen?": "Treppen müssen frei und unbeschädigt sein.",
+  "Sind die Verkehrswege so beschaffen, dass kein Risiko zum Stolpern, Ausrutschen oder Umknicken besteht?": "Verkehrswege müssen sicher und ohne Stolperfallen sein.",
+
  };
+
 
 const questionsTableBody = document.querySelector('#questionsTable tbody');
 Object.entries(questionsMeasures).forEach(([questionText], index) => {
