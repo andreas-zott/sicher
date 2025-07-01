@@ -8,6 +8,7 @@
   <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon" />
   <link href="/sicher/manifest.json" rel="manifest"/>
   <style>
+
 .wrapper-rahmen {
   background-color: #ffffff;
   border-radius: 16px;
@@ -17,70 +18,71 @@
   margin: auto;
 }
 
-#signature-pad {
-  border: 2px solid #cccccc;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 600px;
-  height: 150px;
-  touch-action: none;
-}
 
-.buttons {
-  margin-top: 10px;
-}
+  #signature-pad {
+    border: 2px solid #cccccc;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 600px;
+    height: 150px;
+    touch-action: none;
+  }
 
-#content {
-  max-width: 600px;
-  margin: auto;
-  font-family: Arial, sans-serif;
-}
+  .buttons {
+    margin-top: 10px;
+  }
 
-button {
-  background-color: #007BFF;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 10px 20px;
-  cursor: pointer;
-  font-size: 16px;
-  margin-right: 10px;
-}
+  #content {
+    max-width: 600px;
+    margin: auto;
+    font-family: Arial, sans-serif;
+  }
 
-button:hover {
-  background-color: #0056b3;
-}
+  button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 10px;
+  }
+
+  button:hover {
+    background-color: #0056b3;
+  }
 </style>
 <style>
-.confirmation-section {
-  background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  padding: 24px;
-  max-width: 700px;
-  margin: 40px auto;
-}
+  .confirmation-section {
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+    max-width: 700px;
+    margin: 40px auto;
+  }
 
-.checkbox-row {
-  display: flex;
-  gap: 40px; /* Abstand zwischen den Spalten */
-  margin-top: 16px;
-  justify-content: space-between;
-}
+  .checkbox-row {
+    display: flex;
+    gap: 40px; /* Abstand zwischen den Spalten */
+    margin-top: 16px;
+    justify-content: space-between;
+  }
 
-.checkbox-column {
-  display: flex;
-  flex-direction: column;
-  gap: 12px; /* Abstand zwischen Checkboxen in einer Spalte */
-  flex: 1;
-}
+  .checkbox-column {
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Abstand zwischen Checkboxen in einer Spalte */
+    flex: 1;
+  }
 
-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+  label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
 /* Gemeinsame Button-Grundform */
 button.custom-btn,
 button.btn-large,
@@ -140,12 +142,15 @@ button.btn-medium {
   display: block;
   font-family: inherit;
 }
+
+/* Kleine Buttons */
+
 </style>
 <style>
     @media print {
       .page-break-before {
         page-break-before: always;
-        margin-top: 0;
+  margin-top: 0;
         break-before: page;
       }
       @page {
@@ -1232,20 +1237,27 @@ button.btn-medium {
     const alleZeilen = document.querySelectorAll("#fragenTabelle tr");
     const neinAntworten = [];
 
+    let questionIndex = 0; // Global counter for questions
     alleZeilen.forEach(row => {
-      const zellen = row.querySelectorAll("td");
-      if (zellen.length >= 4) {
-        const frageText = zellen[0]?.innerText.trim();
-        const radios = row.querySelectorAll("input[type='radio']");
-        radios.forEach(radio => {
-          if (radio.checked && radio.value === "nein") {
-            neinAntworten.push(frageText);
-          }
-        });
+      const frageTextCell = row.cells[0];
+      if (!frageTextCell || frageTextCell.classList.contains('category-header')) {
+        return; // Skip category headers or invalid rows
       }
+      questionIndex++; // Increment for each actual question row
+
+      const radios = row.querySelectorAll("input[type='radio']");
+      radios.forEach(radio => {
+        if (radio.checked && radio.value === "nein") {
+          // Use the global questionIndex to get the specific measure
+          const measureText = measures[questionIndex]?.text || umformulieren(frageTextCell.innerText);
+          neinAntworten.push(measureText);
+        }
+      });
     });
 
     const maßnahmenZeilen = document.querySelectorAll('#maßnahmen-tabelle td[contenteditable]');
+    maßnahmenZeilen.forEach(cell => cell.textContent = ''); // Clear existing content
+
     neinAntworten.forEach((text, index) => {
       if (maßnahmenZeilen[index]) {
         maßnahmenZeilen[index].innerText = text;
@@ -1289,6 +1301,108 @@ button.btn-medium {
         .catch(err => console.error("❌ Service Worker Fehler:", err));
     });
   }
+
+// Measures object as provided by the user
+const measures = {
+  1: { text: "Schuhwerk-Richtlinien durchsetzen und Mitarbeiter über korrekte Arbeitsschuhe informieren", priority: "medium" },
+  2: { text: "Türen und Tore durch Fachfirma reparieren lassen und regelmäßige Wartung sicherstellen", priority: "high" },
+  3: { text: "Aufzug durch zertifizierten Sachverständigen prüfen lassen und Reparaturen durchführen", priority: "high" },
+  4: { text: "Leergutrücknahme-Anlage instand setzen, Schutzeinrichtungen reparieren und Glasscherben entfernen", priority: "high" },
+  5: { text: "Leitern durch Sachkundigen prüfen lassen und Prüfprotokoll erstellen", priority: "medium" },
+  6: { text: "Geeignete Sicherheitsmesser aus dem Ordersatz beschaffen und Verwendung schulen", priority: "medium" },
+  7: { text: "Beschädigte Schalter und Steckdosen durch Elektrofachkraft reparieren lassen", priority: "high" },
+  8: { text: "Gabelhubwagen reparieren oder ersetzen und regelmäßige Wartung durchführen", priority: "medium" },
+  9: { text: "Elektrischen Hubwagen durch Sachverständigen prüfen lassen und Reparaturen durchführen", priority: "high" },
+  10: { text: "Zugangswege zu Feuerlöscheinrichtungen freiräumen und dauerhaft freihalten", priority: "high" },
+  11: { text: "Feuerlöscheinrichtungen durch Fachfirma prüfen lassen und Prüffristen einhalten", priority: "high" },
+  12: { text: "Brandschutztüren freiräumen und Mitarbeiter über Freihaltung schulen", priority: "high" },
+  13: { text: "Türhaltevorrichtungen und Schließfolgeregler durch Fachfirma reparieren lassen", priority: "high" },
+  14: { text: "Beschädigte Brandschutztüren durch Fachfirma reparieren oder ersetzen lassen", priority: "high" },
+  15: { text: "Aktuellen Flucht- und Rettungsplan erstellen und gut sichtbar aushängen", priority: "high" },
+  16: { text: "Defekte Notausgangsbeleuchtung reparieren und regelmäßige Funktionsprüfung durchführen", priority: "high" },
+  17: { text: "Notausgänge freiräumen und dauerhaft freihalten, Mitarbeiter schulen", priority: "high" },
+  18: { text: "Notausgänge entriegeln, Öffnungsmechanismus prüfen und Zugänglichkeit sicherstellen", priority: "high" },
+  19: { text: "Fluchtwegeführung überprüfen und sichere Sammelpunkte definieren", priority: "high" },
+  20: { text: "Verkehrswege instand setzen, rutschfeste Beläge anbringen und Stolperstellen beseitigen", priority: "medium" },
+  21: { text: "Treppen reparieren, freiräumen und regelmäßige Kontrolle durchführen", priority: "medium" },
+  22: { text: "Geeignete PSA beschaffen und Mitarbeiter in der Verwendung schulen", priority: "high" },
+  23: { text: "Brennbares Material aus Technik- und Heizräumen entfernen und Lagerverbot durchsetzen", priority: "high" },
+  24: { text: "Technik- und Heizräume räumen und alternative Lagermöglichkeiten schaffen", priority: "high" },
+  25: { text: "Betriebsanweisungen aktualisieren, gut sichtbar aushängen und Einhaltung kontrollieren", priority: "medium" },
+  26: { text: "Steckverbindungen ordnungsgemäß verlegen und Stolperstellen beseitigen", priority: "medium" },
+  27: { text: "Arbeitsgeräte der Backstation warten und reparieren lassen", priority: "medium" },
+  28: { text: "Handwaschbecken reparieren oder ersetzen", priority: "medium" },
+  29: { text: "Elektroleitungen durch Fachkraft prüfen und ordnungsgemäß verlegen lassen", priority: "high" },
+  30: { text: "Zuleitung durch Elektrofachkraft VDE-konform erneuern lassen", priority: "high" },
+  31: { text: "Neue Backhandschuhe mit langer Stulpe beschaffen", priority: "medium" },
+  32: { text: "Heißgeräte durch Fachfirma warten und reparieren lassen", priority: "high" },
+  33: { text: "Hautschutzplan erstellen und gut sichtbar aushängen", priority: "medium" },
+  34: { text: "Hautschutz- und Hautpflegeprodukte beschaffen und bereitstellen", priority: "medium" },
+  35: { text: "Arbeitsgeräte im Servicebereich warten und reparieren lassen", priority: "medium" },
+  36: { text: "Glastüren und Glaswände in Augenhöhe mit Sicherheitsmarkierungen versehen", priority: "medium" },
+  37: { text: "Farbcodierte Schneidbretter und Messer beschaffen und Reinigungsplan erstellen", priority: "medium" },
+  38: { text: "Schneidbretter mit Messereinschub beschaffen", priority: "low" },
+  39: { text: "Geeignete Messerhalter beschaffen und installieren", priority: "low" },
+  40: { text: "Convenience-Geräte warten und reparieren lassen", priority: "medium" },
+  41: { text: "Fußraum an den Kassen freiräumen und Ordnung halten", priority: "low" },
+  42: { text: "Fußboden im Kassenbereich reparieren oder erneuern", priority: "medium" },
+  43: { text: "Brennbares Material von Heizgeräten entfernen und Sicherheitsabstand einhalten", priority: "high" },
+  44: { text: "Defekte Kassenstühle reparieren oder ersetzen", priority: "low" },
+  45: { text: "Transportband reparieren oder ersetzen, Lücken schließen", priority: "medium" },
+  46: { text: "Überglocken an der Kühlhausbeleuchtung installieren", priority: "medium" },
+  47: { text: "Notentriegelung installieren oder reparieren und Funktion prüfen", priority: "high" },
+  48: { text: "Rettungswegschilder ISO 7010 an Kühlhaustüren anbringen", priority: "high" },
+  49: { text: "Kühlhausbeleuchtung reparieren und regelmäßige Wartung durchführen", priority: "medium" },
+  50: { text: "Notruf-Funktion reparieren und regelmäßige Funktionsprüfung durchführen", priority: "high" },
+  51: { text: "Schwerlastregale durch Sachverständigen prüfen lassen", priority: "high" },
+  52: { text: "Anfahrschutz für Regale installieren", priority: "medium" },
+  53: { text: "Traglastangaben an allen Schwerlastregalen anbringen", priority: "medium" },
+  54: { text: "Absturzsicherung an der Rampe installieren", priority: "high" },
+  55: { text: "Absturzsicherung reparieren und ordnungsgemäß kennzeichnen", priority: "high" },
+  56: { text: "Müll-/Papierpresse durch Sachverständigen prüfen lassen", priority: "medium" },
+  57: { text: "Müll-/Papierpresse reparieren und Schutzeinrichtungen instand setzen", priority: "medium" },
+  58: { text: "Verkehrswege im Lager instand setzen und Stolperstellen beseitigen", priority: "medium" },
+  59: { text: "Aktuelle aushangpflichtige Unterlagen beschaffen und aushängen", priority: "medium" },
+  60: { text: "Nicht brennbare Unterlagen für hitzeentwickelnde Geräte beschaffen", priority: "medium" },
+  61: { text: "Erste-Hilfe-Koffer gut sichtbar und zugänglich montieren", priority: "high" },
+  62: { text: "Prüfung ortsveränderlicher elektrischer Betriebsmittel durch Elektrofachkraft veranlassen", priority: "medium" },
+  63: { text: "Aktuelle Liste und Prüfberichte erstellen und führen", priority: "medium" },
+  64: { text: "Verbandskasten auffüllen und regelmäßig kontrollieren", priority: "high" },
+  65: { text: "Dokumentation für Erste Hilfeleistungen einführen und führen", priority: "medium" },
+  66: { text: "Sicherheitsmaßnahmen gegen Raubüberfälle installieren (Türspion, Sicherheitsknauf)", priority: "high" },
+  67: { text: "Verfahren für sicheren Umgang mit Zahlungsmitteln etablieren und schulen", priority: "high" },
+  68: { text: "Unterweisungsprogramm für neue Mitarbeiter zu Arbeitssicherheit und Brandschutz erstellen", priority: "high" },
+  69: { text: "Ersthelfer ausbilden lassen und Anwesenheit während Öffnungszeiten sicherstellen", priority: "high" },
+  70: { text: "Brandschutzhelfer ausbilden lassen und Anwesenheit während Öffnungszeiten sicherstellen", priority: "high" },
+  71: { text: "Sicherheitsbeauftragten ausbilden lassen und offiziell bestellen", priority: "medium" },
+  72: { text: "Gefährdungsbeurteilung erstellen oder aktualisieren", priority: "high" },
+  73: { text: "Unterweisung für Personen im Bereich von CO2-Kühlanlagen durchführen", priority: "high" },
+  74: { text: "CO2-Sensoren freiräumen und regelmäßige Kontrolle durchführen", priority: "high" },
+  75: { text: "Sicherheitsvorrichtungen der CO2-Anlage reparieren und regelmäßig prüfen", priority: "high" },
+  76: { text: "Unterweisungsprogramm für Praktikanten und Schüleraushilfen erstellen und durchführen", priority: "medium" },
+  77: { text: "Dokumentationssystem für Unterweisungen einführen", priority: "medium" },
+  78: { text: "Verständniskontrolle bei Unterweisungen durchführen und dokumentieren", priority: "medium" },
+  79: { text: "Arbeitsmedizinische Vorsorge organisieren und Mitarbeitern anbieten", priority: "medium" },
+  80: { text: "Präventionsmaßnahmen gegen Hauterkrankungen implementieren", priority: "medium" },
+  81: { text: "Mitarbeitertoiletten und Pausenräume sauber und mit Seife, Einmalhandtüchern und ggf. Desinfektionsmittel ausgestattet", priority: "low" }, // New question, assigned a measure
+  82: { text: "Mitarbeiterwünsche systematisch in Arbeitsplanung einbeziehen", priority: "low" },
+  83: { text: "Pausenregelung überarbeiten und konsequent umsetzen", priority: "medium" },
+  84: { text: "Geeigneten Pausenraum einrichten", priority: "medium" },
+  85: { text: "Überstundenmanagement implementieren und Überstunden reduzieren", priority: "medium" },
+  86: { text: "Regelmäßige Teambesprechungen einführen und durchführen", priority: "low" },
+  87: { text: "Strukturiertes Einarbeitungsprogramm für neue Mitarbeiter entwickeln", priority: "medium" },
+  88: { text: "Unterweisung zu Brand- und Arbeitsschutz durchführen und dokumentieren", priority: "high" },
+  89: { text: "Schwarzes Brett für Mitarbeiterinformationen installieren", priority: "low" },
+  90: { text: "Kommunikationsprozess für transparente Entscheidungserläuterung etablieren", priority: "low" },
+  91: { text: "System für positive Leistungsrückmeldungen einführen", priority: "low" },
+  92: { text: "Schulung für Führungskräfte in konstruktiver Kritik durchführen", priority: "low" },
+  93: { text: "Weiterbildungsprogramm für Mitarbeiter entwickeln und anbieten", priority: "low" },
+  94: { text: "Informationsmaterial zur Suchtprävention aushängen", priority: "low" },
+  95: { text: "Betriebliches Wiedereingliederungsmanagement einführen", priority: "medium" },
+  96: { text: "Arbeitsorganisation überprüfen und Alleinarbeit minimieren", priority: "medium" },
+  97: { text: "Betreuungskonzept für Überfallsituationen entwickeln", priority: "high" },
+  98: { text: "Schulungen für Umgang mit gewalttätigen Situationen organisieren", priority: "medium" }
+};
 
 function frageVerneinen(satz) {
   return satz
@@ -1363,13 +1477,16 @@ function umformulieren(frage) {
     const maßnahmenZeilen = document.querySelectorAll("#maßnahmen-tabelle td[contenteditable='true']");
     maßnahmenZeilen.forEach(cell => cell.textContent = ''); // Clear existing content
 
-    let index = 0;
+    let index = 0; // This will be our global question counter, matching `measures` keys
+    let measuresAdded = 0;
+
     fragenzeilen.forEach(row => {
       const frageTextCell = row.cells[0];
       if (!frageTextCell || frageTextCell.classList.contains('category-header')) {
         return; // Skip category headers or invalid rows
       }
-      const frageText = frageTextCell.innerText;
+      index++; // Increment for each actual question row
+
       const radios = row.querySelectorAll('input[type="radio"]');
       let selected = null;
 
@@ -1377,16 +1494,25 @@ function umformulieren(frage) {
         if (r.checked) selected = r.value;
       });
 
-      if (selected === 'nein' && index < maßnahmenZeilen.length) {
-        const umformulierteFrage = umformulieren(frageText);
-        maßnahmenZeilen[index].textContent = umformulierteFrage;
-        index++;
+      if (selected === 'nein' && measuresAdded < maßnahmenZeilen.length) {
+        const measure = measures[index]; // Get the specific measure using the global index
+        let textToInsert = "";
+
+        if (measure && measure.text) {
+          textToInsert = measure.text;
+        } else {
+          // Fallback to umformulieren if no specific measure is found
+          textToInsert = umformulieren(frageTextCell.innerText);
+        }
+        
+        maßnahmenZeilen[measuresAdded].textContent = textToInsert;
+        measuresAdded++;
       }
     });
 
-    if (index === 0) {
+    if (measuresAdded === 0) {
       alert("✅ Es wurden keine Fragen mit 'nein' beantwortet.");
-    } else if (index >= maßnahmenZeilen.length) {
+    } else if (measuresAdded >= maßnahmenZeilen.length) {
       alert("⚠️ Mehr als 15 'nein'-Antworten – nur die ersten 15 wurden übernommen.");
     }
   }
