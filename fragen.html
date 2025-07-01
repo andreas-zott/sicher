@@ -3074,7 +3074,22 @@ button,
                     const questionText = questionDiv.querySelector('.question-text').textContent;
                     const radioGroupName = questionDiv.querySelector('input[type="radio"]').name;
                     const selectedAnswerElement = document.querySelector(`input[name="${radioGroupName}"]:checked`);
-                    const selectedAnswer = selectedAnswerElement ? selectedAnswerElement.value : 'Nicht beantwortet';
+                    
+                    const selectedAnswerRaw = selectedAnswerElement ? selectedAnswerElement.value : 'Nicht beantwortet';
+                    let selectedAnswerTranslated = '';
+                    switch (selectedAnswerRaw) {
+                        case 'yes':
+                            selectedAnswerTranslated = 'Ja';
+                            break;
+                        case 'no':
+                            selectedAnswerTranslated = 'Nein';
+                            break;
+                        case 'na':
+                            selectedAnswerTranslated = 'Nicht zutreffend';
+                            break;
+                        default:
+                            selectedAnswerTranslated = selectedAnswerRaw;
+                    }
 
                     if (yPos > 260) { // Check for page overflow before adding question
                         pdf.addPage();
@@ -3085,11 +3100,11 @@ button,
                     pdf.text(splitQuestion, 20, yPos);
                     yPos += splitQuestion.length * 5; // Adjust yPos based on lines of question text
                     
-                    pdf.text(`Antwort: ${selectedAnswer}`, 25, yPos);
+                    pdf.text(`Antwort: ${selectedAnswerTranslated}`, 25, yPos);
                     yPos += 10; // Space for answer
                     
                     // Add inline measure if 'no' was selected
-                    if (selectedAnswer === 'no') {
+                    if (selectedAnswerRaw === 'no') {
                         const questionId = parseInt(radioGroupName.replace('question-', ''));
                         const measureData = measures[questionId];
                         if (measureData) {
