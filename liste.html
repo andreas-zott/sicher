@@ -1057,6 +1057,8 @@ button.btn-medium {
 <script>
   async function generateAndSharePDF() {
     const element = document.body;
+        const buttonsToHide = document.querySelectorAll('button, .buttons, footer, #auswertung-container');
+        buttonsToHide.forEach(btn => btn.style.display = 'none');
 
     const opt = {
       margin:       0,
@@ -1072,6 +1074,9 @@ button.btn-medium {
       type: "application/pdf",
     });
 
+        // Restore visibility of buttons and footer after PDF generation
+        buttonsToHide.forEach(btn => btn.style.display = '');
+    
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       try {
         await navigator.share({
