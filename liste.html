@@ -8,7 +8,6 @@
   <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon" />
   <link href="/sicher/manifest.json" rel="manifest"/>
   <style>
-
 .wrapper-rahmen {
   background-color: #ffffff;
   border-radius: 16px;
@@ -18,71 +17,70 @@
   margin: auto;
 }
 
+#signature-pad {
+  border: 2px solid #cccccc;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  height: 150px;
+  touch-action: none;
+}
 
-  #signature-pad {
-    border: 2px solid #cccccc;
-    border-radius: 12px;
-    width: 100%;
-    max-width: 600px;
-    height: 150px;
-    touch-action: none;
-  }
+.buttons {
+  margin-top: 10px;
+}
 
-  .buttons {
-    margin-top: 10px;
-  }
+#content {
+  max-width: 600px;
+  margin: auto;
+  font-family: Arial, sans-serif;
+}
 
-  #content {
-    max-width: 600px;
-    margin: auto;
-    font-family: Arial, sans-serif;
-  }
+button {
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-right: 10px;
+}
 
-  button {
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-right: 10px;
-  }
-
-  button:hover {
-    background-color: #0056b3;
-  }
+button:hover {
+  background-color: #0056b3;
+}
 </style>
 <style>
-  .confirmation-section {
-    background: #fff;
-    border: 1px solid #ccc;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    padding: 24px;
-    max-width: 700px;
-    margin: 40px auto;
-  }
+.confirmation-section {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  max-width: 700px;
+  margin: 40px auto;
+}
 
-  .checkbox-row {
-    display: flex;
-    gap: 40px; /* Abstand zwischen den Spalten */
-    margin-top: 16px;
-    justify-content: space-between;
-  }
+.checkbox-row {
+  display: flex;
+  gap: 40px; /* Abstand zwischen den Spalten */
+  margin-top: 16px;
+  justify-content: space-between;
+}
 
-  .checkbox-column {
-    display: flex;
-    flex-direction: column;
-    gap: 12px; /* Abstand zwischen Checkboxen in einer Spalte */
-    flex: 1;
-  }
+.checkbox-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* Abstand zwischen Checkboxen in einer Spalte */
+  flex: 1;
+}
 
-  label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 /* Gemeinsame Button-Grundform */
 button.custom-btn,
 button.btn-large,
@@ -142,15 +140,12 @@ button.btn-medium {
   display: block;
   font-family: inherit;
 }
-
-/* Kleine Buttons 
-
 </style>
 <style>
     @media print {
       .page-break-before {
         page-break-before: always;
-  margin-top: 0;
+        margin-top: 0;
         break-before: page;
       }
       @page {
@@ -187,6 +182,12 @@ button.btn-medium {
       font-family: Arial, sans-serif;
       background-color: #f8f9fa;
       padding: 20px;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
     }
 
     header h1 {
@@ -253,9 +254,11 @@ button.btn-medium {
 
     button:hover {
       background-color: #0056b3;
-
-
+    }
   </style>
+  <!-- PDF Generation Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
   <div class="wrapper-rahmen">
@@ -515,40 +518,34 @@ button.btn-medium {
 <td><input name="3.0 Serviceabteilung-2" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Glastüren/-wände sind in Augenhöhe gekennzeichnet</td>
+<td style="text-align: left;">Sind die Glastüren und Glaswände in Augenhöhe gekennzeichnet?</td>
 <td><input name="3.0 Serviceabteilung-3" type="radio" value="ja"/></td>
 <td><input name="3.0 Serviceabteilung-3" type="radio" value="nein"/></td>
 <td><input name="3.0 Serviceabteilung-3" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind die Glastüren und Glaswände in Augenhöhe gekennzeichnet?</td>
+<td style="text-align: left;">Werden Schneidbretter und Messer regelmäßig gereinigt und farbcodiert verwendet?</td>
 <td><input name="3.0 Serviceabteilung-4" type="radio" value="ja"/></td>
 <td><input name="3.0 Serviceabteilung-4" type="radio" value="nein"/></td>
 <td><input name="3.0 Serviceabteilung-4" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Werden Schneidbretter und Messer regelmäßig gereinigt und farbcodiert verwendet?</td>
+<td style="text-align: left;">Werden Schneidbretter mit Messereinschub verwendet?</td>
 <td><input name="3.0 Serviceabteilung-5" type="radio" value="ja"/></td>
 <td><input name="3.0 Serviceabteilung-5" type="radio" value="nein"/></td>
 <td><input name="3.0 Serviceabteilung-5" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Werden Schneidbretter mit Messereinschub verwendet?</td>
+<td style="text-align: left;">Werden Messerhalter verwendet?</td>
 <td><input name="3.0 Serviceabteilung-6" type="radio" value="ja"/></td>
 <td><input name="3.0 Serviceabteilung-6" type="radio" value="nein"/></td>
 <td><input name="3.0 Serviceabteilung-6" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Werden Messerhalter verwendet?</td>
+<td style="text-align: left;">Sind die Convenience-Geräte in einem ordnungsgemäßen Zustand?</td>
 <td><input name="3.0 Serviceabteilung-7" type="radio" value="ja"/></td>
 <td><input name="3.0 Serviceabteilung-7" type="radio" value="nein"/></td>
 <td><input name="3.0 Serviceabteilung-7" type="radio" value="nicht_vorhanden"/></td>
-</tr>
-<tr>
-<td style="text-align: left;">Sind die Convenience-Geräte in einem ordnungsgemäßen Zustand?</td>
-<td><input name="3.0 Serviceabteilung-8" type="radio" value="ja"/></td>
-<td><input name="3.0 Serviceabteilung-8" type="radio" value="nein"/></td>
-<td><input name="3.0 Serviceabteilung-8" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 
 <tr><td class="category-header" colspan="4" style="text-align: left;">4.0 Kassenzone</td></tr>
@@ -699,63 +696,63 @@ button.btn-medium {
 
 <tr>
 <td style="text-align: left;">Liegt eine aktuelle Liste sowie Prüfberichte prüfungsbedürftiger Einrichtungen vor?</td>
-<td><input name="8.0 Marktleiterbüro-9" type="radio" value="ja"/></td>
-<td><input name="8.0 Marktleiterbüro-9" type="radio" value="nein"/></td>
-<td><input name="8.0 Marktleiterbüro-9" type="radio" value="nicht_vorhanden"/></td>
-</tr>
-<tr>
-<td style="text-align: left;">Ist der Verbandskasten in einem ordnungsgemäßen Zustand?</td>
 <td><input name="8.0 Marktleiterbüro-0" type="radio" value="ja"/></td>
 <td><input name="8.0 Marktleiterbüro-0" type="radio" value="nein"/></td>
 <td><input name="8.0 Marktleiterbüro-0" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Wird die "Dokumentation Erste Hilfeleistungen" geführt?</td>
+<td style="text-align: left;">Ist der Verbandskasten in einem ordnungsgemäßen Zustand?</td>
 <td><input name="8.0 Marktleiterbüro-1" type="radio" value="ja"/></td>
 <td><input name="8.0 Marktleiterbüro-1" type="radio" value="nein"/></td>
 <td><input name="8.0 Marktleiterbüro-1" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind Maßnahmen getroffen, die den Anreiz zu Raubüberfällen vermindern (z. B. Türspion, feststehender Knauf)?</td>
+<td style="text-align: left;">Wird die "Dokumentation Erste Hilfeleistungen" geführt?</td>
 <td><input name="8.0 Marktleiterbüro-2" type="radio" value="ja"/></td>
 <td><input name="8.0 Marktleiterbüro-2" type="radio" value="nein"/></td>
 <td><input name="8.0 Marktleiterbüro-2" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist die Tür während des Umgangs mit Zahlungsmitteln verschlossen?</td>
+<td style="text-align: left;">Sind Maßnahmen getroffen, die den Anreiz zu Raubüberfällen vermindern (z. B. Türspion, feststehender Knauf)?</td>
 <td><input name="8.0 Marktleiterbüro-3" type="radio" value="ja"/></td>
 <td><input name="8.0 Marktleiterbüro-3" type="radio" value="nein"/></td>
 <td><input name="8.0 Marktleiterbüro-3" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Werden neue Mitarbeiter vor Aufnahme der Tätigkeit zum Thema Arbeitssicherheit und Brandschutz unterwiesen?</td>
+<td style="text-align: left;">Ist die Tür während des Umgangs mit Zahlungsmitteln verschlossen?</td>
 <td><input name="8.0 Marktleiterbüro-4" type="radio" value="ja"/></td>
 <td><input name="8.0 Marktleiterbüro-4" type="radio" value="nein"/></td>
 <td><input name="8.0 Marktleiterbüro-4" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist während der gesamten Ladenöffnungszeit mindestens ein Mitarbeiter mit der Qualifikation zum Ersthelfer anwesend?</td>
+<td style="text-align: left;">Werden neue Mitarbeiter vor Aufnahme der Tätigkeit zum Thema Arbeitssicherheit und Brandschutz unterwiesen?</td>
 <td><input name="8.0 Marktleiterbüro-5" type="radio" value="ja"/></td>
 <td><input name="8.0 Marktleiterbüro-5" type="radio" value="nein"/></td>
 <td><input name="8.0 Marktleiterbüro-5" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist während der gesamten Ladenöffnungszeit mindestens ein Mitarbeiter mit der Qualifikation als Brandschutzhelfer anwesend?</td>
+<td style="text-align: left;">Ist während der gesamten Ladenöffnungszeit mindestens ein Mitarbeiter mit der Qualifikation zum Ersthelfer anwesend?</td>
 <td><input name="8.0 Marktleiterbüro-6" type="radio" value="ja"/></td>
 <td><input name="8.0 Marktleiterbüro-6" type="radio" value="nein"/></td>
 <td><input name="8.0 Marktleiterbüro-6" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist ein Sicherheitsbeauftragter ausgebildet und bestellt?</td>
+<td style="text-align: left;">Ist während der gesamten Ladenöffnungszeit mindestens ein Mitarbeiter mit der Qualifikation als Brandschutzhelfer anwesend?</td>
 <td><input name="8.0 Marktleiterbüro-7" type="radio" value="ja"/></td>
 <td><input name="8.0 Marktleiterbüro-7" type="radio" value="nein"/></td>
 <td><input name="8.0 Marktleiterbüro-7" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Wurde die Gefährdungsbeurteilung (GBO) erstellt und ist sie auf dem aktuellen Stand?</td>
+<td style="text-align: left;">Ist ein Sicherheitsbeauftragter ausgebildet und bestellt?</td>
 <td><input name="8.0 Marktleiterbüro-8" type="radio" value="ja"/></td>
 <td><input name="8.0 Marktleiterbüro-8" type="radio" value="nein"/></td>
 <td><input name="8.0 Marktleiterbüro-8" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Wurde die Gefährdungsbeurteilung (GBO) erstellt und ist sie auf dem aktuellen Stand?</td>
+<td><input name="8.0 Marktleiterbüro-9" type="radio" value="ja"/></td>
+<td><input name="8.0 Marktleiterbüro-9" type="radio" value="nein"/></td>
+<td><input name="8.0 Marktleiterbüro-9" type="radio" value="nicht_vorhanden"/></td>
 
 </tr>
 <tr><td class="category-header" colspan="4" style="text-align: left;">9.0 CO2 Kühleinrichtungen</td></tr>
@@ -812,6 +809,12 @@ button.btn-medium {
 <td><input name="11.0 Arbeitsmedizin-1" type="radio" value="ja"/></td>
 <td><input name="11.0 Arbeitsmedizin-1" type="radio" value="nein"/></td>
 <td><input name="11.0 Arbeitsmedizin-1" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind Mitarbeitertoiletten und Pausenräume sauber und mit Seife, Einmalhandtüchern und ggf. Desinfektionsmittel ausgestattet?</td>
+<td><input name="11.0 Arbeitsmedizin-2" type="radio" value="ja"/></td>
+<td><input name="11.0 Arbeitsmedizin-2" type="radio" value="nein"/></td>
+<td><input name="11.0 Arbeitsmedizin-2" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 
 <tr><td class="category-header" colspan="4" style="text-align: left;">12.0 Psychische Belastung</td></tr>
@@ -1165,8 +1168,15 @@ button.btn-medium {
     img.style.border = "2px solid #000";
     img.style.width = "100%";
     img.style.maxWidth = "600px";
-    canvas.replaceWith(img);
+    // Replace the canvas with the image for printing
+    canvas.style.display = 'none'; // Hide canvas
+    canvas.parentNode.insertBefore(img, canvas.nextSibling); // Insert image after canvas
+
     window.print();
+
+    // After printing, remove the image and show the canvas again
+    img.remove();
+    canvas.style.display = 'block';
   }
 
   function auswertungAnzeigen() {
@@ -1201,48 +1211,21 @@ button.btn-medium {
       <p><strong>Nein:</strong> ${auswertung.nein}</p>
       <p><strong>Nicht vorhanden:</strong> ${auswertung.nicht_vorhanden}</p>
     `;
- const auswertungWindow = window.open('auswertung-sifa.html', 'auswertung');
-  const daten = {
-    markt: markt,
-    datum: datum,
-    name: name,
-    sifa: sifa,
-    ja: auswertung.ja,
-    nein: auswertung.nein,
-    nicht_vorhanden: auswertung.nicht_vorhanden
-  };
-  setTimeout(() => {
-    auswertungWindow.postMessage(daten, "*");
-  }, 1000);
-
-  }
-
-  function neinFragenInMaßnahmen() {
-    const fragenzeilen = document.querySelectorAll('#fragenTabelle tr');
-    const maßnahmenZeilen = document.querySelectorAll("#maßnahmen-tabelle td[contenteditable='true']");
-    maßnahmenZeilen.forEach(cell => cell.textContent = '');
-
-    let index = 0;
-    fragenzeilen.forEach(row => {
-      const frageText = row.cells[0]?.innerText;
-      const radios = row.querySelectorAll('input[type="radio"]');
-      let selected = null;
-
-      radios.forEach(r => {
-        if (r.checked) selected = r.value;
-      });
-
-      if (selected === 'nein' && index < maßnahmenZeilen.length) {
-        maßnahmenZeilen[index].textContent = frageText;
-        index++;
-      }
-    });
-
-    if (index === 0) {
-      alert("✅ Es wurden keine Fragen mit 'nein' beantwortet.");
-    } else if (index >= maßnahmenZeilen.length) {
-      alert("⚠️ Mehr als 15 'nein'-Antworten – nur die ersten 15 wurden übernommen.");
-    }
+    // Note: The following lines depend on external files (auswertung-sifa.html) not provided.
+    // If these files are not present, this functionality will not work as expected.
+    const auswertungWindow = window.open('auswertung-sifa.html', 'auswertung');
+    const daten = {
+      markt: markt,
+      datum: datum,
+      name: name,
+      sifa: sifa,
+      ja: auswertung.ja,
+      nein: auswertung.nein,
+      nicht_vorhanden: auswertung.nicht_vorhanden
+    };
+    setTimeout(() => {
+      auswertungWindow.postMessage(daten, "*");
+    }, 1000);
   }
 
   function neinAntwortenEinfügenUndÖffnen() {
@@ -1269,6 +1252,8 @@ button.btn-medium {
       }
     });
 
+    // Note: The following lines depend on external files (defizite.html) not provided.
+    // If these files are not present, this functionality will not work as expected.
     const win = window.open('defizite.html', '_blank');
     setTimeout(() => {
       win?.postMessage({ neinAntworten }, "*");
@@ -1304,17 +1289,6 @@ button.btn-medium {
         .catch(err => console.error("❌ Service Worker Fehler:", err));
     });
   }
-function unterschriftExtern() {
-  window.open('signatur.html', 'Signatur', 'width=700,height=400');
-}
-
-window.addEventListener("message", (event) => {
-  if (event.data?.type === 'signature') {
-    const img = document.getElementById('signature-image');
-    img.src = event.data.dataUrl;
-    img.style.display = 'block';
-  }
-});
 
 function frageVerneinen(satz) {
   return satz
@@ -1329,7 +1303,6 @@ function frageVerneinen(satz) {
     .replace(/\bgewährleistet\b/g, "nicht gewährleistet")
     .replace(/\bgesichert\b/g, "nicht gesichert");
 }
-
 
 function umformulieren(frage) {
   const original = frage.trim();
@@ -1385,16 +1358,18 @@ function umformulieren(frage) {
   return umformuliert;
 }
 
-
-
   function neinFragenInMaßnahmen() {
     const fragenzeilen = document.querySelectorAll('#fragenTabelle tr');
     const maßnahmenZeilen = document.querySelectorAll("#maßnahmen-tabelle td[contenteditable='true']");
-    maßnahmenZeilen.forEach(cell => cell.textContent = '');
+    maßnahmenZeilen.forEach(cell => cell.textContent = ''); // Clear existing content
 
     let index = 0;
     fragenzeilen.forEach(row => {
-      const frageText = row.cells[0]?.innerText;
+      const frageTextCell = row.cells[0];
+      if (!frageTextCell || frageTextCell.classList.contains('category-header')) {
+        return; // Skip category headers or invalid rows
+      }
+      const frageText = frageTextCell.innerText;
       const radios = row.querySelectorAll('input[type="radio"]');
       let selected = null;
 
