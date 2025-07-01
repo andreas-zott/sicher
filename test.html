@@ -4,246 +4,37 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Arbeitssicherheit-Checkliste-2025</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<link href="/sicher/favicon.ico" rel="icon" type="image/x-icon" />
-<link href="/sicher/manifest-unten-farbig.json" rel="manifest" />
+  <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon" />
+  <link href="/sicher/manifest-unten-farbig.json" rel="manifest" />
 <style>
 
 .wrapper-rahmen {
-background-color: #ffffff;
-border-radius: 16px;
-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-padding: 24px;
-max-width: 1400px;
-margin: auto;
-}
-
-
-#signature-pad {
-  border: 2px solid #cccccc;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 600px;
-  height: 150px;
-  touch-action: none;
-}
-
-.buttons {
-  margin-top: 10px;
-}
-
-#content {
-  max-width: 600px;
-  margin: auto;
-  font-family: Arial, sans-serif;
-}
-
-button {
-  background-color: #007BFF;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 10px 20px;
-  cursor: pointer;
-  font-size: 16px;
-  margin-right: 10px;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-</style>
-<style>
-.confirmation-section {
-  background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   padding: 24px;
-  max-width: 700px;
-  margin: 40px auto;
+  max-width: 1200px;
+  margin: auto;
 }
 
-.checkbox-row {
-  display: flex;
-  gap: 40px; /* Abstand zwischen den Spalten */
-  margin-top: 16px;
-  justify-content: space-between;
-}
 
-.checkbox-column {
-  display: flex;
-  flex-direction: column;
-  gap: 12px; /* Abstand zwischen Checkboxen in einer Spalte */
-  flex: 1;
-}
-
-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-/* Gemeinsame Button-Grundform */
-button.custom-btn,
-button.btn-large,
-button.btn-medium {
-font-size: 16px;
-padding: 10px 20px;
-border-radius: 8px;
-border: none;
-cursor: pointer;
-margin: 10px auto;
-display: block;
-font-family: inherit;
-}
-
-/* Große Buttons (600px) */
-button.btn-large {
-width: 600px;
-}
-
-/* Mittlere Buttons (280px) */
-button.btn-medium {
-width: 280px;
-}
-
-/* Spezielle Farben */
-button.btn-blue {
-background-color: #007bff;
-color: white;
-}
-button.btn-green {
-background-color: #28a745;
-color: white;
-}
-button.btn-gray {
-background-color: #6c757d;
-color: white;
-}
-
-/* Unterschriftsbild */
-#signature-image {
-max-width: 600px;
-border: 1px solid #ccc;
-border-radius: 8px;
-display: block;
-min-height: 150px;
-margin: 10px auto;
-}
-button.custom-btn,
-button.btn-large,
-button.btn-medium {
-font-size: 16px;
-padding: 10px 20px;
-border-radius: 8px;
-border: none;
-cursor: pointer;
-margin: 10px auto;
-display: block;
-font-family: inherit;
-}
-
-/* Kleine Buttons */
-
-</style>
-<style>
-  @media print {
-    .page-break-before {
-      page-break-before: always;
-margin-top: 0;
-      break-before: page;
-    }
-    @page {
-      size: A4 portrait;
-      margin: 20mm;
-    }
-    button, .btn, footer, .footer {
-      display: none !important;
-    }
-    input[type="text"], input[type="date"] {
-      border: none;
-      background: transparent;
-      font-weight: bold;
-      color: black;
-    }
-    input[type="radio"] {
-      transform: scale(1.2);
-    }
-    th, .category-header {
-      background-color: #ccc !important;
-      color: black !important;
-    }
-    tr:nth-child(even) {
-      background-color: #eee !important;
-    }
-    body {
-      background: white;
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
-    }
+  #signature-pad {
+    border: 2px solid #cccccc;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 600px;
+    height: 150px;
+    touch-action: none;
   }
 
-  body {
+  .buttons {
+    margin-top: 10px;
+  }
+
+  #content {
+    max-width: 600px;
+    margin: auto;
     font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
-    padding: 20px;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-
-  header h1 {
-    color: #212529;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-    background-color: white;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  }
-
-  th {
-    background-color: #007BFF;
-    color: white;
-    padding: 12px;
-    text-align: center;
-  }
-
-  td {
-    padding: 10px;
-    border: 1px solid #dee2e6;
-    text-align: left;
-  }
-
-  tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-
-  tr:hover {
-    background-color: #e6f0ff;
-  }
-
-  .category-header {
-    background-color: #d1ecf1 !important;
-    color: #0c5460;
-    font-weight: bold;
-    text-align: left;
-    padding: 12px;
-  }
-
-  input[type="text"], input[type="date"] {
-    width: 100%;
-    max-width: 300px;
-    padding: 8px;
-    font-size: 16px;
-    margin-top: 5px;
-    box-sizing: border-box;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
   }
 
   button {
@@ -254,59 +45,260 @@ margin-top: 0;
     padding: 10px 20px;
     cursor: pointer;
     font-size: 16px;
+    margin-right: 10px;
   }
 
   button:hover {
     background-color: #0056b3;
   }
 </style>
-<!-- PDF Generation Libraries -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  .confirmation-section {
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+    max-width: 700px;
+    margin: 40px auto;
+  }
+
+  .checkbox-row {
+    display: flex;
+    gap: 40px; /* Abstand zwischen den Spalten */
+    margin-top: 16px;
+    justify-content: space-between;
+  }
+
+  .checkbox-column {
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Abstand zwischen Checkboxen in einer Spalte */
+    flex: 1;
+  }
+
+  label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+/* Gemeinsame Button-Grundform */
+button.custom-btn,
+button.btn-large,
+button.btn-medium {
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  margin: 10px auto;
+  display: block;
+  font-family: inherit;
+}
+
+/* Große Buttons (600px) */
+button.btn-large {
+  width: 600px;
+}
+
+/* Mittlere Buttons (280px) */
+button.btn-medium {
+  width: 280px;
+}
+
+/* Spezielle Farben */
+button.btn-blue {
+  background-color: #007bff;
+  color: white;
+}
+button.btn-green {
+  background-color: #28a745;
+  color: white;
+}
+button.btn-gray {
+  background-color: #6c757d;
+  color: white;
+}
+
+/* Unterschriftsbild */
+#signature-image {
+  max-width: 600px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  display: block;
+  min-height: 150px;
+  margin: 10px auto;
+}
+button.custom-btn,
+button.btn-large,
+button.btn-medium {
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  margin: 10px auto;
+  display: block;
+  font-family: inherit;
+}
+
+/* Kleine Buttons 
+
+</style>
+<style>
+    @media print {
+      .page-break-before {
+        page-break-before: always;
+  margin-top: 0;
+        break-before: page;
+      }
+      @page {
+        size: A4 portrait;
+        margin: 20mm;
+      }
+      button, .btn, footer, .footer {
+        display: none !important;
+      }
+      input[type="text"], input[type="date"] {
+        border: none;
+        background: transparent;
+        font-weight: bold;
+        color: black;
+      }
+      input[type="radio"] {
+        transform: scale(1.2);
+      }
+      th, .category-header {
+        background-color: #ccc !important;
+        color: black !important;
+      }
+      tr:nth-child(even) {
+        background-color: #eee !important;
+      }
+      body {
+        background: white;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      padding: 20px;
+    }
+
+    header h1 {
+      color: #212529;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      background-color: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    th {
+      background-color: #007BFF;
+      color: white;
+      padding: 12px;
+      text-align: center;
+    }
+
+    td {
+      padding: 10px;
+      border: 1px solid #dee2e6;
+      text-align: left;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    tr:hover {
+      background-color: #e6f0ff;
+    }
+
+    .category-header {
+      background-color: #d1ecf1 !important;
+      color: #0c5460;
+      font-weight: bold;
+      text-align: left;
+      padding: 12px;
+    }
+
+    input[type="text"], input[type="date"] {
+      width: 100%;
+      max-width: 300px;
+      padding: 8px;
+      font-size: 16px;
+      margin-top: 5px;
+      box-sizing: border-box;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+    }
+
+    button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+
+
+  </style>
 </head>
 <body>
-<div class="wrapper-rahmen">
+  <div class="wrapper-rahmen">
 <div class="print-wrapper">
 <header>
-<div style="display: flex; justify-content: space-between; align-items: center;">
-  <h1 style="margin: 0;">Arbeitssicherheit-Checkliste-2025</h1>
-  <input id="datum" type="date" style="padding: 8px; font-size: 16px;" />
-</div>
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <h1 style="margin: 0;">Arbeitssicherheit-Checkliste-2025</h1>
+    <input id="datum" type="date" style="padding: 8px; font-size: 16px;" />
+  </div>
 </header>
 
 <div class="form-section" style="max-width: 300px;">
-<div style="margin-bottom: 10px;">
-  <label for="markt">Marktnummer:</label>
-  <input type="text" id="markt" placeholder="z. B. M123" required>
-</div>
-<div style="margin-bottom: 10px;">
-  <label for="name">Name:</label><br/>
-  <input id="name" style="width: 100%;" type="text"/>
-</div>
-<div style="margin-bottom: 10px;">
-  <label for="sifa">SiFa:</label><br/>
-  <input id="sifa" style="width: 100%;" type="text"/>
-</div>
+  <div style="margin-bottom: 10px;">
+    <label for="markt">Marktnummer:</label>
+    <input type="text" id="markt" placeholder="z. B. M123" required>
+  </div>
+  <div style="margin-bottom: 10px;">
+    <label for="name">Name:</label><br/>
+    <input id="name" style="width: 100%;" type="text"/>
+  </div>
+  <div style="margin-bottom: 10px;">
+    <label for="sifa">SiFa:</label><br/>
+    <input id="sifa" style="width: 100%;" type="text"/>
+  </div>
 </div>
 
 <div style="text-align: center; margin: 40px 0; font-size: 20px;">
-<strong>Teil der Gefährdungsbeurteilung / Wirksamkeitskontrolle</strong><br/>
-Wenn eine Frage mit „nein“ beantwortet wurde, besteht Handlungsbedarf.
+  <strong>Teil der Gefährdungsbeurteilung / Wirksamkeitskontrolle</strong><br/>
+  Wenn eine Frage mit „nein“ beantwortet wurde, besteht Handlungsbedarf.
 </div>
 <table id="fragenTabelle">
-<thead>
-  <tr>
-    <th>Frage</th>
-    <th>Ja</th>
-    <th>Nein</th>
-    <th>Nicht vorhanden</th>
-  </tr>
-</thead>
-<tbody>
-  <tr>
-    <td class="category-header" colspan="4">1.0 Gesamtmarkt</td>
-  </tr>
- </tr>
+  <thead>
+    <tr>
+      <th>Frage</th>
+      <th>Ja</th>
+      <th>Nein</th>
+      <th>Nicht vorhanden</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="category-header" colspan="4">1.0 Gesamtmarkt</td>
+    </tr>
+   </tr>
 <td style="text-align: left;">Tragen alle Personen im Markt festes, geschlossenes und flaches Schuhwerk entsprechend den Vorgaben?</td>
 <td><input name="1.0 Gesamtmarkt-0" type="radio" value="ja"/></td>
 <td><input name="1.0 Gesamtmarkt-0" type="radio" value="nein"/></td>
@@ -315,7 +307,7 @@ Wenn eine Frage mit „nein“ beantwortet wurde, besteht Handlungsbedarf.
 <tr>
 <td style="text-align: left;">Sind an den Automatiktüren, Rolltoren und Schnelllauftoren keine sichtbaren Beschädigungen erkennbar?</td>
 <td><input name="1.0 Gesamtmarkt-1" type="radio" value="ja"/></td>
-<td><input name="1.0 Gesamtmarkt-1" type="radio" value="neen"/></td>
+<td><input name="1.0 Gesamtmarkt-1" type="radio" value="nein"/></td>
 <td><input name="1.0 Gesamtmarkt-1" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
@@ -373,7 +365,7 @@ Wenn eine Frage mit „nein“ beantwortet wurde, besteht Handlungsbedarf.
 <td><input name="1.0 Gesamtmarkt-10" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Befinden sich keine Gegenstände im Bereich der Brandschutztüren, und ist deren Funktionsfähigkeit vollständig gewährleistet?</td>
+<td style="text-align: left;">Sind die Brandschutztüren frei von Zugestellungen und wird ihre Funktion nicht gestört?</td>
 <td><input name="1.0 Gesamtmarkt-11" type="radio" value="ja"/></td>
 <td><input name="1.0 Gesamtmarkt-11" type="radio" value="nein"/></td>
 <td><input name="1.0 Gesamtmarkt-11" type="radio" value="nicht_vorhanden"/></td>
@@ -399,7 +391,7 @@ Wenn eine Frage mit „nein“ beantwortet wurde, besteht Handlungsbedarf.
 <tr>
 <td style="text-align: left;"> Ist die Notausgangsbeleuchtung ohne Defekte?</td>
 <td><input name="1.0 Gesamtmarkt-15" type="radio" value="ja"/></td>
-<td><input name="10. Gesamtmarkt-15" type="radio" value="nein"/></td>
+<td><input name="1.0 Gesamtmarkt-15" type="radio" value="nein"/></td>
 <td><input name="1.0 Gesamtmarkt-15" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
@@ -483,13 +475,13 @@ Wenn eine Frage mit „nein“ beantwortet wurde, besteht Handlungsbedarf.
 <td><input name="2.0 Backstation-2" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;"> Entspricht die Zuleitung der VDE-Norm?</td>
+<td style="text-align: left;">Entspricht die Zuleitung der VDE-Norm?</td>
 <td><input name="2.0 Backstation-3" type="radio" value="ja"/></td>
 <td><input name="2.0 Backstation-3" type="radio" value="nein"/></td>
 <td><input name="2.0 Backstation-3" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;"> Ist der Backhandschuh für die Backstation in einem ordnungsgemäßen Zustand (kein Verschleiß) und besitzt eine lange Stulpe?</td>
+<td style="text-align: left;">Ist der Backhandschuh für die Backstation in einem ordnungsgemäßen Zustand (kein Verschleiß) und besitzt eine lange Stulpe?</td>
 <td><input name="2.0 Backstation-4" type="radio" value="ja"/></td>
 <td><input name="2.0 Backstation-4" type="radio" value="nein"/></td>
 <td><input name="2.0 Backstation-4" type="radio" value="nicht_vorhanden"/></td>
@@ -522,34 +514,40 @@ Wenn eine Frage mit „nein“ beantwortet wurde, besteht Handlungsbedarf.
 <td><input name="3.0 Serviceabteilung-2" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind die Glastüren und Glaswände in Augenhöhe gekennzeichnet?</td>
+<td style="text-align: left;">Bleiben die Thekenscheiben selbstständig in der oberen Stellung stehen?</td>
 <td><input name="3.0 Serviceabteilung-3" type="radio" value="ja"/></td>
 <td><input name="3.0 Serviceabteilung-3" type="radio" value="nein"/></td>
 <td><input name="3.0 Serviceabteilung-3" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Werden Schneidbretter und Messer regelmäßig gereinigt und farbcodiert verwendet?</td>
+<td style="text-align: left;">Sind die Glastüren und Glaswände in Augenhöhe gekennzeichnet?</td>
 <td><input name="3.0 Serviceabteilung-4" type="radio" value="ja"/></td>
 <td><input name="3.0 Serviceabteilung-4" type="radio" value="nein"/></td>
 <td><input name="3.0 Serviceabteilung-4" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Werden Schneidbretter mit Messereinschub verwendet?</td>
+<td style="text-align: left;">Werden Schneidbretter und Messer regelmäßig gereinigt und farbcodiert verwendet?</td>
 <td><input name="3.0 Serviceabteilung-5" type="radio" value="ja"/></td>
 <td><input name="3.0 Serviceabteilung-5" type="radio" value="nein"/></td>
 <td><input name="3.0 Serviceabteilung-5" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Werden Messerhalter verwendet?</td>
+<td style="text-align: left;">Werden Schneidbretter mit Messereinschub verwendet?</td>
 <td><input name="3.0 Serviceabteilung-6" type="radio" value="ja"/></td>
 <td><input name="3.0 Serviceabteilung-6" type="radio" value="nein"/></td>
 <td><input name="3.0 Serviceabteilung-6" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind die Convenience-Geräte in einem ordnungsgemäßen Zustand?</td>
+<td style="text-align: left;">Werden Messerhalter verwendet?</td>
 <td><input name="3.0 Serviceabteilung-7" type="radio" value="ja"/></td>
 <td><input name="3.0 Serviceabteilung-7" type="radio" value="nein"/></td>
 <td><input name="3.0 Serviceabteilung-7" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind die Convenience-Geräte in einem ordnungsgemäßen Zustand?</td>
+<td><input name="3.0 Serviceabteilung-8" type="radio" value="ja"/></td>
+<td><input name="3.0 Serviceabteilung-8" type="radio" value="nein"/></td>
+<td><input name="3.0 Serviceabteilung-8" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 
 <tr><td class="category-header" colspan="4" style="text-align: left;">4.0 Kassenzone</td></tr>
@@ -594,13 +592,13 @@ Wenn eine Frage mit „nein“ beantwortet wurde, besteht Handlungsbedarf.
 <td><input name="5.0 Kühlhaus-0" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;"> Ist die Notentriegelung vorhanden und in Ordnung?</td>
+<td style="text-align: left;">Ist die Notentriegelung vorhanden und in Ordnung?</td>
 <td><input name="5.0 Kühlhaus-1" type="radio" value="ja"/></td>
 <td><input name="5.0 Kühlhaus-1" type="radio" value="nein"/></td>
 <td><input name="5.0 Kühlhaus-1" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;"> Sind die Kühlhaustüren von innen mit dem Rettungswegschild ISO 7010 gekennzeichnet?</td>
+<td style="text-align: left;">Sind die Kühlhaustüren von innen mit dem Rettungswegschild ISO 7010 gekennzeichnet?</td>
 <td><input name="5.0 Kühlhaus-2" type="radio" value="ja"/></td>
 <td><input name="5.0 Kühlhaus-2" type="radio" value="nein"/></td>
 <td><input name="5.0 Kühlhaus-2" type="radio" value="nicht_vorhanden"/></td>
@@ -657,7 +655,7 @@ Wenn eine Frage mit „nein“ beantwortet wurde, besteht Handlungsbedarf.
 <td><input name="6.0 Lager-5" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;"> Ist die Müll-/Papierpresse in einem ordnungsgemäßen Zustand (keine sichtbaren Beschädigungen, intakte Schutzeinrichtungen, fester Stand)?</td>
+<td style="text-align: left;">Ist die Müll-/Papierpresse in einem ordnungsgemäßen Zustand (keine sichtbaren Beschädigungen, intakte Schutzeinrichtungen, fester Stand)?</td>
 <td><input name="6.0 Lager-6" type="radio" value="ja"/></td>
 <td><input name="6.0 Lager-6" type="radio" value="nein"/></td>
 <td><input name="6.0 Lager-6" type="radio" value="nicht_vorhanden"/></td>
@@ -690,7 +688,7 @@ Wenn eine Frage mit „nein“ beantwortet wurde, besteht Handlungsbedarf.
 <td><input name="7.0 Sozialräume-2" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;"> Werden ortsveränderliche elektrische Betriebsmittel (z. B. Leitungen, Steckverbindungen, Leuchten, Geräte) in angemessenen Zeitabständen geprüft?</td>
+<td style="text-align: left;">Werden ortsveränderliche elektrische Betriebsmittel (z. B. Leitungen, Steckverbindungen, Leuchten, Geräte) in angemessenen Zeitabständen geprüft?</td>
 <td><input name="7.0 Sozialräume-3" type="radio" value="ja"/></td>
 <td><input name="7.0 Sozialräume-3" type="radio" value="nein"/></td>
 <td><input name="7.0 Sozialräume-3" type="radio" value="nicht_vorhanden"/></td>
@@ -700,63 +698,63 @@ Wenn eine Frage mit „nein“ beantwortet wurde, besteht Handlungsbedarf.
 
 <tr>
 <td style="text-align: left;">Liegt eine aktuelle Liste sowie Prüfberichte prüfungsbedürftiger Einrichtungen vor?</td>
+<td><input name="8.0 Marktleiterbüro-9" type="radio" value="ja"/></td>
+<td><input name="8.0 Marktleiterbüro-9" type="radio" value="nein"/></td>
+<td><input name="8.0 Marktleiterbüro-9" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist der Verbandskasten in einem ordnungsgemäßen Zustand?</td>
 <td><input name="8.0 Marktleiterbüro-0" type="radio" value="ja"/></td>
 <td><input name="8.0 Marktleiterbüro-0" type="radio" value="nein"/></td>
 <td><input name="8.0 Marktleiterbüro-0" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist der Verbandskasten in einem ordnungsgemäßen Zustand?</td>
+<td style="text-align: left;">Wird die "Dokumentation Erste Hilfeleistungen" geführt?</td>
 <td><input name="8.0 Marktleiterbüro-1" type="radio" value="ja"/></td>
 <td><input name="8.0 Marktleiterbüro-1" type="radio" value="nein"/></td>
 <td><input name="8.0 Marktleiterbüro-1" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Wird die "Dokumentation Erste Hilfeleistungen" geführt?</td>
+<td style="text-align: left;">Sind Maßnahmen getroffen, die den Anreiz zu Raubüberfällen vermindern (z. B. Türspion, feststehender Knauf)?</td>
 <td><input name="8.0 Marktleiterbüro-2" type="radio" value="ja"/></td>
 <td><input name="8.0 Marktleiterbüro-2" type="radio" value="nein"/></td>
 <td><input name="8.0 Marktleiterbüro-2" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind Maßnahmen getroffen, die den Anreiz zu Raubüberfällen vermindern (z. B. Türspion, feststehender Knauf)?</td>
+<td style="text-align: left;">Ist die Tür während des Umgangs mit Zahlungsmitteln verschlossen?</td>
 <td><input name="8.0 Marktleiterbüro-3" type="radio" value="ja"/></td>
 <td><input name="8.0 Marktleiterbüro-3" type="radio" value="nein"/></td>
 <td><input name="8.0 Marktleiterbüro-3" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist die Tür während des Umgangs mit Zahlungsmitteln verschlossen?</td>
+<td style="text-align: left;">Werden neue Mitarbeiter vor Aufnahme der Tätigkeit zum Thema Arbeitssicherheit und Brandschutz unterwiesen?</td>
 <td><input name="8.0 Marktleiterbüro-4" type="radio" value="ja"/></td>
 <td><input name="8.0 Marktleiterbüro-4" type="radio" value="nein"/></td>
 <td><input name="8.0 Marktleiterbüro-4" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Werden neue Mitarbeiter vor Aufnahme der Tätigkeit zum Thema Arbeitssicherheit und Brandschutz unterwiesen?</td>
+<td style="text-align: left;">Ist während der gesamten Ladenöffnungszeit mindestens ein Mitarbeiter mit der Qualifikation zum Ersthelfer anwesend?</td>
 <td><input name="8.0 Marktleiterbüro-5" type="radio" value="ja"/></td>
 <td><input name="8.0 Marktleiterbüro-5" type="radio" value="nein"/></td>
 <td><input name="8.0 Marktleiterbüro-5" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist während der gesamten Ladenöffnungszeit mindestens ein Mitarbeiter mit der Qualifikation zum Ersthelfer anwesend?</td>
+<td style="text-align: left;">Ist während der gesamten Ladenöffnungszeit mindestens ein Mitarbeiter mit der Qualifikation als Brandschutzhelfer anwesend?</td>
 <td><input name="8.0 Marktleiterbüro-6" type="radio" value="ja"/></td>
 <td><input name="8.0 Marktleiterbüro-6" type="radio" value="nein"/></td>
 <td><input name="8.0 Marktleiterbüro-6" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist während der gesamten Ladenöffnungszeit mindestens ein Mitarbeiter mit der Qualifikation als Brandschutzhelfer anwesend?</td>
+<td style="text-align: left;">Ist ein Sicherheitsbeauftragter ausgebildet und bestellt?</td>
 <td><input name="8.0 Marktleiterbüro-7" type="radio" value="ja"/></td>
 <td><input name="8.0 Marktleiterbüro-7" type="radio" value="nein"/></td>
 <td><input name="8.0 Marktleiterbüro-7" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist ein Sicherheitsbeauftragter ausgebildet und bestellt?</td>
+<td style="text-align: left;">Wurde die Gefährdungsbeurteilung (GBO) erstellt und ist sie auf dem aktuellen Stand?</td>
 <td><input name="8.0 Marktleiterbüro-8" type="radio" value="ja"/></td>
 <td><input name="8.0 Marktleiterbüro-8" type="radio" value="nein"/></td>
 <td><input name="8.0 Marktleiterbüro-8" type="radio" value="nicht_vorhanden"/></td>
-</tr>
-<tr>
-<td style="text-align: left;">Wurde die Gefährdungsbeurteilung (GBO) erstellt und ist sie auf dem aktuellen Stand?</td>
-<td><input name="8.0 Marktleiterbüro-9" type="radio" value="ja"/></td>
-<td><input name="8.0 Marktleiterbüro-9" type="radio" value="nein"/></td>
-<td><input name="8.0 Marktleiterbüro-9" type="radio" value="nicht_vorhanden"/></td>
 
 </tr>
 <tr><td class="category-header" colspan="4" style="text-align: left;">9.0 CO2 Kühleinrichtungen</td></tr>
@@ -813,12 +811,6 @@ Wenn eine Frage mit „nein“ beantwortet wurde, besteht Handlungsbedarf.
 <td><input name="11.0 Arbeitsmedizin-1" type="radio" value="ja"/></td>
 <td><input name="11.0 Arbeitsmedizin-1" type="radio" value="nein"/></td>
 <td><input name="11.0 Arbeitsmedizin-1" type="radio" value="nicht_vorhanden"/></td>
-</tr>
-<tr>
-<td style="text-align: left;">Sind Mitarbeitertoiletten und Pausenräume sauber und mit Seife, Einmalhandtüchern und ggf. Desinfektionsmittel ausgestattet?</td>
-<td><input name="11.0 Arbeitsmedizin-2" type="radio" value="ja"/></td>
-<td><input name="11.0 Arbeitsmedizin-2" type="radio" value="nein"/></td>
-<td><input name="11.0 Arbeitsmedizin-2" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 
 <tr><td class="category-header" colspan="4" style="text-align: left;">12.0 Psychische Belastung</td></tr>
@@ -930,30 +922,30 @@ Wenn eine Frage mit „nein“ beantwortet wurde, besteht Handlungsbedarf.
 </table>
 <br>
 <div style="display: flex; justify-content: center; gap: 16px; margin: 20px 0;">
-<button onclick="neinFragenInMaßnahmen()">⛔ Nein-Fragen automatisch einfügen</button>
-<button onclick="neinAntwortenEinfügenUndÖffnen()">📝 „Nein“-Antworten übernehmen & anzeigen</button>
+  <button onclick="neinFragenInMaßnahmen()">⛔ Nein-Fragen automatisch einfügen</button>
+  <button onclick="neinAntwortenEinfügenUndÖffnen()">📝 „Nein“-Antworten übernehmen & anzeigen</button>
 </div>
 <br>
 <h2 class="page-break-before" style="text-align: center;">
-Beschreibung der Maßnahmen zur Beseitigung von Defiziten
+  Beschreibung der Maßnahmen zur Beseitigung von Defiziten
 </h2>
 <br>
 
 <table>
-<thead>
-  <tr>
-    <th>Nr.</th>
-    <th>Beschreibung</th>
-  </tr>
-</thead>
-<tbody id="maßnahmen-tabelle">
-  <tr><td>1</td><td contenteditable="true"></td></tr>
-  <tr><td>2</td><td contenteditable="true"></td></tr>
-  <tr><td>3</td><td contenteditable="true"></td></tr>
-  <tr><td>4</td><td contenteditable="true"></td></tr>
-  <tr><td>5</td><td contenteditable="true"></td></tr>
-  <tr><td>6</td><td contenteditable="true"></td></tr>
-  <tr><td>7</td><td contenteditable="true"></td></tr>
+  <thead>
+    <tr>
+      <th>Nr.</th>
+      <th>Beschreibung</th>
+    </tr>
+  </thead>
+  <tbody id="maßnahmen-tabelle">
+    <tr><td>1</td><td contenteditable="true"></td></tr>
+    <tr><td>2</td><td contenteditable="true"></td></tr>
+    <tr><td>3</td><td contenteditable="true"></td></tr>
+    <tr><td>4</td><td contenteditable="true"></td></tr>
+    <tr><td>5</td><td contenteditable="true"></td></tr>
+    <tr><td>6</td><td contenteditable="true"></td></tr>
+    <tr><td>7</td><td contenteditable="true"></td></tr>
 <tr><td>8</td><td contenteditable="true"></td></tr>
 <tr><td>9</td><td contenteditable="true"></td></tr>
 <tr><td>10</td><td contenteditable="true"></td></tr>
@@ -962,316 +954,120 @@ Beschreibung der Maßnahmen zur Beseitigung von Defiziten
 <tr><td>13</td><td contenteditable="true"></td></tr>
 <tr><td>14</td><td contenteditable="true"></td></tr>
 <tr><td>15</td><td contenteditable="true"></td></tr>
-</tbody>
+  </tbody>
 </table>
 <div class="page-break-before confirmation-section">
-<h2>Abschlussbestätigung</h2>
-<div class="checkbox-row">
-  <div class="column">
-    <label for="mangel">
-      <input type="checkbox" id="mangel"/>
-      <span>Alle Mängel wurden zur Kenntnis genommen.</span>
-    </label>
-    <label for="massnahmen">
-      <input type="checkbox" id="massnahmen"/>
-      <span>Maßnahmen gemäß Plan werden umgesetzt.</span>
-    </label>
+  <h2>Abschlussbestätigung</h2>
+  <div class="checkbox-row">
+    <div class="column">
+      <label for="mangel">
+        <input type="checkbox" id="mangel"/>
+        <span>Alle Mängel wurden zur Kenntnis genommen.</span>
+      </label>
+      <label for="massnahmen">
+        <input type="checkbox" id="massnahmen"/>
+        <span>Maßnahmen gemäß Plan werden umgesetzt.</span>
+      </label>
+    </div>
+    <div class="column">
+      <label for="nachkontrolle">
+        <input type="checkbox" id="nachkontrolle"/>
+        <span>Nachkontrolle wird durchgeführt.</span>
+      </label>
+      <label for="mitarbeiter">
+        <input type="checkbox" id="mitarbeiter"/>
+        <span>Mitarbeiter wurden informiert.</span>
+      </label>
+    </div>
   </div>
-  <div class="column">
-    <label for="nachkontrolle">
-      <input type="checkbox" id="nachkontrolle"/>
-      <span>Nachkontrolle wird durchgeführt.</span>
-    </label>
-    <label for="mitarbeiter">
-      <input type="checkbox" id="mitarbeiter"/>
-      <span>Mitarbeiter wurden informiert.</span>
-    </label>
-  </div>
-</div>
 </div>
 
 <div>
-
-
+ 
+ 
 <!-- Unterschriftenfeld mit oben links platziertem "Unterschrift"-Label -->
 <div class="signature-container" style="position: relative; max-width: 600px; margin: 0 auto 20px auto;">
-<label style="
-  position: absolute;
-  top: 8px;
-  left: 12px;
-  background: white;
-  padding: 0 6px;
-  font-weight: bold;
-  font-size: 14px;
-  color: #212529;
-  pointer-events: none;
-  user-select: none;
-  z-index: 10;
-">Unterschrift</label>
+  <label style="
+    position: absolute;
+    top: 8px;
+    left: 12px;
+    background: white;
+    padding: 0 6px;
+    font-weight: bold;
+    font-size: 14px;
+    color: #212529;
+    pointer-events: none;
+    user-select: none;
+    z-index: 10;
+  ">Unterschrift</label>
 
-<canvas id="signature-pad" style="
-  border: 2px solid #ddd;
-  border-radius: 16px;
-  width: 100%;
-  height: 150px;
-  touch-action: none;
-  display: block;
-"></canvas>
+  <canvas id="signature-pad" style="
+    border: 2px solid #ddd;
+    border-radius: 16px;
+    width: 100%;
+    height: 150px;
+    touch-action: none;
+    display: block;
+  "></canvas>
 </div>
-
+ 
 
 <button onclick="clearSignature()" class="btn-large btn-gray" style="display: block; width: 600px; margin: 10px auto;">
-🗑️ Unterschrift löschen
+  🗑️ Unterschrift löschen
 </button>
 
 <div class="buttons" style="display: flex; justify-content: center; gap: 20px; max-width: 600px; margin: 0 auto 40px auto;">
-<button onclick="auswertungAnzeigen()" class="btn-medium btn-gray" style="flex: 1; max-width: 280px;">
-  📊 Auswerten
-</button>
-<button onclick="prepareForPrint()" class="btn-medium btn-gray" style="flex: 1; max-width: 280px;">
-  📄 Drucken / PDF
-</button>
+  <button onclick="auswertungAnzeigen()" class="btn-medium btn-gray" style="flex: 1; max-width: 280px;">
+    📊 Auswerten
+  </button>
+  <button onclick="prepareForPrint()" class="btn-medium btn-gray" style="flex: 1; max-width: 280px;">
+    📄 Drucken / PDF
+  </button>
 </div>
 
 <button onclick="generateAndSharePDF()" class="custom-btn" style="background-color: #28a745; width: 600px; margin: 10px auto 40px auto; display: block;">
-📤 PDF teilen (iPad)
+  📤 PDF teilen (iPad)
 </button>
-<div id="auswertung-container">
-  <div id="auswertung"></div>
+  <div id="auswertung-container">
+    <div id="auswertung"></div>
+  </div>
+  <footer style="
+    text-align: center;
+    margin-top: 40px;
+    padding: 16px 8px;
+    font-size: 12px;
+    color: #999;
+    background-color: #fafafa;
+    border-top: 1px solid #eee;
+    border-radius: 0 0 10px 10px;">
+    &copy; 2025 Andreas Zott – Alle Rechte vorbehalten<br>
+    <span style="font-size: 11px;">(Sifa) Arbeitssicherheit 2025</span>
+  </footer>
 </div>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
-// Neue Funktion zum Erstellen des schlankeren PDF-Inhalts
-function getSlimmedPdfContentElement() {
-  const container = document.createElement('div');
-  container.style.fontFamily = 'Arial, sans-serif';
-  container.style.padding = '20px';
-  container.style.backgroundColor = '#ffffff';
-  container.style.color = '#212529'; // Standardtextfarbe
+  async function generateAndSharePDF() {
+    const element = document.body;
 
-  // 1. Header
-  const headerHtml = `
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-          <h1 style="margin: 0; font-size: 24px; color: #212529;">Arbeitssicherheit-Checkliste-2025</h1>
-          <div style="font-size: 16px; color: #212529;">Datum: ${document.getElementById('datum')?.value || 'N/A'}</div>
-      </div>
-      <div style="margin-bottom: 20px; font-size: 14px; color: #212529;">
-          <p style="margin: 5px 0;"><strong>Marktnummer:</strong> ${document.getElementById('markt')?.value || 'N/A'}</p>
-          <p style="margin: 5px 0;"><strong>Name:</strong> ${document.getElementById('name')?.value || 'N/A'}</p>
-          <p style="margin: 5px 0;"><strong>SiFa:</strong> ${document.getElementById('sifa')?.value || 'N/A'}</p>
-      </div>
-      <div style="text-align: center; margin: 20px 0; font-size: 16px; font-weight: bold; color: #212529;">
-          Teil der Gefährdungsbeurteilung / Wirksamkeitskontrolle<br/>
-          Wenn eine Frage mit „nein“ beantwortet wurde, besteht Handlungsbedarf.
-      </div>
-  `;
-  container.innerHTML += headerHtml;
+    const opt = {
+      margin:       0,
+      filename:     'arbeitssicherheit-checkliste.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, scrollY: 0 },
+      jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' }
+    };
 
-  // 2. Alle Fragen als Liste
-  const fragenTabelle = document.getElementById('fragenTabelle');
-  if (fragenTabelle) {
-    let allQuestionsHtml = `
-        <h2 style="text-align: center; margin-top: 30px; font-size: 20px; color: #212529;" class="page-break-before">Alle Fragen und Antworten</h2>
-        <div style="margin-top: 20px;">
-    `;
-    let currentCategory = '';
-    fragenTabelle.querySelectorAll('tr').forEach(row => {
-      const categoryHeader = row.querySelector('.category-header');
-      if (categoryHeader) {
-        // Neue Kategorie
-        currentCategory = categoryHeader.textContent.trim();
-        allQuestionsHtml += `<h3 style="margin-top: 20px; margin-bottom: 10px; font-size: 18px; color: #007BFF;">${currentCategory}</h3>`;
-      } else {
-        // Fragezeile
-        const frageText = row.cells[0]?.innerText.trim();
-        if (frageText) {
-          let answer = 'Nicht beantwortet';
-          const radios = row.querySelectorAll('input[type="radio"]');
-          radios.forEach(radio => {
-            if (radio.checked) {
-              switch (radio.value) {
-                case 'ja':
-                  answer = 'Ja ✅';
-                  break;
-                case 'nein':
-                  answer = 'Nein ❌';
-                  break;
-                case 'nicht_vorhanden':
-                  answer = 'Nicht vorhanden ➖';
-                  break;
-              }
-            }
-          });
-          allQuestionsHtml += `
-              <p style="margin-bottom: 5px; font-size: 14px;">
-                  <strong>Frage:</strong> ${frageText}<br/>
-                  <strong>Antwort:</strong> <span style="font-weight: bold; color: ${answer.includes('❌') ? '#dc3545' : (answer.includes('✅') ? '#28a745' : '#6c757d')};">${answer}</span>
-              </p>
-          `;
-        }
-      }
-    });
-    allQuestionsHtml += `</div>`;
-    container.innerHTML += allQuestionsHtml;
-  }
+    const blob = await html2pdf().set(opt).from(element).outputPdf('blob');
 
-  // 3. "Nein" Fragen (wieder hinzugefügt)
-  const neinFragen = [];
-  if (fragenTabelle) {
-    let currentCategory = '';
-    fragenTabelle.querySelectorAll('tr').forEach(row => {
-      const categoryHeader = row.querySelector('.category-header');
-      if (categoryHeader) {
-        currentCategory = categoryHeader.textContent.trim();
-      } else {
-        const radioNein = row.querySelector('input[type="radio"][value="nein"]:checked');
-        if (radioNein) {
-          const frageText = row.cells[0]?.innerText.trim();
-          if (frageText) {
-            neinFragen.push({ category: currentCategory, question: frageText });
-          }
-        }
-      }
-    });
-  }
-
-  if (neinFragen.length > 0) {
-    let neinFragenHtml = `
-        <h2 style="text-align: center; margin-top: 30px; font-size: 20px; color: #212529;" class="page-break-before">Fragen mit "Nein" beantwortet</h2>
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; background-color: white; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-            <thead>
-                <tr>
-                    <th style="background-color: #dc3545; color: white; padding: 10px; text-align: left;">Kategorie</th>
-                    <th style="background-color: #dc3545; color: white; padding: 10px; text-align: left;">Frage</th>
-                </tr>
-            </thead>
-            <tbody>
-    `;
-    neinFragen.forEach(item => {
-      neinFragenHtml += `
-            <tr>
-                <td style="padding: 8px; border: 1px solid #dee2e6; color: #212529;">${item.category}</td>
-                <td style="padding: 8px; border: 1px solid #dee2e6; color: #212529;">${item.question}</td>
-            </tr>
-        `;
-    });
-    neinFragenHtml += `</tbody></table>`;
-    container.innerHTML += neinFragenHtml;
-  } else {
-    container.innerHTML += `
-        <h2 style="text-align: center; margin-top: 30px; font-size: 20px; color: #212529;" class="page-break-before">Alle Fragen mit "Ja" oder "Nicht vorhanden" beantwortet.</h2>
-    `;
-  }
-
-
-  // 4. Maßnahmen (unverändert, da bereits schlank)
-  const massnahmenTable = document.getElementById('maßnahmen-tabelle');
-  if (massnahmenTable && massnahmenTable.querySelectorAll('td[contenteditable="true"]').length > 0) {
-    let hasContent = false;
-    let massnahmenRowsHtml = '';
-    massnahmenTable.querySelectorAll('tr').forEach(row => {
-      const nr = row.cells[0]?.innerText.trim();
-      const beschreibung = row.cells[1]?.innerText.trim();
-      if (beschreibung) { // Only add rows with content
-        hasContent = true;
-        massnahmenRowsHtml += `
-                <tr>
-                    <td style="padding: 8px; border: 1px solid #dee2e6; color: #212529;">${nr}</td>
-                    <td style="padding: 8px; border: 1px solid #dee2e6; color: #212529;">${beschreibung}</td>
-                </tr>
-            `;
-      }
-    });
-
-    if (hasContent) {
-      let massnahmenHtml = `
-            <h2 style="text-align: center; margin-top: 30px; font-size: 20px; color: #212529;" class="page-break-before">Beschreibung der Maßnahmen zur Beseitigung von Defiziten</h2>
-            <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; background-color: white; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                <thead>
-                    <tr>
-                        <th style="background-color: #007BFF; color: white; padding: 10px; text-align: left; width: 50px;">Nr.</th>
-                        <th style="background-color: #007BFF; color: white; padding: 10px; text-align: left;">Beschreibung</th>
-                    </tr>
-                </thead>
-                <tbody>
-    ` + massnahmenRowsHtml + `</tbody></table>`;
-      container.innerHTML += massnahmenHtml;
-    }
-  }
-
-  // 5. Abschlussbestätigung (unverändert)
-  const mangelChecked = document.getElementById('mangel')?.checked ? '✅' : '❌';
-  const massnahmenChecked = document.getElementById('massnahmen')?.checked ? '✅' : '❌';
-  const nachkontrolleChecked = document.getElementById('nachkontrolle')?.checked ? '✅' : '❌';
-  const mitarbeiterChecked = document.getElementById('mitarbeiter')?.checked ? '✅' : '❌';
-
-  const confirmationHtml = `
-      <div style="background: #fff; border: 1px solid #ccc; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); padding: 24px; max-width: 700px; margin: 40px auto; color: #212529;" class="page-break-before">
-          <h2 style="text-align: center; margin-bottom: 20px; font-size: 20px; color: #212529;">Abschlussbestätigung</h2>
-          <div style="display: flex; justify-content: space-between; gap: 40px;">
-              <div style="flex: 1;">
-                  <p style="margin-bottom: 10px;">${mangelChecked} Alle Mängel wurden zur Kenntnis genommen.</p>
-                  <p>${massnahmenChecked} Maßnahmen gemäß Plan werden umgesetzt.</p>
-              </div>
-              <div style="flex: 1;">
-                  <p style="margin-bottom: 10px;">${nachkontrolleChecked} Nachkontrolle wird durchgeführt.</p>
-                  <p>${mitarbeiterChecked} Mitarbeiter wurden informiert.</p>
-              </div>
-          </div>
-      </div>
-  `;
-  container.innerHTML += confirmationHtml;
-
-  // 6. Signature (unverändert)
-  const signatureCanvas = document.getElementById('signature-pad');
-  if (signatureCanvas) {
-    const signatureDataURL = signatureCanvas.toDataURL();
-    // Check if the canvas is not empty (default empty canvas data URL)
-    if (signatureDataURL && signatureDataURL !== 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdjYGBgAAAABQAB6AHe6AAAAAASUVORK5CYII=') {
-      const signatureHtml = `
-              <div style="margin-top: 30px; text-align: center;">
-                  <p style="font-weight: bold; margin-bottom: 10px; color: #212529;">Unterschrift:</p>
-                  <img src="${signatureDataURL}" style="max-width: 400px; border: 1px solid #ccc; border-radius: 8px; display: block; margin: 0 auto; height: 100px; object-fit: contain;" alt="Unterschrift"/>
-              </div>
-          `;
-      container.innerHTML += signatureHtml;
-    }
-  }
-  
-  return container;
-}
-
-// Passen Sie die generateAndSharePDF Funktion an
-async function generateAndSharePDF() {
-  // Erstellen Sie ein temporäres Element mit nur dem gewünschten Inhalt
-  const elementToPrint = getSlimmedPdfContentElement();
-
-  // Fügen Sie es temporär dem Body hinzu, damit html2pdf es korrekt rendern kann.
-  // Dies ist ein gängiges Muster, wenn html2pdf Dimensionen/Stile basierend auf dem
-  // tatsächlichen DOM-Layout berechnen muss.
-  document.body.appendChild(elementToPrint);
-
-  const opt = {
-    margin: [20, 20, 20, 20], // Top, Right, Bottom, Left margins in mm
-    filename: 'arbeitssicherheit-checkliste-schlank.pdf',
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, scrollY: 0, useCORS: true }, // useCORS ist wichtig für Bilder
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } // Einheit auf mm geändert für einfachere Margenberechnung
-  };
-
-  try {
-    const blob = await html2pdf().set(opt).from(elementToPrint).outputPdf('blob');
-
-    const file = new File([blob], "arbeitssicherheit-checkliste-schlank.pdf", {
+    const file = new File([blob], "arbeitssicherheit-checkliste.pdf", {
       type: "application/pdf",
     });
 
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       try {
         await navigator.share({
-          title: 'Checkliste Arbeitssicherheit (Schlank)',
-          text: 'Anbei die ausgefüllte Arbeitssicherheits-Checkliste als schlankes PDF.',
+          title: 'Checkliste Arbeitssicherheit',
+          text: 'Anbei die ausgefüllte Arbeitssicherheits-Checkliste als PDF.',
           files: [file],
         });
         console.log("✅ Teilen abgeschlossen");
@@ -1282,145 +1078,129 @@ async function generateAndSharePDF() {
       alert("📤 Teilen nicht unterstützt – bitte manuell PDF herunterladen.");
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = "arbeitssicherheit-checkliste-schlank.pdf";
+      link.download = "arbeitssicherheit-checkliste.pdf";
       link.click();
     }
-  } catch (error) {
-    console.error("Fehler bei der PDF-Generierung oder beim Teilen:", error);
-    alert("Ein Fehler ist bei der PDF-Generierung aufgetreten. Bitte versuchen Sie es erneut.");
-  } finally {
-    // Entfernen Sie das temporäre Element aus dem DOM
-    document.body.removeChild(elementToPrint);
   }
-}
 </script>
 <script>
-// Signatur-Canvas Setup
-const canvas = document.getElementById('signature-pad');
-const ctx = canvas.getContext('2d');
-let drawing = false;
+  // Signatur-Canvas Setup
+  const canvas = document.getElementById('signature-pad');
+  const ctx = canvas.getContext('2d');
+  let drawing = false;
 
-function resizeCanvas() {
-  const ratio = window.devicePixelRatio || 1;
-  const displayWidth = canvas.offsetWidth;
-  const displayHeight = canvas.offsetHeight;
-  const oldImage = new Image();
-  oldImage.src = canvas.toDataURL();
+  function resizeCanvas() {
+    const ratio = window.devicePixelRatio || 1;
+    const displayWidth = canvas.offsetWidth;
+    const displayHeight = canvas.offsetHeight;
+    const oldImage = new Image();
+    oldImage.src = canvas.toDataURL();
 
-  canvas.width = displayWidth * ratio;
-  canvas.height = displayHeight * ratio;
-  canvas.style.width = displayWidth + "px";
-  canvas.style.height = displayHeight + "px";
+    canvas.width = displayWidth * ratio;
+    canvas.height = displayHeight * ratio;
+    canvas.style.width = displayWidth + "px";
+    canvas.style.height = displayHeight + "px";
 
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  ctx.scale(ratio, ratio);
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.scale(ratio, ratio);
 
-  oldImage.onload = () => {
-    ctx.drawImage(oldImage, 0, 0, displayWidth, displayHeight);
-  };
-}
-
-function getX(e) {
-  return e.touches ? e.touches[0].clientX - canvas.getBoundingClientRect().left :
-                     e.clientX - canvas.getBoundingClientRect().left;
-}
-
-function getY(e) {
-  return e.touches ? e.touches[0].clientY - canvas.getBoundingClientRect().top :
-                     e.clientY - canvas.getBoundingClientRect().top;
-}
-
-function startDrawing(e) {
-  drawing = true;
-  ctx.beginPath();
-  ctx.moveTo(getX(e), getY(e));
-}
-
-function draw(e) {
-  if (!drawing) return;
-  ctx.lineTo(getX(e), getY(e));
-  ctx.stroke();
-}
-
-function stopDrawing() {
-  drawing = false;
-  saveSignature();
-}
-
-function clearSignature() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  localStorage.removeItem("signatureImage");
-}
-
-function saveSignature() {
-  const dataURL = canvas.toDataURL();
-  localStorage.setItem("signatureImage", dataURL);
-}
-
-function restoreSignature() {
-  const dataURL = localStorage.getItem("signatureImage");
-  if (dataURL) {
-    const image = new Image();
-    image.onload = () => {
-      ctx.drawImage(image, 0, 0, canvas.offsetWidth, canvas.offsetHeight);
+    oldImage.onload = () => {
+      ctx.drawImage(oldImage, 0, 0, displayWidth, displayHeight);
     };
-    image.src = dataURL;
   }
-}
 
-function prepareForPrint() {
-  const dataURL = canvas.toDataURL();
-  const img = document.createElement("img");
-  img.src = dataURL;
-  img.style.border = "2px solid #000";
-  img.style.width = "100%";
-  img.style.maxWidth = "600px";
-  // Replace the canvas with the image for printing
-  canvas.style.display = 'none'; // Hide canvas
-  canvas.parentNode.insertBefore(img, canvas.nextSibling); // Insert image after canvas
+  function getX(e) {
+    return e.touches ? e.touches[0].clientX - canvas.getBoundingClientRect().left :
+                       e.clientX - canvas.getBoundingClientRect().left;
+  }
 
-  window.print();
+  function getY(e) {
+    return e.touches ? e.touches[0].clientY - canvas.getBoundingClientRect().top :
+                       e.clientY - canvas.getBoundingClientRect().top;
+  }
 
-  // After printing, remove the image and show the canvas again
-  img.remove();
-  canvas.style.display = 'block';
-}
+  function startDrawing(e) {
+    drawing = true;
+    ctx.beginPath();
+    ctx.moveTo(getX(e), getY(e));
+  }
 
-function auswertungAnzeigen() {
-  const radios = document.querySelectorAll('input[type="radio"]:checked');
-  const datum = document.getElementById('datum')?.value || 'kein Datum';
-  const markt = document.getElementById('markt')?.value || 'unbekannt';
-  const name = document.getElementById('name')?.value || 'unbekannt';
-  const sifa = document.getElementById('sifa')?.value || 'unbekannt';
+  function draw(e) {
+    if (!drawing) return;
+    ctx.lineTo(getX(e), getY(e));
+    ctx.stroke();
+  }
 
-  const auswertung = {
-    ja: 0,
-    nein: 0,
-    nicht_vorhanden: 0
-  };
+  function stopDrawing() {
+    drawing = false;
+    saveSignature();
+  }
 
-  radios.forEach(radio => {
-    if (auswertung.hasOwnProperty(radio.value)) {
-      auswertung[radio.value]++;
+  function clearSignature() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    localStorage.removeItem("signatureImage");
+  }
+
+  function saveSignature() {
+    const dataURL = canvas.toDataURL();
+    localStorage.setItem("signatureImage", dataURL);
+  }
+
+  function restoreSignature() {
+    const dataURL = localStorage.getItem("signatureImage");
+    if (dataURL) {
+      const image = new Image();
+      image.onload = () => {
+        ctx.drawImage(image, 0, 0, canvas.offsetWidth, canvas.offsetHeight);
+      };
+      image.src = dataURL;
     }
-  });
+  }
 
-  const auswertungDiv = document.getElementById('auswertung');
-  auswertungDiv.style.display = 'block';
-  auswertungDiv.innerHTML = `
-    <h3>📊 Auswertung</h3>
-    <p><strong>Markt:</strong> ${markt}</p>
-    <p><strong>Datum:</strong> ${datum}</p>
-    <p><strong>Name:</strong> ${name}</p>
-    <p><strong>SiFa:</strong> ${sifa}</p>
-    <hr style="margin: 16px 0;">
-    <p><strong>Ja:</strong> ${auswertung.ja}</p>
-    <p><strong>Nein:</strong> ${auswertung.nein}</p>
-    <p><strong>Nicht vorhanden:</strong> ${auswertung.nicht_vorhanden}</p>
-  `;
-  // Note: The following lines depend on external files (auswertung-sifa.html) not provided.
-  // If these files are not present, this functionality will not work as expected.
-  const auswertungWindow = window.open('auswertung-sifa.html', 'auswertung');
+  function prepareForPrint() {
+    const dataURL = canvas.toDataURL();
+    const img = document.createElement("img");
+    img.src = dataURL;
+    img.style.border = "2px solid #000";
+    img.style.width = "100%";
+    img.style.maxWidth = "600px";
+    canvas.replaceWith(img);
+    window.print();
+  }
+
+  function auswertungAnzeigen() {
+    const radios = document.querySelectorAll('input[type="radio"]:checked');
+    const datum = document.getElementById('datum')?.value || 'kein Datum';
+    const markt = document.getElementById('markt')?.value || 'unbekannt';
+    const name = document.getElementById('name')?.value || 'unbekannt';
+    const sifa = document.getElementById('sifa')?.value || 'unbekannt';
+
+    const auswertung = {
+      ja: 0,
+      nein: 0,
+      nicht_vorhanden: 0
+    };
+
+    radios.forEach(radio => {
+      if (auswertung.hasOwnProperty(radio.value)) {
+        auswertung[radio.value]++;
+      }
+    });
+
+    const auswertungDiv = document.getElementById('auswertung');
+    auswertungDiv.style.display = 'block';
+    auswertungDiv.innerHTML = `
+      <h3>📊 Auswertung</h3>
+      <p><strong>Markt:</strong> ${markt}</p>
+      <p><strong>Datum:</strong> ${datum}</p>
+      <p><strong>Name:</strong> ${name}</p>
+      <p><strong>SiFa:</strong> ${sifa}</p>
+      <hr style="margin: 16px 0;">
+      <p><strong>Ja:</strong> ${auswertung.ja}</p>
+      <p><strong>Nein:</strong> ${auswertung.nein}</p>
+      <p><strong>Nicht vorhanden:</strong> ${auswertung.nicht_vorhanden}</p>
+    `;
+ const auswertungWindow = window.open('auswertung-sifa.html', 'auswertung');
   const daten = {
     markt: markt,
     datum: datum,
@@ -1433,295 +1213,208 @@ function auswertungAnzeigen() {
   setTimeout(() => {
     auswertungWindow.postMessage(daten, "*");
   }, 1000);
-}
 
-function neinAntwortenEinfügenUndÖffnen() {
-  const alleZeilen = document.querySelectorAll("#fragenTabelle tr");
-  const neinAntworten = [];
+  }
 
-  let questionIndex = 0; // Global counter for questions
-  alleZeilen.forEach(row => {
-    const frageTextCell = row.cells[0];
-    if (!frageTextCell || frageTextCell.classList.contains('category-header')) {
-      return; // Skip category headers or invalid rows
-    }
-    questionIndex++; // Increment for each actual question row
+  function neinFragenInMaßnahmen() {
+    const fragenzeilen = document.querySelectorAll('#fragenTabelle tr');
+    const maßnahmenZeilen = document.querySelectorAll("#maßnahmen-tabelle td[contenteditable='true']");
+    maßnahmenZeilen.forEach(cell => cell.textContent = '');
 
-    const radios = row.querySelectorAll("input[type='radio']");
-    radios.forEach(radio => {
-      if (radio.checked && radio.value === "nein") {
-        // Use the global questionIndex to get the specific measure
-        const measureText = measures[questionIndex]?.text || umformulieren(frageTextCell.innerText);
-        neinAntworten.push(measureText);
+    let index = 0;
+    fragenzeilen.forEach(row => {
+      const frageText = row.cells[0]?.innerText;
+      const radios = row.querySelectorAll('input[type="radio"]');
+      let selected = null;
+
+      radios.forEach(r => {
+        if (r.checked) selected = r.value;
+      });
+
+      if (selected === 'nein' && index < maßnahmenZeilen.length) {
+        maßnahmenZeilen[index].textContent = frageText;
+        index++;
       }
     });
-  });
 
-  const maßnahmenZeilen = document.querySelectorAll('#maßnahmen-tabelle td[contenteditable]');
-  maßnahmenZeilen.forEach(cell => cell.textContent = ''); // Clear existing content
+    if (index === 0) {
+      alert("✅ Es wurden keine Fragen mit 'nein' beantwortet.");
+    } else if (index >= maßnahmenZeilen.length) {
+      alert("⚠️ Mehr als 15 'nein'-Antworten – nur die ersten 15 wurden übernommen.");
+    }
+  }
 
-  neinAntworten.forEach((text, index) => {
-    if (maßnahmenZeilen[index]) {
-      maßnahmenZeilen[index].innerText = text;
+  function neinAntwortenEinfügenUndÖffnen() {
+    const alleZeilen = document.querySelectorAll("#fragenTabelle tr");
+    const neinAntworten = [];
+
+    alleZeilen.forEach(row => {
+      const zellen = row.querySelectorAll("td");
+      if (zellen.length >= 4) {
+        const frageText = zellen[0]?.innerText.trim();
+        const radios = row.querySelectorAll("input[type='radio']");
+        radios.forEach(radio => {
+          if (radio.checked && radio.value === "nein") {
+            neinAntworten.push(frageText);
+          }
+        });
+      }
+    });
+
+    const maßnahmenZeilen = document.querySelectorAll('#maßnahmen-tabelle td[contenteditable]');
+    neinAntworten.forEach((text, index) => {
+      if (maßnahmenZeilen[index]) {
+        maßnahmenZeilen[index].innerText = text;
+      }
+    });
+
+    const win = window.open('defizite.html', '_blank');
+    setTimeout(() => {
+      win?.postMessage({ neinAntworten }, "*");
+    }, 500);
+  }
+
+  // Init
+  window.addEventListener("resize", resizeCanvas);
+  window.addEventListener("load", () => {
+    resizeCanvas();
+    restoreSignature();
+
+    const datumsfeld = document.getElementById('datum');
+    if (datumsfeld) {
+      const heute = new Date().toISOString().split('T')[0];
+      datumsfeld.value = heute;
     }
   });
 
-  // Note: The following lines depend on external files (defizite.html) not provided.
-  // If these files are not present, this functionality will not work as expected.
-  const win = window.open('defizite.html', '_blank');
-  setTimeout(() => {
-    win?.postMessage({ neinAntworten }, "*");
-  }, 500);
+  canvas.addEventListener('mousedown', startDrawing);
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', stopDrawing);
+  canvas.addEventListener('mouseout', stopDrawing);
+  canvas.addEventListener('touchstart', startDrawing, { passive: false });
+  canvas.addEventListener('touchmove', draw, { passive: false });
+  canvas.addEventListener('touchend', stopDrawing);
+
+  // Service Worker optional
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sicher/sw.js')
+        .then(() => console.log("✅ Service Worker registriert"))
+        .catch(err => console.error("❌ Service Worker Fehler:", err));
+    });
+  }
+function unterschriftExtern() {
+  window.open('signatur.html', 'Signatur', 'width=700,height=400');
 }
 
-// Init
-window.addEventListener("resize", resizeCanvas);
-window.addEventListener("load", () => {
-  resizeCanvas();
-  restoreSignature();
-
-  const datumsfeld = document.getElementById('datum');
-  if (datumsfeld) {
-    const heute = new Date().toISOString().split('T')[0];
-    datumsfeld.value = heute;
+window.addEventListener("message", (event) => {
+  if (event.data?.type === 'signature') {
+    const img = document.getElementById('signature-image');
+    img.src = event.data.dataUrl;
+    img.style.display = 'block';
   }
 });
 
-canvas.addEventListener('mousedown', startDrawing);
-canvas.addEventListener('mousemove', draw);
-canvas.addEventListener('mouseup', stopDrawing);
-canvas.addEventListener('mouseout', stopDrawing);
-canvas.addEventListener('touchstart', startDrawing, { passive: false });
-canvas.addEventListener('touchmove', draw, { passive: false });
-canvas.addEventListener('touchend', stopDrawing);
-
-// Service Worker optional
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sicher/sw.js')
-      .then(() => console.log("✅ Service Worker registriert"))
-      .catch(err => console.error("❌ Service Worker Fehler:", err));
-  });
-}
-
-// Measures object as provided by the user
-const measures = {
-1: { text: "Schuhwerk-Richtlinien durchsetzen und Mitarbeiter über korrekte Arbeitsschuhe informieren", priority: "medium" },
-2: { text: "Türen und Tore durch Fachfirma reparieren lassen und regelmäßige Wartung sicherstellen", priority: "high" },
-3: { text: "Aufzug durch zertifizierten Sachverständigen prüfen lassen und Reparaturen durchführen", priority: "high" },
-4: { text: "Leergutrücknahme-Anlage instand setzen, Schutzeinrichtungen reparieren und Glasscherben entfernen", priority: "high" },
-5: { text: "Leitern durch Sachkundigen prüfen lassen und Prüfprotokoll erstellen", priority: "medium" },
-6: { text: "Geeignete Sicherheitsmesser aus dem Ordersatz beschaffen und Verwendung schulen", priority: "medium" },
-7: { text: "Beschädigte Schalter und Steckdosen durch Elektrofachkraft reparieren lassen", priority: "high" },
-8: { text: "Gabelhubwagen reparieren oder ersetzen und regelmäßige Wartung durchführen", priority: "medium" },
-9: { text: "Elektrischen Hubwagen durch Sachverständigen prüfen lassen und Reparaturen durchführen", priority: "high" },
-10: { text: "Zugangswege zu Feuerlöscheinrichtungen freiräumen und dauerhaft freihalten", priority: "high" },
-11: { text: "Feuerlöscheinrichtungen durch Fachfirma prüfen lassen und Prüffristen einhalten", priority: "high" },
-12: { text: "Brandschutztüren freiräumen und Mitarbeiter über Freihaltung schulen", priority: "high" },
-13: { text: "Türhaltevorrichtungen und Schließfolgeregler durch Fachfirma reparieren lassen", priority: "high" },
-14: { text: "Beschädigte Brandschutztüren durch Fachfirma reparieren oder ersetzen lassen", priority: "high" },
-15: { text: "Aktuellen Flucht- und Rettungsplan erstellen und gut sichtbar aushängen", priority: "high" },
-16: { text: "Defekte Notausgangsbeleuchtung reparieren und regelmäßige Funktionsprüfung durchführen", priority: "high" },
-17: { text: "Notausgänge freiräumen und dauerhaft freihalten, Mitarbeiter schulen", priority: "high" },
-18: { text: "Notausgänge entriegeln, Öffnungsmechanismus prüfen und Zugänglichkeit sicherstellen", priority: "high" },
-19: { text: "Fluchtwegeführung überprüfen und sichere Sammelpunkte definieren", priority: "high" },
-20: { text: "Verkehrswege instand setzen, rutschfeste Beläge anbringen und Stolperstellen beseitigen", priority: "medium" },
-21: { text: "Treppen reparieren, freiräumen und regelmäßige Kontrolle durchführen", priority: "medium" },
-22: { text: "Geeignete PSA beschaffen und Mitarbeiter in der Verwendung schulen", priority: "high" },
-23: { text: "Brennbares Material aus Technik- und Heizräumen entfernen und Lagerverbot durchsetzen", priority: "high" },
-24: { text: "Technik- und Heizräume räumen und alternative Lagermöglichkeiten schaffen", priority: "high" },
-25: { text: "Betriebsanweisungen aktualisieren, gut sichtbar aushängen und Einhaltung kontrollieren", priority: "medium" },
-26: { text: "Steckverbindungen ordnungsgemäß verlegen und Stolperstellen beseitigen", priority: "medium" },
-27: { text: "Arbeitsgeräte der Backstation warten und reparieren lassen", priority: "medium" },
-28: { text: "Handwaschbecken reparieren oder ersetzen", priority: "medium" },
-29: { text: "Elektroleitungen durch Fachkraft prüfen und ordnungsgemäß verlegen lassen", priority: "high" },
-30: { text: "Zuleitung durch Elektrofachkraft VDE-konform erneuern lassen", priority: "high" },
-31: { text: "Neue Backhandschuhe mit langer Stulpe beschaffen", priority: "medium" },
-32: { text: "Heißgeräte durch Fachfirma warten und reparieren lassen", priority: "high" },
-33: { text: "Hautschutzplan erstellen und gut sichtbar aushängen", priority: "medium" },
-34: { text: "Hautschutz- und Hautpflegeprodukte beschaffen und bereitstellen", priority: "medium" },
-35: { text: "Arbeitsgeräte im Servicebereich warten und reparieren lassen", priority: "medium" },
-36: { text: "Glastüren und Glaswände in Augenhöhe mit Sicherheitsmarkierungen versehen", priority: "medium" },
-37: { text: "Farbcodierte Schneidbretter und Messer beschaffen und Reinigungsplan erstellen", priority: "medium" },
-38: { text: "Schneidbretter mit Messereinschub beschaffen", priority: "low" },
-39: { text: "Geeignete Messerhalter beschaffen und installieren", priority: "low" },
-40: { text: "Convenience-Geräte warten und reparieren lassen", priority: "medium" },
-41: { text: "Fußraum an den Kassen freiräumen und Ordnung halten", priority: "low" },
-42: { text: "Fußboden im Kassenbereich reparieren oder erneuern", priority: "medium" },
-43: { text: "Brennbares Material von Heizgeräten entfernen und Sicherheitsabstand einhalten", priority: "high" },
-44: { text: "Defekte Kassenstühle reparieren oder ersetzen", priority: "low" },
-45: { text: "Transportband reparieren oder ersetzen, Lücken schließen", priority: "medium" },
-46: { text: "Überglocken an der Kühlhausbeleuchtung installieren", priority: "medium" },
-47: { text: "Notentriegelung installieren oder reparieren und Funktion prüfen", priority: "high" },
-48: { text: "Rettungswegschilder ISO 7010 an Kühlhaustüren anbringen", priority: "high" },
-49: { text: "Kühlhausbeleuchtung reparieren und regelmäßige Wartung durchführen", priority: "medium" },
-50: { text: "Notruf-Funktion reparieren und regelmäßige Funktionsprüfung durchführen", priority: "high" },
-51: { text: "Schwerlastregale durch Sachverständigen prüfen lassen", priority: "high" },
-52: { text: "Anfahrschutz für Regale installieren", priority: "medium" },
-53: { text: "Traglastangaben an allen Schwerlastregalen anbringen", priority: "medium" },
-54: { text: "Absturzsicherung an der Rampe installieren", priority: "high" },
-55: { text: "Absturzsicherung reparieren und ordnungsgemäß kennzeichnen", priority: "high" },
-56: { text: "Müll-/Papierpresse durch Sachverständigen prüfen lassen", priority: "medium" },
-57: { text: "Müll-/Papierpresse reparieren und Schutzeinrichtungen instand setzen", priority: "medium" },
-58: { text: "Verkehrswege im Lager instand setzen und Stolperstellen beseitigen", priority: "medium" },
-59: { text: "Aktuelle aushangpflichtige Unterlagen beschaffen und aushängen", priority: "medium" },
-60: { text: "Nicht brennbare Unterlagen für hitzeentwickelnde Geräte beschaffen", priority: "medium" },
-61: { text: "Erste-Hilfe-Koffer gut sichtbar und zugänglich montieren", priority: "high" },
-62: { text: "Prüfung ortsveränderlicher elektrischer Betriebsmittel durch Elektrofachkraft veranlassen", priority: "medium" },
-63: { text: "Aktuelle Liste und Prüfberichte erstellen und führen", priority: "medium" },
-64: { text: "Verbandskasten auffüllen und regelmäßig kontrollieren", priority: "high" },
-65: { text: "Dokumentation für Erste Hilfeleistungen einführen und führen", priority: "medium" },
-66: { text: "Sicherheitsmaßnahmen gegen Raubüberfälle installieren (Türspion, Sicherheitsknauf)", priority: "high" },
-67: { text: "Verfahren für sicheren Umgang mit Zahlungsmitteln etablieren und schulen", priority: "high" },
-68: { text: "Unterweisungsprogramm für neue Mitarbeiter zu Arbeitssicherheit und Brandschutz erstellen", priority: "high" },
-69: { text: "Ersthelfer ausbilden lassen und Anwesenheit während Öffnungszeiten sicherstellen", priority: "high" },
-70: { text: "Brandschutzhelfer ausbilden lassen und Anwesenheit während Öffnungszeiten sicherstellen", priority: "high" },
-71: { text: "Sicherheitsbeauftragten ausbilden lassen und offiziell bestellen", priority: "medium" },
-72: { text: "Gefährdungsbeurteilung erstellen oder aktualisieren", priority: "high" },
-73: { text: "Unterweisung für Personen im Bereich von CO2-Kühlanlagen durchführen", priority: "high" },
-74: { text: "CO2-Sensoren freiräumen und regelmäßige Kontrolle durchführen", priority: "high" },
-75: { text: "Sicherheitsvorrichtungen der CO2-Anlage reparieren und regelmäßig prüfen", priority: "high" },
-76: { text: "Unterweisungsprogramm für Praktikanten und Schüleraushilfen erstellen und durchführen", priority: "medium" },
-77: { text: "Dokumentationssystem für Unterweisungen einführen", priority: "medium" },
-78: { text: "Verständniskontrolle bei Unterweisungen durchführen und dokumentieren", priority: "medium" },
-79: { text: "Arbeitsmedizinische Vorsorge organisieren und Mitarbeitern anbieten", priority: "medium" },
-80: { text: "Präventionsmaßnahmen gegen Hauterkrankungen implementieren", priority: "medium" },
-81: { text: "Mitarbeitertoiletten und Pausenräume sauber und mit Seife, Einmalhandtüchern und ggf. Desinfektionsmittel ausgestattet", priority: "low" }, // New question, assigned a measure
-82: { text: "Mitarbeiterwünsche systematisch in Arbeitsplanung einbeziehen", priority: "low" },
-83: { text: "Pausenregelung überarbeiten und konsequent umsetzen", priority: "medium" },
-84: { text: "Geeigneten Pausenraum einrichten", priority: "medium" },
-85: { text: "Überstundenmanagement implementieren und Überstunden reduzieren", priority: "medium" },
-86: { text: "Regelmäßige Teambesprechungen einführen und durchführen", priority: "low" },
-87: { text: "Strukturiertes Einarbeitungsprogramm für neue Mitarbeiter entwickeln", priority: "medium" },
-88: { text: "Unterweisung zu Brand- und Arbeitsschutz durchführen und dokumentieren", priority: "high" },
-89: { text: "Schwarzes Brett für Mitarbeiterinformationen installieren", priority: "low" },
-90: { text: "Kommunikationsprozess für transparente Entscheidungserläuterung etablieren", priority: "low" },
-91: { text: "System für positive Leistungsrückmeldungen einführen", priority: "low" },
-92: { text: "Schulung für Führungskräfte in konstruktiver Kritik durchführen", priority: "low" },
-93: { text: "Weiterbildungsprogramm für Mitarbeiter entwickeln und anbieten", priority: "low" },
-94: { text: "Informationsmaterial zur Suchtprävention aushängen", priority: "low" },
-95: { text: "Betriebliches Wiedereingliederungsmanagement einführen", priority: "medium" },
-96: { text: "Arbeitsorganisation überprüfen und Alleinarbeit minimieren", priority: "medium" },
-97: { text: "Betreuungskonzept für Überfallsituationen entwickeln", priority: "high" },
-98: { text: "Schulungen für Umgang mit gewalttätigen Situationen organisieren", priority: "medium" }
-};
-
 function frageVerneinen(satz) {
-return satz
-  .replace(/\bist\b/g, "ist nicht")
-  .replace(/\bsind\b/g, "sind nicht")
-  .replace(/\bwurde\b/g, "wurde nicht")
-  .replace(/\bwurden\b/g, "wurden nicht")
-  .replace(/\bsteht\b/g, "steht nicht")
-  .replace(/\bstehen\b/g, "stehen nicht")
-  .replace(/\berfolgt\b/g, "erfolgt nicht")
-  .replace(/\berfolgen\b/g, "erfolgen nicht")
-  .replace(/\bgewährleistet\b/g, "nicht gewährleistet")
-  .replace(/\bgesichert\b/g, "nicht gesichert");
+  return satz
+    .replace(/\bist\b/g, "ist nicht")
+    .replace(/\bsind\b/g, "sind nicht")
+    .replace(/\bwurde\b/g, "wurde nicht")
+    .replace(/\bwurden\b/g, "wurden nicht")
+    .replace(/\bsteht\b/g, "steht nicht")
+    .replace(/\bstehen\b/g, "stehen nicht")
+    .replace(/\berfolgt\b/g, "erfolgt nicht")
+    .replace(/\berfolgen\b/g, "erfolgen nicht")
+    .replace(/\bgewährleistet\b/g, "nicht gewährleistet")
+    .replace(/\bgesichert\b/g, "nicht gesichert");
 }
+
 
 function umformulieren(frage) {
-const original = frage.trim();
-const lower = original.toLowerCase();
-let umformuliert = "";
+  const original = frage.trim();
+  const lower = original.toLowerCase();
+  let umformuliert = "";
 
-// ===== SPEZIFISCHE FALLREGELN (formell) =====
-if (lower.includes("geprüft") && lower.includes("ordnungsgemäß")) {
-  umformuliert = "Die Einrichtung wurde nicht geprüft oder befindet sich nicht in ordnungsgemäßem Zustand: " + frageVerneinen(original);
-} else if (lower.includes("beschädigung") || lower.includes("defekt") || lower.includes("nicht funktionsfähig")) {
-  umformuliert = "Es liegen erkennbare technische Mängel oder Beschädigungen vor: " + frageVerneinen(original);
-} else if (lower.includes("funktionsfähig") || lower.includes("funktion")) {
-  umformuliert = "Die Funktionsfähigkeit ist nicht gewährleistet: " + frageVerneinen(original);
-} else if (lower.includes("frei zugänglich") || lower.includes("nicht zugänglich") || lower.includes("zugestellt")) {
-  umformuliert = "Der uneingeschränkte Zugang ist nicht sichergestellt: " + frageVerneinen(original);
-} else if (lower.includes("gekennzeichnet") && lower.includes("sichtbar")) {
-  umformuliert = "Kennzeichnung ist unzureichend oder nicht sichtbar: " + frageVerneinen(original);
-} else if (lower.includes("schuhwerk") || lower.includes("schutzbrille") || lower.includes("handschuhe")) {
-  umformuliert = "PSA wird nicht bereitgestellt oder nicht ordnungsgemäß verwendet: " + frageVerneinen(original);
-} else if (lower.includes("sicherheitsmesser")) {
-  umformuliert = "Verwendung von Sicherheitsmessern ist nicht sichergestellt: " + frageVerneinen(original);
-} else if (lower.includes("feuerlöscher") || lower.includes("feuerlöscheinrichtung")) {
-  umformuliert = "Funktionssicherheit oder Zugänglichkeit der Feuerlöscher ist nicht gegeben: " + frageVerneinen(original);
-} else if (lower.includes("brandschutztür") || lower.includes("türhaltevorrichtung")) {
-  umformuliert = "Brandschutzeinrichtungen entsprechen nicht den Anforderungen: " + frageVerneinen(original);
-} else if (lower.includes("notausgang") || lower.includes("fluchtweg")) {
-  umformuliert = "Die sichere Nutzung der Fluchtwege ist nicht gewährleistet: " + frageVerneinen(original);
-} else if (lower.includes("unterwiesen") || lower.includes("eingearbeitet")) {
-  umformuliert = "Mitarbeitende wurden nicht ordnungsgemäß unterwiesen oder eingearbeitet: " + frageVerneinen(original);
-} else if (lower.includes("ersthelfer") || lower.includes("brandschutzhelfer")) {
-  umformuliert = "Personelle Besetzung durch Erst-/Brandschutzhelfer ist nicht gewährleistet: " + frageVerneinen(original);
-} else if (lower.includes("pausen") || lower.includes("überstunden") || lower.includes("rückmeldung")) {
-  umformuliert = "Organisatorische Mängel im Bereich Arbeitszeit oder Rückmeldungen bestehen: " + frageVerneinen(original);
-} else if (lower.includes("kommunikation") || lower.includes("entscheidung")) {
-  umformuliert = "Kommunikation oder Entscheidungsprozesse sind unzureichend: " + frageVerneinen(original);
+  // ===== SPEZIFISCHE FALLREGELN (formell) =====
+  if (lower.includes("geprüft") && lower.includes("ordnungsgemäß")) {
+    umformuliert = "Die Einrichtung wurde nicht geprüft oder befindet sich nicht in ordnungsgemäßem Zustand: " + frageVerneinen(original);
+  } else if (lower.includes("beschädigung") || lower.includes("defekt") || lower.includes("nicht funktionsfähig")) {
+    umformuliert = "Es liegen erkennbare technische Mängel oder Beschädigungen vor: " + frageVerneinen(original);
+  } else if (lower.includes("funktionsfähig") || lower.includes("funktion")) {
+    umformuliert = "Die Funktionsfähigkeit ist nicht gewährleistet: " + frageVerneinen(original);
+  } else if (lower.includes("frei zugänglich") || lower.includes("nicht zugänglich") || lower.includes("zugestellt")) {
+    umformuliert = "Der uneingeschränkte Zugang ist nicht sichergestellt: " + frageVerneinen(original);
+  } else if (lower.includes("gekennzeichnet") && lower.includes("sichtbar")) {
+    umformuliert = "Kennzeichnung ist unzureichend oder nicht sichtbar: " + frageVerneinen(original);
+  } else if (lower.includes("schuhwerk") || lower.includes("schutzbrille") || lower.includes("handschuhe")) {
+    umformuliert = "PSA wird nicht bereitgestellt oder nicht ordnungsgemäß verwendet: " + frageVerneinen(original);
+  } else if (lower.includes("sicherheitsmesser")) {
+    umformuliert = "Verwendung von Sicherheitsmessern ist nicht sichergestellt: " + frageVerneinen(original);
+  } else if (lower.includes("feuerlöscher") || lower.includes("feuerlöscheinrichtung")) {
+    umformuliert = "Funktionssicherheit oder Zugänglichkeit der Feuerlöscher ist nicht gegeben: " + frageVerneinen(original);
+  } else if (lower.includes("brandschutztür") || lower.includes("türhaltevorrichtung")) {
+    umformuliert = "Brandschutzeinrichtungen entsprechen nicht den Anforderungen: " + frageVerneinen(original);
+  } else if (lower.includes("notausgang") || lower.includes("fluchtweg")) {
+    umformuliert = "Die sichere Nutzung der Fluchtwege ist nicht gewährleistet: " + frageVerneinen(original);
+  } else if (lower.includes("unterwiesen") || lower.includes("eingearbeitet")) {
+    umformuliert = "Mitarbeitende wurden nicht ordnungsgemäß unterwiesen oder eingearbeitet: " + frageVerneinen(original);
+  } else if (lower.includes("ersthelfer") || lower.includes("brandschutzhelfer")) {
+    umformuliert = "Personelle Besetzung durch Erst-/Brandschutzhelfer ist nicht gewährleistet: " + frageVerneinen(original);
+  } else if (lower.includes("pausen") || lower.includes("überstunden") || lower.includes("rückmeldung")) {
+    umformuliert = "Organisatorische Mängel im Bereich Arbeitszeit oder Rückmeldungen bestehen: " + frageVerneinen(original);
+  } else if (lower.includes("kommunikation") || lower.includes("entscheidung")) {
+    umformuliert = "Kommunikation oder Entscheidungsprozesse sind unzureichend: " + frageVerneinen(original);
+  }
+
+  // ===== ALLGEMEINE FORMELLE REGELN =====
+  else if (/^Die |^Der |^Das /i.test(original)) {
+    umformuliert = "Es wurde festgestellt, dass " + frageVerneinen(original[0].toLowerCase() + original.slice(1));
+  } else if (/^Im |^In |^An |^Auf /i.test(original)) {
+    umformuliert = "Die folgende Feststellung trifft nicht zu: " + frageVerneinen(original);
+  } else if (original.trim().endsWith("?")) {
+    umformuliert = "Die Fragestellung ist aktuell nicht mit 'Ja' zu beantworten: " + frageVerneinen(original);
+  } else {
+    umformuliert = "Abweichung festgestellt: " + frageVerneinen(original);
+  }
+
+  if (!umformuliert.endsWith(".")) {
+    umformuliert += ".";
+  }
+
+  return umformuliert;
 }
 
-// ===== ALLGEMEINE FORMELLE REGELN =====
-else if (/^Die |^Der |^Das /i.test(original)) {
-  umformuliert = "Es wurde festgestellt, dass " + frageVerneinen(original[0].toLowerCase() + original.slice(1));
-} else if (/^Im |^In |^An |^Auf /i.test(original)) {
-  umformuliert = "Die folgende Feststellung trifft nicht zu: " + frageVerneinen(original);
-} else if (original.trim().endsWith("?")) {
-  umformuliert = "Die Fragestellung ist aktuell nicht mit 'Ja' zu beantworten: " + frageVerneinen(original);
-} else {
-  umformuliert = "Abweichung festgestellt: " + frageVerneinen(original);
-}
 
-if (!umformuliert.endsWith(".")) {
-  umformuliert += ".";
-}
 
-return umformuliert;
-}
+  function neinFragenInMaßnahmen() {
+    const fragenzeilen = document.querySelectorAll('#fragenTabelle tr');
+    const maßnahmenZeilen = document.querySelectorAll("#maßnahmen-tabelle td[contenteditable='true']");
+    maßnahmenZeilen.forEach(cell => cell.textContent = '');
 
-function neinFragenInMaßnahmen() {
-  const fragenzeilen = document.querySelectorAll('#fragenTabelle tr');
-  const maßnahmenZeilen = document.querySelectorAll("#maßnahmen-tabelle td[contenteditable='true']");
-  maßnahmenZeilen.forEach(cell => cell.textContent = ''); // Clear existing content
+    let index = 0;
+    fragenzeilen.forEach(row => {
+      const frageText = row.cells[0]?.innerText;
+      const radios = row.querySelectorAll('input[type="radio"]');
+      let selected = null;
 
-  let index = 0; // This will be our global question counter, matching `measures` keys
-  let measuresAdded = 0;
+      radios.forEach(r => {
+        if (r.checked) selected = r.value;
+      });
 
-  fragenzeilen.forEach(row => {
-    const frageTextCell = row.cells[0];
-    if (!frageTextCell || frageTextCell.classList.contains('category-header')) {
-      return; // Skip category headers or invalid rows
-    }
-    index++; // Increment for each actual question row
-
-    const radios = row.querySelectorAll('input[type="radio"]');
-    let selected = null;
-
-    radios.forEach(r => {
-      if (r.checked) selected = r.value;
+      if (selected === 'nein' && index < maßnahmenZeilen.length) {
+        const umformulierteFrage = umformulieren(frageText);
+        maßnahmenZeilen[index].textContent = umformulierteFrage;
+        index++;
+      }
     });
 
-    if (selected === 'nein' && measuresAdded < maßnahmenZeilen.length) {
-      const measure = measures[index]; // Get the specific measure using the global index
-      let textToInsert = "";
-
-      if (measure && measure.text) {
-        textToInsert = measure.text;
-      } else {
-        // Fallback to umformulieren if no specific measure is found
-        textToInsert = umformulieren(frageTextCell.innerText);
-      }
-      
-      maßnahmenZeilen[measuresAdded].textContent = textToInsert;
-      measuresAdded++;
+    if (index === 0) {
+      alert("✅ Es wurden keine Fragen mit 'nein' beantwortet.");
+    } else if (index >= maßnahmenZeilen.length) {
+      alert("⚠️ Mehr als 15 'nein'-Antworten – nur die ersten 15 wurden übernommen.");
     }
-  });
-
-  if (measuresAdded === 0) {
-    alert("✅ Es wurden keine Fragen mit 'nein' beantwortet.");
-  } else if (measuresAdded >= maßnahmenZeilen.length) {
-    alert("⚠️ Mehr als 15 'nein'-Antworten – nur die ersten 15 wurden übernommen.");
   }
-}
 </script>
-</div>
-<footer style="text-align: center; margin-top: 40px; padding: 20px; border-top: 1px solid #eee; color: #6c757d;">
-  <p>&copy; 2025 Arbeitssicherheit-Checkliste. Alle Rechte vorbehalten.</p>
-</footer>
+  </div>
 </body>
 </html>
