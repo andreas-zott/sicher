@@ -13,7 +13,7 @@
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   padding: 24px;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: auto;
 }
 
@@ -142,7 +142,7 @@ button.btn-medium {
   font-family: inherit;
 }
 
-/* Kleine Buttons 
+/* Kleine Buttons */
 
 </style>
 <style>
@@ -186,6 +186,12 @@ button.btn-medium {
       font-family: Arial, sans-serif;
       background-color: #f8f9fa;
       padding: 20px;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
     }
 
     header h1 {
@@ -252,9 +258,11 @@ button.btn-medium {
 
     button:hover {
       background-color: #0056b3;
-
-
+    }
   </style>
+  <!-- PDF Generation Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
   <div class="wrapper-rahmen">
@@ -475,13 +483,13 @@ button.btn-medium {
 <td><input name="2.0 Backstation-2" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Entspricht die Zuleitung der VDE-Norm?</td>
+<td style="text-align: left;"> Entspricht die Zuleitung der VDE-Norm?</td>
 <td><input name="2.0 Backstation-3" type="radio" value="ja"/></td>
 <td><input name="2.0 Backstation-3" type="radio" value="nein"/></td>
 <td><input name="2.0 Backstation-3" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist der Backhandschuh für die Backstation in einem ordnungsgemäßen Zustand (kein Verschleiß) und besitzt eine lange Stulpe?</td>
+<td style="text-align: left;"> Ist der Backhandschuh für die Backstation in einem ordnungsgemäßen Zustand (kein Verschleiß) und besitzt eine lange Stulpe?</td>
 <td><input name="2.0 Backstation-4" type="radio" value="ja"/></td>
 <td><input name="2.0 Backstation-4" type="radio" value="nein"/></td>
 <td><input name="2.0 Backstation-4" type="radio" value="nicht_vorhanden"/></td>
@@ -514,40 +522,34 @@ button.btn-medium {
 <td><input name="3.0 Serviceabteilung-2" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Bleiben die Thekenscheiben selbstständig in der oberen Stellung stehen?</td>
+<td style="text-align: left;">Sind die Glastüren und Glaswände in Augenhöhe gekennzeichnet?</td>
 <td><input name="3.0 Serviceabteilung-3" type="radio" value="ja"/></td>
 <td><input name="3.0 Serviceabteilung-3" type="radio" value="nein"/></td>
 <td><input name="3.0 Serviceabteilung-3" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind die Glastüren und Glaswände in Augenhöhe gekennzeichnet?</td>
+<td style="text-align: left;">Werden Schneidbretter und Messer regelmäßig gereinigt und farbcodiert verwendet?</td>
 <td><input name="3.0 Serviceabteilung-4" type="radio" value="ja"/></td>
 <td><input name="3.0 Serviceabteilung-4" type="radio" value="nein"/></td>
 <td><input name="3.0 Serviceabteilung-4" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Werden Schneidbretter und Messer regelmäßig gereinigt und farbcodiert verwendet?</td>
+<td style="text-align: left;">Werden Schneidbretter mit Messereinschub verwendet?</td>
 <td><input name="3.0 Serviceabteilung-5" type="radio" value="ja"/></td>
 <td><input name="3.0 Serviceabteilung-5" type="radio" value="nein"/></td>
 <td><input name="3.0 Serviceabteilung-5" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Werden Schneidbretter mit Messereinschub verwendet?</td>
+<td style="text-align: left;">Werden Messerhalter verwendet?</td>
 <td><input name="3.0 Serviceabteilung-6" type="radio" value="ja"/></td>
 <td><input name="3.0 Serviceabteilung-6" type="radio" value="nein"/></td>
 <td><input name="3.0 Serviceabteilung-6" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Werden Messerhalter verwendet?</td>
+<td style="text-align: left;">Sind die Convenience-Geräte in einem ordnungsgemäßen Zustand?</td>
 <td><input name="3.0 Serviceabteilung-7" type="radio" value="ja"/></td>
 <td><input name="3.0 Serviceabteilung-7" type="radio" value="nein"/></td>
 <td><input name="3.0 Serviceabteilung-7" type="radio" value="nicht_vorhanden"/></td>
-</tr>
-<tr>
-<td style="text-align: left;">Sind die Convenience-Geräte in einem ordnungsgemäßen Zustand?</td>
-<td><input name="3.0 Serviceabteilung-8" type="radio" value="ja"/></td>
-<td><input name="3.0 Serviceabteilung-8" type="radio" value="nein"/></td>
-<td><input name="3.0 Serviceabteilung-8" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 
 <tr><td class="category-header" colspan="4" style="text-align: left;">4.0 Kassenzone</td></tr>
@@ -592,13 +594,13 @@ button.btn-medium {
 <td><input name="5.0 Kühlhaus-0" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist die Notentriegelung vorhanden und in Ordnung?</td>
+<td style="text-align: left;"> Ist die Notentriegelung vorhanden und in Ordnung?</td>
 <td><input name="5.0 Kühlhaus-1" type="radio" value="ja"/></td>
 <td><input name="5.0 Kühlhaus-1" type="radio" value="nein"/></td>
 <td><input name="5.0 Kühlhaus-1" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind die Kühlhaustüren von innen mit dem Rettungswegschild ISO 7010 gekennzeichnet?</td>
+<td style="text-align: left;"> Sind die Kühlhaustüren von innen mit dem Rettungswegschild ISO 7010 gekennzeichnet?</td>
 <td><input name="5.0 Kühlhaus-2" type="radio" value="ja"/></td>
 <td><input name="5.0 Kühlhaus-2" type="radio" value="nein"/></td>
 <td><input name="5.0 Kühlhaus-2" type="radio" value="nicht_vorhanden"/></td>
@@ -655,7 +657,7 @@ button.btn-medium {
 <td><input name="6.0 Lager-5" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist die Müll-/Papierpresse in einem ordnungsgemäßen Zustand (keine sichtbaren Beschädigungen, intakte Schutzeinrichtungen, fester Stand)?</td>
+<td style="text-align: left;"> Ist die Müll-/Papierpresse in einem ordnungsgemäßen Zustand (keine sichtbaren Beschädigungen, intakte Schutzeinrichtungen, fester Stand)?</td>
 <td><input name="6.0 Lager-6" type="radio" value="ja"/></td>
 <td><input name="6.0 Lager-6" type="radio" value="nein"/></td>
 <td><input name="6.0 Lager-6" type="radio" value="nicht_vorhanden"/></td>
@@ -688,7 +690,7 @@ button.btn-medium {
 <td><input name="7.0 Sozialräume-2" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Werden ortsveränderliche elektrische Betriebsmittel (z. B. Leitungen, Steckverbindungen, Leuchten, Geräte) in angemessenen Zeitabständen geprüft?</td>
+<td style="text-align: left;"> Werden ortsveränderliche elektrische Betriebsmittel (z. B. Leitungen, Steckverbindungen, Leuchten, Geräte) in angemessenen Zeitabständen geprüft?</td>
 <td><input name="7.0 Sozialräume-3" type="radio" value="ja"/></td>
 <td><input name="7.0 Sozialräume-3" type="radio" value="nein"/></td>
 <td><input name="7.0 Sozialräume-3" type="radio" value="nicht_vorhanden"/></td>
@@ -698,63 +700,63 @@ button.btn-medium {
 
 <tr>
 <td style="text-align: left;">Liegt eine aktuelle Liste sowie Prüfberichte prüfungsbedürftiger Einrichtungen vor?</td>
-<td><input name="8.0 Marktleiterbüro-9" type="radio" value="ja"/></td>
-<td><input name="8.0 Marktleiterbüro-9" type="radio" value="nein"/></td>
-<td><input name="8.0 Marktleiterbüro-9" type="radio" value="nicht_vorhanden"/></td>
-</tr>
-<tr>
-<td style="text-align: left;">Ist der Verbandskasten in einem ordnungsgemäßen Zustand?</td>
 <td><input name="8.0 Marktleiterbüro-0" type="radio" value="ja"/></td>
 <td><input name="8.0 Marktleiterbüro-0" type="radio" value="nein"/></td>
 <td><input name="8.0 Marktleiterbüro-0" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Wird die "Dokumentation Erste Hilfeleistungen" geführt?</td>
+<td style="text-align: left;">Ist der Verbandskasten in einem ordnungsgemäßen Zustand?</td>
 <td><input name="8.0 Marktleiterbüro-1" type="radio" value="ja"/></td>
 <td><input name="8.0 Marktleiterbüro-1" type="radio" value="nein"/></td>
 <td><input name="8.0 Marktleiterbüro-1" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind Maßnahmen getroffen, die den Anreiz zu Raubüberfällen vermindern (z. B. Türspion, feststehender Knauf)?</td>
+<td style="text-align: left;">Wird die "Dokumentation Erste Hilfeleistungen" geführt?</td>
 <td><input name="8.0 Marktleiterbüro-2" type="radio" value="ja"/></td>
 <td><input name="8.0 Marktleiterbüro-2" type="radio" value="nein"/></td>
 <td><input name="8.0 Marktleiterbüro-2" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist die Tür während des Umgangs mit Zahlungsmitteln verschlossen?</td>
+<td style="text-align: left;">Sind Maßnahmen getroffen, die den Anreiz zu Raubüberfällen vermindern (z. B. Türspion, feststehender Knauf)?</td>
 <td><input name="8.0 Marktleiterbüro-3" type="radio" value="ja"/></td>
 <td><input name="8.0 Marktleiterbüro-3" type="radio" value="nein"/></td>
 <td><input name="8.0 Marktleiterbüro-3" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Werden neue Mitarbeiter vor Aufnahme der Tätigkeit zum Thema Arbeitssicherheit und Brandschutz unterwiesen?</td>
+<td style="text-align: left;">Ist die Tür während des Umgangs mit Zahlungsmitteln verschlossen?</td>
 <td><input name="8.0 Marktleiterbüro-4" type="radio" value="ja"/></td>
 <td><input name="8.0 Marktleiterbüro-4" type="radio" value="nein"/></td>
 <td><input name="8.0 Marktleiterbüro-4" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist während der gesamten Ladenöffnungszeit mindestens ein Mitarbeiter mit der Qualifikation zum Ersthelfer anwesend?</td>
+<td style="text-align: left;">Werden neue Mitarbeiter vor Aufnahme der Tätigkeit zum Thema Arbeitssicherheit und Brandschutz unterwiesen?</td>
 <td><input name="8.0 Marktleiterbüro-5" type="radio" value="ja"/></td>
 <td><input name="8.0 Marktleiterbüro-5" type="radio" value="nein"/></td>
 <td><input name="8.0 Marktleiterbüro-5" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist während der gesamten Ladenöffnungszeit mindestens ein Mitarbeiter mit der Qualifikation als Brandschutzhelfer anwesend?</td>
+<td style="text-align: left;">Ist während der gesamten Ladenöffnungszeit mindestens ein Mitarbeiter mit der Qualifikation zum Ersthelfer anwesend?</td>
 <td><input name="8.0 Marktleiterbüro-6" type="radio" value="ja"/></td>
 <td><input name="8.0 Marktleiterbüro-6" type="radio" value="nein"/></td>
 <td><input name="8.0 Marktleiterbüro-6" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist ein Sicherheitsbeauftragter ausgebildet und bestellt?</td>
+<td style="text-align: left;">Ist während der gesamten Ladenöffnungszeit mindestens ein Mitarbeiter mit der Qualifikation als Brandschutzhelfer anwesend?</td>
 <td><input name="8.0 Marktleiterbüro-7" type="radio" value="ja"/></td>
 <td><input name="8.0 Marktleiterbüro-7" type="radio" value="nein"/></td>
 <td><input name="8.0 Marktleiterbüro-7" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Wurde die Gefährdungsbeurteilung (GBO) erstellt und ist sie auf dem aktuellen Stand?</td>
+<td style="text-align: left;">Ist ein Sicherheitsbeauftragter ausgebildet und bestellt?</td>
 <td><input name="8.0 Marktleiterbüro-8" type="radio" value="ja"/></td>
 <td><input name="8.0 Marktleiterbüro-8" type="radio" value="nein"/></td>
 <td><input name="8.0 Marktleiterbüro-8" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Wurde die Gefährdungsbeurteilung (GBO) erstellt und ist sie auf dem aktuellen Stand?</td>
+<td><input name="8.0 Marktleiterbüro-9" type="radio" value="ja"/></td>
+<td><input name="8.0 Marktleiterbüro-9" type="radio" value="nein"/></td>
+<td><input name="8.0 Marktleiterbüro-9" type="radio" value="nicht_vorhanden"/></td>
 
 </tr>
 <tr><td class="category-header" colspan="4" style="text-align: left;">9.0 CO2 Kühleinrichtungen</td></tr>
@@ -811,6 +813,12 @@ button.btn-medium {
 <td><input name="11.0 Arbeitsmedizin-1" type="radio" value="ja"/></td>
 <td><input name="11.0 Arbeitsmedizin-1" type="radio" value="nein"/></td>
 <td><input name="11.0 Arbeitsmedizin-1" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind Mitarbeitertoiletten und Pausenräume sauber und mit Seife, Einmalhandtüchern und ggf. Desinfektionsmittel ausgestattet?</td>
+<td><input name="11.0 Arbeitsmedizin-2" type="radio" value="ja"/></td>
+<td><input name="11.0 Arbeitsmedizin-2" type="radio" value="nein"/></td>
+<td><input name="11.0 Arbeitsmedizin-2" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 
 <tr><td class="category-header" colspan="4" style="text-align: left;">12.0 Psychische Belastung</td></tr>
@@ -1164,8 +1172,15 @@ button.btn-medium {
     img.style.border = "2px solid #000";
     img.style.width = "100%";
     img.style.maxWidth = "600px";
-    canvas.replaceWith(img);
+    // Replace the canvas with the image for printing
+    canvas.style.display = 'none'; // Hide canvas
+    canvas.parentNode.insertBefore(img, canvas.nextSibling); // Insert image after canvas
+
     window.print();
+
+    // After printing, remove the image and show the canvas again
+    img.remove();
+    canvas.style.display = 'block';
   }
 
   function auswertungAnzeigen() {
@@ -1200,74 +1215,56 @@ button.btn-medium {
       <p><strong>Nein:</strong> ${auswertung.nein}</p>
       <p><strong>Nicht vorhanden:</strong> ${auswertung.nicht_vorhanden}</p>
     `;
- const auswertungWindow = window.open('auswertung-sifa.html', 'auswertung');
-  const daten = {
-    markt: markt,
-    datum: datum,
-    name: name,
-    sifa: sifa,
-    ja: auswertung.ja,
-    nein: auswertung.nein,
-    nicht_vorhanden: auswertung.nicht_vorhanden
-  };
-  setTimeout(() => {
-    auswertungWindow.postMessage(daten, "*");
-  }, 1000);
-
-  }
-
-  function neinFragenInMaßnahmen() {
-    const fragenzeilen = document.querySelectorAll('#fragenTabelle tr');
-    const maßnahmenZeilen = document.querySelectorAll("#maßnahmen-tabelle td[contenteditable='true']");
-    maßnahmenZeilen.forEach(cell => cell.textContent = '');
-
-    let index = 0;
-    fragenzeilen.forEach(row => {
-      const frageText = row.cells[0]?.innerText;
-      const radios = row.querySelectorAll('input[type="radio"]');
-      let selected = null;
-
-      radios.forEach(r => {
-        if (r.checked) selected = r.value;
-      });
-
-      if (selected === 'nein' && index < maßnahmenZeilen.length) {
-        maßnahmenZeilen[index].textContent = frageText;
-        index++;
-      }
-    });
-
-    if (index === 0) {
-      alert("✅ Es wurden keine Fragen mit 'nein' beantwortet.");
-    } else if (index >= maßnahmenZeilen.length) {
-      alert("⚠️ Mehr als 15 'nein'-Antworten – nur die ersten 15 wurden übernommen.");
-    }
+    // Note: The following lines depend on external files (auswertung-sifa.html) not provided.
+    // If these files are not present, this functionality will not work as expected.
+    const auswertungWindow = window.open('auswertung-sifa.html', 'auswertung');
+    const daten = {
+      markt: markt,
+      datum: datum,
+      name: name,
+      sifa: sifa,
+      ja: auswertung.ja,
+      nein: auswertung.nein,
+      nicht_vorhanden: auswertung.nicht_vorhanden
+    };
+    setTimeout(() => {
+      auswertungWindow.postMessage(daten, "*");
+    }, 1000);
   }
 
   function neinAntwortenEinfügenUndÖffnen() {
     const alleZeilen = document.querySelectorAll("#fragenTabelle tr");
     const neinAntworten = [];
 
+    let questionIndex = 0; // Global counter for questions
     alleZeilen.forEach(row => {
-      const zellen = row.querySelectorAll("td");
-      if (zellen.length >= 4) {
-        const frageText = zellen[0]?.innerText.trim();
-        const radios = row.querySelectorAll("input[type='radio']");
-        radios.forEach(radio => {
-          if (radio.checked && radio.value === "nein") {
-            neinAntworten.push(frageText);
-          }
-        });
+      const frageTextCell = row.cells[0];
+      if (!frageTextCell || frageTextCell.classList.contains('category-header')) {
+        return; // Skip category headers or invalid rows
       }
+      questionIndex++; // Increment for each actual question row
+
+      const radios = row.querySelectorAll("input[type='radio']");
+      radios.forEach(radio => {
+        if (radio.checked && radio.value === "nein") {
+          // Use the global questionIndex to get the specific measure
+          const measureText = measures[questionIndex]?.text || umformulieren(frageTextCell.innerText);
+          neinAntworten.push(measureText);
+        }
+      });
     });
 
     const maßnahmenZeilen = document.querySelectorAll('#maßnahmen-tabelle td[contenteditable]');
+    maßnahmenZeilen.forEach(cell => cell.textContent = ''); // Clear existing content
+
     neinAntworten.forEach((text, index) => {
       if (maßnahmenZeilen[index]) {
         maßnahmenZeilen[index].innerText = text;
       }
     });
 
+    // Note: The following lines depend on external files (defizite.html) not provided.
+    // If these files are not present, this functionality will not work as expected.
     const win = window.open('defizite.html', '_blank');
     setTimeout(() => {
       win?.postMessage({ neinAntworten }, "*");
@@ -1303,17 +1300,108 @@ button.btn-medium {
         .catch(err => console.error("❌ Service Worker Fehler:", err));
     });
   }
-function unterschriftExtern() {
-  window.open('signatur.html', 'Signatur', 'width=700,height=400');
-}
 
-window.addEventListener("message", (event) => {
-  if (event.data?.type === 'signature') {
-    const img = document.getElementById('signature-image');
-    img.src = event.data.dataUrl;
-    img.style.display = 'block';
-  }
-});
+// Measures object as provided by the user
+const measures = {
+  1: { text: "Schuhwerk-Richtlinien durchsetzen und Mitarbeiter über korrekte Arbeitsschuhe informieren", priority: "medium" },
+  2: { text: "Türen und Tore durch Fachfirma reparieren lassen und regelmäßige Wartung sicherstellen", priority: "high" },
+  3: { text: "Aufzug durch zertifizierten Sachverständigen prüfen lassen und Reparaturen durchführen", priority: "high" },
+  4: { text: "Leergutrücknahme-Anlage instand setzen, Schutzeinrichtungen reparieren und Glasscherben entfernen", priority: "high" },
+  5: { text: "Leitern durch Sachkundigen prüfen lassen und Prüfprotokoll erstellen", priority: "medium" },
+  6: { text: "Geeignete Sicherheitsmesser aus dem Ordersatz beschaffen und Verwendung schulen", priority: "medium" },
+  7: { text: "Beschädigte Schalter und Steckdosen durch Elektrofachkraft reparieren lassen", priority: "high" },
+  8: { text: "Gabelhubwagen reparieren oder ersetzen und regelmäßige Wartung durchführen", priority: "medium" },
+  9: { text: "Elektrischen Hubwagen durch Sachverständigen prüfen lassen und Reparaturen durchführen", priority: "high" },
+  10: { text: "Zugangswege zu Feuerlöscheinrichtungen freiräumen und dauerhaft freihalten", priority: "high" },
+  11: { text: "Feuerlöscheinrichtungen durch Fachfirma prüfen lassen und Prüffristen einhalten", priority: "high" },
+  12: { text: "Brandschutztüren freiräumen und Mitarbeiter über Freihaltung schulen", priority: "high" },
+  13: { text: "Türhaltevorrichtungen und Schließfolgeregler durch Fachfirma reparieren lassen", priority: "high" },
+  14: { text: "Beschädigte Brandschutztüren durch Fachfirma reparieren oder ersetzen lassen", priority: "high" },
+  15: { text: "Aktuellen Flucht- und Rettungsplan erstellen und gut sichtbar aushängen", priority: "high" },
+  16: { text: "Defekte Notausgangsbeleuchtung reparieren und regelmäßige Funktionsprüfung durchführen", priority: "high" },
+  17: { text: "Notausgänge freiräumen und dauerhaft freihalten, Mitarbeiter schulen", priority: "high" },
+  18: { text: "Notausgänge entriegeln, Öffnungsmechanismus prüfen und Zugänglichkeit sicherstellen", priority: "high" },
+  19: { text: "Fluchtwegeführung überprüfen und sichere Sammelpunkte definieren", priority: "high" },
+  20: { text: "Verkehrswege instand setzen, rutschfeste Beläge anbringen und Stolperstellen beseitigen", priority: "medium" },
+  21: { text: "Treppen reparieren, freiräumen und regelmäßige Kontrolle durchführen", priority: "medium" },
+  22: { text: "Geeignete PSA beschaffen und Mitarbeiter in der Verwendung schulen", priority: "high" },
+  23: { text: "Brennbares Material aus Technik- und Heizräumen entfernen und Lagerverbot durchsetzen", priority: "high" },
+  24: { text: "Technik- und Heizräume räumen und alternative Lagermöglichkeiten schaffen", priority: "high" },
+  25: { text: "Betriebsanweisungen aktualisieren, gut sichtbar aushängen und Einhaltung kontrollieren", priority: "medium" },
+  26: { text: "Steckverbindungen ordnungsgemäß verlegen und Stolperstellen beseitigen", priority: "medium" },
+  27: { text: "Arbeitsgeräte der Backstation warten und reparieren lassen", priority: "medium" },
+  28: { text: "Handwaschbecken reparieren oder ersetzen", priority: "medium" },
+  29: { text: "Elektroleitungen durch Fachkraft prüfen und ordnungsgemäß verlegen lassen", priority: "high" },
+  30: { text: "Zuleitung durch Elektrofachkraft VDE-konform erneuern lassen", priority: "high" },
+  31: { text: "Neue Backhandschuhe mit langer Stulpe beschaffen", priority: "medium" },
+  32: { text: "Heißgeräte durch Fachfirma warten und reparieren lassen", priority: "high" },
+  33: { text: "Hautschutzplan erstellen und gut sichtbar aushängen", priority: "medium" },
+  34: { text: "Hautschutz- und Hautpflegeprodukte beschaffen und bereitstellen", priority: "medium" },
+  35: { text: "Arbeitsgeräte im Servicebereich warten und reparieren lassen", priority: "medium" },
+  36: { text: "Glastüren und Glaswände in Augenhöhe mit Sicherheitsmarkierungen versehen", priority: "medium" },
+  37: { text: "Farbcodierte Schneidbretter und Messer beschaffen und Reinigungsplan erstellen", priority: "medium" },
+  38: { text: "Schneidbretter mit Messereinschub beschaffen", priority: "low" },
+  39: { text: "Geeignete Messerhalter beschaffen und installieren", priority: "low" },
+  40: { text: "Convenience-Geräte warten und reparieren lassen", priority: "medium" },
+  41: { text: "Fußraum an den Kassen freiräumen und Ordnung halten", priority: "low" },
+  42: { text: "Fußboden im Kassenbereich reparieren oder erneuern", priority: "medium" },
+  43: { text: "Brennbares Material von Heizgeräten entfernen und Sicherheitsabstand einhalten", priority: "high" },
+  44: { text: "Defekte Kassenstühle reparieren oder ersetzen", priority: "low" },
+  45: { text: "Transportband reparieren oder ersetzen, Lücken schließen", priority: "medium" },
+  46: { text: "Überglocken an der Kühlhausbeleuchtung installieren", priority: "medium" },
+  47: { text: "Notentriegelung installieren oder reparieren und Funktion prüfen", priority: "high" },
+  48: { text: "Rettungswegschilder ISO 7010 an Kühlhaustüren anbringen", priority: "high" },
+  49: { text: "Kühlhausbeleuchtung reparieren und regelmäßige Wartung durchführen", priority: "medium" },
+  50: { text: "Notruf-Funktion reparieren und regelmäßige Funktionsprüfung durchführen", priority: "high" },
+  51: { text: "Schwerlastregale durch Sachverständigen prüfen lassen", priority: "high" },
+  52: { text: "Anfahrschutz für Regale installieren", priority: "medium" },
+  53: { text: "Traglastangaben an allen Schwerlastregalen anbringen", priority: "medium" },
+  54: { text: "Absturzsicherung an der Rampe installieren", priority: "high" },
+  55: { text: "Absturzsicherung reparieren und ordnungsgemäß kennzeichnen", priority: "high" },
+  56: { text: "Müll-/Papierpresse durch Sachverständigen prüfen lassen", priority: "medium" },
+  57: { text: "Müll-/Papierpresse reparieren und Schutzeinrichtungen instand setzen", priority: "medium" },
+  58: { text: "Verkehrswege im Lager instand setzen und Stolperstellen beseitigen", priority: "medium" },
+  59: { text: "Aktuelle aushangpflichtige Unterlagen beschaffen und aushängen", priority: "medium" },
+  60: { text: "Nicht brennbare Unterlagen für hitzeentwickelnde Geräte beschaffen", priority: "medium" },
+  61: { text: "Erste-Hilfe-Koffer gut sichtbar und zugänglich montieren", priority: "high" },
+  62: { text: "Prüfung ortsveränderlicher elektrischer Betriebsmittel durch Elektrofachkraft veranlassen", priority: "medium" },
+  63: { text: "Aktuelle Liste und Prüfberichte erstellen und führen", priority: "medium" },
+  64: { text: "Verbandskasten auffüllen und regelmäßig kontrollieren", priority: "high" },
+  65: { text: "Dokumentation für Erste Hilfeleistungen einführen und führen", priority: "medium" },
+  66: { text: "Sicherheitsmaßnahmen gegen Raubüberfälle installieren (Türspion, Sicherheitsknauf)", priority: "high" },
+  67: { text: "Verfahren für sicheren Umgang mit Zahlungsmitteln etablieren und schulen", priority: "high" },
+  68: { text: "Unterweisungsprogramm für neue Mitarbeiter zu Arbeitssicherheit und Brandschutz erstellen", priority: "high" },
+  69: { text: "Ersthelfer ausbilden lassen und Anwesenheit während Öffnungszeiten sicherstellen", priority: "high" },
+  70: { text: "Brandschutzhelfer ausbilden lassen und Anwesenheit während Öffnungszeiten sicherstellen", priority: "high" },
+  71: { text: "Sicherheitsbeauftragten ausbilden lassen und offiziell bestellen", priority: "medium" },
+  72: { text: "Gefährdungsbeurteilung erstellen oder aktualisieren", priority: "high" },
+  73: { text: "Unterweisung für Personen im Bereich von CO2-Kühlanlagen durchführen", priority: "high" },
+  74: { text: "CO2-Sensoren freiräumen und regelmäßige Kontrolle durchführen", priority: "high" },
+  75: { text: "Sicherheitsvorrichtungen der CO2-Anlage reparieren und regelmäßig prüfen", priority: "high" },
+  76: { text: "Unterweisungsprogramm für Praktikanten und Schüleraushilfen erstellen und durchführen", priority: "medium" },
+  77: { text: "Dokumentationssystem für Unterweisungen einführen", priority: "medium" },
+  78: { text: "Verständniskontrolle bei Unterweisungen durchführen und dokumentieren", priority: "medium" },
+  79: { text: "Arbeitsmedizinische Vorsorge organisieren und Mitarbeitern anbieten", priority: "medium" },
+  80: { text: "Präventionsmaßnahmen gegen Hauterkrankungen implementieren", priority: "medium" },
+  81: { text: "Mitarbeitertoiletten und Pausenräume sauber und mit Seife, Einmalhandtüchern und ggf. Desinfektionsmittel ausgestattet", priority: "low" }, // New question, assigned a measure
+  82: { text: "Mitarbeiterwünsche systematisch in Arbeitsplanung einbeziehen", priority: "low" },
+  83: { text: "Pausenregelung überarbeiten und konsequent umsetzen", priority: "medium" },
+  84: { text: "Geeigneten Pausenraum einrichten", priority: "medium" },
+  85: { text: "Überstundenmanagement implementieren und Überstunden reduzieren", priority: "medium" },
+  86: { text: "Regelmäßige Teambesprechungen einführen und durchführen", priority: "low" },
+  87: { text: "Strukturiertes Einarbeitungsprogramm für neue Mitarbeiter entwickeln", priority: "medium" },
+  88: { text: "Unterweisung zu Brand- und Arbeitsschutz durchführen und dokumentieren", priority: "high" },
+  89: { text: "Schwarzes Brett für Mitarbeiterinformationen installieren", priority: "low" },
+  90: { text: "Kommunikationsprozess für transparente Entscheidungserläuterung etablieren", priority: "low" },
+  91: { text: "System für positive Leistungsrückmeldungen einführen", priority: "low" },
+  92: { text: "Schulung für Führungskräfte in konstruktiver Kritik durchführen", priority: "low" },
+  93: { text: "Weiterbildungsprogramm für Mitarbeiter entwickeln und anbieten", priority: "low" },
+  94: { text: "Informationsmaterial zur Suchtprävention aushängen", priority: "low" },
+  95: { text: "Betriebliches Wiedereingliederungsmanagement einführen", priority: "medium" },
+  96: { text: "Arbeitsorganisation überprüfen und Alleinarbeit minimieren", priority: "medium" },
+  97: { text: "Betreuungskonzept für Überfallsituationen entwickeln", priority: "high" },
+  98: { text: "Schulungen für Umgang mit gewalttätigen Situationen organisieren", priority: "medium" }
+};
 
 function frageVerneinen(satz) {
   return satz
@@ -1328,7 +1416,6 @@ function frageVerneinen(satz) {
     .replace(/\bgewährleistet\b/g, "nicht gewährleistet")
     .replace(/\bgesichert\b/g, "nicht gesichert");
 }
-
 
 function umformulieren(frage) {
   const original = frage.trim();
@@ -1384,16 +1471,21 @@ function umformulieren(frage) {
   return umformuliert;
 }
 
-
-
   function neinFragenInMaßnahmen() {
     const fragenzeilen = document.querySelectorAll('#fragenTabelle tr');
     const maßnahmenZeilen = document.querySelectorAll("#maßnahmen-tabelle td[contenteditable='true']");
-    maßnahmenZeilen.forEach(cell => cell.textContent = '');
+    maßnahmenZeilen.forEach(cell => cell.textContent = ''); // Clear existing content
 
-    let index = 0;
+    let index = 0; // This will be our global question counter, matching `measures` keys
+    let measuresAdded = 0;
+
     fragenzeilen.forEach(row => {
-      const frageText = row.cells[0]?.innerText;
+      const frageTextCell = row.cells[0];
+      if (!frageTextCell || frageTextCell.classList.contains('category-header')) {
+        return; // Skip category headers or invalid rows
+      }
+      index++; // Increment for each actual question row
+
       const radios = row.querySelectorAll('input[type="radio"]');
       let selected = null;
 
@@ -1401,16 +1493,25 @@ function umformulieren(frage) {
         if (r.checked) selected = r.value;
       });
 
-      if (selected === 'nein' && index < maßnahmenZeilen.length) {
-        const umformulierteFrage = umformulieren(frageText);
-        maßnahmenZeilen[index].textContent = umformulierteFrage;
-        index++;
+      if (selected === 'nein' && measuresAdded < maßnahmenZeilen.length) {
+        const measure = measures[index]; // Get the specific measure using the global index
+        let textToInsert = "";
+
+        if (measure && measure.text) {
+          textToInsert = measure.text;
+        } else {
+          // Fallback to umformulieren if no specific measure is found
+          textToInsert = umformulieren(frageTextCell.innerText);
+        }
+        
+        maßnahmenZeilen[measuresAdded].textContent = textToInsert;
+        measuresAdded++;
       }
     });
 
-    if (index === 0) {
+    if (measuresAdded === 0) {
       alert("✅ Es wurden keine Fragen mit 'nein' beantwortet.");
-    } else if (index >= maßnahmenZeilen.length) {
+    } else if (measuresAdded >= maßnahmenZeilen.length) {
       alert("⚠️ Mehr als 15 'nein'-Antworten – nur die ersten 15 wurden übernommen.");
     }
   }
