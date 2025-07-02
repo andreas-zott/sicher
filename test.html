@@ -6,7 +6,7 @@
 <title>Arbeitssicherheit-Checkliste-2025</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
 <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon" />
-<link href="/sicher/manifest.json" rel="manifest"/>
+<link href="/sicher/manifest-unten-farbig.json" rel="manifest" />
 <style>
 #signature-pad {
   border: 2px solid #cccccc;
@@ -920,11 +920,7 @@ Wenn eine Frage mit „nein“ beantwortet wurde, besteht Handlungsbedarf.
 </tbody>
 </table>
 <br>
-<div style="display: flex; justify-content: center; gap: 16px; margin: 20px 0;">
-<button onclick="neinFragenInMaßnahmen()">⛔ Nein-Fragen automatisch einfügen</button>
-<button onclick="neinAntwortenEinfügenUndÖffnen()">📝 „Nein“-Antworten übernehmen & anzeigen</button>
-</div>
-<br>
+
 <h2 class="page-break-before" style="text-align: center;">
 Beschreibung der Maßnahmen zur Beseitigung von Defiziten
 </h2>
@@ -1454,42 +1450,9 @@ function neinFragenInMaßnahmen() {
     }
   });
 
-  if (index === 0) {
-    alert("✅ Es wurden keine Fragen mit 'nein' beantwortet.");
-  } else if (index >= maßnahmenZeilen.length) {
+  if (index >= maßnahmenZeilen.length) {
     alert("⚠️ Mehr als 15 'nein'-Antworten – nur die ersten 15 wurden übernommen.");
   }
-}
-
-function neinAntwortenEinfügenUndÖffnen() {
-  const alleZeilen = document.querySelectorAll("#fragenTabelle tr");
-  const neinAntworten = [];
-
-  alleZeilen.forEach(row => {
-    const zellen = row.querySelectorAll("td");
-    if (zellen.length >= 4) {
-      const frageText = zellen[0]?.innerText.trim();
-      const radios = row.querySelectorAll("input[type='radio']");
-      radios.forEach(radio => {
-        if (radio.checked && radio.value === "nein") {
-          neinAntworten.push(frageText);
-        }
-      });
-    }
-  });
-
-  const maßnahmenZeilen = document.querySelectorAll('#maßnahmen-tabelle td[contenteditable]');
-  neinAntworten.forEach((text, index) => {
-    if (maßnahmenZeilen[index]) {
-      // This function is intended to display the raw "No" answers, not transformed measures.
-      maßnahmenZeilen[index].innerText = text;
-    }
-  });
-
-  const win = window.open('defizite.html', '_blank');
-  setTimeout(() => {
-    win?.postMessage({ neinAntworten }, "*");
-  }, 500);
 }
 
 // Init
@@ -1503,6 +1466,15 @@ window.addEventListener("load", () => {
     const heute = new Date().toISOString().split('T')[0];
     datumsfeld.value = heute;
   }
+
+  // Add event listeners to all radio buttons to trigger measure generation
+  const radioButtons = document.querySelectorAll('#fragenTabelle input[type="radio"]');
+  radioButtons.forEach(radio => {
+    radio.addEventListener('change', neinFragenInMaßnahmen);
+  });
+
+  // Initial call to populate measures if any 'No' answers are pre-selected
+  neinFragenInMaßnahmen();
 });
 
 canvas.addEventListener('mousedown', startDrawing);
