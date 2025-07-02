@@ -1,748 +1,692 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Arbeitssicherheit-Checkliste-2025</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/exif-js@2.3.0/exif.js"></script>
-<link href="/sicher/favicon.ico" rel="icon" type="image/x-icon" />
-<link href="/sicher/manifest.json" rel="manifest" />
-<style>
-  body {
-    background-color: #d0e7ff;
-    color: #212529;
-    padding: 1rem;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
-    font-family: Arial, sans-serif;
-    position: relative;
-  }
-  
-  body.dark-mode {
-    background-color: #121212;
-    color: #eee;
-  }
-  
-  body.dark-mode input,
-  body.dark-mode select,
-  body.dark-mode button,
-  body.dark-mode textarea {
-    background-color: #333;
-    color: #eee;
-    border-color: #555;
-  }
-  
-  body.dark-mode label {
-    color: #ccc;
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Arbeitssicherheit-Checkliste-2025</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/exif-js@2.3.0/exif.js"></script>
+  <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon" />
+  <link href="/sicher/manifest.json" rel="manifest" />
+  <style>
+    body {
+      background-color: #d0e7ff;
+      color: #212529;
+      padding: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      position: relative;
+    }
+    
+    body.dark-mode {
+      background-color: #121212;
+      color: #eee;
+    }
+    
+    body.dark-mode input,
+    body.dark-mode select,
+    body.dark-mode button,
+    body.dark-mode textarea {
+      background-color: #333;
+      color: #eee;
+      border-color: #555;
+    }
+    
+    body.dark-mode label {
+      color: #ccc;
+    }
 
-  .container-box {
-    background-color: white;
-    max-width: 800px;
-    width: 100%;
-    padding: 2rem 2rem 3rem 2rem;
-    box-shadow: 0 0 15px rgba(0,0,0,0.15);
-    border-radius: 12px;
-    box-sizing: border-box;
-  }
-  
-  body.dark-mode .container-box {
-    background-color: #1e1e1e;
-    box-shadow: 0 0 20px rgba(255,255,255,0.1);
-  }
-
-  #vorschauContainer .img-wrapper {
-    position: relative;
-    display: inline-block;
-    max-width: 150px;
-    margin: 5px;
-    vertical-align: top;
-  }
-
-  #vorschauContainer img {
-    border-radius: 10px;
-    max-height: 120px;
-    width: 150px;
-    object-fit: cover;
-    display: block;
-    margin-bottom: 5px;
-  }
-  
-  #vorschauContainer textarea {
-    width: 150px;
-    resize: vertical;
-    font-size: 0.9rem;
-    padding: 4px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-    min-height: 50px;
-  }
-
-  .orientation-indicator {
-    position: absolute;
-    top: 30px;
-    left: 5px;
-    background-color: rgba(0, 123, 255, 0.9);
-    color: white;
-    font-size: 10px;
-    padding: 2px 5px;
-    border-radius: 8px;
-    font-weight: bold;
-    z-index: 5;
-  }
-
-  .delete-btn {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background-color: rgba(255, 0, 0, 0.8);
-    color: white;
-    font-weight: bold;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    user-select: none;
-    z-index: 10;
-    border: none;
-  }
-
-  .delete-btn:hover {
-    background-color: rgba(255, 0, 0, 1);
-  }
-
-  @media (max-width: 768px) {
     .container-box {
-      padding: 1.5rem 1rem 2rem 1rem;
-      max-width: 100%;
+      background-color: white;
+      max-width: 800px;
+      width: 100%;
+      padding: 2rem 2rem 3rem 2rem;
+      box-shadow: 0 0 15px rgba(0,0,0,0.15);
+      border-radius: 12px;
+      box-sizing: border-box;
     }
     
-    #vorschauContainer img,
-    #vorschauContainer textarea {
-      max-height: 100px;
-      width: 100px;
+    body.dark-mode .container-box {
+      background-color: #1e1e1e;
+      box-shadow: 0 0 20px rgba(255,255,255,0.1);
     }
-    
+
     #vorschauContainer .img-wrapper {
-      max-width: 100px;
+      position: relative;
+      display: inline-block;
+      max-width: 150px;
+      margin: 5px;
+      vertical-align: top;
     }
-  }
 
-  footer {
-    font-size: 0.8rem;
-    color: #666c7a;
-    margin-top: 2.5rem;
-  }
-  
-  body.dark-mode footer {
-    color: #aaa;
-  }
+    #vorschauContainer img {
+      border-radius: 10px;
+      max-height: 120px;
+      width: 150px;
+      object-fit: cover;
+      display: block;
+      margin-bottom: 5px;
+    }
+    
+    #vorschauContainer textarea {
+      width: 150px;
+      resize: vertical;
+      font-size: 0.9rem;
+      padding: 4px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+      min-height: 50px;
+    }
 
-  #darkModeToggle {
-    position: fixed;
-    top: 1rem;
-    right: 1rem;
-    width: 36px;
-    height: 36px;
-    background: transparent;
-    color: #004080;
-    border: none;
-    border-radius: 50%;
-    font-size: 1rem;
-    cursor: pointer;
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-  }
+    .delete-btn {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background-color: rgba(255, 0, 0, 0.8);
+      color: white;
+      font-weight: bold;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      z-index: 10;
+      border: none;
+    }
 
-  #darkModeToggle:hover {
-    background-color: rgba(0, 64, 128, 0.1);
-  }
+    .delete-btn:hover {
+      background-color: rgba(255, 0, 0, 1);
+    }
 
-  body.dark-mode #darkModeToggle {
-    color: #ffd700;
-  }
+    @media (max-width: 768px) {
+      .container-box {
+        padding: 1.5rem 1rem 2rem 1rem;
+        max-width: 100%;
+      }
+      
+      #vorschauContainer img,
+      #vorschauContainer textarea {
+        max-height: 100px;
+        width: 100px;
+      }
+      
+      #vorschauContainer .img-wrapper {
+        max-width: 100px;
+      }
+    }
 
-  #formatHinweis {
-    position: fixed;
-    top: 250px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #fff3cd;
-    border: 1px solid #ffeaa7;
-    padding: 12px 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
-    font-weight: bold;
-    z-index: 2000;
-    max-width: 600px;
-    text-align: center;
-    font-family: Arial, sans-serif;
-    cursor: pointer;
-    animation: fadeIn 0.5s ease-in;
-  }
+    footer {
+      font-size: 0.8rem;
+      color: #666c7a;
+      margin-top: 2.5rem;
+    }
+    
+    body.dark-mode footer {
+      color: #aaa;
+    }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
-    to { opacity: 1; transform: translateX(-50%) translateY(0); }
-  }
+    #darkModeToggle {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      width: 36px;
+      height: 36px;
+      background: transparent;
+      color: #004080;
+      border: none;
+      border-radius: 50%;
+      font-size: 1rem;
+      cursor: pointer;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
 
-  .btn-loading {
-    position: relative;
-    pointer-events: none;
-  }
+    #darkModeToggle:hover {
+      background-color: rgba(0, 64, 128, 0.1);
+    }
 
-  .btn-loading::after {
-    content: "";
-    position: absolute;
-    width: 16px;
-    height: 16px;
-    margin: auto;
-    border: 2px solid transparent;
-    border-top-color: #ffffff;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-  }
+    body.dark-mode #darkModeToggle {
+      color: #ffd700;
+    }
 
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-</style>
+    #formatHinweis {
+      position: fixed;
+      top: 250px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #fff3cd;
+      border: 1px solid #ffeaa7;
+      padding: 12px 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      font-weight: bold;
+      z-index: 2000;
+      max-width: 600px;
+      text-align: center;
+      font-family: Arial, sans-serif;
+      cursor: pointer;
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    .btn-loading {
+      position: relative;
+      pointer-events: none;
+    }
+
+    .btn-loading::after {
+      content: "";
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      margin: auto;
+      border: 2px solid transparent;
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
 </head>
 <body>
 
 <button id="darkModeToggle" aria-label="Dark Mode umschalten" title="Dark Mode umschalten">🌙</button>
 
 <div id="formatHinweis">
-📸 iPad-optimiert: Automatische Anpassung von Hoch- und Querformat in der PDF-Ausgabe.
-<br><small>Klick zum Schließen</small>
+  📸 Bitte nehmen Sie ausschließlich Fotos im <span style="color:#007bff;">Querformat</span> auf. 
+  <br><small>Klick zum Schließen</small>
 </div>
 
 <div class="container-box">
-<h1 class="mb-4 text-center">Arbeitssicherheit-Checkliste-2025</h1>
+  <h1 class="mb-4 text-center">Arbeitssicherheit-Checkliste-2025</h1>
 
-<form id="formular" class="mb-4">
-  <div class="mb-3">
-    <label for="datum" class="form-label">Datum:</label>
-    <input type="date" id="datum" name="datum" class="form-control" required />
-  </div>
+  <form id="formular" class="mb-4">
+    <div class="mb-3">
+      <label for="datum" class="form-label">Datum:</label>
+      <input type="date" id="datum" name="datum" class="form-control" required />
+    </div>
 
-  <div class="mb-3">
-    <label for="marktnummer" class="form-label">Marktnummer:</label>
-    <input type="text" id="marktnummer" name="marktnummer" class="form-control" placeholder="z.B. M123" required />
-  </div>
+    <div class="mb-3">
+      <label for="marktnummer" class="form-label">Marktnummer:</label>
+      <input type="text" id="marktnummer" name="marktnummer" class="form-control" placeholder="z.B. M123" required />
+    </div>
 
-  <div class="mb-3">
-    <label for="name" class="form-label">Name:</label>
-    <input type="text" id="name" name="name" class="form-control" placeholder="Ihr Name" required />
-  </div>
+    <div class="mb-3">
+      <label for="name" class="form-label">Name:</label>
+      <input type="text" id="name" name="name" class="form-control" placeholder="Ihr Name" required />
+    </div>
 
-  <div class="mb-3">
-    <label for="sifa" class="form-label">SiFa:</label>
-    <input type="text" id="sifa" name="sifa" class="form-control" placeholder="Sicherheitsfachkraft" required />
-  </div>
+    <div class="mb-3">
+      <label for="sifa" class="form-label">SiFa:</label>
+      <input type="text" id="sifa" name="sifa" class="form-control" placeholder="Sicherheitsfachkraft" required />
+    </div>
 
-  <div class="mb-3">
-    <label class="form-label">Foto aufnehmen (Kamera):</label>
-    <input type="file" id="foto" accept="image/*" capture="environment" multiple style="display:none;" />
-    <button type="button" id="fotoBtn" class="btn btn-primary w-100">📷 Foto aufnehmen</button>
-  </div>
+    <div class="mb-3">
+      <label class="form-label">Foto aufnehmen (Kamera):</label>
+      <input type="file" id="foto" accept="image/*" capture="environment" multiple style="display:none;" />
+      <button type="button" id="fotoBtn" class="btn btn-primary w-100">📷 Foto aufnehmen</button>
+    </div>
 
-  <div class="mb-3">
-    <label for="upload" class="form-label">Dateien auswählen (Galerie):</label>
-    <input type="file" id="upload" accept="image/*" multiple class="form-control" />
-  </div>
+    <div class="mb-3">
+      <label for="upload" class="form-label">Dateien auswählen (Galerie):</label>
+      <input type="file" id="upload" accept="image/*" multiple class="form-control" />
+    </div>
 
-  <div id="vorschauContainer" class="mb-3"></div>
+    <div id="vorschauContainer" class="mb-3"></div>
 
-  <button type="button" id="pdfSpeichern" class="btn btn-success w-100" onclick="speichernAlsPDF()">💾 Als PDF speichern</button>
-  <button type="button" id="pdfTeilen" class="btn btn-info w-100 mt-2" onclick="pdfTeileniPad()">📤 PDF teilen (iPad)</button>
-</form>
+    <button type="button" id="pdfSpeichern" class="btn btn-success w-100" onclick="speichernAlsPDF()">💾 Als PDF speichern</button>
+    <button type="button" id="pdfTeilen" class="btn btn-info w-100 mt-2" onclick="pdfTeileniPad()">📤 PDF teilen (iPad)</button>
+  </form>
 
-<footer class="text-center">
-  &copy; <span id="jahr1"></span> Andreas Zott. Alle Rechte vorbehalten. (SiFa) Arbeitssicherheit <span id="jahr2"></span>
-</footer>
+  <footer class="text-center">
+    &copy; <span id="jahr1"></span> Andreas Zott. Alle Rechte vorbehalten. (SiFa) Arbeitssicherheit <span id="jahr2"></span>
+  </footer>
 </div>
 
 <script>
-const fotoInput = document.getElementById("foto");
-const uploadInput = document.getElementById("upload");
-const fotoButton = document.getElementById("fotoBtn");
-const vorschauContainer = document.getElementById("vorschauContainer");
-const darkModeToggle = document.getElementById("darkModeToggle");
-let bilder = [];
+  const fotoInput = document.getElementById("foto");
+  const uploadInput = document.getElementById("upload");
+  const fotoButton = document.getElementById("fotoBtn");
+  const vorschauContainer = document.getElementById("vorschauContainer");
+  const darkModeToggle = document.getElementById("darkModeToggle");
+  let bilder = [];
 
-// Dark Mode Toggle
-darkModeToggle.addEventListener("click", () => {
-  document.body.classList.toggle("dark-mode");
-  darkModeToggle.textContent = document.body.classList.contains("dark-mode") ? "☀️" : "🌙";
-  localStorage.setItem('darkMode', document.body.classList.contains("dark-mode"));
-});
+  // Dark Mode Toggle
+  darkModeToggle.addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
+    darkModeToggle.textContent = document.body.classList.contains("dark-mode") ? "☀️" : "🌙";
+    localStorage.setItem('darkMode', document.body.classList.contains("dark-mode"));
+  });
 
-// Dark Mode aus localStorage laden
-if (localStorage.getItem('darkMode') === 'true') {
-  document.body.classList.add("dark-mode");
-  darkModeToggle.textContent = "☀️";
-}
+  // Dark Mode aus localStorage laden
+  if (localStorage.getItem('darkMode') === 'true') {
+    document.body.classList.add("dark-mode");
+    darkModeToggle.textContent = "☀️";
+  }
 
-fotoButton.addEventListener("click", () => {
-  fotoInput.click();
-});
+  fotoButton.addEventListener("click", () => {
+    fotoInput.click();
+  });
 
-fotoInput.addEventListener("change", handleFile);
-uploadInput.addEventListener("change", handleFile);
+  fotoInput.addEventListener("change", handleFile);
+  uploadInput.addEventListener("change", handleFile);
 
-// Vereinfachte Orientierungserkennung für iPad-Kompatibilität
-function getImageOrientation(width, height) {
-  const ratio = width / height;
-  if (ratio > 1.3) return 'landscape';
-  if (ratio < 0.75) return 'portrait';
-  return 'square';
-}
+  function handleFile(event) {
+    const files = event.target.files;
+    
+    if (files.length === 0) return;
 
-function handleFile(event) {
-  const files = event.target.files;
-  
-  if (files.length === 0) return;
-
-  for (const file of files) {
-    if (file && file.type.startsWith("image/")) {
-      if (bilder.length >= 16) {
-        alert("Maximal 16 Bilder erlaubt.");
-        break;
-      }
-      
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const img = new Image();
-        img.onload = function () {
-          try {
-            // Vereinfachte EXIF-Verarbeitung mit Fallback
-            if (typeof EXIF !== 'undefined' && EXIF.getData) {
+    for (const file of files) {
+      if (file && file.type.startsWith("image/")) {
+        if (bilder.length >= 16) {
+          alert("Maximal 16 Bilder erlaubt.");
+          break;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const img = new Image();
+          img.onload = function () {
+            try {
               EXIF.getData(img, function () {
-                processImageWithOrientation(img, e.target.result, this);
+                const orientation = EXIF.getTag(this, "Orientation") || 1;
+                const canvas = document.createElement("canvas");
+                const ctx = canvas.getContext("2d");
+                
+                let { width, height } = img;
+                
+                if (orientation >= 5 && orientation <= 8) {
+                  canvas.width = height;
+                  canvas.height = width;
+                } else {
+                  canvas.width = width;
+                  canvas.height = height;
+                }
+                
+                switch (orientation) {
+                  case 2:
+                    ctx.translate(width, 0);
+                    ctx.scale(-1, 1);
+                    break;
+                  case 3:
+                    ctx.translate(width, height);
+                    ctx.rotate(Math.PI);
+                    break;
+                  case 4:
+                    ctx.translate(0, height);
+                    ctx.scale(1, -1);
+                    break;
+                  case 5:
+                    ctx.rotate(0.5 * Math.PI);
+                    ctx.scale(1, -1);
+                    ctx.translate(0, -height);
+                    break;
+                  case 6:
+                    ctx.rotate(0.5 * Math.PI);
+                    ctx.translate(0, -height);
+                    break;
+                  case 7:
+                    ctx.rotate(0.5 * Math.PI);
+                    ctx.translate(width, -height);
+                    ctx.scale(-1, 1);
+                    break;
+                  case 8:
+                    ctx.rotate(-0.5 * Math.PI);
+                    ctx.translate(-width, 0);
+                    break;
+                  default:
+                    break;
+                }
+                
+                ctx.drawImage(img, 0, 0);
+                const finalImage = canvas.toDataURL("image/jpeg", 0.8);
+                bilder.push({ src: finalImage, kommentar: "" });
+                renderVorschau();
               });
-            } else {
-              // Fallback ohne EXIF
-              processImageSimple(img, e.target.result);
+            } catch (error) {
+              console.error("EXIF-Verarbeitung fehlgeschlagen:", error);
+              bilder.push({ src: e.target.result, kommentar: "" });
+              renderVorschau();
             }
-          } catch (error) {
-            console.warn("EXIF-Verarbeitung übersprungen:", error);
-            processImageSimple(img, e.target.result);
-          }
+          };
+          
+          img.onerror = function() {
+            console.error("Fehler beim Laden des Bildes");
+            alert("Fehler beim Laden des Bildes. Bitte versuchen Sie es erneut.");
+          };
+          
+          img.src = e.target.result;
         };
         
-        img.onerror = function() {
-          console.error("Fehler beim Laden des Bildes");
-          alert("Fehler beim Laden des Bildes. Bitte versuchen Sie es erneut.");
+        reader.onerror = function() {
+          console.error("Fehler beim Lesen der Datei");
+          alert("Fehler beim Lesen der Datei. Bitte versuchen Sie es erneut.");
         };
         
-        img.src = e.target.result;
-      };
-      
-      reader.onerror = function() {
-        console.error("Fehler beim Lesen der Datei");
-        alert("Fehler beim Lesen der Datei. Bitte versuchen Sie es erneut.");
-      };
-      
-      reader.readAsDataURL(file);
-    }
-  }
-  
-  event.target.value = "";
-}
-
-function processImageWithOrientation(img, imageSrc, exifThis) {
-  try {
-    const orientation = EXIF.getTag(exifThis, "Orientation") || 1;
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-    
-    let { width, height } = img;
-    
-    // Canvas-Dimensionen basierend auf Orientierung
-    if (orientation >= 5 && orientation <= 8) {
-      canvas.width = height;
-      canvas.height = width;
-    } else {
-      canvas.width = width;
-      canvas.height = height;
-    }
-    
-    // Einfache Transformationen
-    switch (orientation) {
-      case 3:
-        ctx.translate(width, height);
-        ctx.rotate(Math.PI);
-        break;
-      case 6:
-        ctx.rotate(0.5 * Math.PI);
-        ctx.translate(0, -height);
-        break;
-      case 8:
-        ctx.rotate(-0.5 * Math.PI);
-        ctx.translate(-width, 0);
-        break;
-      default:
-        break;
-    }
-    
-    ctx.drawImage(img, 0, 0);
-    const finalImage = canvas.toDataURL("image/jpeg", 0.8);
-    
-    // Orientierung nach Korrektur bestimmen
-    const imageOrientation = getImageOrientation(canvas.width, canvas.height);
-    
-    bilder.push({ 
-      src: finalImage, 
-      kommentar: "",
-      orientation: imageOrientation,
-      width: canvas.width,
-      height: canvas.height
-    });
-    
-    renderVorschau();
-  } catch (error) {
-    console.warn("EXIF-Verarbeitung fehlgeschlagen, verwende Original:", error);
-    processImageSimple(img, imageSrc);
-  }
-}
-
-function processImageSimple(img, imageSrc) {
-  const imageOrientation = getImageOrientation(img.width, img.height);
-  
-  bilder.push({ 
-    src: imageSrc, 
-    kommentar: "",
-    orientation: imageOrientation,
-    width: img.width,
-    height: img.height
-  });
-  
-  renderVorschau();
-}
-
-function renderVorschau() {
-  vorschauContainer.innerHTML = "";
-  
-  if (bilder.length === 0) {
-    vorschauContainer.innerHTML = '<p class="text-muted text-center">Keine Bilder ausgewählt</p>';
-    return;
-  }
-  
-  bilder.forEach((bildObj, index) => {
-    const wrapper = document.createElement("div");
-    wrapper.className = "img-wrapper";
-
-    const imgElement = document.createElement("img");
-    imgElement.src = bildObj.src;
-    imgElement.alt = `Foto ${index + 1}`;
-    imgElement.loading = "lazy";
-
-    // Orientierungsanzeige
-    const orientationIndicator = document.createElement("div");
-    orientationIndicator.className = "orientation-indicator";
-    const orientationText = bildObj.orientation === 'landscape' ? 'Quer' : 
-                           bildObj.orientation === 'portrait' ? 'Hoch' : 'Quad';
-    orientationIndicator.textContent = orientationText;
-
-    const deleteBtn = document.createElement("button");
-    deleteBtn.textContent = "✖";
-    deleteBtn.className = "delete-btn";
-    deleteBtn.type = "button";
-    deleteBtn.title = "Foto löschen";
-    deleteBtn.setAttribute('aria-label', `Foto ${index + 1} löschen`);
-    deleteBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      if (confirm("Möchten Sie dieses Foto wirklich löschen?")) {
-        bilder.splice(index, 1);
-        renderVorschau();
+        reader.readAsDataURL(file);
       }
+    }
+    
+    event.target.value = "";
+  }
+
+  function renderVorschau() {
+    vorschauContainer.innerHTML = "";
+    
+    if (bilder.length === 0) {
+      vorschauContainer.innerHTML = '<p class="text-muted text-center">Keine Bilder ausgewählt</p>';
+      return;
+    }
+    
+    bilder.forEach((bildObj, index) => {
+      const wrapper = document.createElement("div");
+      wrapper.className = "img-wrapper";
+
+      const imgElement = document.createElement("img");
+      imgElement.src = bildObj.src;
+      imgElement.alt = `Foto ${index + 1}`;
+      imgElement.loading = "lazy";
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.textContent = "✖";
+      deleteBtn.className = "delete-btn";
+      deleteBtn.type = "button";
+      deleteBtn.title = "Foto löschen";
+      deleteBtn.setAttribute('aria-label', `Foto ${index + 1} löschen`);
+      deleteBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (confirm("Möchten Sie dieses Foto wirklich löschen?")) {
+          bilder.splice(index, 1);
+          renderVorschau();
+        }
+      });
+
+      const kommentar = document.createElement("textarea");
+      kommentar.placeholder = "Kommentar hier eingeben...";
+      kommentar.value = bildObj.kommentar;
+      kommentar.setAttribute('aria-label', `Kommentar für Foto ${index + 1}`);
+      kommentar.addEventListener("input", (e) => {
+        bilder[index].kommentar = e.target.value;
+      });
+
+      wrapper.appendChild(imgElement);
+      wrapper.appendChild(deleteBtn);
+      wrapper.appendChild(kommentar);
+      vorschauContainer.appendChild(wrapper);
     });
-
-    const kommentar = document.createElement("textarea");
-    kommentar.placeholder = "Kommentar hier eingeben...";
-    kommentar.value = bildObj.kommentar;
-    kommentar.setAttribute('aria-label', `Kommentar für Foto ${index + 1}`);
-    kommentar.addEventListener("input", (e) => {
-      bilder[index].kommentar = e.target.value;
-    });
-
-    wrapper.appendChild(imgElement);
-    wrapper.appendChild(orientationIndicator);
-    wrapper.appendChild(deleteBtn);
-    wrapper.appendChild(kommentar);
-    vorschauContainer.appendChild(wrapper);
-  });
-}
-
-function validateForm() {
-  const datum = document.getElementById("datum").value;
-  const marktnummer = document.getElementById("marktnummer").value;
-  const name = document.getElementById("name").value;
-  const sifa = document.getElementById("sifa").value;
-
-  if (!datum || !marktnummer || !name || !sifa) {
-    alert("Bitte füllen Sie alle Pflichtfelder aus.");
-    return false;
   }
 
-  if (bilder.length === 0) {
-    alert("Bitte fügen Sie mindestens ein Foto hinzu.");
-    return false;
+  function validateForm() {
+    const datum = document.getElementById("datum").value;
+    const marktnummer = document.getElementById("marktnummer").value;
+    const name = document.getElementById("name").value;
+    const sifa = document.getElementById("sifa").value;
+
+    if (!datum || !marktnummer || !name || !sifa) {
+      alert("Bitte füllen Sie alle Pflichtfelder aus.");
+      return false;
+    }
+
+    if (bilder.length === 0) {
+      alert("Bitte fügen Sie mindestens ein Foto hinzu.");
+      return false;
+    }
+
+    return true;
   }
 
-  return true;
-}
+  function createPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: "pt", format: "a4" });
+    const margin = 40;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const cols = 2;
+    const rows = 2;
+    const imagesPerPage = cols * rows;
+    const cellWidth = (pageWidth - margin * 2) / cols;
+    const cellHeight = (pageHeight - margin * 2 - 60) / rows;
 
-// Vereinfachte, iPad-optimierte PDF-Erstellung
-function createPDF() {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ unit: "pt", format: "a4" });
-  const margin = 40;
-  const pageWidth = doc.internal.pageSize.getWidth();
-  const pageHeight = doc.internal.pageSize.getHeight();
+    const datum = document.getElementById("datum").value;
+    const marktnummer = document.getElementById("marktnummer").value;
+    const name = document.getElementById("name").value;
+    const sifa = document.getElementById("sifa").value;
 
-  const datum = document.getElementById("datum").value;
-  const marktnummer = document.getElementById("marktnummer").value;
-  const name = document.getElementById("name").value;
-  const sifa = document.getElementById("sifa").value;
+    function drawHeader() {
+      doc.setFontSize(18);
+      doc.setFont(undefined, 'bold');
+      doc.text("Arbeitssicherheit-Checkliste-2025", margin, margin + 20);
+      
+      doc.setFontSize(11);
+      doc.setFont(undefined, 'normal');
+      doc.text(`Datum: ${datum}`, margin, margin + 45);
+      doc.text(`Marktnummer: ${marktnummer}`, margin + 200, margin + 45);
+      doc.text(`Name: ${name}`, margin, margin + 60);
+      doc.text(`SiFa: ${sifa}`, margin + 200, margin + 60);
+      
+      doc.setLineWidth(1);
+      doc.line(margin, margin + 70, pageWidth - margin, margin + 70);
+    }
 
-  function drawHeader() {
-    doc.setFontSize(18);
-    doc.setFont(undefined, 'bold');
-    doc.text("Arbeitssicherheit-Checkliste-2025", margin, margin + 20);
-    
-    doc.setFontSize(11);
-    doc.setFont(undefined, 'normal');
-    doc.text(`Datum: ${datum}`, margin, margin + 45);
-    doc.text(`Marktnummer: ${marktnummer}`, margin + 200, margin + 45);
-    doc.text(`Name: ${name}`, margin, margin + 60);
-    doc.text(`SiFa: ${sifa}`, margin + 200, margin + 60);
-    
-    doc.setLineWidth(1);
-    doc.line(margin, margin + 70, pageWidth - margin, margin + 70);
-  }
-
-  // Adaptive Layout-Logik
-  let currentPage = 0;
-  let currentY = margin + 90;
-  const availableWidth = pageWidth - margin * 2;
-  const maxImageHeight = 300;
-
-  for (let i = 0; i < bilder.length; i++) {
-    const bildObj = bilder[i];
-    
-    // Neue Seite wenn nötig
-    if (currentPage === 0 || currentY + maxImageHeight + 100 > pageHeight - margin) {
-      if (currentPage > 0) doc.addPage();
+    let page = 0;
+    for (let i = 0; i < bilder.length; i += imagesPerPage) {
+      if (page > 0) doc.addPage();
       drawHeader();
-      currentY = margin + 90;
-      currentPage++;
+
+      const bilderSeite = bilder.slice(i, i + imagesPerPage);
+      
+      for (let j = 0; j < bilderSeite.length; j++) {
+        const bildObj = bilderSeite[j];
+        const img = bildObj.src;
+        const kommentar = bildObj.kommentar || "";
+
+        const col = j % cols;
+        const row = Math.floor(j / cols);
+
+        const x = margin + col * cellWidth;
+        const y = margin + 80 + row * cellHeight;
+
+        const maxW = cellWidth * 0.9;
+        const maxH = cellHeight * 0.7;
+
+        let imgProps;
+        try {
+          imgProps = doc.getImageProperties(img);
+        } catch (error) {
+          console.error("Fehler beim Verarbeiten des Bildes:", error);
+          continue;
+        }
+
+        let ratio = imgProps.width / imgProps.height;
+        let imgW = maxW;
+        let imgH = imgW / ratio;
+
+        if (imgH > maxH) {
+          imgH = maxH;
+          imgW = imgH * ratio;
+        }
+
+        const offsetX = x + (cellWidth - imgW) / 2;
+        const offsetY = y + 10;
+
+        try {
+          doc.addImage(img, "JPEG", offsetX, offsetY, imgW, imgH);
+        } catch (error) {
+          console.error("Fehler beim Hinzufügen des Bildes zum PDF:", error);
+          continue;
+        }
+
+        if (kommentar) {
+          doc.setFontSize(9);
+          const textLines = doc.splitTextToSize(kommentar, cellWidth - 20);
+          doc.text(textLines, x + 10, offsetY + imgH + 15);
+        }
+      }
+      page++;
     }
 
-    let imageWidth, imageHeight;
-    
-    // Einfache Orientierungslogik
-    if (bildObj.orientation === 'portrait') {
-      // Hochformat: Schmaler aber höher
-      imageWidth = availableWidth * 0.5;
-      imageHeight = maxImageHeight * 1.2;
-    } else {
-      // Querformat/Quadratisch: Breiter aber niedriger
-      imageWidth = availableWidth * 0.8;
-      imageHeight = maxImageHeight * 0.8;
-    }
+    return doc;
+  }
 
-    const x = margin + (availableWidth - imageWidth) / 2;
+  function speichernAlsPDF() {
+    if (!validateForm()) return;
+
+    const button = document.getElementById("pdfSpeichern");
+    button.classList.add("btn-loading");
+    button.disabled = true;
 
     try {
-      // Bild hinzufügen
-      const imgProps = doc.getImageProperties(bildObj.src);
-      const ratio = imgProps.width / imgProps.height;
-      
-      let finalWidth = imageWidth;
-      let finalHeight = finalWidth / ratio;
-      
-      if (finalHeight > imageHeight) {
-        finalHeight = imageHeight;
-        finalWidth = finalHeight * ratio;
-      }
-
-      const centerX = x + (imageWidth - finalWidth) / 2;
-      
-      doc.addImage(bildObj.src, "JPEG", centerX, currentY, finalWidth, finalHeight);
-      
-      // Kommentar hinzufügen
-      if (bildObj.kommentar) {
-        doc.setFontSize(9);
-        const textLines = doc.splitTextToSize(bildObj.kommentar, imageWidth);
-        doc.text(textLines, x, currentY + finalHeight + 20);
-        currentY += finalHeight + 40 + (textLines.length * 12);
-      } else {
-        currentY += finalHeight + 30;
-      }
-      
+      const doc = createPDF();
+      const datum = document.getElementById("datum").value;
+      const marktnummer = document.getElementById("marktnummer").value;
+      const filename = `arbeitssicherheit-checkliste-${datum}-${marktnummer}.pdf`;
+      doc.save(filename);
     } catch (error) {
-      console.error("Fehler beim Hinzufügen des Bildes:", error);
-      currentY += 50; // Platz für Fehlermeldung
+      console.error("Fehler beim Erstellen des PDFs:", error);
+      alert("Fehler beim Erstellen des PDFs. Bitte versuchen Sie es erneut.");
+    } finally {
+      button.classList.remove("btn-loading");
+      button.disabled = false;
     }
   }
 
-  return doc;
-}
+  // Optimierte iPad-Teilen-Funktion
+  async function pdfTeileniPad() {
+    if (!validateForm()) return;
 
-function speichernAlsPDF() {
-  if (!validateForm()) return;
+    const button = document.getElementById("pdfTeilen");
+    button.classList.add("btn-loading");
+    button.disabled = true;
 
-  const button = document.getElementById("pdfSpeichern");
-  button.classList.add("btn-loading");
-  button.disabled = true;
-
-  try {
-    const doc = createPDF();
-    const datum = document.getElementById("datum").value;
-    const marktnummer = document.getElementById("marktnummer").value;
-    const filename = `arbeitssicherheit-checkliste-${datum}-${marktnummer}.pdf`;
-    doc.save(filename);
-  } catch (error) {
-    console.error("Fehler beim Erstellen des PDFs:", error);
-    alert("Fehler beim Erstellen des PDFs. Bitte versuchen Sie es erneut.");
-  } finally {
-    button.classList.remove("btn-loading");
-    button.disabled = false;
-  }
-}
-
-// iPad-optimierte Teilen-Funktion
-async function pdfTeileniPad() {
-  if (!validateForm()) return;
-
-  const button = document.getElementById("pdfTeilen");
-  button.classList.add("btn-loading");
-  button.disabled = true;
-
-  try {
-    console.log("🔄 iPad PDF-Erstellung gestartet...");
-    
-    const doc = createPDF();
-    const datum = document.getElementById("datum").value;
-    const marktnummer = document.getElementById("marktnummer").value;
-    const filename = `arbeitssicherheit-checkliste-${datum}-${marktnummer}.pdf`;
-    
-    console.log("📄 PDF erstellt, erstelle Blob...");
-    
-    // Robuste Blob-Erstellung
-    let pdfBlob;
     try {
-      pdfBlob = doc.output("blob");
-    } catch (blobError) {
-      console.error("Blob-Erstellung fehlgeschlagen:", blobError);
-      throw new Error("PDF-Blob konnte nicht erstellt werden");
-    }
-    
-    console.log("✅ Blob erstellt, Größe:", pdfBlob.size, "bytes");
-    
-    // iPad-spezifische Checks
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    console.log("🍎 iOS erkannt:", isIOS);
-    
-    if (navigator.share && navigator.canShare) {
+      console.log("🔄 Starte PDF-Erstellung für iPad...");
+      
+      const doc = createPDF();
+      const datum = document.getElementById("datum").value;
+      const marktnummer = document.getElementById("marktnummer").value;
+      const filename = `arbeitssicherheit-checkliste-${datum}-${marktnummer}.pdf`;
+      
+      console.log("📄 PDF erstellt, erstelle Blob...");
+      
+      // PDF als Blob erstellen
+      const pdfBlob = doc.output("blob");
+      console.log("✅ Blob erstellt, Größe:", pdfBlob.size, "bytes");
+      
+      // File-Objekt für Web Share API erstellen
       const file = new File([pdfBlob], filename, { 
         type: "application/pdf",
         lastModified: Date.now()
       });
       
-      if (navigator.canShare({ files: [file] })) {
-        console.log("🚀 Starte Web Share API...");
-        
-        await navigator.share({
-          title: "Arbeitssicherheit Checkliste 2025",
-          text: `Checkliste vom ${datum} (${marktnummer})`,
-          files: [file]
-        });
-        
-        console.log("✅ PDF erfolgreich geteilt!");
-        return;
+      console.log("📁 File-Objekt erstellt:", file.name, file.type);
+      
+      // Prüfen ob Web Share API verfügbar ist
+      if (!navigator.share) {
+        console.log("❌ Web Share API nicht verfügbar");
+        throw new Error("Web Share API nicht unterstützt");
       }
-    }
-    
-    // Fallback für iPad
-    console.log("🔄 Fallback: Download wird gestartet...");
-    const url = URL.createObjectURL(pdfBlob);
-    
-    // iPad-freundlicher Download
-    if (isIOS) {
-      // Für iOS: Neues Fenster öffnen
-      const newWindow = window.open(url, '_blank');
-      if (newWindow) {
-        setTimeout(() => {
-          newWindow.document.title = filename;
-        }, 100);
-      } else {
-        // Fallback: Direct download
+      
+      // Prüfen ob File-Sharing unterstützt wird
+      if (!navigator.canShare || !navigator.canShare({ files: [file] })) {
+        console.log("❌ File-Sharing nicht unterstützt");
+        throw new Error("File-Sharing nicht unterstützt");
+      }
+      
+      console.log("🚀 Starte Sharing...");
+      
+      // PDF teilen
+      await navigator.share({
+        title: "Arbeitssicherheit Checkliste 2025",
+        text: `PDF der Arbeitssicherheits-Checkliste vom ${datum} (${marktnummer})`,
+        files: [file]
+      });
+      
+      console.log("✅ PDF erfolgreich geteilt!");
+      
+    } catch (error) {
+      console.error("❌ Fehler beim Teilen:", error);
+      
+      // Fallback: PDF herunterladen
+      try {
+        console.log("🔄 Fallback: PDF wird heruntergeladen...");
+        const doc = createPDF();
+        const datum = document.getElementById("datum").value;
+        const marktnummer = document.getElementById("marktnummer").value;
+        const filename = `arbeitssicherheit-checkliste-${datum}-${marktnummer}.pdf`;
+        
+        const pdfBlob = doc.output("blob");
+        const url = URL.createObjectURL(pdfBlob);
+        
         const link = document.createElement('a');
         link.href = url;
         link.download = filename;
+        link.style.display = 'none';
+        
+        document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
+        
+        // URL nach kurzer Zeit freigeben
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        
+        alert("📤 Teilen nicht möglich - PDF wurde stattdessen heruntergeladen.");
+        console.log("✅ PDF heruntergeladen als Fallback");
+        
+      } catch (fallbackError) {
+        console.error("❌ Auch Fallback fehlgeschlagen:", fallbackError);
+        alert("❌ Fehler beim Erstellen oder Teilen des PDFs. Bitte versuchen Sie es erneut.");
       }
-    } else {
-      // Standard Download für andere Geräte
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = filename;
-      link.click();
+    } finally {
+      button.classList.remove("btn-loading");
+      button.disabled = false;
     }
-    
-    setTimeout(() => URL.revokeObjectURL(url), 2000);
-    alert("📱 PDF wurde für iPad optimiert bereitgestellt!");
-    
-  } catch (error) {
-    console.error("❌ Fehler:", error);
-    alert("❌ Fehler beim Erstellen oder Teilen des PDFs. Bitte versuchen Sie es erneut.");
-  } finally {
-    button.classList.remove("btn-loading");
-    button.disabled = false;
   }
-}
 
-// Format-Hinweis automatisch ausblenden
-const hinweis = document.getElementById("formatHinweis");
-if (hinweis) {
-  setTimeout(() => {
-    hinweis.style.display = "none";
-  }, 6000);
-  
-  hinweis.addEventListener("click", () => {
-    hinweis.style.display = "none";
-  });
-}
+  // Format-Hinweis automatisch ausblenden
+  const hinweis = document.getElementById("formatHinweis");
+  if (hinweis) {
+    setTimeout(() => {
+      hinweis.style.display = "none";
+    }, 5000);
+    
+    hinweis.addEventListener("click", () => {
+      hinweis.style.display = "none";
+    });
+  }
 
-// Datum auf heute setzen und Jahr in Footer
-const datumInput = document.getElementById("datum");
-const heute = new Date();
-datumInput.value = heute.toISOString().split("T")[0];
-document.getElementById("jahr1").textContent = heute.getFullYear();
-document.getElementById("jahr2").textContent = heute.getFullYear();
+  // Datum auf heute setzen und Jahr in Footer
+  const datumInput = document.getElementById("datum");
+  const heute = new Date();
+  datumInput.value = heute.toISOString().split("T")[0];
+  document.getElementById("jahr1").textContent = heute.getFullYear();
+  document.getElementById("jahr2").textContent = heute.getFullYear();
 
-// Initial-Rendering
-renderVorschau();
+  // Initial-Rendering
+  renderVorschau();
 </script>
 </body>
 </html>
