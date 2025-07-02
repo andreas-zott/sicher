@@ -8,6 +8,39 @@
 <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon" />
 <link href="/sicher/manifest-unten-farbig.json" rel="manifest" />
 <style>
+@media print {
+  /* Alles, was nicht gedruckt werden soll */
+  button, 
+  .btn, 
+  footer, 
+  .footer, 
+  .buttons, 
+  .custom-btn,
+  .btn-medium,
+  .btn-large {
+    display: none !important;
+  }
+
+  /* Wenn du weitere Container ausblenden möchtest, z. B. Signatur */
+  #signature-pad, 
+  canvas, 
+  #auswertung-container {
+    display: none !important;
+  }
+
+  /* Optional: Seitenränder und Druckoptimierung */
+  @page {
+    size: A4 portrait;
+    margin: 20mm;
+  }
+
+  body {
+    background: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
 #signature-pad {
   border: 2px solid #cccccc;
   border-radius: 12px;
@@ -996,16 +1029,17 @@ Beschreibung der Maßnahmen zur Beseitigung von Defiziten
 <button onclick="clearSignature()" class="btn-large btn-gray" style="display: block; width: 600px; margin: 10px auto;">
 🗑️ Unterschrift löschen
 </button>
-
 <div class="buttons" style="display: flex; justify-content: center; gap: 20px; max-width: 600px; margin: 0 auto 40px auto;">
 <button onclick="auswertungAnzeigen()" class="btn-medium btn-gray" style="flex: 1; max-width: 280px;">
   📊 Auswerten
+</button>
+<button onclick="exportiereMassnahmen()" class="btn-medium btn-gray" style="flex: 1; max-width: 280px;">
+  📝 Defizite exportieren
 </button>
 <button onclick="prepareForPrint()" class="btn-medium btn-gray" style="flex: 1; max-width: 280px;">
   📄 Drucken / PDF
 </button>
 </div>
-
 <button onclick="generateAndSharePDF()" class="custom-btn" style="background-color: #28a745; width: 600px; margin: 10px auto 40px auto; display: block;">
 📤 PDF teilen (iPad)
 </button>
@@ -1512,6 +1546,90 @@ if (event.data?.type === 'signature') {
   img.style.display = 'block';
 }
 });
+
+async function exportiereMassnahmen() {
+  const tabelle = document.getElementById('maßnahmen-tabelle');
+  const zeilen = tabelle.innerHTML;
+
+  const htmlContent = `
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Defizit-Maßnahmen</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f8f9fa;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+    }
+    th, td {
+      border: 1px solid #dee2e6;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #007BFF;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Maßnahmen zur Beseitigung von Defiziten</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Nr.</th>
+        <th>Beschreibung</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${zeilen}
+    </tbody>
+  </table>
+</body>
+</html>
+`;
+
+  const blob = new Blob([htmlContent], { type: "text/html" });
+  const file = new File([blob], "massnahmen.html", { type: "text/html" });
+
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({
+        title: "Maßnahmen zur Beseitigung von Defiziten",
+        text: "Anbei die vollständige Maßnahmenliste als HTML-Datei.",
+        files: [file],
+      });
+      console.log("✅ Teilen erfolgreich");
+    } catch (error) {
+      console.error("❌ Teilen fehlgeschlagen:", error);
+    }
+  } else {
+    // Fallback: Download-Link
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "massnahmen.html";
+    a.click();
+    URL.revokeObjectURL(url);
+    alert("📤 Teilen nicht unterstützt – Datei wurde stattdessen heruntergeladen.");
+  }
+}
+
+document.querySelectorAll('button, footer').forEach(el => el.style.display = '');
 </script>
 </body>
 </html>
