@@ -84,6 +84,19 @@
       min-height: 50px;
     }
 
+    .orientation-badge {
+      position: absolute;
+      top: 30px;
+      left: 5px;
+      background-color: rgba(0, 123, 255, 0.8);
+      color: white;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 10px;
+      font-weight: bold;
+      z-index: 5;
+    }
+
     .delete-btn {
       position: absolute;
       top: 5px;
@@ -210,6 +223,21 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+
+    .layout-info {
+      background-color: #e7f3ff;
+      border: 1px solid #b3d9ff;
+      border-radius: 8px;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 0.9rem;
+    }
+
+    body.dark-mode .layout-info {
+      background-color: #1a2332;
+      border-color: #2d4a66;
+      color: #ccc;
+    }
   </style>
 </head>
 <body>
@@ -217,7 +245,7 @@
 <button id="darkModeToggle" aria-label="Dark Mode umschalten" title="Dark Mode umschalten">🌙</button>
 
 <div id="formatHinweis">
-  📸 Bitte nehmen Sie ausschließlich Fotos im <span style="color:#007bff;">Querformat</span> auf. 
+  📸 Die App erkennt automatisch Hoch- und Querformat und passt das PDF-Layout entsprechend an.
   <br><small>Klick zum Schließen</small>
 </div>
 
@@ -254,6 +282,11 @@
     <div class="mb-3">
       <label for="upload" class="form-label">Dateien auswählen (Galerie):</label>
       <input type="file" id="upload" accept="image/*" multiple class="form-control" />
+    </div>
+
+    <div id="layoutInfo" class="layout-info" style="display: none;">
+      <strong>📊 Layout-Vorschau:</strong>
+      <div id="layoutDetails"></div>
     </div>
 
     <div id="vorschauContainer" class="mb-3"></div>
@@ -294,6 +327,18 @@
 
   fotoInput.addEventListener("change", handleFile);
   uploadInput.addEventListener("change", handleFile);
+
+  function detectImageOrientation(img) {
+    const aspectRatio = img.width / img.height;
+    
+    if (aspectRatio > 1.2) {
+      return 'landscape'; // Querformat
+    } else if (aspectRatio < 0.8) {
+      return 'portrait'; // Hochformat
+    } else {
+      return 'square'; // Quadratisch
+    }
+  }
 
   function handleFile(event) {
     const files = event.target.files;
@@ -364,13 +409,36 @@
                 
                 ctx.drawImage(img, 0, 0);
                 const finalImage = canvas.toDataURL("image/jpeg", 0.8);
-                bilder.push({ src: finalImage, kommentar: "" });
-                renderVorschau();
+                
+                // Orientierung nach EXIF-Korrektur bestimmen
+                const correctedImg = new Image();
+                correctedImg.onload = function() {
+                  const imageOrientation = detectImageOrientation(correctedImg);
+                  
+                  bilder.push({ 
+                    src: finalImage, 
+                    kommentar: "",
+                    orientation: imageOrientation,
+                    originalWidth: correctedImg.width,
+                    originalHeight: correctedImg.height
+                  });
+                  renderVorschau();
+                  updateLayoutInfo();
+                };
+                correctedImg.src = finalImage;
               });
             } catch (error) {
               console.error("EXIF-Verarbeitung fehlgeschlagen:", error);
-              bilder.push({ src: e.target.result, kommentar: "" });
+              const imageOrientation = detectImageOrientation(img);
+              bilder.push({ 
+                src: e.target.result, 
+                kommentar: "",
+                orientation: imageOrientation,
+                originalWidth: img.width,
+                originalHeight: img.height
+              });
               renderVorschau();
+              updateLayoutInfo();
             }
           };
           
@@ -394,6 +462,31 @@
     event.target.value = "";
   }
 
+  function updateLayoutInfo() {
+    const layoutInfo = document.getElementById("layoutInfo");
+    const layoutDetails = document.getElementById("layoutDetails");
+    
+    if (bilder.length === 0) {
+      layoutInfo.style.display = "none";
+      return;
+    }
+    
+    const orientationCounts = {
+      landscape: bilder.filter(b => b.orientation === 'landscape').length,
+      portrait: bilder.filter(b => b.orientation === 'portrait').length,
+      square: bilder.filter(b => b.orientation === 'square').length
+    };
+    
+    let layoutText = `
+      📐 Querformat: ${orientationCounts.landscape} Bilder (2x2 Grid)<br>
+      📱 Hochformat: ${orientationCounts.portrait} Bilder (1x2 Grid, größere Darstellung)<br>
+      ⬜ Quadratisch: ${orientationCounts.square} Bilder (2x2 Grid)
+    `;
+    
+    layoutDetails.innerHTML = layoutText;
+    layoutInfo.style.display = "block";
+  }
+
   function renderVorschau() {
     vorschauContainer.innerHTML = "";
     
@@ -411,6 +504,11 @@
       imgElement.alt = `Foto ${index + 1}`;
       imgElement.loading = "lazy";
 
+      const orientationBadge = document.createElement("div");
+      orientationBadge.className = "orientation-badge";
+      orientationBadge.textContent = bildObj.orientation === 'landscape' ? '📐 Quer' : 
+                                    bildObj.orientation === 'portrait' ? '📱 Hoch' : '⬜ Quad';
+
       const deleteBtn = document.createElement("button");
       deleteBtn.textContent = "✖";
       deleteBtn.className = "delete-btn";
@@ -422,6 +520,7 @@
         if (confirm("Möchten Sie dieses Foto wirklich löschen?")) {
           bilder.splice(index, 1);
           renderVorschau();
+          updateLayoutInfo();
         }
       });
 
@@ -434,6 +533,7 @@
       });
 
       wrapper.appendChild(imgElement);
+      wrapper.appendChild(orientationBadge);
       wrapper.appendChild(deleteBtn);
       wrapper.appendChild(kommentar);
       vorschauContainer.appendChild(wrapper);
@@ -465,11 +565,8 @@
     const margin = 40;
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
-    const cols = 2;
-    const rows = 2;
-    const imagesPerPage = cols * rows;
-    const cellWidth = (pageWidth - margin * 2) / cols;
-    const cellHeight = (pageHeight - margin * 2 - 60) / rows;
+    const availableWidth = pageWidth - margin * 2;
+    const availableHeight = pageHeight - margin * 2 - 80; // 80pt für Header
 
     const datum = document.getElementById("datum").value;
     const marktnummer = document.getElementById("marktnummer").value;
@@ -492,61 +589,101 @@
       doc.line(margin, margin + 70, pageWidth - margin, margin + 70);
     }
 
-    let page = 0;
-    for (let i = 0; i < bilder.length; i += imagesPerPage) {
-      if (page > 0) doc.addPage();
-      drawHeader();
+    function addImageToPDF(bildObj, x, y, maxWidth, maxHeight) {
+      const img = bildObj.src;
+      const kommentar = bildObj.kommentar || "";
 
-      const bilderSeite = bilder.slice(i, i + imagesPerPage);
+      let imgProps;
+      try {
+        imgProps = doc.getImageProperties(img);
+      } catch (error) {
+        console.error("Fehler beim Verarbeiten des Bildes:", error);
+        return 0;
+      }
+
+      let ratio = imgProps.width / imgProps.height;
+      let imgW = maxWidth;
+      let imgH = imgW / ratio;
+
+      if (imgH > maxHeight) {
+        imgH = maxHeight;
+        imgW = imgH * ratio;
+      }
+
+      // Bild zentrieren
+      const offsetX = x + (maxWidth - imgW) / 2;
+      const offsetY = y;
+
+      try {
+        doc.addImage(img, "JPEG", offsetX, offsetY, imgW, imgH);
+      } catch (error) {
+        console.error("Fehler beim Hinzufügen des Bildes zum PDF:", error);
+        return 0;
+      }
+
+      // Kommentar hinzufügen
+      if (kommentar) {
+        doc.setFontSize(9);
+        const textLines = doc.splitTextToSize(kommentar, maxWidth - 10);
+        doc.text(textLines, x + 5, offsetY + imgH + 15);
+        return imgH + 30 + (textLines.length * 12); // Höhe + Kommentar
+      }
+
+      return imgH + 20; // Nur Bildhöhe + Abstand
+    }
+
+    let currentPage = 0;
+    let currentY = margin + 90; // Start nach Header
+    
+    for (let i = 0; i < bilder.length; i++) {
+      const bildObj = bilder[i];
       
-      for (let j = 0; j < bilderSeite.length; j++) {
-        const bildObj = bilderSeite[j];
-        const img = bildObj.src;
-        const kommentar = bildObj.kommentar || "";
+      // Neue Seite wenn nötig
+      if (currentPage === 0 || currentY > pageHeight - margin - 200) {
+        if (currentPage > 0) doc.addPage();
+        drawHeader();
+        currentY = margin + 90;
+        currentPage++;
+      }
 
-        const col = j % cols;
-        const row = Math.floor(j / cols);
-
-        const x = margin + col * cellWidth;
-        const y = margin + 80 + row * cellHeight;
-
-        const maxW = cellWidth * 0.9;
-        const maxH = cellHeight * 0.7;
-
-        let imgProps;
-        try {
-          imgProps = doc.getImageProperties(img);
-        } catch (error) {
-          console.error("Fehler beim Verarbeiten des Bildes:", error);
+      let imageWidth, imageHeight, x;
+      
+      // Layout basierend auf Orientierung
+      if (bildObj.orientation === 'portrait') {
+        // Hochformat: Größere Darstellung, zentriert
+        imageWidth = availableWidth * 0.6;
+        imageHeight = availableHeight * 0.4;
+        x = margin + (availableWidth - imageWidth) / 2;
+      } else {
+        // Querformat und Quadratisch: Kleinere Darstellung
+        imageWidth = availableWidth * 0.45;
+        imageHeight = availableHeight * 0.3;
+        
+        // Bei Querformat: 2 nebeneinander wenn möglich
+        if (i + 1 < bilder.length && 
+            bilder[i + 1].orientation !== 'portrait' && 
+            currentY + imageHeight + 100 < pageHeight - margin) {
+          
+          // Erstes Bild links
+          x = margin;
+          const usedHeight1 = addImageToPDF(bildObj, x, currentY, imageWidth, imageHeight);
+          
+          // Zweites Bild rechts
+          i++; // Nächstes Bild überspringen in der Hauptschleife
+          const bildObj2 = bilder[i];
+          x = margin + availableWidth - imageWidth;
+          const usedHeight2 = addImageToPDF(bildObj2, x, currentY, imageWidth, imageHeight);
+          
+          currentY += Math.max(usedHeight1, usedHeight2) + 20;
           continue;
-        }
-
-        let ratio = imgProps.width / imgProps.height;
-        let imgW = maxW;
-        let imgH = imgW / ratio;
-
-        if (imgH > maxH) {
-          imgH = maxH;
-          imgW = imgH * ratio;
-        }
-
-        const offsetX = x + (cellWidth - imgW) / 2;
-        const offsetY = y + 10;
-
-        try {
-          doc.addImage(img, "JPEG", offsetX, offsetY, imgW, imgH);
-        } catch (error) {
-          console.error("Fehler beim Hinzufügen des Bildes zum PDF:", error);
-          continue;
-        }
-
-        if (kommentar) {
-          doc.setFontSize(9);
-          const textLines = doc.splitTextToSize(kommentar, cellWidth - 20);
-          doc.text(textLines, x + 10, offsetY + imgH + 15);
+        } else {
+          // Einzelnes Bild zentriert
+          x = margin + (availableWidth - imageWidth) / 2;
         }
       }
-      page++;
+      
+      const usedHeight = addImageToPDF(bildObj, x, currentY, imageWidth, imageHeight);
+      currentY += usedHeight + 20;
     }
 
     return doc;
@@ -592,11 +729,9 @@
       
       console.log("📄 PDF erstellt, erstelle Blob...");
       
-      // PDF als Blob erstellen
       const pdfBlob = doc.output("blob");
       console.log("✅ Blob erstellt, Größe:", pdfBlob.size, "bytes");
       
-      // File-Objekt für Web Share API erstellen
       const file = new File([pdfBlob], filename, { 
         type: "application/pdf",
         lastModified: Date.now()
@@ -604,13 +739,11 @@
       
       console.log("📁 File-Objekt erstellt:", file.name, file.type);
       
-      // Prüfen ob Web Share API verfügbar ist
       if (!navigator.share) {
         console.log("❌ Web Share API nicht verfügbar");
         throw new Error("Web Share API nicht unterstützt");
       }
       
-      // Prüfen ob File-Sharing unterstützt wird
       if (!navigator.canShare || !navigator.canShare({ files: [file] })) {
         console.log("❌ File-Sharing nicht unterstützt");
         throw new Error("File-Sharing nicht unterstützt");
@@ -618,7 +751,6 @@
       
       console.log("🚀 Starte Sharing...");
       
-      // PDF teilen
       await navigator.share({
         title: "Arbeitssicherheit Checkliste 2025",
         text: `PDF der Arbeitssicherheits-Checkliste vom ${datum} (${marktnummer})`,
@@ -630,7 +762,6 @@
     } catch (error) {
       console.error("❌ Fehler beim Teilen:", error);
       
-      // Fallback: PDF herunterladen
       try {
         console.log("🔄 Fallback: PDF wird heruntergeladen...");
         const doc = createPDF();
@@ -650,7 +781,6 @@
         link.click();
         document.body.removeChild(link);
         
-        // URL nach kurzer Zeit freigeben
         setTimeout(() => URL.revokeObjectURL(url), 1000);
         
         alert("📤 Teilen nicht möglich - PDF wurde stattdessen heruntergeladen.");
@@ -671,7 +801,7 @@
   if (hinweis) {
     setTimeout(() => {
       hinweis.style.display = "none";
-    }, 5000);
+    }, 7000);
     
     hinweis.addEventListener("click", () => {
       hinweis.style.display = "none";
