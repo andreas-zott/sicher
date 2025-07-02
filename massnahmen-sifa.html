@@ -6,22 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
-const opt = {
-  margin: [40, 40, 40, 40], // top, left, bottom, right in pt (1pt = 0.3527 mm)
-  filename: `maßnahmen-${aktuelleDaten.markt || 'markt'}.pdf`,
-  image: { type: 'jpeg', quality: 0.98 },
-  html2canvas: { scale: 2, scrollY: 0 },
-  jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
-};
-@media print {
-  .btn-group,
-  button {
-    display: none !important;
-  }
-  body {
-    margin: 30mm;
-  }
-}
     body {
       font-family: Arial, sans-serif;
       padding: 20px;
@@ -30,10 +14,12 @@ const opt = {
       max-width: 900px;
       margin: auto;
     }
+
     h1 {
       text-align: center;
       margin-bottom: 30px;
     }
+
     .info {
       background: white;
       padding: 20px;
@@ -41,6 +27,7 @@ const opt = {
       margin-bottom: 30px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
+
     table {
       width: 100%;
       border-collapse: collapse;
@@ -48,16 +35,19 @@ const opt = {
       margin-bottom: 30px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
+
     th, td {
       padding: 14px;
       border: 1px solid #ccc;
       text-align: left;
       font-size: 16px;
     }
+
     th {
       background-color: #C62828;
       color: white;
     }
+
     .btn-group {
       display: flex;
       flex-wrap: wrap;
@@ -65,6 +55,7 @@ const opt = {
       gap: 16px;
       margin-bottom: 40px;
     }
+
     button {
       background-color: #C62828;
       color: white;
@@ -76,16 +67,60 @@ const opt = {
       min-width: 160px;
       transition: background-color 0.2s;
     }
+
     button:hover {
       background-color: #0056b3;
     }
+
+    .nav-buttons {
+      position: fixed;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 9999;
+      pointer-events: auto;
+      backdrop-filter: blur(4px);
+      background: rgba(0, 0, 0, 0.05);
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .nav-buttons button {
+      padding: 6px 10px;
+      font-size: 14px;
+      opacity: 0.6;
+      background: #444;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .nav-buttons button:hover {
+      opacity: 1;
+    }
+
     @media (max-width: 600px) {
       th, td {
         font-size: 14px;
       }
+
       button {
         font-size: 16px;
         padding: 10px 20px;
+      }
+    }
+
+    @media print {
+      .btn-group,
+      .nav-buttons {
+        display: none !important;
+      }
+
+      body {
+        margin: 30mm;
       }
     }
   </style>
@@ -98,6 +133,11 @@ const opt = {
     <button onclick="window.print()">📄 Drucken / PDF</button>
     <button onclick="teilen()">📤 Teilen</button>
     <button onclick="pdfTeilen()">📧 PDF generieren & teilen</button>
+  </div>
+
+  <div class="nav-buttons">
+    <button onclick="history.back()">◀ Zurück</button>
+    <button onclick="history.forward()">Vor ▶</button>
   </div>
 
   <table id="maßnahmen-tabelle">
@@ -170,11 +210,12 @@ const opt = {
         return;
       }
 
-      const element = document.body.cloneNode(true); // Kopie der Seite
-      element.querySelector('.btn-group')?.remove(); // Buttons im PDF ausblenden
+      const element = document.body.cloneNode(true);
+      element.querySelector('.btn-group')?.remove();
+      element.querySelector('.nav-buttons')?.remove();
 
       const opt = {
-       margin: [56.7, 56.7, 56.7, 56.7],
+        margin: [56.7, 56.7, 56.7, 56.7], // 2cm in pt
         filename: `maßnahmen-${aktuelleDaten.markt || 'markt'}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2, scrollY: 0 },
