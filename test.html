@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Arbeitssicherheit-Checkliste-2025</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
-<link href="/sicher/favicon.ico" rel="icon" type="image/x-icon" />
-<link href="/sicher/manifest-unten-farbig.json" rel="manifest" />
 <style>
 /* Print Styles - Buttons und interaktive Elemente ausblenden */
 @media print {
@@ -249,7 +247,7 @@ input[type="text"], input[type="date"] {
 <div class="print-wrapper">
 <header>
 <div style="display: flex; justify-content: space-between; align-items: center;">
-  <h1 style="margin: 0;">Arbeitssicherheit-Checkliste-2025</h1>
+  <h1 id="titel" style="margin: 0;"></h1>
   <input id="datum" type="date" style="padding: 8px; font-size: 16px;" />
 </div>
 </header>
@@ -1381,6 +1379,10 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.error("❌ Service Worker Fehler:", err));
   });
 }
+</script>
+<script>
+  const aktuellesJahr = new Date().getFullYear();
+  document.getElementById('titel').textContent = `Arbeitssicherheit-Checkliste-${aktuellesJahr}`;
 </script>
 </body>
 </html>
