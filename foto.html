@@ -220,7 +220,7 @@
 </div>
 
 <div class="container-box">
-  <h1 class="mb-4 text-center">Arbeitssicherheit-Checkliste-2025</h1>
+<h1 class="mb-4 text-center" id="titel">Arbeitssicherheit-Checkliste-2025</h1>
 
   <form id="formular" class="mb-4">
     <div class="mb-3">
@@ -500,6 +500,11 @@
   document.getElementById("datum").value = new Date().toISOString().split("T")[0];
   document.getElementById("jahr1").textContent = new Date().getFullYear();
   document.getElementById("jahr2").textContent = new Date().getFullYear();
+</script>
+<script>
+  const aktuellesJahr = new Date().getFullYear();
+  const titel = document.getElementById('titel');
+  titel.textContent = titel.textContent.replace(/\d{4}/, aktuellesJahr);
 </script>
 </body>
 </html>
