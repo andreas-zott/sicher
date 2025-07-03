@@ -8,23 +8,27 @@
 <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon" />
 <link href="/sicher/manifest.json" rel="manifest"/>
 <style>
-/* Print Styles - Alle Buttons und interaktive Elemente ausblenden */
 @media print {
+  /* Alles, was nicht gedruckt werden soll */
   button, 
   .btn, 
-  .btn-group,
-  .buttons,
+  footer, 
+  .footer, 
+  .buttons, 
   .custom-btn,
   .btn-medium,
-  .btn-large,
-  footer, 
-  .footer,
+  .btn-large {
+    display: none !important;
+  }
+
+  /* Wenn du weitere Container ausblenden möchtest, z. B. Signatur */
   #signature-pad, 
   canvas, 
   #auswertung-container {
     display: none !important;
   }
 
+  /* Optional: Seitenränder und Druckoptimierung */
   @page {
     size: A4 portrait;
     margin: 20mm;
@@ -34,38 +38,9 @@
     background: white !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
-    margin: 0;
-    padding: 0;
-  }
-
-  .page-break-before {
-    page-break-before: always;
-    margin-top: 0;
-    break-before: page;
-  }
-
-  input[type="text"], input[type="date"] {
-    border: none;
-    background: transparent;
-    font-weight: bold;
-    color: black;
-  }
-
-  input[type="radio"] {
-    transform: scale(1.2);
-  }
-
-  th, .category-header {
-    background-color: #ccc !important;
-    color: black !important;
-  }
-
-  tr:nth-child(even) {
-    background-color: #eee !important;
   }
 }
 
-/* Signature Pad */
 #signature-pad {
   border: 2px solid #cccccc;
   border-radius: 12px;
@@ -85,7 +60,6 @@
   font-family: Arial, sans-serif;
 }
 
-/* Button Styles */
 button {
   background-color: #007BFF;
   color: white;
@@ -100,46 +74,8 @@ button {
 button:hover {
   background-color: #0056b3;
 }
-
-button.custom-btn,
-button.btn-large,
-button.btn-medium {
-  font-size: 16px;
-  padding: 10px 20px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  margin: 10px auto;
-  display: block;
-  font-family: inherit;
-}
-
-/* Button Sizes */
-button.btn-large {
-  width: 600px;
-}
-
-button.btn-medium {
-  width: 280px;
-}
-
-/* Button Colors */
-button.btn-blue {
-  background-color: #007bff;
-  color: white;
-}
-
-button.btn-green {
-  background-color: #28a745;
-  color: white;
-}
-
-button.btn-gray {
-  background-color: #6c757d;
-  color: white;
-}
-
-/* Confirmation Section */
+</style>
+<style>
 .confirmation-section {
   background: #fff;
   border: 1px solid #ccc;
@@ -152,7 +88,7 @@ button.btn-gray {
 
 .checkbox-row {
   display: flex;
-  gap: 40px;
+  gap: 40px; /* Abstand zwischen den Spalten */
   margin-top: 16px;
   justify-content: space-between;
 }
@@ -160,7 +96,7 @@ button.btn-gray {
 .checkbox-column {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 12px; /* Abstand zwischen Checkboxen in einer Spalte */
   flex: 1;
 }
 
@@ -169,75 +105,178 @@ label {
   align-items: center;
   gap: 8px;
 }
+/* Gemeinsame Button-Grundform */
+button.custom-btn,
+button.btn-large,
+button.btn-medium {
+font-size: 16px;
+padding: 10px 20px;
+border-radius: 8px;
+border: none;
+cursor: pointer;
+margin: 10px auto;
+display: block;
+font-family: inherit;
+}
 
-/* Signature Image */
+/* Große Buttons (600px) */
+button.btn-large {
+width: 600px;
+}
+
+/* Mittlere Buttons (280px) */
+button.btn-medium {
+width: 280px;
+}
+
+/* Spezielle Farben */
+button.btn-blue {
+background-color: #007bff;
+color: white;
+}
+button.btn-green {
+background-color: #28a745;
+color: white;
+}
+button.btn-gray {
+background-color: #6c757d;
+color: white;
+}
+
+/* Unterschriftsbild */
 #signature-image {
-  max-width: 600px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  display: block;
-  min-height: 150px;
-  margin: 10px auto;
+max-width: 600px;
+border: 1px solid #ccc;
+border-radius: 8px;
+display: block;
+min-height: 150px;
+margin: 10px auto;
+}
+button.custom-btn,
+button.btn-large,
+button.btn-medium {
+font-size: 16px;
+padding: 10px 20px;
+border-radius: 8px;
+border: none;
+cursor: pointer;
+margin: 10px auto;
+display: block;
+font-family: inherit;
 }
 
-/* General Styles */
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f8f9fa;
-  padding: 20px;
-}
+/* Kleine Buttons
 
-header h1 {
-  color: #212529;
-}
+</style>
+<style>
+  @media print {
+    .page-break-before {
+      page-break-before: always;
+margin-top: 0;
+      break-before: page;
+    }
+    @page {
+      size: A4 portrait;
+      margin: 20mm;
+    }
+    button, .btn, footer, .footer {
+      display: none !important;
+    }
+    input[type="text"], input[type="date"] {
+      border: none;
+      background: transparent;
+      font-weight: bold;
+      color: black;
+    }
+    input[type="radio"] {
+      transform: scale(1.2);
+    }
+    th, .category-header {
+      background-color: #ccc !important;
+      color: black !important;
+    }
+    tr:nth-child(even) {
+      background-color: #eee !important;
+    }
+    body {
+      background: white;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
-  background-color: white;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    padding: 20px;
+  }
 
-th {
-  background-color: #007BFF;
-  color: white;
-  padding: 12px;
-  text-align: center;
-}
+  header h1 {
+    color: #212529;
+  }
 
-td {
-  padding: 10px;
-  border: 1px solid #dee2e6;
-  text-align: left;
-}
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
 
-tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
+  th {
+    background-color: #007BFF;
+    color: white;
+    padding: 12px;
+    text-align: center;
+  }
 
-tr:hover {
-  background-color: #e6f0ff;
-}
+  td {
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    text-align: left;
+  }
 
-.category-header {
-  background-color: #d1ecf1 !important;
-  color: #0c5460;
-  font-weight: bold;
-  text-align: left;
-  padding: 12px;
-}
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
 
-input[type="text"], input[type="date"] {
-  width: 100%;
-  max-width: 300px;
-  padding: 8px;
-  font-size: 16px;
-  margin-top: 5px;
-  box-sizing: border-box;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-}
+  tr:hover {
+    background-color: #e6f0ff;
+  }
+
+  .category-header {
+    background-color: #d1ecf1 !important;
+    color: #0c5460;
+    font-weight: bold;
+    text-align: left;
+    padding: 12px;
+  }
+
+  input[type="text"], input[type="date"] {
+    width: 100%;
+    max-width: 300px;
+    padding: 8px;
+    font-size: 16px;
+    margin-top: 5px;
+    box-sizing: border-box;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+  }
+
+  button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  button:hover {
+    background-color: #0056b3;
+
+
 </style>
 </head>
 <body>
@@ -902,12 +941,6 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
 </table>
 <br>
 
-<div style="display: flex; justify-content: center; gap: 16px; margin: 20px 0;">
-<button onclick="neinFragenInMaßnahmen()">⛔ Nein-Fragen automatisch einfügen</button>
-<button onclick="neinAntwortenEinfügenUndÖffnen()">📝 „Nein"-Antworten übernehmen & anzeigen</button>
-</div>
-<br>
-
 <h2 class="page-break-before" style="text-align: center;">
 Beschreibung der Maßnahmen zur Beseitigung von Defiziten
 </h2>
@@ -921,21 +954,7 @@ Beschreibung der Maßnahmen zur Beseitigung von Defiziten
   </tr>
 </thead>
 <tbody id="maßnahmen-tabelle">
-  <tr><td>1</td><td contenteditable="true"></td></tr>
-  <tr><td>2</td><td contenteditable="true"></td></tr>
-  <tr><td>3</td><td contenteditable="true"></td></tr>
-  <tr><td>4</td><td contenteditable="true"></td></tr>
-  <tr><td>5</td><td contenteditable="true"></td></tr>
-  <tr><td>6</td><td contenteditable="true"></td></tr>
-  <tr><td>7</td><td contenteditable="true"></td></tr>
-  <tr><td>8</td><td contenteditable="true"></td></tr>
-  <tr><td>9</td><td contenteditable="true"></td></tr>
-  <tr><td>10</td><td contenteditable="true"></td></tr>
-  <tr><td>11</td><td contenteditable="true"></td></tr>
-  <tr><td>12</td><td contenteditable="true"></td></tr>
-  <tr><td>13</td><td contenteditable="true"></td></tr>
-  <tr><td>14</td><td contenteditable="true"></td></tr>
-  <tr><td>15</td><td contenteditable="true"></td></tr>
+  <!-- Diese Zeilen werden dynamisch von JavaScript hinzugefügt -->
 </tbody>
 </table>
 
@@ -995,13 +1014,13 @@ Beschreibung der Maßnahmen zur Beseitigung von Defiziten
 🗑️ Unterschrift löschen
 </button>
 
-<div class="buttons" style="display: flex; justify-content: center; gap: 20px; max-width: 600px; margin: 0 auto 40px auto;">
-<button onclick="auswertungAnzeigen()" class="btn-medium btn-gray" style="flex: 1; max-width: 280px;">
-  📊 Auswerten
-</button>
-<button onclick="prepareForPrint()" class="btn-medium btn-gray" style="flex: 1; max-width: 280px;">
-  📄 Drucken / PDF
-</button>
+<div style="display: flex; justify-content: center; gap: 20px; max-width: 600px; margin: 0 auto;">
+  <button onclick="exportiereMassnahmen()" class="btn-medium btn-gray" style="flex: 1; max-width: 280px;">
+    📝 Defizite exportieren
+  </button>
+  <button onclick="prepareForPrint()" class="btn-medium btn-gray" style="flex: 1; max-width: 280px;">
+    📄 Drucken / PDF
+  </button>
 </div>
 
 <button onclick="generateAndSharePDF()" class="custom-btn" style="background-color: #28a745; width: 600px; margin: 10px auto 40px auto; display: block;">
@@ -1196,54 +1215,6 @@ function prepareForPrint() {
   window.print();
 }
 
-function auswertungAnzeigen() {
-  const radios = document.querySelectorAll('input[type="radio"]:checked');
-  const datum = document.getElementById('datum')?.value || 'kein Datum';
-  const markt = document.getElementById('markt')?.value || 'unbekannt';
-  const name = document.getElementById('name')?.value || 'unbekannt';
-  const sifa = document.getElementById('sifa')?.value || 'unbekannt';
-
-  const auswertung = {
-    ja: 0,
-    nein: 0,
-    nicht_vorhanden: 0
-  };
-
-  radios.forEach(radio => {
-    if (auswertung.hasOwnProperty(radio.value)) {
-      auswertung[radio.value]++;
-    }
-  });
-
-  const auswertungDiv = document.getElementById('auswertung');
-  auswertungDiv.style.display = 'block';
-  auswertungDiv.innerHTML = `
-    <h3>📊 Auswertung</h3>
-    <p><strong>Markt:</strong> ${markt}</p>
-    <p><strong>Datum:</strong> ${datum}</p>
-    <p><strong>Name:</strong> ${name}</p>
-    <p><strong>SiFa:</strong> ${sifa}</p>
-    <hr style="margin: 16px 0;">
-    <p><strong>Ja:</strong> ${auswertung.ja}</p>
-    <p><strong>Nein:</strong> ${auswertung.nein}</p>
-    <p><strong>Nicht vorhanden:</strong> ${auswertung.nicht_vorhanden}</p>
-  `;
-
-  const auswertungWindow = window.open('auswertung-sifa.html', 'auswertung');
-  const daten = {
-    markt: markt,
-    datum: datum,
-    name: name,
-    sifa: sifa,
-    ja: auswertung.ja,
-    nein: auswertung.nein,
-    nicht_vorhanden: auswertung.nicht_vorhanden
-  };
-  setTimeout(() => {
-    auswertungWindow.postMessage(daten, "*");
-  }, 1000);
-}
-
 function generateMeasure(question) {
   let measure = question.trim();
 
@@ -1262,19 +1233,19 @@ function generateMeasure(question) {
   } else if (measure.includes("Leergutrücknahme in einem ordnungsgemäßen Zustand")) {
     measure = "Sorgen Sie unverzüglich für den ordnungsgemäßen Zustand der Leergutrücknahme gemäß den Sicherheitsvorschriften (intakte Schutzeinrichtungen, gesicherte Einzugsstellen, keine Glasscherben).";
   } else if (measure.includes("Leitern geprüft gemäß")) {
-    measure = "Führen Sie umgehend die Prüfung der Leitern gemäß BGV D 36 / GUV-VD360 durch und dokumentieren Sie diese.";
+    measure = "Führen Sie umgehend die Prüfung der Leitern durch und dokumentieren Sie diese.";
   } else if (measure.includes("geeignete Sicherheitsmesser verwendet")) {
     measure = "Stellen Sie sofort die Verwendung geeigneter Sicherheitsmesser aus dem Ordersatz sicher und weisen Sie Mitarbeiter entsprechend ein.";
   } else if (measure.includes("keine sichtbaren Beschädigungen an Schaltern und Steckdosen")) {
     measure = "Beheben Sie dringend sichtbare Beschädigungen an Schaltern und Steckdosen gemäß den elektrotechnischen Vorschriften.";
   } else if (measure.includes("Gabelhubwagen in einem ordnungsgemäßen Zustand")) {
-    measure = "Stellen Sie umgehend den ordnungsgemäßen Zustand des Gabelhubwagens sicher und beheben Sie sichtbare Beschädigungen gemäß DGUV Vorschrift 68.";
+    measure = "Stellen Sie umgehend den ordnungsgemäßen Zustand des Gabelhubwagens sicher und beheben Sie sichtbare Beschädigungen.";
   } else if (measure.includes("elektrische Hubwagen geprüft")) {
-    measure = "Prüfen Sie den elektrischen Hubwagen sofort gemäß DGUV Vorschrift 68 und stellen Sie den ordnungsgemäßen Zustand sicher (keine sichtbaren Beschädigungen, funktionsfähige Schutzeinrichtungen).";
+    measure = "Prüfen Sie den elektrischen Hubwagen sofort und stellen Sie den ordnungsgemäßen Zustand sicher (keine sichtbaren Beschädigungen, funktionsfähige Schutzeinrichtungen).";
   } else if (measure.includes("Feuerlöscheinrichtungen frei zugänglich")) {
     measure = "Halten Sie Feuerlöscheinrichtungen dringend frei zugänglich und entfernen Sie umgehend blockierende Gegenstände gemäß Brandschutzordnung.";
   } else if (measure.includes("Feuerlöscheinrichtungen geprüft")) {
-    measure = "Prüfen Sie die Feuerlöscheinrichtungen sofort gemäß DIN 14406 und stellen Sie die Einhaltung der Prüffristen sicher.";
+    measure = "Prüfen Sie die Feuerlöscheinrichtungen sofort und stellen Sie die Einhaltung der Prüffristen sicher.";
   } else if (measure.includes("Brandschutztüren frei von Zugestellungen")) {
     measure = "Halten Sie Brandschutztüren dringend frei von Zugestellungen und stellen Sie deren uneingeschränkte Funktion gemäß Brandschutzvorschriften sicher.";
   } else if (measure.includes("Türhaltevorrichtungen und der Schließfolgeregler")) {
@@ -1282,19 +1253,19 @@ function generateMeasure(question) {
   } else if (measure.includes("Brandschutztüren ohne Beschädigungen")) {
     measure = "Beheben Sie sofort Beschädigungen an Brandschutztüren gemäß den Brandschutzbestimmungen.";
   } else if (measure.includes("aktueller Flucht- und Rettungsplan")) {
-    measure = "Erstellen/Aktualisieren Sie dringend den Flucht- und Rettungsplan gemäß ASR A2.3 und hängen Sie ihn umgehend aus.";
+    measure = "Erstellen/Aktualisieren Sie dringend den Flucht- und Rettungsplan und hängen Sie ihn umgehend aus.";
   } else if (measure.includes("Notausgangsbeleuchtung ohne Defekte")) {
     measure = "Reparieren Sie sofort Defekte an der Notausgangsbeleuchtung gemäß den Sicherheitsvorschriften.";
   } else if (measure.includes("Notausgänge frei zugänglich")) {
-    measure = "Halten Sie Notausgänge dringend frei zugänglich und entfernen Sie alle Zustellungen unverzüglich gemäß ASR A2.3.";
+    measure = "Halten Sie Notausgänge dringend frei zugänglich und entfernen Sie alle Zustellungen unverzüglich.";
   } else if (measure.includes("Notausgänge und -ausstiege von innen ohne fremde Hilfe")) {
-    measure = "Stellen Sie umgehend sicher, dass Notausgänge und -ausstiege von innen ohne fremde Hilfe zu öffnen und nicht zugestellt sind, gemäß ASR A2.3.";
+    measure = "Stellen Sie umgehend sicher, dass Notausgänge und -ausstiege von innen ohne fremde Hilfe zu öffnen und nicht zugestellt sind.";
   } else if (measure.includes("Notausgänge in sichere Bereiche")) {
     measure = "Stellen Sie dringend sicher, dass Notausgänge in sichere Bereiche führen, gemäß den Rettungswegvorschriften.";
   } else if (measure.includes("Verkehrswege so beschaffen")) {
-    measure = "Gestalten Sie Verkehrswege sofort so, dass Stolper-, Ausrutsch- und Umknickrisiken gemäß ASR A1.8 ausgeschlossen sind.";
+    measure = "Gestalten Sie Verkehrswege sofort so, dass Stolper-, Ausrutsch- und Umknickrisiken ausgeschlossen sind.";
   } else if (measure.includes("Treppen unbeschädigt")) {
-    measure = "Beheben Sie dringend Beschädigungen an Treppen und halten Sie diese unverzüglich frei von Gegenständen gemäß ASR A1.8.";
+    measure = "Beheben Sie dringend Beschädigungen an Treppen und halten Sie diese unverzüglich frei von Gegenständen.";
   } else if (measure.includes("persönliche Schutzausrüstung")) {
     measure = "Stellen Sie die passende persönliche Schutzausrüstung (z.B. Schutzbrille, Handschuhe) für Tätigkeiten mit Gefahrstoffen umgehend zur Verfügung und weisen Sie in deren Nutzung ein, gemäß PSA-Verordnung.";
   } else if (measure.includes("brennbares Material")) {
@@ -1302,9 +1273,9 @@ function generateMeasure(question) {
   } else if (measure.includes("Technik- und Heizräume als Lagerräume")) {
     measure = "Beenden Sie dringend die Nutzung von Technik- und Heizräumen als Lagerräume gemäß den Brandschutzbestimmungen.";
   } else if (measure.includes("Betriebsanweisungen gut zugänglich")) {
-    measure = "Stellen Sie umgehend sicher, dass Betriebsanweisungen gut zugänglich sind und Sicherheitsanweisungen gemäß BetrSichV eingehalten werden.";
+    measure = "Stellen Sie umgehend sicher, dass Betriebsanweisungen gut zugänglich sind und Sicherheitsanweisungen eingehalten werden.";
   } else if (measure.includes("Steckverbindungen auf dem Boden")) {
-    measure = "Entfernen Sie sofort Steckverbindungen vom Boden, um Stolperfallen zu vermeiden, gemäß ASR A1.8.";
+    measure = "Entfernen Sie sofort Steckverbindungen vom Boden, um Stolperfallen zu vermeiden.";
   } else {
     // Default fallback if no specific rule matches
     measure = "Dringend: Beheben Sie den Mangel bezüglich: " + measure + " unter Berücksichtigung der relevanten Arbeitsschutzbestimmungen.";
@@ -1319,10 +1290,10 @@ function generateMeasure(question) {
 
 function neinFragenInMaßnahmen() {
   const fragenzeilen = document.querySelectorAll('#fragenTabelle tr');
-  const maßnahmenZeilen = document.querySelectorAll("#maßnahmen-tabelle td[contenteditable='true']");
-  maßnahmenZeilen.forEach(cell => cell.textContent = ''); // Clear existing content
+  const maßnahmenTabelleBody = document.getElementById('maßnahmen-tabelle');
+  maßnahmenTabelleBody.innerHTML = '';
 
-  let index = 0;
+  let dynamicMeasuresCount = 0;
   fragenzeilen.forEach(row => {
     const frageText = row.cells[0]?.innerText;
     const radios = row.querySelectorAll('input[type="radio"]');
@@ -1332,49 +1303,78 @@ function neinFragenInMaßnahmen() {
       if (r.checked) selected = r.value;
     });
 
-    if (selected === 'nein' && frageText && index < maßnahmenZeilen.length && !frageText.includes('category-header')) {
+    if (selected === 'nein' && frageText && !frageText.includes('category-header')) {
       const measureText = generateMeasure(frageText);
-      maßnahmenZeilen[index].textContent = measureText;
-      index++;
+
+      const newRow = document.createElement('tr');
+      const numCell = document.createElement('td');
+      const descCell = document.createElement('td');
+
+      numCell.textContent = (dynamicMeasuresCount + 1).toString();
+      descCell.textContent = measureText;
+      descCell.contentEditable = "true";
+
+      newRow.appendChild(numCell);
+      newRow.appendChild(descCell);
+      maßnahmenTabelleBody.appendChild(newRow);
+      dynamicMeasuresCount++;
     }
   });
 
-  if (index === 0) {
-    alert("✅ Es wurden keine Fragen mit 'nein' beantwortet.");
-  } else if (index >= maßnahmenZeilen.length) {
-    alert("⚠️ Mehr als 15 'nein'-Antworten – nur die ersten 15 wurden übernommen.");
+  // Add two empty rows for manual input
+  for (let i = 0; i < 2; i++) {
+    const newRow = document.createElement('tr');
+    const numCell = document.createElement('td');
+    const descCell = document.createElement('td');
+
+    numCell.textContent = (dynamicMeasuresCount + i + 1).toString();
+    descCell.textContent = '';
+    descCell.contentEditable = "true";
+
+    newRow.appendChild(numCell);
+    newRow.appendChild(descCell);
+    maßnahmenTabelleBody.appendChild(newRow);
   }
 }
 
-function neinAntwortenEinfügenUndÖffnen() {
-  const alleZeilen = document.querySelectorAll("#fragenTabelle tr");
-  const neinAntworten = [];
+function exportiereMassnahmen() {
+  const fragenTabelle = document.getElementById('fragenTabelle');
+  const maßnahmenTabelle = [];
 
-  alleZeilen.forEach(row => {
-    const zellen = row.querySelectorAll("td");
-    if (zellen.length >= 4) {
-      const frageText = zellen[0]?.innerText.trim();
-      const radios = row.querySelectorAll("input[type='radio']");
-      radios.forEach(radio => {
-        if (radio.checked && radio.value === "nein") {
-          neinAntworten.push(frageText);
-        }
-      });
+  const rows = fragenTabelle.querySelectorAll('tr');
+  rows.forEach((row, index) => {
+    const frageZelle = row.querySelector('td');
+    const radios = row.querySelectorAll('input[type="radio"]');
+    if (radios.length > 0 && frageZelle) {
+      const neinRadio = [...radios].find(r => r.value === 'nein' && r.checked);
+      if (neinRadio) {
+        const frageText = frageZelle.textContent.trim();
+        const maßnahmeText = generateMeasure(frageText);
+        maßnahmenTabelle.push({
+          nr: index + 1,
+          beschreibung: maßnahmeText
+        });
+      }
     }
   });
 
-  const maßnahmenZeilen = document.querySelectorAll('#maßnahmen-tabelle td[contenteditable]');
-  neinAntworten.forEach((text, index) => {
-    if (maßnahmenZeilen[index]) {
-      // This function is intended to display the raw "No" answers, not transformed measures.
-      maßnahmenZeilen[index].innerText = text;
-    }
-  });
+  const datum = document.getElementById('datum')?.value || '';
+  const markt = document.getElementById('markt')?.value || '';
+  const name = document.getElementById('name')?.value || '';
+  const sifa = document.getElementById('sifa')?.value || '';
 
-  const win = window.open('defizite.html', '_blank');
+  const daten = {
+    datum,
+    markt,
+    name,
+    sifa,
+    maßnahmen: maßnahmenTabelle
+  };
+
+  const newWindow = window.open('massnahmen-sifa.html', 'maßnahmen');
   setTimeout(() => {
-    win?.postMessage({ neinAntworten }, "*");
-  }, 500);
+    newWindow.postMessage(daten, "*");
+  }, 1000);
 }
 
 // Event Listeners
@@ -1388,6 +1388,15 @@ window.addEventListener("load", () => {
     const heute = new Date().toISOString().split('T')[0];
     datumsfeld.value = heute;
   }
+
+  // Add event listeners to all radio buttons
+  const radioButtons = document.querySelectorAll('#fragenTabelle input[type="radio"]');
+  radioButtons.forEach(radio => {
+    radio.addEventListener('change', neinFragenInMaßnahmen);
+  });
+
+  // Initial call to populate measures
+  neinFragenInMaßnahmen();
 });
 
 canvas.addEventListener('mousedown', startDrawing);
@@ -1406,18 +1415,6 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.error("❌ Service Worker Fehler:", err));
   });
 }
-
-function unterschriftExtern() {
-  window.open('signatur.html', 'Signatur', 'width=700,height=400');
-}
-
-window.addEventListener("message", (event) => {
-  if (event.data?.type === 'signature') {
-    const img = document.getElementById('signature-image');
-    img.src = event.data.dataUrl;
-    img.style.display = 'block';
-  }
-});
 </script>
 </body>
 </html>
