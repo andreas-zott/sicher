@@ -283,7 +283,7 @@ margin-top: 0;
 <div class="print-wrapper">
 <header>
 <div style="display: flex; justify-content: space-between; align-items: center;">
-  <h1 style="margin: 0;">Arbeitssicherheit-Checkliste-2025</h1>
+  <h1 id="titel" style="margin: 0;"></h1>
   <input id="datum" type="date" style="padding: 8px; font-size: 16px;" />
 </div>
 </header>
@@ -1408,6 +1408,10 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.error("❌ Service Worker Fehler:", err));
   });
 }
+</script>
+<script>
+  const aktuellesJahr = new Date().getFullYear();
+  document.getElementById('titel').textContent = `Arbeitssicherheit-Checkliste-${aktuellesJahr}`;
 </script>
 </body>
 </html>
