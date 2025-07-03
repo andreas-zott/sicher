@@ -1049,14 +1049,16 @@ Beschreibung der Maßnahmen zur Beseitigung von Defiziten
 <script>
 // PDF Generation mit verbesserter Button-Ausblendung für iPad
 async function generateAndSharePDF() {
-  // Alle Buttons temporär ausblenden
+// Alle Buttons & no-print-Elemente temporär ausblenden
   const buttons = document.querySelectorAll('button, .btn, .btn-group, .buttons, .custom-btn, .btn-medium, .btn-large');
+  const noPrintElems = document.querySelectorAll('footer, .no-print');
   const originalDisplays = [];
-  
+
   buttons.forEach((btn, index) => {
     originalDisplays[index] = btn.style.display;
     btn.style.display = 'none';
   });
+  noPrintElems.forEach(el => el.style.display = 'none');
 
   // Canvas durch Bild ersetzen für PDF
   const canvas = document.getElementById('signature-pad');
@@ -1078,8 +1080,8 @@ async function generateAndSharePDF() {
     margin: [20, 20, 20, 20],
     filename: `arbeitssicherheit-checkliste-${new Date().toISOString().split('T')[0]}.pdf`,
     image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { 
-      scale: 2, 
+    html2canvas: {
+      scale: 2,
       scrollY: 0,
       useCORS: true,
       allowTaint: true
@@ -1092,21 +1094,11 @@ async function generateAndSharePDF() {
     const file = new File([blob], opt.filename, { type: "application/pdf" });
 
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      try {
-        await navigator.share({
-          title: 'Checkliste Arbeitssicherheit',
-          text: 'Anbei die ausgefüllte Arbeitssicherheits-Checkliste als PDF.',
-          files: [file],
-        });
-        console.log("✅ Teilen abgeschlossen");
-      } catch (err) {
-        console.error("❌ Teilen abgebrochen oder fehlgeschlagen:", err);
-        // Fallback: Download
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = opt.filename;
-        link.click();
-      }
+      await navigator.share({
+        title: 'Checkliste Arbeitssicherheit',
+        text: 'Anbei die ausgefüllte Arbeitssicherheits-Checkliste als PDF.',
+        files: [file],
+      });
     } else {
       alert("📤 Teilen nicht unterstützt – PDF wird heruntergeladen.");
       const link = document.createElement("a");
@@ -1118,12 +1110,13 @@ async function generateAndSharePDF() {
     console.error("Fehler bei PDF-Generierung:", error);
     alert("Fehler bei der PDF-Erstellung. Bitte versuchen Sie es erneut.");
   } finally {
-    // Buttons wieder einblenden
+    // Elemente wieder einblenden
     buttons.forEach((btn, index) => {
       btn.style.display = originalDisplays[index];
     });
-    
-    // Canvas wieder anzeigen und temporäres Bild entfernen
+    noPrintElems.forEach(el => el.style.display = '');
+
+    // Canvas wieder anzeigen und Bild entfernen
     if (canvas && signatureImg) {
       canvas.style.display = 'block';
       signatureImg.remove();
