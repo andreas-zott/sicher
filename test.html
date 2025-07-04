@@ -1060,11 +1060,18 @@ async function generateAndSharePDF() {
   // Alle Buttons temporär ausblenden
   const buttons = document.querySelectorAll('button, .btn, .btn-group, .buttons, .custom-btn, .btn-medium, .btn-large');
   const originalDisplays = [];
-  
+
   buttons.forEach((btn, index) => {
     originalDisplays[index] = btn.style.display;
     btn.style.display = 'none';
   });
+
+  // Footer ausblenden
+  const footer = document.querySelector('footer');
+  const originalFooterDisplay = footer ? footer.style.display : '';
+  if (footer) {
+    footer.style.display = 'none';
+  }
 
   // Canvas durch Bild ersetzen für PDF
   const canvas = document.getElementById('signature-pad');
@@ -1086,8 +1093,8 @@ async function generateAndSharePDF() {
     margin: [20, 20, 20, 20],
     filename: `arbeitssicherheit-checkliste-${new Date().toISOString().split('T')[0]}.pdf`,
     image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { 
-      scale: 2, 
+    html2canvas: {
+      scale: 2,
       scrollY: 0,
       useCORS: true,
       allowTaint: true
@@ -1100,21 +1107,11 @@ async function generateAndSharePDF() {
     const file = new File([blob], opt.filename, { type: "application/pdf" });
 
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      try {
-        await navigator.share({
-          title: 'Checkliste Arbeitssicherheit',
-          text: 'Anbei die ausgefüllte Arbeitssicherheits-Checkliste als PDF.',
-          files: [file],
-        });
-        console.log("✅ Teilen abgeschlossen");
-      } catch (err) {
-        console.error("❌ Teilen abgebrochen oder fehlgeschlagen:", err);
-        // Fallback: Download
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = opt.filename;
-        link.click();
-      }
+      await navigator.share({
+        title: 'Checkliste Arbeitssicherheit',
+        text: 'Anbei die ausgefüllte Arbeitssicherheits-Checkliste als PDF.',
+        files: [file],
+      });
     } else {
       alert("📤 Teilen nicht unterstützt – PDF wird heruntergeladen.");
       const link = document.createElement("a");
@@ -1130,7 +1127,12 @@ async function generateAndSharePDF() {
     buttons.forEach((btn, index) => {
       btn.style.display = originalDisplays[index];
     });
-    
+
+    // Footer wieder einblenden
+    if (footer) {
+      footer.style.display = originalFooterDisplay;
+    }
+
     // Canvas wieder anzeigen und temporäres Bild entfernen
     if (canvas && signatureImg) {
       canvas.style.display = 'block';
