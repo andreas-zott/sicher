@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Arbeitssicherheit-Checkliste-2025</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+ <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon" />
+  <link href="/sicher/iphone.json" rel="manifest" />
+<style>
+
+@media (max-width: 768px) {
+  .checkbox-row {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+    font-size: 14px;
+    word-break: break-word;
+  }
+
+  .form-section, #content, .confirmation-section, .signature-container {
+    max-width: 100%;
+    padding: 0 10px;
+  }
+
+  canvas#signature-pad {
+    height: 120px !important;
+  }
+
+  .page-break-before {
+    page-break-before: auto;
+    break-before: auto;
+  }
+
+  button, .custom-btn, .btn-large, .btn-medium {
+    font-size: 16px;
+    padding: 12px 16px;
+    width: 100% !important;
+    margin: 8px 0 !important;
+  }
+
+  .buttons,
+  .btn-group {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+}
+
+/* Print Styles - Buttons und interaktive Elemente ausblenden */
+@media print {
+  button, 
+  .btn, 
+  .btn-group,
+  .buttons,
+  .custom-btn,
+  .btn-medium,
+  .btn-large,
+  footer, 
+  .footer,
+  #signature-pad, 
+  canvas, 
+  #auswertung-container {
+    display: none !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 20mm;
+  }
+
+  body {
+    background: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    margin: 0;
+    padding: 0;
+  }
+
+  .page-break-before {
+    page-break-before: always;
+    margin-top: 0;
+    break-before: page;
+  }
+
+  input[type="text"], input[type="date"] {
+    border: none;
+    background: transparent;
+    font-weight: bold;
+    color: black;
+  }
+
+  input[type="radio"] {
+    transform: scale(1.2);
+  }
+
+  th, .category-header {
+    background-color: #ccc !important;
+    color: black !important;
+  }
+
+  tr:nth-child(even) {
+    background-color: #eee !important;
+  }
+}
+
+/* Signature Pad Styles */
+#signature-pad {
+  border: 2px solid #cccccc;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  height: 150px;
+  touch-action: none;
+}
+
+.buttons {
+  margin-top: 10px;
+}
+
+#content {
+  max-width: 600px;
+  margin: auto;
+  font-family: Arial, sans-serif;
+}
+
+/* Button Styles */
+button {
+  background-color: #C62828;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button.custom-btn,
+button.btn-large,
+button.btn-medium {
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  margin: 10px auto;
+  display: block;
+  font-family: inherit;
+}
+
+/* Button Sizes */
+button.btn-large {
+  width: 600px;
+}
+
+button.btn-medium {
+  width: 280px;
+}
+
+/* Button Colors */
+button.btn-blue {
+  background-color: #C62828;
+  color: white;
+}
+
+button.btn-green {
+  background-color: #28a745;
+  color: white;
+}
+
+button.btn-gray {
+  background-color: #6c757d;
+  color: white;
+}
+
+/* Confirmation Section */
+.confirmation-section {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  max-width: 700px;
+  margin: 40px auto;
+}
+
+.checkbox-row {
+  display: flex;
+  gap: 40px;
+  margin-top: 16px;
+  justify-content: space-between;
+}
+
+.checkbox-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Signature Image */
+#signature-image {
+  max-width: 600px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  display: block;
+  min-height: 150px;
+  margin: 10px auto;
+}
+
+/* General Styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+  padding: 20px;
+}
+
+header h1 {
+  color: #212529;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+th {
+  background-color: #C62828;
+  color: white;
+  padding: 12px;
+  text-align: center;
+}
+
+td {
+  padding: 10px;
+  border: 1px solid #dee2e6;
+  text-align: left;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tr:hover {
+  background-color: #e6f0ff;
+}
+
+.category-header {
+  background-color: #d1ecf1 !important;
+  color: #0c5460;
+  font-weight: bold;
+  text-align: left;
+  padding: 12px;
+}
+
+input[type="text"], input[type="date"] {
+  width: 100%;
+  max-width: 300px;
+  padding: 8px;
+  font-size: 16px;
+  margin-top: 5px;
+  box-sizing: border-box;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+}
+
+/* Maßnahmen Tabelle Hervorhebung */
+#maßnahmen-tabelle {
+  border: 2px solid red;
+}
+</style>
+
+<style>
+/* Verbesserte mobile Darstellung */
+@media (max-width: 768px) {
+  body, input, td, label {
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  .checkbox-row {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .form-section, #content, .confirmation-section, .signature-container {
+    max-width: 100%;
+    padding: 0 10px;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+    word-break: break-word;
+  }
+
+  th {
+    position: sticky;
+    top: 0;
+    background-color: #C62828;
+    color: white;
+  }
+
+  button, .custom-btn, .btn-large, .btn-medium {
+    font-size: 16px;
+    padding: 14px;
+    width: 100% !important;
+    margin: 10px 0 !important;
+  }
+
+  .buttons,
+  .btn-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+/* Touchfreundliche Inputs */
+input[type="radio"], input[type="checkbox"] {
+  width: 24px;
+  height: 24px;
+}
+
+label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  padding: 4px 0;
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #121212;
+    color: #f0f0f0;
+  }
+
+  table, input, label {
+    background: #1e1e1e;
+    color: #ffffff;
+  }
+
+  th {
+    background-color: #880000;
+  }
+
+  .category-header {
+    background-color: #222;
+    color: #eee;
+  }
+}
+
+/* Visuelle Trennung großer Abschnitte */
+.category-header {
+  background: #f5f5f5;
+  border-left: 4px solid #C62828;
+  padding: 12px;
+  font-weight: bold;
+}
+
+
+</style>
+
+</head>
+<body>
+<div class="print-wrapper">
+<header>
+<div style="display: flex; justify-content: space-between; align-items: center;">
+  <h1 id="titel" style="margin: 0;"></h1>
+  <input id="datum" type="date" style="padding: 8px; font-size: 16px;" />
+</div>
+</header>
+
+<div class="form-section" style="max-width: 300px;">
+<div style="margin-bottom: 10px;">
+  <label for="markt">Marktnummer:</label>
+  <input type="text" id="markt" placeholder="z. B. M123" required>
+</div>
+<div style="margin-bottom: 10px;">
+  <label for="name">Name:</label><br/>
+  <input id="name" style="width: 100%;" type="text"/>
+</div>
+<div style="margin-bottom: 10px;">
+  <label for="sifa">SiFa:</label><br/>
+  <input id="sifa" style="width: 100%;" type="text"/>
+</div>
+</div>
+
+<div style="text-align: center; margin: 40px 0; font-size: 20px;">
+<strong>Teil der Gefährdungsbeurteilung / Wirksamkeitskontrolle</strong><br/>
+Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
+</div>
+
+<table id="fragenTabelle">
+<thead>
+  <tr>
+    <th>Frage</th>
+    <th>Ja</th>
+    <th>Nein</th>
+    <th>Nicht vorhanden</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td class="category-header" colspan="4">1.0 Gesamtmarkt</td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Tragen alle Personen im Markt festes, geschlossenes und flaches Schuhwerk entsprechend den Vorgaben?</td>
+    <td><input name="1.0 Gesamtmarkt-0" type="radio" value="ja"/></td>
+    <td><input name="1.0 Gesamtmarkt-0" type="radio" value="nein"/></td>
+    <td><input name="1.0 Gesamtmarkt-0" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Sind an den Automatiktüren, Rolltoren und Schnelllauftoren keine sichtbaren Beschädigungen erkennbar?</td>
+    <td><input name="1.0 Gesamtmarkt-1" type="radio" value="ja"/></td>
+    <td><input name="1.0 Gesamtmarkt-1" type="radio" value="nein"/></td>
+    <td><input name="1.0 Gesamtmarkt-1" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Ist die Aufzugsanlage geprüft und in einem ordnungsgemäßen Zustand (ohne sichtbare Beschädigungen und mit funktionsfähigen Schutzeinrichtungen)?</td>
+    <td><input name="1.0 Gesamtmarkt-2" type="radio" value="ja"/></td>
+    <td><input name="1.0 Gesamtmarkt-2" type="radio" value="nein"/></td>
+    <td><input name="1.0 Gesamtmarkt-2" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Ist die Leergutrücknahme in einem ordnungsgemäßen Zustand (Schutzeinrichtungen intakt, Einzugsstellen gesichert, keine Glasscherben)?</td>
+    <td><input name="1.0 Gesamtmarkt-3" type="radio" value="ja"/></td>
+    <td><input name="1.0 Gesamtmarkt-3" type="radio" value="nein"/></td>
+    <td><input name="1.0 Gesamtmarkt-3" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Sind die Leitern geprüft gemäß „Leitern und Tritte" (BGV D 36) bzw. GUV-VD360?</td>
+    <td><input name="1.0 Gesamtmarkt-4" type="radio" value="ja"/></td>
+    <td><input name="1.0 Gesamtmarkt-4" type="radio" value="nein"/></td>
+    <td><input name="1.0 Gesamtmarkt-4" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Werden aus dem Ordersatz geeignete Sicherheitsmesser verwendet?</td>
+    <td><input name="1.0 Gesamtmarkt-5" type="radio" value="ja"/></td>
+    <td><input name="1.0 Gesamtmarkt-5" type="radio" value="nein"/></td>
+    <td><input name="1.0 Gesamtmarkt-5" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Sind zur Zeit der Begehung keine sichtbaren Beschädigungen an Schaltern und Steckdosen vorhanden?</td>
+    <td><input name="1.0 Gesamtmarkt-6" type="radio" value="ja"/></td>
+    <td><input name="1.0 Gesamtmarkt-6" type="radio" value="nein"/></td>
+    <td><input name="1.0 Gesamtmarkt-6" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Ist der Gabelhubwagen in einem ordnungsgemäßen Zustand ohne sichtbare Beschädigungen?</td>
+    <td><input name="1.0 Gesamtmarkt-7" type="radio" value="ja"/></td>
+    <td><input name="1.0 Gesamtmarkt-7" type="radio" value="nein"/></td>
+    <td><input name="1.0 Gesamtmarkt-7" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Ist der elektrische Hubwagen geprüft und in einem ordnungsgemäßen Zustand (keine sichtbaren Beschädigungen, funktionsfähige Schutzeinrichtungen)?</td>
+    <td><input name="1.0 Gesamtmarkt-8" type="radio" value="ja"/></td>
+    <td><input name="1.0 Gesamtmarkt-8" type="radio" value="nein"/></td>
+    <td><input name="1.0 Gesamtmarkt-8" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Sind die Feuerlöscheinrichtungen frei zugänglich und nicht durch Ware, Displays oder sonstige Gegenstände blockiert?</td>
+    <td><input name="1.0 Gesamtmarkt-9" type="radio" value="ja"/></td>
+    <td><input name="1.0 Gesamtmarkt-9" type="radio" value="nein"/></td>
+    <td><input name="1.0 Gesamtmarkt-9" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Sind die Feuerlöscheinrichtungen geprüft, und werden die Prüffristen eingehalten?</td>
+    <td><input name="1.0 Gesamtmarkt-10" type="radio" value="ja"/></td>
+    <td><input name="1.0 Gesamtmarkt-10" type="radio" value="nein"/></td>
+    <td><input name="1.0 Gesamtmarkt-10" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Sind die Brandschutztüren frei von Zugestellungen und wird ihre Funktion nicht gestört?</td>
+    <td><input name="1.0 Gesamtmarkt-11" type="radio" value="ja"/></td>
+    <td><input name="1.0 Gesamtmarkt-11" type="radio" value="nein"/></td>
+    <td><input name="1.0 Gesamtmarkt-11" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Sind die Türhaltevorrichtungen und der Schließfolgeregler des Feuerschutzabschlusses in Ordnung?</td>
+    <td><input name="1.0 Gesamtmarkt-12" type="radio" value="ja"/></td>
+    <td><input name="1.0 Gesamtmarkt-12" type="radio" value="nein"/></td>
+    <td><input name="1.0 Gesamtmarkt-12" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Sind die Brandschutztüren ohne Beschädigungen?</td>
+    <td><input name="1.0 Gesamtmarkt-13" type="radio" value="ja"/></td>
+    <td><input name="1.0 Gesamtmarkt-13" type="radio" value="nein"/></td>
+    <td><input name="1.0 Gesamtmarkt-13" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Ist ein aktueller Flucht- und Rettungsplan vorhanden?</td>
+    <td><input name="1.0 Gesamtmarkt-14" type="radio" value="ja"/></td>
+    <td><input name="1.0 Gesamtmarkt-14" type="radio" value="nein"/></td>
+    <td><input name="1.0 Gesamtmarkt-14" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Ist die Notausgangsbeleuchtung ohne Defekte?</td>
+    <td><input name="1.0 Gesamtmarkt-15" type="radio" value="ja"/></td>
+    <td><input name="1.0 Gesamtmarkt-15" type="radio" value="nein"/></td>
+    <td><input name="1.0 Gesamtmarkt-15" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Sind die Notausgänge frei zugänglich und nicht zugestellt?</td>
+    <td><input name="1.0 Gesamtmarkt-16" type="radio" value="ja"/></td>
+    <td><input name="1.0 Gesamtmarkt-16" type="radio" value="nein"/></td>
+    <td><input name="1.0 Gesamtmarkt-16" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Sind die Notausgänge und -ausstiege von innen ohne fremde Hilfe zu öffnen und nicht zugestellt?</td>
+    <td><input name="1.0 Gesamtmarkt-17" type="radio" value="ja"/></td>
+    <td><input name="1.0 Gesamtmarkt-17" type="radio" value="nein"/></td>
+    <td><input name="1.0 Gesamtmarkt-17" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Führen die Notausgänge in sichere Bereiche?</td>
+    <td><input name="1.0 Gesamtmarkt-18" type="radio" value="ja"/></td>
+    <td><input name="1.0 Gesamtmarkt-18" type="radio" value="nein"/></td>
+    <td><input name="1.0 Gesamtmarkt-18" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Sind die Verkehrswege so beschaffen, dass kein Unfallrisiko durch Stolpern, Ausrutschen oder Umknicken besteht?</td>
+    <td><input name="1.0 Gesamtmarkt-19" type="radio" value="ja"/></td>
+    <td><input name="1.0 Gesamtmarkt-19" type="radio" value="nein"/></td>
+    <td><input name="1.0 Gesamtmarkt-19" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Sind die Treppen unbeschädigt und frei von Gegenständen?</td>
+    <td><input name="1.0 Gesamtmarkt-20" type="radio" value="ja"/></td>
+    <td><input name="1.0 Gesamtmarkt-20" type="radio" value="nein"/></td>
+    <td><input name="1.0 Gesamtmarkt-20" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Wird die passende persönliche Schutzausrüstung (z. B. Schutzbrille, Handschuhe) für Tätigkeiten mit Gefahrstoffen zur Verfügung gestellt?</td>
+    <td><input name="1.0 Gesamtmarkt-21" type="radio" value="ja"/></td>
+    <td><input name="1.0 Gesamtmarkt-21" type="radio" value="nein"/></td>
+    <td><input name="1.0 Gesamtmarkt-21" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Befindet sich brennbares Material (z. B. Kisten, Kartons) in den Technik- oder Heizräumen?</td>
+    <td><input name="1.0 Gesamtmarkt-22" type="radio" value="ja"/></td>
+    <td><input name="1.0 Gesamtmarkt-22" type="radio" value="nein"/></td>
+    <td><input name="1.0 Gesamtmarkt-22" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Werden Technik- und Heizräume als Lagerräume genutzt?</td>
+    <td><input name="1.0 Gesamtmarkt-23" type="radio" value="ja"/></td>
+    <td><input name="1.0 Gesamtmarkt-23" type="radio" value="nein"/></td>
+    <td><input name="1.0 Gesamtmarkt-23" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Sind Betriebsanweisungen gut zugänglich und werden Sicherheitsanweisungen eingehalten?</td>
+    <td><input name="1.0 Gesamtmarkt-24" type="radio" value="ja"/></td>
+    <td><input name="1.0 Gesamtmarkt-24" type="radio" value="nein"/></td>
+    <td><input name="1.0 Gesamtmarkt-24" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Liegen Steckverbindungen auf dem Boden?</td>
+    <td><input name="1.0 Gesamtmarkt-25" type="radio" value="ja"/></td>
+    <td><input name="1.0 Gesamtmarkt-25" type="radio" value="nein"/></td>
+    <td><input name="1.0 Gesamtmarkt-25" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+
+  <tr><td class="category-header" colspan="4" style="text-align: left;">2.0 Backstation</td></tr>
+  <tr>
+    <td style="text-align: left;">Sind die Arbeitsgeräte an der Backstation (Backofen, Backbleche, Brotschneidemaschine) in einem ordnungsgemäßen Zustand?</td>
+    <td><input name="2.0 Backstation-0" type="radio" value="ja"/></td>
+    <td><input name="2.0 Backstation-0" type="radio" value="nein"/></td>
+    <td><input name="2.0 Backstation-0" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Ist das freistehende Handwaschbecken ohne Beschädigungen?</td>
+    <td><input name="2.0 Backstation-1" type="radio" value="ja"/></td>
+    <td><input name="2.0 Backstation-1" type="radio" value="nein"/></td>
+    <td><input name="2.0 Backstation-1" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Sind die Elektroleitungen intakt und bilden keine Stolperstellen?</td>
+    <td><input name="2.0 Backstation-2" type="radio" value="ja"/></td>
+    <td><input name="2.0 Backstation-2" type="radio" value="nein"/></td>
+    <td><input name="2.0 Backstation-2" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Entspricht die Zuleitung der VDE-Norm?</td>
+    <td><input name="2.0 Backstation-3" type="radio" value="ja"/></td>
+    <td><input name="2.0 Backstation-3" type="radio" value="nein"/></td>
+    <td><input name="2.0 Backstation-3" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Ist der Backhandschuh für die Backstation in einem ordnungsgemäßen Zustand (kein Verschleiß) und besitzt eine lange Stulpe?</td>
+    <td><input name="2.0 Backstation-4" type="radio" value="ja"/></td>
+    <td><input name="2.0 Backstation-4" type="radio" value="nein"/></td>
+    <td><input name="2.0 Backstation-4" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Sind alle Heißgeräte (z. B. Heißtheken, Fritteusen) in technisch einwandfreiem Zustand?</td>
+    <td><input name="2.0 Backstation-5" type="radio" value="ja"/></td>
+    <td><input name="2.0 Backstation-5" type="radio" value="nein"/></td>
+    <td><input name="2.0 Backstation-5" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+
+  <tr><td class="category-header" colspan="4" style="text-align: left;" class="page-break-before">3.0 Serviceabteilung</td></tr>
+  <tr>
+    <td style="text-align: left;">Hängt der Hautschutzplan aus?</td>
+    <td><input name="3.0 Serviceabteilung-0" type="radio" value="ja"/></td>
+    <td><input name="3.0 Serviceabteilung-0" type="radio" value="nein"/></td>
+    <td><input name="3.0 Serviceabteilung-0" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Werden Hautschutz- und Hautpflegeprodukte zur Verfügung gestellt?</td>
+    <td><input name="3.0 Serviceabteilung-1" type="radio" value="ja"/></td>
+    <td><input name="3.0 Serviceabteilung-1" type="radio" value="nein"/></td>
+    <td><input name="3.0 Serviceabteilung-1" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Sind die Arbeitsgeräte im Servicebereich in einem ordnungsgemäßen Zustand?</td>
+    <td><input name="3.0 Serviceabteilung-2" type="radio" value="ja"/></td>
+    <td><input name="3.0 Serviceabteilung-2" type="radio" value="nein"/></td>
+    <td><input name="3.0 Serviceabteilung-2" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Bleiben die Thekenscheiben selbstständig in der oberen Stellung stehen?</td>
+    <td><input name="3.0 Serviceabteilung-3" type="radio" value="ja"/></td>
+    <td><input name="3.0 Serviceabteilung-3" type="radio" value="nein"/></td>
+    <td><input name="3.0 Serviceabteilung-3" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Sind die Glastüren und Glaswände in Augenhöhe gekennzeichnet?</td>
+    <td><input name="3.0 Serviceabteilung-4" type="radio" value="ja"/></td>
+    <td><input name="3.0 Serviceabteilung-4" type="radio" value="nein"/></td>
+    <td><input name="3.0 Serviceabteilung-4" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Werden Schneidbretter und Messer regelmäßig gereinigt und farbcodiert verwendet?</td>
+    <td><input name="3.0 Serviceabteilung-5" type="radio" value="ja"/></td>
+    <td><input name="3.0 Serviceabteilung-5" type="radio" value="nein"/></td>
+    <td><input name="3.0 Serviceabteilung-5" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Werden Schneidbretter mit Messereinschub verwendet?</td>
+    <td><input name="3.0 Serviceabteilung-6" type="radio" value="ja"/></td>
+    <td><input name="3.0 Serviceabteilung-6" type="radio" value="nein"/></td>
+    <td><input name="3.0 Serviceabteilung-6" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Werden Messerhalter verwendet?</td>
+    <td><input name="3.0 Serviceabteilung-7" type="radio" value="ja"/></td>
+    <td><input name="3.0 Serviceabteilung-7" type="radio" value="nein"/></td>
+    <td><input name="3.0 Serviceabteilung-7" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Sind die Convenience-Geräte in einem ordnungsgemäßen Zustand?</td>
+    <td><input name="3.0 Serviceabteilung-8" type="radio" value="ja"/></td>
+    <td><input name="3.0 Serviceabteilung-8" type="radio" value="nein"/></td>
+    <td><input name="3.0 Serviceabteilung-8" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+
+  <tr><td class="category-header" colspan="4" style="text-align: left;">4.0 Kassenzone</td></tr>
+  <tr>
+    <td style="text-align: left;">Ist der Fußraum frei von Gegenständen?</td>
+    <td><input name="4.0 Kassenzone-0" type="radio" value="ja"/></td>
+    <td><input name="4.0 Kassenzone-0" type="radio" value="nein"/></td>
+    <td><input name="4.0 Kassenzone-0" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Ist der Fußboden im Kassenbereich in einem ordnungsgemäßen Zustand (ohne sichtbare Beschädigungen)?</td>
+    <td><input name="4.0 Kassenzone-1" type="radio" value="ja"/></td>
+    <td><input name="4.0 Kassenzone-1" type="radio" value="nein"/></td>
+    <td><input name="4.0 Kassenzone-1" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Sind die serienmäßig eingebauten Heizgeräte im Kassenraum nicht durch brennbares Material zugestellt?</td>
+    <td><input name="4.0 Kassenzone-2" type="radio" value="ja"/></td>
+    <td><input name="4.0 Kassenzone-2" type="radio" value="nein"/></td>
+    <td><input name="4.0 Kassenzone-2" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Sind die Kassenstühle in einem funktionsfähigen Zustand?</td>
+    <td><input name="4.0 Kassenzone-3" type="radio" value="ja"/></td>
+    <td><input name="4.0 Kassenzone-3" type="radio" value="nein"/></td>
+    <td><input name="4.0 Kassenzone-3" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Ist das Transportband unbeschädigt und weist keine Lücke von über 5 mm auf?</td>
+    <td><input name="4.0 Kassenzone-4" type="radio" value="ja"/></td>
+    <td><input name="4.0 Kassenzone-4" type="radio" value="nein"/></td>
+    <td><input name="4.0 Kassenzone-4" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+
+  <tr><td class="category-header" colspan="4" style="text-align: left;" class="page-break-before">5.0 Kühlhaus</td></tr>
+  <tr>
+    <td style="text-align: left;">Ist in den Kühlhäusern an der Beleuchtung die Überglocke vorhanden?</td>
+    <td><input name="5.0 Kühlhaus-0" type="radio" value="ja"/></td>
+    <td><input name="5.0 Kühlhaus-0" type="radio" value="nein"/></td>
+    <td><input name="5.0 Kühlhaus-0" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Ist die Notentriegelung vorhanden und in Ordnung?</td>
+    <td><input name="5.0 Kühlhaus-1" type="radio" value="ja"/></td>
+    <td><input name="5.0 Kühlhaus-1" type="radio" value="nein"/></td>
+    <td><input name="5.0 Kühlhaus-1" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Sind die Kühlhaustüren von innen mit dem Rettungswegschild ISO 7010 gekennzeichnet?</td>
+    <td><input name="5.0 Kühlhaus-2" type="radio" value="ja"/></td>
+    <td><input name="5.0 Kühlhaus-2" type="radio" value="nein"/></td>
+    <td><input name="5.0 Kühlhaus-2" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Funktioniert die Beleuchtung einwandfrei?</td>
+    <td><input name="5.0 Kühlhaus-3" type="radio" value="ja"/></td>
+    <td><input name="5.0 Kühlhaus-3" type="radio" value="nein"/></td>
+    <td><input name="5.0 Kühlhaus-3" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Ist die Notruf-Funktion (wenn vorhanden) in Ordnung und ohne Beschädigungen?</td>
+    <td><input name="5.0 Kühlhaus-4" type="radio" value="ja"/></td>
+    <td><input name="5.0 Kühlhaus-4" type="radio" value="nein"/></td>
+    <td><input name="5.0 Kühlhaus-4" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+
+  <tr><td class="category-header" colspan="4" style="text-align: left;">6.0 Lager</td></tr>
+  <tr>
+    <td style="text-align: left;">Sind die Schwerlastregale geprüft?</td>
+    <td><input name="6.0 Lager-0" type="radio" value="ja"/></td>
+    <td><input name="6.0 Lager-0" type="radio" value="nein"/></td>
+    <td><input name="6.0 Lager-0" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Ist der Anfahrschutz vorhanden?</td>
+    <td><input name="6.0 Lager-1" type="radio" value="ja"/></td>
+    <td><input name="6.0 Lager-1" type="radio" value="nein"/></td>
+    <td><input name="6.0 Lager-1" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Ist die Traglastangabe an den Schwerlastregalen vorhanden?</td>
+    <td><input name="6.0 Lager-2" type="radio" value="ja"/></td>
+    <td><input name="6.0 Lager-2" type="radio" value="nein"/></td>
+    <td><input name="6.0 Lager-2" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Befindet sich eine Absturzsicherung an der Rampe?</td>
+    <td><input name="6.0 Lager-3" type="radio" value="ja"/></td>
+    <td><input name="6.0 Lager-3" type="radio" value="nein"/></td>
+    <td><input name="6.0 Lager-3" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Ist die Absturzsicherung in einem ordnungsgemäßen Zustand (ohne sichtbare Beschädigungen und mit Kennzeichnung)?</td>
+    <td><input name="6.0 Lager-4" type="radio" value="ja"/></td>
+    <td><input name="6.0 Lager-4" type="radio" value="nein"/></td>
+    <td><input name="6.0 Lager-4" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Ist die Müll-/Papierpresse geprüft?</td>
+    <td><input name="6.0 Lager-5" type="radio" value="ja"/></td>
+    <td><input name="6.0 Lager-5" type="radio" value="nein"/></td>
+    <td><input name="6.0 Lager-5" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Ist die Müll-/Papierpresse in einem ordnungsgemäßen Zustand (keine sichtbaren Beschädigungen, intakte Schutzeinrichtungen, fester Stand)?</td>
+    <td><input name="6.0 Lager-6" type="radio" value="ja"/></td>
+    <td><input name="6.0 Lager-6" type="radio" value="nein"/></td>
+    <td><input name="6.0 Lager-6" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Sind die Verkehrswege so beschaffen, dass kein Risiko zum Stolpern, Ausrutschen oder Umknicken besteht?</td>
+    <td><input name="6.0 Lager-7" type="radio" value="ja"/></td>
+    <td><input name="6.0 Lager-7" type="radio" value="nein"/></td>
+    <td><input name="6.0 Lager-7" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+
+  <tr><td class="category-header" colspan="4" style="text-align: left;">7.0 Sozialräume</td></tr>
+  <tr>
+    <td style="text-align: left;">Hängen im Sozialbereich die aktuellen aushangpflichtigen Gesetze, Unfallverhütungsvorschriften sowie die Brandschutzordnung Teil A aus?</td>
+    <td><input name="7.0 Sozialräume-0" type="radio" value="ja"/></td>
+    <td><input name="7.0 Sozialräume-0" type="radio" value="nein"/></td>
+    <td><input name="7.0 Sozialräume-0" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Sind die Kaffeemaschine und andere hitzeentwickelnde Geräte auf einer nicht brennbaren Unterlage abgestellt?</td>
+    <td><input name="7.0 Sozialräume-1" type="radio" value="ja"/></td>
+    <td><input name="7.0 Sozialräume-1" type="radio" value="nein"/></td>
+    <td><input name="7.0 Sozialräume-1" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Ist der Erste-Hilfe-Koffer gut sichtbar an einer geeigneten Stelle montiert?</td>
+    <td><input name="7.0 Sozialräume-2" type="radio" value="ja"/></td>
+    <td><input name="7.0 Sozialräume-2" type="radio" value="nein"/></td>
+    <td><input name="7.0 Sozialräume-2" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Werden ortsveränderliche elektrische Betriebsmittel (z. B. Leitungen, Steckverbindungen, Leuchten, Geräte) in angemessenen Zeitabständen geprüft?</td>
+    <td><input name="7.0 Sozialräume-3" type="radio" value="ja"/></td>
+    <td><input name="7.0 Sozialräume-3" type="radio" value="nein"/></td>
+    <td><input name="7.0 Sozialräume-3" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+
+  <tr><td class="category-header" colspan="4" style="text-align: left;">8.0 Marktleiterbüro</td></tr>
+  <tr>
+    <td style="text-align: left;">Liegt eine aktuelle Liste sowie Prüfberichte prüfungsbedürftiger Einrichtungen vor?</td>
+    <td><input name="8.0 Marktleiterbüro-0" type="radio" value="ja"/></td>
+    <td><input name="8.0 Marktleiterbüro-0" type="radio" value="nein"/></td>
+    <td><input name="8.0 Marktleiterbüro-0" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Ist der Verbandskasten in einem ordnungsgemäßen Zustand?</td>
+    <td><input name="8.0 Marktleiterbüro-1" type="radio" value="ja"/></td>
+    <td><input name="8.0 Marktleiterbüro-1" type="radio" value="nein"/></td>
+    <td><input name="8.0 Marktleiterbüro-1" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Wird die "Dokumentation Erste Hilfeleistungen" geführt?</td>
+    <td><input name="8.0 Marktleiterbüro-2" type="radio" value="ja"/></td>
+    <td><input name="8.0 Marktleiterbüro-2" type="radio" value="nein"/></td>
+    <td><input name="8.0 Marktleiterbüro-2" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Sind Maßnahmen getroffen, die den Anreiz zu Raubüberfällen vermindern (z. B. Türspion, feststehender Knauf)?</td>
+    <td><input name="8.0 Marktleiterbüro-3" type="radio" value="ja"/></td>
+    <td><input name="8.0 Marktleiterbüro-3" type="radio" value="nein"/></td>
+    <td><input name="8.0 Marktleiterbüro-3" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Ist die Tür während des Umgangs mit Zahlungsmitteln verschlossen?</td>
+    <td><input name="8.0 Marktleiterbüro-4" type="radio" value="ja"/></td>
+    <td><input name="8.0 Marktleiterbüro-4" type="radio" value="nein"/></td>
+    <td><input name="8.0 Marktleiterbüro-4" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Werden neue Mitarbeiter vor Aufnahme der Tätigkeit zum Thema Arbeitssicherheit und Brandschutz unterwiesen?</td>
+    <td><input name="8.0 Marktleiterbüro-5" type="radio" value="ja"/></td>
+    <td><input name="8.0 Marktleiterbüro-5" type="radio" value="nein"/></td>
+    <td><input name="8.0 Marktleiterbüro-5" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Ist während der gesamten Ladenöffnungszeit mindestens ein Mitarbeiter mit der Qualifikation zum Ersthelfer anwesend?</td>
+    <td><input name="8.0 Marktleiterbüro-6" type="radio" value="ja"/></td>
+    <td><input name="8.0 Marktleiterbüro-6" type="radio" value="nein"/></td>
+    <td><input name="8.0 Marktleiterbüro-6" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Ist während der gesamten Ladenöffnungszeit mindestens ein Mitarbeiter mit der Qualifikation als Brandschutzhelfer anwesend?</td>
+    <td><input name="8.0 Marktleiterbüro-7" type="radio" value="ja"/></td>
+    <td><input name="8.0 Marktleiterbüro-7" type="radio" value="nein"/></td>
+    <td><input name="8.0 Marktleiterbüro-7" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Ist ein Sicherheitsbeauftragter ausgebildet und bestellt?</td>
+    <td><input name="8.0 Marktleiterbüro-8" type="radio" value="ja"/></td>
+    <td><input name="8.0 Marktleiterbüro-8" type="radio" value="nein"/></td>
+    <td><input name="8.0 Marktleiterbüro-8" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Wurde die Gefährdungsbeurteilung (GBO) erstellt und ist sie auf dem aktuellen Stand?</td>
+    <td><input name="8.0 Marktleiterbüro-9" type="radio" value="ja"/></td>
+    <td><input name="8.0 Marktleiterbüro-9" type="radio" value="nein"/></td>
+    <td><input name="8.0 Marktleiterbüro-9" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+
+  <tr><td class="category-header" colspan="4" style="text-align: left;">9.0 CO2 Kühleinrichtungen</td></tr>
+  <tr>
+    <td style="text-align: left;">Wurden Personen, die sich im Bereich von Kühlanlagen oder Kühlhäusern aufhalten, unterwiesen?</td>
+    <td><input name="9.0 CO2 Kühleinrichtungen-0" type="radio" value="ja"/></td>
+    <td><input name="9.0 CO2 Kühleinrichtungen-0" type="radio" value="nein"/></td>
+    <td><input name="9.0 CO2 Kühleinrichtungen-0" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Sind die Sensoren nicht mit Material oder sonstigen Gegenständen verstellt?</td>
+    <td><input name="9.0 CO2 Kühleinrichtungen-1" type="radio" value="ja"/></td>
+    <td><input name="9.0 CO2 Kühleinrichtungen-1" type="radio" value="nein"/></td>
+    <td><input name="9.0 CO2 Kühleinrichtungen-1" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Sind alle Sicherheitsvorrichtungen (Alarmleuchten, Kennzeichnungen, Kühlhaustüren) intakt?</td>
+    <td><input name="9.0 CO2 Kühleinrichtungen-2" type="radio" value="ja"/></td>
+    <td><input name="9.0 CO2 Kühleinrichtungen-2" type="radio" value="nein"/></td>
+    <td><input name="9.0 CO2 Kühleinrichtungen-2" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+
+  <tr><td class="category-header" colspan="4" style="text-align: left;">10.0 Praktikanten</td></tr>
+  <tr>
+    <td style="text-align: left;">Wurde die Unterweisung von Praktikanten und Schüleraushilfen durchgeführt?</td>
+    <td><input name="10.0 Praktikanten-0" type="radio" value="ja"/></td>
+    <td><input name="10.0 Praktikanten-0" type="radio" value="nein"/></td>
+    <td><input name="10.0 Praktikanten-0" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Wurde die Unterweisung schriftlich dokumentiert?</td>
+    <td><input name="10.0 Praktikanten-1" type="radio" value="ja"/></td>
+    <td><input name="10.0 Praktikanten-1" type="radio" value="nein"/></td>
+    <td><input name="10.0 Praktikanten-1" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Haben die Personen die Inhalte der Unterweisung verstanden?</td>
+    <td><input name="10.0 Praktikanten-2" type="radio" value="ja"/></td>
+    <td><input name="10.0 Praktikanten-2" type="radio" value="nein"/></td>
+    <td><input name="10.0 Praktikanten-2" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+
+  <tr><td class="category-header" colspan="4" style="text-align: left;">11.0 Arbeitsmedizin</td></tr>
+  <tr>
+    <td style="text-align: left;">Wird den Beschäftigten arbeitsmedizinische Vorsorge angeboten?</td>
+    <td><input name="11.0 Arbeitsmedizin-0" type="radio" value="ja"/></td>
+    <td><input name="11.0 Arbeitsmedizin-0" type="radio" value="nein"/></td>
+    <td><input name="11.0 Arbeitsmedizin-0" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Sind Maßnahmen gegen Hauterkrankungen getroffen?</td>
+    <td><input name="11.0 Arbeitsmedizin-1" type="radio" value="ja"/></td>
+    <td><input name="11.0 Arbeitsmedizin-1" type="radio" value="nein"/></td>
+    <td><input name="11.0 Arbeitsmedizin-1" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Sind Mitarbeitertoiletten und Pausenräume sauber und mit Seife, Einmalhandtüchern und ggf. Desinfektionsmittel ausgestattet?</td>
+    <td><input name="11.0 Arbeitsmedizin-2" type="radio" value="ja"/></td>
+    <td><input name="11.0 Arbeitsmedizin-2" type="radio" value="nein"/></td>
+    <td><input name="11.0 Arbeitsmedizin-2" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+
+  <tr><td class="category-header" colspan="4" style="text-align: left;">12.0 Psychische Belastung</td></tr>
+  <tr>
+    <td style="text-align: left;">Werden Wünsche der Beschäftigten bei der Arbeitsplanung berücksichtigt?</td>
+    <td><input name="12.0 Psychische Belastung-0" type="radio" value="ja"/></td>
+    <td><input name="12.0 Psychische Belastung-0" type="radio" value="nein"/></td>
+    <td><input name="12.0 Psychische Belastung-0" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Ist die Pausenregelung umgesetzt?</td>
+    <td><input name="12.0 Psychische Belastung-1" type="radio" value="ja"/></td>
+    <td><input name="12.0 Psychische Belastung-1" type="radio" value="nein"/></td>
+    <td><input name="12.0 Psychische Belastung-1" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Ist ein Pausenraum vorhanden?</td>
+    <td><input name="12.0 Psychische Belastung-2" type="radio" value="ja"/></td>
+    <td><input name="12.0 Psychische Belastung-2" type="radio" value="nein"/></td>
+    <td><input name="12.0 Psychische Belastung-2" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Werden Überstunden gering gehalten?</td>
+    <td><input name="12.0 Psychische Belastung-3" type="radio" value="ja"/></td>
+    <td><input name="12.0 Psychische Belastung-3" type="radio" value="nein"/></td>
+    <td><input name="12.0 Psychische Belastung-3" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Werden regelmäßige Teambesprechungen durchgeführt?</td>
+    <td><input name="12.0 Psychische Belastung-4" type="radio" value="ja"/></td>
+    <td><input name="12.0 Psychische Belastung-4" type="radio" value="nein"/></td>
+    <td><input name="12.0 Psychische Belastung-4" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Werden neue Mitarbeiter eingearbeitet?</td>
+    <td><input name="12.0 Psychische Belastung-5" type="radio" value="ja"/></td>
+    <td><input name="12.0 Psychische Belastung-5" type="radio" value="nein"/></td>
+    <td><input name="12.0 Psychische Belastung-5" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Ist eine Unterweisung zum Thema Brand- und Arbeitsschutz erfolgt?</td>
+    <td><input name="12.0 Psychische Belastung-6" type="radio" value="ja"/></td>
+    <td><input name="12.0 Psychische Belastung-6" type="radio" value="nein"/></td>
+    <td><input name="12.0 Psychische Belastung-6" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Hängt ein sogenanntes schwarzes Brett im Sozialraum oder Kassenbüro?</td>
+    <td><input name="12.0 Psychische Belastung-7" type="radio" value="ja"/></td>
+    <td><input name="12.0 Psychische Belastung-7" type="radio" value="nein"/></td>
+    <td><input name="12.0 Psychische Belastung-7" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Werden Entscheidungen transparent erläutert?</td>
+    <td><input name="12.0 Psychische Belastung-8" type="radio" value="ja"/></td>
+    <td><input name="12.0 Psychische Belastung-8" type="radio" value="nein"/></td>
+    <td><input name="12.0 Psychische Belastung-8" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Gibt es positive Rückmeldungen bei guter Leistung?</td>
+    <td><input name="12.0 Psychische Belastung-9" type="radio" value="ja"/></td>
+    <td><input name="12.0 Psychische Belastung-9" type="radio" value="nein"/></td>
+    <td><input name="12.0 Psychische Belastung-9" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Wird konstruktive Kritik geübt?</td>
+    <td><input name="12.0 Psychische Belastung-10" type="radio" value="ja"/></td>
+    <td><input name="12.0 Psychische Belastung-10" type="radio" value="nein"/></td>
+    <td><input name="12.0 Psychische Belastung-10" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Wurden Weiterbildungsmöglichkeiten geschaffen bzw. angeboten?</td>
+    <td><input name="12.0 Psychische Belastung-11" type="radio" value="ja"/></td>
+    <td><input name="12.0 Psychische Belastung-11" type="radio" value="nein"/></td>
+    <td><input name="12.0 Psychische Belastung-11" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Gibt es einen Aushang zur Information über die Suchtprävention?</td>
+    <td><input name="12.0 Psychische Belastung-12" type="radio" value="ja"/></td>
+    <td><input name="12.0 Psychische Belastung-12" type="radio" value="nein"/></td>
+    <td><input name="12.0 Psychische Belastung-12" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Ist ein betriebliches Wiedereingliederungsmanagement implementiert?</td>
+    <td><input name="12.0 Psychische Belastung-13" type="radio" value="ja"/></td>
+    <td><input name="12.0 Psychische Belastung-13" type="radio" value="nein"/></td>
+    <td><input name="12.0 Psychische Belastung-13" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Wird Alleinarbeit vermieden?</td>
+    <td><input name="12.0 Psychische Belastung-14" type="radio" value="ja"/></td>
+    <td><input name="12.0 Psychische Belastung-14" type="radio" value="nein"/></td>
+    <td><input name="12.0 Psychische Belastung-14" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Ist die Betreuung nach einem Überfall organisiert?</td>
+    <td><input name="12.0 Psychische Belastung-15" type="radio" value="ja"/></td>
+    <td><input name="12.0 Psychische Belastung-15" type="radio" value="nein"/></td>
+    <td><input name="12.0 Psychische Belastung-15" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Werden Schulungen für den Umgang mit gewalttätigen Situationen ermöglicht?</td>
+    <td><input name="12.0 Psychische Belastung-16" type="radio" value="ja"/></td>
+    <td><input name="12.0 Psychische Belastung-16" type="radio" value="nein"/></td>
+    <td><input name="12.0 Psychische Belastung-16" type="radio" value="nicht_vorhanden"/></td>
+  </tr>
+</tbody>
+</table>
+<br>
+
+<h2 class="page-break-before" style="text-align: center;">
+Beschreibung der Maßnahmen zur Beseitigung von Defiziten
+</h2>
+<br>
+
+<table>
+<thead>
+  <tr>
+    <th>Nr.</th>
+    <th>Beschreibung</th>
+  </tr>
+</thead>
+<tbody id="maßnahmen-tabelle">
+  <!-- Diese Zeilen werden dynamisch von JavaScript hinzugefügt -->
+</tbody>
+</table>
+
+<div class="page-break-before confirmation-section">
+<h2>Abschlussbestätigung</h2>
+<div class="checkbox-row">
+  <div class="checkbox-column">
+    <label for="mangel">
+      <input type="checkbox" id="mangel"/>
+      <span>Alle Mängel wurden zur Kenntnis genommen.</span>
+    </label>
+    <label for="massnahmen">
+      <input type="checkbox" id="massnahmen"/>
+      <span>Maßnahmen gemäß Plan werden umgesetzt.</span>
+    </label>
+  </div>
+  <div class="checkbox-column">
+    <label for="nachkontrolle">
+      <input type="checkbox" id="nachkontrolle"/>
+      <span>Nachkontrolle wird durchgeführt.</span>
+    </label>
+    <label for="mitarbeiter">
+      <input type="checkbox" id="mitarbeiter"/>
+      <span>Mitarbeiter wurden informiert.</span>
+    </label>
+  </div>
+</div>
+</div>
+
+<!-- Unterschriftenfeld mit oben links platziertem "Unterschrift"-Label -->
+<div class="signature-container" style="position: relative; max-width: 600px; margin: 0 auto 20px auto;">
+<label style="
+  position: absolute;
+  top: 8px;
+  left: 12px;
+  background: white;
+  padding: 0 6px;
+  font-weight: bold;
+  font-size: 14px;
+  color: #212529;
+  pointer-events: none;
+  user-select: none;
+  z-index: 10;
+">Unterschrift</label>
+
+<canvas id="signature-pad" style="
+  border: 2px solid #ddd;
+  border-radius: 16px;
+  width: 100%;
+  height: 150px;
+  touch-action: none;
+  display: block;
+"></canvas>
+</div>
+
+<button onclick="clearSignature()" class="btn-large btn-gray" style="display: block; width: 600px; margin: 10px auto;">
+🗑️ Unterschrift löschen
+</button>
+
+<div style="display: flex; justify-content: center; gap: 20px; max-width: 600px; margin: 0 auto;">
+  <button onclick="exportiereMassnahmen()" class="btn-medium btn-gray" style="flex: 1; max-width: 280px;">
+    📝 Defizite exportieren
+  </button>
+  <button onclick="prepareForPrint()" class="btn-medium btn-gray" style="flex: 1; max-width: 280px;">
+    📄 Drucken / PDF
+  </button>
+</div>
+
+<button onclick="generateAndSharePDF()" class="custom-btn" style="background-color: #C62828; width: 600px; margin: 10px auto 40px auto; display: block;">
+📤 PDF teilen (iPad)
+</button>
+
+<div id="auswertung-container">
+  <div id="auswertung"></div>
+</div>
+
+<footer style="
+  text-align: center;
+  margin-top: 40px;
+  padding: 16px 8px;
+  font-size: 12px;
+  color: #999;
+  background-color: #fafafa;
+  border-top: 1px solid #eee;
+  border-radius: 0 0 10px 10px;">
+  &copy; <span id="year"></span> Andreas Zott – Alle Rechte vorbehalten<br>
+  <span style="font-size: 11px;">(Sifa) Arbeitssicherheit <span id="year-small"></span></span>
+</footer>
+
+<script>
+  const year = new Date().getFullYear();
+  document.getElementById('year').textContent = year;
+  document.getElementById('year-small').textContent = year;
+</script>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+// PDF Generation mit verbesserter Button-Ausblendung für iPad
+async function generateAndSharePDF() {
+  // Alle Buttons temporär ausblenden
+  const buttons = document.querySelectorAll('button, .btn, .btn-group, .buttons, .custom-btn, .btn-medium, .btn-large');
+  const originalDisplays = [];
+
+  buttons.forEach((btn, index) => {
+    originalDisplays[index] = btn.style.display;
+    btn.style.display = 'none';
+  });
+
+  // Footer ausblenden
+  const footer = document.querySelector('footer');
+  const originalFooterDisplay = footer ? footer.style.display : '';
+  if (footer) {
+    footer.style.display = 'none';
+  }
+
+  // Canvas durch Bild ersetzen für PDF
+  const canvas = document.getElementById('signature-pad');
+  let signatureImg = null;
+  if (canvas) {
+    const dataURL = canvas.toDataURL();
+    signatureImg = document.createElement('img');
+    signatureImg.src = dataURL;
+    signatureImg.style.border = '2px solid #000';
+    signatureImg.style.width = '100%';
+    signatureImg.style.maxWidth = '600px';
+    signatureImg.style.height = '150px';
+    canvas.style.display = 'none';
+    canvas.parentNode.insertBefore(signatureImg, canvas);
+  }
+
+  const element = document.body;
+  const opt = {
+    margin: [20, 20, 20, 20],
+    filename: `arbeitssicherheit-checkliste-${new Date().toISOString().split('T')[0]}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: {
+      scale: 2,
+      scrollY: 0,
+      useCORS: true,
+      allowTaint: true
+    },
+    jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
+  };
+
+  try {
+    const blob = await html2pdf().set(opt).from(element).outputPdf('blob');
+    const file = new File([blob], opt.filename, { type: "application/pdf" });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({
+        title: 'Checkliste Arbeitssicherheit',
+        text: 'Anbei die ausgefüllte Arbeitssicherheits-Checkliste als PDF.',
+        files: [file],
+      });
+    } else {
+      alert("📤 Teilen nicht unterstützt – PDF wird heruntergeladen.");
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = opt.filename;
+      link.click();
+    }
+  } catch (error) {
+    console.error("Fehler bei PDF-Generierung:", error);
+    alert("Fehler bei der PDF-Erstellung. Bitte versuchen Sie es erneut.");
+  } finally {
+    // Buttons wieder einblenden
+    buttons.forEach((btn, index) => {
+      btn.style.display = originalDisplays[index];
+    });
+
+    // Footer wieder einblenden
+    if (footer) {
+      footer.style.display = originalFooterDisplay;
+    }
+
+    // Canvas wieder anzeigen und temporäres Bild entfernen
+    if (canvas && signatureImg) {
+      canvas.style.display = 'block';
+      signatureImg.remove();
+    }
+  }
+}
+
+// Signatur-Canvas Setup
+const canvas = document.getElementById('signature-pad');
+const ctx = canvas.getContext('2d');
+let drawing = false;
+
+function resizeCanvas() {
+  const ratio = window.devicePixelRatio || 1;
+  const displayWidth = canvas.offsetWidth;
+  const displayHeight = canvas.offsetHeight;
+  const oldImage = new Image();
+  oldImage.src = canvas.toDataURL();
+
+  canvas.width = displayWidth * ratio;
+  canvas.height = displayHeight * ratio;
+  canvas.style.width = displayWidth + "px";
+  canvas.style.height = displayHeight + "px";
+
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.scale(ratio, ratio);
+
+  oldImage.onload = () => {
+    ctx.drawImage(oldImage, 0, 0, displayWidth, displayHeight);
+  };
+}
+
+function getX(e) {
+  return e.touches ? e.touches[0].clientX - canvas.getBoundingClientRect().left :
+                     e.clientX - canvas.getBoundingClientRect().left;
+}
+
+function getY(e) {
+  return e.touches ? e.touches[0].clientY - canvas.getBoundingClientRect().top :
+                     e.clientY - canvas.getBoundingClientRect().top;
+}
+
+function startDrawing(e) {
+  drawing = true;
+  ctx.beginPath();
+  ctx.moveTo(getX(e), getY(e));
+}
+
+function draw(e) {
+  if (!drawing) return;
+  ctx.lineTo(getX(e), getY(e));
+  ctx.stroke();
+}
+
+function stopDrawing() {
+  drawing = false;
+  saveSignature();
+}
+
+function clearSignature() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  localStorage.removeItem("signatureImage");
+}
+
+function saveSignature() {
+  const dataURL = canvas.toDataURL();
+  localStorage.setItem("signatureImage", dataURL);
+}
+
+function restoreSignature() {
+  const dataURL = localStorage.getItem("signatureImage");
+  if (dataURL) {
+    const image = new Image();
+    image.onload = () => {
+      ctx.drawImage(image, 0, 0, canvas.offsetWidth, canvas.offsetHeight);
+    };
+    image.src = dataURL;
+  }
+}
+
+function prepareForPrint() {
+  const dataURL = canvas.toDataURL();
+  const img = document.createElement("img");
+  img.src = dataURL;
+  img.style.border = "2px solid #000";
+  img.style.width = "100%";
+  img.style.maxWidth = "600px";
+  canvas.replaceWith(img);
+  window.print();
+}
+
+function generateMeasure(question) {
+  let measure = question.trim();
+
+  // Remove trailing question mark
+  if (measure.endsWith("?")) {
+    measure = measure.slice(0, -1);
+  }
+
+  // Specific rules for more concrete and imperative measures
+  if (measure.includes("festes, geschlossenes und flaches Schuhwerk")) {
+    measure = "Stellen Sie umgehend sicher, dass alle Personen im Markt festes, geschlossenes und flaches Schuhwerk gemäß den Arbeitsschutzbestimmungen tragen.";
+  } else if (measure.includes("Automatiktüren, Rolltoren und Schnelllauftoren keine sichtbaren Beschädigungen")) {
+    measure = "Beheben Sie sofort sichtbare Beschädigungen an Automatiktüren, Rolltoren und Schnelllauftoren gemäß den Wartungsvorschriften.";
+  } else if (measure.includes("Aufzugsanlage geprüft und in einem ordnungsgemäßen Zustand")) {
+    measure = "Führen Sie dringend eine Prüfung der Aufzugsanlage gemäß BetrSichV durch und stellen Sie den ordnungsgemäßen Zustand sicher (inkl. funktionsfähiger Schutzeinrichtungen).";
+  } else if (measure.includes("Leergutrücknahme in einem ordnungsgemäßen Zustand")) {
+    measure = "Sorgen Sie unverzüglich für den ordnungsgemäßen Zustand der Leergutrücknahme gemäß den Sicherheitsvorschriften (intakte Schutzeinrichtungen, gesicherte Einzugsstellen, keine Glasscherben).";
+  } else if (measure.includes("Leitern geprüft gemäß")) {
+    measure = "Führen Sie umgehend die Prüfung der Leitern gemäß BGV D 36 / GUV-VD360 durch und dokumentieren Sie diese.";
+  } else if (measure.includes("geeignete Sicherheitsmesser verwendet")) {
+    measure = "Stellen Sie sofort die Verwendung geeigneter Sicherheitsmesser aus dem Ordersatz sicher und weisen Sie Mitarbeiter entsprechend ein.";
+  } else if (measure.includes("keine sichtbaren Beschädigungen an Schaltern und Steckdosen")) {
+    measure = "Beheben Sie dringend sichtbare Beschädigungen an Schaltern und Steckdosen gemäß den elektrotechnischen Vorschriften.";
+  } else if (measure.includes("Gabelhubwagen in einem ordnungsgemäßen Zustand")) {
+    measure = "Stellen Sie umgehend den ordnungsgemäßen Zustand des Gabelhubwagens sicher und beheben Sie sichtbare Beschädigungen gemäß DGUV Vorschrift 68.";
+  } else if (measure.includes("elektrische Hubwagen geprüft")) {
+    measure = "Prüfen Sie den elektrischen Hubwagen sofort gemäß DGUV Vorschrift 68 und stellen Sie den ordnungsgemäßen Zustand sicher (keine sichtbaren Beschädigungen, funktionsfähige Schutzeinrichtungen).";
+  } else if (measure.includes("Feuerlöscheinrichtungen frei zugänglich")) {
+    measure = "Halten Sie Feuerlöscheinrichtungen dringend frei zugänglich und entfernen Sie umgehend blockierende Gegenstände gemäß Brandschutzordnung.";
+  } else if (measure.includes("Feuerlöscheinrichtungen geprüft")) {
+    measure = "Prüfen Sie die Feuerlöscheinrichtungen sofort gemäß DIN 14406 und stellen Sie die Einhaltung der Prüffristen sicher.";
+  } else if (measure.includes("Brandschutztüren frei von Zugestellungen")) {
+    measure = "Halten Sie Brandschutztüren dringend frei von Zugestellungen und stellen Sie deren uneingeschränkte Funktion gemäß Brandschutzvorschriften sicher.";
+  } else if (measure.includes("Türhaltevorrichtungen und der Schließfolgeregler")) {
+    measure = "Überprüfen und reparieren Sie umgehend Türhaltevorrichtungen und Schließfolgeregler des Feuerschutzabschlusses gemäß den technischen Richtlinien.";
+  } else if (measure.includes("Brandschutztüren ohne Beschädigungen")) {
+    measure = "Beheben Sie sofort Beschädigungen an Brandschutztüren gemäß den Brandschutzbestimmungen.";
+  } else if (measure.includes("aktueller Flucht- und Rettungsplan")) {
+    measure = "Erstellen/Aktualisieren Sie dringend den Flucht- und Rettungsplan gemäß ASR A2.3 und hängen Sie ihn umgehend aus.";
+  } else if (measure.includes("Notausgangsbeleuchtung ohne Defekte")) {
+    measure = "Reparieren Sie sofort Defekte an der Notausgangsbeleuchtung gemäß den Sicherheitsvorschriften.";
+  } else if (measure.includes("Notausgänge frei zugänglich")) {
+    measure = "Halten Sie Notausgänge dringend frei zugänglich und entfernen Sie alle Zustellungen unverzüglich gemäß ASR A2.3.";
+  } else if (measure.includes("Notausgänge und -ausstiege von innen ohne fremde Hilfe")) {
+    measure = "Stellen Sie umgehend sicher, dass Notausgänge und -ausstiege von innen ohne fremde Hilfe zu öffnen und nicht zugestellt sind, gemäß ASR A2.3.";
+  } else if (measure.includes("Notausgänge in sichere Bereiche")) {
+    measure = "Stellen Sie dringend sicher, dass Notausgänge in sichere Bereiche führen, gemäß den Rettungswegvorschriften.";
+  } else if (measure.includes("Verkehrswege so beschaffen")) {
+    measure = "Gestalten Sie Verkehrswege sofort so, dass Stolper-, Ausrutsch- und Umknickrisiken gemäß ASR A1.8 ausgeschlossen sind.";
+  } else if (measure.includes("Treppen unbeschädigt")) {
+    measure = "Beheben Sie dringend Beschädigungen an Treppen und halten Sie diese unverzüglich frei von Gegenständen gemäß ASR A1.8.";
+  } else if (measure.includes("persönliche Schutzausrüstung")) {
+    measure = "Stellen Sie die passende persönliche Schutzausrüstung (z.B. Schutzbrille, Handschuhe) für Tätigkeiten mit Gefahrstoffen umgehend zur Verfügung und weisen Sie in deren Nutzung ein, gemäß PSA-Verordnung.";
+  } else if (measure.includes("brennbares Material")) {
+    measure = "Entfernen Sie sofort brennbares Material (z.B. Kisten, Kartons) aus Technik- und Heizräumen gemäß Brandschutzvorschriften.";
+  } else if (measure.includes("Technik- und Heizräume als Lagerräume")) {
+    measure = "Beenden Sie dringend die Nutzung von Technik- und Heizräumen als Lagerräume gemäß den Brandschutzbestimmungen.";
+  } else if (measure.includes("Betriebsanweisungen gut zugänglich")) {
+    measure = "Stellen Sie umgehend sicher, dass Betriebsanweisungen gut zugänglich sind und Sicherheitsanweisungen gemäß BetrSichV eingehalten werden.";
+  } else if (measure.includes("Steckverbindungen auf dem Boden")) {
+    measure = "Entfernen Sie sofort Steckverbindungen vom Boden, um Stolperfallen zu vermeiden, gemäß ASR A1.8.";
+  } else {
+    // Default fallback if no specific rule matches
+    measure = "Dringend: Beheben Sie den Mangel bezüglich: " + measure + " unter Berücksichtigung der relevanten Arbeitsschutzbestimmungen.";
+  }
+
+  if (!measure.endsWith(".")) {
+    measure += ".";
+  }
+
+  return measure;
+}
+
+function neinFragenInMaßnahmen() {
+  const fragenzeilen = document.querySelectorAll('#fragenTabelle tr');
+  const maßnahmenTabelleBody = document.getElementById('maßnahmen-tabelle');
+  maßnahmenTabelleBody.innerHTML = '';
+
+  let dynamicMeasuresCount = 0;
+  fragenzeilen.forEach(row => {
+    const frageText = row.cells[0]?.innerText;
+    const radios = row.querySelectorAll('input[type="radio"]');
+    let selected = null;
+
+    radios.forEach(r => {
+      if (r.checked) selected = r.value;
+    });
+
+    if (selected === 'nein' && frageText && !frageText.includes('category-header')) {
+      const measureText = generateMeasure(frageText);
+
+      const newRow = document.createElement('tr');
+      const numCell = document.createElement('td');
+      const descCell = document.createElement('td');
+
+      numCell.textContent = (dynamicMeasuresCount + 1).toString();
+      descCell.textContent = measureText;
+      descCell.contentEditable = "true";
+
+      newRow.appendChild(numCell);
+      newRow.appendChild(descCell);
+      maßnahmenTabelleBody.appendChild(newRow);
+      dynamicMeasuresCount++;
+    }
+  });
+
+  // Add two empty rows for manual input
+  for (let i = 0; i < 2; i++) {
+    const newRow = document.createElement('tr');
+    const numCell = document.createElement('td');
+    const descCell = document.createElement('td');
+
+    numCell.textContent = (dynamicMeasuresCount + i + 1).toString();
+    descCell.textContent = '';
+    descCell.contentEditable = "true";
+
+    newRow.appendChild(numCell);
+    newRow.appendChild(descCell);
+    maßnahmenTabelleBody.appendChild(newRow);
+  }
+}
+
+function exportiereMassnahmen() {
+  const fragenTabelle = document.getElementById('fragenTabelle');
+  const maßnahmenTabelle = [];
+
+  const rows = fragenTabelle.querySelectorAll('tr');
+  rows.forEach((row, index) => {
+    const frageZelle = row.querySelector('td');
+    const radios = row.querySelectorAll('input[type="radio"]');
+    if (radios.length > 0 && frageZelle) {
+      const neinRadio = [...radios].find(r => r.value === 'nein' && r.checked);
+      if (neinRadio) {
+        const frageText = frageZelle.textContent.trim();
+        const maßnahmeText = generateMeasure(frageText);
+        maßnahmenTabelle.push({
+          nr: index + 1,
+          beschreibung: maßnahmeText
+        });
+      }
+    }
+  });
+
+  const datum = document.getElementById('datum')?.value || '';
+  const markt = document.getElementById('markt')?.value || '';
+  const name = document.getElementById('name')?.value || '';
+  const sifa = document.getElementById('sifa')?.value || '';
+
+  const daten = {
+    datum,
+    markt,
+    name,
+    sifa,
+    maßnahmen: maßnahmenTabelle
+  };
+
+  const newWindow = window.open('massnahmen-sifa.html', 'maßnahmen');
+  setTimeout(() => {
+    newWindow.postMessage(daten, "*");
+  }, 1000);
+}
+
+// Event Listeners
+window.addEventListener("resize", resizeCanvas);
+window.addEventListener("load", () => {
+  resizeCanvas();
+  restoreSignature();
+
+  const datumsfeld = document.getElementById('datum');
+  if (datumsfeld) {
+    const heute = new Date().toISOString().split('T')[0];
+    datumsfeld.value = heute;
+  }
+
+  // Add event listeners to all radio buttons
+  const radioButtons = document.querySelectorAll('#fragenTabelle input[type="radio"]');
+  radioButtons.forEach(radio => {
+    radio.addEventListener('change', neinFragenInMaßnahmen);
+  });
+
+  // Initial call to populate measures
+  neinFragenInMaßnahmen();
+});
+
+canvas.addEventListener('mousedown', startDrawing);
+canvas.addEventListener('mousemove', draw);
+canvas.addEventListener('mouseup', stopDrawing);
+canvas.addEventListener('mouseout', stopDrawing);
+canvas.addEventListener('touchstart', startDrawing, { passive: false });
+canvas.addEventListener('touchmove', draw, { passive: false });
+canvas.addEventListener('touchend', stopDrawing);
+
+// Service Worker optional
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sicher/sw.js')
+      .then(() => console.log("✅ Service Worker registriert"))
+      .catch(err => console.error("❌ Service Worker Fehler:", err));
+  });
+}
+</script>
+<script>
+  const aktuellesJahr = new Date().getFullYear();
+  document.getElementById('titel').textContent = `Arbeitssicherheit-Checkliste-${aktuellesJahr}`;
+</script>
+
+</body>
+
+</html>
