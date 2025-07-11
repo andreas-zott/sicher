@@ -1419,5 +1419,124 @@ if ('serviceWorker' in navigator) {
   const aktuellesJahr = new Date().getFullYear();
   document.getElementById('titel').textContent = `Arbeitssicherheit-Checkliste-${aktuellesJahr}`;
 </script>
+<script>
+  const aktuellesJahr = new Date().getFullYear();
+  document.getElementById('titel').textContent = `Arbeitssicherheit-Checkliste-${aktuellesJahr}`;
+</script>
+<script>
+// Automatisches Laden beim Start
+window.addEventListener('DOMContentLoaded', () => {
+  ladeFormular();
+});
+
+// Speichern aller Eingaben
+function speichereFormular() {
+  const formData = {};
+  document.querySelectorAll('input').forEach(el => {
+    if (el.type === 'radio' || el.type === 'checkbox') {
+      if (el.name) {
+        if (!formData[el.name]) formData[el.name] = {};
+        formData[el.name][el.value] = el.checked;
+      } else {
+        formData[el.id] = el.checked;
+      }
+    } else {
+      formData[el.id || el.name] = el.value;
+    }
+  });
+  localStorage.setItem('formSicherheit2025', JSON.stringify(formData));
+}
+
+// Laden und Anwenden (inkl. Hervorhebung)
+function ladeFormular() {
+  const saved = localStorage.getItem('formSicherheit2025');
+  if (!saved) return;
+  const data = JSON.parse(saved);
+
+  document.querySelectorAll('input').forEach(el => {
+    if (el.type === 'radio' || el.type === 'checkbox') {
+      if (el.name && data[el.name]) {
+        el.checked = !!data[el.name][el.value];
+      } else if (el.id && data[el.id] !== undefined) {
+        el.checked = !!data[el.id];
+      }
+    } else if ((el.id && data[el.id] !== undefined) || (el.name && data[el.name] !== undefined)) {
+      el.value = data[el.id || el.name];
+    }
+  });
+
+  // Nach dem Laden: Hervorhebung aktualisieren
+  aktualisiereHervorhebung();
+}
+
+// Farbige Hervorhebung der Antworten
+function aktualisiereHervorhebung() {
+  const zeilen = document.querySelectorAll('#fragenTabelle tbody tr');
+  zeilen.forEach(row => {
+    const radios = row.querySelectorAll('input[type="radio"]');
+    if (radios.length) {
+      row.classList.remove('highlight-ja', 'highlight-nein', 'highlight-nicht');
+      radios.forEach(radio => {
+        if (radio.checked) {
+          if (radio.value === 'ja') row.classList.add('highlight-ja');
+          else if (radio.value === 'nein') row.classList.add('highlight-nein');
+          else if (radio.value === 'nicht_vorhanden') row.classList.add('highlight-nicht');
+        }
+      });
+    }
+  });
+}
+
+// Speichern bei jeder Eingabeänderung
+document.addEventListener('change', event => {
+  if (event.target.matches('input')) {
+    speichereFormular();
+    aktualisiereHervorhebung();
+  }
+});
+
+// Manuelles Speichern
+function manuellSpeichern() {
+  speichereFormular();
+  alert("✅ Formular gespeichert!");
+}
+
+// Formular zurücksetzen
+function formularZuruecksetzen() {
+  if (confirm("⚠️ Formular & Daten wirklich löschen?")) {
+    localStorage.removeItem('formSicherheit2025');
+    document.querySelectorAll('input').forEach(el => {
+      if (el.type === 'radio' || el.type === 'checkbox') {
+        el.checked = false;
+      } else {
+        el.value = '';
+      }
+    });
+    aktualisiereHervorhebung();
+    alert("🧹 Formular zurückgesetzt.");
+  }
+}
+
+// Im Teilen-Script zusätzlich:
+const originalGenerateAndSharePDF = generateAndSharePDF;
+generateAndSharePDF = async function () {
+  speichereFormular(); // Vor dem Teilen speichern
+  await originalGenerateAndSharePDF(); // Dann ausführen
+  ladeFormular(); // Danach alles wiederherstellen
+};
+</script>
+
+<style>
+/* Visuelle Hervorhebung von Antworten */
+.highlight-ja td:first-child {
+  background-color: #d4edda !important;
+}
+.highlight-nein td:first-child {
+  background-color: #f8d7da !important;
+}
+.highlight-nicht td:first-child {
+  background-color: #e2e3e5 !important;
+}
+</style>
 </body>
 </html>
