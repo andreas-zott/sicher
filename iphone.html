@@ -8,7 +8,56 @@
  <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon" />
   <link href="/sicher/iphone.json" rel="manifest" />
 <style>
+  .modern-button {
+    display: block;
+    width: 100%;
+    max-width: 600px;
+    margin: 10px auto;
+    padding: 16px 24px;
+    font-size: 18px;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    text-align: center;
+  }
 
+  .modern-button:active {
+    transform: scale(0.98);
+  }
+
+  .btn-gray {
+    background-color: #f0f0f0;
+    color: #333;
+  }
+
+  .btn-green {
+    background-color: #4CAF50;
+    color: white;
+  }
+
+  .btn-red {
+    background-color: #C62828;
+    color: white;
+  }
+
+  .button-row {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    max-width: 600px;
+    margin: 10px auto;
+  }
+
+  .button-row .modern-button {
+    flex: 1;
+    min-width: 260px;
+  }
+</style>
+<style>
 @media (max-width: 768px) {
   .checkbox-row {
     flex-direction: column;
@@ -1113,32 +1162,35 @@ Beschreibung der Maßnahmen zur Beseitigung von Defiziten
   display: block;
 "></canvas>
 </div>
-<button onclick="clearSignature()" class="btn-large btn-gray" style="display: block; width: 600px; margin: 10px auto 20px;">
+<!-- Einzelner großer Button -->
+<button onclick="clearSignature()" class="modern-button btn-gray">
   🗑️ Unterschrift löschen
 </button>
 
-<div style="display: flex; justify-content: center; gap: 20px; max-width: 600px; margin: 0 auto 20px;">
-  <button onclick="prepareForPrint()" class="btn-medium btn-gray" style="flex: 1; max-width: 280px;">
-    📄 Drucken / PDF
-  </button>
-  <button onclick="exportiereMassnahmen()" class="btn-medium btn-green" style="flex: 1; max-width: 280px;">
+<!-- Zwei Buttons nebeneinander -->
+<div class="button-row">
+  <button onclick="exportiereMassnahmen()" class="modern-button btn-gray">
     📝 Defizite exportieren
   </button>
+  <button onclick="prepareForPrint()" class="modern-button btn-gray">
+    📄 Drucken / PDF
+  </button>
 </div>
-<div style="display: flex; justify-content: center; gap: 20px; max-width: 600px; margin: 0 auto 40px;">
-  <button onclick="manuellSpeichern()" class="btn-medium btn-green" style="flex: 1; max-width: 280px;">
+
+<!-- Zwei weitere Buttons nebeneinander -->
+<div class="button-row">
+  <button onclick="manuellSpeichern()" class="modern-button btn-green">
     💾 Speichern
   </button>
-  <button onclick="formularZuruecksetzen()" class="btn-medium btn-gray" style="flex: 1; max-width: 280px;">
+  <button onclick="formularZuruecksetzen()" class="modern-button btn-gray">
     🧹 Zurücksetzen
   </button>
 </div>
 
-
-<button onclick="generateAndSharePDF()" class="custom-btn" style="background-color: #C62828; width: 600px; margin: 0 auto 10px; display: block;">
+<!-- Roter Einzel-Button -->
+<button onclick="generateAndSharePDF()" class="modern-button btn-red">
   📤 PDF teilen (iPad)
 </button>
-
 
 
 <div id="auswertung-container">
