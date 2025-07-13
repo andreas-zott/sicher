@@ -1053,8 +1053,18 @@ Beschreibung der Maßnahmen zur Beseitigung von Defiziten
     📄 Drucken / PDF
   </button>
 </div>
+  </button>
+</div>
+<div style="display: flex; justify-content: center; gap: 20px; max-width: 600px; margin: 0 auto 40px;">
+  <button onclick="manuellSpeichern()" class="btn-medium btn-green" style="flex: 1; max-width: 280px;">
+    💾 Speichern
+  </button>
+  <button onclick="formularZuruecksetzen()" class="btn-medium btn-gray" style="flex: 1; max-width: 280px;">
+    🧹 Zurücksetzen
+  </button>
+</div>
 
-<button onclick="generateAndSharePDF()" class="custom-btn" style="background-color: #28a745; width: 600px; margin: 10px auto 40px auto; display: block;">
+<button onclick="generateAndSharePDF()" class="custom-btn" style="background-color: #C62828; width: 600px; margin: 10px auto 40px auto; display: block;">
 📤 PDF teilen (iPad)
 </button>
 
@@ -1254,102 +1264,404 @@ function generateMeasure(question) {
   }
 
   // Specific rules for more concrete and imperative measures
-  if (measure.includes("festes, geschlossenes und flaches Schuhwerk")) {
-    measure = "Stellen Sie umgehend sicher, dass alle Personen im Markt festes, geschlossenes und flaches Schuhwerk gemäß den Arbeitsschutzbestimmungen tragen.";
-  } else if (measure.includes("Automatiktüren, Rolltoren und Schnelllauftoren keine sichtbaren Beschädigungen")) {
-    measure = "Beheben Sie sofort sichtbare Beschädigungen an Automatiktüren, Rolltoren und Schnelllauftoren gemäß den Wartungsvorschriften.";
-  } else if (measure.includes("Aufzugsanlage geprüft und in einem ordnungsgemäßen Zustand")) {
-    measure = "Führen Sie dringend eine Prüfung der Aufzugsanlage gemäß BetrSichV durch und stellen Sie den ordnungsgemäßen Zustand sicher (inkl. funktionsfähiger Schutzeinrichtungen).";
-  } else if (measure.includes("Leergutrücknahme in einem ordnungsgemäßen Zustand")) {
-    measure = "Sorgen Sie unverzüglich für den ordnungsgemäßen Zustand der Leergutrücknahme gemäß den Sicherheitsvorschriften (intakte Schutzeinrichtungen, gesicherte Einzugsstellen, keine Glasscherben).";
-  } else if (measure.includes("Leitern geprüft gemäß")) {
-    measure = "Führen Sie umgehend die Prüfung der Leitern durch und dokumentieren Sie diese.";
-  } else if (measure.includes("geeignete Sicherheitsmesser verwendet")) {
-    measure = "Stellen Sie sofort die Verwendung geeigneter Sicherheitsmesser aus dem Ordersatz sicher und weisen Sie Mitarbeiter entsprechend ein.";
-  } else if (measure.includes("keine sichtbaren Beschädigungen an Schaltern und Steckdosen")) {
-    measure = "Beheben Sie dringend sichtbare Beschädigungen an Schaltern und Steckdosen gemäß den elektrotechnischen Vorschriften.";
-  } else if (measure.includes("Gabelhubwagen in einem ordnungsgemäßen Zustand")) {
-    measure = "Stellen Sie umgehend den ordnungsgemäßen Zustand des Gabelhubwagens sicher und beheben Sie sichtbare Beschädigungen.";
-  } else if (measure.includes("elektrische Hubwagen geprüft")) {
-    measure = "Prüfen Sie den elektrischen Hubwagen sofort und stellen Sie den ordnungsgemäßen Zustand sicher (keine sichtbaren Beschädigungen, funktionsfähige Schutzeinrichtungen).";
-  } else if (measure.includes("Feuerlöscheinrichtungen frei zugänglich")) {
-    measure = "Halten Sie Feuerlöscheinrichtungen dringend frei zugänglich und entfernen Sie umgehend blockierende Gegenstände gemäß Brandschutzordnung.";
-  } else if (measure.includes("Feuerlöscheinrichtungen geprüft")) {
-    measure = "Prüfen Sie die Feuerlöscheinrichtungen sofort und stellen Sie die Einhaltung der Prüffristen sicher.";
-  } else if (measure.includes("Brandschutztüren frei von Zugestellungen")) {
-    measure = "Halten Sie Brandschutztüren dringend frei von Zugestellungen und stellen Sie deren uneingeschränkte Funktion gemäß Brandschutzvorschriften sicher.";
-  } else if (measure.includes("Türhaltevorrichtungen und der Schließfolgeregler")) {
-    measure = "Überprüfen und reparieren Sie umgehend Türhaltevorrichtungen und Schließfolgeregler des Feuerschutzabschlusses gemäß den technischen Richtlinien.";
-  } else if (measure.includes("Brandschutztüren ohne Beschädigungen")) {
-    measure = "Beheben Sie sofort Beschädigungen an Brandschutztüren gemäß den Brandschutzbestimmungen.";
-  } else if (measure.includes("aktueller Flucht- und Rettungsplan")) {
-    measure = "Erstellen/Aktualisieren Sie dringend den Flucht- und Rettungsplan und hängen Sie ihn umgehend aus.";
-  } else if (measure.includes("Notausgangsbeleuchtung ohne Defekte")) {
-    measure = "Reparieren Sie sofort Defekte an der Notausgangsbeleuchtung gemäß den Sicherheitsvorschriften.";
-  } else if (measure.includes("Notausgänge frei zugänglich")) {
-    measure = "Halten Sie Notausgänge dringend frei zugänglich und entfernen Sie alle Zustellungen unverzüglich.";
-  } else if (measure.includes("Notausgänge und -ausstiege von innen ohne fremde Hilfe")) {
-    measure = "Stellen Sie umgehend sicher, dass Notausgänge und -ausstiege von innen ohne fremde Hilfe zu öffnen und nicht zugestellt sind.";
-  } else if (measure.includes("Notausgänge in sichere Bereiche")) {
-    measure = "Stellen Sie dringend sicher, dass Notausgänge in sichere Bereiche führen, gemäß den Rettungswegvorschriften.";
-  } else if (measure.includes("Verkehrswege so beschaffen")) {
-    measure = "Gestalten Sie Verkehrswege sofort so, dass Stolper-, Ausrutsch- und Umknickrisiken ausgeschlossen sind.";
-  } else if (measure.includes("Treppen unbeschädigt")) {
-    measure = "Beheben Sie dringend Beschädigungen an Treppen und halten Sie diese unverzüglich frei von Gegenständen.";
-  } else if (measure.includes("persönliche Schutzausrüstung")) {
-    measure = "Stellen Sie die passende persönliche Schutzausrüstung (z.B. Schutzbrille, Handschuhe) für Tätigkeiten mit Gefahrstoffen umgehend zur Verfügung und weisen Sie in deren Nutzung ein, gemäß PSA-Verordnung.";
-  } else if (measure.includes("brennbares Material")) {
-    measure = "Entfernen Sie sofort brennbares Material (z.B. Kisten, Kartons) aus Technik- und Heizräumen gemäß Brandschutzvorschriften.";
-  } else if (measure.includes("Technik- und Heizräume als Lagerräume")) {
-    measure = "Beenden Sie dringend die Nutzung von Technik- und Heizräumen als Lagerräume gemäß den Brandschutzbestimmungen.";
-  } else if (measure.includes("Betriebsanweisungen gut zugänglich")) {
-    measure = "Stellen Sie umgehend sicher, dass Betriebsanweisungen gut zugänglich sind und Sicherheitsanweisungen eingehalten werden.";
-  } else if (measure.includes("Steckverbindungen auf dem Boden")) {
-    measure = "Entfernen Sie sofort Steckverbindungen vom Boden, um Stolperfallen zu vermeiden.";
-} else if (measure.includes("Arbeitsgeräte an der Backstation")) {
-    measure = "Prüfen Sie sofort die Arbeitsgeräte an der Backstation (Backofen, Backbleche, Brotschneidemaschine) und beheben Sie festgestellte Mängel gemäß den Hygiene- und Sicherheitsvorschriften.";
-  } else if (measure.includes("freistehende Handwaschbecken ohne Beschädigungen")) {
-    measure = "Reparieren oder ersetzen Sie umgehend beschädigte Handwaschbecken, um die hygienische Händereinigung sicherzustellen.";
-  } else if (measure.includes("Elektroleitungen intakt")) {
-    measure = "Stellen Sie sicher, dass alle Elektroleitungen intakt sind und keine Stolperstellen bilden. Beschädigte Leitungen sind umgehend zu entfernen oder zu sichern.";
-  } else if (measure.includes("Zuleitung der VDE-Norm")) {
-    measure = "Stellen Sie sicher, dass die elektrische Zuleitung der gültigen VDE-Norm entspricht. Bei Abweichungen ist eine Elektrofachkraft hinzuzuziehen.";
-  } else if (measure.includes("Backhandschuh für die Backstation")) {
-    measure = "Ersetzen Sie verschlissene Backhandschuhe sofort durch hitzebeständige Modelle mit langer Stulpe gemäß Arbeitsschutzrichtlinien.";
-  } else if (measure.includes("Heißgeräte in technisch einwandfreiem Zustand")) {
-    measure = "Prüfen Sie alle Heißgeräte (z. B. Heißtheken, Fritteusen) auf technische Mängel und lassen Sie defekte Geräte fachgerecht instand setzen.";
-  } else if (measure.includes("Hautschutzplan")) {
-    measure = "Hängen Sie den aktuellen Hautschutzplan gut sichtbar aus und informieren Sie das Personal über die Anwendung.";
-  } else if (measure.includes("Hautschutz- und Hautpflegeprodukte")) {
-    measure = "Stellen Sie geeignete Hautschutz- und Hautpflegeprodukte bereit und weisen Sie die Mitarbeitenden in deren Anwendung ein.";
-  } else if (measure.includes("Arbeitsgeräte im Servicebereich")) {
-    measure = "Prüfen Sie die Arbeitsgeräte im Servicebereich regelmäßig auf Schäden und setzen Sie defekte Geräte außer Betrieb.";
-  } else if (measure.includes("Thekenscheiben selbstständig in der oberen Stellung")) {
-    measure = "Sorgen Sie dafür, dass Thekenscheiben sicher arretieren und nicht unkontrolliert zurückfallen können.";
-  } else if (measure.includes("Glastüren und Glaswände in Augenhöhe gekennzeichnet")) {
-    measure = "Kennzeichnen Sie alle Glastüren und Glaswände in Augenhöhe mit sichtbaren Markierungen zur Unfallvermeidung gemäß ASR A1.3.";
-  } else if (measure.includes("Schneidbretter und Messer regelmäßig gereinigt")) {
-    measure = "Stellen Sie sicher, dass Schneidbretter und Messer regelmäßig gereinigt und farbcodiert eingesetzt werden, um Kreuzkontamination zu vermeiden.";
-  } else if (measure.includes("Schneidbretter mit Messereinschub")) {
-    measure = "Verwenden Sie Schneidbretter mit integriertem Messereinschub zur sicheren Aufbewahrung der Messer.";
-  } else if (measure.includes("Messerhalter verwendet")) {
-    measure = "Nutzen Sie geeignete Messerhalter zur sicheren und hygienischen Lagerung von Messern im Arbeitsbereich.";
-  } else if (measure.includes("Convenience-Geräte in einem ordnungsgemäßen Zustand")) {
-    measure = "Überprüfen Sie alle Convenience-Geräte regelmäßig und lassen Sie defekte Geräte sofort instand setzen.";
-  } else if (measure.includes("Fußraum frei von Gegenständen")) {
-    measure = "Halten Sie den Fußraum stets frei von Gegenständen, um Stolper- und Unfallgefahren zu vermeiden.";
-  } else if (measure.includes("Fußboden im Kassenbereich")) {
-    measure = "Reparieren Sie Beschädigungen am Fußboden im Kassenbereich umgehend, um Unfälle zu vermeiden.";
-  } else if (measure.includes("Heizgeräte im Kassenraum nicht durch brennbares Material zugestellt")) {
-    measure = "Räumen Sie alle brennbaren Materialien vor Heizgeräten im Kassenraum weg, um Brandgefahren zu verhindern.";
-  } else if (measure.includes("Kassenstühle in einem funktionsfähigen Zustand")) {
-    measure = "Ersetzen oder reparieren Sie defekte Kassenstühle unverzüglich, um ergonomische Arbeitsbedingungen sicherzustellen.";
-  } else if (measure.includes("Transportband unbeschädigt")) {
-    measure = "Stellen Sie sicher, dass das Transportband keine Schäden oder Lücken über 5 mm aufweist. Bei Mängeln: sofortige Reparatur.";
-    } else {
-    // Default fallback if no specific rule matches
-    measure = "Dringend: Beheben Sie den Mangel bezüglich: " + measure + " unter Berücksichtigung der relevanten Arbeitsschutzbestimmungen.";
-  }
+  
+
+if (measure.includes("festes, geschlossenes und flaches Schuhwerk")) {
+  measure = "Sorgen Sie gemäß § 3 Abs. 1 ArbSchG dafür, dass alle Personen im Markt festes, geschlossenes und flaches Schuhwerk tragen, um arbeitsbedingte Gesundheitsgefahren wirksam zu vermeiden.";
+}
+
+if (measure.includes("Automatiktüren") || measure.includes("Rolltoren") || measure.includes("Schnelllauftoren")) {
+  measure = "Stellen Sie entsprechend der Betriebssicherheitsverordnung (BetrSichV) sicher, dass alle Automatiktüren, Roll- und Schnelllauftore regelmäßig auf erkennbare Mängel geprüft und instand gehalten werden.";
+}
+
+if (measure.includes("Aufzugsanlage")) {
+  measure = "Veranlassen Sie gemäß § 4 BetrSichV regelmäßige Prüfungen der Aufzugsanlage, um deren ordnungsgemäßen und sicheren Zustand sicherzustellen.";
+}
+
+if (measure.includes("Leergutrücknahme")) {
+  measure = "Stellen Sie sicher, dass die Leergutrücknahme gemäß DGUV Regel 100-500 (Kapitel 2.10) technisch einwandfrei, mit funktionierenden Schutzeinrichtungen versehen und frei von Gefährdungen durch Glasscherben ist.";
+}
+
+if (measure.includes("Leitern") || measure.includes("Tritte")) {
+  measure = "Führen Sie regelmäßige Prüfungen aller Leitern und Tritte nach DGUV Information 208-016 sowie gemäß den Regelungen der BetrSichV durch und dokumentieren Sie diese nachvollziehbar.";
+}
+
+if (measure.includes("Sicherheitsmesser")) {
+  measure = "Stellen Sie auf Grundlage der Gefährdungsbeurteilung sicher, dass ausschließlich geeignete, im Ordersatz festgelegte Sicherheitsmesser verwendet werden, um Schnittverletzungen zu vermeiden (§§ 4–5 ArbSchG).";
+}
+
+if (measure.includes("Schaltern und Steckdosen")) {
+  measure = "Veranlassen Sie die regelmäßige Sichtprüfung aller Schalter und Steckdosen und stellen Sie gemäß TRBS 1201 sicher, dass keine erkennbaren Schäden vorliegen.";
+}
+
+if (measure.includes("Gabelhubwagen")) {
+  measure = "Sorgen Sie für eine regelmäßige technische Kontrolle und Instandhaltung des Gabelhubwagens gemäß DGUV Vorschrift 68 (Flurförderzeuge), um dessen ordnungsgemäßen Zustand zu gewährleisten.";
+}
+
+if (measure.includes("elektrische Hubwagen")) {
+  measure = "Stellen Sie sicher, dass elektrische Hubwagen gemäß Betriebssicherheitsverordnung und DGUV Regel 100-500 geprüft und mit intakten Schutzeinrichtungen betrieben werden.";
+}
+
+if (measure.includes("Feuerlöscheinrichtungen frei zugänglich")) {
+  measure = "Halten Sie alle Feuerlöscheinrichtungen gemäß ASR A2.2 und § 10 ArbSchG stets frei zugänglich, um eine unverzügliche Nutzung im Brandfall zu gewährleisten.";
+}
+
+if (measure.includes("Feuerlöscheinrichtungen geprüft")) {
+  measure = "Veranlassen Sie Prüfungen aller Feuerlöscher durch befähigte Personen nach DIN 14406-4 und sorgen Sie für die Einhaltung der vorgeschriebenen Prüffristen gemäß § 10 ArbSchG.";
+}
+
+if (measure.includes("Brandschutztüren frei von Zugestellungen")) {
+  measure = "Achten Sie gemäß ASR A2.3 darauf, dass Brandschutztüren jederzeit frei zugänglich und in ihrer Funktion nicht beeinträchtigt sind.";
+}
+
+if (measure.includes("Türhaltevorrichtungen") || measure.includes("Schließfolgeregler")) {
+  measure = "Sorgen Sie dafür, dass Türhaltevorrichtungen und Schließfolgeregler an Brandschutztüren regelmäßig auf ihre Funktionsfähigkeit überprüft werden (vgl. DIN 14677).";
+}
+
+if (measure.includes("Brandschutztüren ohne Beschädigungen")) {
+  measure = "Prüfen Sie regelmäßig den Zustand aller Brandschutztüren auf Beschädigungen und stellen Sie ihre uneingeschränkte Schutzwirkung sicher (§ 4 ArbSchG).";
+}
+
+if (measure.includes("Flucht- und Rettungsplan")) {
+  measure = "Hängen Sie einen aktuellen und übersichtlichen Flucht- und Rettungsplan gemäß ASR A1.3 und § 4 ArbStättV gut sichtbar aus.";
+}
+
+if (measure.includes("Notausgangsbeleuchtung ohne Defekte")) {
+  measure = "Stellen Sie sicher, dass die Notausgangsbeleuchtung gemäß ASR A3.4/3 fehlerfrei funktioniert, um bei Stromausfall eine sichere Flucht zu ermöglichen.";
+}
+
+if (measure.includes("Notausgänge frei zugänglich")) {
+  measure = "Halten Sie Notausgänge zu jeder Zeit frei zugänglich und vermeiden Sie jedwede Art von Verstellung gemäß § 4 ArbStättV i. V. m. ASR A2.3.";
+}
+
+if (measure.includes("Notausgänge von innen ohne fremde Hilfe")) {
+  measure = "Sorgen Sie dafür, dass Notausgänge jederzeit ohne fremde Hilfe von innen zu öffnen sind (§ 4 Abs. 4 ArbStättV).";
+}
+
+if (measure.includes("Notausgänge in sichere Bereiche")) {
+  measure = "Vergewissern Sie sich, dass alle Notausgänge in gesicherte, gefahrenfreie Bereiche führen und so der Schutz der Beschäftigten gewährleistet ist.";
+}
+
+if (measure.includes("Verkehrswege so beschaffen")) {
+  measure = "Gestalten und erhalten Sie Verkehrswege so, dass sie frei von Stolper-, Rutsch- oder Sturzgefahren sind (§ 3a ArbStättV, ASR A1.8).";
+}
+
+if (measure.includes("Treppen unbeschädigt")) {
+  measure = "Stellen Sie sicher, dass alle Treppen frei von Hindernissen sind und keine baulichen Mängel aufweisen, um die Unfallgefahr gemäß ASR A1.8 zu minimieren.";
+}
+
+if (measure.includes("persönliche Schutzausrüstung") || measure.includes("Schutzbrille") || measure.includes("Handschuhe")) {
+  measure = "Stellen Sie geeignete persönliche Schutzausrüstung (PSA) für Tätigkeiten mit Gefahrstoffen bereit und weisen Sie die Beschäftigten gemäß § 3 ArbSchG und § 2 PSA-Benutzungsverordnung ein.";
+}
+
+if (measure.includes("brennbares Material in Technik- oder Heizräumen")) {
+  measure = "Lagern Sie gemäß ASR A2.2 und Brandschutzordnung Teil C keine brennbaren Materialien in Technik- oder Heizräumen, um Brandrisiken zu vermeiden.";
+}
+
+if (measure.includes("Technik- und Heizräume als Lagerräume genutzt")) {
+  measure = "Verwenden Sie Technik- und Heizräume ausschließlich für ihre bestimmungsgemäße Nutzung, da eine Lagerung dort gegen Brandschutzvorgaben verstößt (§ 3 ArbSchG).";
+}
+
+if (measure.includes("Betriebsanweisungen gut zugänglich")) {
+  measure = "Halten Sie alle Betriebsanweisungen gut zugänglich und stellen Sie sicher, dass die Beschäftigten über die Inhalte unterwiesen sind (§§ 4, 12 ArbSchG).";
+}
+if (measure.includes("Steckverbindungen auf dem Boden")) {
+  measure = "Verlegen Sie Steckverbindungen so, dass keine Stolperstellen entstehen, und sichern Sie diese gemäß § 3 ArbSchG und ASR A1.5 gegen unbeabsichtigtes Lösen.";
+}
+
+if (measure.includes("Arbeitsgeräte an der Backstation")) {
+  measure = "Stellen Sie sicher, dass sämtliche Arbeitsgeräte in der Backstation regelmäßig gewartet und auf ordnungsgemäßen Zustand geprüft werden (§ 4 ArbSchG, BetrSichV § 10).";
+}
+
+if (measure.includes("freistehende Handwaschbecken ohne Beschädigungen")) {
+  measure = "Kontrollieren Sie freistehende Handwaschbecken regelmäßig auf Beschädigungen und sichern Sie deren Hygiene und Funktion gemäß ArbStättV § 6.";
+}
+
+if (measure.includes("Elektroleitungen intakt und bilden keine Stolperstellen")) {
+  measure = "Führen Sie regelmäßige Sichtprüfungen elektrischer Leitungen durch, um sicherzustellen, dass keine Stolper- oder Brandgefahren gemäß DGUV Vorschrift 3 entstehen.";
+}
+
+if (measure.includes("Zuleitung der VDE-Norm")) {
+  measure = "Vergewissern Sie sich, dass sämtliche elektrischen Zuleitungen den Vorgaben der VDE-Normen entsprechen, um elektrische Gefährdungen auszuschließen (§ 3 ArbSchG, BetrSichV).";
+}
+
+if (measure.includes("Backhandschuh in einem ordnungsgemäßen Zustand")) {
+  measure = "Verwenden Sie nur hitzebeständige Backhandschuhe in einwandfreiem Zustand und mit langer Stulpe gemäß PSA-Benutzungsverordnung und § 3 ArbSchG.";
+}
+
+if (measure.includes("Heißgeräte in technisch einwandfreiem Zustand")) {
+  measure = "Prüfen Sie regelmäßig alle Heißgeräte (z. B. Heißtheken, Fritteusen) auf technische Mängel und dokumentieren Sie die Instandhaltung gemäß BetrSichV § 10.";
+}
+
+if (measure.includes("Hautschutzplan")) {
+  measure = "Hängen Sie einen aktuellen Hautschutzplan gut sichtbar aus und stellen Sie sicher, dass er von allen Beschäftigten verstanden und umgesetzt wird (§ 5 ArbSchG, TRGS 401).";
+}
+
+if (measure.includes("Hautschutz- und Hautpflegeprodukte")) {
+  measure = "Stellen Sie geeignete Hautschutz- und Hautpflegeprodukte bereit, um berufsbedingten Hauterkrankungen gemäß § 3 ArbSchG vorzubeugen.";
+}
+
+if (measure.includes("Arbeitsgeräte im Servicebereich")) {
+  measure = "Veranlassen Sie regelmäßige Sicht- und Funktionsprüfungen der Arbeitsgeräte im Servicebereich gemäß § 4 BetrSichV.";
+}
+
+if (measure.includes("Thekenscheiben selbstständig in der oberen Stellung stehen")) {
+  measure = "Sorgen Sie dafür, dass Thekenscheiben selbstständig in der oberen Position arretiert werden können, um Verletzungsrisiken auszuschließen (§ 3 ArbSchG).";
+}
+
+if (measure.includes("Glastüren und Glaswände in Augenhöhe gekennzeichnet")) {
+  measure = "Kennzeichnen Sie Glastüren und Glaswände in Augenhöhe mit deutlich sichtbaren Markierungen gemäß ASR A1.3 und DGUV Information 208-004.";
+}
+
+if (measure.includes("Schneidbretter und Messer regelmäßig gereinigt")) {
+  measure = "Reinigen und desinfizieren Sie Schneidbretter und Messer regelmäßig und wenden Sie ein Farbsystem zur hygienischen Trennung an (§ 3 ArbSchG, HACCP).";
+}
+
+if (measure.includes("Schneidbretter mit Messereinschub")) {
+  measure = "Verwenden Sie Schneidbretter mit sicherem Messereinschub, um Schnittverletzungen zu vermeiden und die Lagerung gemäß § 3 ArbSchG sicher zu gestalten.";
+}
+
+if (measure.includes("Messerhalter verwendet")) {
+  measure = "Sorgen Sie für eine sichere Aufbewahrung von Messern durch geeignete Halterungen gemäß § 3 ArbSchG und DGUV Regel 100-500.";
+}
+
+if (measure.includes("Convenience-Geräte in einem ordnungsgemäßen Zustand")) {
+  measure = "Führen Sie regelmäßige Wartungen und Funktionsprüfungen an Convenience-Geräten durch, um deren sicheren Betrieb zu gewährleisten (§ 4 BetrSichV).";
+}
+
+if (measure.includes("Fußraum frei von Gegenständen")) {
+  measure = "Halten Sie den Fußraum dauerhaft frei von Gegenständen, um Unfallgefahren durch Stolpern oder Hängenbleiben zu vermeiden (§ 3 ArbSchG, ASR A1.8).";
+}
+
+if (measure.includes("Fußboden im Kassenbereich in einem ordnungsgemäßen Zustand")) {
+  measure = "Sorgen Sie für die Instandhaltung und Rutschhemmung des Fußbodens im Kassenbereich gemäß ASR A1.5/1,2 und § 3 ArbSchG.";
+}
+
+if (measure.includes("Heizgeräte im Kassenraum nicht durch brennbares Material zugestellt")) {
+  measure = "Stellen Sie sicher, dass Heizgeräte frei zugänglich und nicht durch brennbare Materialien blockiert sind, um Brandgefahren zu vermeiden (§ 10 ArbSchG, ASR A2.2).";
+}
+
+if (measure.includes("Kassenstühle in einem funktionsfähigen Zustand")) {
+  measure = "Prüfen Sie Kassenstühle regelmäßig auf Funktionalität und stellen Sie ergonomische Arbeitsmittel gemäß ArbStättV Anhang Nr. 6 bereit.";
+}
+
+
+
+if (measure.includes("Transportband unbeschädigt")) {
+  measure = "Überprüfen Sie Transportbänder regelmäßig auf Schäden und sorgen Sie dafür, dass keine Lücken über 5 mm entstehen, um Verletzungsrisiken auszuschließen (§ 3 ArbSchG).";
+}
+
+if (measure.includes("Kühlhäusern an der Beleuchtung die Überglocke vorhanden")) {
+  measure = "Sichern Sie Beleuchtungseinrichtungen in Kühlhäusern mit Schutzabdeckungen gegen mechanische Einwirkungen und Glasbruch gemäß DIN 10500.";
+}
+
+if (measure.includes("Notentriegelung vorhanden")) {
+  measure = "Stellen Sie sicher, dass Notentriegelungen an Kühlraumtüren installiert, gekennzeichnet und jederzeit funktionsfähig sind (§ 3 ArbSchG, TRBS 2121 Teil 2).";
+}
+
+if (measure.includes("Kühlhaustüren von innen mit dem Rettungswegschild ISO 7010 gekennzeichnet")) {
+  measure = "Kennzeichnen Sie Kühlhaustüren von innen mit dem international gültigen Rettungswegsymbol gemäß ISO 7010 und ASR A1.3.";
+}
+
+if (measure.includes("Beleuchtung einwandfrei")) {
+  measure = "Stellen Sie eine ausreichende, blendfreie und funktionstüchtige Beleuchtung aller Arbeitsbereiche gemäß ASR A3.4 sicher.";
+}
+if (measure.includes("Notruf-Funktion in Ordnung")) {
+  measure = "Stellen Sie sicher, dass die Notruf-Funktion in Kühlräumen jederzeit funktionsfähig ist und regelmäßig geprüft wird (§ 4 ArbSchG, TRBS 3121).";
+}
+
+if (measure.includes("Schwerlastregale geprüft")) {
+  measure = "Veranlassen Sie regelmäßige Prüfungen aller Schwerlastregale durch befähigte Personen gemäß BetrSichV § 14 sowie DGUV Regel 108-007.";
+}
+
+if (measure.includes("Anfahrschutz vorhanden")) {
+  measure = "Installieren Sie gemäß DGUV Vorschrift 68 und ASR A1.3 einen geeigneten Anfahrschutz an allen relevanten Bereichen, um strukturelle Schäden zu vermeiden.";
+}
+
+if (measure.includes("Traglastangabe an den Schwerlastregalen vorhanden")) {
+  measure = "Bringen Sie an jedem Regal deutlich sichtbare und dauerhafte Traglastangaben an, wie es § 4 BetrSichV i.V.m. TRBS 1201 fordert.";
+}
+
+if (measure.includes("Absturzsicherung an der Rampe")) {
+  measure = "Sorgen Sie dafür, dass an Rampen mit Absturzkante geeignete Absturzsicherungen gemäß ASR A2.1 installiert sind.";
+}
+
+if (measure.includes("Absturzsicherung in einem ordnungsgemäßen Zustand")) {
+  measure = "Überprüfen Sie regelmäßig die Absturzsicherung auf Schäden und achten Sie auf gut sichtbare Warnkennzeichnungen (§ 4 ArbSchG).";
+}
+
+if (measure.includes("Müll-/Papierpresse geprüft")) {
+  measure = "Lassen Sie Müll- und Papierpressen regelmäßig durch befähigte Personen gemäß BetrSichV und DGUV Regel 100-500 prüfen.";
+}
+
+if (measure.includes("Müll-/Papierpresse in einem ordnungsgemäßen Zustand")) {
+  measure = "Stellen Sie sicher, dass die Müll-/Papierpresse technisch einwandfrei, standsicher und mit intakten Schutzeinrichtungen betrieben wird (§ 3 ArbSchG, § 4 BetrSichV).";
+}
+
+if (measure.includes("Verkehrswege so beschaffen, dass kein Risiko")) {
+  measure = "Achten Sie darauf, dass Verkehrswege eben, rutschfest und frei von Hindernissen sind, um Gefährdungen durch Stolpern, Ausrutschen oder Umknicken gemäß ASR A1.8 zu vermeiden.";
+}
+
+if (measure.includes("Sozialbereich die aktuellen aushangpflichtigen Gesetze")) {
+  measure = "Bringen Sie im Sozialbereich alle gesetzlich vorgeschriebenen Aushänge (z. B. ArbSchG, JArbSchG, DGUV Vorschrift 1) gut sichtbar und aktuell an (§ 12 ArbSchG).";
+}
+
+if (measure.includes("Kaffeemaschine und andere hitzeentwickelnde Geräte auf einer nicht brennbaren Unterlage")) {
+  measure = "Betreiben Sie hitzeentwickelnde Geräte ausschließlich auf nicht brennbaren Unterlagen, um Brandgefahren gemäß ASR A2.2 zu vermeiden.";
+}
+
+if (measure.includes("Erste-Hilfe-Koffer gut sichtbar")) {
+  measure = "Platzieren Sie den Erste-Hilfe-Koffer gut sichtbar, dauerhaft zugänglich und gemäß DGUV Vorschrift 1 an einem geeigneten Ort.";
+}
+
+if (measure.includes("ortsveränderliche elektrische Betriebsmittel geprüft")) {
+  measure = "Führen Sie regelmäßige Prüfungen ortsveränderlicher elektrischer Betriebsmittel durch befähigte Elektrofachkräfte gemäß DGUV Vorschrift 3 und TRBS 1201.";
+}
+
+if (measure.includes("aktuelle Liste sowie Prüfberichte prüfungsbedürftiger Einrichtungen")) {
+  measure = "Führen Sie eine vollständige Liste aller prüfpflichtigen Betriebseinrichtungen inklusive Nachweise und Prüfberichte gemäß BetrSichV § 14.";
+}
+
+if (measure.includes("Verbandskasten in einem ordnungsgemäßen Zustand")) {
+  measure = "Kontrollieren Sie den Inhalt des Verbandskastens regelmäßig und stellen Sie die Vollständigkeit und Haltbarkeit der Materialien sicher (DIN 13157, DGUV Vorschrift 1).";
+}
+
+if (measure.includes("Dokumentation Erste Hilfeleistungen")) {
+  measure = "Führen Sie eine schriftliche Dokumentation aller Erste-Hilfe-Leistungen im Verbandbuch gemäß § 24 DGUV Vorschrift 1 und bewahren Sie diese vier Jahre auf.";
+}
+
+if (measure.includes("Anreiz zu Raubüberfällen vermindern")) {
+  measure = "Ergreifen Sie organisatorische und bauliche Maßnahmen zur Prävention von Raubüberfällen, etwa durch Türspione, Sicherheitsknäufe oder videoüberwachte Eingänge (§ 3 ArbSchG, DGUV Information 215-542).";
+}
+
+if (measure.includes("Tür während des Umgangs mit Zahlungsmitteln verschlossen")) {
+  measure = "Sorgen Sie dafür, dass der Zugang zum Kassenbüro während des Umgangs mit Bargeld stets verschlossen ist, um Überfällen vorzubeugen (§ 3 ArbSchG).";
+}
+
+if (measure.includes("neue Mitarbeiter vor Aufnahme der Tätigkeit unterwiesen")) {
+  measure = "Führen Sie vor Arbeitsaufnahme eine umfassende Erstunterweisung zur Arbeitssicherheit und zum Brandschutz gemäß § 12 ArbSchG durch und dokumentieren Sie diese.";
+}
+
+if (measure.includes("mindestens ein Mitarbeiter mit der Qualifikation zum Ersthelfer")) {
+  measure = "Stellen Sie sicher, dass während der gesamten Betriebszeiten mindestens ein ausgebildeter Ersthelfer nach DGUV Vorschrift 1 § 26 anwesend ist.";
+}
+
+if (measure.includes("mindestens ein Mitarbeiter mit der Qualifikation als Brandschutzhelfer")) {
+  measure = "Sorgen Sie gemäß ASR A2.2 und § 10 ArbSchG dafür, dass jederzeit ein geschulter Brandschutzhelfer vor Ort ist.";
+}
+
+if (measure.includes("Sicherheitsbeauftragter ausgebildet und bestellt")) {
+  measure = "Bestellen Sie gemäß § 22 SGB VII einen geeigneten Sicherheitsbeauftragten und stellen Sie dessen Schulung und regelmäßige Beteiligung sicher.";
+}
+
+if (measure.includes("Gefährdungsbeurteilung erstellt")) {
+  measure = "Erstellen und aktualisieren Sie regelmäßig eine schriftliche Gefährdungsbeurteilung gemäß § 5 ArbSchG und § 3 BetrSichV.";
+}
+
+if (measure.includes("Personen im Bereich von Kühlanlagen unterwiesen")) {
+  measure = "Unterweisen Sie alle Personen, die sich im Bereich von Kühlanlagen aufhalten, zu spezifischen Gefährdungen und Rettungsmaßnahmen gemäß § 12 ArbSchG.";
+}
+
+if (measure.includes("Sensoren nicht mit Material oder sonstigen Gegenständen verstellt")) {
+  measure = "Achten Sie darauf, dass sicherheitsrelevante Sensoren, Melder oder Lüftungselemente nicht verstellt oder blockiert sind (§ 3 ArbSchG, TRBS 1115).";
+}
+
+if (measure.includes("alle Sicherheitsvorrichtungen intakt")) {
+  measure = "Sorgen Sie dafür, dass alle sicherheitstechnischen Vorrichtungen, wie Alarmleuchten, Kennzeichnungen und Schutzeinrichtungen, stets funktionstüchtig und unbeschädigt sind (§ 4 BetrSichV).";
+}
+if (measure.includes("Unterweisung von Praktikanten und Schüleraushilfen durchgeführt")) {
+  measure = "Führen Sie eine Unterweisung für Praktikanten und Schüleraushilfen vor Beginn der Beschäftigung gemäß § 12 ArbSchG durch und dokumentieren Sie diese schriftlich.";
+}
+
+if (measure.includes("Unterweisung schriftlich dokumentiert")) {
+  measure = "Dokumentieren Sie alle durchgeführten Unterweisungen rechtskonform und archivieren Sie die Nachweise gemäß § 6 ArbSchG.";
+}
+
+if (measure.includes("Personen die Inhalte der Unterweisung verstanden")) {
+  measure = "Vergewissern Sie sich, dass unterwiesene Personen die vermittelten Inhalte verstanden haben, etwa durch Rückfragen oder Lernerfolgskontrollen (§ 12 ArbSchG).";
+}
+
+if (measure.includes("arbeitsmedizinische Vorsorge angeboten")) {
+  measure = "Bieten Sie allen Beschäftigten arbeitsmedizinische Vorsorge nach der Verordnung zur arbeitsmedizinischen Vorsorge (ArbMedVV) an und dokumentieren Sie das Angebot.";
+}
+
+if (measure.includes("Maßnahmen gegen Hauterkrankungen getroffen")) {
+  measure = "Ergreifen Sie geeignete Schutzmaßnahmen (z. B. Hautschutzmittel, Handschuhe, Schulungen) zur Prävention von Hauterkrankungen gemäß § 3 ArbSchG und TRGS 401.";
+}
+
+if (measure.includes("Mitarbeitertoiletten und Pausenräume sauber")) {
+  measure = "Sorgen Sie für eine regelmäßige Reinigung und hygienische Ausstattung der sanitären Einrichtungen nach ArbStättV Anhang Nr. 4.1 und ASR A4.1.";
+}
+
+if (measure.includes("Wünsche der Beschäftigten bei der Arbeitsplanung berücksichtigt")) {
+  measure = "Beziehen Sie individuelle Wünsche der Beschäftigten bei der Arbeitszeitgestaltung ein, soweit dies mit den betrieblichen Erfordernissen vereinbar ist (§ 3 ArbSchG, § 106 GewO).";
+}
+
+if (measure.includes("Pausenregelung umgesetzt")) {
+  measure = "Stellen Sie sicher, dass die gesetzlichen Pausenregelungen gemäß § 4 ArbZG eingehalten und in der Arbeitszeitplanung berücksichtigt werden.";
+}
+
+if (measure.includes("Pausenraum vorhanden")) {
+  measure = "Halten Sie einen geeigneten Pausenraum gemäß ArbStättV Anhang Nr. 4.2 bereit, der sauber, beheizbar und mit Sitzmöglichkeiten ausgestattet ist.";
+}
+
+if (measure.includes("Überstunden gering gehalten")) {
+  measure = "Begrenzen Sie Überstunden auf das notwendige Maß und achten Sie auf die Einhaltung der täglichen und wöchentlichen Höchstarbeitszeiten (§ 3 ArbZG).";
+}
+
+if (measure.includes("regelmäßige Teambesprechungen durchgeführt")) {
+  measure = "Führen Sie regelmäßige Besprechungen im Team durch, um die Kommunikation und Beteiligung der Beschäftigten gemäß § 81 BetrVG und § 4 ArbSchG zu fördern.";
+}
+
+if (measure.includes("neue Mitarbeiter eingearbeitet")) {
+  measure = "Stellen Sie sicher, dass neue Beschäftigte systematisch eingearbeitet werden und die für ihre Tätigkeit erforderlichen Kenntnisse vermittelt bekommen (§ 3 ArbSchG).";
+}
+
+if (measure.includes("Unterweisung zum Thema Brand- und Arbeitsschutz erfolgt")) {
+  measure = "Führen Sie regelmäßige Unterweisungen zu Arbeitsschutz und Brandschutz gemäß § 12 ArbSchG und DGUV Information 205-023 durch.";
+}
+
+if (measure.includes("schwarzes Brett im Sozialraum oder Kassenbüro")) {
+  measure = "Halten Sie ein aktuelles schwarzes Brett im Sozialraum oder Bürobereich zur Information der Beschäftigten bereit (§ 81 BetrVG, § 12 ArbSchG).";
+}
+
+if (measure.includes("Entscheidungen transparent erläutert")) {
+  measure = "Kommunizieren Sie betriebliche Entscheidungen transparent und nachvollziehbar, um das Vertrauen der Beschäftigten zu stärken (§ 4 ArbSchG, § 81 BetrVG).";
+}
+
+if (measure.includes("positive Rückmeldungen bei guter Leistung")) {
+  measure = "Geben Sie regelmäßig wertschätzendes Feedback bei guter Leistung, um Motivation und Arbeitszufriedenheit zu fördern (§ 4 ArbSchG, § 75 BetrVG).";
+}
+
+if (measure.includes("konstruktive Kritik geübt")) {
+  measure = "Führen Sie Kritikgespräche sachlich und lösungsorientiert, unter Wahrung der Würde der betroffenen Person (§ 75 BetrVG, § 4 ArbSchG).";
+}
+
+if (measure.includes("Weiterbildungsmöglichkeiten geschaffen")) {
+  measure = "Schaffen Sie innerbetriebliche oder externe Weiterbildungsangebote und fördern Sie Qualifizierungen gemäß § 82 BetrVG sowie § 3 ArbSchG.";
+}
+
+if (measure.includes("Aushang zur Information über die Suchtprävention")) {
+  measure = "Stellen Sie einen gut sichtbaren Aushang mit Informationen zur Suchtprävention bereit und verweisen Sie auf innerbetriebliche Hilfsangebote (§ 3 ArbSchG, BEM-Leitlinien).";
+}
+
+if (measure.includes("betriebliches Wiedereingliederungsmanagement implementiert")) {
+  measure = "Implementieren Sie ein betriebliches Wiedereingliederungsmanagement (BEM) nach § 167 Abs. 2 SGB IX für länger erkrankte Beschäftigte.";
+}
+
+if (measure.includes("Alleinarbeit vermieden")) {
+  measure = "Vermeiden Sie gefährdende Alleinarbeit oder ergreifen Sie geeignete Schutzmaßnahmen, wie Notrufsysteme oder Kontrollgänge (§ 3 ArbSchG, DGUV Regel 115-003).";
+}
+
+if (measure.includes("Betreuung nach einem Überfall organisiert")) {
+  measure = "Stellen Sie sicher, dass betroffene Mitarbeitende nach einem Überfall psychologische Betreuung und Nachsorge erhalten (§ 3 ArbSchG, § 84 SGB IX).";
+}
+
+if (measure.includes("Schulungen für den Umgang mit gewalttätigen Situationen ermöglicht")) {
+  measure = "Ermöglichen Sie Mitarbeitenden Schulungen zum Deeskalations- und Konfliktmanagement bei Gewaltvorfällen gemäß § 12 ArbSchG und DGUV Information 206-023.";
+}
+
+	
 
   if (!measure.endsWith(".")) {
     measure += ".";
