@@ -1,383 +1,404 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0, user-scalable=no" name="viewport"/>
-<title>Arbeitssicherheit 2025</title>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
-<link href="/sicher/favicon.ico" rel="icon" type="image/x-icon" />
-<link href="/sicher/manifest.json" rel="manifest"/>
-<style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Arbeitssicherheit 2025</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon" />
+  <link href="/sicher/manifest.json" rel="manifest" />
+  <style>
     * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     html, body {
-        height: 100%;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        overflow-x: hidden;
+      height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      overflow-x: hidden;
     }
 
     body {
-        background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 50%, #e0e7ff 100%);
-        color: #1e293b;
-        transition: all 0.3s ease;
-        min-height: 100vh;
+      background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 50%, #e0e7ff 100%);
+      color: #1e293b;
+      transition: all 0.3s ease;
+      min-height: 100vh;
     }
 
     body.dark {
-        background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
-        color: #e2e8f0;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+      color: #e2e8f0;
     }
 
     .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
     .theme-toggle {
-        position: fixed;
-        top: 10px;
-        right: 20px;
-        z-index: 1000;
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        border: 1.5px solid rgba(255, 255, 255, 0.15);
-        background: rgba(255, 255, 255, 0.3);
-        backdrop-filter: blur(6px);
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 18px;
-        transition: all 0.3s ease;
-        box-shadow: none;
-        -webkit-tap-highlight-color: transparent;
-        opacity: 0.85;
+      position: fixed;
+      top: 10px;
+      right: 20px;
+      z-index: 1000;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(6px);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      transition: all 0.3s ease;
+      box-shadow: none;
+      -webkit-tap-highlight-color: transparent;
+      opacity: 0.85;
     }
 
     .theme-toggle:hover,
     .theme-toggle:active {
-        opacity: 1;
-        transform: scale(1.15);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      opacity: 1;
+      transform: scale(1.15);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
     .theme-toggle i {
-        color: #1e293b;
-        transition: color 0.3s ease;
+      color: #1e293b;
+      transition: color 0.3s ease;
     }
 
     body.dark .theme-toggle {
-        background: rgba(30, 41, 59, 0.3);
-        border-color: rgba(255, 255, 255, 0.1);
+      background: rgba(30, 41, 59, 0.3);
+      border-color: rgba(255, 255, 255, 0.1);
     }
 
     body.dark .theme-toggle i {
-        color: #f8fafc;
+      color: #f8fafc;
     }
 
     .header {
-        text-align: center;
-        margin-bottom: 60px;
-        padding-top: 40px;
+      text-align: center;
+      margin-bottom: 60px;
+      padding-top: 40px;
     }
 
     .header-icon {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 80px;
-        height: 80px;
-        background: linear-gradient(135deg, #3b82f6, #6366f1);
-        border-radius: 20px;
-        margin-bottom: 20px;
-        box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      border-radius: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
     }
 
     .header-icon i {
-        font-size: 36px;
-        color: white;
+      font-size: 36px;
+      color: white;
     }
 
     .header h1 {
-        font-size: clamp(2.5rem, 5vw, 4rem);
-        font-weight: 700;
-        background: linear-gradient(135deg, #3b82f6, #6366f1);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        margin-bottom: 15px;
-        line-height: 1.2;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 700;
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 15px;
+      line-height: 1.2;
     }
 
     .header p {
-        font-size: 1.2rem;
-        color: #64748b;
-        max-width: 600px;
-        margin: 0 auto;
+      font-size: 1.2rem;
+      color: #64748b;
+      max-width: 600px;
+      margin: 0 auto;
     }
 
     body.dark .header p {
-        color: #94a3b8;
+      color: #94a3b8;
     }
 
     .tiles-container {
-        background: rgba(255, 255, 255, 0.6);
-        backdrop-filter: blur(15px);
-        border-radius: 30px;
-        padding: 40px;
-        margin-bottom: 60px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        position: relative;
-        overflow: hidden;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(15px);
+      border-radius: 30px;
+      padding: 40px;
+      margin-bottom: 60px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      position: relative;
+      overflow: hidden;
     }
 
     .tiles-container::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(99, 102, 241, 0.05));
-        pointer-events: none;
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(99, 102, 241, 0.05));
+      pointer-events: none;
     }
 
     body.dark .tiles-container {
-        background: rgba(30, 41, 59, 0.6);
-        border-color: rgba(255, 255, 255, 0.1);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      background: rgba(30, 41, 59, 0.6);
+      border-color: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     }
 
     body.dark .tiles-container::before {
-        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(99, 102, 241, 0.1));
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(99, 102, 241, 0.1));
     }
 
     .tiles-container-header {
-        text-align: center;
-        margin-bottom: 30px;
-        position: relative;
-        z-index: 1;
+      text-align: center;
+      margin-bottom: 30px;
+      position: relative;
+      z-index: 1;
     }
 
     .tiles-container-header h2 {
-        font-size: 1.8rem;
-        font-weight: 600;
-        color: #1e293b;
-        margin-bottom: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 12px;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
     }
 
     body.dark .tiles-container-header h2 {
-        color: #f8fafc;
+      color: #f8fafc;
     }
 
     .tiles-container-header h2 i {
-        color: #3b82f6;
-        font-size: 1.5rem;
+      color: #3b82f6;
+      font-size: 1.5rem;
     }
 
     body.dark .tiles-container-header h2 i {
-        color: #60a5fa;
+      color: #60a5fa;
     }
 
     .tiles-container-header p {
-        color: #64748b;
-        font-size: 1rem;
+      color: #64748b;
+      font-size: 1rem;
     }
 
     body.dark .tiles-container-header p {
-        color: #94a3b8;
+      color: #94a3b8;
     }
 
     .tiles-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 25px;
-        position: relative;
-        z-index: 1;
-    }
-
-    @media (min-width: 768px) and (max-width: 1024px) {
-        .tile {
-            padding: 40px 30px;
-        }
-
-        .tile h3 {
-            font-size: 1.3rem;
-        }
-
-        .tile p {
-            font-size: 1.05rem;
-        }
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      position: relative;
+      z-index: 1;
     }
 
     .tile {
-        background: rgba(255, 255, 255, 0.8);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        padding: 30px;
-        text-decoration: none;
-        color: inherit;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        transition: all 0.3s ease;
-        display: block;
-        text-align: center;
-        border: 1px solid rgba(255, 255, 255, 0.4);
-        -webkit-tap-highlight-color: transparent;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .tile:hover::before,
-    .tile:active::before {
-        opacity: 1;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      text-decoration: none;
+      color: inherit;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      display: block;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      -webkit-tap-highlight-color: transparent;
+      position: relative;
+      overflow: hidden;
+      min-height: 160px;
     }
 
     .tile:hover,
     .tile:active {
-        transform: translateY(-8px);
-        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+      transform: scale(0.98);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
     }
 
     body.dark .tile {
-        background: rgba(30, 41, 59, 0.8);
-        border-color: rgba(255, 255, 255, 0.2);
+      background: rgba(30, 41, 59, 0.8);
+      border-color: rgba(255, 255, 255, 0.2);
     }
 
     .tile-icon {
-        width: 70px;
-        height: 70px;
-        border-radius: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 20px;
-        background: linear-gradient(135deg, #3b82f6, #6366f1);
-        box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
-        color: white;
-        font-size: 32px;
+      width: 70px;
+      height: 70px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+      color: white;
+      font-size: 32px;
     }
 
     .tile h3 {
-        font-size: 1.25rem;
-        font-weight: 600;
-        margin-bottom: 12px;
-        color: #1e293b;
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #1e293b;
     }
 
     body.dark .tile h3 {
-        color: #f1f5f9;
+      color: #f1f5f9;
     }
 
     .tile p {
-        font-size: 1rem;
-        line-height: 1.5;
-        color: #475569;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: #475569;
     }
 
     body.dark .tile p {
-        color: #cbd5e1;
+      color: #cbd5e1;
     }
 
     footer {
-        text-align: center;
-        font-size: 0.875rem;
-        color: #64748b;
-        margin-top: auto;
-        padding: 20px 0;
-        border-top: 1px solid rgba(0, 0, 0, 0.05);
+      text-align: center;
+      font-size: 0.875rem;
+      color: #64748b;
+      margin-top: auto;
+      padding: 20px 0;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
     }
 
     body.dark footer {
-        color: #cbd5e1;
-        border-top-color: rgba(255, 255, 255, 0.1);
+      color: #cbd5e1;
+      border-top-color: rgba(255, 255, 255, 0.1);
     }
-</style>
+
+    @media (max-width: 767px) {
+      .container {
+        padding: 16px;
+      }
+
+      .header {
+        padding-top: 20px;
+        margin-bottom: 40px;
+      }
+
+      .tiles-container {
+        padding: 20px;
+        margin-bottom: 40px;
+        border-radius: 20px;
+      }
+
+      .tile {
+        padding: 20px;
+      }
+
+      .tile h3 {
+        font-size: 1.1rem;
+      }
+
+      .tile p {
+        font-size: 0.95rem;
+      }
+
+      .tile-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 28px;
+        border-radius: 12px;
+      }
+
+      .header h1 {
+        font-size: 2rem;
+      }
+
+      .theme-toggle {
+        top: 6px;
+        right: 10px;
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+      }
+    }
+  </style>
 </head>
 <body>
 <button class="theme-toggle" aria-label="Toggle dark mode" title="Wechsel zu Dunkelmodus">
-    <i class="fas fa-moon"></i>
+  <i class="fas fa-moon"></i>
 </button>
 
 <div class="container">
-    <header class="header">
-        <div class="header-icon"><i class="fas fa-shield-alt"></i></div>
-        <h1 id="titel" style="margin: 0;"></h1>
-        <p>Neue und innovative Konzepte für Ihre Sicherheit am Arbeitsplatz</p>
-    </header>
+  <header class="header">
+    <div class="header-icon"><i class="fas fa-shield-alt"></i></div>
+    <h1 id="titel" style="margin: 0;"></h1>
+    <p>Neue und innovative Konzepte für Ihre Sicherheit am Arbeitsplatz</p>
+  </header>
 
-    <section class="tiles-container" aria-label="Arbeitssicherheit - Checkliste">
-        <div class="tiles-container-header">
-            <h2><i class="fas fa-cogs"></i> Features</h2>
-            <p>Arbeitssicherheit Checkliste</p>
-        </div>
+  <section class="tiles-container" aria-label="Arbeitssicherheit - Checkliste">
+    <div class="tiles-container-header">
+      <h2><i class="fas fa-cogs"></i> Features</h2>
+      <p>Arbeitssicherheit Checkliste</p>
+    </div>
 
-        <a class="tile" href="liste.html" target="_blank">
-            <div class="tile-icon"><i class="fas fa-clipboard-check"></i></div>
-            <h3>Arbeitssicherheit-Checkliste-2025</h3>
-            <p>Die Maßnahmen berücksichtigen dabei die üblichen Anforderungen aus dem Arbeitsschutzgesetz (ArbSchG), der Betriebssicherheitsverordnung (BetrSichV), den DGUV-Regeln und den relevanten BGHW-Vorgaben</p>
-        </a>
-<br>
-        <a class="tile" href="test.html" target="_blank">
-            <div class="tile-icon"><i class="fas fa-clipboard-check"></i></div>
-            <h3>Arbeitssicherheit-Checkliste-2025</h3>
-            <p>Die Maßnahmen berücksichtigen dabei die üblichen Anforderungen aus dem Arbeitsschutzgesetz (ArbSchG), der Betriebssicherheitsverordnung (BetrSichV), den DGUV-Regeln und den relevanten BGHW-Vorgaben,  in verschärfter, unmissverständlicher und rechtlich eindeutiger Form.</p>
-        </a>
-<br>
-<a class="tile" href="2025.html" target="_blank">
-            <div class="tile-icon"><i class="fas fa-clipboard-check"></i></div>
-            <h3>Arbeitssicherheit-Checkliste-2025 (iPhone)</h3>
-            <p>Die Maßnahmen berücksichtigen dabei die üblichen Anforderungen aus dem Arbeitsschutzgesetz (ArbSchG) in lockerer Form.</p>
-        </a>
-<br>
-        <a class="tile" href="iphone.html" target="_blank">
-            <div class="tile-icon"><i class="fas fa-clipboard-check"></i></div>
-            <h3>Arbeitssicherheit-Checkliste-2025 (iPhone)</h3>
-            <p>Die Maßnahmen berücksichtigen dabei die üblichen Anforderungen aus dem Arbeitsschutzgesetz (ArbSchG), der Betriebssicherheitsverordnung (BetrSichV), den DGUV-Regeln und den relevanten BGHW-Vorgaben,  in verschärfter, unmissverständlicher und rechtlich eindeutiger Form</p>
-        </p>
-        </a>
-        </a>
-    </section>
+    <a class="tile" href="liste.html" target="_blank">
+      <div class="tile-icon"><i class="fas fa-clipboard-check"></i></div>
+      <h3>Arbeitssicherheit-Checkliste-2025</h3>
+      <p>Die Maßnahmen berücksichtigen dabei die üblichen Anforderungen aus dem Arbeitsschutzgesetz (ArbSchG), der Betriebssicherheitsverordnung (BetrSichV), den DGUV-Regeln und den relevanten BGHW-Vorgaben.</p>
+    </a>
+    <br>
+    <a class="tile" href="test.html" target="_blank">
+      <div class="tile-icon"><i class="fas fa-clipboard-check"></i></div>
+      <h3>Arbeitssicherheit-Checkliste-2025</h3>
+      <p>... in verschärfter, unmissverständlicher und rechtlich eindeutiger Form.</p>
+    </a>
+    <br>
+    <a class="tile" href="2025.html" target="_blank">
+      <div class="tile-icon"><i class="fas fa-clipboard-check"></i></div>
+      <h3>Arbeitssicherheit-Checkliste-2025 (iPhone)</h3>
+      <p>... in lockerer Form.</p>
+    </a>
+    <br>
+    <a class="tile" href="iphone.html" target="_blank">
+      <div class="tile-icon"><i class="fas fa-clipboard-check"></i></div>
+      <h3>Arbeitssicherheit-Checkliste-2025 (iPhone)</h3>
+      <p>... in verschärfter, unmissverständlicher und rechtlich eindeutiger Form.</p>
+    </a>
+  </section>
 </div>
 
 <footer>
-    &copy; <span id="currentYear"></span> Arbeitssicherheit – Alle Rechte vorbehalten.
+  &copy; <span id="currentYear"></span> Arbeitssicherheit – Alle Rechte vorbehalten.
 </footer>
 
 <script>
-    const toggleButton = document.querySelector('.theme-toggle');
-    toggleButton.addEventListener('click', () => {
-        document.body.classList.toggle('dark');
-        const icon = toggleButton.querySelector('i');
-        if(document.body.classList.contains('dark')) {
-            icon.classList.remove('fa-moon');
-            icon.classList.add('fa-sun');
-        } else {
-            icon.classList.remove('fa-sun');
-            icon.classList.add('fa-moon');
-        }
-    });
+  document.querySelector('.theme-toggle').addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+    const icon = document.querySelector('.theme-toggle i');
+    icon.classList.toggle('fa-sun');
+    icon.classList.toggle('fa-moon');
+  });
 
-    document.getElementById("currentYear").textContent = new Date().getFullYear();
-</script>
-<script>
-  const aktuellesJahr = new Date().getFullYear();
-  document.getElementById('titel').textContent = `Arbeitssicherheit ${aktuellesJahr}`;
+  document.getElementById("currentYear").textContent = new Date().getFullYear();
+  document.getElementById('titel').textContent = `Arbeitssicherheit ${new Date().getFullYear()}`;
 </script>
 </body>
 </html>
