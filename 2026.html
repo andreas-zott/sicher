@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<title>Arbeitsschutz ‑ Checkliste</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<link href="/sicher/favicon.ico" rel="icon" type="image/x-icon" />
+<link href="/sicher/manifest.json" rel="manifest"/>
+<style>
+.footer p {
+  font-size: 12px;          /* kleinerer Text */
+  color: #888888;           /* hellgraues, blasses Grau */
+  margin: 0;                /* optional: etwas Abstand rausnehmen */
+}
+.footer a {
+  color: #aaa;              /* Links auch blasser */
+  text-decoration: none;    /* Optional: ohne Unterstreichung */
+}
+.footer a:hover {
+  text-decoration: underline; /* Unterstreichung beim Hover */
+}
+
+.buttons-container {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.buttons-container button {
+  padding: 3px 8px;
+  font-size: 15px;
+  cursor: pointer;
+  border-radius: 3px;
+
+}
+@media print {
+  button {
+    display: none;
+  }
+}
+body {
+  font-family: Arial, sans-serif;
+  background-color: #d0e7ff; /* Hellblau */
+}
+table { width: 98%; border-collapse: collapse; margin-bottom: 30px; }
+th, td { border: 1px solid #ccc; padding: 8px; vertical-align: top; }
+th { background-color: #eee; }
+select { width: 100%; }
+.antwortwahl { display: none; }
+#hinweisContainer { margin-top: 40px; }
+button { padding: 10px 20px; font-size: 16px; cursor: pointer; margin-right: 10px; }
+canvas { touch-action: none; }
+</style>
+<!-- external libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+<h1 style="text-align: center;">Arbeitsschutz ‑ Checkliste</h1>
+
+<form id="metaForm" style="margin-bottom: 30px; display: flex; gap: 20px; flex-wrap: wrap;">
+  <label>Marktnummer:
+    <input type="text" id="marktnummer" />
+  </label><br />
+  <label>Name:
+    <input type="text" id="name" />
+  </label><br />
+  <label>Sifa:
+    <input type="text" id="sifa" />
+  </label><br />
+  <label>Datum:
+    <input type="text" id="datum" readonly />
+  </label>
+</form>
+
+<table id="checklist">
+  <thead>
+    <tr>
+      <th>Frage</th>
+      <th>Antwort</th>
+      <th>Quelle<span style="font-weight: normal"></span></th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<div id="hinweisContainer">
+<h2 style="text-align: center;">Zusammenfassung der Maßnahmen</h2>
+  <table id="zusammenfassung">
+    <thead>
+      <tr><th>Frage</th><th>Hinweistext</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+<!-- Unterschrift -->
+<div style="margin-top: 40px;">
+<h3 style="text-align: center;">Unterschrift</h3>
+<div style="text-align: center;">
+  <canvas id="signature" width="600" height="200" style="border:1px solid #ccc; background-color: white;"></canvas><br />
+<div class="buttons-container">
+  <button type="button" onclick="clearSignature()">🗑️ Unterschrift löschen</button>
+</div>
+
+<!-- Aktionen -->
+
+<div class="buttons-container">
+  <button onclick="exportMassnahmenAsHTML()">📝 Defizite exportieren</button>
+  <button onclick="openSummaryPage()">📝 Maßnahmen</button>
+  <button onclick="window.print()">📄 Drucken / PDF</button>
+  <button onclick="sharePDF()">📤 PDF teilen (iPad)</button>
+</div>
+
+<script src="fragen.js"></script>
+<script>
+// Datum automatisch eintragen
+document.getElementById("datum").value = new Date().toLocaleDateString("de-DE");
+
+const tbody = document.querySelector("#checklist tbody");
+const summaryBody = document.querySelector("#zusammenfassung tbody");
+const antwortenMap = new Map();
+
+function renderSummary() {
+  summaryBody.textContent = "";
+  antwortenMap.forEach((hinweis, frage) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${frage}</td><td>${hinweis}</td>`;
+    summaryBody.appendChild(tr);
+  });
+}
+
+function escapeHTML(str) {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+if (!Array.isArray(window.fragen)) {
+  alert('Fehler: Die Fragen konnten nicht geladen werden (fragen.js).');
+} else {
+  fragen.forEach((eintrag) => {
+    const tr = document.createElement('tr');
+
+    const tdFrage = document.createElement('td');
+    tdFrage.textContent = eintrag.frage;
+
+    const tdAntwort = document.createElement('td');
+    const selectAntwort = document.createElement('select');
+    ['Ja', 'Nein', 'Nicht vorhanden'].forEach((opt) => {
+      const option = document.createElement('option');
+      option.value = opt;
+      option.textContent = opt;
+      selectAntwort.appendChild(option);
+    });
+    tdAntwort.appendChild(selectAntwort);
+
+    const tdFormWahl = document.createElement('td');
+    const selectForm = document.createElement('select');
+    selectForm.className = 'antwortwahl';
+    selectForm.title = 'Quelle des Hinweistexts wählen';
+    ['bghw', 'klar', 'rechtlich'].forEach((val) => {
+      const option = document.createElement('option');
+      option.value = val;
+      option.textContent = val.toUpperCase();
+      selectForm.appendChild(option);
+    });
+    tdFormWahl.appendChild(selectForm);
+
+    const updateHinweis = () => {
+      if (selectAntwort.value === 'Nein') {
+        const form = selectForm.value || 'bghw';
+        const text = eintrag.antworten[form] || '[Kein Text hinterlegt]';
+        antwortenMap.set(eintrag.frage, text);
+      } else {
+        antwortenMap.delete(eintrag.frage);
+      }
+      renderSummary();
+    };
+
+    selectAntwort.addEventListener('change', () => {
+      selectForm.style.display = selectAntwort.value === 'Nein' ? 'inline-block' : 'none';
+      updateHinweis();
+    });
+
+    selectForm.addEventListener('change', updateHinweis);
+
+    tr.appendChild(tdFrage);
+    tr.appendChild(tdAntwort);
+    tr.appendChild(tdFormWahl);
+    tbody.appendChild(tr);
+  });
+}
+
+// Signatur‑Canvas
+const signCanvas = document.getElementById('signature');
+const signCtx = signCanvas.getContext('2d');
+let signing = false;
+
+const getPos = (e) => {
+  const rect = signCanvas.getBoundingClientRect();
+  if (e.touches && e.touches.length) {
+    return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
+  } else {
+    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+  }
+};
+
+const startSign = (e) => {
+  e.preventDefault();
+  signing = true;
+  const pos = getPos(e);
+  signCtx.beginPath();
+  signCtx.moveTo(pos.x, pos.y);
+};
+
+const drawSign = (e) => {
+  if (!signing) return;
+  e.preventDefault();
+  const pos = getPos(e);
+  signCtx.lineTo(pos.x, pos.y);
+  signCtx.stroke();
+};
+
+const endSign = () => {
+  signing = false;
+};
+
+['mousedown', 'touchstart'].forEach(evt => signCanvas.addEventListener(evt, startSign));
+['mousemove', 'touchmove'].forEach(evt => signCanvas.addEventListener(evt, drawSign));
+['mouseup', 'mouseleave', 'touchend'].forEach(evt => signCanvas.addEventListener(evt, endSign));
+
+function clearSignature() {
+  signCtx.clearRect(0, 0, signCanvas.width, signCanvas.height);
+}
+
+// PDF‑Export & Teilen (iPad Safari)
+
+
+async function sharePDF() {
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF('p', 'pt', 'a4');
+  const pageHeight = pdf.internal.pageSize.getHeight();
+  const elements = document.body.cloneNode(true);
+
+  const container = document.createElement('div');
+  container.style.width = '800px';
+  container.style.padding = '20px';
+  container.style.background = 'white';
+  container.style.position = 'absolute';
+  container.style.top = '-10000px';
+  container.appendChild(elements);
+  document.body.appendChild(container);
+
+  await html2canvas(container, { scale: 2 }).then(canvas => {
+    const imgData = canvas.toDataURL('image/png');
+    const imgWidth = pdf.internal.pageSize.getWidth();
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    let heightLeft = imgHeight;
+    let position = 0;
+
+    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
+
+    while (heightLeft > 0) {
+      position -= pageHeight;
+      pdf.addPage();
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+    }
+
+    document.body.removeChild(container);
+
+    const pdfBlob = pdf.output('blob');
+    const file = new File([pdfBlob], 'checkliste.pdf', { type: 'application/pdf' });
+
+    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+      navigator.share({
+        title: 'Arbeitsschutz‑Checkliste',
+        files: [file]
+      }).catch(err => console.error(err));
+    } else {
+      pdf.save('checkliste.pdf');
+    }
+  });
+}
+function exportMassnahmenAsHTML() {
+  let htmlContent = `
+  <!DOCTYPE html>
+  <html lang="de">
+  <head>
+    <meta charset="UTF-8">
+    <title>Exportierte Maßnahmen</title>
+    <style>
+      body { font-family: Arial, sans-serif; margin: 20px; }
+      table { border-collapse: collapse; width: 100%; }
+      th, td { border: 1px solid #ccc; padding: 10px; }
+      th { background-color: #f2f2f2; }
+    </style>
+  </head>
+  <body>
+    <h1>Zusammenfassung der Maßnahmen</h1>
+    <table>
+      <thead>
+        <tr><th>Frage</th><th>Hinweis</th></tr>
+      </thead>
+      <tbody>
+  `;
+
+  antwortenMap.forEach((hinweis, frage) => {
+    htmlContent += `
+      <tr>
+        <td>${frage}</td>
+        <td>${hinweis}</td>
+      </tr>
+    `;
+  });
+
+  htmlContent += `
+      </tbody>
+    </table>
+  </body>
+  </html>
+  `;
+
+  const blob = new Blob([htmlContent], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  window.open(url, '_blank');
+}
+function openSummaryPage() {
+  const eintraege = [];
+
+  antwortenMap.forEach((hinweis, frage) => {
+    eintraege.push({ frage, hinweis });
+  });
+
+  const datenString = encodeURIComponent(JSON.stringify(eintraege));
+  const url = `zusammenfassung.html?data=${datenString}`;
+  window.open(url, '_blank');
+}
+
+</script>
+<p>
+ </p>
+<p>
+<footer class="footer">
+  <p>
+    © <span id="currentYear"></span> Andreas Zott. Alle Rechte vorbehalten.
+    <a href="datenschutz.html" rel="noopener noreferrer" target="_blank">Datenschutz</a> |
+    <a href="impressum.html" rel="noopener noreferrer" target="_blank">Impressum</a>
+  </p>
+</footer>
+<script>
+  const aktuellesJahr = new Date().getFullYear();
+  document.getElementById('titel').textContent = `Arbeitssicherheit-Checkliste-${aktuellesJahr}`;
+</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker
+        .register('sw.js')
+        .then(() => console.log("✅ Service Worker registriert"))
+        .catch((err) => console.error("❌ Service Worker Fehler:", err));
+    });
+  }
+</script>
+</body>
+</html>
