@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Arbeitsschutz‑Checkliste</title>
+    <style>
+      table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+      th, td { border: 1px solid #ccc; padding: 8px; vertical-align: top; }
+      th { background-color: #eee; }
+      select { width: 100%; }
+      .antwortwahl { display: none; }
+      #hinweisContainer { margin-top: 40px; }
+      button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+    </style>
+  </head>
+  <body>
+    <h1>Arbeitsschutz‑Checkliste</h1>
+
+    <table id="checklist">
+      <thead>
+        <tr>
+          <th>Frage</th>
+          <th>Antwort</th>
+          <th>Hinweistext‑Quelle<span style="font-weight: normal">* (nur bei „Nein“)</span></th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div id="hinweisContainer">
+      <h2>Zusammenfassung der „Nein“-Antworten</h2>
+      <table id="zusammenfassung">
+        <thead>
+          <tr>
+            <th>Frage</th>
+            <th>Hinweistext</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <button type="button" onclick="exportHTML()">HTML‑Datei erstellen</button>
+    </div>
+
+    <script src="fragen.js"></script>
+    <script>
+      const tbody = document.querySelector("#checklist tbody");
+      const summaryBody = document.querySelector("#zusammenfassung tbody");
+      const antwortenMap = new Map();
+
+      function renderSummary() {
+        summaryBody.textContent = "";
+        antwortenMap.forEach((hinweis, frage) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `<td>${frage}</td><td>${hinweis}</td>`;
+          summaryBody.appendChild(tr);
+        });
+      }
+
+      function escapeHTML(str) {
+        return str
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function exportHTML() {
+        let content = \`<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"><title>Auswertung</title><style>table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccc;padding:8px}th{background:#eee}</style></head><body><h1>Auswertung der Arbeitsschutz‑Kontrolle</h1><table><thead><tr><th>Frage</th><th>Hinweistext</th></tr></thead><tbody>\`;
+        antwortenMap.forEach((hinweis, frage) => {
+          content += \`<tr><td>\${escapeHTML(frage)}</td><td>\${escapeHTML(hinweis)}</td></tr>\`;
+        });
+        content += "</tbody></table></body></html>";
+
+        const blob = new Blob([content], { type: "text/html" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "arbeitsschutz-auswertung.html";
+        a.click();
+      }
+
+      if (!Array.isArray(window.fragen)) {
+        alert("Fehler: Die Fragen konnten nicht geladen werden (fragen.js).");
+      } else {
+        fragen.forEach((eintrag) => {
+          const tr = document.createElement("tr");
+
+          const tdFrage = document.createElement("td");
+          tdFrage.textContent = eintrag.frage;
+
+          const tdAntwort = document.createElement("td");
+          const selectAntwort = document.createElement("select");
+          ["Ja", "Nein", "Nicht vorhanden"].forEach((opt) => {
+            const option = document.createElement("option");
+            option.value = opt;
+            option.textContent = opt;
+            selectAntwort.appendChild(option);
+          });
+          tdAntwort.appendChild(selectAntwort);
+
+          const tdFormWahl = document.createElement("td");
+          const selectForm = document.createElement("select");
+          selectForm.className = "antwortwahl";
+          selectForm.title = "Quelle des Hinweistexts wählen";
+          ["bghw", "klar", "rechtlich"].forEach((val) => {
+            const option = document.createElement("option");
+            option.value = val;
+            option.textContent = val.toUpperCase();
+            selectForm.appendChild(option);
+          });
+          tdFormWahl.appendChild(selectForm);
+
+          const updateHinweis = () => {
+            if (selectAntwort.value === "Nein") {
+              const form = selectForm.value || "bghw";
+              const text = eintrag.antworten[form] || "[Kein Text hinterlegt]";
+              antwortenMap.set(eintrag.frage, text);
+            } else {
+              antwortenMap.delete(eintrag.frage);
+            }
+            renderSummary();
+          };
+
+          selectAntwort.addEventListener("change", () => {
+            selectForm.style.display = selectAntwort.value === "Nein" ? "inline-block" : "none";
+            updateHinweis();
+          });
+
+          selectForm.addEventListener("change", updateHinweis);
+
+          tr.appendChild(tdFrage);
+          tr.appendChild(tdAntwort);
+          tr.appendChild(tdFormWahl);
+          tbody.appendChild(tr);
+        });
+      }
+    </script>
+  </body>
+</html>
