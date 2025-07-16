@@ -17,6 +17,20 @@
 </head>
 <body><div id="content-to-pdf">
 <h1 style="text-align: center;">Zusammenfassung der Maßnahmen</h1>
+<form id="metaForm" style="margin-bottom: 30px; display: flex; gap: 20px; flex-wrap: wrap;">
+  <label>Marktnummer:
+    <input type="text" id="marktnummer" />
+  </label><br />
+  <label>Name:
+    <input type="text" id="name" />
+  </label><br />
+  <label>Sifa:
+    <input type="text" id="sifa" />
+  </label><br />
+  <label>Datum:
+    <input id="datum" readonly="" type="text"/></p>
+  </label>
+</form>
 <table id="summary">
 <thead><tr><th>Frage</th><th>Hinweis</th></tr></thead>
 <tbody></tbody>
@@ -125,5 +139,12 @@ async function sharePDF() {
     pdf.save('zusammenfassung.pdf');
   }
 }
-</script></body>
+</script>
+<script>
+    // Datum setzen
+    const heute = new Date();
+    const datumString = heute.toLocaleDateString('de-DE');
+    document.getElementById('datum').value = datumString;
+  </script>
+</body>
 </html>
