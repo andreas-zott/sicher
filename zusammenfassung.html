@@ -21,111 +21,59 @@
 <thead><tr><th>Frage</th><th>Hinweis</th></tr></thead>
 <tbody></tbody>
 </table><div style="display: flex; gap: 20px; justify-content: center; margin: 20px 0;"></div>
-<script>
-    const params = new URLSearchParams(window.location.search);
-    const data = JSON.parse(decodeURIComponent(params.get("data") || "[]"));
-    const tbodyParam = document.querySelector("#summary tbody");
+<div class="buttons-container">
+<button onclick="window.print()">📄 Drucken / PDF</button>
+<button onclick="sharePDF()">📤 PDF teilen (iPad)</button>
+</div></div><script>
+window.onload = function () {
+  const urlParams = new URLSearchParams(window.location.search);
+  const dataParam = urlParams.get("data");
+  const tbody = document.querySelector("#summary tbody");
 
-    data.forEach(eintrag => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `<td>${eintrag.frage}</td><td>${eintrag.hinweis}</td>`;
-      tbodyParam.appendChild(tr);
-    });
-  </script>
-<script>
-    const tbody = document.querySelector("#summary tbody");
-
-    function escapeHTML(str) {
-      return str
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
-
-    function loadZusammenfassung() {
-      const gespeichert = localStorage.getItem("neinAntworten");
-      if (!gespeichert) {
-        alert("Keine Daten vorhanden. Bitte zuerst die Checkliste ausfüllen.");
-        return;
-      }
-
-      const eintraege = JSON.parse(gespeichert);
-      eintraege.forEach(([frage, hinweis]) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `<td>${escapeHTML(frage)}</td><td>${escapeHTML(hinweis)}</td>`;
-        tbody.appendChild(tr);
-      });
-
-      // Metadaten anzeigen
-      document.getElementById("metaMarktnummer").textContent = localStorage.getItem("marktnummer") || "–";
-      document.getElementById("metaName").textContent = localStorage.getItem("name") || "–";
-      document.getElementById("metaSifa").textContent = localStorage.getItem("sifa") || "–";
-      document.getElementById("metaDatum").textContent = localStorage.getItem("datum") || "–";
-    }
-
-    async function sharePDF() {
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF('p', 'pt', 'a4');
-
-      const container = document.body;
-      const canvas = await html2canvas(container, { scale: 2, scrollY: -window.scrollY });
-      const imgData = canvas.toDataURL('image/png');
-
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
-      const imgHeight = (canvas.height * pageWidth) / canvas.width;
-
-      let heightLeft = imgHeight;
-      let position = 0;
-
-      pdf.addImage(imgData, 'PNG', 0, position, pageWidth, imgHeight);
-      heightLeft -= pageHeight;
-
-      while (heightLeft > 0) {
-        position -= pageHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, pageWidth, imgHeight);
-        heightLeft -= pageHeight;
-      }
-
-      const blob = pdf.output('blob');
-      const file = new File([blob], 'zusammenfassung.pdf', { type: 'application/pdf' });
-
-    if (navigator.share) {
-  const blobUrl = URL.createObjectURL(blob);
-  try {
-    await navigator.share({
-      title: 'Zusammenfassung „Nein“-Antworten',
-      text: 'Hier ist die PDF-Zusammenfassung:',
-      url: blobUrl
-    });
-  } catch (err) {
-    console.error('Teilen fehlgeschlagen:', err);
-    pdf.save('zusammenfassung.pdf');
+  function escapeHTML(str) {
+    return str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
   }
-} else {
-  pdf.save('zusammenfassung.pdf');
-}
+
+  let daten = [];
+
+  if (dataParam) {
+    try {
+      daten = JSON.parse(decodeURIComponent(dataParam));
+    } catch (err) {
+      console.error("Fehler beim Parsen der URL-Daten:", err);
     }
+  } else {
+    const gespeichert = localStorage.getItem("neinAntworten");
+    if (gespeichert) {
+      try {
+        daten = JSON.parse(gespeichert).map(([frage, hinweis]) => ({ frage, hinweis }));
+      } catch (err) {
+        console.error("Fehler beim Laden aus localStorage:", err);
+      }
+    }
+  }
 
-    window.onload = loadZusammenfassung;
-  
-function prepareForPrint() {
-  window.print();
-}
-window.generateAndSharePDF = sharePDF;
+  if (!daten.length) {
+    alert("Keine Daten vorhanden. Bitte zuerst die Checkliste ausfüllen.");
+    return;
+  }
 
-function prepareForPrint() {
-  window.print();
-}
-
-
-window.generateAndSharePDF = async function() {
+  daten.forEach(eintrag => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${escapeHTML(eintrag.frage)}</td><td>${escapeHTML(eintrag.hinweis)}</td>`;
+    tbody.appendChild(tr);
+  });
+};
+</script><script>
+async function sharePDF() {
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF('p', 'pt', 'a4');
-  const content = document.getElementById("content-to-pdf");
+  const content = document.getElementById("content-to-pdf") || document.body;
 
   const canvas = await html2canvas(content, { scale: 2, scrollY: -window.scrollY });
   const imgData = canvas.toDataURL('image/png');
@@ -152,25 +100,30 @@ window.generateAndSharePDF = async function() {
   const blob = pdf.output('blob');
   const file = new File([blob], 'zusammenfassung.pdf', { type: 'application/pdf' });
 
-  if (navigator.share) {
-    const blobUrl = URL.createObjectURL(blob);
+  if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
     try {
       await navigator.share({
         title: 'Zusammenfassung „Nein“-Antworten',
-        text: 'Hier ist die PDF-Zusammenfassung:',
-        url: blobUrl
+        files: [file]
       });
     } catch (err) {
       console.error('Teilen fehlgeschlagen:', err);
       pdf.save('zusammenfassung.pdf');
     }
+  } else if (navigator.share) {
+    const blobUrl = URL.createObjectURL(file);
+    try {
+      await navigator.share({
+        title: 'Zusammenfassung „Nein“-Antworten',
+        url: blobUrl
+      });
+    } catch (err) {
+      console.error('Fallback Teilen fehlgeschlagen:', err);
+      pdf.save('zusammenfassung.pdf');
+    }
   } else {
     pdf.save('zusammenfassung.pdf');
   }
-};
-</script>
-<div class="buttons-container">
-<button onclick="window.print()">📄 Drucken / PDF</button>
-<button onclick="sharePDF()">📤 PDF teilen (iPad)</button>
-</div></body>
+}
+</script></body>
 </html>
