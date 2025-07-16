@@ -3,776 +3,891 @@ window.fragen = [
     "frage": "Tragen alle Personen im Markt festes, geschlossenes und flaches Schuhwerk entsprechend den Vorgaben?",
     "antworten": {
       "bghw": "Gemäß DGUV Regel 112‑191 (Benutzung von Fuß‑ und Knieschutz) müssen Beschäftigte geeignetes, festes, geschlossenes und rutschhemmendes Schuhwerk tragen, das der Tätigkeit und den Bodenverhältnissen entspricht.",
-      "klar": "Alle müssen feste, geschlossene und rutschfeste Schuhe tragen.",
+      "klar": "Stellen Sie umgehend sicher, dass alle Personen im Markt festes, geschlossenes und flaches Schuhwerk gemäß den Arbeitsschutzbestimmungen tragen.",
       "rechtlich": "Alle Automatiktüren, Schnelllauf- und Rolltore sind regelmäßig durch befähigte Personen auf sichtbare und mechanische Mängel zu prüfen. Das Unterlassen dieser Prüfpflicht stellt eine erhebliche Verletzung der Betreiberverantwortung gemäß § 4 BetrSichV dar und ist sofort abzustellen."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Sind an den Automatiktüren, Rolltoren und Schnelllauftoren keine sichtbaren Beschädigungen erkennbar?",
     "antworten": {
       "bghw": "Tor- und Türanlagen müssen gemäß ASR A1.7 sowie DGUV Vorschrift 3 regelmäßig auf sichere Funktion geprüft werden. Sichtbare Schäden oder Mängel müssen sofort beseitigt werden.",
-      "klar": "Türen und Tore müssen ganz und funktionstüchtig sein, ohne sichtbare Schäden.",
+      "klar": "Überprüfen Sie regelmäßig alle Automatiktüren, Rolltore und Schnelllauftore auf sichtbare Beschädigungen und beheben Sie Mängel sofort.",
       "rechtlich": "Alle Automatiktüren, Schnelllauf- und Rolltore sind regelmäßig durch befähigte Personen auf sichtbare und mechanische Mängel zu prüfen. Das Unterlassen dieser Prüfpflicht stellt eine erhebliche Verletzung der Betreiberverantwortung gemäß § 4 BetrSichV dar und ist sofort abzustellen."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Ist die Aufzugsanlage geprüft und in einem ordnungsgemäßen Zustand (ohne sichtbare Beschädigungen und mit funktionsfähigen Schutzeinrichtungen)?",
     "antworten": {
       "bghw": "Aufzugsanlagen sind nach BetrSichV §16 und TRBS 3121 regelmäßig durch eine ZÜS zu prüfen. Sichtkontrollen sind durch den Betreiber verpflichtend durchzuführen.",
-      "klar": "Der Aufzug muss geprüft, funktionstüchtig und ohne sichtbare Schäden sein.",
+      "klar": "Stellen Sie sicher, dass die Aufzugsanlage regelmäßig geprüft wird und sich in einem technisch einwandfreien Zustand befindet.",
       "rechtlich": "Die Aufzugsanlage ist gemäß § 16 BetrSichV regelmäßig durch eine zugelassene Überwachungsstelle prüfen zu lassen. Ein unterlassener Prüf- oder Wartungsnachweis stellt einen gravierenden Verstoß gegen die Pflicht zur Gewährleistung der Betriebssicherheit gemäß § 4 ArbSchG dar."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Ist die Leergutrücknahme in einem ordnungsgemäßen Zustand (Schutzeinrichtungen intakt, Einzugsstellen gesichert, keine Glasscherben)?",
     "antworten": {
       "bghw": "Leergutrücknahmeautomaten müssen laut DGUV Regel 100-500 (Kapitel 2.10) mit Schutzvorrichtungen ausgerüstet sein, die regelmäßig geprüft und gewartet werden müssen.",
-      "klar": "Der Automat darf keine Gefahr darstellen und muss sicher und funktionsfähig sein.",
+      "klar": "Stellen Sie sicher, dass die Leergutrücknahme über intakte Schutzeinrichtungen verfügt und keine Gefährdungen durch Einzugsstellen oder Glasscherben bestehen",
       "rechtlich": "Die technische Funktionsfähigkeit der Leergutrücknahmeeinrichtung ist uneingeschränkt sicherzustellen. Schutzeinrichtungen müssen intakt, Einzugsstellen gesichert und die Umgebung frei von Splittergefahren gehalten werden – in zwingender Umsetzung der Vorgaben aus § 3 ArbSchG und der DGUV Regel 100-500, Kap. 2.10."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Sind die Leitern geprüft gemäß „Leitern und Tritte\" (BGV D 36) bzw. GUV-VD360?",
     "antworten": {
       "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "klar": "Prüfen Sie regelmäßig alle Leitern und Tritte gemäß DGUV Regel 208-016 und dokumentieren Sie die Ergebnisse.",
       "rechtlich": "Sämtliche im Betrieb verwendeten Leitern und Tritte sind nach DGUV Information 208-016 regelmäßig zu prüfen, zu kennzeichnen und schriftlich zu dokumentieren. Die Nichteinhaltung stellt eine unmittelbare Gefährdung dar und ist mit § 4 BetrSichV und § 3 ArbSchG unvereinbar."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Werden aus dem Ordersatz geeignete Sicherheitsmesser verwendet?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Stellen Sie auf Grundlage der Gefährdungsbeurteilung sicher, dass ausschließlich geeignete, im Ordersatz festgelegte Sicherheitsmesser verwendet werden, um Schnittverletzungen zu vermeiden (§§ 4–5 ArbSchG).",
+      "klar": "Stellen Sie sicher, dass ausschließlich geeignete Sicherheitsmesser aus dem freigegebenen Ordersatz verwendet werden.",
       "rechtlich": "Es ist zwingend sicherzustellen, dass ausschließlich die im freigegebenen Ordersatz enthaltenen Sicherheitsmesser verwendet werden. Die Verwendung ungeeigneter Schneidwerkzeuge stellt eine erhebliche Gefährdung dar und ist gemäß § 3 ArbSchG sowie der Gefährdungsbeurteilung unverzüglich zu unterbinden.\t"
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Sind zur Zeit der Begehung keine sichtbaren Beschädigungen an Schaltern und Steckdosen vorhanden?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Veranlassen Sie die regelmäßige Sichtprüfung aller Schalter und Steckdosen und stellen Sie gemäß TRBS 1201 sicher, dass keine erkennbaren Schäden vorliegen.",
+      "klar": "Überprüfen Sie alle Schalter und Steckdosen auf sichtbare Schäden und ersetzen Sie defekte Bauteile umgehend.",
       "rechtlich": "Alle Schalter und Steckdosen sind regelmäßig auf Beschädigungen zu kontrollieren. Beschädigte oder manipulierte Einrichtungen sind umgehend außer Betrieb zu nehmen und durch Elektrofachkräfte instand zu setzen. Eine Zuwiderhandlung stellt einen schwerwiegenden Verstoß gegen § 3 ArbSchG und DGUV Vorschrift 3 dar."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Ist der Gabelhubwagen in einem ordnungsgemäßen Zustand ohne sichtbare Beschädigungen?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Sorgen Sie für eine regelmäßige technische Kontrolle und Instandhaltung des Gabelhubwagens gemäß DGUV Vorschrift 68 (Flurförderzeuge), um dessen ordnungsgemäßen Zustand zu gewährleisten.",
+      "klar": "Stellen Sie sicher, dass der Gabelhubwagen regelmäßig geprüft und frei von sichtbaren Mängeln ist.",
       "rechtlich": "Die technische Betriebsfähigkeit und Unversehrtheit aller eingesetzten Gabelhubwagen ist regelmäßig zu prüfen und lückenlos zu dokumentieren. Fehlfunktionen oder Mängel sind unverzüglich zu beheben. Grundlage: § 4 BetrSichV in Verbindung mit § 3 ArbSchG und DGUV Vorschrift 68."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Ist der elektrische Hubwagen geprüft und in einem ordnungsgemäßen Zustand (keine sichtbaren Beschädigungen, funktionsfähige Schutzeinrichtungen)?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Stellen Sie sicher, dass elektrische Hubwagen gemäß Betriebssicherheitsverordnung und DGUV Regel 100-500 geprüft und mit intakten Schutzeinrichtungen betrieben werden.",
+      "klar": "Prüfen Sie elektrische Hubwagen regelmäßig auf Mängel und sorgen Sie für funktionsfähige Schutzeinrichtungen.",
       "rechtlich": "Elektrische Hubwagen dürfen ausschließlich in technisch einwandfreiem Zustand betrieben werden. Die Funktion aller Schutz- und Bedieneinrichtungen ist regelmäßig zu prüfen. Verstöße gegen diese Pflicht stellen eine unmittelbare Gefährdung nach § 3 ArbSchG und § 10 BetrSichV dar."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Sind die Feuerlöscheinrichtungen frei zugänglich und nicht durch Ware, Displays oder sonstige Gegenstände blockiert?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Halten Sie alle Feuerlöscheinrichtungen gemäß ASR A2.2 und § 10 ArbSchG stets frei zugänglich, um eine unverzügliche Nutzung im Brandfall zu gewährleisten.",
+      "klar": "Sorgen Sie dafür, dass alle Feuerlöscheinrichtungen jederzeit frei zugänglich und nicht durch Waren oder Objekte blockiert sind.",
       "rechtlich": "Feuerlöscheinrichtungen sind uneingeschränkt und jederzeit zugänglich zu halten. Jede Art von Blockierung – sei es durch Waren, Inventar oder persönliche Gegenstände – stellt eine erhebliche Sicherheitsgefährdung dar und ist gemäß § 10 ArbSchG und ASR A2.2 unverzüglich zu beseitigen."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Sind die Feuerlöscheinrichtungen geprüft, und werden die Prüffristen eingehalten?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Veranlassen Sie Prüfungen aller Feuerlöscher durch befähigte Personen nach DIN 14406-4 und sorgen Sie für die Einhaltung der vorgeschriebenen Prüffristen gemäß § 10 ArbSchG.",
+      "klar": "Überprüfen Sie alle Feuerlöscheinrichtungen regelmäßig und halten Sie die vorgeschriebenen Prüffristen ein.",
       "rechtlich": "Die Prüfung sämtlicher Feuerlöscheinrichtungen ist durch eine befähigte Person in den gesetzlich vorgeschriebenen Intervallen durchzuführen. Fehlende oder überfällige Prüfungen stellen eine erhebliche Pflichtverletzung dar gemäß § 10 ArbSchG in Verbindung mit ASR A2.2 und DIN 14406-4."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Sind die Brandschutztüren frei von Zugestellungen und wird ihre Funktion nicht gestört?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Achten Sie gemäß ASR A2.3 darauf, dass Brandschutztüren jederzeit frei zugänglich und in ihrer Funktion nicht beeinträchtigt sind.",
+      "klar": "Halten Sie Brandschutztüren stets frei von Zugestellungen und gewährleisten Sie ihre vollständige Funktion.",
       "rechtlich": "Es ist mit sofortiger Wirkung sicherzustellen, dass sämtliche Brandschutztüren vollständig und dauerhaft freigehalten werden. Zugestellte oder blockierte Brandschutztüren stellen eine akute Gefahr für Leib und Leben dar und sind ein schwerwiegender Verstoß gegen § 10 ArbSchG und die Musterbauordnung."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Sind die Türhaltevorrichtungen und der Schließfolgeregler des Feuerschutzabschlusses in Ordnung?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Sorgen Sie dafür, dass Türhaltevorrichtungen und Schließfolgeregler an Brandschutztüren regelmäßig auf ihre Funktionsfähigkeit überprüft werden (vgl. DIN 14677).",
+      "klar": "Überprüfen Sie die Türhaltevorrichtungen und Schließfolgeregler regelmäßig auf Funktionstüchtigkeit und Unversehrtheit.",
       "rechtlich": "Türhaltevorrichtungen und Schließfolgeregler an Brandschutztüren sind auf ihre Funktionsfähigkeit zu überprüfen und dauerhaft in betriebsbereitem Zustand zu halten. Manipulierte oder defekte Vorrichtungen müssen umgehend außer Betrieb genommen werden (§ 3 ArbSchG, DIN 14677, TRBS 1201)."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Sind die Brandschutztüren ohne Beschädigungen?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Prüfen Sie regelmäßig den Zustand aller Brandschutztüren auf Beschädigungen und stellen Sie ihre uneingeschränkte Schutzwirkung sicher (§ 4 ArbSchG).",
+      "klar": "Sorgen Sie für die regelmäßige Kontrolle der Brandschutztüren auf Beschädigungen und stellen Sie die Funktionssicherheit sicher.",
       "rechtlich": "Alle Brandschutztüren sind regelmäßig auf mechanische Unversehrtheit zu prüfen. Beschädigte Türen dürfen nicht weiterverwendet werden. Eine fehlerhafte Tür erfüllt nicht die Schutzwirkung und verstößt gegen § 4 ArbSchG sowie ASR A2.2 Abs. 5.1."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Ist ein aktueller Flucht- und Rettungsplan vorhanden?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Hängen Sie einen aktuellen und übersichtlichen Flucht- und Rettungsplan gemäß ASR A1.3 und § 4 ArbStättV gut sichtbar aus.",
+      "klar": "Stellen Sie sicher, dass ein aktueller Flucht- und Rettungsplan gut sichtbar und vollständig vorhanden ist.",
       "rechtlich": "Ein aktueller und gut lesbarer Flucht- und Rettungsplan ist an jeder vorgeschriebenen Stelle auszuhängen. Veraltete, unvollständige oder fehlende Pläne sind umgehend zu ersetzen. Dies ist verpflichtend gemäß § 4 Abs. 4 ArbStättV und ASR A1.3."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Ist die Notausgangsbeleuchtung ohne Defekte?",
     "antworten": {
-      "bghw": "Beleuchtungseinrichtungen müssen laut ASR A3.4 ausreichend Helligkeit für sicheres Arbeiten bieten und regelmäßig auf Funktion geprüft werden.",
-      "klar": "Licht muss ausreichend hell sein und funktionieren.",
+      "bghw": "Stellen Sie sicher, dass die Notausgangsbeleuchtung gemäß ASR A3.4/3 fehlerfrei funktioniert, um bei Stromausfall eine sichere Flucht zu ermöglichen.",
+      "klar": "Überprüfen Sie die Notausgangsbeleuchtung regelmäßig und beheben Sie Defekte sofort.",
       "rechtlich": "Die vollständige Funktionsfähigkeit aller Notausgangsbeleuchtungen ist dauerhaft sicherzustellen. Defekte Leuchten sind ohne Verzögerung instand zu setzen. Eine nicht funktionierende Sicherheitsbeleuchtung stellt eine erhebliche Gefährdung dar und verletzt § 3 ArbSchG i. V. m. ASR A3.4/3."
-    }
+    },
+    "kategorie": "Unbekannt"
+  },
+  {
+ "frage": "Sind die Notausgänge frei zugänglich und nicht zugestellt?",
+    "antworten": {
+      "bghw": "Halten Sie Notausgänge zu jeder Zeit frei zugänglich und vermeiden Sie jedwede Art von Verstellung gemäß § 4 ArbStättV i. V. m. ASR A2.3.",
+      "klar": "Halten Sie Notausgänge zu jeder Zeit frei zugänglich und vermeiden Sie jedwede Art von Verstellung.",
+      "rechtlich": "Alle Notausgänge müssen zu jedem Zeitpunkt uneingeschränkt zugänglich und frei von jeglicher Verstellung sein. Ein blockierter Fluchtweg ist ein gravierender Verstoß gegen § 4 Abs. 4 ArbStättV und ASR A2.3 und ist unverzüglich zu beseitigen."
+    },
+    "kategorie": "Unbekannt"
+ },
+  {
+    "frage": "Sind die Notausgänge und -ausstiege von innen ohne fremde Hilfe zu öffnen und nicht zugestellt.",
+    "antworten": {
+      "bghw": "Sorgen Sie dafür, dass Notausgänge jederzeit ohne fremde Hilfe von innen zu öffnen sind (§ 4 Abs. 4 ArbStättV).",
+      "klar": "Sorgen Sie dafür, dass Notausgänge jederzeit ohne fremde Hilfe von innen zu öffnen sind.",
+      "rechtlich": "Stellen Sie sicher, dass sämtliche Notausgänge jederzeit ohne fremde Hilfe von innen geöffnet werden können. Verschlossene oder verriegelte Fluchtwege sind absolut unzulässig und verstoßen gegen § 4 ArbStättV sowie ASR A2.3 Punkt 4.2."
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Führen die Notausgänge in sichere Bereiche?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Sorgen Sie dafür, dass Notausgänge jederzeit ohne fremde Hilfe von innen zu öffnen sind (§ 4 Abs. 4 ArbStättV).",
+      "klar": "Überprüfen Sie, dass alle Notausgänge in sichere Bereiche führen und den Vorgaben der Fluchtwegplanung entsprechen.",
       "rechtlich": "Vergewissern Sie sich, dass alle Notausgänge in gesicherte und gefahrenfreie Bereiche führen. Ein Fluchtweg, der in einen Gefahrenbereich führt, widerspricht den Schutzzielen des § 4 ArbStättV und ist baulich und organisatorisch anzupassen."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Sind die Verkehrswege so beschaffen, dass kein Unfallrisiko durch Stolpern, Ausrutschen oder Umknicken besteht?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Gestalten und erhalten Sie Verkehrswege so, dass sie frei von Stolper-, Rutsch- oder Sturzgefahren sind (§ 3a ArbStättV, ASR A1.8).",
+      "klar": "Achten Sie darauf, dass Verkehrswege frei von Stolperstellen, Rutschgefahren und Hindernissen sind.",
       "rechtlich": "Verkehrswege sind so zu gestalten und zu erhalten, dass keine Stolper-, Rutsch- oder Sturzgefahren bestehen. Unregelmäßigkeiten, Verschmutzungen oder Hindernisse sind umgehend zu beseitigen – gemäß § 3a ArbStättV und ASR A1.8 ohne Ausnahme."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Sind die Treppen unbeschädigt und frei von Gegenständen?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Stellen Sie sicher, dass alle Treppen frei von Hindernissen sind und keine baulichen Mängel aufweisen, um die Unfallgefahr gemäß ASR A1.8 zu minimieren",
+      "klar": "Halten Sie Treppen jederzeit frei von Gegenständen und sorgen Sie für die Instandhaltung der Bausubstanz.",
       "rechtlich": "Treppenanlagen sind regelmäßig auf bauliche Schäden, lose Elemente oder Verunreinigungen zu überprüfen. Jede Form der Beeinträchtigung stellt eine erhebliche Unfallgefahr dar und ist umgehend zu beheben – in Übereinstimmung mit § 3 ArbSchG und ASR A1.8."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Wird die passende persönliche Schutzausrüstung (z. B. Schutzbrille, Handschuhe) für Tätigkeiten mit Gefahrstoffen zur Verfügung gestellt?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Stellen Sie geeignete persönliche Schutzausrüstung (PSA) für Tätigkeiten mit Gefahrstoffen bereit und weisen Sie die Beschäftigten gemäß § 3 ArbSchG und § 2 PSA-Benutzungsverordnung ein.",
+      "klar": "Stellen Sie geeignete persönliche Schutzausrüstung für alle Tätigkeiten mit Gefahrstoffen zur Verfügung und weisen Sie auf deren Nutzung hin.",
       "rechtlich": "Geeignete persönliche Schutzausrüstung (PSA), wie Schutzbrillen und Schutzhandschuhe, ist bereitzustellen, regelmäßig zu kontrollieren und durch Unterweisungspflicht einzufordern. Eine Missachtung der Tragepflicht stellt einen Verstoß gegen § 3 ArbSchG sowie § 2 der PSA-Benutzungsverordnung dar."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Befindet sich brennbares Material (z. B. Kisten, Kartons) in den Technik- oder Heizräumen?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Lagern Sie gemäß ASR A2.2 und Brandschutzordnung Teil C keine brennbaren Materialien in Technik- oder Heizräumen, um Brandrisiken zu vermeiden.",
+      "klar": "Lagern Sie kein brennbares Material in Technik- oder Heizräumen – dies stellt einen erheblichen Verstoß gegen den Brandschutz dar.",
       "rechtlich": "Die Lagerung brennbarer Materialien in Technik- oder Heizräumen ist strikt untersagt. Jegliche Zuwiderhandlung stellt eine erhebliche Brandgefährdung dar und ist gemäß § 10 ArbSchG sowie ASR A2.2 unverzüglich abzustellen."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Werden Technik- und Heizräume als Lagerräume genutzt?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": " Verwenden Sie Technik- und Heizräume ausschließlich für ihre bestimmungsgemäße Nutzung, da eine Lagerung dort gegen Brandschutzvorgaben verstößt (§ 3 ArbSchG).",
+      "klar": "Stellen Sie sicher, dass Technik- und Heizräume ausschließlich ihrem vorgesehenen Zweck dienen und nicht als Lagerflächen genutzt werden.",
       "rechtlich": "Technik- und Heizräume dürfen ausschließlich ihrem bestimmungsgemäßen Zweck dienen. Die Nutzung als Lagerfläche ist untersagt und stellt einen gravierenden Verstoß gegen die Brandschutzvorschriften und § 3 ArbSchG dar."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Sind Betriebsanweisungen gut zugänglich und werden Sicherheitsanweisungen eingehalten?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Halten Sie alle Betriebsanweisungen gut zugänglich und stellen Sie sicher, dass die Beschäftigten über die Inhalte unterwiesen sind (§§ 4, 12 ArbSchG).",
+      "klar": "Halten Sie alle Betriebs- und Sicherheitsanweisungen gut sichtbar und aktuell verfügbar.",
       "rechtlich": "Betriebsanweisungen für Tätigkeiten mit Gefahrstoffen, Maschinen oder Arbeitsmitteln sind jederzeit gut sichtbar, vollständig und aktuell zugänglich zu halten. Das Unterlassen stellt einen Verstoß gegen § 14 GefStoffV und § 12 ArbSchG dar."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Liegen Steckverbindungen auf dem Boden?",
     "antworten": {
-      "bghw": "Fußböden müssen gemäß ASR A1.5 rutschhemmend, eben und trittsicher sein. Verunreinigungen und Hindernisse sind sofort zu beseitigen.",
-      "klar": "Der Boden muss sauber, eben und rutschfest sein.",
+      "bghw": "Verlegen Sie Steckverbindungen so, dass keine Stolperstellen entstehen, und sichern Sie diese gemäß § 3 ArbSchG und ASR A1.5 gegen unbeabsichtigtes Lösen.",
+      "klar": "Sorgen Sie dafür, dass Steckverbindungen nicht auf dem Boden liegen, um Stolper- und Brandgefahren zu vermeiden.",
       "rechtlich": "Steckverbindungen auf dem Boden sind unverzüglich fachgerecht zu verlegen oder gegen unbeabsichtigtes Lösen und Stolpergefahren zu sichern. Die Gefährdung durch Stolperunfälle ist unzulässig und stellt einen Verstoß gegen § 3 ArbSchG sowie ASR A1.5 dar."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Sind die Arbeitsgeräte an der Backstation (Backofen, Backbleche, Brotschneidemaschine) in einem ordnungsgemäßen Zustand?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Stellen Sie sicher, dass sämtliche Arbeitsgeräte in der Backstation regelmäßig gewartet und auf ordnungsgemäßen Zustand geprüft werden (§ 4 ArbSchG, BetrSichV § 10).",
+      "klar": "Überprüfen Sie regelmäßig alle Arbeitsgeräte an der Backstation auf Funktionsfähigkeit und sichtbare Schäden.",
       "rechtlich": "Sämtliche Arbeitsgeräte in der Backstation sind regelmäßig auf Funktionsfähigkeit, Sicherheit und Sauberkeit zu kontrollieren. Geräte mit sicherheitsrelevanten Mängeln dürfen nicht betrieben werden – gemäß § 4 BetrSichV und § 3 ArbSchG ist der betriebsbereite Zustand zwingend herzustellen."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Ist das freistehende Handwaschbecken ohne Beschädigungen?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Kontrollieren Sie freistehende Handwaschbecken regelmäßig auf Beschädigungen und sichern Sie deren Hygiene und Funktion gemäß ArbStättV § 6.",
+      "klar": "Sorgen Sie für die regelmäßige Kontrolle des Handwaschbeckens und dessen einwandfreien Zustand.",
       "rechtlich": "Alle freistehenden Handwaschbecken müssen jederzeit funktional und frei von Beschädigungen sein. Mängel sind sofort zu beheben, um Hygieneverstöße nach ArbStättV Anhang 4.1 sowie § 3 ArbSchG auszuschließen."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Sind die Elektroleitungen intakt und bilden keine Stolperstellen?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Führen Sie regelmäßige Sichtprüfungen elektrischer Leitungen durch, um sicherzustellen, dass keine Stolper- oder Brandgefahren gemäß DGUV Vorschrift 3 entstehen.",
+      "klar": "Achten Sie darauf, dass Elektroleitungen keine Stolperstellen bilden und jederzeit unbeschädigt sind.",
       "rechtlich": "Elektroleitungen müssen in technisch einwandfreiem Zustand gehalten und so verlegt werden, dass sie keine Stolper-, Brand- oder Berührungsgefahr darstellen. Eine Missachtung stellt einen unmittelbaren Verstoß gegen § 3 ArbSchG sowie DGUV Vorschrift 3 dar."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Entspricht die Zuleitung der VDE-Norm?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Vergewissern Sie sich, dass sämtliche elektrischen Zuleitungen den Vorgaben der VDE-Normen entsprechen, um elektrische Gefährdungen auszuschließen (§ 3 ArbSchG, BetrSichV).",
+      "klar": "Stellen Sie sicher, dass alle Zuleitungen den einschlägigen VDE-Normen entsprechen.",
       "rechtlich": "Stellen Sie sicher, dass sämtliche elektrischen Zuleitungen den geltenden VDE-Normen (z. B. VDE 0100) entsprechen. Abweichende Installationen sind unverzüglich zu beseitigen. Die Maßnahme ist zwingend gemäß § 4 BetrSichV i. V. m. § 3 ArbSchG umzusetzen."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Ist der Backhandschuh für die Backstation in einem ordnungsgemäßen Zustand (kein Verschleiß) und besitzt eine lange Stulpe?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Verwenden Sie nur hitzebeständige Backhandschuhe in einwandfreiem Zustand und mit langer Stulpe gemäß PSA-Benutzungsverordnung und § 3 ArbSchG.",
+      "klar": "Stellen Sie sicher, dass der Backhandschuh frei von Verschleiß ist und über eine lange Stulpe verfügt, um Verbrennungen zu vermeiden.",
       "rechtlich": "Es ist sicherzustellen, dass der verwendete Backhandschuh hitzebeständig, unbeschädigt und mit langer Stulpe versehen ist. Jeder Einsatz mangelhafter PSA ist unzulässig und stellt einen klaren Verstoß gegen § 3 ArbSchG sowie § 2 PSA-Benutzungsverordnung dar."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Sind alle Heißgeräte (z. B. Heißtheken, Fritteusen) in technisch einwandfreiem Zustand?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Prüfen Sie regelmäßig alle Heißgeräte (z. B. Heißtheken, Fritteusen) auf technische Mängel und dokumentieren Sie die Instandhaltung gemäß BetrSichV § 10.",
+      "klar": "Prüfen Sie regelmäßig alle Heißgeräte wie Heißtheken und Fritteusen auf technischen Zustand und Sicherheit.",
       "rechtlich": "Heißgeräte wie Heißtheken, Fritteusen oder Warmhalteplatten dürfen ausschließlich im technisch einwandfreien Zustand betrieben werden. Mängel sind unverzüglich zu beseitigen. Eine Missachtung stellt eine Verletzung der Instandhaltungspflicht nach § 4 BetrSichV dar"
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Hängt der Hautschutzplan aus?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Hängen Sie einen aktuellen Hautschutzplan gut sichtbar aus und stellen Sie sicher, dass er von allen Beschäftigten verstanden und umgesetzt wird (§ 5 ArbSchG, TRGS 401).",
+      "klar": "Hängen Sie einen aktuellen Hautschutzplan gut sichtbar aus und stellen Sie sicher, dass er von allen Beschäftigten verstanden und umgesetzt wird.",
       "rechtlich": "Ein vollständiger und aktueller Hautschutzplan ist gut sichtbar auszuhängen. Die Umsetzung des Plans ist zu kontrollieren und zu dokumentieren. Die Pflicht ergibt sich aus § 3 ArbSchG i. V. m. TRGS 401 und ist unverzüglich zu erfüllen."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Werden Hautschutz- und Hautpflegeprodukte zur Verfügung gestellt?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Stellen Sie geeignete Hautschutz- und Hautpflegeprodukte bereit, um berufsbedingten Hauterkrankungen gemäß § 3 ArbSchG vorzubeugen.",
+      "klar": "Stellen Sie geeignete Hautschutz- und Hautpflegeprodukte bereit.",
       "rechtlich": "Hautschutz-, Reinigungs- und Pflegeprodukte sind entsprechend dem Hautschutzplan bereitzustellen und dürfen keinesfalls fehlen. Die Bereitstellung ist verpflichtend nach § 3 ArbSchG und den Vorgaben der TRGS 401 zur Prävention berufsbedingter Hauterkrankungen."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Sind die Arbeitsgeräte im Servicebereich in einem ordnungsgemäßen Zustand?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Veranlassen Sie regelmäßige Sicht- und Funktionsprüfungen der Arbeitsgeräte im Servicebereich gemäß § 4 BetrSichV.",
+      "klar": "Sicht- und Funktionsprüfungen der Arbeitsgeräte.",
       "rechtlich": "Alle im Servicebereich eingesetzten Arbeitsgeräte sind regelmäßig sicherheitstechnisch zu kontrollieren. Defekte Geräte sind sofort außer Betrieb zu nehmen. Dies ist verpflichtend gemäß § 4 BetrSichV und § 3 ArbSchG umzusetzen."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Bleiben die Thekenscheiben selbstständig in der oberen Stellung stehen?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Sorgen Sie dafür, dass Thekenscheiben selbstständig in der oberen Position arretiert werden können, um Verletzungsrisiken auszuschließen (§ 3 ArbSchG).",
+      "klar": "Sorgen Sie dafür, dass Thekenscheiben sicher und stabil in geöffneter Position stehen bleiben.",
       "rechtlich": "Sämtliche Thekenscheiben müssen so konstruiert und instand gehalten werden, dass sie selbstständig und sicher in geöffneter Stellung verbleiben. Ein unbeabsichtigtes Herabfallen stellt eine erhebliche Verletzungsgefahr dar und ist umgehend zu verhindern – in Umsetzung von § 3 ArbSchG und § 4 BetrSichV."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Sind die Glastüren und Glaswände in Augenhöhe gekennzeichnet?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Kennzeichnen Sie Glastüren und Glaswände in Augenhöhe mit deutlich sichtbaren Markierungen gemäß ASR A1.3 und DGUV Information 208-004",
+      "klar": "Kennzeichnen Sie Glastüren und Glaswände in Augenhöhe.",
       "rechtlich": "Glastüren und Glasflächen müssen dauerhaft in Augenhöhe mit kontrastreichen Sicherheitskennzeichnungen versehen sein. Fehlende Markierungen sind unverzüglich nachzurüsten, da sie eine erhebliche Unfallgefahr darstellen (§ 4 ArbStättV, ASR A1.3)."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Werden Schneidbretter und Messer regelmäßig gereinigt und farbcodiert verwendet?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Reinigen und desinfizieren Sie Schneidbretter und Messer regelmäßig und wenden Sie ein Farbsystem zur hygienischen Trennung an (§ 3 ArbSchG, HACCP).",
+      "klar": "Reinigen Sie Schneidbretter und Messer regelmäßig und wenden Sie ein Farbcodierungssystem zur Vermeidung von Kreuzkontamination an.",
       "rechtlich": "Schneidbretter und Messer sind regelmäßig und nach jedem Gebrauch hygienisch zu reinigen und gemäß HACCP-Prinzip farblich getrennt einzusetzen. Abweichungen stellen schwerwiegende Hygieneverstöße dar und verstoßen gegen § 3 ArbSchG i. V. m. LMHV."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Werden Schneidbretter mit Messereinschub verwendet?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Verwenden Sie Schneidbretter mit sicherem Messereinschub, um Schnittverletzungen zu vermeiden und die Lagerung gemäß § 3 ArbSchG sicher zu gestalten.",
+      "klar": "Verwenden Sie Schneidbretter mit integriertem Messereinschub, um Verletzungen zu vermeiden.",
       "rechtlich": "Es sind ausschließlich Schneidbretter mit integriertem, verletzungssicherem Messereinschubsystem zu verwenden. Offene Lagerung von Messern stellt eine akute Gefährdung dar und ist gemäß § 3 ArbSchG sowie den Grundsätzen aus der Gefährdungsbeurteilung nicht zulässig."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Werden Messerhalter verwendet?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Sorgen Sie für eine sichere Aufbewahrung von Messern durch geeignete Halterungen gemäß § 3 ArbSchG und DGUV Regel 100-500.",
+      "klar": "Stellen Sie geeignete Messerhalter bereit und verwenden Sie diese zur sicheren Aufbewahrung von Messern.",
       "rechtlich": "Geeignete Messerhalter sind bereitzustellen und zwingend zu verwenden. Eine unsachgemäße Ablage scharfer Werkzeuge ist eine unzulässige Gefahrenquelle und stellt einen Verstoß gegen § 3 ArbSchG sowie DGUV Regel 100-500 dar."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Sind die Convenience-Geräte in einem ordnungsgemäßen Zustand?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Führen Sie regelmäßige Wartungen und Funktionsprüfungen an Convenience-Geräten durch, um deren sicheren Betrieb zu gewährleisten (§ 4 BetrSichV).",
+      "klar": "Überprüfen Sie alle Convenience-Geräte regelmäßig auf Funktionstüchtigkeit und Hygiene.",
       "rechtlich": "Alle Convenience-Geräte sind regelmäßig sicherheitstechnisch zu prüfen und in betriebsbereitem Zustand zu halten. Geräte mit Mängeln dürfen keinesfalls weiterbetrieben werden. Dies ist zwingend umzusetzen gemäß § 4 BetrSichV und § 3 ArbSchG."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Ist der Fußraum frei von Gegenständen?",
     "antworten": {
       "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "klar": "Halten Sie den Fußraum jederzeit frei von Gegenständen, um Stolper- und Unfallgefahren zu vermeiden.",
       "rechtlich": "Der Fußraum sämtlicher Arbeitsplätze ist frei von losen Gegenständen zu halten. Jede Form von Verstellung stellt eine konkrete Unfallgefahr dar und ist gemäß § 3 ArbSchG sowie ASR A1.8 umgehend zu beseitigen."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Ist der Fußboden im Kassenbereich in einem ordnungsgemäßen Zustand (ohne sichtbare Beschädigungen)?",
     "antworten": {
-      "bghw": "Fußböden müssen gemäß ASR A1.5 rutschhemmend, eben und trittsicher sein. Verunreinigungen und Hindernisse sind sofort zu beseitigen.",
+      "bghw": "Halten Sie den Fußraum dauerhaft frei von Gegenständen, um Unfallgefahren durch Stolpern oder Hängenbleiben zu vermeiden (§ 3 ArbSchG, ASR A1.8).",
       "klar": "Der Boden muss sauber, eben und rutschfest sein.",
       "rechtlich": "Der Boden im Kassenbereich muss eben, rutschfest und frei von Beschädigungen sein. Schäden oder lose Beläge sind sofort zu beheben. Eine Missachtung stellt einen Verstoß gegen § 3 ArbSchG sowie ASR A1.5/1,2 dar."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Sind die serienmäßig eingebauten Heizgeräte im Kassenraum nicht durch brennbares Material zugestellt?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Stellen Sie sicher, dass Heizgeräte frei zugänglich und nicht durch brennbare Materialien blockiert sind, um Brandgefahren zu vermeiden (§ 10 ArbSchG, ASR A2.2).",
+      "klar": "Achten Sie darauf, dass Heizgeräte im Kassenraum nicht durch brennbare Materialien zugestellt werden.",
       "rechtlich": "Heizgeräte dürfen zu keiner Zeit durch brennbare Materialien verdeckt oder umstellt werden. Jegliche Lagerung in unmittelbarer Umgebung ist untersagt und stellt eine erhebliche Brandgefährdung dar (§ 10 ArbSchG, ASR A2.2)."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Sind die Kassenstühle in einem funktionsfähigen Zustand?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Prüfen Sie Kassenstühle regelmäßig auf Funktionalität und stellen Sie ergonomische Arbeitsmittel gemäß ArbStättV Anhang Nr. 6 bereit.",
+      "klar": "Überprüfen Sie regelmäßig die Kassenstühle auf Stabilität und Funktionsfähigkeit.",
       "rechtlich": "Alle Kassenstühle müssen ergonomisch gestaltet, mechanisch funktionstüchtig und höhenverstellbar sein. Defekte Sitzgelegenheiten sind unverzüglich auszutauschen. Grundlage: § 3 ArbSchG und ArbStättV Anhang Nr. 6."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Ist das Transportband unbeschädigt und weist keine Lücke von über 5 mm auf?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Überprüfen Sie Transportbänder regelmäßig auf Schäden und sorgen Sie dafür, dass keine Lücken über 5 mm entstehen, um Verletzungsrisiken auszuschließen (§ 3 ArbSchG).",
+      "klar": "Halten Sie das Transportband frei von Schäden und stellen Sie sicher, dass keine Lücken über 5 mm vorhanden sind.",
       "rechtlich": "Das Transportband ist regelmäßig auf mechanische Unversehrtheit, gleichmäßigen Lauf und geschlossene Oberfläche zu prüfen. Jede Beschädigung ist umgehend zu beheben, da sie eine unmittelbare Verletzungsgefahr darstellt (§ 4 BetrSichV, § 3 ArbSchG)."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Ist in den Kühlhäusern an der Beleuchtung die Überglocke vorhanden?",
     "antworten": {
-      "bghw": "Beleuchtungseinrichtungen müssen laut ASR A3.4 ausreichend Helligkeit für sicheres Arbeiten bieten und regelmäßig auf Funktion geprüft werden.",
-      "klar": "Licht muss ausreichend hell sein und funktionieren.",
+      "bghw": "Sichern Sie Beleuchtungseinrichtungen in Kühlhäusern mit Schutzabdeckungen gegen mechanische Einwirkungen und Glasbruch gemäß DIN 10500.",
+      "klar": "Schutzabdeckungen sind zwingend vorzusehen.",
       "rechtlich": "In allen Kühlhäusern sind bruchsichere Schutzabdeckungen („Überglocken“) an Leuchten zwingend vorzusehen. Der Schutz vor Glasbruch in lebensmittelrelevanten Bereichen ist eine unabdingbare Forderung gemäß LMHV, HACCP sowie § 3 ArbSchG."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Ist die Notentriegelung vorhanden und in Ordnung?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Stellen Sie sicher, dass Notentriegelungen an Kühlraumtüren installiert, gekennzeichnet und jederzeit funktionsfähig sind (§ 3 ArbSchG, TRBS 2121 Teil 2).",
+      "klar": "Prüfen Sie die Notentriegelungen in Kühlhäusern regelmäßig auf Funktion und Kennzeichnung.",
       "rechtlich": "Jede Kühlraumtür muss mit einer funktionstüchtigen und jederzeit nutzbaren Notentriegelung ausgestattet sein. Fehlende oder defekte Notentriegelungen sind unverzüglich zu beheben. Die Pflicht ergibt sich unmittelbar aus § 3 ArbSchG sowie TRBS 2152 Teil 4."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Sind die Kühlhaustüren von innen mit dem Rettungswegschild ISO 7010 gekennzeichnet?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Kennzeichnen Sie Kühlhaustüren von innen mit dem international gültigen Rettungswegsymbol gemäß ISO 7010 und ASR A1.3..",
+      "klar": "international anerkannten Rettungswegsymbol gemäß ISO 7010 zu kennzeichnen.",
       "rechtlich": "Kühlhaustüren sind auf der Innenseite mit dem international anerkannten Rettungswegsymbol gemäß ISO 7010 zu kennzeichnen. Fehlende Kennzeichnung stellt einen Verstoß gegen § 4 ArbStättV i. V. m. ASR A1.3 dar und ist umgehend nachzurüsten."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Funktioniert die Beleuchtung einwandfrei?",
     "antworten": {
       "bghw": "Beleuchtungseinrichtungen müssen laut ASR A3.4 ausreichend Helligkeit für sicheres Arbeiten bieten und regelmäßig auf Funktion geprüft werden.",
-      "klar": "Licht muss ausreichend hell sein und funktionieren.",
+      "klar": "Stellen Sie sicher, dass die Beleuchtung in allen Betriebsbereichen einwandfrei funktioniert.",
       "rechtlich": "Die Beleuchtung in allen Arbeitsbereichen ist jederzeit ausreichend, blendfrei und funktionsfähig zu halten. Dunkle, unbeleuchtete oder flackernde Bereiche sind unverzüglich zu beheben – in Umsetzung von § 3 ArbSchG und ASR A3.4."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Ist die Notruf-Funktion (wenn vorhanden) in Ordnung und ohne Beschädigungen?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Stellen Sie sicher, dass die Notruf-Funktion in Kühlräumen jederzeit funktionsfähig ist und regelmäßig geprüft wird (§ 4 ArbSchG, TRBS 3121).",
+      "klar": "Notruf-Funktion jederzeit technisch einwandfrei verfügbar zu halten.",
       "rechtlich": "In Bereichen mit Alleinarbeit, insbesondere in Kühlräumen, ist die Notruf-Funktion jederzeit technisch einwandfrei verfügbar zu halten. Die Funktionalität ist regelmäßig zu testen und zu dokumentieren. Eine Nichtverfügbarkeit stellt eine unmittelbare Gefährdung gemäß § 3 ArbSchG und TRBS 2121 Teil 2 dar."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Sind die Schwerlastregale geprüft?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Veranlassen Sie regelmäßige Prüfungen aller Schwerlastregale durch befähigte Personen gemäß BetrSichV § 14 sowie DGUV Regel 108-007.",
+      "klar": "Führen Sie regelmäßige Prüfungen der Schwerlastregale durch und dokumentieren Sie diese gemäß Betriebssicherheitsverordnung.",
       "rechtlich": "Schwerlastregale sind gemäß § 14 BetrSichV durch befähigte Personen regelmäßig zu prüfen. Unterlassene oder nicht dokumentierte Prüfungen stellen einen schweren Verstoß gegen die Betriebssicherheitsverordnung dar und sind umgehend nachzuholen."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Ist der Anfahrschutz vorhanden?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Installieren Sie gemäß DGUV Vorschrift 68 und ASR A1.3 einen geeigneten Anfahrschutz an allen relevanten Bereichen, um strukturelle Schäden zu vermeiden.",
+      "klar": "Installieren Sie Anfahrschutz an Regalen und exponierten Stellen gemäß den Anforderungen der BGHW..",
       "rechtlich": "Ein wirksamer Anfahrschutz an Regalen, Türen und gefährdeten Strukturen ist verpflichtend vorzusehen. Fehlender oder beschädigter Schutz ist unverzüglich zu ersetzen – gemäß § 3 ArbSchG sowie DGUV Vorschrift 68 und ASR A1.3."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Ist die Traglastangabe an den Schwerlastregalen vorhanden?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Bringen Sie an jedem Regal deutlich sichtbare und dauerhafte Traglastangaben an, wie es § 4 BetrSichV i.V.m. TRBS 1201 fordert.",
+      "klar": "Bringen Sie an allen Schwerlastregalen gut sichtbare Traglastangaben an.",
       "rechtlich": "Jedes Schwerlastregal ist dauerhaft und gut sichtbar mit einer gültigen Traglastkennzeichnung zu versehen. Eine fehlende oder unleserliche Angabe stellt eine erhebliche Gefährdung dar und verletzt § 4 BetrSichV sowie TRBS 1201."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Befindet sich eine Absturzsicherung an der Rampe?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Sorgen Sie dafür, dass an Rampen mit Absturzkante geeignete Absturzsicherungen gemäß ASR A2.1 installiert sind.",
+      "klar": "Stellen Sie sicher, dass an allen Rampen eine funktionierende Absturzsicherung vorhanden ist.",
       "rechtlich": "An Rampenkanten und höhergelegenen Arbeitsplätzen ist eine technisch wirksame Absturzsicherung zwingend zu installieren. Das Fehlen stellt eine unmittelbare Lebensgefahr dar und widerspricht § 4 ArbSchG sowie ASR A2.1."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Ist die Absturzsicherung in einem ordnungsgemäßen Zustand (ohne sichtbare Beschädigungen und mit Kennzeichnung)?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Überprüfen Sie regelmäßig die Absturzsicherung auf Schäden und achten Sie auf gut sichtbare Warnkennzeichnungen (§ 4 ArbSchG).",
+      "klar": "Prüfen Sie regelmäßig die Absturzsicherungen auf Schäden und eine gut sichtbare Kennzeichnung.",
       "rechtlich": "Alle vorhandenen Absturzsicherungen müssen jederzeit technisch einwandfrei, standsicher und wirksam sein. Beschädigte oder unvollständige Sicherungen sind unverzüglich instand zu setzen. Eine Unterlassung stellt eine gravierende Pflichtverletzung nach § 4 ArbSchG und ASR A2.1 dar."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Ist die Müll-/Papierpresse geprüft?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Lassen Sie Müll- und Papierpressen regelmäßig durch befähigte Personen gemäß BetrSichV und DGUV Regel 100-500 prüfen.",
+      "klar": "Lassen Sie die Müll-/Papierpressen regelmäßig durch befähigte Personen prüfen.",
       "rechtlich": "Müll- und Papierpressen sind gemäß § 14 BetrSichV regelmäßig durch befähigte Personen zu prüfen. Eine fehlende oder unvollständige Prüfbescheinigung stellt eine schwerwiegende Verletzung der Betreiberpflichten dar und ist sofort zu beheben."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Ist die Müll-/Papierpresse in einem ordnungsgemäßen Zustand (keine sichtbaren Beschädigungen, intakte Schutzeinrichtungen, fester Stand)?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Stellen Sie sicher, dass die Müll-/Papierpresse technisch einwandfrei, standsicher und mit intakten Schutzeinrichtungen betrieben wird (§ 3 ArbSchG, § 4 BetrSichV).",
+      "klar": "Sorgen Sie für einen einwandfreien Zustand der Müll-/Papierpresse – ohne Schäden, mit intakten Schutzeinrichtungen und sicherem Stand.",
       "rechtlich": "Die Müll- und Papierpressen sind stets in sicherheitstechnisch einwandfreiem Zustand zu betreiben. Schutzvorrichtungen müssen funktionstüchtig, der Zugang gesichert und die Bedienung gefahrlos möglich sein – in Umsetzung von § 3 ArbSchG und § 4 BetrSichV."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Sind die Verkehrswege so beschaffen, dass kein Risiko zum Stolpern, Ausrutschen oder Umknicken besteht?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Achten Sie darauf, dass Verkehrswege eben, rutschfest und frei von Hindernissen sind, um Gefährdungen durch Stolpern, Ausrutschen oder Umknicken gemäß ASR A1.8 zu vermeiden.",
+      "klar": "Gestalten und kontrollieren Sie Verkehrswege so, dass keine Gefahren durch Stolpern, Ausrutschen oder Umknicken entstehen.",
       "rechtlich": "Verkehrswege müssen dauerhaft rutschhemmend, eben und frei von Hindernissen sein. Abweichungen – wie lose Kabel, beschädigte Böden oder Stolperquellen – sind umgehend zu beseitigen. Dies ist zwingend umzusetzen gemäß § 3 ArbSchG i. V. m. ASR A1.8."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Hängen im Sozialbereich die aktuellen aushangpflichtigen Gesetze, Unfallverhütungsvorschriften sowie die Brandschutzordnung Teil A aus?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Bringen Sie im Sozialbereich alle gesetzlich vorgeschriebenen Aushänge (z. B. ArbSchG, JArbSchG, DGUV Vorschrift 1) gut sichtbar und aktuell an (§ 12 ArbSchG).",
+      "klar": "Hängen Sie im Sozialbereich alle aktuellen aushangpflichtigen Gesetze, UVV sowie die Brandschutzordnung Teil A gut sichtbar aus.",
       "rechtlich": "Im Sozialbereich sind alle gesetzlich vorgeschriebenen Aushänge (z. B. ArbSchG, JArbSchG, DGUV Vorschrift 1) gut sichtbar und aktuell bereitzustellen. Fehlende Aushänge sind umgehend nachzurüsten – gemäß § 12 ArbSchG und § 81 BetrVG."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Sind die Kaffeemaschine und andere hitzeentwickelnde Geräte auf einer nicht brennbaren Unterlage abgestellt?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Betreiben Sie hitzeentwickelnde Geräte ausschließlich auf nicht brennbaren Unterlagen, um Brandgefahren gemäß ASR A2.2 zu vermeiden.",
+      "klar": "Stellen Sie sicher, dass Kaffeemaschinen und andere hitzeentwickelnde Geräte nur auf nicht brennbaren Unterlagen betrieben werden.",
       "rechtlich": "Hitzetechnische Geräte wie Kaffeemaschinen sind ausschließlich auf nicht brennbaren, standsicheren Unterlagen zu betreiben. Jede Abweichung stellt eine akute Brandgefährdung dar und ist umgehend zu beseitigen – gemäß § 10 ArbSchG i. V. m. ASR A2.2."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Ist der Erste-Hilfe-Koffer gut sichtbar an einer geeigneten Stelle montiert?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Platzieren Sie den Erste-Hilfe-Koffer gut sichtbar, dauerhaft zugänglich und gemäß DGUV Vorschrift 1 an einem geeigneten Ort.",
+      "klar": "Platzieren Sie den Erste-Hilfe-Koffer gut sichtbar und zugänglich an einer geeigneten Stelle.",
       "rechtlich": "Der Erste-Hilfe-Koffer ist gut sichtbar, jederzeit zugänglich und vollständig ausgestattet bereitzuhalten. Eine verdeckte oder fehlende Platzierung stellt einen Verstoß gegen § 25 DGUV Vorschrift 1 und § 3 ArbSchG dar."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Werden ortsveränderliche elektrische Betriebsmittel (z. B. Leitungen, Steckverbindungen, Leuchten, Geräte) in angemessenen Zeitabständen geprüft?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Führen Sie regelmäßige Prüfungen ortsveränderlicher elektrischer Betriebsmittel durch befähigte Elektrofachkräfte gemäß DGUV Vorschrift 3 und TRBS 1201.",
+      "klar": "Lassen Sie ortsveränderliche elektrische Betriebsmittel regelmäßig von Elektrofachkräften oder befähigten Personen prüfen.",
       "rechtlich": "Alle ortsveränderlichen elektrischen Betriebsmittel sind turnusgemäß durch Elektrofachkräfte zu prüfen. Die Prüfung ist lückenlos zu dokumentieren. Ein Verstoß gegen diese Vorschrift verletzt § 14 BetrSichV und DGUV Vorschrift 3 und ist unverzüglich zu beheben."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Liegt eine aktuelle Liste sowie Prüfberichte prüfungsbedürftiger Einrichtungen vor?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Führen Sie eine vollständige Liste aller prüfpflichtigen Betriebseinrichtungen inklusive Nachweise und Prüfberichte gemäß BetrSichV § 14.",
+      "klar": "Führen Sie eine aktuelle Liste prüfpflichtiger Einrichtungen mit zugehörigen Prüfberichten.",
       "rechtlich": "Eine vollständige und jederzeit aktuelle Liste aller prüfpflichtigen Einrichtungen sowie die zugehörigen Prüfberichte sind bereitzuhalten. Die Dokumentation ist verpflichtend gemäß § 14 BetrSichV und TRBS 1201."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Ist der Verbandskasten in einem ordnungsgemäßen Zustand?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Kontrollieren Sie den Inhalt des Verbandskastens regelmäßig und stellen Sie die Vollständigkeit und Haltbarkeit der Materialien sicher (DIN 13157, DGUV Vorschrift 1).",
+      "klar": "Kontrollieren Sie regelmäßig den Inhalt des Verbandskastens und tauschen Sie abgelaufene Materialien aus.",
       "rechtlich": "Der Verbandskasten ist regelmäßig auf Vollständigkeit und Verfallsdaten zu kontrollieren. Unvollständige oder abgelaufene Inhalte sind sofort auszutauschen – in strikter Umsetzung von § 25 DGUV Vorschrift 1 und § 3 ArbSchG."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Wird die \"Dokumentation Erste Hilfeleistungen\" geführt?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Führen Sie eine schriftliche Dokumentation aller Erste-Hilfe-Leistungen im Verbandbuch gemäß § 24 DGUV Vorschrift 1 und bewahren Sie diese vier Jahre auf.",
+      "klar": "Führen Sie ein Verbandbuch oder ein digitales System zur Dokumentation von Erste-Hilfe-Leistungen.",
       "rechtlich": "Alle Erste-Hilfe-Leistungen sind umgehend und vollständig im Verbandbuch oder einem gleichwertigen System zu dokumentieren. Die Aufbewahrungsfrist beträgt vier Jahre. Ein Verstoß gegen diese Pflicht stellt eine Missachtung von § 24 Abs. 6 DGUV Vorschrift 1 dar."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Sind Maßnahmen getroffen, die den Anreiz zu Raubüberfällen vermindern (z. B. Türspion, feststehender Knauf)?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Ergreifen Sie organisatorische und bauliche Maßnahmen zur Prävention von Raubüberfällen, etwa durch Türspione, Sicherheitsknäufe oder videoüberwachte Eingänge (§ 3 ArbSchG, DGUV Information 215-542).",
+      "klar": "Treffen Sie technische und organisatorische Maßnahmen (z. B. Türspion, feststehender Knauf), um das Risiko für Raubüberfälle zu senken.",
       "rechtlich": "Ergreifen Sie bauliche und organisatorische Maßnahmen zur aktiven Reduzierung des Überfallrisikos (z. B. Türspion, Sicherheitsverriegelung, Videoüberwachung). Eine unterlassene Gefahrenprävention verstößt gegen § 3 ArbSchG und gefährdet unmittelbar Leib und Leben der Beschäftigten."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Ist die Tür während des Umgangs mit Zahlungsmitteln verschlossen?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Sorgen Sie dafür, dass der Zugang zum Kassenbüro während des Umgangs mit Bargeld stets verschlossen ist, um Überfällen vorzubeugen (§ 3 ArbSchG).",
+      "klar": "Sorgen Sie dafür, dass die Tür zum Büro während des Umgangs mit Bargeld stets verschlossen ist.",
       "rechtlich": "Zugänge zu sensiblen Bereichen (z. B. Kassenbüros) sind während des Umgangs mit Bargeld stets verschlossen zu halten. Das Offenlassen stellt eine erhebliche Sicherheitslücke dar und ist ein Verstoß gegen § 3 ArbSchG sowie DGUV Information 215-542."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Werden neue Mitarbeiter vor Aufnahme der Tätigkeit zum Thema Arbeitssicherheit und Brandschutz unterwiesen?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Führen Sie vor Arbeitsaufnahme eine umfassende Erstunterweisung zur Arbeitssicherheit und zum Brandschutz gemäß § 12 ArbSchG durch und dokumentieren Sie diese.",
+      "klar": "Unterweisen Sie neue Mitarbeiter vor Arbeitsbeginn umfassend zu Arbeitssicherheit und Brandschutz und dokumentieren Sie dies schriftlich.",
       "rechtlich": "Neue Mitarbeiter sind vor Aufnahme der Tätigkeit umfassend zu sicherheitsrelevanten Themen zu unterweisen. Die Unterweisung ist zu dokumentieren. Unterlassene Erstunterweisungen sind ein gravierender Verstoß gegen § 12 ArbSchG."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Ist während der gesamten Ladenöffnungszeit mindestens ein Mitarbeiter mit der Qualifikation zum Ersthelfer anwesend?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Stellen Sie sicher, dass während der gesamten Betriebszeiten mindestens ein ausgebildeter Ersthelfer nach DGUV Vorschrift 1 § 26 anwesend ist.",
+      "klar": "Stellen Sie sicher, dass während der gesamten Öffnungszeit mindestens ein ausgebildeter Ersthelfer anwesend ist.",
       "rechtlich": "Während der gesamten Arbeitszeit ist die Anwesenheit mindestens eines ausgebildeten Ersthelfers sicherzustellen. Fehlt diese Mindestbesetzung, liegt ein schwerwiegender Verstoß gegen § 26 DGUV Vorschrift 1 und § 3 ArbSchG vor."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Ist während der gesamten Ladenöffnungszeit mindestens ein Mitarbeiter mit der Qualifikation als Brandschutzhelfer anwesend?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Sorgen Sie gemäß ASR A2.2 und § 10 ArbSchG dafür, dass jederzeit ein geschulter Brandschutzhelfer vor Ort ist.",
+      "klar": "Sorgen Sie dafür, dass jederzeit ein geschulter Brandschutzhelfer im Markt anwesend ist.",
       "rechtlich": "Die Anwesenheit mindestens eines ausgebildeten Brandschutzhelfers ist während der gesamten Öffnungszeit verbindlich sicherzustellen. Fehlt dieser, liegt ein schwerwiegender Verstoß gegen § 10 ArbSchG und ASR A2.2 Punkt 7.3 vor."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Ist ein Sicherheitsbeauftragter ausgebildet und bestellt?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Bestellen Sie gemäß § 22 SGB VII einen geeigneten Sicherheitsbeauftragten und stellen Sie dessen Schulung und regelmäßige Beteiligung sicher.",
+      "klar": "Benennen und schulen Sie einen Sicherheitsbeauftragten gemäß DGUV Vorschrift 1 und dokumentieren Sie die Bestellung.",
       "rechtlich": "Ein qualifizierter Sicherheitsbeauftragter ist in ausreichender Anzahl schriftlich zu benennen und regelmäßig fortzubilden. Eine fehlende Bestellung stellt einen Verstoß gegen § 22 SGB VII und § 20 DGUV Vorschrift 1 dar."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Wurde die Gefährdungsbeurteilung (GBO) erstellt und ist sie auf dem aktuellen Stand?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Erstellen und aktualisieren Sie regelmäßig eine schriftliche Gefährdungsbeurteilung gemäß § 5 ArbSchG und § 3 BetrSichV.",
+      "klar": "Erstellen und aktualisieren Sie regelmäßig eine schriftliche Gefährdungsbeurteilung (GBO).",
       "rechtlich": "Für alle Arbeitsbereiche ist eine vollständige, systematische und aktuelle Gefährdungsbeurteilung schriftlich zu erstellen. Fehlt diese, liegt ein unmittelbarer Verstoß gegen § 5 ArbSchG vor und gefährdet die gesamte Arbeitsschutzorganisation."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Wurden Personen, die sich im Bereich von Kühlanlagen oder Kühlhäusern aufhalten, unterwiesen?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Unterweisen Sie alle Personen, die sich im Bereich von Kühlanlagen aufhalten, zu spezifischen Gefährdungen und Rettungsmaßnahmen gemäß § 12 ArbSchG.",
+      "klar": "Unterweisen Sie alle Personen, die sich im Bereich von Kühlanlagen aufhalten, zu den spezifischen Gefahren und Rettungsmöglichkeiten.",
       "rechtlich": "Beschäftigte, die sich regelmäßig in Kühlräumen aufhalten, sind über spezifische Gefährdungen und Notfallmaßnahmen zu unterweisen. Diese Unterweisung ist verpflichtend gemäß § 12 ArbSchG und zu dokumentieren."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Sind die Sensoren nicht mit Material oder sonstigen Gegenständen verstellt?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Achten Sie darauf, dass sicherheitsrelevante Sensoren, Melder oder Lüftungselemente nicht verstellt oder blockiert sind (§ 3 ArbSchG, TRBS 1115).",
+      "klar": "Achten Sie darauf, dass sicherheitsrelevante Sensoren nicht verdeckt oder verstellt sind.",
       "rechtlich": "Sensoren (z. B. Rauch-, Gas-, Bewegungsmelder) sind jederzeit frei zugänglich zu halten. Eine Verstellung ist unzulässig, gefährdet die Schutzfunktion und stellt einen Verstoß gegen § 3 ArbSchG sowie TRBS 1115 dar."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Sind alle Sicherheitsvorrichtungen (Alarmleuchten, Kennzeichnungen, Kühlhaustüren) intakt?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Sorgen Sie dafür, dass alle sicherheitstechnischen Vorrichtungen, wie Alarmleuchten, Kennzeichnungen und Schutzeinrichtungen, stets funktionstüchtig und unbeschädigt sind (§ 4 BetrSichV).",
+      "klar": "Prüfen Sie alle Sicherheitsvorrichtungen regelmäßig und sorgen Sie für deren vollständige Funktionsfähigkeit.",
       "rechtlich": "Sämtliche sicherheitsrelevanten Vorrichtungen (z. B. Not-Aus-Schalter, Türkontakte, Leuchtsignale) sind jederzeit funktionstüchtig zu halten. Fehlfunktionen sind unverzüglich zu beheben. Das Unterlassen stellt eine grobe Pflichtverletzung gemäß § 3 ArbSchG und § 10 BetrSichV dar."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Wurde die Unterweisung von Praktikanten und Schüleraushilfen durchgeführt?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Führen Sie eine Unterweisung für Praktikanten und Schüleraushilfen vor Beginn der Beschäftigung gemäß § 12 ArbSchG durch und dokumentieren Sie diese schriftlich.",
+      "klar": "Führen Sie eine Unterweisung für Praktikanten und Schüleraushilfen vor Beginn der Beschäftigung durch und dokumentieren Sie diese schriftlich.",
       "rechtlich": "Praktikanten und Schüleraushilfen dürfen erst nach dokumentierter sicherheitsrelevanter Erstunterweisung eingesetzt werden. Ein Einsatz ohne Unterweisung verstößt unmittelbar gegen § 12 ArbSchG."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Wurde die Unterweisung schriftlich dokumentiert?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Dokumentieren Sie alle durchgeführten Unterweisungen rechtskonform und archivieren Sie die Nachweise gemäß § 6 ArbSchG.",
+      "klar": "Dokumentieren Sie alle durchgeführten Unterweisungen rechtskonform und archivieren Sie die Nachweise.",
       "rechtlich": "Jede Unterweisung ist nachvollziehbar, vollständig und schriftlich zu dokumentieren – inklusive Datum, Thema und Unterschrift der unterwiesenen Personen. Das Fehlen einer solchen Dokumentation stellt einen Verstoß gegen § 6 ArbSchG dar."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Haben die Personen die Inhalte der Unterweisung verstanden?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Vergewissern Sie sich, dass unterwiesene Personen die vermittelten Inhalte verstanden haben, etwa durch Rückfragen oder Lernerfolgskontrollen (§ 12 ArbSchG).",
+      "klar": "Vergewissern Sie sich, dass unterwiesene Personen die vermittelten Inhalte verstanden haben.",
       "rechtlich": "Die Verständlichkeit der Unterweisung ist zu überprüfen (z. B. durch Rückfragen oder praktische Anwendung). Unterlassene Erfolgskontrolle widerspricht der Wirksamkeitsforderung gemäß § 12 ArbSchG Abs. 1 Satz 2."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Wird den Beschäftigten arbeitsmedizinische Vorsorge angeboten?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Bieten Sie allen Beschäftigten arbeitsmedizinische Vorsorge nach der Verordnung zur arbeitsmedizinischen Vorsorge (ArbMedVV) an und dokumentieren Sie das Angebot.",
+      "klar": "Bieten Sie allen Beschäftigten arbeitsmedizinische Vorsorge nach der Verordnung zur arbeitsmedizinischen Vorsorge an und dokumentieren Sie das Angebot.",
       "rechtlich": "Arbeitsmedizinische Vorsorge ist für alle betroffenen Beschäftigten aktiv anzubieten, durchzuführen und zu dokumentieren. Das Nichterfüllen dieser Pflicht verstößt gegen § 3 ArbSchG in Verbindung mit ArbMedVV."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Sind Maßnahmen gegen Hauterkrankungen getroffen?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Ergreifen Sie geeignete Schutzmaßnahmen (z. B. Hautschutzmittel, Handschuhe, Schulungen) zur Prävention von Hauterkrankungen gemäß § 3 ArbSchG und TRGS 401.",
+      "klar": "Ergreifen Sie geeignete Schutzmaßnahmen (z. B. Hautschutzmittel, Handschuhe, Schulungen) zur Prävention von Hauterkrankungen.",
       "rechtlich": "Schutzmaßnahmen gegen berufsbedingte Hauterkrankungen (z. B. Hautschutzpläne, PSA, Schulungen) sind verpflichtend umzusetzen. Eine Missachtung stellt einen gravierenden Verstoß gegen § 3 ArbSchG sowie die TRGS 401 dar und ist sofort zu beheben."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Sind Mitarbeitertoiletten und Pausenräume sauber und mit Seife, Einmalhandtüchern und ggf. Desinfektionsmittel ausgestattet?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Sorgen Sie für eine regelmäßige Reinigung und hygienische Ausstattung der sanitären Einrichtungen nach ArbStättV Anhang Nr. 4.1 und ASR A4.1.",
+      "klar": "Sanitärräume und Pausenbereiche sind regelmäßig zu reinigen und dauerhaft hygienisch einwandfrei zu halten.",
       "rechtlich": "Sanitärräume und Pausenbereiche sind regelmäßig zu reinigen und dauerhaft hygienisch einwandfrei zu halten. Jede Vernachlässigung stellt eine Verletzung von § 6 ArbStättV und § 3 ArbSchG dar und ist unverzüglich abzustellen."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Werden Wünsche der Beschäftigten bei der Arbeitsplanung berücksichtigt?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Beziehen Sie individuelle Wünsche der Beschäftigten bei der Arbeitszeitgestaltung ein, soweit dies mit den betrieblichen Erfordernissen vereinbar ist (§ 3 ArbSchG, § 106 GewO).",
+      "klar": "Beziehen Sie individuelle Wünsche der Beschäftigten bei der Arbeitszeitgestaltung ein, soweit dies mit den betrieblichen Erfordernissen vereinbar ist.",
       "rechtlich": "Beschäftigte sind bei der Einsatz- und Dienstplanung aktiv einzubeziehen. Das systematische Ignorieren berechtigter Interessen widerspricht § 3 ArbSchG und stellt eine Verletzung des Mitbestimmungsgrundsatzes nach § 81 BetrVG dar."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Ist die Pausenregelung umgesetzt?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Stellen Sie sicher, dass die gesetzlichen Pausenregelungen gemäß § 4 ArbZG eingehalten und in der Arbeitszeitplanung berücksichtigt werden.",
+      "klar": "Stellen Sie sicher, dass die gesetzlichen Pausenregelungen eingehalten und in der Arbeitszeitplanung berücksichtigt werden.",
       "rechtlich": "Gesetzlich vorgeschriebene Pausen nach § 4 ArbZG sind vollständig und ungestört zu gewähren. Ein systematisches Vorenthalten von Pausen stellt einen schweren Verstoß gegen das Arbeitszeitgesetz und § 3 ArbSchG dar."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Ist ein Pausenraum vorhanden?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Halten Sie einen geeigneten Pausenraum gemäß ArbStättV Anhang Nr. 4.2 bereit, der sauber, beheizbar und mit Sitzmöglichkeiten ausgestattet ist.",
+      "klar": "Halten Sie einen geeigneten Pausenraum bereit, der sauber, beheizbar und mit Sitzmöglichkeiten ausgestattet ist.",
       "rechtlich": "Ein entsprechend den Vorgaben der ArbStättV gestalteter Pausenraum (z. B. mit Sitzgelegenheiten, Tisch, Lüftung, Reinigung) ist zwingend bereitzustellen. Ein fehlender oder unbrauchbarer Raum ist umgehend nachzubessern – gemäß § 6 ArbStättV i. V. m. ASR A4.2."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Werden Überstunden gering gehalten?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Begrenzen Sie Überstunden auf das notwendige Maß und achten Sie auf die Einhaltung der täglichen und wöchentlichen Höchstarbeitszeiten (§ 3 ArbZG).",
+      "klar": "Begrenzen Sie Überstunden auf das notwendige Maß und achten Sie auf die Einhaltung der täglichen und wöchentlichen Höchstarbeitszeiten.",
       "rechtlich": "Überstunden sind auf das absolut notwendige Maß zu begrenzen und im Rahmen der gesetzlichen Höchstarbeitszeiten gemäß § 3 ArbZG zu dokumentieren. Eine systematische Überbelastung der Beschäftigten stellt eine klare Pflichtverletzung gemäß § 3 ArbSchG dar."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Werden regelmäßige Teambesprechungen durchgeführt?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Führen Sie regelmäßige Besprechungen im Team durch, um die Kommunikation und Beteiligung der Beschäftigten gemäß § 81 BetrVG und § 4 ArbSchG zu fördern.",
+      "klar": "Führen Sie regelmäßige Besprechungen im Team durch, um die Kommunikation und Beteiligung der Beschäftigten zu fördern.",
       "rechtlich": "Teambesprechungen zu sicherheitsrelevanten Themen sind regelmäßig, dokumentiert und mit Beteiligung aller betroffenen Beschäftigten durchzuführen. Eine Unterlassung verletzt das Beteiligungsprinzip gemäß § 4 ArbSchG und § 81 BetrVG."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Werden neue Mitarbeiter eingearbeitet?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Stellen Sie sicher, dass neue Beschäftigte systematisch eingearbeitet werden und die für ihre Tätigkeit erforderlichen Kenntnisse vermittelt bekommen (§ 3 ArbSchG).",
+      "klar": "Stellen Sie sicher, dass neue Beschäftigte systematisch eingearbeitet werden und die für ihre Tätigkeit erforderlichen Kenntnisse vermittelt bekommen.",
       "rechtlich": "Neue Beschäftigte sind systematisch einzuarbeiten, wobei Sicherheitsunterweisungen, Arbeitsplatzabläufe und organisatorische Maßnahmen vollständig zu vermitteln sind. Die Unterlassung stellt einen Verstoß gegen § 3 und § 12 ArbSchG dar."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Ist eine Unterweisung zum Thema Brand- und Arbeitsschutz erfolgt?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Führen Sie regelmäßige Unterweisungen zu Arbeitsschutz und Brandschutz gemäß § 12 ArbSchG und DGUV Information 205-023 durch.",
+      "klar": "Führen Sie regelmäßige Unterweisungen zu Arbeitsschutz und Brandschutz durch.",
       "rechtlich": "Eine umfassende, schriftlich dokumentierte Unterweisung zu Brand- und Arbeitsschutz ist regelmäßig durchzuführen. Unterlassene Unterweisungen verletzen § 10 und § 12 ArbSchG und gefährden die Betriebssicherheit nachhaltig."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Hängt ein sogenanntes schwarzes Brett im Sozialraum oder Kassenbüro?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Halten Sie ein aktuelles schwarzes Brett im Sozialraum oder Bürobereich zur Information der Beschäftigten bereit (§ 81 BetrVG, § 12 ArbSchG).",
+      "klar": "Halten Sie ein aktuelles schwarzes Brett im Sozialraum oder Bürobereich zur Information der Beschäftigten bereit.",
       "rechtlich": "Ein schwarzes Brett mit aktuellen Informationen zu Sicherheitsvorgaben, Aushängen und organisatorischen Anweisungen ist gut sichtbar zu installieren. Das Fehlen stellt eine Kommunikationslücke gemäß § 12 ArbSchG und § 81 BetrVG dar."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Werden Entscheidungen transparent erläutert?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Kommunizieren Sie betriebliche Entscheidungen transparent und nachvollziehbar, um das Vertrauen der Beschäftigten zu stärken (§ 4 ArbSchG, § 81 BetrVG).",
+      "klar": "Kommunizieren Sie betriebliche Entscheidungen transparent und nachvollziehbar, um das Vertrauen der Beschäftigten zu stärken.",
       "rechtlich": "Sicherheits- und gesundheitsrelevante Entscheidungen sind klar, nachvollziehbar und zeitnah gegenüber allen Beschäftigten zu kommunizieren. Das Unterlassen stellt einen Verstoß gegen das Beteiligungsgebot gemäß § 81 BetrVG und die Transparenzpflicht nach § 4 ArbSchG dar."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Gibt es positive Rückmeldungen bei guter Leistung?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Geben Sie regelmäßig wertschätzendes Feedback bei guter Leistung, um Motivation und Arbeitszufriedenheit zu fördern (§ 4 ArbSchG, § 75 BetrVG).",
+      "klar": "Geben Sie regelmäßig wertschätzendes Feedback bei guter Leistung, um Motivation und Arbeitszufriedenheit zu fördern.",
       "rechtlich": "Anerkennung guter Leistungen ist aktiv auszusprechen und als Teil der psychischen Gesundheitsprävention zu begreifen. Ein systematisches Ausbleiben wertschätzender Kommunikation widerspricht dem Schutzauftrag gemäß § 3 ArbSchG und den Grundsätzen des § 75 BetrVG."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Wird konstruktive Kritik geübt?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Führen Sie Kritikgespräche sachlich und lösungsorientiert, unter Wahrung der Würde der betroffenen Person (§ 75 BetrVG, § 4 ArbSchG).",
+      "klar": "Führen Sie Kritikgespräche sachlich und lösungsorientiert, unter Wahrung der Würde der betroffenen Person.",
       "rechtlich": "Kritikgespräche sind respektvoll, lösungsorientiert und sachlich zu führen. Eine unangemessene oder entwürdigende Kritikpraxis verstößt gegen die Vorgaben des § 3 ArbSchG zur Erhaltung der psychischen Unversehrtheit."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Wurden Weiterbildungsmöglichkeiten geschaffen bzw. angeboten?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Schaffen Sie innerbetriebliche oder externe Weiterbildungsangebote und fördern Sie Qualifizierungen gemäß § 82 BetrVG sowie § 3 ArbSchG.",
+      "klar": "Schaffen Sie innerbetriebliche oder externe Weiterbildungsangebote und fördern Sie QualifizierungenG.",
       "rechtlich": "Fort- und Weiterbildungsmaßnahmen – insbesondere im Bereich Arbeitsschutz – sind regelmäßig anzubieten. Eine unterlassene Qualifikationsförderung verletzt die Fürsorgepflicht nach § 3 ArbSchG sowie § 82 BetrVG."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Gibt es einen Aushang zur Information über die Suchtprävention?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Stellen Sie einen gut sichtbaren Aushang mit Informationen zur Suchtprävention bereit und verweisen Sie auf innerbetriebliche Hilfsangebote (§ 3 ArbSchG, BEM-Leitlinien).",
+      "klar": "Stellen Sie einen gut sichtbaren Aushang mit Informationen zur Suchtprävention bereit und verweisen Sie auf innerbetriebliche Hilfsangebote.",
       "rechtlich": "Ein gut sichtbarer und aktueller Aushang zur Suchtprävention ist zwingend bereitzustellen. Die Unterlassung dieser Aufklärungsmaßnahme verstößt gegen § 3 ArbSchG und verhindert proaktive Gesundheitsförderung im Sinne des BEM gemäß § 167 SGB IX."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Ist ein betriebliches Wiedereingliederungsmanagement implementiert?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Implementieren Sie ein betriebliches Wiedereingliederungsmanagement (BEM) nach § 167 Abs. 2 SGB IX für länger erkrankte Beschäftigte.",
+      "klar": "Implementieren Sie ein betriebliches Wiedereingliederungsmanagement.",
       "rechtlich": "Ein betriebliches Wiedereingliederungsmanagement (BEM) ist strukturiert umzusetzen und allen anspruchsberechtigten Beschäftigten aktiv anzubieten. Das Versäumnis dieser Maßnahme stellt einen Verstoß gegen § 167 Abs. 2 SGB IX sowie § 3 ArbSchG dar."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Wird Alleinarbeit vermieden?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Vermeiden Sie gefährdende Alleinarbeit oder ergreifen Sie geeignete Schutzmaßnahmen, wie Notrufsysteme oder Kontrollgänge (§ 3 ArbSchG, DGUV Regel 115-003).",
+      "klar": "Vermeiden Sie gefährdende Alleinarbeit oder ergreifen Sie geeignete Schutzmaßnahmen, wie Notrufsysteme oder Kontrollgänge.",
       "rechtlich": "Gefährdende Alleinarbeit ist grundsätzlich zu vermeiden. Ist sie unvermeidbar, sind durchdachte technische und organisatorische Schutzmaßnahmen verpflichtend zu ergreifen. Eine Nichtabsicherung verletzt § 3 ArbSchG und widerspricht der DGUV Regel 115-003."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Ist die Betreuung nach einem Überfall organisiert?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Stellen Sie sicher, dass betroffene Mitarbeitende nach einem Überfall psychologische Betreuung und Nachsorge erhalten (§ 3 ArbSchG, § 84 SGB IX).",
+      "klar": "Stellen Sie sicher, dass betroffene Mitarbeitende nach einem Überfall psychologische Betreuung und Nachsorge erhalten.",
       "rechtlich": "Unmittelbar nach Überfallereignissen ist eine professionelle psychosoziale Betreuung der betroffenen Beschäftigten sicherzustellen. Das Unterlassen dieser Fürsorgepflicht stellt einen Verstoß gegen § 3 ArbSchG sowie § 84 SGB IX dar."
-    }
+    },
+    "kategorie": "Unbekannt"
   },
   {
     "frage": "Werden Schulungen für den Umgang mit gewalttätigen Situationen ermöglicht?",
     "antworten": {
-      "bghw": "Die Sicherheit muss entsprechend den geltenden Vorschriften wie ArbSchG, DGUV Regeln und ASR gewährleistet sein. Technische Einrichtungen sind regelmäßig zu prüfen und Mängel sofort zu beheben.",
-      "klar": "Die Einrichtung muss sicher, geprüft und ohne erkennbare Mängel sein.",
+      "bghw": "Ermöglichen Sie Mitarbeitenden Schulungen zum Deeskalations- und Konfliktmanagement bei Gewaltvorfällen gemäß § 12 ArbSchG und DGUV Information 206-023.",
+      "klar": "Ermöglichen Sie Mitarbeitenden Schulungen zum Deeskalations- und Konfliktmanagement bei Gewaltvorfällen.",
       "rechtlich": "Beschäftigten sind regelmäßig Deeskalationstrainings und Schulungen zum Umgang mit Gewalt- und Bedrohungssituationen zu ermöglichen. Diese Maßnahmen sind Bestandteil der Gefährdungsbeurteilung nach § 5 ArbSchG und verbindlich umzusetzen (§ 3 ArbSchG, DGUV Information 206-023)."
-    }
+    },
+    "kategorie": "Unbekannt"
   }
 ];
