@@ -1,39 +1,37 @@
 <!DOCTYPE html>
+
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>Zusammenfassung</title>
+<meta charset="utf-8"/>
+<title>Zusammenfassung</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <style>
+<style>
     body { font-family: Arial; padding: 20px; }
     table { border-collapse: collapse; width: 100%; }
     th, td { border: 1px solid #ccc; padding: 10px; }
     th { background-color: #eee; }
   </style>
 </head>
-<body>
-  <h1 style="text-align: center;">Zusammenfassung der Maßnahmen</h1>
-  <table id="summary">
-    <thead><tr><th>Frage</th><th>Hinweis</th></tr></thead>
-    <tbody></tbody>
-  </table>
-<button onclick="window.print()">Drucken</button>
-  <button onclick="sharePDF()">Teilen (PDF)</button>
-
-  <script>
+<body><div id="content-to-pdf">
+<h1 style="text-align: center;">Zusammenfassung der Maßnahmen</h1>
+<table id="summary">
+<thead><tr><th>Frage</th><th>Hinweis</th></tr></thead>
+<tbody></tbody>
+</table><div style="display: flex; gap: 20px; justify-content: center; margin: 20px 0;"></div>
+<script>
     const params = new URLSearchParams(window.location.search);
     const data = JSON.parse(decodeURIComponent(params.get("data") || "[]"));
-    const tbody = document.querySelector("#summary tbody");
+    const tbodyParam = document.querySelector("#summary tbody");
 
     data.forEach(eintrag => {
       const tr = document.createElement("tr");
       tr.innerHTML = `<td>${eintrag.frage}</td><td>${eintrag.hinweis}</td>`;
-      tbody.appendChild(tr);
+      tbodyParam.appendChild(tr);
     });
   </script>
-  <script>
-    const tbody = document.querySelector("#zusammenfassung tbody");
+<script>
+    const tbody = document.querySelector("#summary tbody");
 
     function escapeHTML(str) {
       return str
@@ -111,6 +109,67 @@
     }
 
     window.onload = loadZusammenfassung;
-  </script>
-</body>
+  
+function prepareForPrint() {
+  window.print();
+}
+window.generateAndSharePDF = sharePDF;
+
+function prepareForPrint() {
+  window.print();
+}
+
+
+window.generateAndSharePDF = async function() {
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF('p', 'pt', 'a4');
+  const content = document.getElementById("content-to-pdf");
+
+  const canvas = await html2canvas(content, { scale: 2, scrollY: -window.scrollY });
+  const imgData = canvas.toDataURL('image/png');
+
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
+  const margin = 30;
+  const usableWidth = pageWidth - 2 * margin;
+  const imgHeight = (canvas.height * usableWidth) / canvas.width;
+
+  let heightLeft = imgHeight;
+  let position = 0;
+
+  pdf.addImage(imgData, 'PNG', margin, margin, usableWidth, imgHeight);
+  heightLeft -= pageHeight - 2 * margin;
+
+  while (heightLeft > 0) {
+    position -= pageHeight - 2 * margin;
+    pdf.addPage();
+    pdf.addImage(imgData, 'PNG', margin, position + margin, usableWidth, imgHeight);
+    heightLeft -= pageHeight - 2 * margin;
+  }
+
+  const blob = pdf.output('blob');
+  const file = new File([blob], 'zusammenfassung.pdf', { type: 'application/pdf' });
+
+  if (navigator.share) {
+    const blobUrl = URL.createObjectURL(blob);
+    try {
+      await navigator.share({
+        title: 'Zusammenfassung „Nein“-Antworten',
+        text: 'Hier ist die PDF-Zusammenfassung:',
+        url: blobUrl
+      });
+    } catch (err) {
+      console.error('Teilen fehlgeschlagen:', err);
+      pdf.save('zusammenfassung.pdf');
+    }
+  } else {
+    pdf.save('zusammenfassung.pdf');
+  }
+};
+</script>
+</div><div style="display: flex; justify-content: center; gap: 20px; margin-top: 30px;"><button class="btn-medium btn-gray" onclick="prepareForPrint()" style="flex: 1; max-width: 280px; padding: 12px; font-size: 16px; background-color: #C62828; color: white; border: none; border-radius: 6px; cursor: pointer;">
+    📄 Drucken / PDF
+  </button><button class="custom-btn" onclick="generateAndSharePDF()" style="flex: 1; max-width: 280px; padding: 12px; font-size: 16px; background-color: #C62828; color: white; border: none; border-radius: 6px; cursor: pointer;">
+📤 PDF teilen (iPad)
+</button></div></body>
 </html>
