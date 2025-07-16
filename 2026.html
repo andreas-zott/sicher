@@ -1,10 +1,11 @@
 <!DOCTYPE html>
+
 <html lang="de">
 <head>
-<meta charset="UTF-8" />
+<meta charset="utf-8"/>
 <title>Arbeitsschutz ‑ Checkliste</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
-<link href="/sicher/favicon.ico" rel="icon" type="image/x-icon" />
+<link href="/sicher/favicon.ico" rel="icon" type="image/x-icon"/>
 <link href="/sicher/manifest.json" rel="manifest"/>
 <style>
 .footer p {
@@ -35,54 +36,53 @@
   </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
- <script src="fragen.js"></script>
-</head>
+<script src="fragen.js"></script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="yes" name="apple-mobile-web-app-capable"/><meta content="Checkliste" name="apple-mobile-web-app-title"/><meta content="default" name="apple-mobile-web-app-status-bar-style"/><link href="icons/icon-192.png" rel="apple-touch-icon"/></head>
 <body>
-
 <h1 style="text-align: center;">Arbeitsschutz ‑ Checkliste</h1>
 <form id="metaForm" style="margin-bottom: 30px; display: flex; gap: 20px; flex-wrap: wrap;">
-  <label>Marktnummer:
-    <input type="text" id="marktnummer" />
-  </label><br />
-  <label>Name:
-    <input type="text" id="name" />
-  </label><br />
-  <label>Sifa:
-    <input type="text" id="sifa" />
-  </label><br />
-  <label>Datum:
-    <input type="text" id="datum" readonly />
-  </label>
+<label>Marktnummer:
+    <input id="marktnummer" type="text"/>
+</label><br/>
+<label>Name:
+    <input id="name" type="text"/>
+</label><br/>
+<label>Sifa:
+    <input id="sifa" type="text"/>
+</label><br/>
+<label>Datum:
+    <input id="datum" readonly="" type="text"/>
+</label>
 </form>
 <table id="checklist">
-  <thead>
-    <tr>
-      <th>Frage</th>
-      <th>Antwort</th>
-      <th>Quelle<span style="font-weight: normal"></span></th>
-    </tr>
-  </thead>
-  <tbody></tbody>
+<thead>
+<tr>
+<th>Frage</th>
+<th>Antwort</th>
+<th>Quelle<span style="font-weight: normal"></span></th>
+</tr>
+</thead>
+<tbody></tbody>
 </table>
 <h2 style="text-align: center;">Zusammenfassung der Maßnahmen</h2>
-  <table id="zusammenfassung">
-    <thead>
-      <tr><th>Frage</th><th>Hinweistext</th></tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+<table id="zusammenfassung">
+<thead>
+<tr><th>Frage</th><th>Hinweistext</th></tr>
+</thead>
+<tbody></tbody>
+</table>
 <div style="margin-top: 40px;">
 <h3 style="text-align: center;">Unterschrift</h3>
 <div style="text-align: center;">
-  <canvas id="signature" width="600" height="200" style="border:1px solid #ccc; background-color: white;"></canvas><br />
+<canvas height="200" id="signature" style="border:1px solid #ccc; background-color: white;" width="600"></canvas><br/>
 <div class="buttons-container">
-  <button type="button" onclick="clearSignature()">🗑️ Unterschrift löschen</button>
+<button onclick="clearSignature()" type="button">🗑️ Unterschrift löschen</button>
 </div>
 <div class="buttons-container">
-  <button onclick="exportMassnahmenAsHTML()">📝 Defizite exportieren</button>
-  <button onclick="openSummaryPage()">📝 Maßnahmen</button>
-  <button onclick="window.print()">📄 Drucken / PDF</button>
-  <button onclick="sharePDF()">📤 PDF teilen (iPad)</button>
+<button onclick="exportMassnahmenAsHTML()">📝 Defizite exportieren</button>
+<button onclick="openSummaryPage()">📝 Maßnahmen</button>
+<button onclick="window.print()">📄 Drucken / PDF</button>
+<button onclick="sharePDF()">📤 PDF teilen (iPad)</button>
 </div>
 <script>
 // Datum automatisch eintragen
@@ -161,6 +161,8 @@ if (!Array.isArray(window.fragen)) {
 }
 const signCanvas = document.getElementById('signature');
 const signCtx = signCanvas.getContext('2d');
+  signCtx.lineWidth = 2;
+  signCtx.lineCap = 'round';
 let signing = false;
 const getPos = (e) => {
   const rect = signCanvas.getBoundingClientRect();
@@ -196,11 +198,12 @@ function clearSignature() {
   signCtx.clearRect(0, 0, signCanvas.width, signCanvas.height);
 }
 
+
 async function sharePDF() {
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF('p', 'pt', 'a4');
   const pageHeight = pdf.internal.pageSize.getHeight();
-  const elements = document.body.cloneNode(true);
+  const cloned = document.body.cloneNode(true);
 
   const container = document.createElement('div');
   container.style.width = '800px';
@@ -208,36 +211,43 @@ async function sharePDF() {
   container.style.background = 'white';
   container.style.position = 'absolute';
   container.style.top = '-10000px';
-  container.appendChild(elements);
+  container.appendChild(cloned);
   document.body.appendChild(container);
-  await html2canvas(container, { scale: 2 }).then(canvas => {
-    const imgData = canvas.toDataURL('image/png');
-    const imgWidth = pdf.internal.pageSize.getWidth();
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-    let heightLeft = imgHeight;
-    let position = 0;
+
+  const canvas = await html2canvas(container, { scale: 2 });
+  const imgData = canvas.toDataURL('image/png');
+  const imgWidth = pdf.internal.pageSize.getWidth();
+  const imgHeight = (canvas.height * imgWidth) / canvas.width;
+  let heightLeft = imgHeight;
+  let position = 0;
+  pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+  heightLeft -= pageHeight;
+  while (heightLeft > 0) {
+    position -= pageHeight;
+    pdf.addPage();
     pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
     heightLeft -= pageHeight;
-    while (heightLeft > 0) {
-      position -= pageHeight;
-      pdf.addPage();
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-    }
+  }
 
-    document.body.removeChild(container);
-    const pdfBlob = pdf.output('blob');
-    const file = new File([pdfBlob], 'checkliste.pdf', { type: 'application/pdf' });
+  document.body.removeChild(container);
+  const pdfBlob = pdf.output('blob');
+  const file = new File([pdfBlob], 'checkliste.pdf', { type: 'application/pdf' });
+
+  try {
     if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-      navigator.share({
-        title: 'Arbeitsschutz‑Checkliste',
-        files: [file]
-      }).catch(err => console.error(err));
+      await navigator.share({ title: 'Arbeitsschutz‑Checkliste', files: [file] });
+    } else if (navigator.share) {
+      const blobUrl = URL.createObjectURL(file);
+      await navigator.share({ title: 'Arbeitsschutz‑Checkliste', url: blobUrl });
     } else {
       pdf.save('checkliste.pdf');
     }
-  });
+  } catch (err) {
+    console.error(err);
+    pdf.save('checkliste.pdf');
+  }
 }
+
 function exportMassnahmenAsHTML() {
   let htmlContent = `
   <!DOCTYPE html>
@@ -295,14 +305,14 @@ function openSummaryPage() {
 
 </script>
 <p>
- </p>
+</p>
 <p>
 <footer class="footer">
-  <p>
+<p>
     © <span id="currentYear"></span> Andreas Zott. Alle Rechte vorbehalten.
     <a href="datenschutz.html" rel="noopener noreferrer" target="_blank">Datenschutz</a> |
     <a href="impressum.html" rel="noopener noreferrer" target="_blank">Impressum</a>
-  </p>
+</p>
 </footer>
 <script>
   const aktuellesJahr = new Date().getFullYear();
@@ -318,5 +328,5 @@ function openSummaryPage() {
     });
   }
 </script>
-</body>
+</p></div></div></body>
 </html>
