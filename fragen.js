@@ -4,7 +4,7 @@ window.fragen = [
     "antworten": {
       "bghw": "Gemäß DGUV Regel 112‑191 (Benutzung von Fuß‑ und Knieschutz) müssen Beschäftigte geeignetes, festes, geschlossenes und rutschhemmendes Schuhwerk tragen, das der Tätigkeit und den Bodenverhältnissen entspricht.",
       "klar": "Stellen Sie umgehend sicher, dass alle Personen im Markt festes, geschlossenes und flaches Schuhwerk gemäß den Arbeitsschutzbestimmungen tragen.",
-      "rechtlich": "Alle Automatiktüren, Schnelllauf- und Rolltore sind regelmäßig durch befähigte Personen auf sichtbare und mechanische Mängel zu prüfen. Das Unterlassen dieser Prüfpflicht stellt eine erhebliche Verletzung der Betreiberverantwortung gemäß § 4 BetrSichV dar und ist sofort abzustellen."
+      "rechtlich": "Es ist ausnahmslos sicherzustellen, dass sämtliche Beschäftigte festes, geschlossenes und flaches Schuhwerk tragen. Abweichungen sind unverzüglich zu unterbinden. Die Maßnahme dient der Verhütung schwerer Stolper- und Rutschunfälle und ist zwingend umzusetzen gemäß § 3 Abs. 1 ArbSchG i. V. m. § 2 PSA-Benutzungsverordnung."
     },
     "kategorie": "Unbekannt"
   },
