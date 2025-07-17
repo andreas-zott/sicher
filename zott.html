@@ -5,6 +5,72 @@
   <meta charset="UTF-8">
   <title>Gefährdungsbeurteilung – Interaktive Übersicht</title>
   <style> 
+.button-grid, .button-grid-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+
+  .button-grid button,
+  .button-grid-row button {
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+  }
+
+  .button-grid button:hover,
+  .button-grid-row button:hover {
+    background-color: #e0e0e0;
+  }
+  .signatur-bereich {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 30px 0;
+  }
+
+  .signatur-bereich canvas {
+    border: 1px solid #000;
+    margin-bottom: 10px;
+  }
+
+  .signatur-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .signatur-buttons button {
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+.footer {
+    background-color: #f9f9f9;
+    color: #666;
+    text-align: center;
+    padding: 20px;
+    font-size: 14px;
+    border-top: 1px solid #ddd;
+  }
+
+  .footer a {
+    color: #888;
+    text-decoration: none;
+    margin: 0 5px;
+  }
+
+  .footer a:hover {
+    color: #555;
+    text-decoration: underline;
+  }
     body {
       font-family: Arial, sans-serif;
       margin: 40px;
@@ -138,15 +204,11 @@ async function teilePdfZusammenfassung() {
     alert("PDF-Teilen wird von diesem Gerät oder Browser nicht unterstützt.");
   }
 }
-
 </script>
-
-
 <div style="text-align: center; margin: 40px 0; font-size: 18px;">
   <strong>Teil der Gefährdungsbeurteilung / Wirksamkeitskontrolle</strong><br><br>
   Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
 </div>
-
 <script>
 function zeigeAntwortoptionen(selectAntwort) {
   const block = selectAntwort.closest('.frage-block');
@@ -172,42 +234,7 @@ function zeigeAntwort(selectQuelle) {
   antwortfeld.querySelector('.anzeige-text').textContent = antwortfeld.dataset[quelle];
 }
 
-async function teilePdfZusammenfassung() {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
 
-  let y = 10;
-  const texte = Array.from(document.querySelectorAll('.anzeige-text'))
-    .map(p => p.textContent.trim())
-    .filter(text => text.length > 0);
-
-  for (let t of texte) {
-    const lines = doc.splitTextToSize(t, 180);
-    doc.text(lines, 10, y);
-    y += lines.length * 8;
-    if (y > 270) {
-      doc.addPage();
-      y = 10;
-    }
-  }
-
-  const pdfBlob = doc.output("blob");
-  const file = new File([pdfBlob], "zusammenfassung.pdf", { type: "application/pdf" });
-
-  if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    try {
-      await navigator.share({
-        title: "Gefährdungsbeurteilung",
-        text: "Zusammenfassung als PDF",
-        files: [file]
-      });
-    } catch (err) {
-      console.error("Teilen abgebrochen oder fehlgeschlagen", err);
-    }
-  } else {
-    alert("PDF-Teilen wird von diesem Gerät oder Browser nicht unterstützt.");
-  }
-}
 
 </script>
 <h2>Brandschutz (3)</h2>
@@ -2500,128 +2527,20 @@ async function teilePdfZusammenfassung() {
       }
     });
   }
-
-async function teilePdfZusammenfassung() {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-
-  let y = 10;
-  const texte = Array.from(document.querySelectorAll('.anzeige-text'))
-    .map(p => p.textContent.trim())
-    .filter(text => text.length > 0);
-
-  for (let t of texte) {
-    const lines = doc.splitTextToSize(t, 180);
-    doc.text(lines, 10, y);
-    y += lines.length * 8;
-    if (y > 270) {
-      doc.addPage();
-      y = 10;
-    }
-  }
-
-  const pdfBlob = doc.output("blob");
-  const file = new File([pdfBlob], "zusammenfassung.pdf", { type: "application/pdf" });
-
-  if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    try {
-      await navigator.share({
-        title: "Gefährdungsbeurteilung",
-        text: "Zusammenfassung als PDF",
-        files: [file]
-      });
-    } catch (err) {
-      console.error("Teilen abgebrochen oder fehlgeschlagen", err);
-    }
-  } else {
-    alert("PDF-Teilen wird von diesem Gerät oder Browser nicht unterstützt.");
-  }
-}
-
 </script>
-
-
 <hr>
 <h2>Export &amp; Drucken</h2>
 
-<style>
-  .button-grid, .button-grid-row {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 20px;
-  }
-
-  .button-grid button,
-  .button-grid-row button {
-    padding: 10px 20px;
-    font-size: 14px;
-    cursor: pointer;
-    border: 1px solid #ccc;
-    background-color: #f0f0f0;
-    border-radius: 5px;
-    transition: background-color 0.2s;
-  }
-
-  .button-grid button:hover,
-  .button-grid-row button:hover {
-    background-color: #e0e0e0;
-  }
-</style>
 
 <div class="button-grid">
   <button onclick="exportiereAlsPDF()">💾 PDF speichern</button>  
   <button onclick="window.print()">🖨️ Dokument drucken</button>
-</div>
-
-<div class="button-grid-row">
-  <button onclick="teileZusammenfassung()">📤 Teilen</button>
   <button onclick="teilePdfZusammenfassung()">📤 PDF teilen (iPad)</button> 
 </div>
+</div>  
 </div>
-  
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
-async function teilePdfZusammenfassung() {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-
-  let y = 10;
-  const texte = Array.from(document.querySelectorAll('.anzeige-text'))
-    .map(p => p.textContent.trim())
-    .filter(text => text.length > 0);
-
-  for (let t of texte) {
-    const lines = doc.splitTextToSize(t, 180);
-    doc.text(lines, 10, y);
-    y += lines.length * 8;
-    if (y > 270) {
-      doc.addPage();
-      y = 10;
-    }
-  }
-
-  const pdfBlob = doc.output("blob");
-  const file = new File([pdfBlob], "zusammenfassung.pdf", { type: "application/pdf" });
-
-  if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    try {
-      await navigator.share({
-        title: "Gefährdungsbeurteilung",
-        text: "Zusammenfassung als PDF",
-        files: [file]
-      });
-    } catch (err) {
-      console.error("Teilen abgebrochen oder fehlgeschlagen", err);
-    }
-  } else {
-    alert("PDF-Teilen wird von diesem Gerät oder Browser nicht unterstützt.");
-  }
-}
-
 </script>
+
 <script>
 async function exportierePDF() {
   const {{ jsPDF }} = window.jspdf;
@@ -2697,8 +2616,6 @@ async function teilePdfZusammenfassung() {
 
 </script>
 
-
-
 <hr style="margin-top: 50px;">
 
 <h2>Maßnahmen-Zusammenfassung & Unterschrift</h2><div class="rahmen-box">
@@ -2726,33 +2643,9 @@ async function teilePdfZusammenfassung() {
         </label>
       </div>
     </div>
+
 <!-- Unterschrift -->
-<style>
-  .signatur-bereich {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 30px 0;
-  }
 
-  .signatur-bereich canvas {
-    border: 1px solid #000;
-    margin-bottom: 10px;
-  }
-
-  .signatur-buttons {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  .signatur-buttons button {
-    padding: 8px 16px;
-    font-size: 14px;
-    cursor: pointer;
-  }
-</style>
 
 <div class="signatur-bereich">
   <p><strong>Unterschrift:</strong></p>
@@ -2887,43 +2780,65 @@ function formularZuruecksetzen() {
 }
 
 // Zeichnen auf dem Canvas
+
+
+
 const canvas = document.getElementById("signatureCanvas");
 const ctx = canvas.getContext("2d");
 let drawing = false;
 
-canvas.addEventListener("mousedown", () => drawing = true);
-canvas.addEventListener("mouseup", () => {
-  drawing = false;
-  ctx.beginPath();
-});
-canvas.addEventListener("mousemove", zeichnen);
-canvas.addEventListener("touchstart", () => drawing = true);
-canvas.addEventListener("touchend", () => {
-  drawing = false;
-  ctx.beginPath();
-});
-canvas.addEventListener("touchmove", e => {
-  const touch = e.touches[0];
+function getPos(e) {
   const rect = canvas.getBoundingClientRect();
-  const mouseEvent = new MouseEvent("mousemove", {
-    clientX: touch.clientX - rect.left,
-    clientY: touch.clientY - rect.top
-  });
-  canvas.dispatchEvent(mouseEvent);
-  e.preventDefault();
-});
+  if (e.touches) {
+    return {
+      x: e.touches[0].clientX - rect.left,
+      y: e.touches[0].clientY - rect.top
+    };
+  } else {
+    return {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    };
+  }
+}
 
-function zeichnen(e) {
+function startDraw(e) {
+  drawing = true;
+  const pos = getPos(e);
+  ctx.beginPath();
+  ctx.moveTo(pos.x, pos.y);
+  e.preventDefault?.();
+}
+
+function endDraw(e) {
+  drawing = false;
+  ctx.beginPath();
+  e.preventDefault?.();
+}
+
+function draw(e) {
   if (!drawing) return;
-  const rect = canvas.getBoundingClientRect();
+  const pos = getPos(e);
   ctx.lineWidth = 2;
   ctx.lineCap = "round";
   ctx.strokeStyle = "#000";
-  ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+  ctx.lineTo(pos.x, pos.y);
   ctx.stroke();
   ctx.beginPath();
-  ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+  ctx.moveTo(pos.x, pos.y);
+  e.preventDefault?.();
 }
+
+canvas.addEventListener("mousedown", startDraw);
+canvas.addEventListener("mouseup", endDraw);
+canvas.addEventListener("mouseout", endDraw);
+canvas.addEventListener("mousemove", draw);
+
+canvas.addEventListener("touchstart", startDraw, { passive: false });
+canvas.addEventListener("touchend", endDraw, { passive: false });
+canvas.addEventListener("touchcancel", endDraw, { passive: false });
+canvas.addEventListener("touchmove", draw, { passive: false });
+
 
 async function teilePdfZusammenfassung() {
   const { jsPDF } = window.jspdf;
@@ -2961,8 +2876,8 @@ async function teilePdfZusammenfassung() {
     alert("PDF-Teilen wird von diesem Gerät oder Browser nicht unterstützt.");
   }
 }
-
 </script>
+
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const heute = new Date();
@@ -2970,27 +2885,6 @@ async function teilePdfZusammenfassung() {
     document.getElementById("datum").value = isoHeute;
   });
 </script>
-<style>
-  .footer {
-    background-color: #f9f9f9;
-    color: #666;
-    text-align: center;
-    padding: 20px;
-    font-size: 14px;
-    border-top: 1px solid #ddd;
-  }
-
-  .footer a {
-    color: #888;
-    text-decoration: none;
-    margin: 0 5px;
-  }
-
-  .footer a:hover {
-    color: #555;
-    text-decoration: underline;
-  }
-</style>
 
 <footer class="footer">
   <p>
