@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -5,92 +6,161 @@
 <title>Checkliste zur Gefährdungsbeurteilung im Einzelhandel</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
 <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon" />
-<link href="/sicher/manifest.json" rel="manifest"/>
+<link href="/sicher/2026.json" rel="manifest"/>
 <style>
-.footer p {
-  font-size: 12px;          /* kleinerer Text */
-  color: #888888;           /* hellgraues, blasses Grau */
-  margin: 0;                /* optional: etwas Abstand rausnehmen */
-}
-.footer a {
-  color: #aaa;              /* Links auch blasser */
-  text-decoration: none;    /* Optional: ohne Unterstreichung */
-}
-.footer a:hover {
-  text-decoration: underline; /* Unterstreichung beim Hover */
-}
+ .footer {
+    text-align: center;
+    margin-top: 60px;
+  }
 
- body { font-family: Arial, sans-serif; background-color: #eef5ff; padding: 20px; }
-    h1, h2 { text-align: center; }
-    table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
-    th, td { border: 1px solid #ccc; padding: 10px; vertical-align: top; }
-    th { background-color: #ddd; }
-    select { width: 100%; }
-    .antwortwahl { display: none; }
-    #hinweisContainer { background: #fff; padding: 20px; border: 1px solid #aaa; }
-    pre { white-space: pre-wrap; background: #f9f9f9; padding: 10px; border: 1px solid #ccc; }
-    .buttons-container { margin-top: 30px; text-align: center; }
-    .buttons-container button { padding: 10px 18px; margin: 5px; cursor: pointer; }
-    @media print { .buttons-container button { display: none; } }
-  </style>
+  .footer p {
+    font-size: 12px;          /* kleine Schrift */
+    color: #888888;           /* dezentes Grau */
+    margin: 0;
+  }
+
+  .footer a {
+    color: #aaa;
+    text-decoration: none;
+  }
+
+  .footer a:hover {
+    text-decoration: underline;
+  }
+
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #eef5ff;
+    padding: 20px;
+  }
+  h1, h2, h3 {
+    text-align: center;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    vertical-align: top;
+    font-size: 16px;
+  }
+  th {
+    background-color: #ddd;
+  }
+  select {
+    width: 100%;
+    font-size: 14px;
+  }
+  .antwortwahl {
+    display: none;
+  }
+  #metaForm,
+  #metaForm label,
+  #metaForm input {
+    font-size: 16px;
+  }
+  #checklist tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+  }
+  #checklist tbody tr:nth-child(even) {
+    background-color: #ffffff;
+  }
+  #hinweisContainer {
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #aaa;
+  }
+  pre {
+    white-space: pre-wrap;
+    background: #f9f9f9;
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+  .buttons-container {
+    margin-top: 30px;
+    text-align: center;
+  }
+  .buttons-container button {
+    padding: 10px 18px;
+    margin: 5px;
+    cursor: pointer;
+  }
+  @media print {
+    .buttons-container button {
+      display: none;
+    }
+  }
+</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
- <script src="fragen.js"></script>
+<script src="fragen.js"></script>
 </head>
 <body>
 
-<h1 style="text-align: center;">Checkliste zur Gefährdungsbeurteilung im Einzelhandel</h1>
+<h1>Checkliste zur Gefährdungsbeurteilung im Einzelhandel</h1>
+
 <br>
 <form id="metaForm" style="margin-bottom: 30px; display: flex; gap: 20px; flex-wrap: wrap;">
   <label>Marktnummer:
     <input type="text" id="marktnummer" />
-  </label><br />
+  </label>
   <label>Name:
     <input type="text" id="name" />
-  </label><br />
+  </label>
   <label>Sifa:
     <input type="text" id="sifa" />
-  </label><br />
+  </label>
   <label>Datum:
     <input type="text" id="datum" readonly />
   </label>
 </form>
+<div style="text-align: center; margin: 40px 0; font-size: 18px;">
+  <strong>Teil der Gefährdungsbeurteilung / Wirksamkeitskontrolle</strong><br><br>
+  Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
+</div>
+<br>
 <table id="checklist">
   <thead>
     <tr>
       <th>Frage</th>
       <th>Antwort</th>
-      <th>Quelle<span style="font-weight: normal"></span></th>
+      <th>Quelle</th>
     </tr>
   </thead>
   <tbody></tbody>
 </table>
-<h2 style="text-align: center;">Zusammenfassung der Maßnahmen</h2>
-  <table id="zusammenfassung">
-    <thead>
-      <tr><th>Frage</th><th>Hinweistext</th></tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-<div style="margin-top: 40px;">
-<h3 style="text-align: center;">Unterschrift</h3>
+<h2>Zusammenfassung der Maßnahmen</h2>
+<table id="zusammenfassung">
+  <thead>
+    <tr><th>Frage</th><th>Hinweistext</th></tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<h3>Unterschrift</h3>
 <div style="text-align: center;">
-  <canvas id="signature" width="600" height="200" style="border:1px solid #ccc; background-color: white;"></canvas><br />
-<div class="buttons-container">
-  <button type="button" onclick="clearSignature()">🗑️ Unterschrift löschen</button>
+  <canvas id="signature" width="600" height="200" style="border:1px solid #ccc; background-color: white;"></canvas>
+  <div class="buttons-container">
+    <button type="button" onclick="clearSignature()">🗑️ Unterschrift löschen</button>
+  </div>
 </div>
+
 <div class="buttons-container">
   <button onclick="exportMassnahmenAsHTML()">📝 Defizite exportieren</button>
   <button onclick="openSummaryPage()">📝 Maßnahmen</button>
   <button onclick="window.print()">📄 Drucken / PDF</button>
   <button onclick="sharePDF()">📤 PDF teilen (iPad)</button>
 </div>
+
 <script>
-// Datum automatisch eintragen
 document.getElementById("datum").value = new Date().toLocaleDateString("de-DE");
 const tbody = document.querySelector("#checklist tbody");
 const summaryBody = document.querySelector("#zusammenfassung tbody");
 const antwortenMap = new Map();
+
 function renderSummary() {
   summaryBody.textContent = "";
   antwortenMap.forEach((hinweis, frage) => {
@@ -98,15 +168,6 @@ function renderSummary() {
     tr.innerHTML = `<td>${frage}</td><td>${hinweis}</td>`;
     summaryBody.appendChild(tr);
   });
-}
-
-function escapeHTML(str) {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
 }
 
 if (!Array.isArray(window.fragen)) {
@@ -127,10 +188,10 @@ if (!Array.isArray(window.fragen)) {
       selectAntwort.appendChild(option);
     });
     tdAntwort.appendChild(selectAntwort);
+
     const tdFormWahl = document.createElement('td');
     const selectForm = document.createElement('select');
     selectForm.className = 'antwortwahl';
-    selectForm.title = 'Quelle des Hinweistexts wählen';
     ['bghw', 'klar', 'rechtlich'].forEach((val) => {
       const option = document.createElement('option');
       option.value = val;
@@ -138,6 +199,7 @@ if (!Array.isArray(window.fragen)) {
       selectForm.appendChild(option);
     });
     tdFormWahl.appendChild(selectForm);
+
     const updateHinweis = () => {
       if (selectAntwort.value === 'Nein') {
         const form = selectForm.value || 'bghw';
@@ -152,14 +214,28 @@ if (!Array.isArray(window.fragen)) {
     selectAntwort.addEventListener('change', () => {
       selectForm.style.display = selectAntwort.value === 'Nein' ? 'inline-block' : 'none';
       updateHinweis();
+
+      if (selectAntwort.value === 'Ja') {
+        tr.style.backgroundColor = '#e0f8e0';
+      } else if (selectAntwort.value === 'Nein') {
+        tr.style.backgroundColor = '#fbeaea';
+      } else if (selectAntwort.value === 'Nicht vorhanden') {
+        tr.style.backgroundColor = '#fff8dc';
+      } else {
+        tr.style.backgroundColor = '';
+      }
     });
+
     selectForm.addEventListener('change', updateHinweis);
+
     tr.appendChild(tdFrage);
     tr.appendChild(tdAntwort);
     tr.appendChild(tdFormWahl);
     tbody.appendChild(tr);
   });
 }
+
+// Signaturfunktionen
 const signCanvas = document.getElementById('signature');
 const signCtx = signCanvas.getContext('2d');
 let signing = false;
@@ -188,7 +264,6 @@ const drawSign = (e) => {
 const endSign = () => {
   signing = false;
 };
-
 ['mousedown', 'touchstart'].forEach(evt => signCanvas.addEventListener(evt, startSign));
 ['mousemove', 'touchmove'].forEach(evt => signCanvas.addEventListener(evt, drawSign));
 ['mouseup', 'mouseleave', 'touchend'].forEach(evt => signCanvas.addEventListener(evt, endSign));
@@ -202,7 +277,6 @@ async function sharePDF() {
   const pdf = new jsPDF('p', 'pt', 'a4');
   const pageHeight = pdf.internal.pageSize.getHeight();
   const elements = document.body.cloneNode(true);
-
   const container = document.createElement('div');
   container.style.width = '800px';
   container.style.padding = '20px';
@@ -225,82 +299,44 @@ async function sharePDF() {
       pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
       heightLeft -= pageHeight;
     }
-
     document.body.removeChild(container);
     const pdfBlob = pdf.output('blob');
     const file = new File([pdfBlob], 'checkliste.pdf', { type: 'application/pdf' });
     if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-      navigator.share({
-        title: 'Arbeitsschutz‑Checkliste',
-        files: [file]
-      }).catch(err => console.error(err));
+      navigator.share({ title: 'Arbeitsschutz‑Checkliste', files: [file] }).catch(err => console.error(err));
     } else {
       pdf.save('checkliste.pdf');
     }
   });
 }
+
 function exportMassnahmenAsHTML() {
-  let htmlContent = `
-  <!DOCTYPE html>
-  <html lang="de">
-  <head>
-    <meta charset="UTF-8">
-    <title>Exportierte Maßnahmen</title>
-    <style>
-      body { font-family: Arial, sans-serif; margin: 20px; }
-      table { border-collapse: collapse; width: 100%; }
-      th, td { border: 1px solid #ccc; padding: 10px; }
-      th { background-color: #f2f2f2; }
-    </style>
-  </head>
-  <body>
-    <h1>Zusammenfassung der Maßnahmen</h1>
-    <table>
-      <thead>
-        <tr><th>Frage</th><th>Hinweis</th></tr>
-      </thead>
-      <tbody>
-  `;
-
+  let htmlContent = `<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"><title>Exportierte Maßnahmen</title><style>body { font-family: Arial, sans-serif; margin: 20px; }table { border-collapse: collapse; width: 100%; }th, td { border: 1px solid #ccc; padding: 10px; }th { background-color: #f2f2f2; }</style></head><body><h1>Zusammenfassung der Maßnahmen</h1><table><thead><tr><th>Frage</th><th>Hinweis</th></tr></thead><tbody>`;
   antwortenMap.forEach((hinweis, frage) => {
-    htmlContent += `
-      <tr>
-        <td>${frage}</td>
-        <td>${hinweis}</td>
-      </tr>
-    `;
+    htmlContent += `<tr><td>${frage}</td><td>${hinweis}</td></tr>`;
   });
-
-  htmlContent += `
-      </tbody>
-    </table>
-  </body>
-  </html>
-  `;
-
+  htmlContent += `</tbody></table></body></html>`;
   const blob = new Blob([htmlContent], { type: 'text/html' });
   const url = URL.createObjectURL(blob);
   window.open(url, '_blank');
 }
+
 function openSummaryPage() {
   const eintraege = [];
-
   antwortenMap.forEach((hinweis, frage) => {
     eintraege.push({ frage, hinweis });
   });
-
   const datenString = encodeURIComponent(JSON.stringify(eintraege));
   const url = `zusammenfassung.html?data=${datenString}`;
   window.open(url, '_blank');
 }
-
 </script>
 <p>
  </p>
 <p>
 <footer class="footer">
   <p>
-    © <span id="currentYear"></span> Andreas Zott. Alle Rechte vorbehalten.
+      &copy; <span id="currentYear"></span> Andreas Zott – Alle Rechte vorbehalten.
     <a href="datenschutz.html" rel="noopener noreferrer" target="_blank">Datenschutz</a> |
     <a href="impressum.html" rel="noopener noreferrer" target="_blank">Impressum</a>
   </p>
@@ -319,5 +355,13 @@ function openSummaryPage() {
     });
   }
 </script>
+<script>
+  // Setzt das aktuelle Jahr automatisch ein
+  document.getElementById("currentYear").textContent = new Date().getFullYear();
+  const year = new Date().getFullYear();
+  document.getElementById('year').textContent = year;
+  document.getElementById('year-small').textContent = year;
+</script>
+
 </body>
 </html>
