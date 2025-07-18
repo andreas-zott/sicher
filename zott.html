@@ -4,7 +4,25 @@
 <head>
   <meta charset="UTF-8">
   <title>Gefährdungsbeurteilung – Interaktive Übersicht</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+ <style>
+    body { font-family: sans-serif; padding: 20px; }
+    #content { background: #f0f0f0; padding: 20px; border-radius: 10px; }
+  </style>
   <style> 
+ @media print {
+    .footer,
+    .button-grid,
+    .signatur-buttons,
+    button {
+      display: none !important;
+    }
+  }
+
+.no-print {
+  display: none !important;
+}
 .button-grid, .button-grid-row {
     display: flex;
     justify-content: center;
@@ -234,13 +252,10 @@ function zeigeAntwort(selectQuelle) {
   antwortfeld.querySelector('.anzeige-text').textContent = antwortfeld.dataset[quelle];
 }
 
-
-
 </script>
-<h2>Brandschutz (3)</h2>
-
+<h2>Schutzausrüstung (PSA)</h2>
 <div class="frage-block">
-  <strong>Frage:</strong> Ist die Notausgangsbeleuchtung ohne Defekte?<br><br>
+  <strong>Frage:</strong> Tragen alle Personen im Markt festes, geschlossenes und flaches Schuhwerk entsprechend den Vorgaben?<br><br>
   <label>Antwort:
     <select onchange="zeigeAntwortoptionen(this)">
       <option value="">Bitte wählen</option>
@@ -257,10 +272,60 @@ function zeigeAntwort(selectQuelle) {
       <option value="rechtlich">Rechtlich</option>
     </select>
   </label>
-  <div class="antwortfeld" data-bghw="Stellen Sie sicher, dass die Notausgangsbeleuchtung gemäß ASR A3.4/3 fehlerfrei funktioniert, um bei Stromausfall eine sichere Flucht zu ermöglichen." data-klar="Überprüfen Sie die Notausgangsbeleuchtung regelmäßig und beheben Sie Defekte sofort." data-rechtlich="Die vollständige Funktionsfähigkeit aller Notausgangsbeleuchtungen ist dauerhaft sicherzustellen. Defekte Leuchten sind ohne Verzögerung instand zu setzen. Eine nicht funktionierende Sicherheitsbeleuchtung stellt eine erhebliche Gefährdung dar und verletzt §3 ArbSchG i. V. m. ASR A3.4/3.">
+  <div class="antwortfeld" data-bghw="Gemäß DGUV-Regel 112‑191 (Benutzung von Fuß‑ und Knieschutz) müssen Beschäftigte geeignetes, festes, geschlossenes und rutschhemmendes Schuhwerk tragen, das der Tätigkeit und den Bodenverhältnissen entspricht." data-klar="Stellen Sie umgehend sicher, dass alle Personen im Markt festes, geschlossenes und flaches Schuhwerk gemäß den Arbeitsschutzbestimmungen tragen." data-rechtlich="Es ist ausnahmslos sicherzustellen, dass sämtliche Beschäftigte festes, geschlossenes und flaches Schuhwerk tragen. Abweichungen sind unverzüglich zu unterbinden. Die Maßnahme dient der Verhütung schwerer Stolper- und Rutschunfälle und ist zwingend umzusetzen gemäß §3 Abs. 1 ArbSchG i. V. m. §2 PSA-Benutzungsverordnung.">
     <p class="anzeige-text"></p>
   </div>
 </div>
+
+<div class="frage-block">
+  <strong>Frage:</strong> Wird die passende persönliche Schutzausrüstung (z. B. Schutzbrille, Handschuhe) für Tätigkeiten mit Gefahrstoffen zur Verfügung gestellt?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Stellen Sie geeignete persönliche Schutzausrüstung (PSA) für Tätigkeiten mit Gefahrstoffen bereit und weisen Sie die Beschäftigten gemäß §3 ArbSchG und §2 PSA-Benutzungsverordnung ein." data-klar="Stellen Sie geeignete persönliche Schutzausrüstung für alle Tätigkeiten mit Gefahrstoffen zur Verfügung und weisen Sie auf deren Nutzung hin." data-rechtlich="Geeignete persönliche Schutzausrüstung (PSA), wie Schutzbrillen und Schutzhandschuhe, ist bereitzustellen, regelmäßig zu kontrollieren und durch Unterweisungspflicht einzufordern. Eine Missachtung der Tragepflicht stellt einen Verstoß gegen §3 ArbSchG sowie §2 der PSA-Benutzungsverordnung dar.">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+
+<div class="frage-block">
+  <strong>Frage:</strong> Ist der Backhandschuh für die Backstation in einem ordnungsgemäßen Zustand (kein Verschleiß) und besitzt eine lange Stulpe?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Verwenden Sie nur hitzebeständige Backhandschuhe in einwandfreiem Zustand und mit langer Stulpe gemäß PSA-Benutzungsverordnung und §3 ArbSchG." data-klar="Stellen Sie sicher, dass der Backhandschuh frei von Verschleiß ist und über eine lange Stulpe verfügt, um Verbrennungen zu vermeiden." data-rechtlich="Es ist sicherzustellen, dass der verwendete Backhandschuh hitzebeständig, unbeschädigt und mit langer Stulpe versehen ist. Jeder Einsatz mangelhafter PSA ist unzulässig und stellt einen klaren Verstoß gegen §3 ArbSchG sowie §2 PSA-Benutzungsverordnung dar.">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+
+
+
+<h2>Brandschutz</h2>
 
 <div class="frage-block">
   <strong>Frage:</strong> Werden neue Mitarbeiter vor Aufnahme der Tätigkeit zum Thema Arbeitssicherheit und Brandschutz unterwiesen?<br><br>
@@ -281,6 +346,28 @@ function zeigeAntwort(selectQuelle) {
     </select>
   </label>
   <div class="antwortfeld" data-bghw="Führen Sie vor Arbeitsaufnahme eine umfassende Erstunterweisung zur Arbeitssicherheit und zum Brandschutz gemäß §12 ArbSchG durch und dokumentieren Sie diese." data-klar="Unterweisen Sie neue Mitarbeiter vor Arbeitsbeginn umfassend zu Arbeitssicherheit und Brandschutz und dokumentieren Sie dies schriftlich." data-rechtlich="Neue Mitarbeiter sind vor Aufnahme der Tätigkeit umfassend zu sicherheitsrelevanten Themen zu unterweisen. Die Unterweisung ist zu dokumentieren. Unterlassene Erstunterweisungen sind ein gravierender Verstoß gegen §12 ArbSchG.">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+<div class="frage-block">
+  <strong>Frage:</strong> Ist eine Unterweisung zum Thema Brand- und Arbeitsschutz erfolgt?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Führen Sie regelmäßige Unterweisungen zu Arbeitsschutz und Brandschutz gemäß §12 ArbSchG und DGUV Information 205-023 durch." data-klar="Führen Sie regelmäßige Unterweisungen zu Arbeitsschutz und Brandschutz durch." data-rechtlich="Eine umfassende, schriftlich dokumentierte Unterweisung zu Brand- und Arbeitsschutz ist regelmäßig durchzuführen. Unterlassene Unterweisungen verletzen §10 und §12 ArbSchG und gefährden die Betriebssicherheit nachhaltig.">
     <p class="anzeige-text"></p>
   </div>
 </div>
@@ -307,7 +394,234 @@ function zeigeAntwort(selectQuelle) {
     <p class="anzeige-text"></p>
   </div>
 </div>
-<h2>Ergonomie (1)</h2>
+<div class="frage-block">
+  <strong>Frage:</strong> Sind die Feuerlöscheinrichtungen frei zugänglich und nicht durch Ware, Displays oder sonstige Gegenstände blockiert?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Halten Sie alle Feuerlöscheinrichtungen gemäß ASR A2.2 und §10 ArbSchG stets frei zugänglich, um eine unverzügliche Nutzung im Brandfall zu gewährleisten." data-klar="Sorgen Sie dafür, dass alle Feuerlöscheinrichtungen jederzeit frei zugänglich und nicht durch Waren oder Objekte blockiert sind." data-rechtlich="Feuerlöscheinrichtungen sind uneingeschränkt und jederzeit zugänglich zu halten. Jede Art von Blockierung – sei es durch Waren, Inventar oder persönliche Gegenstände – stellt eine erhebliche Sicherheitsgefährdung dar und ist gemäß §10 ArbSchG und ASR A2.2 unverzüglich zu beseitigen.">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+
+<div class="frage-block">
+  <strong>Frage:</strong> Sind die Feuerlöscheinrichtungen geprüft, und werden die Prüffristen eingehalten?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Veranlassen Sie Prüfungen aller Feuerlöscher durch befähigte Personen nach DIN 14406-4 und sorgen Sie für die Einhaltung der vorgeschriebenen Prüffristen gemäß §10 ArbSchG." data-klar="Überprüfen Sie alle Feuerlöscheinrichtungen regelmäßig und halten Sie die vorgeschriebenen Prüffristen ein." data-rechtlich="Die Prüfung sämtlicher Feuerlöscheinrichtungen ist durch eine befähigte Person in den gesetzlich vorgeschriebenen Intervallen durchzuführen. Fehlende oder überfällige Prüfungen stellen eine erhebliche Pflichtverletzung dar gemäß §10 ArbSchG in Verbindung mit ASR A2.2 und DIN 14406-4.">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+
+<div class="frage-block">
+  <strong>Frage:</strong> Ist ein aktueller Flucht- und Rettungsplan vorhanden?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Hängen Sie einen aktuellen und übersichtlichen Flucht- und Rettungsplan gemäß ASR A1.3 und §4 ArbStättV gut sichtbar aus." data-klar="Stellen Sie sicher, dass ein aktueller Flucht- und Rettungsplan gut sichtbar und vollständig vorhanden ist." data-rechtlich="Ein aktueller und gut lesbarer Flucht- und Rettungsplan ist an jeder vorgeschriebenen Stelle auszuhängen. Veraltete, unvollständige oder fehlende Pläne sind umgehend zu ersetzen. Dies ist verpflichtend gemäß §4 Abs. 4 ArbStättV und ASR A1.3.">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+<div class="frage-block">
+  <strong>Frage:</strong> Ist die Notausgangsbeleuchtung ohne Defekte?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Stellen Sie sicher, dass die Notausgangsbeleuchtung gemäß ASR A3.4/3 fehlerfrei funktioniert, um bei Stromausfall eine sichere Flucht zu ermöglichen." data-klar="Überprüfen Sie die Notausgangsbeleuchtung regelmäßig und beheben Sie Defekte sofort." data-rechtlich="Die vollständige Funktionsfähigkeit aller Notausgangsbeleuchtungen ist dauerhaft sicherzustellen. Defekte Leuchten sind ohne Verzögerung instand zu setzen. Eine nicht funktionierende Sicherheitsbeleuchtung stellt eine erhebliche Gefährdung dar und verletzt §3 ArbSchG i. V. m. ASR A3.4/3.">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+<div class="frage-block">
+  <strong>Frage:</strong> Sind die Notausgänge frei zugänglich und nicht zugestellt?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Halten Sie Notausgänge zu jeder Zeit frei zugänglich und vermeiden Sie jedwede Art von Verstellung gemäß §4 ArbStättV i. V. m. ASR A2.3." data-klar="Halten Sie Notausgänge zu jeder Zeit frei zugänglich und vermeiden Sie jedwede Art von Verstellung." data-rechtlich="Alle Notausgänge müssen zu jedem Zeitpunkt uneingeschränkt zugänglich und frei von jeglicher Verstellung sein. Ein blockierter Fluchtweg ist ein gravierender Verstoß gegen §4 Abs. 4 ArbStättV und ASR A2.3 und ist unverzüglich zu beseitigen.">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+
+<div class="frage-block">
+  <strong>Frage:</strong> Sind die Notausgänge und -ausstiege von innen ohne fremde Hilfe zu öffnen und nicht zugestellt.<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Sorgen Sie dafür, dass Notausgänge jederzeit ohne fremde Hilfe von innen zu öffnen sind (§4 Abs. 4 ArbStättV)." data-klar="Sorgen Sie dafür, dass Notausgänge jederzeit ohne fremde Hilfe von innen zu öffnen sind." data-rechtlich="Stellen Sie sicher, dass sämtliche Notausgänge jederzeit ohne fremde Hilfe von innen geöffnet werden können. Verschlossene oder verriegelte Fluchtwege sind absolut unzulässig und verstoßen gegen §4 ArbStättV sowie ASR A2.3 Punkt 4.2.">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+
+<div class="frage-block">
+  <strong>Frage:</strong> Führen die Notausgänge in sichere Bereiche?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Sorgen Sie dafür, dass Notausgänge jederzeit ohne fremde Hilfe von innen zu öffnen sind (§4 Abs. 4 ArbStättV)." data-klar="Überprüfen Sie, dass alle Notausgänge in sichere Bereiche führen und den Vorgaben der Fluchtwegplanung entsprechen." data-rechtlich="Vergewissern Sie sich, dass alle Notausgänge in gesicherte und gefahrenfreie Bereiche führen. Ein Fluchtweg, der in einen Gefahrenbereich führt, widerspricht den Schutzzielen des §4 ArbStättV und ist baulich und organisatorisch anzupassen.">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+
+<div class="frage-block">
+  <strong>Frage:</strong> Sind die Brandschutztüren frei von Zugestellungen und wird ihre Funktion nicht gestört?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Achten Sie gemäß ASR A2.3 darauf, dass Brandschutztüren jederzeit frei zugänglich und in ihrer Funktion nicht beeinträchtigt sind." data-klar="Halten Sie Brandschutztüren stets frei von Zugestellungen und gewährleisten Sie ihre vollständige Funktion." data-rechtlich="Es ist mit sofortiger Wirkung sicherzustellen, dass sämtliche Brandschutztüren vollständig und dauerhaft freigehalten werden. Zugestellte oder blockierte Brandschutztüren stellen eine akute Gefahr für Leib und Leben dar und sind ein schwerwiegender Verstoß gegen §10 ArbSchG und die Musterbauordnung.">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+
+<div class="frage-block">
+  <strong>Frage:</strong> Sind die Türhaltevorrichtungen und der Schließfolgeregler des Feuerschutzabschlusses in Ordnung?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Sorgen Sie dafür, dass Türhaltevorrichtungen und Schließfolgeregler an Brandschutztüren regelmäßig auf ihre Funktionsfähigkeit überprüft werden (vgl. DIN 14677)." data-klar="Überprüfen Sie die Türhaltevorrichtungen und Schließfolgeregler regelmäßig auf Funktionstüchtigkeit und Unversehrtheit." data-rechtlich="Türhaltevorrichtungen und Schließfolgeregler an Brandschutztüren sind auf ihre Funktionsfähigkeit zu überprüfen und dauerhaft in betriebsbereitem Zustand zu halten. Manipulierte oder defekte Vorrichtungen müssen umgehend außer Betrieb genommen werden (§3 ArbSchG, DIN 14677, TRBS 1201).">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+
+<div class="frage-block">
+  <strong>Frage:</strong> Sind die Brandschutztüren ohne Beschädigungen?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Prüfen Sie regelmäßig den Zustand aller Brandschutztüren auf Beschädigungen und stellen Sie ihre uneingeschränkte Schutzwirkung sicher (§4 ArbSchG)." data-klar="Sorgen Sie für die regelmäßige Kontrolle der Brandschutztüren auf Beschädigungen und stellen Sie die Funktionssicherheit sicher." data-rechtlich="Alle Brandschutztüren sind regelmäßig auf mechanische Unversehrtheit zu prüfen. Beschädigte Türen dürfen nicht weiterverwendet werden. Eine fehlerhafte Tür erfüllt nicht die Schutzwirkung und verstößt gegen §4 ArbSchG sowie ASR A2.2 Abs. 5.1.">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+<h2>Handwaschbecken</h2>
 
 <div class="frage-block">
   <strong>Frage:</strong> Ist das freistehende Handwaschbecken ohne Beschädigungen?<br><br>
@@ -331,10 +645,8 @@ function zeigeAntwort(selectQuelle) {
     <p class="anzeige-text"></p>
   </div>
 </div>
-<h2>Gefahrstoffe (1)</h2>
-
 <div class="frage-block">
-  <strong>Frage:</strong> Ist die Absturzsicherung in einem ordnungsgemäßen Zustand (ohne sichtbare Beschädigungen und mit Kennzeichnung)?<br><br>
+  <strong>Frage:</strong> Entspricht die Zuleitung der VDE-Norm?<br><br>
   <label>Antwort:
     <select onchange="zeigeAntwortoptionen(this)">
       <option value="">Bitte wählen</option>
@@ -351,14 +663,16 @@ function zeigeAntwort(selectQuelle) {
       <option value="rechtlich">Rechtlich</option>
     </select>
   </label>
-  <div class="antwortfeld" data-bghw="Überprüfen Sie regelmäßig die Absturzsicherung auf Schäden und achten Sie auf gut sichtbare Warnkennzeichnungen (§4 ArbSchG)." data-klar="Prüfen Sie regelmäßig die Absturzsicherungen auf Schäden und eine gut sichtbare Kennzeichnung." data-rechtlich="Alle vorhandenen Absturzsicherungen müssen jederzeit technisch einwandfrei, standsicher und wirksam sein. Beschädigte oder unvollständige Sicherungen sind unverzüglich instand zu setzen. Eine Unterlassung stellt eine gravierende Pflichtverletzung nach §4 ArbSchG und ASR A2.1 dar.">
+  <div class="antwortfeld" data-bghw="Vergewissern Sie sich, dass sämtliche elektrischen Zuleitungen den Vorgaben der VDE-Normen entsprechen, um elektrische Gefährdungen auszuschließen (§3 ArbSchG, BetrSichV)." data-klar="Stellen Sie sicher, dass alle Zuleitungen den einschlägigen VDE-Normen entsprechen." data-rechtlich="Stellen Sie sicher, dass sämtliche elektrischen Zuleitungen den geltenden VDE-Normen (z. B. VDE 0100) entsprechen. Abweichende Installationen sind unverzüglich zu beseitigen. Die Maßnahme ist zwingend gemäß §4 BetrSichV i. V. m. §3 ArbSchG umzusetzen.">
     <p class="anzeige-text"></p>
   </div>
 </div>
-<h2>Hygiene (1)</h2>
+
+
+<h2>Organisation</h2>
 
 <div class="frage-block">
-  <strong>Frage:</strong> Sind Mitarbeitertoiletten und Pausenräume sauber und mit Seife, Einmalhandtüchern und ggf. Desinfektionsmittel ausgestattet?<br><br>
+  <strong>Frage:</strong> Ist während der gesamten Ladenöffnungszeit mindestens ein Mitarbeiter mit der Qualifikation zum Ersthelfer anwesend?<br><br>
   <label>Antwort:
     <select onchange="zeigeAntwortoptionen(this)">
       <option value="">Bitte wählen</option>
@@ -375,11 +689,34 @@ function zeigeAntwort(selectQuelle) {
       <option value="rechtlich">Rechtlich</option>
     </select>
   </label>
-  <div class="antwortfeld" data-bghw="Sorgen Sie für eine regelmäßige Reinigung und hygienische Ausstattung der sanitären Einrichtungen nach ArbStättV Anhang Nr. 4.1 und ASR A4.1." data-klar="Sanitärräume und Pausenbereiche sind regelmäßig zu reinigen und dauerhaft hygienisch einwandfrei zu halten." data-rechtlich="Sanitärräume und Pausenbereiche sind regelmäßig zu reinigen und dauerhaft hygienisch einwandfrei zu halten. Jede Vernachlässigung stellt eine Verletzung von §6 ArbStättV und §3 ArbSchG dar und ist unverzüglich abzustellen.">
+  <div class="antwortfeld" data-bghw="Stellen Sie sicher, dass während der gesamten Betriebszeiten mindestens ein ausgebildeter Ersthelfer nach DGUV Vorschrift 1 §26 anwesend ist." data-klar="Stellen Sie sicher, dass während der gesamten Öffnungszeit mindestens ein ausgebildeter Ersthelfer anwesend ist." data-rechtlich="Während der gesamten Arbeitszeit ist die Anwesenheit mindestens eines ausgebildeten Ersthelfers sicherzustellen. Fehlt diese Mindestbesetzung, liegt ein schwerwiegender Verstoß gegen §26 DGUV Vorschrift 1 und §3 ArbSchG vor.">
     <p class="anzeige-text"></p>
   </div>
 </div>
-<h2>Organisation (8)</h2>
+
+<div class="frage-block">
+  <strong>Frage:</strong> Wurde die Gefährdungsbeurteilung (GBO) erstellt und ist sie auf dem aktuellen Stand?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Erstellen und aktualisieren Sie regelmäßig eine schriftliche Gefährdungsbeurteilung gemäß §5 ArbSchG und §3 BetrSichV." data-klar="Erstellen und aktualisieren Sie regelmäßig eine schriftliche Gefährdungsbeurteilung (GBO)." data-rechtlich="Für alle Arbeitsbereiche ist eine vollständige, systematische und aktuelle Gefährdungsbeurteilung schriftlich zu erstellen. Fehlt diese, liegt ein unmittelbarer Verstoß gegen §5 ArbSchG vor und gefährdet die gesamte Arbeitsschutzorganisation.">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+
 
 <div class="frage-block">
   <strong>Frage:</strong> Hängen im Sozialbereich die aktuellen aushangpflichtigen Gesetze, Unfallverhütungsvorschriften sowie die Brandschutzordnung Teil A aus?<br><br>
@@ -426,6 +763,8 @@ function zeigeAntwort(selectQuelle) {
     <p class="anzeige-text"></p>
   </div>
 </div>
+
+<h2>Praktikanten</h2>
 
 <div class="frage-block">
   <strong>Frage:</strong> Wurde die Unterweisung von Praktikanten und Schüleraushilfen durchgeführt?<br><br>
@@ -496,145 +835,12 @@ function zeigeAntwort(selectQuelle) {
   </div>
 </div>
 
-<div class="frage-block">
-  <strong>Frage:</strong> Ist eine Unterweisung zum Thema Brand- und Arbeitsschutz erfolgt?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Führen Sie regelmäßige Unterweisungen zu Arbeitsschutz und Brandschutz gemäß §12 ArbSchG und DGUV Information 205-023 durch." data-klar="Führen Sie regelmäßige Unterweisungen zu Arbeitsschutz und Brandschutz durch." data-rechtlich="Eine umfassende, schriftlich dokumentierte Unterweisung zu Brand- und Arbeitsschutz ist regelmäßig durchzuführen. Unterlassene Unterweisungen verletzen §10 und §12 ArbSchG und gefährden die Betriebssicherheit nachhaltig.">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
 
-<div class="frage-block">
-  <strong>Frage:</strong> Gibt es einen Aushang zur Information über die Suchtprävention?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Stellen Sie einen gut sichtbaren Aushang mit Informationen zur Suchtprävention bereit und verweisen Sie auf innerbetriebliche Hilfsangebote (§3 ArbSchG, BEM-Leitlinien)." data-klar="Stellen Sie einen gut sichtbaren Aushang mit Informationen zur Suchtprävention bereit und verweisen Sie auf innerbetriebliche Hilfsangebote." data-rechtlich="Ein gut sichtbarer und aktueller Aushang zur Suchtprävention ist zwingend bereitzustellen. Die Unterlassung dieser Aufklärungsmaßnahme verstößt gegen §3 ArbSchG und verhindert proaktive Gesundheitsförderung im Sinne des BEM gemäß §167 SGB IX.">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
 
-<div class="frage-block">
-  <strong>Frage:</strong> Werden Schulungen für den Umgang mit gewalttätigen Situationen ermöglicht?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Ermöglichen Sie Mitarbeitenden Schulungen zum Deeskalations- und Konfliktmanagement bei Gewaltvorfällen gemäß §12 ArbSchG und DGUV Information 206-023." data-klar="Ermöglichen Sie Mitarbeitenden Schulungen zum Deeskalations- und Konfliktmanagement bei Gewaltvorfällen." data-rechtlich="Beschäftigten sind regelmäßig Deeskalationstrainings und Schulungen zum Umgang mit Gewalt- und Bedrohungssituationen zu ermöglichen. Diese Maßnahmen sind Bestandteil der Gefährdungsbeurteilung nach §5 ArbSchG und verbindlich umzusetzen (§3 ArbSchG, DGUV Information 206-023).">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
-<h2>PSA (3)</h2>
 
-<div class="frage-block">
-  <strong>Frage:</strong> Tragen alle Personen im Markt festes, geschlossenes und flaches Schuhwerk entsprechend den Vorgaben?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Gemäß DGUV-Regel 112‑191 (Benutzung von Fuß‑ und Knieschutz) müssen Beschäftigte geeignetes, festes, geschlossenes und rutschhemmendes Schuhwerk tragen, das der Tätigkeit und den Bodenverhältnissen entspricht." data-klar="Stellen Sie umgehend sicher, dass alle Personen im Markt festes, geschlossenes und flaches Schuhwerk gemäß den Arbeitsschutzbestimmungen tragen." data-rechtlich="Es ist ausnahmslos sicherzustellen, dass sämtliche Beschäftigte festes, geschlossenes und flaches Schuhwerk tragen. Abweichungen sind unverzüglich zu unterbinden. Die Maßnahme dient der Verhütung schwerer Stolper- und Rutschunfälle und ist zwingend umzusetzen gemäß §3 Abs. 1 ArbSchG i. V. m. §2 PSA-Benutzungsverordnung.">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
 
-<div class="frage-block">
-  <strong>Frage:</strong> Wird die passende persönliche Schutzausrüstung (z. B. Schutzbrille, Handschuhe) für Tätigkeiten mit Gefahrstoffen zur Verfügung gestellt?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Stellen Sie geeignete persönliche Schutzausrüstung (PSA) für Tätigkeiten mit Gefahrstoffen bereit und weisen Sie die Beschäftigten gemäß §3 ArbSchG und §2 PSA-Benutzungsverordnung ein." data-klar="Stellen Sie geeignete persönliche Schutzausrüstung für alle Tätigkeiten mit Gefahrstoffen zur Verfügung und weisen Sie auf deren Nutzung hin." data-rechtlich="Geeignete persönliche Schutzausrüstung (PSA), wie Schutzbrillen und Schutzhandschuhe, ist bereitzustellen, regelmäßig zu kontrollieren und durch Unterweisungspflicht einzufordern. Eine Missachtung der Tragepflicht stellt einen Verstoß gegen §3 ArbSchG sowie §2 der PSA-Benutzungsverordnung dar.">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
 
-<div class="frage-block">
-  <strong>Frage:</strong> Ist der Backhandschuh für die Backstation in einem ordnungsgemäßen Zustand (kein Verschleiß) und besitzt eine lange Stulpe?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Verwenden Sie nur hitzebeständige Backhandschuhe in einwandfreiem Zustand und mit langer Stulpe gemäß PSA-Benutzungsverordnung und §3 ArbSchG." data-klar="Stellen Sie sicher, dass der Backhandschuh frei von Verschleiß ist und über eine lange Stulpe verfügt, um Verbrennungen zu vermeiden." data-rechtlich="Es ist sicherzustellen, dass der verwendete Backhandschuh hitzebeständig, unbeschädigt und mit langer Stulpe versehen ist. Jeder Einsatz mangelhafter PSA ist unzulässig und stellt einen klaren Verstoß gegen §3 ArbSchG sowie §2 PSA-Benutzungsverordnung dar.">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
-<h2>Sonstiges (64)</h2>
+<h2>Leergut</h2>
 
 <div class="frage-block">
   <strong>Frage:</strong> Ist die Leergutrücknahme in einem ordnungsgemäßen Zustand (Schutzeinrichtungen intakt, Einzugsstellen gesichert, keine Glasscherben)?<br><br>
@@ -681,6 +887,8 @@ function zeigeAntwort(selectQuelle) {
     <p class="anzeige-text"></p>
   </div>
 </div>
+
+<h2>Gesamtmarkt</h2>
 
 <div class="frage-block">
   <strong>Frage:</strong> Sind zur Zeit der Begehung keine sichtbaren Beschädigungen an Schaltern und Steckdosen vorhanden?<br><br>
@@ -751,143 +959,7 @@ function zeigeAntwort(selectQuelle) {
   </div>
 </div>
 
-<div class="frage-block">
-  <strong>Frage:</strong> Sind die Feuerlöscheinrichtungen frei zugänglich und nicht durch Ware, Displays oder sonstige Gegenstände blockiert?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Halten Sie alle Feuerlöscheinrichtungen gemäß ASR A2.2 und §10 ArbSchG stets frei zugänglich, um eine unverzügliche Nutzung im Brandfall zu gewährleisten." data-klar="Sorgen Sie dafür, dass alle Feuerlöscheinrichtungen jederzeit frei zugänglich und nicht durch Waren oder Objekte blockiert sind." data-rechtlich="Feuerlöscheinrichtungen sind uneingeschränkt und jederzeit zugänglich zu halten. Jede Art von Blockierung – sei es durch Waren, Inventar oder persönliche Gegenstände – stellt eine erhebliche Sicherheitsgefährdung dar und ist gemäß §10 ArbSchG und ASR A2.2 unverzüglich zu beseitigen.">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
 
-<div class="frage-block">
-  <strong>Frage:</strong> Sind die Feuerlöscheinrichtungen geprüft, und werden die Prüffristen eingehalten?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Veranlassen Sie Prüfungen aller Feuerlöscher durch befähigte Personen nach DIN 14406-4 und sorgen Sie für die Einhaltung der vorgeschriebenen Prüffristen gemäß §10 ArbSchG." data-klar="Überprüfen Sie alle Feuerlöscheinrichtungen regelmäßig und halten Sie die vorgeschriebenen Prüffristen ein." data-rechtlich="Die Prüfung sämtlicher Feuerlöscheinrichtungen ist durch eine befähigte Person in den gesetzlich vorgeschriebenen Intervallen durchzuführen. Fehlende oder überfällige Prüfungen stellen eine erhebliche Pflichtverletzung dar gemäß §10 ArbSchG in Verbindung mit ASR A2.2 und DIN 14406-4.">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
-
-<div class="frage-block">
-  <strong>Frage:</strong> Ist ein aktueller Flucht- und Rettungsplan vorhanden?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Hängen Sie einen aktuellen und übersichtlichen Flucht- und Rettungsplan gemäß ASR A1.3 und §4 ArbStättV gut sichtbar aus." data-klar="Stellen Sie sicher, dass ein aktueller Flucht- und Rettungsplan gut sichtbar und vollständig vorhanden ist." data-rechtlich="Ein aktueller und gut lesbarer Flucht- und Rettungsplan ist an jeder vorgeschriebenen Stelle auszuhängen. Veraltete, unvollständige oder fehlende Pläne sind umgehend zu ersetzen. Dies ist verpflichtend gemäß §4 Abs. 4 ArbStättV und ASR A1.3.">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
-
-<div class="frage-block">
-  <strong>Frage:</strong> Sind die Notausgänge frei zugänglich und nicht zugestellt?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Halten Sie Notausgänge zu jeder Zeit frei zugänglich und vermeiden Sie jedwede Art von Verstellung gemäß §4 ArbStättV i. V. m. ASR A2.3." data-klar="Halten Sie Notausgänge zu jeder Zeit frei zugänglich und vermeiden Sie jedwede Art von Verstellung." data-rechtlich="Alle Notausgänge müssen zu jedem Zeitpunkt uneingeschränkt zugänglich und frei von jeglicher Verstellung sein. Ein blockierter Fluchtweg ist ein gravierender Verstoß gegen §4 Abs. 4 ArbStättV und ASR A2.3 und ist unverzüglich zu beseitigen.">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
-
-<div class="frage-block">
-  <strong>Frage:</strong> Sind die Notausgänge und -ausstiege von innen ohne fremde Hilfe zu öffnen und nicht zugestellt.<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Sorgen Sie dafür, dass Notausgänge jederzeit ohne fremde Hilfe von innen zu öffnen sind (§4 Abs. 4 ArbStättV)." data-klar="Sorgen Sie dafür, dass Notausgänge jederzeit ohne fremde Hilfe von innen zu öffnen sind." data-rechtlich="Stellen Sie sicher, dass sämtliche Notausgänge jederzeit ohne fremde Hilfe von innen geöffnet werden können. Verschlossene oder verriegelte Fluchtwege sind absolut unzulässig und verstoßen gegen §4 ArbStättV sowie ASR A2.3 Punkt 4.2.">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
-
-<div class="frage-block">
-  <strong>Frage:</strong> Führen die Notausgänge in sichere Bereiche?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Sorgen Sie dafür, dass Notausgänge jederzeit ohne fremde Hilfe von innen zu öffnen sind (§4 Abs. 4 ArbStättV)." data-klar="Überprüfen Sie, dass alle Notausgänge in sichere Bereiche führen und den Vorgaben der Fluchtwegplanung entsprechen." data-rechtlich="Vergewissern Sie sich, dass alle Notausgänge in gesicherte und gefahrenfreie Bereiche führen. Ein Fluchtweg, der in einen Gefahrenbereich führt, widerspricht den Schutzzielen des §4 ArbStättV und ist baulich und organisatorisch anzupassen.">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
 
 <div class="frage-block">
   <strong>Frage:</strong> Sind die Verkehrswege so beschaffen, dass kein Unfallrisiko durch Stolpern, Ausrutschen oder Umknicken besteht?<br><br>
@@ -1004,28 +1076,8 @@ function zeigeAntwort(selectQuelle) {
   </div>
 </div>
 
-<div class="frage-block">
-  <strong>Frage:</strong> Entspricht die Zuleitung der VDE-Norm?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Vergewissern Sie sich, dass sämtliche elektrischen Zuleitungen den Vorgaben der VDE-Normen entsprechen, um elektrische Gefährdungen auszuschließen (§3 ArbSchG, BetrSichV)." data-klar="Stellen Sie sicher, dass alle Zuleitungen den einschlägigen VDE-Normen entsprechen." data-rechtlich="Stellen Sie sicher, dass sämtliche elektrischen Zuleitungen den geltenden VDE-Normen (z. B. VDE 0100) entsprechen. Abweichende Installationen sind unverzüglich zu beseitigen. Die Maßnahme ist zwingend gemäß §4 BetrSichV i. V. m. §3 ArbSchG umzusetzen.">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
+
+<h2>Serviceabteilung</h2>
 
 <div class="frage-block">
   <strong>Frage:</strong> Sind alle Heißgeräte (z. B. Heißtheken, Fritteusen) in technisch einwandfreiem Zustand?<br><br>
@@ -1234,6 +1286,8 @@ function zeigeAntwort(selectQuelle) {
   </div>
 </div>
 
+<h2>Kassen</h2>
+
 <div class="frage-block">
   <strong>Frage:</strong> Ist der Fußraum frei von Gegenständen?<br><br>
   <label>Antwort:
@@ -1349,6 +1403,8 @@ function zeigeAntwort(selectQuelle) {
   </div>
 </div>
 
+<h2>Kühlhaus</h2>
+
 <div class="frage-block">
   <strong>Frage:</strong> Ist in den Kühlhäusern an der Beleuchtung die Überglocke vorhanden?<br><br>
   <label>Antwort:
@@ -1441,6 +1497,8 @@ function zeigeAntwort(selectQuelle) {
   </div>
 </div>
 
+<h2>Lager</h2>
+
 <div class="frage-block">
   <strong>Frage:</strong> Sind die Schwerlastregale geprüft?<br><br>
   <label>Antwort:
@@ -1510,6 +1568,9 @@ function zeigeAntwort(selectQuelle) {
   </div>
 </div>
 
+
+<h2>Rampe - Lager</h2>
+
 <div class="frage-block">
   <strong>Frage:</strong> Befindet sich eine Absturzsicherung an der Rampe?<br><br>
   <label>Antwort:
@@ -1532,6 +1593,33 @@ function zeigeAntwort(selectQuelle) {
     <p class="anzeige-text"></p>
   </div>
 </div>
+
+<div class="frage-block">
+  <strong>Frage:</strong> Ist die Absturzsicherung in einem ordnungsgemäßen Zustand (ohne sichtbare Beschädigungen und mit Kennzeichnung)?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Überprüfen Sie regelmäßig die Absturzsicherung auf Schäden und achten Sie auf gut sichtbare Warnkennzeichnungen (§4 ArbSchG)." data-klar="Prüfen Sie regelmäßig die Absturzsicherungen auf Schäden und eine gut sichtbare Kennzeichnung." data-rechtlich="Alle vorhandenen Absturzsicherungen müssen jederzeit technisch einwandfrei, standsicher und wirksam sein. Beschädigte oder unvollständige Sicherungen sind unverzüglich instand zu setzen. Eine Unterlassung stellt eine gravierende Pflichtverletzung nach §4 ArbSchG und ASR A2.1 dar.">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+
+
+
+<h2>Anlieferung</h2>
 
 <div class="frage-block">
   <strong>Frage:</strong> Ist die Müll-/Papierpresse geprüft?<br><br>
@@ -1579,6 +1667,8 @@ function zeigeAntwort(selectQuelle) {
   </div>
 </div>
 
+
+
 <div class="frage-block">
   <strong>Frage:</strong> Sind die Verkehrswege so beschaffen, dass kein Risiko zum Stolpern, Ausrutschen oder Umknicken besteht?<br><br>
   <label>Antwort:
@@ -1602,28 +1692,7 @@ function zeigeAntwort(selectQuelle) {
   </div>
 </div>
 
-<div class="frage-block">
-  <strong>Frage:</strong> Ist der Erste-Hilfe-Koffer gut sichtbar an einer geeigneten Stelle montiert?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Platzieren Sie den Erste-Hilfe-Koffer gut sichtbar, dauerhaft zugänglich und gemäß DGUV Vorschrift 1 an einem geeigneten Ort." data-klar="Platzieren Sie den Erste-Hilfe-Koffer gut sichtbar und zugänglich an einer geeigneten Stelle." data-rechtlich="Der Erste-Hilfe-Koffer ist gut sichtbar, jederzeit zugänglich und vollständig ausgestattet bereitzuhalten. Eine verdeckte oder fehlende Platzierung stellt einen Verstoß gegen §25 DGUV Vorschrift 1 und §3 ArbSchG dar.">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
+
 
 <div class="frage-block">
   <strong>Frage:</strong> Werden ortsveränderliche elektrische Betriebsmittel (z. B. Leitungen, Steckverbindungen, Leuchten, Geräte) in angemessenen Zeitabständen geprüft?<br><br>
@@ -1648,97 +1717,12 @@ function zeigeAntwort(selectQuelle) {
   </div>
 </div>
 
-<div class="frage-block">
-  <strong>Frage:</strong> Ist der Verbandskasten in einem ordnungsgemäßen Zustand?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Kontrollieren Sie den Inhalt des Verbandskastens regelmäßig und stellen Sie die Vollständigkeit und Haltbarkeit der Materialien sicher (DIN 13157, DGUV Vorschrift 1)." data-klar="Kontrollieren Sie regelmäßig den Inhalt des Verbandskastens und tauschen Sie abgelaufene Materialien aus." data-rechtlich="Der Verbandskasten ist regelmäßig auf Vollständigkeit und Verfallsdaten zu kontrollieren. Unvollständige oder abgelaufene Inhalte sind sofort auszutauschen – in strikter Umsetzung von §25 DGUV Vorschrift 1 und §3 ArbSchG.">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
 
-<div class="frage-block">
-  <strong>Frage:</strong> Ist während der gesamten Ladenöffnungszeit mindestens ein Mitarbeiter mit der Qualifikation zum Ersthelfer anwesend?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Stellen Sie sicher, dass während der gesamten Betriebszeiten mindestens ein ausgebildeter Ersthelfer nach DGUV Vorschrift 1 §26 anwesend ist." data-klar="Stellen Sie sicher, dass während der gesamten Öffnungszeit mindestens ein ausgebildeter Ersthelfer anwesend ist." data-rechtlich="Während der gesamten Arbeitszeit ist die Anwesenheit mindestens eines ausgebildeten Ersthelfers sicherzustellen. Fehlt diese Mindestbesetzung, liegt ein schwerwiegender Verstoß gegen §26 DGUV Vorschrift 1 und §3 ArbSchG vor.">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
 
-<div class="frage-block">
-  <strong>Frage:</strong> Wurde die Gefährdungsbeurteilung (GBO) erstellt und ist sie auf dem aktuellen Stand?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Erstellen und aktualisieren Sie regelmäßig eine schriftliche Gefährdungsbeurteilung gemäß §5 ArbSchG und §3 BetrSichV." data-klar="Erstellen und aktualisieren Sie regelmäßig eine schriftliche Gefährdungsbeurteilung (GBO)." data-rechtlich="Für alle Arbeitsbereiche ist eine vollständige, systematische und aktuelle Gefährdungsbeurteilung schriftlich zu erstellen. Fehlt diese, liegt ein unmittelbarer Verstoß gegen §5 ArbSchG vor und gefährdet die gesamte Arbeitsschutzorganisation.">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
 
-<div class="frage-block">
-  <strong>Frage:</strong> Sind die Sensoren nicht mit Material oder sonstigen Gegenständen verstellt?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Achten Sie darauf, dass sicherheitsrelevante Sensoren, Melder oder Lüftungselemente nicht verstellt oder blockiert sind (§3 ArbSchG, TRBS 1115)." data-klar="Achten Sie darauf, dass sicherheitsrelevante Sensoren nicht verdeckt oder verstellt sind." data-rechtlich="Sensoren (z. B. Rauch-, Gas-, Bewegungsmelder) sind jederzeit frei zugänglich zu halten. Eine Verstellung ist unzulässig, gefährdet die Schutzfunktion und stellt einen Verstoß gegen §3 ArbSchG sowie TRBS 1115 dar.">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
+
+
+<h2>Arbeitsmedizin</h2>
 
 <div class="frage-block">
   <strong>Frage:</strong> Wird den Beschäftigten arbeitsmedizinische Vorsorge angeboten?<br><br>
@@ -1785,6 +1769,406 @@ function zeigeAntwort(selectQuelle) {
     <p class="anzeige-text"></p>
   </div>
 </div>
+
+<div class="frage-block">
+  <strong>Frage:</strong> Ist der Erste-Hilfe-Koffer gut sichtbar an einer geeigneten Stelle montiert?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Platzieren Sie den Erste-Hilfe-Koffer gut sichtbar, dauerhaft zugänglich und gemäß DGUV Vorschrift 1 an einem geeigneten Ort." data-klar="Platzieren Sie den Erste-Hilfe-Koffer gut sichtbar und zugänglich an einer geeigneten Stelle." data-rechtlich="Der Erste-Hilfe-Koffer ist gut sichtbar, jederzeit zugänglich und vollständig ausgestattet bereitzuhalten. Eine verdeckte oder fehlende Platzierung stellt einen Verstoß gegen §25 DGUV Vorschrift 1 und §3 ArbSchG dar.">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+<div class="frage-block">
+  <strong>Frage:</strong> Ist der Verbandskasten in einem ordnungsgemäßen Zustand?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Kontrollieren Sie den Inhalt des Verbandskastens regelmäßig und stellen Sie die Vollständigkeit und Haltbarkeit der Materialien sicher (DIN 13157, DGUV Vorschrift 1)." data-klar="Kontrollieren Sie regelmäßig den Inhalt des Verbandskastens und tauschen Sie abgelaufene Materialien aus." data-rechtlich="Der Verbandskasten ist regelmäßig auf Vollständigkeit und Verfallsdaten zu kontrollieren. Unvollständige oder abgelaufene Inhalte sind sofort auszutauschen – in strikter Umsetzung von §25 DGUV Vorschrift 1 und §3 ArbSchG.">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+<h2>Hygiene</h2>
+
+<div class="frage-block">
+  <strong>Frage:</strong> Sind Mitarbeitertoiletten und Pausenräume sauber und mit Seife, Einmalhandtüchern und ggf. Desinfektionsmittel ausgestattet?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Sorgen Sie für eine regelmäßige Reinigung und hygienische Ausstattung der sanitären Einrichtungen nach ArbStättV Anhang Nr. 4.1 und ASR A4.1." data-klar="Sanitärräume und Pausenbereiche sind regelmäßig zu reinigen und dauerhaft hygienisch einwandfrei zu halten." data-rechtlich="Sanitärräume und Pausenbereiche sind regelmäßig zu reinigen und dauerhaft hygienisch einwandfrei zu halten. Jede Vernachlässigung stellt eine Verletzung von §6 ArbStättV und §3 ArbSchG dar und ist unverzüglich abzustellen.">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+
+
+<h2>Technik</h2>
+
+<div class="frage-block">
+  <strong>Frage:</strong> Sind an den Automatiktüren, Rolltoren und Schnelllauftoren keine sichtbaren Beschädigungen erkennbar?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Tor- und Türanlagen müssen gemäß ASR A1.7 sowie DGUV Vorschrift 3 regelmäßig auf sichere Funktion geprüft werden. Sichtbare Schäden oder Mängel müssen sofort beseitigt werden." data-klar="Überprüfen Sie regelmäßig alle Automatiktüren, Rolltore und Schnelllauftore auf sichtbare Beschädigungen und beheben Sie Mängel sofort." data-rechtlich="Alle Automatiktüren, Schnelllauf- und Rolltore sind regelmäßig durch befähigte Personen auf sichtbare und mechanische Mängel zu prüfen. Das Unterlassen dieser Prüfpflicht stellt eine erhebliche Verletzung der Betreiberverantwortung gemäß §4 BetrSichV dar und ist sofort abzustellen.">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+
+<div class="frage-block">
+  <strong>Frage:</strong> Ist die Aufzugsanlage geprüft und in einem ordnungsgemäßen Zustand (ohne sichtbare Beschädigungen und mit funktionsfähigen Schutzeinrichtungen)?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Aufzugsanlagen sind nach §16 und TRBS 3121 regelmäßig durch eine ZÜS zu prüfen. Sichtkontrollen sind durch den Betreiber verpflichtend durchzuführen." data-klar="Stellen Sie sicher, dass die Aufzugsanlage regelmäßig geprüft wird und sich in einem technisch einwandfreien Zustand befindet." data-rechtlich="Die Aufzugsanlage ist gemäß §16 BetrSichV regelmäßig durch eine zugelassene Überwachungsstelle prüfen zu lassen. Ein unterlassener Prüf- oder Wartungsnachweis stellt einen gravierenden Verstoß gegen die Pflicht zur Gewährleistung der Betriebssicherheit gemäß §4 ArbSchG dar.">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+
+<div class="frage-block">
+  <strong>Frage:</strong> Befindet sich brennbares Material (z. B. Kisten, Kartons) in den Technik- oder Heizräumen?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Lagern Sie gemäß ASR A2.2 und Brandschutzordnung Teil C keine brennbaren Materialien in Technik- oder Heizräumen, um Brandrisiken zu vermeiden." data-klar="Lagern Sie kein brennbares Material in Technik- oder Heizräumen – dies stellt einen erheblichen Verstoß gegen den Brandschutz dar." data-rechtlich="Die Lagerung brennbarer Materialien in Technik- oder Heizräumen ist strikt untersagt. Jegliche Zuwiderhandlung stellt eine erhebliche Brandgefährdung dar und ist gemäß §10 ArbSchG sowie ASR A2.2 unverzüglich abzustellen.">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+
+<div class="frage-block">
+  <strong>Frage:</strong> Werden Technik- und Heizräume als Lagerräume genutzt?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Verwenden Sie Technik- und Heizräume ausschließlich für ihre bestimmungsgemäße Nutzung, da eine Lagerung dort gegen Brandschutzvorgaben verstößt (§3 ArbSchG)." data-klar="Stellen Sie sicher, dass Technik- und Heizräume ausschließlich ihrem vorgesehenen Zweck dienen und nicht als Lagerflächen genutzt werden." data-rechtlich="Technik- und Heizräume dürfen ausschließlich ihrem bestimmungsgemäßen Zweck dienen. Die Nutzung als Lagerfläche ist untersagt und stellt einen gravierenden Verstoß gegen die Brandschutzvorschriften und §3 ArbSchG dar.">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+
+<div class="frage-block">
+  <strong>Frage:</strong> Sind die Arbeitsgeräte an der Backstation (Backofen, Backbleche, Brotschneidemaschine) in einem ordnungsgemäßen Zustand?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Stellen Sie sicher, dass sämtliche Arbeitsgeräte in der Backstation regelmäßig gewartet und auf ordnungsgemäßen Zustand geprüft werden (§4 ArbSchG, §10)." data-klar="Überprüfen Sie regelmäßig alle Arbeitsgeräte an der Backstation auf Funktionsfähigkeit und sichtbare Schäden." data-rechtlich="Sämtliche Arbeitsgeräte in der Backstation sind regelmäßig auf Funktionsfähigkeit, Sicherheit und Sauberkeit zu kontrollieren. Geräte mit sicherheitsrelevanten Mängeln dürfen nicht betrieben werden – gemäß §4 BetrSichV und §3 ArbSchG ist der betriebsbereite Zustand zwingend herzustellen.">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+
+<div class="frage-block">
+  <strong>Frage:</strong> Sind die Glastüren und Glaswände in Augenhöhe gekennzeichnet?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Kennzeichnen Sie Glastüren und Glaswände in Augenhöhe mit deutlich sichtbaren Markierungen gemäß ASR A1.3 und DGUV Information 208-004" data-klar="Kennzeichnen Sie Glastüren und Glaswände in Augenhöhe." data-rechtlich="Glastüren und Glasflächen müssen dauerhaft in Augenhöhe mit kontrastreichen Sicherheitskennzeichnungen versehen sein. Fehlende Markierungen sind unverzüglich nachzurüsten, da sie eine erhebliche Unfallgefahr darstellen (§4 ArbStättV, ASR A1.3).">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+
+
+
+<div class="frage-block">
+  <strong>Frage:</strong> Sind die Kaffeemaschine und andere hitzeentwickelnde Geräte auf einer nicht brennbaren Unterlage abgestellt?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Betreiben Sie hitzeentwickelnde Geräte ausschließlich auf nicht brennbaren Unterlagen, um Brandgefahren gemäß ASR A2.2 zu vermeiden." data-klar="Stellen Sie sicher, dass Kaffeemaschinen und andere hitzeentwickelnde Geräte nur auf nicht brennbaren Unterlagen betrieben werden." data-rechtlich="Hitzetechnische Geräte wie Kaffeemaschinen sind ausschließlich auf nicht brennbaren, standsicheren Unterlagen zu betreiben. Jede Abweichung stellt eine akute Brandgefährdung dar und ist umgehend zu beseitigen – gemäß §10 ArbSchG i. V. m. ASR A2.2.">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+
+<div class="frage-block">
+  <strong>Frage:</strong> Liegt eine aktuelle Liste sowie Prüfberichte prüfungsbedürftiger Einrichtungen vor?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Führen Sie eine vollständige Liste aller prüfpflichtigen Betriebseinrichtungen inklusive Nachweise und Prüfberichte gemäß §14." data-klar="Führen Sie eine aktuelle Liste prüfpflichtiger Einrichtungen mit zugehörigen Prüfberichten." data-rechtlich="Eine vollständige und jederzeit aktuelle Liste aller prüfpflichtigen Einrichtungen sowie die zugehörigen Prüfberichte sind bereitzuhalten. Die Dokumentation ist verpflichtend gemäß §14 BetrSichV und TRBS 1201.">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+
+<h2>Kassenbüro</h2>
+
+<div class="frage-block">
+  <strong>Frage:</strong> Sind Maßnahmen getroffen, die den Anreiz zu Raubüberfällen vermindern (z. B. Türspion, feststehender Knauf)?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Ergreifen Sie organisatorische und bauliche Maßnahmen zur Prävention von Raubüberfällen, etwa durch Türspione, Sicherheitsknäufe oder videoüberwachte Eingänge (§3 ArbSchG, DGUV Information 215-542)." data-klar="Treffen Sie technische und organisatorische Maßnahmen (z. B. Türspion, feststehender Knauf), um das Risiko für Raubüberfälle zu senken." data-rechtlich="Ergreifen Sie bauliche und organisatorische Maßnahmen zur aktiven Reduzierung des Überfallrisikos (z. B. Türspion, Sicherheitsverriegelung, Videoüberwachung). Eine unterlassene Gefahrenprävention verstößt gegen §3 ArbSchG und gefährdet unmittelbar Leib und Leben der Beschäftigten.">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+
+<div class="frage-block">
+  <strong>Frage:</strong> Ist die Tür während des Umgangs mit Zahlungsmitteln verschlossen?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Sorgen Sie dafür, dass der Zugang zum Kassenbüro während des Umgangs mit Bargeld stets verschlossen ist, um Überfällen vorzubeugen (§3 ArbSchG)." data-klar="Sorgen Sie dafür, dass die Tür zum Büro während des Umgangs mit Bargeld stets verschlossen ist." data-rechtlich="Zugänge zu sensiblen Bereichen (z. B. Kassenbüros) sind während des Umgangs mit Bargeld stets verschlossen zu halten. Das Offenlassen stellt eine erhebliche Sicherheitslücke dar und ist ein Verstoß gegen §3 ArbSchG sowie DGUV Information 215-542.">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+
+<h2>Kühlanlagen</h2>
+
+<div class="frage-block">
+  <strong>Frage:</strong> Sind die Kühlhaustüren von innen mit dem Rettungswegschild ISO 7010 gekennzeichnet?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Kennzeichnen Sie Kühlhaustüren von innen mit dem international gültigen Rettungswegsymbol gemäß ISO 7010 und ASR A1.3.." data-klar="international anerkannten Rettungswegsymbol gemäß ISO 7010 zu kennzeichnen." data-rechtlich="Kühlhaustüren sind auf der Innenseite mit dem international anerkannten Rettungswegsymbol gemäß ISO 7010 zu kennzeichnen. Fehlende Kennzeichnung stellt einen Verstoß gegen §4 ArbStättV i. V. m. ASR A1.3 dar und ist umgehend nachzurüsten.">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+
+<div class="frage-block">
+  <strong>Frage:</strong> Wurden Personen, die sich im Bereich von Kühlanlagen oder Kühlhäusern aufhalten, unterwiesen?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Unterweisen Sie alle Personen, die sich im Bereich von Kühlanlagen aufhalten, zu spezifischen Gefährdungen und Rettungsmaßnahmen gemäß §12 ArbSchG." data-klar="Unterweisen Sie alle Personen, die sich im Bereich von Kühlanlagen aufhalten, zu den spezifischen Gefahren und Rettungsmöglichkeiten." data-rechtlich="Beschäftigte, die sich regelmäßig in Kühlräumen aufhalten, sind über spezifische Gefährdungen und Notfallmaßnahmen zu unterweisen. Diese Unterweisung ist verpflichtend gemäß §12 ArbSchG und zu dokumentieren.">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+
+<div class="frage-block">
+  <strong>Frage:</strong> Sind alle Sicherheitsvorrichtungen (Alarmleuchten, Kennzeichnungen, Kühlhaustüren) intakt?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Sorgen Sie dafür, dass alle sicherheitstechnischen Vorrichtungen, wie Alarmleuchten, Kennzeichnungen und Schutzeinrichtungen, stets funktionstüchtig und unbeschädigt sind (§4 BetrSichV)." data-klar="Prüfen Sie alle Sicherheitsvorrichtungen regelmäßig und sorgen Sie für deren vollständige Funktionsfähigkeit." data-rechtlich="Sämtliche sicherheitsrelevanten Vorrichtungen (z. B. Not-Aus-Schalter, Türkontakte, Leuchtsignale) sind jederzeit funktionstüchtig zu halten. Fehlfunktionen sind unverzüglich zu beheben. Das Unterlassen stellt eine grobe Pflichtverletzung gemäß §3 ArbSchG und §10 BetrSichV dar.">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+<div class="frage-block">
+  <strong>Frage:</strong> Sind die Sensoren nicht mit Material oder sonstigen Gegenständen verstellt?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Achten Sie darauf, dass sicherheitsrelevante Sensoren, Melder oder Lüftungselemente nicht verstellt oder blockiert sind (§3 ArbSchG, TRBS 1115)." data-klar="Achten Sie darauf, dass sicherheitsrelevante Sensoren nicht verdeckt oder verstellt sind." data-rechtlich="Sensoren (z. B. Rauch-, Gas-, Bewegungsmelder) sind jederzeit frei zugänglich zu halten. Eine Verstellung ist unzulässig, gefährdet die Schutzfunktion und stellt einen Verstoß gegen §3 ArbSchG sowie TRBS 1115 dar.">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+<h2> Psychische Belastung</h2>
 
 <div class="frage-block">
   <strong>Frage:</strong> Werden Wünsche der Beschäftigten bei der Arbeitsplanung berücksichtigt?<br><br>
@@ -2084,6 +2468,53 @@ function zeigeAntwort(selectQuelle) {
     <p class="anzeige-text"></p>
   </div>
 </div>
+<div class="frage-block">
+  <strong>Frage:</strong> Gibt es einen Aushang zur Information über die Suchtprävention?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Stellen Sie einen gut sichtbaren Aushang mit Informationen zur Suchtprävention bereit und verweisen Sie auf innerbetriebliche Hilfsangebote (§3 ArbSchG, BEM-Leitlinien)." data-klar="Stellen Sie einen gut sichtbaren Aushang mit Informationen zur Suchtprävention bereit und verweisen Sie auf innerbetriebliche Hilfsangebote." data-rechtlich="Ein gut sichtbarer und aktueller Aushang zur Suchtprävention ist zwingend bereitzustellen. Die Unterlassung dieser Aufklärungsmaßnahme verstößt gegen §3 ArbSchG und verhindert proaktive Gesundheitsförderung im Sinne des BEM gemäß §167 SGB IX.">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+
+<div class="frage-block">
+  <strong>Frage:</strong> Werden Schulungen für den Umgang mit gewalttätigen Situationen ermöglicht?<br><br>
+  <label>Antwort:
+    <select onchange="zeigeAntwortoptionen(this)">
+      <option value="">Bitte wählen</option>
+      <option value="Ja">Ja</option>
+      <option value="Nein">Nein</option>
+      <option value="Nicht vorhanden">Nicht vorhanden</option>
+    </select>
+  </label>
+  <br><br>
+  <label class="antwortwahl">Hinweisquelle:
+    <select onchange="zeigeAntwort(this)">
+      <option value="bghw">BGHW</option>
+      <option value="klar">Klar</option>
+      <option value="rechtlich">Rechtlich</option>
+    </select>
+  </label>
+  <div class="antwortfeld" data-bghw="Ermöglichen Sie Mitarbeitenden Schulungen zum Deeskalations- und Konfliktmanagement bei Gewaltvorfällen gemäß §12 ArbSchG und DGUV Information 206-023." data-klar="Ermöglichen Sie Mitarbeitenden Schulungen zum Deeskalations- und Konfliktmanagement bei Gewaltvorfällen." data-rechtlich="Beschäftigten sind regelmäßig Deeskalationstrainings und Schulungen zum Umgang mit Gewalt- und Bedrohungssituationen zu ermöglichen. Diese Maßnahmen sind Bestandteil der Gefährdungsbeurteilung nach §5 ArbSchG und verbindlich umzusetzen (§3 ArbSchG, DGUV Information 206-023).">
+    <p class="anzeige-text"></p>
+  </div>
+</div>
+
+
 
 <div class="frage-block">
   <strong>Frage:</strong> Ist die Betreuung nach einem Überfall organisiert?<br><br>
@@ -2107,375 +2538,7 @@ function zeigeAntwort(selectQuelle) {
     <p class="anzeige-text"></p>
   </div>
 </div>
-<h2>Technik (16)</h2>
 
-<div class="frage-block">
-  <strong>Frage:</strong> Sind an den Automatiktüren, Rolltoren und Schnelllauftoren keine sichtbaren Beschädigungen erkennbar?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Tor- und Türanlagen müssen gemäß ASR A1.7 sowie DGUV Vorschrift 3 regelmäßig auf sichere Funktion geprüft werden. Sichtbare Schäden oder Mängel müssen sofort beseitigt werden." data-klar="Überprüfen Sie regelmäßig alle Automatiktüren, Rolltore und Schnelllauftore auf sichtbare Beschädigungen und beheben Sie Mängel sofort." data-rechtlich="Alle Automatiktüren, Schnelllauf- und Rolltore sind regelmäßig durch befähigte Personen auf sichtbare und mechanische Mängel zu prüfen. Das Unterlassen dieser Prüfpflicht stellt eine erhebliche Verletzung der Betreiberverantwortung gemäß §4 BetrSichV dar und ist sofort abzustellen.">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
-
-<div class="frage-block">
-  <strong>Frage:</strong> Ist die Aufzugsanlage geprüft und in einem ordnungsgemäßen Zustand (ohne sichtbare Beschädigungen und mit funktionsfähigen Schutzeinrichtungen)?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Aufzugsanlagen sind nach §16 und TRBS 3121 regelmäßig durch eine ZÜS zu prüfen. Sichtkontrollen sind durch den Betreiber verpflichtend durchzuführen." data-klar="Stellen Sie sicher, dass die Aufzugsanlage regelmäßig geprüft wird und sich in einem technisch einwandfreien Zustand befindet." data-rechtlich="Die Aufzugsanlage ist gemäß §16 BetrSichV regelmäßig durch eine zugelassene Überwachungsstelle prüfen zu lassen. Ein unterlassener Prüf- oder Wartungsnachweis stellt einen gravierenden Verstoß gegen die Pflicht zur Gewährleistung der Betriebssicherheit gemäß §4 ArbSchG dar.">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
-
-<div class="frage-block">
-  <strong>Frage:</strong> Sind die Brandschutztüren frei von Zugestellungen und wird ihre Funktion nicht gestört?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Achten Sie gemäß ASR A2.3 darauf, dass Brandschutztüren jederzeit frei zugänglich und in ihrer Funktion nicht beeinträchtigt sind." data-klar="Halten Sie Brandschutztüren stets frei von Zugestellungen und gewährleisten Sie ihre vollständige Funktion." data-rechtlich="Es ist mit sofortiger Wirkung sicherzustellen, dass sämtliche Brandschutztüren vollständig und dauerhaft freigehalten werden. Zugestellte oder blockierte Brandschutztüren stellen eine akute Gefahr für Leib und Leben dar und sind ein schwerwiegender Verstoß gegen §10 ArbSchG und die Musterbauordnung.">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
-
-<div class="frage-block">
-  <strong>Frage:</strong> Sind die Türhaltevorrichtungen und der Schließfolgeregler des Feuerschutzabschlusses in Ordnung?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Sorgen Sie dafür, dass Türhaltevorrichtungen und Schließfolgeregler an Brandschutztüren regelmäßig auf ihre Funktionsfähigkeit überprüft werden (vgl. DIN 14677)." data-klar="Überprüfen Sie die Türhaltevorrichtungen und Schließfolgeregler regelmäßig auf Funktionstüchtigkeit und Unversehrtheit." data-rechtlich="Türhaltevorrichtungen und Schließfolgeregler an Brandschutztüren sind auf ihre Funktionsfähigkeit zu überprüfen und dauerhaft in betriebsbereitem Zustand zu halten. Manipulierte oder defekte Vorrichtungen müssen umgehend außer Betrieb genommen werden (§3 ArbSchG, DIN 14677, TRBS 1201).">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
-
-<div class="frage-block">
-  <strong>Frage:</strong> Sind die Brandschutztüren ohne Beschädigungen?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Prüfen Sie regelmäßig den Zustand aller Brandschutztüren auf Beschädigungen und stellen Sie ihre uneingeschränkte Schutzwirkung sicher (§4 ArbSchG)." data-klar="Sorgen Sie für die regelmäßige Kontrolle der Brandschutztüren auf Beschädigungen und stellen Sie die Funktionssicherheit sicher." data-rechtlich="Alle Brandschutztüren sind regelmäßig auf mechanische Unversehrtheit zu prüfen. Beschädigte Türen dürfen nicht weiterverwendet werden. Eine fehlerhafte Tür erfüllt nicht die Schutzwirkung und verstößt gegen §4 ArbSchG sowie ASR A2.2 Abs. 5.1.">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
-
-<div class="frage-block">
-  <strong>Frage:</strong> Befindet sich brennbares Material (z. B. Kisten, Kartons) in den Technik- oder Heizräumen?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Lagern Sie gemäß ASR A2.2 und Brandschutzordnung Teil C keine brennbaren Materialien in Technik- oder Heizräumen, um Brandrisiken zu vermeiden." data-klar="Lagern Sie kein brennbares Material in Technik- oder Heizräumen – dies stellt einen erheblichen Verstoß gegen den Brandschutz dar." data-rechtlich="Die Lagerung brennbarer Materialien in Technik- oder Heizräumen ist strikt untersagt. Jegliche Zuwiderhandlung stellt eine erhebliche Brandgefährdung dar und ist gemäß §10 ArbSchG sowie ASR A2.2 unverzüglich abzustellen.">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
-
-<div class="frage-block">
-  <strong>Frage:</strong> Werden Technik- und Heizräume als Lagerräume genutzt?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Verwenden Sie Technik- und Heizräume ausschließlich für ihre bestimmungsgemäße Nutzung, da eine Lagerung dort gegen Brandschutzvorgaben verstößt (§3 ArbSchG)." data-klar="Stellen Sie sicher, dass Technik- und Heizräume ausschließlich ihrem vorgesehenen Zweck dienen und nicht als Lagerflächen genutzt werden." data-rechtlich="Technik- und Heizräume dürfen ausschließlich ihrem bestimmungsgemäßen Zweck dienen. Die Nutzung als Lagerfläche ist untersagt und stellt einen gravierenden Verstoß gegen die Brandschutzvorschriften und §3 ArbSchG dar.">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
-
-<div class="frage-block">
-  <strong>Frage:</strong> Sind die Arbeitsgeräte an der Backstation (Backofen, Backbleche, Brotschneidemaschine) in einem ordnungsgemäßen Zustand?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Stellen Sie sicher, dass sämtliche Arbeitsgeräte in der Backstation regelmäßig gewartet und auf ordnungsgemäßen Zustand geprüft werden (§4 ArbSchG, §10)." data-klar="Überprüfen Sie regelmäßig alle Arbeitsgeräte an der Backstation auf Funktionsfähigkeit und sichtbare Schäden." data-rechtlich="Sämtliche Arbeitsgeräte in der Backstation sind regelmäßig auf Funktionsfähigkeit, Sicherheit und Sauberkeit zu kontrollieren. Geräte mit sicherheitsrelevanten Mängeln dürfen nicht betrieben werden – gemäß §4 BetrSichV und §3 ArbSchG ist der betriebsbereite Zustand zwingend herzustellen.">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
-
-<div class="frage-block">
-  <strong>Frage:</strong> Sind die Glastüren und Glaswände in Augenhöhe gekennzeichnet?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Kennzeichnen Sie Glastüren und Glaswände in Augenhöhe mit deutlich sichtbaren Markierungen gemäß ASR A1.3 und DGUV Information 208-004" data-klar="Kennzeichnen Sie Glastüren und Glaswände in Augenhöhe." data-rechtlich="Glastüren und Glasflächen müssen dauerhaft in Augenhöhe mit kontrastreichen Sicherheitskennzeichnungen versehen sein. Fehlende Markierungen sind unverzüglich nachzurüsten, da sie eine erhebliche Unfallgefahr darstellen (§4 ArbStättV, ASR A1.3).">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
-
-<div class="frage-block">
-  <strong>Frage:</strong> Sind die Kühlhaustüren von innen mit dem Rettungswegschild ISO 7010 gekennzeichnet?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Kennzeichnen Sie Kühlhaustüren von innen mit dem international gültigen Rettungswegsymbol gemäß ISO 7010 und ASR A1.3.." data-klar="international anerkannten Rettungswegsymbol gemäß ISO 7010 zu kennzeichnen." data-rechtlich="Kühlhaustüren sind auf der Innenseite mit dem international anerkannten Rettungswegsymbol gemäß ISO 7010 zu kennzeichnen. Fehlende Kennzeichnung stellt einen Verstoß gegen §4 ArbStättV i. V. m. ASR A1.3 dar und ist umgehend nachzurüsten.">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
-
-<div class="frage-block">
-  <strong>Frage:</strong> Sind die Kaffeemaschine und andere hitzeentwickelnde Geräte auf einer nicht brennbaren Unterlage abgestellt?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Betreiben Sie hitzeentwickelnde Geräte ausschließlich auf nicht brennbaren Unterlagen, um Brandgefahren gemäß ASR A2.2 zu vermeiden." data-klar="Stellen Sie sicher, dass Kaffeemaschinen und andere hitzeentwickelnde Geräte nur auf nicht brennbaren Unterlagen betrieben werden." data-rechtlich="Hitzetechnische Geräte wie Kaffeemaschinen sind ausschließlich auf nicht brennbaren, standsicheren Unterlagen zu betreiben. Jede Abweichung stellt eine akute Brandgefährdung dar und ist umgehend zu beseitigen – gemäß §10 ArbSchG i. V. m. ASR A2.2.">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
-
-<div class="frage-block">
-  <strong>Frage:</strong> Liegt eine aktuelle Liste sowie Prüfberichte prüfungsbedürftiger Einrichtungen vor?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Führen Sie eine vollständige Liste aller prüfpflichtigen Betriebseinrichtungen inklusive Nachweise und Prüfberichte gemäß §14." data-klar="Führen Sie eine aktuelle Liste prüfpflichtiger Einrichtungen mit zugehörigen Prüfberichten." data-rechtlich="Eine vollständige und jederzeit aktuelle Liste aller prüfpflichtigen Einrichtungen sowie die zugehörigen Prüfberichte sind bereitzuhalten. Die Dokumentation ist verpflichtend gemäß §14 BetrSichV und TRBS 1201.">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
-
-<div class="frage-block">
-  <strong>Frage:</strong> Sind Maßnahmen getroffen, die den Anreiz zu Raubüberfällen vermindern (z. B. Türspion, feststehender Knauf)?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Ergreifen Sie organisatorische und bauliche Maßnahmen zur Prävention von Raubüberfällen, etwa durch Türspione, Sicherheitsknäufe oder videoüberwachte Eingänge (§3 ArbSchG, DGUV Information 215-542)." data-klar="Treffen Sie technische und organisatorische Maßnahmen (z. B. Türspion, feststehender Knauf), um das Risiko für Raubüberfälle zu senken." data-rechtlich="Ergreifen Sie bauliche und organisatorische Maßnahmen zur aktiven Reduzierung des Überfallrisikos (z. B. Türspion, Sicherheitsverriegelung, Videoüberwachung). Eine unterlassene Gefahrenprävention verstößt gegen §3 ArbSchG und gefährdet unmittelbar Leib und Leben der Beschäftigten.">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
-
-<div class="frage-block">
-  <strong>Frage:</strong> Ist die Tür während des Umgangs mit Zahlungsmitteln verschlossen?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Sorgen Sie dafür, dass der Zugang zum Kassenbüro während des Umgangs mit Bargeld stets verschlossen ist, um Überfällen vorzubeugen (§3 ArbSchG)." data-klar="Sorgen Sie dafür, dass die Tür zum Büro während des Umgangs mit Bargeld stets verschlossen ist." data-rechtlich="Zugänge zu sensiblen Bereichen (z. B. Kassenbüros) sind während des Umgangs mit Bargeld stets verschlossen zu halten. Das Offenlassen stellt eine erhebliche Sicherheitslücke dar und ist ein Verstoß gegen §3 ArbSchG sowie DGUV Information 215-542.">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
-
-<div class="frage-block">
-  <strong>Frage:</strong> Wurden Personen, die sich im Bereich von Kühlanlagen oder Kühlhäusern aufhalten, unterwiesen?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Unterweisen Sie alle Personen, die sich im Bereich von Kühlanlagen aufhalten, zu spezifischen Gefährdungen und Rettungsmaßnahmen gemäß §12 ArbSchG." data-klar="Unterweisen Sie alle Personen, die sich im Bereich von Kühlanlagen aufhalten, zu den spezifischen Gefahren und Rettungsmöglichkeiten." data-rechtlich="Beschäftigte, die sich regelmäßig in Kühlräumen aufhalten, sind über spezifische Gefährdungen und Notfallmaßnahmen zu unterweisen. Diese Unterweisung ist verpflichtend gemäß §12 ArbSchG und zu dokumentieren.">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
-
-<div class="frage-block">
-  <strong>Frage:</strong> Sind alle Sicherheitsvorrichtungen (Alarmleuchten, Kennzeichnungen, Kühlhaustüren) intakt?<br><br>
-  <label>Antwort:
-    <select onchange="zeigeAntwortoptionen(this)">
-      <option value="">Bitte wählen</option>
-      <option value="Ja">Ja</option>
-      <option value="Nein">Nein</option>
-      <option value="Nicht vorhanden">Nicht vorhanden</option>
-    </select>
-  </label>
-  <br><br>
-  <label class="antwortwahl">Hinweisquelle:
-    <select onchange="zeigeAntwort(this)">
-      <option value="bghw">BGHW</option>
-      <option value="klar">Klar</option>
-      <option value="rechtlich">Rechtlich</option>
-    </select>
-  </label>
-  <div class="antwortfeld" data-bghw="Sorgen Sie dafür, dass alle sicherheitstechnischen Vorrichtungen, wie Alarmleuchten, Kennzeichnungen und Schutzeinrichtungen, stets funktionstüchtig und unbeschädigt sind (§4 BetrSichV)." data-klar="Prüfen Sie alle Sicherheitsvorrichtungen regelmäßig und sorgen Sie für deren vollständige Funktionsfähigkeit." data-rechtlich="Sämtliche sicherheitsrelevanten Vorrichtungen (z. B. Not-Aus-Schalter, Türkontakte, Leuchtsignale) sind jederzeit funktionstüchtig zu halten. Fehlfunktionen sind unverzüglich zu beheben. Das Unterlassen stellt eine grobe Pflichtverletzung gemäß §3 ArbSchG und §10 BetrSichV dar.">
-    <p class="anzeige-text"></p>
-  </div>
-</div>
 
 
 <hr>
@@ -2533,9 +2596,10 @@ function zeigeAntwort(selectQuelle) {
 
 
 <div class="button-grid">
-  <button onclick="exportiereAlsPDF()">💾 PDF speichern</button>  
-  <button onclick="window.print()">🖨️ Dokument drucken</button>
-  <button onclick="teilePdfZusammenfassung()">📤 PDF teilen (iPad)</button> 
+<button onclick="exportMultiPagePDF()">📤 PDF teilen (iPad)</button>   
+<button onclick="window.print()">🖨️ Dokument drucken</button>
+<button onclick="exportiereAlsPDF()">💾 Maßnahmen speichern</button> 
+ 
 </div>
 </div>  
 </div>
@@ -2893,11 +2957,135 @@ async function teilePdfZusammenfassung() {
     <a href="impressum.html" rel="noopener noreferrer" target="_blank">Impressum</a>
   </p>
 </footer>
+ <script>
+    async function exportMultiPagePDF() {
+      const { jsPDF } = window.jspdf;
+      const element = document.body;
 
-<script>
-  // Fügt automatisch das aktuelle Jahr ein
-  document.getElementById("currentYear").textContent = new Date().getFullYear();
-</script>
+      const canvas = await html2canvas(element, { scale: 2 });
+      const imgData = canvas.toDataURL("image/jpeg", 1.0);
+
+      const pdf = new jsPDF("p", "mm", "a4");
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const pageWidth = pdf.internal.pageSize.getWidth();
+
+      const imgProps = {
+        width: canvas.width,
+        height: canvas.height
+      };
+
+      const pxPerMm = imgProps.width / pageWidth; // Pixels per mm
+
+      const pageHeightPx = pageHeight * pxPerMm;
+
+      let position = 0;
+
+      while (position < imgProps.height) {
+        const canvasPage = document.createElement("canvas");
+        canvasPage.width = imgProps.width;
+        canvasPage.height = Math.min(pageHeightPx, imgProps.height - position);
+
+        const ctx = canvasPage.getContext("2d");
+        ctx.drawImage(
+          canvas,
+          0, position, canvas.width, canvasPage.height,
+          0, 0, canvas.width, canvasPage.height
+        );
+
+        const pageData = canvasPage.toDataURL("image/jpeg", 1.0);
+        if (position > 0) pdf.addPage();
+        pdf.addImage(pageData, "JPEG", 0, 0, pageWidth, pageHeight);
+
+        position += pageHeightPx;
+      }
+
+      // PDF Blob & Teilen
+      const pdfBlob = pdf.output("blob");
+      const file = new File([pdfBlob], "mehrseitige-seite.pdf", { type: "application/pdf" });
+
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            title: "PDF teilen",
+            files: [file],
+          });
+        } catch (err) {
+          alert("Teilen abgebrochen oder fehlgeschlagen: " + err);
+        }
+      } else {
+        const url = URL.createObjectURL(pdfBlob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "mehrseitige-seite.pdf";
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    }
+async function exportMultiPagePDF() {
+  const { jsPDF } = window.jspdf;
+
+  // ❌ Vorübergehend alles ausblenden, was nicht ins PDF soll
+  document.querySelectorAll('.button-grid, .footer, .signatur-buttons, button').forEach(el => el.classList.add('no-print'));
+
+  await new Promise(resolve => setTimeout(resolve, 100)); // Kurze Pause fürs Layout
+
+  const element = document.body;
+  const canvas = await html2canvas(element, { scale: 2 });
+  const imgData = canvas.toDataURL("image/jpeg", 1.0);
+
+  const pdf = new jsPDF("p", "mm", "a4");
+  const pageHeight = pdf.internal.pageSize.getHeight();
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const imgProps = {
+    width: canvas.width,
+    height: canvas.height
+  };
+  const pxPerMm = imgProps.width / pageWidth;
+  const pageHeightPx = pageHeight * pxPerMm;
+
+  let position = 0;
+
+  while (position < imgProps.height) {
+    const canvasPage = document.createElement("canvas");
+    canvasPage.width = imgProps.width;
+    canvasPage.height = Math.min(pageHeightPx, imgProps.height - position);
+
+    const ctx = canvasPage.getContext("2d");
+    ctx.drawImage(canvas, 0, position, canvas.width, canvasPage.height, 0, 0, canvas.width, canvasPage.height);
+
+    const pageData = canvasPage.toDataURL("image/jpeg", 1.0);
+    if (position > 0) pdf.addPage();
+    pdf.addImage(pageData, "JPEG", 0, 0, pageWidth, pageHeight);
+
+    position += pageHeightPx;
+  }
+
+  // ✅ Elemente wieder anzeigen
+  document.querySelectorAll('.button-grid, .footer, .signatur-buttons, button').forEach(el => el.classList.remove('no-print'));
+
+  const pdfBlob = pdf.output("blob");
+  const file = new File([pdfBlob], "seite.pdf", { type: "application/pdf" });
+
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({
+        title: "PDF teilen",
+        files: [file],
+      });
+    } catch (err) {
+      alert("Teilen abgebrochen oder fehlgeschlagen: " + err);
+    }
+  } else {
+    const url = URL.createObjectURL(pdfBlob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "seite.pdf";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+}
+
+  </script>
 
 </body>
 </html>
