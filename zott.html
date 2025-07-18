@@ -75,7 +75,7 @@
     color: #666;
     text-align: center;
     padding: 20px;
-    font-size: 14px;
+    font-size: 10px;
     border-top: 1px solid #ddd;
   }
 
@@ -2589,9 +2589,11 @@ function zeigeAntwort(selectQuelle) {
 
 
 <div class="button-grid">
-<button onclick="exportMultiPagePDF()">📤 PDF teilen (iPad)</button>   
+<button onclick="teileNurZusammenfassung()">💾 Nur Antworten als PDF teilen / speichern</button>
+<button onclick="teileGesamtenText()">Gesamte Seite als PDF (iPad geeignet)</button>
 <button onclick="window.print()">🖨️ Dokument drucken</button>
-<button onclick="exportiereAlsPDF()">💾 Maßnahmen speichern</button> 
+<button onclick="exportMultiPagePDF()">📤 PDF teilen (iPad)</button> 
+
  
 </div>
 </div>  
@@ -2708,6 +2710,7 @@ async function teilePdfZusammenfassung() {
   <p><strong>Unterschrift:</strong></p>
   <canvas id="signatureCanvas" width="600" height="150"></canvas><br>
   <div class="signatur-buttons">
+<div class="button-grid">
      <button onclick="clearCanvas()">🗑️ Unterschrift löschen</button>
   </div>
 </div>
@@ -3078,6 +3081,78 @@ async function exportMultiPagePDF() {
   }
 }
 
+  </script>
+<script>
+    async function teileNurZusammenfassung() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+doc.setFontSize(9);
+
+      let y = 10;
+      const texte = Array.from(document.querySelectorAll('.anzeige-text'))
+        .map(p => p.textContent.trim())
+        .filter(text => text.length > 0);
+
+      for (let t of texte) {
+        const lines = doc.splitTextToSize(t, 180);
+        doc.text(lines, 10, y);
+        y += lines.length * 8;
+        if (y > 270) {
+          doc.addPage();
+          y = 10;
+        }
+      }
+
+      await teileOderLadePDF(doc, "zusammenfassung.pdf");
+    }
+
+    async function teileGesamtenText() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+ doc.setFontSize(9);
+
+      let y = 10;
+      const text = document.body.innerText.trim();
+      const lines = doc.splitTextToSize(text, 180);
+
+      for (let i = 0; i < lines.length; i++) {
+        doc.text(lines[i], 10, y);
+        y += 8;
+        if (y > 270) {
+          doc.addPage();
+          y = 10;
+        }
+      }
+
+      await teileOderLadePDF(doc, "gesamtinhalt.pdf");
+    }
+
+    async function teileOderLadePDF(doc, dateiname) {
+      const pdfBlob = doc.output("blob");
+      const file = new File([pdfBlob], dateiname, { type: "application/pdf" });
+
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            title: "Gefährdungsbeurteilung",
+            text: "PDF-Datei",
+            files: [file]
+          });
+          return;
+        } catch (err) {
+          console.warn("Teilen abgebrochen oder nicht möglich:", err);
+        }
+      }
+
+      const url = URL.createObjectURL(pdfBlob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = dateiname;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
   </script>
 
 </body>
