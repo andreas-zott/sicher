@@ -6,6 +6,82 @@
   <title>Gefährdungsbeurteilung – Interaktive Übersicht</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+body.darkmode .footer {
+  display: none !important;
+}
+body.darkmode #zusammenfassung,
+body.darkmode #zusammenfassung * {
+  color: #8B0000;
+}
+/* DARKMODE aktivieren */
+body.darkmode {
+  background-color: #1e1e1e;
+  color: #ddd;
+}
+
+/* Alle Inhalte abdunkeln */
+body.darkmode .rahmen-box {
+  background-color: #2a2a2a;
+  color: #eee;
+  border-color: #555;
+}
+
+/* Nur das Unterschriftenfeld (Canvas) bleibt weiß */
+body.darkmode .rahmen-box canvas {
+  background-color: #fff !important;
+  border: 1px solid #000;
+}
+  body.darkmode {
+    background-color: #1e1e1e;
+    color: #ddd;
+  }
+
+  body.darkmode .frage-block {
+    background-color: #2a2a2a;
+    border-color: #555;
+  }
+
+  body.darkmode h1, body.darkmode h2 {
+    color: #fff;
+  }
+
+  body.darkmode input,
+  body.darkmode select {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #777;
+  }
+
+  body.darkmode .anzeige-text {
+    background-color: #444;
+    color: #eee;
+  }
+
+  /* Signaturfeld bleibt weiß */
+  .signatur-bereich canvas {
+    background-color: #fff !important;
+  }
+
+  /* Transparenter Toggle-Button */
+  #darkmode-toggle {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    font-size: 18px;
+    background: transparent;
+    color: #999;
+    border: none;
+    cursor: pointer;
+    z-index: 9999;
+  }
+
+  #darkmode-toggle:hover {
+    color: #fff;
+  }
+</style>
+
+
  <style>
     body { font-family: sans-serif; padding: 20px; }
     #content { background: #f0f0f0; padding: 20px; border-radius: 10px; }
@@ -158,8 +234,9 @@
 </style>
 </head>
 <body>
+<button id="darkmode-toggle">🌓</button>
 <header style="text-align: center; margin-bottom: 30px;">
-  <h1>Arbeitssicherheit - Checkliste - 2025</h1>
+ <h1 id="titel-checkliste">Arbeitssicherheit – Checkliste – <span id="jahr"></span></h1>
 </div>
 </header>
 <section style="display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 30px; font-size: 14px;">
@@ -3154,6 +3231,18 @@ doc.setFontSize(9);
       URL.revokeObjectURL(url);
     }
   </script>
+<script>
+  document.getElementById("darkmode-toggle").addEventListener("click", function () {
+    document.body.classList.toggle("darkmode");
+  });
+</script>
+<script>
+  // Setzt das aktuelle Jahr dynamisch
+  document.addEventListener("DOMContentLoaded", function () {
+    const aktuellesJahr = new Date().getFullYear();
+    document.getElementById("jahr").textContent = aktuellesJahr;
+  });
+</script>
 
 </body>
 </html>
