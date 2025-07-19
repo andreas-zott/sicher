@@ -8,6 +8,11 @@
 <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon" />
 <link href="/sicher/2026.json" rel="manifest"/>
 <style>
+@media print {
+  .footer {
+    display: none !important;
+  }
+}
  .footer {
     text-align: center;
     margin-top: 60px;
@@ -276,7 +281,14 @@ async function sharePDF() {
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF('p', 'pt', 'a4');
   const pageHeight = pdf.internal.pageSize.getHeight();
+
+  // Zielbereich klonen
   const elements = document.body.cloneNode(true);
+
+  // Footer und Buttons im Klon entfernen
+  const toRemove = elements.querySelectorAll('.footer, .buttons-container, button');
+  toRemove.forEach(el => el.remove());
+
   const container = document.createElement('div');
   container.style.width = '800px';
   container.style.padding = '20px';
@@ -285,6 +297,7 @@ async function sharePDF() {
   container.style.top = '-10000px';
   container.appendChild(elements);
   document.body.appendChild(container);
+
   await html2canvas(container, { scale: 2 }).then(canvas => {
     const imgData = canvas.toDataURL('image/png');
     const imgWidth = pdf.internal.pageSize.getWidth();
@@ -302,7 +315,7 @@ async function sharePDF() {
     document.body.removeChild(container);
     const pdfBlob = pdf.output('blob');
     const file = new File([pdfBlob], 'checkliste.pdf', { type: 'application/pdf' });
-    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+    if (navigator.share && navigator.canShare({ files: [file] })) {
       navigator.share({ title: 'Arbeitsschutz‑Checkliste', files: [file] }).catch(err => console.error(err));
     } else {
       pdf.save('checkliste.pdf');
