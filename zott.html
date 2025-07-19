@@ -68,7 +68,7 @@ body.darkmode .rahmen-box canvas {
     position: fixed;
     top: 10px;
     right: 10px;
-    font-size: 18px;
+    font-size: 16px;
     background: transparent;
     color: #999;
     border: none;
@@ -234,7 +234,7 @@ body.darkmode .rahmen-box canvas {
 </style>
 </head>
 <body>
-<button id="darkmode-toggle">🌓</button>
+<button id="darkmode-toggle" title="Darkmode umschalten">🌙</button>
 <header style="text-align: center; margin-bottom: 30px;">
  <h1 id="titel-checkliste">Arbeitssicherheit – Checkliste – <span id="jahr"></span></h1>
 </div>
@@ -3232,8 +3232,13 @@ doc.setFontSize(9);
     }
   </script>
 <script>
-  document.getElementById("darkmode-toggle").addEventListener("click", function () {
-    document.body.classList.toggle("darkmode");
+ const button = document.getElementById('darkmode-toggle');
+
+  button.addEventListener('click', () => {
+    document.body.classList.toggle('darkmode');
+    // Icon ändern je nach Modus
+    const dark = document.body.classList.contains('darkmode');
+    button.textContent = dark ? '☀️' : '🌙';
   });
 </script>
 <script>
