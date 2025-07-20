@@ -7,9 +7,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: "Segoe UI", sans-serif;
       padding: 20px;
-      background: #f0f2f5;
+      background: #f8f9fa;
       color: #333;
       max-width: 900px;
       margin: auto;
@@ -52,24 +52,33 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 16px;
-      margin-bottom: 40px;
+      gap: 12px;
+      margin-bottom: 32px;
     }
 
     button {
-      background-color: #C62828;
-      color: white;
-      font-size: 18px;
-      padding: 12px 24px;
+      background: linear-gradient(135deg, #C62828, #b71c1c);
+      color: #fff;
+      font-size: 15px;
+      padding: 10px 18px;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
-      min-width: 160px;
-      transition: background-color 0.2s;
+      min-width: 140px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
     }
 
     button:hover {
-      background-color: #0056b3;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+      background: linear-gradient(135deg, #a61d1d, #8b1818);
+    }
+
+    .share-button {
+      font-size: 14px;
+      padding: 8px 14px;
+      min-width: auto;
     }
 
     .nav-buttons {
@@ -108,8 +117,8 @@
       }
 
       button {
-        font-size: 16px;
-        padding: 10px 20px;
+        font-size: 14px;
+        padding: 8px 14px;
       }
     }
 
@@ -131,9 +140,8 @@
 
   <div class="btn-group">
     <button onclick="window.print()">📄 Drucken / PDF</button>
-  <button onclick="pdfTeilen()">📄 PDF generieren & teilen 📤</button>
-    <button onclick="teilen()">🧾 Text teilen (iPad)</button>
-   
+    <button onclick="pdfTeilen()" class="share-button">📄 PDF generieren & teilen 📤</button>
+    <button onclick="teilen()" class="share-button">🧾 Text teilen (iPad)</button>
   </div>
 
   <div class="nav-buttons">
@@ -162,13 +170,12 @@
 
       // Meta-Daten anzeigen
       document.getElementById('meta-info').innerHTML = `
-        <p><strong>📅 Datum:</strong> ${new Date(data.datum).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })}</p>
+        <p><strong>📅 Datum:</strong> ${new Date(data.datum).toLocaleDateString('de-DE')}</p>
         <p><strong>🏬 Marktnummer:</strong> ${data.markt}</p>
         <p><strong>👤 Name:</strong> ${data.name}</p>
         <p><strong>🛡️ SiFa:</strong> ${data.sifa}</p>
       `;
 
-      // Maßnahmen auflisten
       const tbody = document.querySelector('#maßnahmen-tabelle tbody');
       if (data.maßnahmen.length === 0) {
         tbody.innerHTML = `<tr><td colspan="2">🎉 Keine Maßnahmen erforderlich!</td></tr>`;
@@ -216,7 +223,7 @@
       element.querySelector('.nav-buttons')?.remove();
 
       const opt = {
-        margin: [56.7, 56.7, 56.7, 56.7], // 2cm in pt
+        margin: [56.7, 56.7, 56.7, 56.7],
         filename: `maßnahmen-${aktuelleDaten.markt || 'markt'}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2, scrollY: 0 },
