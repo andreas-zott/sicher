@@ -5,7 +5,7 @@
   <title>Maßnahmen-Auswertung</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
- <style>
+  <style>
     body {
       font-family: "Segoe UI", sans-serif;
       padding: 20px;
@@ -168,9 +168,9 @@
       const data = event.data;
       aktuelleDaten = data;
 
-      // Datum direkt anzeigen, nicht erneut konvertieren
+      // Meta-Daten anzeigen
       document.getElementById('meta-info').innerHTML = `
-        <p><strong>🗓️ Datum:</strong> ${data.datum}</p>
+        <p><strong>📅 Datum:</strong> ${new Date(data.datum).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })}</p>
         <p><strong>🏬 Marktnummer:</strong> ${data.markt}</p>
         <p><strong>👤 Name:</strong> ${data.name}</p>
         <p><strong>🛡️ SiFa:</strong> ${data.sifa}</p>
@@ -194,14 +194,9 @@
         return;
       }
 
-      const text = `Maßnahmenübersicht für Markt ${aktuelleDaten.markt} vom ${aktuelleDaten.datum}:
-
-` +
+      const text = `Maßnahmenübersicht für Markt ${aktuelleDaten.markt} vom ${new Date(aktuelleDaten.datum).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })}:\n\n` +
         aktuelleDaten.maßnahmen.map((m, i) => `${i + 1}. ${m.beschreibung}`).join("\n") +
-        `
-
-Name: ${aktuelleDaten.name}
-SiFa: ${aktuelleDaten.sifa}`;
+        `\n\nName: ${aktuelleDaten.name}\nSiFa: ${aktuelleDaten.sifa}`;
 
       if (navigator.canShare && navigator.canShare({ text })) {
         try {
@@ -242,7 +237,7 @@ SiFa: ${aktuelleDaten.sifa}`;
         try {
           await navigator.share({
             title: "Maßnahmen-Auswertung",
-            text: `PDF zur Checkliste vom ${aktuelleDaten.datum}`,
+            text: `PDF zur Checkliste vom ${new Date(aktuelleDaten.datum).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })}`,
             files: [file]
           });
         } catch (err) {
