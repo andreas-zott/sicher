@@ -241,18 +241,19 @@ body.darkmode .rahmen-box canvas {
 </header>
 <section style="display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 30px; font-size: 14px;">
   <label style="flex: 1 1 200px;">Marktnummer:<br>
-    <input type="text" style="padding: 5px; width: 100%;">
+    <input id="markt" type="text" style="padding: 5px; width: 100%;">
   </label>
   <label style="flex: 1 1 200px;">Name:<br>
-    <input type="text" style="padding: 5px; width: 100%;">
+    <input id="name" type="text" style="padding: 5px; width: 100%;">
   </label>
   <label style="flex: 1 1 200px;">SiFa:<br>
-    <input type="text" style="padding: 5px; width: 100%;">
+    <input id="sifa" type="text" style="padding: 5px; width: 100%;">
   </label>
   <label style="flex: 1 1 200px;">Datum:<br>
     <input id="datum" type="date" style="padding: 5px; width: 100%;">
   </label>
 </section>
+
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const heute = new Date().toLocaleDateString("de-DE", {
@@ -2660,13 +2661,21 @@ function zeigeAntwort(selectQuelle) {
       }
     });
   }
+// Im Teilen-Script zusätzlich:
+const originalGenerateAndSharePDF = generateAndSharePDF;
+generateAndSharePDF = async function () {
+  speichereFormular(); // Vor dem Teilen speichern
+  await originalGenerateAndSharePDF(); // Dann ausführen
+  ladeFormular(); // Danach alles wiederherstellen
+};
+
 </script>
 <hr>
 <h2>Export &amp; Drucken</h2>
 
 
 <div class="button-grid">
-<button onclick="teileNurZusammenfassung()">💾 Nur Antworten als PDF teilen / speichern</button>
+<button onclick="exportiereMassnahmen()" class="modern-button btn-gray"> 📝 Defizite exportieren</button>
 <button onclick="teileGesamtenText()">Gesamte Seite als PDF (iPad geeignet)</button>
 <button onclick="window.print()">🖨️ Dokument drucken</button>
 <button onclick="exportMultiPagePDF()">📤 PDF teilen (iPad)</button> 
@@ -3247,6 +3256,45 @@ doc.setFontSize(9);
     const aktuellesJahr = new Date().getFullYear();
     document.getElementById("jahr").textContent = aktuellesJahr;
   });
+</script>
+<script>
+function exportiereMassnahmen() {
+  const frageBloecke = document.querySelectorAll('.frage-block');
+  const maßnahmenTabelle = [];
+
+  frageBloecke.forEach((block, index) => {
+    const frageText = block.querySelector('strong')?.textContent?.replace('Frage:', '').trim();
+    const antwortSelect = block.querySelector('select');
+    if (antwortSelect && antwortSelect.value === 'Nein') {
+      const quelleSelect = block.querySelector('.antwortwahl select');
+      const quelle = quelleSelect?.value || 'bghw';
+      const antwortfeld = block.querySelector('.antwortfeld');
+      const maßnahmeText = antwortfeld?.dataset?.[quelle]?.trim() || '---';
+      maßnahmenTabelle.push({
+        nr: index + 1,
+        beschreibung: maßnahmeText
+      });
+    }
+  });
+
+  const datum = document.getElementById('datum')?.value || '';
+  const markt = document.getElementById('markt')?.value || '';
+  const name = document.getElementById('name')?.value || '';
+  const sifa = document.getElementById('sifa')?.value || '';
+
+  const daten = {
+    datum,
+    markt,
+    name,
+    sifa,
+    maßnahmen: maßnahmenTabelle
+  };
+
+  const newWindow = window.open('massnahmen-sifa.html', 'maßnahmen');
+  setTimeout(() => {
+    newWindow?.postMessage(daten, "*");
+  }, 1000);
+}
 </script>
 
 </body>
