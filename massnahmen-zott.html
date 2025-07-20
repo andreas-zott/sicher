@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Maßnahmen-Auswertung</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+ <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      padding: 20px;
+      background: #f8f9fa;
+      color: #333;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .info {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    th, td {
+      padding: 14px;
+      border: 1px solid #ccc;
+      text-align: left;
+      font-size: 16px;
+    }
+
+    th {
+      background-color: #C62828;
+      color: white;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    button {
+      background: linear-gradient(135deg, #C62828, #b71c1c);
+      color: #fff;
+      font-size: 15px;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      min-width: 140px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+      background: linear-gradient(135deg, #a61d1d, #8b1818);
+    }
+
+    .share-button {
+      font-size: 14px;
+      padding: 8px 14px;
+      min-width: auto;
+    }
+
+    .nav-buttons {
+      position: fixed;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 9999;
+      pointer-events: auto;
+      backdrop-filter: blur(4px);
+      background: rgba(0, 0, 0, 0.05);
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .nav-buttons button {
+      padding: 6px 10px;
+      font-size: 14px;
+      opacity: 0.6;
+      background: #444;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .nav-buttons button:hover {
+      opacity: 1;
+    }
+
+    @media (max-width: 600px) {
+      th, td {
+        font-size: 14px;
+      }
+
+      button {
+        font-size: 14px;
+        padding: 8px 14px;
+      }
+    }
+
+    @media print {
+      .btn-group,
+      .nav-buttons {
+        display: none !important;
+      }
+
+      body {
+        margin: 30mm;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>🛠️ Maßnahmen-Auswertung</h1>
+  <div class="info" id="meta-info"></div>
+
+  <div class="btn-group">
+    <button onclick="window.print()">📄 Drucken / PDF</button>
+    <button onclick="pdfTeilen()" class="share-button">📄 PDF generieren & teilen 📤</button>
+    <button onclick="teilen()" class="share-button">🧾 Text teilen (iPad)</button>
+  </div>
+
+  <div class="nav-buttons">
+    <button onclick="history.back()">◀ Zurück</button>
+    <button onclick="history.forward()">Vor ▶</button>
+  </div>
+
+  <table id="maßnahmen-tabelle">
+    <thead>
+      <tr>
+        <th>Nr.</th>
+        <th>Beschreibung der Maßnahme</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Dynamisch per JS -->
+    </tbody>
+  </table>
+
+  <script>
+    let aktuelleDaten = null;
+
+    window.addEventListener('message', (event) => {
+      const data = event.data;
+      aktuelleDaten = data;
+
+      // Datum direkt anzeigen, nicht erneut konvertieren
+      document.getElementById('meta-info').innerHTML = `
+        <p><strong>🗓️ Datum:</strong> ${data.datum}</p>
+        <p><strong>🏬 Marktnummer:</strong> ${data.markt}</p>
+        <p><strong>👤 Name:</strong> ${data.name}</p>
+        <p><strong>🛡️ SiFa:</strong> ${data.sifa}</p>
+      `;
+
+      const tbody = document.querySelector('#maßnahmen-tabelle tbody');
+      if (data.maßnahmen.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="2">🎉 Keine Maßnahmen erforderlich!</td></tr>`;
+      } else {
+        data.maßnahmen.forEach((m, i) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `<td>${i + 1}</td><td>${m.beschreibung}</td>`;
+          tbody.appendChild(row);
+        });
+      }
+    });
+
+    async function teilen() {
+      if (!aktuelleDaten) {
+        alert("❗ Noch keine Daten empfangen.");
+        return;
+      }
+
+      const text = `Maßnahmenübersicht für Markt ${aktuelleDaten.markt} vom ${aktuelleDaten.datum}:
+
+` +
+        aktuelleDaten.maßnahmen.map((m, i) => `${i + 1}. ${m.beschreibung}`).join("\n") +
+        `
+
+Name: ${aktuelleDaten.name}
+SiFa: ${aktuelleDaten.sifa}`;
+
+      if (navigator.canShare && navigator.canShare({ text })) {
+        try {
+          await navigator.share({
+            title: `Checkliste ${aktuelleDaten.markt}`,
+            text: text
+          });
+        } catch (err) {
+          console.error("❌ Teilen fehlgeschlagen", err);
+        }
+      } else {
+        alert("❌ Teilen wird auf diesem Gerät nicht unterstützt. Bitte manuell kopieren.");
+      }
+    }
+
+    async function pdfTeilen() {
+      if (!aktuelleDaten) {
+        alert("❗ Noch keine Daten empfangen.");
+        return;
+      }
+
+      const element = document.body.cloneNode(true);
+      element.querySelector('.btn-group')?.remove();
+      element.querySelector('.nav-buttons')?.remove();
+
+      const opt = {
+        margin: [56.7, 56.7, 56.7, 56.7],
+        filename: `maßnahmen-${aktuelleDaten.markt || 'markt'}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, scrollY: 0 },
+        jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
+      };
+
+      const blob = await html2pdf().set(opt).from(element).outputPdf('blob');
+      const file = new File([blob], opt.filename, { type: "application/pdf" });
+
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            title: "Maßnahmen-Auswertung",
+            text: `PDF zur Checkliste vom ${aktuelleDaten.datum}`,
+            files: [file]
+          });
+        } catch (err) {
+          console.error("❌ Teilen fehlgeschlagen", err);
+        }
+      } else {
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = opt.filename;
+        link.click();
+        alert("📥 PDF wurde heruntergeladen. Mailversand wird nicht unterstützt.");
+      }
+    }
+  </script>
+</body>
+</html>

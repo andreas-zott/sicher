@@ -154,14 +154,18 @@
 </div>
 
 <div class="buttons-container">
-  <button onclick="exportMassnahmenAsHTML()">📝 Defizite exportieren</button>
-  <button onclick="openSummaryPage()">📝 Maßnahmen</button>
+  <button onclick="openSummaryPage()">📝 Defizite exportieren</button>
   <button onclick="window.print()">📄 Drucken / PDF</button>
   <button onclick="sharePDF()">📤 PDF teilen (iPad)</button>
 </div>
 
 <script>
 document.getElementById("datum").value = new Date().toLocaleDateString("de-DE");
+const heute = new Date();
+const tag = String(heute.getDate()).padStart(2, '0');
+const monat = String(heute.getMonth() + 1).padStart(2, '0');
+const jahr = heute.getFullYear();
+document.getElementById("datum").value = `${tag}.${monat}.${jahr}`;
 const tbody = document.querySelector("#checklist tbody");
 const summaryBody = document.querySelector("#zusammenfassung tbody");
 const antwortenMap = new Map();
@@ -335,14 +339,29 @@ function exportMassnahmenAsHTML() {
 }
 
 function openSummaryPage() {
-  const eintraege = [];
-  antwortenMap.forEach((hinweis, frage) => {
-    eintraege.push({ frage, hinweis });
-  });
-  const datenString = encodeURIComponent(JSON.stringify(eintraege));
-  const url = `zusammenfassung.html?data=${datenString}`;
-  window.open(url, '_blank');
-}
+    const markt = document.getElementById('marktnummer').value.trim();
+    const name = document.getElementById('name').value.trim();
+    const sifa = document.getElementById('sifa').value.trim();
+    const datum = document.getElementById('datum').value; // unverändert, da schon formatiert
+
+    const maßnahmen = [];
+    antwortenMap.forEach((hinweis, frage) => {
+      maßnahmen.push({ frage, beschreibung: hinweis });
+    });
+
+    const daten = {
+      markt,
+      name,
+      sifa,
+      datum,
+      maßnahmen
+    };
+
+    const newWindow = window.open('massnahmen-zott.html', '_blank');
+    const sendData = () => newWindow.postMessage(daten, '*');
+    setTimeout(sendData, 500);
+  }
+
 </script>
 <p>
  </p>
