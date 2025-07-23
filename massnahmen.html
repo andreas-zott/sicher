@@ -4,13 +4,60 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Beseitigung von Defiziten</title>
+<style>
+    body {
+      font-family: Arial, sans-serif;
+    }
 
+    #infoIcon {
+      display: inline-block;
+      cursor: pointer;
+      font-size: 20px;
+      user-select: none;
+      margin-left: 10px;
+    }
+
+    #popup {
+      position: absolute;
+      top: 30px;
+      left: 20px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 10px;
+      width: 250px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      display: none;
+      z-index: 1000;
+    }
+
+    #popup ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    #popupClose {
+      text-align: right;
+      font-size: 14px;
+      color: #888;
+      cursor: pointer;
+    }
+
+    #popupClose:hover {
+      color: red;
+    }
+  </style>	
 <style>
 @media print {
-  button, .btn, footer, .footer {
+  .no-print {
     display: none !important;
   }
 }
+@media print {
+  .no-print, footer {
+    display: none !important;
+  }
+}
+
   /* Hauptcontainer mit Rahmen & Schatten */
   #main-container {
     max-width: 900px;
@@ -42,14 +89,6 @@
     display: block;
   }
 
-  @media print {
-    .page-break {
-      page-break-before: always;
-    }
-    button, .btn, footer, .footer {
-      display: none !important;
-    }
-  }
 
   body {
     font-family: Arial, sans-serif;
@@ -261,9 +300,29 @@
 </head>
 
 <body>
+<span id="infoIcon">ℹ️❓ </span>
 
-<!-- Darkmode Toggle Button -->
-<button id="darkmode-toggle" aria-label="Toggle Darkmode">🌙</button>
+<div id="popup">
+    <div id="popupClose">✖</div>
+    <strong>F-Tasten Übersicht:</strong>
+    <ul>
+ <br>
+      <li><strong>F1:</strong> Elektrische Geräte ohne Prüfsiegel</li>
+      <li><strong>F2:</strong> Auf den Ladegeräten kein brennbares Material lagern</li>
+      <li><strong>F3:</strong> Die Ladestationen nicht mit brennbaren Materialien zustellen</li>
+      <li><strong>F4:</strong> Kistenstapel nicht über zwei Meter Höhe lagern</li>
+      <li><strong>F5:</strong> Reinigung Leergutraum und Leerguttransportbereich</li>
+<li><strong>F6:</strong> Ortsveränderliche elektrische Betriebsmittel prüfen</li>
+<li><strong>F7:</strong> Es fehlt die regelmäßige Prüfung der Leitern</li>
+<li><strong>F8:</strong> Laderampe Kennzeichnung der oberen Kante</li>
+<li><strong>F9:</strong> Flurförderzeuges gegen unbefugte Benutzung sichern</li>
+<li><strong>F10:</strong>  Sicherheitsschuhe tragen</li>
+      <li><strong>F11:</strong> Mehrfachsteckdosen ohne Zugentlastung</li>
+      <li><strong>F12:</strong> Unterweisung Umgang mit Banknoten	</li>
+    </ul>
+  </div>
+
+
 
 <!-- Hauptcontainer mit Rahmen & Schatten -->
 <div id="main-container">
@@ -300,29 +359,37 @@
 
   <table>
   <thead>
-  <tr>
-    <th>Nr.</th>
-    <th>Beschreibung</th>
-  </tr>
+    <tr>
+      <th>Nr.</th>
+      <th>Beschreibung</th>
+    </tr>
   </thead>
   <tbody>
-    <tr style="height: 60px;"><td>1</td><td contenteditable="true"></td></tr>
-    <tr style="height: 60px;"><td>2</td><td contenteditable="true"></td></tr>
-    <tr style="height: 60px;"><td>3</td><td contenteditable="true"></td></tr>
-    <tr style="height: 60px;"><td>4</td><td contenteditable="true"></td></tr>
-    <tr style="height: 60px;"><td>5</td><td contenteditable="true"></td></tr>
-    <tr style="height: 60px;"><td>6</td><td contenteditable="true"></td></tr>
-    <tr style="height: 60px;" class="page-break"><td>7</td><td contenteditable="true"></td></tr>
-    <tr style="height: 60px;"><td>8</td><td contenteditable="true"></td></tr>
-    <tr style="height: 60px;"><td>9</td><td contenteditable="true"></td></tr>
-    <tr style="height: 60px;"><td>10</td><td contenteditable="true"></td></tr>
-    <tr style="height: 60px;"><td>11</td><td contenteditable="true"></td></tr>
-    <tr style="height: 60px;"><td>12</td><td contenteditable="true"></td></tr>
+    <tr>
+      <td>1</td>
+      <td><textarea id="antwort1" class="antwort" placeholder="Antwort auswählen über die F Tasten oder selbst schreiben"></textarea></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><textarea id="antwort2" class="antwort" placeholder="Antwort auswählen über die F Tasten oder selbst schreiben"></textarea></td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><textarea id="antwort3" class="antwort" placeholder="Antwort auswählen über die F Tasten oder selbst schreiben"></textarea></td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><textarea id="antwort4" class="antwort" placeholder="Antwort auswählen über die F Tasten oder selbst schreiben"></textarea></td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><textarea id="antwort5" class="antwort" placeholder="Antwort auswählen über die F Tasten oder selbst schreiben"></textarea></td>
+    </tr>
   </tbody>
-  </table>
+</table>
 
   <div id="content">
-    <h1 style="text-align: center;">Arbeitssicherheit-Checkliste-2025</h1>
+   
     <p style="text-align: center;">Bitte das Dokument durchlesen und unterschreiben.</p>
 
     <div id="signature-container">
@@ -333,6 +400,7 @@
   </div>
 
 <!-- Buttons -->
+<div class="no-print">
 <div class="buttons" style="text-align: center; margin-top: 40px;">
   <button class="no-print" onclick="clearSignature()">🗑️ Unterschrift Löschen</button>
   <button class="no-print" onclick="prepareForPrint()">📄 Drucken / PDF</button>
@@ -358,17 +426,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Darkmode Umschaltung
-const darkmodeToggle = document.getElementById('darkmode-toggle');
-darkmodeToggle.addEventListener('click', () => {
-  document.body.classList.toggle('darkmode');
-  // Icon wechseln
-  if(document.body.classList.contains('darkmode')) {
-    darkmodeToggle.textContent = '☀️';
-  } else {
-    darkmodeToggle.textContent = '🌙';
-  }
-});
+
 
 // Unterschrift-Canvas Setup
 const canvas = document.getElementById('signature-pad');
@@ -426,13 +484,18 @@ function clearSignature() {
 
 // PDF Drucken und speichern
 function prepareForPrint() {
-  // Signatur als Bild einfügen, damit sie im PDF sichtbar ist
+  // Elemente verstecken
+  const buttons = document.querySelectorAll('.no-print');
+  const footer = document.querySelector('footer');
+  
+  buttons.forEach(btn => btn.style.display = 'none');
+  if (footer) footer.style.display = 'none';
+  // Signatur als Bild einfügen
   const sigCanvas = document.getElementById('signature-pad');
   const dataURL = sigCanvas.toDataURL();
 
-  // Einfügen in einen unsichtbaren img-Tag für html2pdf
   let imgSig = document.getElementById('signature-image');
-  if(!imgSig) {
+  if (!imgSig) {
     imgSig = document.createElement('img');
     imgSig.id = 'signature-image';
     imgSig.style.display = 'block';
@@ -441,7 +504,22 @@ function prepareForPrint() {
   }
   imgSig.src = dataURL;
 
-  const element = document.getElementById('main-container');
+  // --- NEU: Textareas in Divs klonen ---
+  const container = document.getElementById('main-container');
+  const clone = container.cloneNode(true);
+
+  // Textareas umwandeln
+  clone.querySelectorAll('textarea.antwort').forEach(textarea => {
+    const div = document.createElement('div');
+    div.textContent = textarea.value;
+    div.style.whiteSpace = 'pre-wrap';
+    div.style.minHeight = '80px';
+    div.style.padding = '12px';
+    div.style.border = '2px solid #007BFF';
+    div.style.borderRadius = '10px';
+    div.style.backgroundColor = 'white';
+    textarea.parentNode.replaceChild(div, textarea);
+  });
 
   const opt = {
     margin:       10,
@@ -451,12 +529,44 @@ function prepareForPrint() {
     jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
   };
 
-  html2pdf().set(opt).from(element).save();
+  html2pdf().set(opt).from(clone).save();
 }
+
+
 
 // PDF teilen mit Web Share API (iPad Safari kompatibel)
 async function sharePDF() {
-  const element = document.getElementById('main-container');
+  // Original Container klonen
+  const original = document.getElementById('main-container');
+  const clone = original.cloneNode(true);
+
+  // Textareas umwandeln
+  clone.querySelectorAll('textarea.antwort').forEach(textarea => {
+    const div = document.createElement('div');
+    div.textContent = textarea.value;
+    div.style.whiteSpace = 'pre-wrap';
+    div.style.minHeight = '80px';
+    div.style.padding = '12px';
+    div.style.border = '2px solid #007BFF';
+    div.style.borderRadius = '10px';
+    div.style.backgroundColor = 'white';
+    textarea.parentNode.replaceChild(div, textarea);
+  });
+
+  // Signatur als Bild einfügen
+  const sigCanvas = document.getElementById('signature-pad');
+  const dataURL = sigCanvas.toDataURL();
+
+  const imgSig = document.createElement('img');
+  imgSig.src = dataURL;
+  imgSig.style.display = 'block';
+  imgSig.style.margin = '20px auto';
+  const sigContainer = clone.querySelector('#content');
+  if (sigContainer) sigContainer.appendChild(imgSig);
+
+// ❗ Hier Buttons entfernen
+clone.querySelectorAll('.no-print').forEach(el => el.remove());
+
   const opt = {
     margin:       10,
     filename:     'Arbeitssicherheit2025.pdf',
@@ -466,10 +576,9 @@ async function sharePDF() {
   };
 
   try {
-    // PDF als Blob erzeugen
-    const pdfBlob = await html2pdf().set(opt).from(element).outputPdf('blob');
+    // PDF aus dem geklonten Container als Blob erzeugen
+    const pdfBlob = await html2pdf().set(opt).from(clone).outputPdf('blob');
 
-    // Prüfen, ob Teilen mit Dateien möglich ist
     if (navigator.canShare && navigator.canShare({ files: [new File([pdfBlob], opt.filename, { type: 'application/pdf' })] })) {
       const file = new File([pdfBlob], opt.filename, { type: 'application/pdf' });
       await navigator.share({
@@ -477,10 +586,9 @@ async function sharePDF() {
         title: 'Arbeitssicherheit 2025',
         text: 'Hier ist das PDF mit den Arbeitssicherheitsmaßnahmen.'
       });
-      console.log('PDF wurde geteilt');
     } else {
       alert('Teilen wird auf diesem Gerät nicht unterstützt. Das PDF wird heruntergeladen.');
-      html2pdf().set(opt).from(element).save();
+      html2pdf().set(opt).from(clone).save();
     }
   } catch (error) {
     console.error('Fehler beim Teilen:', error);
@@ -488,6 +596,82 @@ async function sharePDF() {
   }
 }
 
+
 </script>
+<script>
+  // Automatische Größenanpassung
+  function autoResize(textarea) {
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+  }
+
+  // Allen Textareas autoResize zuweisen
+  document.querySelectorAll('.antwort').forEach(textarea => {
+    textarea.addEventListener('input', () => autoResize(textarea));
+  });
+
+  // F-Tasten-Inhalte
+  const fInhalte = {
+    F1: "Im Sozialraum finden sich folgende elektrische Geräte ohne Prüfsiegel.",
+    F2: "Auf den Ladegeräten kein brennbares Material sowie Flüssigkeiten lagern.",
+    F3: "Die Ladestationen sind zugestellt mit brennbaren Materialien ein Abstand von 2 Metern in alle Richtungen muss gewährleistet sein.",
+    F4: "Im Getränkeshop finden sich Kistenstapel über zwei Meter Höhe es besteht Verletzungsgefahr für Mitarbeiter/innen und Kunden.",
+    F5: "Im Leergutraum und im Leerguttransportbereich zeigen sich deutliche Verschmutzungen insbesondere auch Schimmelpilzbildung eine gründliche Reinigung ist zum Schutz von Kunden und Mitarbeiter/innen erforderlich.",
+ F6: "Sorgen Sie bitte dafür, dass ortsveränderliche elektrische Betriebsmittel wie z Bewegliche Leitungen Steckverbindungen Leuchten und Geräte in angemessenen Zeitabständen geprüft werden.(DGUV Vorschrift 3 § 5 Abs. 1 und Betriebssicherheitsverordnung § 14 Abs. 2).",
+ F7: "Es fehlt die regelmäßige Prüfung der Leitern. Lassen Sie Arbeitsmittel, bei denen Schäden verursachende Einflüsse zu gefährlichen Situationen führen können, durch hierzu befähigte Person überprüfen (DGUV Vorschrift 1 § 2 Abs.1 und Betriebssicherheitsverordnung § 14 Abs. 2 ).",
+ F8: "An der Laderampe ist die Kennzeichnung der oberen Kante abgenutzt. Sorgen Sie bitte dafür, dass die Kennzeichnung der oberen Kante der Laderampe als mögliche Absturzstelle erneuert wird (DGUV Vorschrift 1 § 2 Abs. 1 und Arbeitsstättenverordnung § 3a Abs. 1 mit Anhang Ziffer 1.3 sowie Technische Regeln für Arbeitsstätten Sicherheits- und Gesundheitsschutzkennzeichnung, ASR A1.3, Ziffer 5.2).",
+ F9: "Veranlassen Sie bitte, dass die Fahrer beim Verlassen des Flurförderzeuges diesen gegen unbefugte Benutzung sichern. ",
+ F10: "Sorgen Sie bitte dafür, dass die Beschäftigten die zu Verfügung gestellten Sicherheitsschuhe tragen (DGUV Vorschrift 1 § 30 Abs. 1 in Verbindung mit DGUV Regel 112 - 191 Benutzung von Fuß- und Knieschutz. Ziffer 3.3).",
+ F11: "Mehrfachsteckdosen ohne Zugentlastung. Sorgen Sie bitte dafür, dass elektrische Anlagen und Betriebsmittel den allgemeinen anerkannten Regeln errichtet und betrieben werden. (DGUV Vorschrift 3 § 3).",
+ F12: "Unterweisen sie bitte die Beschäftigten, die Umgang mit Banknoten haben oder von einem Überfall betroffen sein können, über die bei ihren Tätigkeiten auftretenden gefahren und getroffenen Schutzmaßnahmen (DGUV Vorschrift 25 § 9)."
+
+  };
+
+  // Aktives Feld merken
+  let aktivesFeld = null;
+  document.querySelectorAll('.antwort').forEach(textarea => {
+    textarea.addEventListener('focus', () => aktivesFeld = textarea);
+  });
+
+  // F-Tasten behandeln
+  document.addEventListener('keydown', function(e) {
+    if (e.key in fInhalte && aktivesFeld) {
+      e.preventDefault(); // Verhindert z.B. F1-Hilfe im Browser
+      aktivesFeld.value = fInhalte[e.key];
+      autoResize(aktivesFeld);
+    }
+  });
+</script>
+<script>
+    const infoIcon = document.getElementById("infoIcon");
+    const popup = document.getElementById("popup");
+    const popupClose = document.getElementById("popupClose");
+
+    infoIcon.addEventListener("click", () => {
+      popup.style.display = popup.style.display === "block" ? "none" : "block";
+    });
+
+    popupClose.addEventListener("click", () => {
+      popup.style.display = "none";
+    });
+
+    // Optional: Klick außerhalb schließt das Popup
+    document.addEventListener("click", (e) => {
+      if (!popup.contains(e.target) && e.target !== infoIcon) {
+        popup.style.display = "none";
+      }
+    });
+  </script>
+
+<style>
+  textarea.antwort {
+    width: 100%;
+    font-size: 16px;
+    padding: 6px;
+    overflow: hidden;
+    resize: none;
+  }
+
+</style>
 </body>
 </html>
