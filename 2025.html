@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Arbeitssicherheit-Checkliste-2025</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
- <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon" />
-  <link href="/sicher/iphone.json" rel="manifest" />
+<link href="/sicher/favicon.ico" rel="icon" type="image/x-icon" />
+<link href="/sicher/iphone.json" rel="manifest" />
 <style>
 input[type="radio"] {
   appearance: none;
@@ -49,8 +49,8 @@ input[type="radio"][value="nicht_vorhanden"]:checked {
     width: 100%;
     max-width: 600px;
     margin: 10px auto;
-    padding: 10px 22px;
-    font-size: 16px;
+    padding: 16px 24px;
+    font-size: 18px;
     font-weight: 600;
     border: none;
     border-radius: 12px;
@@ -464,7 +464,16 @@ label {
   font-weight: bold;
 }
 
-
+/* Visuelle Hervorhebung von Antworten */
+.highlight-ja td:first-child {
+  background-color: #d4edda !important;
+}
+.highlight-nein td:first-child {
+  background-color: #f8d7da !important;
+}
+.highlight-nicht td:first-child {
+  background-color: #e2e3e5 !important;
+}
 </style>
 
 </head>
@@ -705,7 +714,8 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
     <td><input name="2.0 Backstation-5" type="radio" value="nicht_vorhanden"/></td>
   </tr>
 
-  <tr><td class="category-header" colspan="4" style="text-align: left;" class="page-break-before">3.0 Serviceabteilung</td></tr>
+  <!-- Fixed duplicate class attribute -->
+  <tr><td class="category-header page-break-before" colspan="4" style="text-align: left;">3.0 Serviceabteilung</td></tr>
   <tr>
     <td style="text-align: left;">Hängt der Hautschutzplan aus?</td>
     <td><input name="3.0 Serviceabteilung-0" type="radio" value="ja"/></td>
@@ -793,7 +803,7 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
     <td><input name="4.0 Kassenzone-4" type="radio" value="nicht_vorhanden"/></td>
   </tr>
 
-  <tr><td class="category-header" colspan="4" style="text-align: left;" class="page-break-before">5.0 Kühlhaus</td></tr>
+  <tr><td class="category-header page-break-before" colspan="4" style="text-align: left;">5.0 Kühlhaus</td></tr>
   <tr>
     <td style="text-align: left;">Ist in den Kühlhäusern an der Beleuchtung die Überglocke vorhanden?</td>
     <td><input name="5.0 Kühlhaus-0" type="radio" value="ja"/></td>
@@ -1228,7 +1238,6 @@ Beschreibung der Maßnahmen zur Beseitigung von Defiziten
   📤 PDF teilen (iPad)
 </button>
 
-
 <div id="auswertung-container">
   <div id="auswertung"></div>
 </div>
@@ -1255,7 +1264,6 @@ Beschreibung der Maßnahmen zur Beseitigung von Defiziten
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
-// PDF Generation mit verbesserter Button-Ausblendung für iPad
 async function generateAndSharePDF() {
   // Alle Buttons temporär ausblenden
   const buttons = document.querySelectorAll('button, .btn, .btn-group, .buttons, .custom-btn, .btn-medium, .btn-large');
@@ -1503,7 +1511,7 @@ if (measure.includes("Notausgänge frei zugänglich")) {
   measure = "Halten Sie alle Notausgänge jederzeit frei zugänglich und vermeiden Sie jede Art der Blockierung.";
 }
 
-if (measure.includes("ohne fremde Hilfe")) {
+if (measure.includes("Notausgänge von innen ohne fremde Hilfe")) {
   measure = "Stellen Sie sicher, dass Notausgänge von innen ohne fremde Hilfe zu öffnen sind und nicht zugestellt werden.";
 }
 
@@ -1698,7 +1706,7 @@ if (measure.includes("Dokumentation Erste Hilfeleistungen")) {
 }
 
 if (measure.includes("Anreiz zu Raubüberfällen vermindern")) {
-  measure = "Treffen Sie technische und organisatorische Maßnahmen (z. B. Türspion, feststehender Knauf), um das Risiko für Raubüberfälle zu senken.";
+  measure = "Treffen Sie technische und organisatorische Maßnahmen (z. B. Türspion, feststehender Knauf), um das Risiko für Raubüberfälle zu senken.";
 }
 
 if (measure.includes("Tür während des Umgangs mit Zahlungsmitteln verschlossen")) {
@@ -1745,7 +1753,7 @@ if (measure.includes("Unterweisung schriftlich dokumentiert")) {
 }
 
 if (measure.includes("Personen die Inhalte der Unterweisung verstanden")) {
-  measure = "Vergewissern Sie sich, dass die unterwiesenen Personen die vermittelten Inhalte verstanden haben, z. B. durch Rückfragen oder Tests.";
+  measure = "Vergewissern Sie sich, dass die unterwiesenen Personen die vermittelten Inhalte verstanden haben, z. B. durch Rückfragen oder Tests.";
 }
 
 if (measure.includes("arbeitsmedizinische Vorsorge angeboten")) {
@@ -1753,7 +1761,7 @@ if (measure.includes("arbeitsmedizinische Vorsorge angeboten")) {
 }
 
 if (measure.includes("Maßnahmen gegen Hauterkrankungen getroffen")) {
-  measure = "Ergreifen Sie geeignete Maßnahmen zum Schutz vor Hauterkrankungen, z. B. durch Hautschutzpläne, PSA und Aufklärung.";
+  measure = "Ergreifen Sie geeignete Maßnahmen zum Schutz vor Hauterkrankungen, z. B. durch Hautschutzpläne, PSA und Aufklärung.";
 }
 
 if (measure.includes("Mitarbeitertoiletten und Pausenräume sauber")) {
@@ -1827,11 +1835,6 @@ if (measure.includes("Betreuung nach einem Überfall organisiert")) {
 if (measure.includes("Schulungen für den Umgang mit gewalttätigen Situationen ermöglicht")) {
   measure = "Ermöglichen Sie Schulungen zum richtigen Verhalten bei gewalttätigen oder bedrohlichen Situationen im Betrieb.";
 }
-
-
-
-
-
 
   if (!measure.endsWith(".")) {
     measure += ".";
@@ -1973,7 +1976,6 @@ if ('serviceWorker' in navigator) {
   document.getElementById('titel').textContent = `Arbeitssicherheit-Checkliste-${aktuellesJahr}`;
 </script>
 <script>
-// Automatisches Laden beim Start
 window.addEventListener('DOMContentLoaded', () => {
   ladeFormular();
 });
@@ -2065,30 +2067,7 @@ function formularZuruecksetzen() {
     alert("🧹 Formular zurückgesetzt.");
   }
 }
-
-// Im Teilen-Script zusätzlich:
-const originalGenerateAndSharePDF = generateAndSharePDF;
-generateAndSharePDF = async function () {
-  speichereFormular(); // Vor dem Teilen speichern
-  await originalGenerateAndSharePDF(); // Dann ausführen
-  ladeFormular(); // Danach alles wiederherstellen
-};
 </script>
 
-<style>
-/* Visuelle Hervorhebung von Antworten */
-.highlight-ja td:first-child {
-  background-color: #d4edda !important;
-}
-.highlight-nein td:first-child {
-  background-color: #f8d7da !important;
-}
-.highlight-nicht td:first-child {
-  background-color: #e2e3e5 !important;
-}
-</style>
-
-
 </body>
-
 </html>
