@@ -1032,8 +1032,7 @@ Beschreibung der Maßnahmen zur Beseitigung von Defiziten
     📄 Drucken / PDF
   </button>
 </div>
-  </button>
-</div>
+
 <div style="display: flex; justify-content: center; gap: 20px; max-width: 600px; margin: 0 auto 40px;">
   <button onclick="manuellSpeichern()" class="btn-medium btn-green" style="flex: 1; max-width: 280px;">
     💾 Speichern
@@ -1318,7 +1317,7 @@ if (measure.includes("Notausgänge frei zugänglich")) {
   measure = "Alle Notausgänge müssen zu jedem Zeitpunkt uneingeschränkt zugänglich und frei von jeglicher Verstellung sein. Ein blockierter Fluchtweg ist ein gravierender Verstoß gegen § 4 Abs. 4 ArbStättV und ASR A2.3 und ist unverzüglich zu beseitigen.";
 }
 
-if (measure.includes("ohne fremde Hilfe zu öffnen")) {
+if (measure.includes("Notausgänge von innen ohne fremde Hilfe")) {
   measure = "Stellen Sie sicher, dass sämtliche Notausgänge jederzeit ohne fremde Hilfe von innen geöffnet werden können. Verschlossene oder verriegelte Fluchtwege sind absolut unzulässig und verstoßen gegen § 4 ArbStättV sowie ASR A2.3 Punkt 4.2.";
 }
 
@@ -1865,12 +1864,14 @@ function formularZuruecksetzen() {
 }
 
 // Im Teilen-Script zusätzlich:
-const originalGenerateAndSharePDF = generateAndSharePDF;
-generateAndSharePDF = async function () {
-  speichereFormular(); // Vor dem Teilen speichern
-  await originalGenerateAndSharePDF(); // Dann ausführen
-  ladeFormular(); // Danach alles wiederherstellen
-};
+window.addEventListener('load', function() {
+  const originalGenerateAndSharePDF = window.generateAndSharePDF;
+  window.generateAndSharePDF = async function () {
+    speichereFormular(); // Vor dem Teilen speichern
+    await originalGenerateAndSharePDF(); // Dann ausführen
+    ladeFormular(); // Danach alles wiederherstellen
+  };
+});
 </script>
 
 <style>
