@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Maßnahmen-Auswertung</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
     body {
-      font-family: "Segoe UI", sans-serif;
+      font-family: Arial, sans-serif;
       padding: 20px;
-      background: #f8f9fa;
+      background: #f0f2f5;
       color: #333;
       max-width: 900px;
       margin: auto;
@@ -52,33 +52,24 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 12px;
-      margin-bottom: 32px;
+      gap: 16px;
+      margin-bottom: 40px;
     }
 
     button {
-      background: linear-gradient(135deg, #C62828, #b71c1c);
-      color: #fff;
-      font-size: 15px;
-      padding: 10px 18px;
+      background-color: #C62828;
+      color: white;
+      font-size: 18px;
+      padding: 12px 24px;
       border: none;
-      border-radius: 10px;
+      border-radius: 8px;
       cursor: pointer;
-      min-width: 140px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      transition: transform 0.2s, box-shadow 0.2s;
+      min-width: 160px;
+      transition: background-color 0.2s;
     }
 
     button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
-      background: linear-gradient(135deg, #a61d1d, #8b1818);
-    }
-
-    .share-button {
-      font-size: 14px;
-      padding: 8px 14px;
-      min-width: auto;
+      background-color: #0056b3;
     }
 
     .nav-buttons {
@@ -117,8 +108,8 @@
       }
 
       button {
-        font-size: 14px;
-        padding: 8px 14px;
+        font-size: 16px;
+        padding: 10px 20px;
       }
     }
 
@@ -136,12 +127,12 @@
 </head>
 <body>
   <h1>🛠️ Maßnahmen-Auswertung</h1>
-  <div class="info" id="meta-info"></div>
+  <section class="info" id="meta-info" aria-label="Metadaten"></section>
 
   <div class="btn-group">
     <button onclick="window.print()">📄 Drucken / PDF</button>
-    <button onclick="pdfTeilen()" class="share-button">📄 PDF generieren & teilen 📤</button>
-    <button onclick="teilen()" class="share-button">🧾 Text teilen (iPad)</button>
+    <button onclick="pdfTeilen()">📄 PDF generieren & teilen 📤</button>
+    <button onclick="teilen()">🧾 Text teilen (iPad)</button>
   </div>
 
   <div class="nav-buttons">
@@ -150,6 +141,7 @@
   </div>
 
   <table id="maßnahmen-tabelle">
+    <caption style="display:none;">Liste der Maßnahmen</caption>
     <thead>
       <tr>
         <th>Nr.</th>
@@ -157,7 +149,7 @@
       </tr>
     </thead>
     <tbody>
-      <!-- Dynamisch per JS -->
+      <!-- Wird durch JS ersetzt -->
     </tbody>
   </table>
 
@@ -166,18 +158,25 @@
 
     window.addEventListener('message', (event) => {
       const data = event.data;
+      if (!data) return;
+
       aktuelleDaten = data;
 
-      // Meta-Daten anzeigen
+      const datum = data.datum ? new Date(data.datum).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '—';
+
+      // Metadaten anzeigen
       document.getElementById('meta-info').innerHTML = `
-        <p><strong>📅 Datum:</strong> ${new Date(data.datum).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })}</p>
-        <p><strong>🏬 Marktnummer:</strong> ${data.markt}</p>
-        <p><strong>👤 Name:</strong> ${data.name}</p>
-        <p><strong>🛡️ SiFa:</strong> ${data.sifa}</p>
+        <p><strong>📅 Datum:</strong> ${datum}</p>
+        <p><strong>🏬 Marktnummer:</strong> ${data.markt || '—'}</p>
+        <p><strong>👤 Name:</strong> ${data.name || '—'}</p>
+        <p><strong>🛡️ SiFa:</strong> ${data.sifa || '—'}</p>
       `;
 
+      // Maßnahmen-Tabelle füllen
       const tbody = document.querySelector('#maßnahmen-tabelle tbody');
-      if (data.maßnahmen.length === 0) {
+      tbody.innerHTML = ''; // Vorherige Inhalte löschen
+
+      if (!Array.isArray(data.maßnahmen) || data.maßnahmen.length === 0) {
         tbody.innerHTML = `<tr><td colspan="2">🎉 Keine Maßnahmen erforderlich!</td></tr>`;
       } else {
         data.maßnahmen.forEach((m, i) => {
@@ -194,11 +193,11 @@
         return;
       }
 
-      const text = `Maßnahmenübersicht für Markt ${aktuelleDaten.markt} vom ${new Date(aktuelleDaten.datum).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })}:\n\n` +
+      const text = `Maßnahmenübersicht für Markt ${aktuelleDaten.markt} vom ${aktuelleDaten.datum}:\n\n` +
         aktuelleDaten.maßnahmen.map((m, i) => `${i + 1}. ${m.beschreibung}`).join("\n") +
         `\n\nName: ${aktuelleDaten.name}\nSiFa: ${aktuelleDaten.sifa}`;
 
-      if (navigator.canShare && navigator.canShare({ text })) {
+      if (navigator.share) {
         try {
           await navigator.share({
             title: `Checkliste ${aktuelleDaten.markt}`,
@@ -208,7 +207,7 @@
           console.error("❌ Teilen fehlgeschlagen", err);
         }
       } else {
-        alert("❌ Teilen wird auf diesem Gerät nicht unterstützt. Bitte manuell kopieren.");
+        alert("❌ Teilen wird auf diesem Gerät nicht unterstützt. Bitte Text manuell kopieren.");
       }
     }
 
@@ -218,26 +217,27 @@
         return;
       }
 
-      const element = document.body.cloneNode(true);
-      element.querySelector('.btn-group')?.remove();
-      element.querySelector('.nav-buttons')?.remove();
+      // Klonen des Inhalts ohne Buttons
+      const clone = document.body.cloneNode(true);
+      clone.querySelector('.btn-group')?.remove();
+      clone.querySelector('.nav-buttons')?.remove();
 
       const opt = {
-        margin: [56.7, 56.7, 56.7, 56.7],
+        margin: 56.7,
         filename: `maßnahmen-${aktuelleDaten.markt || 'markt'}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2, scrollY: 0 },
         jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
       };
 
-      const blob = await html2pdf().set(opt).from(element).outputPdf('blob');
+      const blob = await html2pdf().set(opt).from(clone).outputPdf('blob');
       const file = new File([blob], opt.filename, { type: "application/pdf" });
 
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
         try {
           await navigator.share({
             title: "Maßnahmen-Auswertung",
-            text: `PDF zur Checkliste vom ${new Date(aktuelleDaten.datum).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })}`,
+            text: `PDF zur Checkliste vom ${aktuelleDaten.datum}`,
             files: [file]
           });
         } catch (err) {
