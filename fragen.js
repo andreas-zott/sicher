@@ -168,7 +168,7 @@ window.fragen = [
     }
   },
   {
-    "frage": "Befindet sich brennbares Material (z. B. Kisten, Kartons) in den Technik- oder Heizräumen?",
+    "frage": "Sind die Technik- und Heizräume frei von brennbaren Materialien (z. B. Kisten, Kartons)?",
     "antworten": {
       "bghw": "Lagern Sie gemäß ASR A2.2 und Brandschutzordnung Teil C keine brennbaren Materialien in Technik- oder Heizräumen, um Brandrisiken zu vermeiden.",
       "normal": "Lagern Sie kein brennbares Material in Technik- oder Heizräumen – dies stellt einen erheblichen Verstoß gegen den Brandschutz dar.",
@@ -176,7 +176,7 @@ window.fragen = [
     }
   },
   {
-    "frage": "Werden Technik- und Heizräume als Lagerräume genutzt?",
+    "frage": "Sind die Technik- und Heizräume frei von Lagernutzung?",
     "antworten": {
       "bghw": "Verwenden Sie Technik- und Heizräume ausschließlich für ihre bestimmungsgemäße Nutzung, da eine Lagerung dort gegen Brandschutzvorgaben verstößt (§3 ArbSchG).",
       "normal": "Stellen Sie sicher, dass Technik- und Heizräume ausschließlich ihrem vorgesehenen Zweck dienen und nicht als Lagerflächen genutzt werden.",
