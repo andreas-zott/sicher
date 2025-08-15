@@ -6,81 +6,31 @@
 <title>Gefährdungsbeurteilung Presscontainer</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
-/* Bestehende Styles ... */
-
-table {
-  width: 100%;
-  max-width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-  font-size: 16px;
-  background-color: #fdfdfd;
-  border: 2px solid #ccc;
-  border-radius: 10px;
-  overflow: hidden;
-  table-layout: fixed;       /* Fixierte Layoutbreite */
-  word-wrap: break-word;     /* Umbruch langer Wörter */
-  word-break: break-word;
-}
-
-table th, table td {
-  border: 1px solid #ccc;
-  padding: 14px;
-  text-align: left;
-  white-space: normal;       /* Zeilenumbruch erlauben */
-  overflow-wrap: break-word;
-}
-
-table th {
-  background-color: #ecf0f1;
-  font-size: 17px;
-}
-
-/* Feste Breiten für Spalten, damit Tabelle nicht zu breit wird */
-table th:nth-child(1),
-table td:nth-child(1) {
-  width: 30%; /* Gefährdung */
-}
-
-table th:nth-child(2),
-table td:nth-child(2),
-table th:nth-child(3),
-table td:nth-child(3),
-table th:nth-child(4),
-table td:nth-child(4),
-table th:nth-child(5),
-table td:nth-child(5) {
-  width: 17.5%; /* Restliche 4 Spalten gleich verteilt */
-}
-
-@media print {
-  /* Schriftgröße für Druck kleiner, damit alles passt */
-  table {
-    font-size: 12px !important;
+/* Erzeugt einen Seitenumbruch vor diesem Element beim Drucken */
+  .page-break-before {
+    page-break-before: always; /* ältere Syntax */
+    break-before: page;        /* neuere Syntax */
   }
-
-  /* Seitenformat A4 */
-  @page {
-    size: A4 portrait;
-    margin: 1cm;
+  
+  /* Erzeugt einen Seitenumbruch nach diesem Element beim Drucken */
+  .page-break-after {
+    page-break-after: always;
+    break-after: page;
   }
-
-  /* Buttons ausblenden */
-  button, #buttonContainer {
-    display: none !important;
+  
+  /* Verhindert einen Seitenumbruch innerhalb des Elements */
+  .no-page-break-inside {
+    page-break-inside: avoid;
+    break-inside: avoid;
   }
-
-  /* Seitenumbruch vermeiden innerhalb von Tabellenzeilen */
-  table, tr, td, th {
-    page-break-inside: avoid !important;
+  
+  /* Beispiel: Druck-spezifische Einstellungen */
+  @media print {
+    /* Verstecke Buttons etc. beim Drucken */
+    button {
+      display: none;
+    }
   }
-
-  /* Tabellenkopf auf jeder Seite wiederholen */
-  thead {
-    display: table-header-group;
-  }
-}
-
 .risiko-feld {
   font-weight: bold;
   transition: color 0.3s ease;
@@ -352,6 +302,7 @@ table td:nth-child(5) {
   </ul>
 </div>
 <br>
+<div class="page-break-before">
   <br>
   <form>
   <h2>2. Gefahrenanalyse</h2>

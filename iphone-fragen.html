@@ -36,239 +36,438 @@ input[type="radio"][value="nicht_vorhanden"]:checked {
   background-color: #999;
   border-color: #999;
 }
+</style>
 
+<style>
 .btn-danger-outline {
   background-color: white;
   color: #e53935;
   border: 2px solid #e53935;
 }
+  .modern-button {
+    display: block;
+    width: 100%;
+    max-width: 600px;
+    margin: 10px auto;
+    padding: 16px 24px;
+    font-size: 18px;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    text-align: center;
+  }
 
-.modern-button {
-  display: block;
-  width: 100%;
-  max-width: 750px;
-  margin: 10px auto;
-  padding: 12px 20px;
-  font-size: 16px;
-  font-weight: 600;
-  border: 2px solid;
+  .modern-button:active {
+    transform: scale(0.98);
+  }
+
+  .btn-gray {
+    background-color: #f0f0f0;
+    color: #333;
+  }
+
+  .btn-green {
+    background-color: #4CAF50;
+    color: white;
+  }
+
+  .btn-red {
+    background-color: #C62828;
+    color: white;
+  }
+
+  .button-row {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    max-width: 600px;
+    margin: 10px auto;
+  }
+
+  .button-row .modern-button {
+    flex: 1;
+    min-width: 260px;
+  }
+</style>
+<style>
+@media (max-width: 768px) {
+  .checkbox-row {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+    font-size: 14px;
+    word-break: break-word;
+  }
+
+  .form-section, #content, .confirmation-section, .signature-container {
+    max-width: 100%;
+    padding: 0 10px;
+  }
+
+  canvas#signature-pad {
+    height: 120px !important;
+  }
+
+  .page-break-before {
+    page-break-before: auto;
+    break-before: auto;
+  }
+
+  button, .custom-btn, .btn-large, .btn-medium {
+    font-size: 16px;
+    padding: 12px 16px;
+    width: 100% !important;
+    margin: 8px 0 !important;
+  }
+
+  .buttons,
+  .btn-group {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+}
+
+/* Print Styles - Buttons und interaktive Elemente ausblenden */
+@media print {
+  button, 
+  .btn, 
+  .btn-group,
+  .buttons,
+  .custom-btn,
+  .btn-medium,
+  .btn-large,
+  footer, 
+  .footer,
+  #signature-pad, 
+  canvas, 
+  #auswertung-container {
+    display: none !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 20mm;
+  }
+
+  body {
+    background: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    margin: 0;
+    padding: 0;
+  }
+
+  .page-break-before {
+    page-break-before: always;
+    margin-top: 0;
+    break-before: page;
+  }
+
+  input[type="text"], input[type="date"] {
+    border: none;
+    background: transparent;
+    font-weight: bold;
+    color: black;
+  }
+
+  input[type="radio"] {
+    transform: scale(1.2);
+  }
+
+  th, .category-header {
+    background-color: #ccc !important;
+    color: black !important;
+  }
+
+  tr:nth-child(even) {
+    background-color: #eee !important;
+  }
+}
+
+/* Signature Pad Styles */
+#signature-pad {
+  border: 2px solid #cccccc;
   border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  height: 150px;
+  touch-action: none;
+}
+
+.buttons {
+  margin-top: 10px;
+}
+
+#content {
+  max-width: 600px;
+  margin: auto;
+  font-family: Arial, sans-serif;
+}
+
+/* Button Styles */
+button {
+  background-color: #C62828;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  text-align: center;
-  text-decoration: none;
+  font-size: 16px;
+  margin-right: 10px;
 }
 
-.btn-green {
-  background-color: #4CAF50;
+button:hover {
+  background-color: #0056b3;
+}
+
+button.custom-btn,
+button.btn-large,
+button.btn-medium {
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  margin: 10px auto;
+  display: block;
+  font-family: inherit;
+}
+
+/* Button Sizes */
+button.btn-large {
+  width: 600px;
+}
+
+button.btn-medium {
+  width: 280px;
+}
+
+/* Button Colors */
+button.btn-blue {
+  background-color: #C62828;
   color: white;
-  border-color: #4CAF50;
 }
 
-.btn-green:hover {
-  background-color: #45a049;
-  border-color: #45a049;
-}
-
-.btn-red {
-  background-color: #f44336;
+button.btn-green {
+  background-color: #28a745;
   color: white;
-  border-color: #f44336;
 }
 
-.btn-red:hover {
-  background-color: #da190b;
-  border-color: #da190b;
-}
-
-.btn-gray {
+button.btn-gray {
   background-color: #6c757d;
   color: white;
-  border-color: #6c757d;
 }
 
-.btn-gray:hover {
-  background-color: #5a6268;
-  border-color: #5a6268;
+/* Confirmation Section */
+.confirmation-section {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  max-width: 700px;
+  margin: 40px auto;
 }
 
-.button-row {
+.checkbox-row {
   display: flex;
-  gap: 10px;
-  max-width: 750px;
+  gap: 40px;
+  margin-top: 16px;
+  justify-content: space-between;
+}
+
+.checkbox-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Signature Image */
+#signature-image {
+  max-width: 600px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  display: block;
+  min-height: 150px;
   margin: 10px auto;
 }
 
-.button-row .modern-button {
-  flex: 1;
-  margin: 0;
-}
-
+/* General Styles */
 body {
   font-family: Arial, sans-serif;
-  line-height: 1.6;
-  margin: 0;
+  background-color: #f8f9fa;
   padding: 20px;
-  background-color: #f5f5f5;
 }
 
-.print-wrapper {
-  max-width: 1000px;
-  margin: 0 auto;
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
-header {
-  text-align: center;
-  margin-bottom: 30px;
-  padding-bottom: 20px;
-  border-bottom: 2px solid #333;
-}
-
-h1 {
-  color: #333;
-  margin: 0;
-  font-size: 24px;
-}
-
-.form-section {
-  margin: 20px auto;
-  padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-}
-
-.form-section label {
-  font-weight: bold;
-  display: block;
-  margin-bottom: 5px;
-}
-
-.form-section input[type="text"], .form-section input[type="date"] {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
+header h1 {
+  color: #212529;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  margin: 20px 0;
+  margin-bottom: 20px;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
-th, td {
-  border: 1px solid #ddd;
+th {
+  background-color: #C62828;
+  color: white;
   padding: 12px;
   text-align: center;
 }
 
-th {
+td {
+  padding: 10px;
+  border: 1px solid #dee2e6;
+  text-align: left;
+}
+
+tr:nth-child(even) {
   background-color: #f2f2f2;
-  font-weight: bold;
+}
+
+tr:hover {
+  background-color: #e6f0ff;
 }
 
 .category-header {
-  background-color: #e9ecef !important;
+  background-color: #d1ecf1 !important;
+  color: #0c5460;
   font-weight: bold;
-  text-align: left !important;
+  text-align: left;
+  padding: 12px;
 }
 
-.page-break-before {
-  page-break-before: always;
+input[type="text"], input[type="date"] {
+  width: 100%;
+  max-width: 300px;
+  padding: 8px;
+  font-size: 16px;
+  margin-top: 5px;
+  box-sizing: border-box;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
 }
 
-.confirmation-section {
-  margin: 30px 0;
-  padding: 20px;
-  border: 2px solid #333;
-  border-radius: 8px;
-}
-
-.checkbox-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.checkbox-column {
-  flex: 1;
-  min-width: 250px;
-}
-
-.checkbox-column label {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-  cursor: pointer;
-}
-
-.checkbox-column input[type="checkbox"] {
-  margin-right: 10px;
-  transform: scale(1.2);
-}
-
-.signature-container {
-  margin: 20px auto;
-  text-align: center;
-}
-
-/* Visuelle Hervorhebung von Antworten */
-.highlight-ja td:first-child {
-  background-color: #d4edda !important;
-}
-.highlight-nein td:first-child {
-  background-color: #f8d7da !important;
-}
-.highlight-nicht td:first-child {
-  background-color: #e2e3e5 !important;
-}
-
-@media print {
-  body {
-    background: white;
-    padding: 0;
-  }
-  
-  .print-wrapper {
-    box-shadow: none;
-    border-radius: 0;
-  }
-  
-  .modern-button, .button-row {
-    display: none !important;
-  }
-  
-  .page-break-before {
-    page-break-before: always;
-  }
-}
-
-@media (max-width: 768px) {
-  .checkbox-row {
-    flex-direction: column;
-  }
-  
-  .button-row {
-    flex-direction: column;
-  }
-  
-  table {
-    font-size: 12px;
-  }
-  
-  th, td {
-    padding: 4px;
-  }
+/* Maßnahmen Tabelle Hervorhebung */
+#maßnahmen-tabelle {
+  border: 2px solid red;
 }
 </style>
-</head>
 
+<style>
+/* Verbesserte mobile Darstellung */
+@media (max-width: 768px) {
+  body, input, td, label {
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  .checkbox-row {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .form-section, #content, .confirmation-section, .signature-container {
+    max-width: 100%;
+    padding: 0 10px;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+    word-break: break-word;
+  }
+
+  th {
+    position: sticky;
+    top: 0;
+    background-color: #C62828;
+    color: white;
+  }
+
+  button, .custom-btn, .btn-large, .btn-medium {
+    font-size: 16px;
+    padding: 14px;
+    width: 100% !important;
+    margin: 10px 0 !important;
+  }
+
+  .buttons,
+  .btn-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+/* Touchfreundliche Inputs */
+input[type="radio"], input[type="checkbox"] {
+  width: 24px;
+  height: 24px;
+}
+
+label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  padding: 4px 0;
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #121212;
+    color: #f0f0f0;
+  }
+
+  table, input, label {
+    background: #1e1e1e;
+    color: #ffffff;
+  }
+
+  th {
+    background-color: #880000;
+  }
+
+  .category-header {
+    background-color: #222;
+    color: #eee;
+  }
+}
+
+/* Visuelle Trennung großer Abschnitte */
+.category-header {
+  background: #f5f5f5;
+  border-left: 4px solid #C62828;
+  padding: 12px;
+  font-weight: bold;
+}
+
+
+</style>
+
+</head>
 <body>
 <div class="print-wrapper">
 <header>
@@ -378,7 +577,7 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
     <td><input name="1.0 Gesamtmarkt-10" type="radio" value="nicht_vorhanden"/></td>
   </tr>
   <tr>
-    <td style="text-align: left;">Sind die Brandschutztüren frei von Zustellungen und wird ihre Funktion nicht gestört?</td>
+    <td style="text-align: left;">Sind die Brandschutztüren frei von Zugestellungen und wird ihre Funktion nicht gestört?</td>
     <td><input name="1.0 Gesamtmarkt-11" type="radio" value="ja"/></td>
     <td><input name="1.0 Gesamtmarkt-11" type="radio" value="nein"/></td>
     <td><input name="1.0 Gesamtmarkt-11" type="radio" value="nicht_vorhanden"/></td>
@@ -444,13 +643,13 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
     <td><input name="1.0 Gesamtmarkt-21" type="radio" value="nicht_vorhanden"/></td>
   </tr>
   <tr>
-    <td style="text-align: left;">Sind die Technik- und Heizräume frei von brennbaren Materialien (z. B. Kisten, Kartons)?</td>
+    <td style="text-align: left;">Befindet sich brennbares Material (z. B. Kisten, Kartons) in den Technik- oder Heizräumen?</td>
     <td><input name="1.0 Gesamtmarkt-22" type="radio" value="ja"/></td>
     <td><input name="1.0 Gesamtmarkt-22" type="radio" value="nein"/></td>
     <td><input name="1.0 Gesamtmarkt-22" type="radio" value="nicht_vorhanden"/></td>
   </tr>
   <tr>
-    <td style="text-align: left;">Sind die Technik- und Heizräume frei von Lagernutzung?</td>
+    <td style="text-align: left;">Werden Technik- und Heizräume als Lagerräume genutzt?</td>
     <td><input name="1.0 Gesamtmarkt-23" type="radio" value="ja"/></td>
     <td><input name="1.0 Gesamtmarkt-23" type="radio" value="nein"/></td>
     <td><input name="1.0 Gesamtmarkt-23" type="radio" value="nicht_vorhanden"/></td>
@@ -1243,111 +1442,103 @@ function generateMeasure(question) {
     measure = measure.slice(0, -1);
   }
 
+  // Specific rules for more concrete and imperative measures
   if (measure.includes("festes, geschlossenes und flaches Schuhwerk")) {
-    measure = "Es ist ausnahmslos sicherzustellen, dass sämtliche Beschäftigte festes, geschlossenes und flaches Schuhwerk tragen. Abweichungen sind unverzüglich zu unterbinden. Die Maßnahme dient der Verhütung schwerer Stolper- und Rutschunfälle und ist zwingend umzusetzen gemäß § 3 Abs. 1 ArbSchG i. V. m. § 2 PSA-Benutzungsverordnung.";
+    measure = "Stellen Sie umgehend sicher, dass alle Personen im Markt festes, geschlossenes und flaches Schuhwerk gemäß den Arbeitsschutzbestimmungen tragen.";
+  } else if (measure.includes("Automatiktüren, Rolltoren und Schnelllauftoren keine sichtbaren Beschädigungen")) {
+    measure = "Beheben Sie sofort sichtbare Beschädigungen an Automatiktüren, Rolltoren und Schnelllauftoren gemäß den Wartungsvorschriften.";
+  } else if (measure.includes("Aufzugsanlage geprüft und in einem ordnungsgemäßen Zustand")) {
+    measure = "Führen Sie dringend eine Prüfung der Aufzugsanlage gemäß BetrSichV durch und stellen Sie den ordnungsgemäßen Zustand sicher (inkl. funktionsfähiger Schutzeinrichtungen).";
+  } else if (measure.includes("Leergutrücknahme in einem ordnungsgemäßen Zustand")) {
+    measure = "Sorgen Sie unverzüglich für den ordnungsgemäßen Zustand der Leergutrücknahme gemäß den Sicherheitsvorschriften (intakte Schutzeinrichtungen, gesicherte Einzugsstellen, keine Glasscherben).";
+  } else if (measure.includes("Leitern geprüft gemäß")) {
+    measure = "Führen Sie umgehend die Prüfung der Leitern gemäß BGV D 36 / GUV-VD360 durch und dokumentieren Sie diese.";
+  } else if (measure.includes("geeignete Sicherheitsmesser verwendet")) {
+    measure = "Stellen Sie sofort die Verwendung geeigneter Sicherheitsmesser aus dem Ordersatz sicher und weisen Sie Mitarbeiter entsprechend ein.";
+  } else if (measure.includes("keine sichtbaren Beschädigungen an Schaltern und Steckdosen")) {
+    measure = "Beheben Sie dringend sichtbare Beschädigungen an Schaltern und Steckdosen gemäß den elektrotechnischen Vorschriften.";
+  } else if (measure.includes("Gabelhubwagen in einem ordnungsgemäßen Zustand")) {
+    measure = "Stellen Sie umgehend den ordnungsgemäßen Zustand des Gabelhubwagens sicher und beheben Sie sichtbare Beschädigungen gemäß DGUV Vorschrift 68.";
+  } else if (measure.includes("elektrische Hubwagen geprüft")) {
+    measure = "Prüfen Sie den elektrischen Hubwagen sofort gemäß DGUV Vorschrift 68 und stellen Sie den ordnungsgemäßen Zustand sicher (keine sichtbaren Beschädigungen, funktionsfähige Schutzeinrichtungen).";
+  } else if (measure.includes("Feuerlöscheinrichtungen frei zugänglich")) {
+    measure = "Halten Sie Feuerlöscheinrichtungen dringend frei zugänglich und entfernen Sie umgehend blockierende Gegenstände gemäß Brandschutzordnung.";
+  } else if (measure.includes("Feuerlöscheinrichtungen geprüft")) {
+    measure = "Prüfen Sie die Feuerlöscheinrichtungen sofort gemäß DIN 14406 und stellen Sie die Einhaltung der Prüffristen sicher.";
+  } else if (measure.includes("Brandschutztüren frei von Zugestellungen")) {
+    measure = "Halten Sie Brandschutztüren dringend frei von Zugestellungen und stellen Sie deren uneingeschränkte Funktion gemäß Brandschutzvorschriften sicher.";
+  } else if (measure.includes("Türhaltevorrichtungen und der Schließfolgeregler")) {
+    measure = "Überprüfen und reparieren Sie umgehend Türhaltevorrichtungen und Schließfolgeregler des Feuerschutzabschlusses gemäß den technischen Richtlinien.";
+  } else if (measure.includes("Brandschutztüren ohne Beschädigungen")) {
+    measure = "Beheben Sie sofort Beschädigungen an Brandschutztüren gemäß den Brandschutzbestimmungen.";
+  } else if (measure.includes("aktueller Flucht- und Rettungsplan")) {
+    measure = "Erstellen/Aktualisieren Sie dringend den Flucht- und Rettungsplan gemäß ASR A2.3 und hängen Sie ihn umgehend aus.";
+  } else if (measure.includes("Notausgangsbeleuchtung ohne Defekte")) {
+    measure = "Reparieren Sie sofort Defekte an der Notausgangsbeleuchtung gemäß den Sicherheitsvorschriften.";
+  } else if (measure.includes("Notausgänge frei zugänglich")) {
+    measure = "Halten Sie Notausgänge dringend frei zugänglich und entfernen Sie alle Zustellungen unverzüglich gemäß ASR A2.3.";
+  } else if (measure.includes("Notausgänge und -ausstiege von innen ohne fremde Hilfe")) {
+    measure = "Stellen Sie umgehend sicher, dass Notausgänge und -ausstiege von innen ohne fremde Hilfe zu öffnen und nicht zugestellt sind, gemäß ASR A2.3.";
+  } else if (measure.includes("Notausgänge in sichere Bereiche")) {
+    measure = "Stellen Sie dringend sicher, dass Notausgänge in sichere Bereiche führen, gemäß den Rettungswegvorschriften.";
+  } else if (measure.includes("Verkehrswege so beschaffen")) {
+    measure = "Gestalten Sie Verkehrswege sofort so, dass Stolper-, Ausrutsch- und Umknickrisiken gemäß ASR A1.8 ausgeschlossen sind.";
+  } else if (measure.includes("Treppen unbeschädigt")) {
+    measure = "Beheben Sie dringend Beschädigungen an Treppen und halten Sie diese unverzüglich frei von Gegenständen gemäß ASR A1.8.";
+  } else if (measure.includes("persönliche Schutzausrüstung")) {
+    measure = "Stellen Sie die passende persönliche Schutzausrüstung (z.B. Schutzbrille, Handschuhe) für Tätigkeiten mit Gefahrstoffen umgehend zur Verfügung und weisen Sie in deren Nutzung ein, gemäß PSA-Verordnung.";
+  } else if (measure.includes("brennbares Material")) {
+    measure = "Entfernen Sie sofort brennbares Material (z.B. Kisten, Kartons) aus Technik- und Heizräumen gemäß Brandschutzvorschriften.";
+  } else if (measure.includes("Technik- und Heizräume als Lagerräume")) {
+    measure = "Beenden Sie dringend die Nutzung von Technik- und Heizräumen als Lagerräume gemäß den Brandschutzbestimmungen.";
+  } else if (measure.includes("Betriebsanweisungen gut zugänglich")) {
+    measure = "Stellen Sie umgehend sicher, dass Betriebsanweisungen gut zugänglich sind und Sicherheitsanweisungen gemäß BetrSichV eingehalten werden.";
+  } else if (measure.includes("Steckverbindungen auf dem Boden")) {
+    measure = "Entfernen Sie sofort Steckverbindungen vom Boden, um Stolperfallen zu vermeiden, gemäß ASR A1.8.";
+} else if (measure.includes("Arbeitsgeräte an der Backstation")) {
+    measure = "Prüfen Sie sofort die Arbeitsgeräte an der Backstation (Backofen, Backbleche, Brotschneidemaschine) und beheben Sie festgestellte Mängel gemäß den Hygiene- und Sicherheitsvorschriften.";
+  } else if (measure.includes("freistehende Handwaschbecken ohne Beschädigungen")) {
+    measure = "Reparieren oder ersetzen Sie umgehend beschädigte Handwaschbecken, um die hygienische Händereinigung sicherzustellen.";
+  } else if (measure.includes("Elektroleitungen intakt")) {
+    measure = "Stellen Sie sicher, dass alle Elektroleitungen intakt sind und keine Stolperstellen bilden. Beschädigte Leitungen sind umgehend zu entfernen oder zu sichern.";
+  } else if (measure.includes("Zuleitung der VDE-Norm")) {
+    measure = "Stellen Sie sicher, dass die elektrische Zuleitung der gültigen VDE-Norm entspricht. Bei Abweichungen ist eine Elektrofachkraft hinzuzuziehen.";
+  } else if (measure.includes("Backhandschuh für die Backstation")) {
+    measure = "Ersetzen Sie verschlissene Backhandschuhe sofort durch hitzebeständige Modelle mit langer Stulpe gemäß Arbeitsschutzrichtlinien.";
+  } else if (measure.includes("Heißgeräte in technisch einwandfreiem Zustand")) {
+    measure = "Prüfen Sie alle Heißgeräte (z. B. Heißtheken, Fritteusen) auf technische Mängel und lassen Sie defekte Geräte fachgerecht instand setzen.";
+  } else if (measure.includes("Hautschutzplan")) {
+    measure = "Hängen Sie den aktuellen Hautschutzplan gut sichtbar aus und informieren Sie das Personal über die Anwendung.";
+  } else if (measure.includes("Hautschutz- und Hautpflegeprodukte")) {
+    measure = "Stellen Sie geeignete Hautschutz- und Hautpflegeprodukte bereit und weisen Sie die Mitarbeitenden in deren Anwendung ein.";
+  } else if (measure.includes("Arbeitsgeräte im Servicebereich")) {
+    measure = "Prüfen Sie die Arbeitsgeräte im Servicebereich regelmäßig auf Schäden und setzen Sie defekte Geräte außer Betrieb.";
+  } else if (measure.includes("Thekenscheiben selbstständig in der oberen Stellung")) {
+    measure = "Sorgen Sie dafür, dass Thekenscheiben sicher arretieren und nicht unkontrolliert zurückfallen können.";
+  } else if (measure.includes("Glastüren und Glaswände in Augenhöhe gekennzeichnet")) {
+    measure = "Kennzeichnen Sie alle Glastüren und Glaswände in Augenhöhe mit sichtbaren Markierungen zur Unfallvermeidung gemäß ASR A1.3.";
+  } else if (measure.includes("Schneidbretter und Messer regelmäßig gereinigt")) {
+    measure = "Stellen Sie sicher, dass Schneidbretter und Messer regelmäßig gereinigt und farbcodiert eingesetzt werden, um Kreuzkontamination zu vermeiden.";
+  } else if (measure.includes("Schneidbretter mit Messereinschub")) {
+    measure = "Verwenden Sie Schneidbretter mit integriertem Messereinschub zur sicheren Aufbewahrung der Messer.";
+  } else if (measure.includes("Messerhalter verwendet")) {
+    measure = "Nutzen Sie geeignete Messerhalter zur sicheren und hygienischen Lagerung von Messern im Arbeitsbereich.";
+  } else if (measure.includes("Convenience-Geräte in einem ordnungsgemäßen Zustand")) {
+    measure = "Überprüfen Sie alle Convenience-Geräte regelmäßig und lassen Sie defekte Geräte sofort instand setzen.";
+  } else if (measure.includes("Fußraum frei von Gegenständen")) {
+    measure = "Halten Sie den Fußraum stets frei von Gegenständen, um Stolper- und Unfallgefahren zu vermeiden.";
+  } else if (measure.includes("Fußboden im Kassenbereich")) {
+    measure = "Reparieren Sie Beschädigungen am Fußboden im Kassenbereich umgehend, um Unfälle zu vermeiden.";
+  } else if (measure.includes("Heizgeräte im Kassenraum nicht durch brennbares Material zugestellt")) {
+    measure = "Räumen Sie alle brennbaren Materialien vor Heizgeräten im Kassenraum weg, um Brandgefahren zu verhindern.";
+  } else if (measure.includes("Kassenstühle in einem funktionsfähigen Zustand")) {
+    measure = "Ersetzen oder reparieren Sie defekte Kassenstühle unverzüglich, um ergonomische Arbeitsbedingungen sicherzustellen.";
+  } else if (measure.includes("Transportband unbeschädigt")) {
+    measure = "Stellen Sie sicher, dass das Transportband keine Schäden oder Lücken über 5 mm aufweist. Bei Mängeln: sofortige Reparatur.";
+  } else {
+    // Default fallback if no specific rule matches
+    measure = "Dringend: Beheben Sie den Mangel bezüglich: " + measure + " unter Berücksichtigung der relevanten Arbeitsschutzbestimmungen.";
   }
-
-  if (measure.includes("Automatiktüren")) {
-    measure = "Alle Automatiktüren, Schnelllauf- und Rolltore sind regelmäßig durch befähigte Personen auf sichtbare und mechanische Mängel zu prüfen. Das Unterlassen dieser Prüfpflicht stellt eine erhebliche Verletzung der Betreiberverantwortung gemäß § 4 BetrSichV dar und ist sofort abzustellen.";
-  }
-
-  if (measure.includes("Aufzugsanlage")) {
-    measure = "Die Aufzugsanlage ist gemäß § 16 BetrSichV regelmäßig durch eine zugelassene Überwachungsstelle prüfen zu lassen. Ein unterlassener Prüf- oder Wartungsnachweis stellt einen gravierenden Verstoß gegen die Pflicht zur Gewährleistung der Betriebssicherheit gemäß § 4 ArbSchG dar.";
-  }
-
-  if (measure.includes("Leergutrücknahme")) {
-    measure = "Die technische Funktionsfähigkeit der Leergutrücknahmeeinrichtung ist uneingeschränkt sicherzustellen. Schutzeinrichtungen müssen intakt, Einzugsstellen gesichert und die Umgebung frei von Splittergefahren gehalten werden – in zwingender Umsetzung der Vorgaben aus § 3 ArbSchG und der DGUV Regel 100-500, Kap. 2.10.";
-  }
-
-  if (measure.includes("Leitern")) {
-    measure = "Sämtliche im Betrieb verwendeten Leitern und Tritte sind nach DGUV Information 208-016 regelmäßig zu prüfen, zu kennzeichnen und schriftlich zu dokumentieren. Die Nichteinhaltung stellt eine unmittelbare Gefährdung dar und ist mit § 4 BetrSichV und § 3 ArbSchG unvereinbar.";
-  }
-
-  if (measure.includes("Sicherheitsmesser")) {
-    measure = "Es ist zwingend sicherzustellen, dass ausschließlich die im freigegebenen Ordersatz enthaltenen Sicherheitsmesser verwendet werden. Die Verwendung ungeeigneter Schneidwerkzeuge stellt eine erhebliche Gefährdung dar und ist gemäß § 3 ArbSchG sowie der Gefährdungsbeurteilung unverzüglich zu unterbinden.";
-  }
-
-  if (measure.includes("Schaltern und Steckdosen")) {
-    measure = "Alle Schalter und Steckdosen sind regelmäßig auf Beschädigungen zu kontrollieren. Beschädigte oder manipulierte Einrichtungen sind umgehend außer Betrieb zu nehmen und durch Elektrofachkräfte instand zu setzen. Eine Zuwiderhandlung stellt einen schwerwiegenden Verstoß gegen § 3 ArbSchG und DGUV Vorschrift 3 dar.";
-  }
-
-  if (measure.includes("Gabelhubwagen")) {
-    measure = "Die technische Betriebsfähigkeit und Unversehrtheit aller eingesetzten Gabelhubwagen ist regelmäßig zu prüfen und lückenlos zu dokumentieren. Fehlfunktionen oder Mängel sind unverzüglich zu beheben. Grundlage: § 4 BetrSichV in Verbindung mit § 3 ArbSchG und DGUV Vorschrift 68.";
-  }
-
-  if (measure.includes("elektrische Hubwagen")) {
-    measure = "Elektrische Hubwagen dürfen ausschließlich in technisch einwandfreiem Zustand betrieben werden. Die Funktion aller Schutz- und Bedieneinrichtungen ist regelmäßig zu prüfen. Verstöße gegen diese Pflicht stellen eine unmittelbare Gefährdung nach § 3 ArbSchG und § 10 BetrSichV dar.";
-  }
-
-  if (measure.includes("Feuerlöscheinrichtungen frei zugänglich")) {
-    measure = "Feuerlöscheinrichtungen sind uneingeschränkt und jederzeit zugänglich zu halten. Jede Art von Blockierung – sei es durch Waren, Inventar oder persönliche Gegenstände – stellt eine erhebliche Sicherheitsgefährdung dar und ist gemäß § 10 ArbSchG und ASR A2.2 unverzüglich zu beseitigen.";
-  }
-
-  if (measure.includes("Feuerlöscheinrichtungen geprüft")) {
-    measure = "Die Prüfung sämtlicher Feuerlöscheinrichtungen ist durch eine befähigte Person in den gesetzlich vorgeschriebenen Intervallen durchzuführen. Fehlende oder überfällige Prüfungen stellen eine erhebliche Pflichtverletzung dar gemäß § 10 ArbSchG in Verbindung mit ASR A2.2 und DIN 14406-4.";
-  }
-
-  if (measure.includes("Brandschutztüren frei von Zustellungen")) {
-    measure = "Es ist mit sofortiger Wirkung sicherzustellen, dass sämtliche Brandschutztüren vollständig und dauerhaft freigehalten werden. Zugestellte oder blockierte Brandschutztüren stellen eine akute Gefahr für Leib und Leben dar und sind ein schwerwiegender Verstoß gegen § 10 ArbSchG und die Musterbauordnung.";
-  }
-
-  if (measure.includes("Türhaltevorrichtungen")) {
-    measure = "Türhaltevorrichtungen und Schließfolgeregler an Brandschutztüren sind auf ihre Funktionsfähigkeit zu überprüfen und dauerhaft in betriebsbereitem Zustand zu halten. Manipulierte oder defekte Vorrichtungen müssen umgehend außer Betrieb genommen werden (§ 3 ArbSchG, DIN 14677, TRBS 1201).";
-  }
-
-  if (measure.includes("Brandschutztüren ohne Beschädigungen")) {
-    measure = "Alle Brandschutztüren sind regelmäßig auf mechanische Unversehrtheit zu prüfen. Beschädigte Türen dürfen nicht weiterverwendet werden. Eine fehlerhafte Tür erfüllt nicht die Schutzwirkung und verstößt gegen § 4 ArbSchG sowie ASR A2.2 Abs. 5.1.";
-  }
-
-  if (measure.includes("Flucht- und Rettungsplan")) {
-    measure = "Ein aktueller und gut lesbarer Flucht- und Rettungsplan ist an jeder vorgeschriebenen Stelle auszuhängen. Veraltete, unvollständige oder fehlende Pläne sind umgehend zu ersetzen. Dies ist verpflichtend gemäß § 4 Abs. 4 ArbStättV und ASR A1.3.";
-  }
-
-  if (measure.includes("Notausgangsbeleuchtung ohne Defekte")) {
-    measure = "Die vollständige Funktionsfähigkeit aller Notausgangsbeleuchtungen ist dauerhaft sicherzustellen. Defekte Leuchten sind ohne Verzögerung instand zu setzen. Eine nicht funktionierende Sicherheitsbeleuchtung stellt eine erhebliche Gefährdung dar und verletzt § 3 ArbSchG i. V. m. ASR A3.4/3.";
-  }
-
-  if (measure.includes("Notausgänge frei zugänglich")) {
-    measure = "Alle Notausgänge müssen zu jedem Zeitpunkt uneingeschränkt zugänglich und frei von jeglicher Verstellung sein. Ein blockierter Fluchtweg ist ein gravierender Verstoß gegen § 4 Abs. 4 ArbStättV und ASR A2.3 und ist unverzüglich zu beseitigen.";
-  }
-
-  if (measure.includes("Notausgänge von innen ohne fremde Hilfe")) {
-    measure = "Stellen Sie sicher, dass sämtliche Notausgänge jederzeit ohne fremde Hilfe von innen geöffnet werden können. Verschlossene oder verriegelte Fluchtwege sind absolut unzulässig und verstoßen gegen § 4 ArbStättV sowie ASR A2.3 Punkt 4.2.";
-  }
-
-  if (measure.includes("Notausgänge in sichere Bereiche")) {
-    measure = "Vergewissern Sie sich, dass alle Notausgänge in gesicherte und gefahrenfreie Bereiche führen. Ein Fluchtweg, der in einen Gefahrenbereich führt, widerspricht den Schutzzielen des § 4 ArbStättV und ist baulich und organisatorisch anzupassen.";
-  }
-
-  if (measure.includes("Verkehrswege so beschaffen")) {
-    measure = "Verkehrswege sind so zu gestalten und zu erhalten, dass keine Stolper-, Rutsch- oder Sturzgefahren bestehen. Unregelmäßigkeiten, Verschmutzungen oder Hindernisse sind umgehend zu beseitigen – gemäß § 3a ArbStättV und ASR A1.8 ohne Ausnahme.";
-  }
-
-  if (measure.includes("Treppen unbeschädigt")) {
-    measure = "Treppenanlagen sind regelmäßig auf bauliche Schäden, lose Elemente oder Verunreinigungen zu überprüfen. Jede Form der Beeinträchtigung stellt eine erhebliche Unfallgefahr dar und ist umgehend zu beheben – in Übereinstimmung mit § 3 ArbSchG und ASR A1.8.";
-  }
-
-  if (measure.includes("persönliche Schutzausrüstung") || measure.includes("Schutzbrille") || measure.includes("Handschuhe")) {
-    measure = "Geeignete persönliche Schutzausrüstung (PSA), wie Schutzbrillen und Schutzhandschuhe, ist bereitzustellen, regelmäßig zu kontrollieren und durch Unterweisungspflicht einzufordern. Eine Missachtung der Tragepflicht stellt einen Verstoß gegen § 3 ArbSchG sowie § 2 der PSA-Benutzungsverordnung dar.";
-  }
-
-  if (measure.includes("Sind die Technik- und Heizräume frei von brennbaren Materialien")) {
-    measure = "Die Lagerung brennbarer Materialien in Technik- oder Heizräumen ist strikt untersagt. Jegliche Zuwiderhandlung stellt eine erhebliche Brandgefährdung dar und ist gemäß § 10 ArbSchG sowie ASR A2.2 unverzüglich abzustellen.";
-  }
-
-  if (measure.includes("Sind die Technik- und Heizräume frei von Lagernutzung")) {
-    measure = "Technik- und Heizräume dürfen ausschließlich ihrem bestimmungsgemäßen Zweck dienen. Die Nutzung als Lagerfläche ist untersagt und stellt einen gravierenden Verstoß gegen die Brandschutzvorschriften und § 3 ArbSchG dar.";
-  }
-
-  if (measure.includes("Betriebsanweisungen gut zugänglich")) {
-    measure = "Betriebsanweisungen für Tätigkeiten mit Gefahrstoffen, Maschinen oder Arbeitsmitteln sind jederzeit gut sichtbar, vollständig und aktuell zugänglich zu halten. Das Unterlassen stellt einen Verstoß gegen § 14 GefStoffV und § 12 ArbSchG dar.";
-  }
-
-  if (measure.includes("Steckverbindungen auf dem Boden")) {
-    measure = "Steckverbindungen auf dem Boden sind unverzüglich fachgerecht zu verlegen oder gegen unbeabsichtigtes Lösen und Stolpergefahren zu sichern. Die Gefährdung durch Stolperunfälle ist unzulässig und stellt einen Verstoß gegen § 3 ArbSchG sowie ASR A1.5 dar.";
-  }
-
-  // [All other specific measure rules remain the same as in original]
 
   if (!measure.endsWith(".")) {
     measure += ".";
@@ -1582,13 +1773,29 @@ function formularZuruecksetzen() {
   }
 }
 
+// Im Teilen-Script zusätzlich:
 const originalGenerateAndSharePDF = generateAndSharePDF;
-window.generateAndSharePDF = async function () {
+generateAndSharePDF = async function () {
   speichereFormular(); // Vor dem Teilen speichern
   await originalGenerateAndSharePDF(); // Dann ausführen
   ladeFormular(); // Danach alles wiederherstellen
 };
 </script>
 
+<style>
+/* Visuelle Hervorhebung von Antworten */
+.highlight-ja td:first-child {
+  background-color: #d4edda !important;
+}
+.highlight-nein td:first-child {
+  background-color: #f8d7da !important;
+}
+.highlight-nicht td:first-child {
+  background-color: #e2e3e5 !important;
+}
+</style>
+
+
 </body>
+
 </html>

@@ -7,8 +7,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
-.buttons-container { margin-top: 30px; text-align: center; }
-    .buttons-container button { padding: 10px 18px; margin: 5px; cursor: pointer; }
     body { font-family: Arial; padding: 20px; }
     table { border-collapse: collapse; width: 100%; }
     th, td { border: 1px solid #ccc; padding: 10px; }
@@ -17,134 +15,175 @@
 </head>
 <body><div id="content-to-pdf">
 <h1 style="text-align: center;">Zusammenfassung der Maßnahmen</h1>
-<form id="metaForm" style="margin-bottom: 30px; display: flex; gap: 20px; flex-wrap: wrap;">
-  <label>Marktnummer:
-    <input type="text" id="marktnummer" />
-  </label><br />
-  <label>Name:
-    <input type="text" id="name" />
-  </label><br />
-  <label>Sifa:
-    <input type="text" id="sifa" />
-  </label><br />
-  <label>Datum:
-    <input id="datum" readonly="" type="text"/></p>
-  </label>
-</form>
 <table id="summary">
 <thead><tr><th>Frage</th><th>Hinweis</th></tr></thead>
 <tbody></tbody>
 </table><div style="display: flex; gap: 20px; justify-content: center; margin: 20px 0;"></div>
-<div class="buttons-container">
-<button onclick="window.print()">📄 Drucken / PDF</button>
-<button onclick="sharePDF()">📤 PDF teilen (iPad)</button>
-</div></div><script>
-window.onload = function () {
-  const urlParams = new URLSearchParams(window.location.search);
-  const dataParam = urlParams.get("data");
-  const tbody = document.querySelector("#summary tbody");
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const data = JSON.parse(decodeURIComponent(params.get("data") || "[]"));
+    const tbodyParam = document.querySelector("#summary tbody");
 
-  function escapeHTML(str) {
-    return str
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
+    data.forEach(eintrag => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td>${eintrag.frage}</td><td>${eintrag.hinweis}</td>`;
+      tbodyParam.appendChild(tr);
+    });
+  </script>
+<script>
+    const tbody = document.querySelector("#summary tbody");
 
-  let daten = [];
-
-  if (dataParam) {
-    try {
-      daten = JSON.parse(decodeURIComponent(dataParam));
-    } catch (err) {
-      console.error("Fehler beim Parsen der URL-Daten:", err);
+    function escapeHTML(str) {
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
     }
-  } else {
-    const gespeichert = localStorage.getItem("neinAntworten");
-    if (gespeichert) {
-      try {
-        daten = JSON.parse(gespeichert).map(([frage, hinweis]) => ({ frage, hinweis }));
-      } catch (err) {
-        console.error("Fehler beim Laden aus localStorage:", err);
+
+    function loadZusammenfassung() {
+      const gespeichert = localStorage.getItem("neinAntworten");
+      if (!gespeichert) {
+        alert("Keine Daten vorhanden. Bitte zuerst die Checkliste ausfüllen.");
+        return;
       }
+
+      const eintraege = JSON.parse(gespeichert);
+      eintraege.forEach(([frage, hinweis]) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td>${escapeHTML(frage)}</td><td>${escapeHTML(hinweis)}</td>`;
+        tbody.appendChild(tr);
+      });
+
+      // Metadaten anzeigen
+      document.getElementById("metaMarktnummer").textContent = localStorage.getItem("marktnummer") || "–";
+      document.getElementById("metaName").textContent = localStorage.getItem("name") || "–";
+      document.getElementById("metaSifa").textContent = localStorage.getItem("sifa") || "–";
+      document.getElementById("metaDatum").textContent = localStorage.getItem("datum") || "–";
     }
-  }
 
-  if (!daten.length) {
-    alert("Keine Daten vorhanden. Bitte zuerst die Checkliste ausfüllen.");
-    return;
-  }
+    async function sharePDF() {
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF('p', 'pt', 'a4');
 
-  daten.forEach(eintrag => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td>${escapeHTML(eintrag.frage)}</td><td>${escapeHTML(eintrag.hinweis)}</td>`;
-    tbody.appendChild(tr);
-  });
-};
-</script><script>
-async function sharePDF() {
+      const container = document.body;
+      const canvas = await html2canvas(container, { scale: 2, scrollY: -window.scrollY });
+      const imgData = canvas.toDataURL('image/png');
+
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const imgHeight = (canvas.height * pageWidth) / canvas.width;
+
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      pdf.addImage(imgData, 'PNG', 0, position, pageWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft > 0) {
+        position -= pageHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, pageWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      const blob = pdf.output('blob');
+      const file = new File([blob], 'zusammenfassung.pdf', { type: 'application/pdf' });
+
+    if (navigator.share) {
+  const blobUrl = URL.createObjectURL(blob);
+  try {
+    await navigator.share({
+      title: 'Zusammenfassung „Nein“-Antworten',
+      text: 'Hier ist die PDF-Zusammenfassung:',
+      url: blobUrl
+    });
+  } catch (err) {
+    console.error('Teilen fehlgeschlagen:', err);
+    pdf.save('zusammenfassung.pdf');
+  }
+} else {
+  pdf.save('zusammenfassung.pdf');
+}
+    }
+
+    window.onload = loadZusammenfassung;
+  
+function prepareForPrint() {
+  window.print();
+}
+window.generateAndSharePDF = sharePDF;
+
+function prepareForPrint() {
+  window.print();
+}
+
+window.generateAndSharePDF = async function() {
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF('p', 'pt', 'a4');
-  const content = document.getElementById("content-to-pdf") || document.body;
+  const content = document.getElementById("content-to-pdf");
 
   const canvas = await html2canvas(content, { scale: 2, scrollY: -window.scrollY });
   const imgData = canvas.toDataURL('image/png');
 
   const pageWidth = pdf.internal.pageSize.getWidth();
   const pageHeight = pdf.internal.pageSize.getHeight();
-  const margin = 30;
-  const usableWidth = pageWidth - 2 * margin;
-  const imgHeight = (canvas.height * usableWidth) / canvas.width;
+  const imgHeight = (canvas.height * pageWidth) / canvas.width;
 
   let heightLeft = imgHeight;
   let position = 0;
 
-  pdf.addImage(imgData, 'PNG', margin, margin, usableWidth, imgHeight);
-  heightLeft -= pageHeight - 2 * margin;
+  pdf.addImage(imgData, 'PNG', 0, position, pageWidth, imgHeight);
+  heightLeft -= pageHeight;
 
   while (heightLeft > 0) {
-    position -= pageHeight - 2 * margin;
+    position -= pageHeight;
     pdf.addPage();
-    pdf.addImage(imgData, 'PNG', margin, position + margin, usableWidth, imgHeight);
-    heightLeft -= pageHeight - 2 * margin;
+    pdf.addImage(imgData, 'PNG', 0, position, pageWidth, imgHeight);
+    heightLeft -= pageHeight;
   }
 
   const blob = pdf.output('blob');
   const file = new File([blob], 'zusammenfassung.pdf', { type: 'application/pdf' });
 
-  if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+  if (navigator.share) {
+    const blobUrl = URL.createObjectURL(blob);
     try {
       await navigator.share({
         title: 'Zusammenfassung „Nein“-Antworten',
-        files: [file]
+        text: 'Hier ist die PDF-Zusammenfassung:',
+        url: blobUrl
       });
     } catch (err) {
       console.error('Teilen fehlgeschlagen:', err);
       pdf.save('zusammenfassung.pdf');
     }
-  } else if (navigator.share) {
-    const blobUrl = URL.createObjectURL(file);
-    try {
-      await navigator.share({
-        title: 'Zusammenfassung „Nein“-Antworten',
-        url: blobUrl
-      });
-    } catch (err) {
-      console.error('Fallback Teilen fehlgeschlagen:', err);
-      pdf.save('zusammenfassung.pdf');
-    }
   } else {
     pdf.save('zusammenfassung.pdf');
   }
-}
+};
 </script>
-<script>
-    // Datum setzen
-    const heute = new Date();
-    const datumString = heute.toLocaleDateString('de-DE');
-    document.getElementById('datum').value = datumString;
-  </script>
-</body>
+</div><div style="display: flex; justify-content: center; gap: 20px; margin-top: 30px;"><button class="btn-medium btn-gray" onclick="prepareForPrint()" style="flex: 1; max-width: 280px; padding: 12px; font-size: 16px; background-color: #C62828; color: white; border: none; border-radius: 6px; cursor: pointer;">
+    📄 Drucken / PDF
+  </button><button class="custom-btn" onclick="generateAndSharePDF()" style="flex: 1; max-width: 280px; padding: 12px; font-size: 16px; background-color: #C62828; color: white; border: none; border-radius: 6px; cursor: pointer;">
+📤 PDF teilen (iPad)
+</button></div></body>
+<footer style="
+    background-color: #f3f4f6;
+    color: #374151;
+    padding: 12px 0;
+    margin-top: 40px;
+    text-align: center;
+">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+        <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 8px;">
+            <a href="impressum.html" style="color: #4f46e5; text-decoration: none; font-size: 13px;">Impressum</a>
+            <a href="datenschutz.html" style="color: #4f46e5; text-decoration: none; font-size: 13px;">Datenschutz</a>
+            <a href="welcome.html" style="color: #4f46e5; text-decoration: none; font-size: 13px;">Startseite</a>
+        </div>
+        <p style="margin: 0; font-size: 12px; color: #6b7280;">
+                   </p>
+    </div>
+</footer>
 </html>
