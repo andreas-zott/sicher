@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pflicht-Aushänge im Einzelhandel - Digitale Übersicht</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .category {
+            background: white;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .category-header {
+            background: #34495e;
+            color: white;
+            padding: 1rem 1.5rem;
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+        
+        .law-item {
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.3s ease;
+        }
+        
+        .law-item:last-child {
+            border-bottom: none;
+        }
+        
+        .law-item:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .law-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        
+        .law-description {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+        
+        .law-link {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .law-link:hover {
+            background: #2980b9;
+        }
+        
+        .important-note {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 1rem;
+            margin: 1rem 0;
+            color: #856404;
+        }
+        
+        .search-box {
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        #searchInput {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        #searchInput:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+            background: white;
+            border-radius: 10px;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .law-item {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Pflicht-Aushänge im Einzelhandel</h1>
+            <p class="subtitle">Digitale Übersicht aller gesetzlich vorgeschriebenen Aushänge</p>
+        </header>
+
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Suchen Sie nach einem bestimmten Gesetz oder Thema...">
+        </div>
+
+        <div class="important-note">
+            <strong>Wichtiger Hinweis:</strong> Diese Übersicht dient der Information. Bitte prüfen Sie regelmäßig die Aktualität. .
+        </div>
+
+        <div class="category">
+            <div class="category-header">Arbeits- & Schutzgesetze</div>
+            
+            <div class="law-item">
+                <div class="law-title">Arbeitszeitgesetz (ArbZG)</div>
+                <div class="law-description">Regelt Pausen, Höchstarbeitszeiten, Sonn- und Feiertagsarbeit. Pflichtaushang für alle Betriebe mit Angestellten.</div>
+                <a href="https://www.gesetze-im-internet.de/arbzg/" class="law-link" target="_blank">Zum Gesetzestext</a>
+            </div>
+            
+            <div class="law-item">
+                <div class="law-title">Arbeitsschutzgesetz (ArbSchG)</div>
+                <div class="law-description">Definiert Grundpflichten des Arbeitgebers zum Arbeitsschutz und zur Unfallverhütung.</div>
+                <a href="https://www.gesetze-im-internet.de/arbschg/" class="law-link" target="_blank">Zum Gesetzestext</a>
+            </div>
+            
+            <div class="law-item">
+                <div class="law-title">Arbeitsstättenverordnung (ArbStättV)</div>
+                <div class="law-description">Regelt die Einrichtung und den Betrieb von Arbeitsstätten, inkl. Flucht- und Rettungspläne.</div>
+                <a href="https://www.gesetze-im-internet.de/arbst_ttv_2004/" class="law-link" target="_blank">Zur Verordnung</a>
+            </div>
+            
+            <div class="law-item">
+                <div class="law-title">DGUV Vorschrift 1 "Grundsätze der Prävention"</div>
+                <div class="law-description">Unfallverhütungsvorschriften für Sicherheits- und Gesundheitsschutz am Arbeitsplatz.</div>
+                <a href="https://publikationen.dguv.de/widgets/pdf/download/article/2909" class="law-link" target="_blank">Zur DGUV Vorschrift</a>
+            </div>
+        </div>
+
+        <div class="category">
+            <div class="category-header">Jugend- & Mutterschutz</div>
+            
+            <div class="law-item">
+                <div class="law-title">Jugendarbeitsschutzgesetz (JArbSchG)</div>
+                <div class="law-description">Schutzbestimmungen für die Beschäftigung von Kindern und Jugendlichen. Pflichtaushang wenn Azubis oder jugendliche Aushilfen beschäftigt werden.</div>
+                <a href="https://www.gesetze-im-internet.de/jarbschg/" class="law-link" target="_blank">Zum Gesetzestext</a>
+            </div>
+            
+            <div class="law-item">
+                <div class="law-title">Mutterschutzgesetz (MuSchG)</div>
+                <div class="law-description">Schutz von Mutter und Kind vor und nach der Geburt. Pflichtaushang bei mehr als 3 regelmäßig beschäftigten Frauen.</div>
+                <a href="https://www.gesetze-im-internet.de/muschg_2018/" class="law-link" target="_blank">Zum Gesetzestext</a>
+            </div>
+            
+            <div class="law-item">
+                <div class="law-title">Elternzeitgesetz (BEEG)</div>
+                <div class="law-description">Regelungen zu Anspruch auf Elternzeit und Elterngeld für berufstätige Eltern.</div>
+                <a href="https://www.gesetze-im-internet.de/beeg/" class="law-link" target="_blank">Zum Gesetzestext</a>
+            </div>
+        </div>
+
+        <div class="category">
+            <div class="category-header">Gleichbehandlung & Entgelt</div>
+            
+            <div class="law-item">
+                <div class="law-title">Allgemeines Gleichbehandlungsgesetz (AGG)</div>
+                <div class="law-description">Schutz vor Diskriminierung am Arbeitsplatz, inkl. Beschwerdestelle. Pflichtaushang ab 15 Beschäftigten.</div>
+                <a href="https://www.gesetze-im-internet.de/agg/" class="law-link" target="_blank">Zum Gesetzestext</a>
+            </div>
+            
+            <div class="law-item">
+                <div class="law-title">Mindestlohngesetz (MiLoG)</div>
+                <div class="law-description">Information über Anspruch auf Mindestlohn. Informationspflicht gegenüber Arbeitnehmern.</div>
+                <a href="https://www.gesetze-im-internet.de/milog/" class="law-link" target="_blank">Zum Gesetzestext</a>
+            </div>
+            
+            <div class="law-item">
+                <div class="law-title">Entgeltfortzahlungsgesetz (EFZG)</div>
+                <div class="law-description">Regelungen zur Lohnfortzahlung im Krankheitsfall und an Feiertagen.</div>
+                <a href="https://www.gesetze-im-internet.de/entgfg/" class="law-link" target="_blank">Zum Gesetzestext</a>
+            </div>
+        </div>
+
+        <div class="category">
+            <div class="category-header">Arbeitsrechtliche Grundlagen</div>
+            
+            <div class="law-item">
+                <div class="law-title">Bürgerliches Gesetzbuch (BGB)</div>
+                <div class="law-description">Auszüge zum Arbeitsvertrag und arbeitsrechtlichen Grundlagen.</div>
+                <a href="https://www.gesetze-im-internet.de/bgb/" class="law-link" target="_blank">Zum Gesetzestext</a>
+            </div>
+            
+            <div class="law-item">
+                <div class="law-title">Kündigungsschutzgesetz (KSchG)</div>
+                <div class="law-description">Schutz vor ungerechtfertigter Kündigung. Pflichtaushang sofern Betrieb mehr als 10 Beschäftigte hat.</div>
+                <a href="https://www.gesetze-im-internet.de/kuendschg/" class="law-link" target="_blank">Zum Gesetzestext</a>
+            </div>
+            
+            <div class="law-item">
+                <div class="law-title">Bundesurlaubsgesetz (BUrlG)</div>
+                <div class="law-description">Regelungen zu Urlaubsansprüchen und Urlaubsgewährung.</div>
+                <a href="https://www.gesetze-im-internet.de/burlg/" class="law-link" target="_blank">Zum Gesetzestext</a>
+            </div>
+            
+            <div class="law-item">
+                <div class="law-title">Nachweisgesetz (NachwG)</div>
+                <div class="law-description">Verpflichtung, Arbeitsbedingungen schriftlich festzuhalten und nachzuweisen.</div>
+                <a href="https://www.gesetze-im-internet.de/nachwg/" class="law-link" target="_blank">Zum Gesetzestext</a>
+            </div>
+            
+            <div class="law-item">
+                <div class="law-title">Teilzeit- und Befristungsgesetz (TzBfG)</div>
+                <div class="law-description">Rechte bei Teilzeitarbeit und befristeten Arbeitsverhältnissen.</div>
+                <a href="https://www.gesetze-im-internet.de/tzbfg/" class="law-link" target="_blank">Zum Gesetzestext</a>
+            </div>
+            
+            <div class="law-item">
+                <div class="law-title">Tarifvertragsgesetz (TVG)</div>
+                <div class="law-description">Regelungen zu Tarifverträgen. Aushang falls ein Tarifvertrag gilt.</div>
+                <a href="https://www.gesetze-im-internet.de/tvg/" class="law-link" target="_blank">Zum Gesetzestext</a>
+            </div>
+        </div>
+
+        <div class="category">
+            <div class="category-header">Branchenspezifisch Einzelhandel</div>
+            
+            <div class="law-item">
+                <div class="law-title">Ladenschlussgesetz (LadSchlG)</div>
+                <div class="law-description">Arbeitszeiten im Handel - Ländergesetze beachten. Regelungen zu Öffnungszeiten im Einzelhandel.</div>
+                <a href="https://www.gesetze-im-internet.de/ladschlg/" class="law-link" target="_blank">Informationen HDE</a>
+            </div>
+            
+            <div class="law-item">
+                <div class="law-title">Gefahrstoffverordnung (GefStoffV)</div>
+                <div class="law-description">Schutzmaßnahmen wenn mit Reinigungs- oder Chemikalien gearbeitet wird.</div>
+                <a href="https://www.gesetze-im-internet.de/gefstoffv_2010/" class="law-link" target="_blank">Zur Verordnung</a>
+            </div>
+            
+            <div class="law-item">
+                <div class="law-title">Sicherheitsdatenblätter</div>
+                <div class="law-description">Sicherheitsdatenblätter der verwendeten Gefahrstoffe müssen verfügbar sein.</div>
+                <a href="https://gestis.dguv.de/" class="law-link" target="_blank">BAuA Informationen</a>
+            </div>
+        </div>
+
+        <div class="category">
+            <div class="category-header">Arbeitssicherheit & Notfallschutz</div>
+            
+            <div class="law-item">
+                <div class="law-title">Aushang Arbeitssicherheit</div>
+                <div class="law-description">Zentrale Informationstafel mit allen wichtigen Sicherheitshinweisen, Notfallnummern und Verhaltensregeln für den Arbeitsplatz.</div>
+                <a href="https://www.bghw-medienshop.de/fileadmin/user_upload/BGHW_Medienshop/Website/Medien-Dateien/A/A_6.pdf" class="law-link" target="_blank">BAuA Publikationen</a>
+            </div>
+            
+            <div class="law-item">
+                <div class="law-title">Betriebsarzt</div>
+                <div class="law-description">Kontaktdaten und Sprechzeiten des Betriebsarztes müssen für alle Mitarbeiter zugänglich sein. Pflicht ab einem Mitarbeiter.</div>
+                <a href="https://www.gesetze-im-internet.de/asig/" class="law-link" target="_blank">Arbeitssicherheitsgesetz (ASiG)</a>
+            </div>
+            
+            <div class="law-item">
+                <div class="law-title">Brandschutzmappe</div>
+                <div class="law-description">Brandschutzordnung, Flucht- und Rettungspläne, Verhalten im Brandfall. Muss für alle Mitarbeiter einsehbar sein.</div>
+                <a href="https://www.bgw-online.de/bgw-online-de/themen/sicher-mit-system/brandschutz/brandschutz-im-betrieb-richtiges-verhalten-im-brandfall-20668" class="law-link" target="_blank">BAuA Brandschutz</a>
+            </div>
+            
+            <div class="law-item">
+                <div class="law-title">BGHW Tafel</div>
+                <div class="law-description">Informationstafel der Berufsgenossenschaft Handel und Warenlogistik mit branchenspezifischen Sicherheitshinweisen für den Einzelhandel.</div>
+                <a href="https://www.bghw.de/weiterbildung-services/fuer-sie-zusammengestellt/formulare-und-downloads" class="law-link" target="_blank">BGHW Formulare & Downloads</a>
+                <a href="https://www.bghw-medienshop.de/" class="law-link" target="_blank" style="margin-left: 10px;">BGHW Medienshop</a>
+            </div>
+            
+            <div class="law-item">
+                <div class="law-title">Erste-Hilfe-Aushang</div>
+                <div class="law-description">Verhalten bei Unfällen, Kontaktdaten der Ersthelfer, Standorte der Erste-Hilfe-Kästen und Notausgänge.</div>
+                <a href="https://publikationen.dguv.de/widgets/pdf/download/article/760" class="law-link" target="_blank">DGUV Erste Hilfe</a>
+            </div>
+            
+            <div class="law-item">
+                <div class="law-title">DGUV Regel 108-601 "Branche Einzelhandel"</div>
+                <div class="law-description">Spezielle Regel für den Einzelhandel mit branchenspezifischen Arbeitsschutzmaßnahmen und Präventionshinweisen.</div>
+                <a href="https://www.uv-bund-bahn.de/fileadmin/user_upload/108-601.pdf" class="law-link" target="_blank">DGUV Regel 108-601 PDF</a>
+            </div>
+            
+            <div class="law-item">
+                <div class="law-title">BGHW Kompendium Arbeitsschutz</div>
+                <div class="law-description">Digitaler Zugang zu allen Vorschriften und Präventionsmedien der BGHW für Online-Recherche, Ausdruck und Download.</div>
+                <a href="https://www.bghw.de/weiterbildung-services/fuer-sie-zusammengestellt/formulare-und-downloads" class="law-link" target="_blank">Zum Kompendium</a>
+            </div>
+        </div>
+
+        <div class="category">
+            <div class="category-header">Datenschutz & Betriebsrat</div>
+            
+            <div class="law-item">
+                <div class="law-title">Datenschutz-Grundverordnung (DSGVO) + BDSG</div>
+                <div class="law-description">EU-weite Regelungen zum Datenschutz und Umgang mit Mitarbeiterdaten. Informationspflichten gegenüber Beschäftigten.</div>
+                <a href="https://dsgvo-gesetz.de/" class="law-link" target="_blank">Zur DSGVO</a>
+            </div>
+            
+            <div class="law-item">
+                <div class="law-title">Betriebsverfassungsgesetz (BetrVG)</div>
+                <div class="law-description">Regelt die Zusammenarbeit zwischen Arbeitgeber und Betriebsrat. Besonders wichtig bei Betriebsrat oder Wahlen.</div>
+                <a href="https://www.gesetze-im-internet.de/betrvg/" class="law-link" target="_blank">Zum Gesetzestext</a>
+            </div>
+        </div>
+
+        <div class="category">
+            <div class="category-header">Weiterbildung & Prävention</div>
+            
+            <div class="law-item">
+                <div class="law-title">Der sichere Supermarkt (interaktiv)</div>
+                <div class="law-description">Virtuelle Präventionsplattform der BGHW für den Einzelhandel – mit Videos, Checklisten und Quizfragen.</div>
+                <a href="https://www.bghw.de/arbeitsschutz/wie-sie-aktiv-den-arbeitsschutz-gestalten-koennen/der-sichere-supermarkt" class="law-link" target="_blank">Zur Plattform</a>
+            </div>
+            
+            <div class="law-item">
+                <div class="law-title">Seminar TS 16: Brandschutz & Evakuierung</div>
+                <div class="law-description">3-tägiges BGHW-Seminar zur Umsetzung von Brandschutz und Evakuierungsmaßnahmen im Einzelhandel.</div>
+                <a href="https://www.bghw.de/weiterbildung-services/seminare/seminarangebot/ts-16-brandschutz-und-evakuierung-im-einzelhandel" class="law-link" target="_blank">Zum Seminar</a>
+            </div>
+            
+            <div class="law-item">
+                <div class="law-title">Seminar TS 20: Raub-/Diebstahlprävention</div>
+                <div class="law-description">BGHW-Seminar zu Präventionsmaßnahmen bei Raubüberfällen und Ladendiebstählen, inkl. Verhaltenstraining.</div>
+                <a href="https://www.bghw.de/weiterbildung-services/seminare/seminarangebot/ts-20-raubueberfaelle-und-ladendiebstahl-praeventionsmassnahmen" class="law-link" target="_blank">Zum Seminar</a>
+            </div>
+            
+            <div class="law-item">
+                <div class="law-title">Offene Lernangebote (digital)</div>
+                <div class="law-description">Online-Lernmodule zu Erste Hilfe, Brandschutz, Gewaltprävention u.v.m. – flexibel und kostenlos nutzbar.</div>
+                <a href="https://www.bghw.de/weiterbildung-services/weiterbildung/offene-lernangebote" class="law-link" target="_blank">Zu den Lernangeboten</a>
+            </div>
+        </div>
+
+        <footer>
+            <p><strong>Stand:</strong> Januar 2025 | <strong>Hinweis:</strong> Diese Übersicht erhebt keinen Anspruch auf Vollständigkeit. Bitte prüfen Sie regelmäßig die Aktualität der Gesetze.</p>
+            <p>Bei Fragen wenden Sie sich an Ihren Vorgesetzten.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Suchfunktion
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const lawItems = document.querySelectorAll('.law-item');
+            const categories = document.querySelectorAll('.category');
+            
+            categories.forEach(category => {
+                const items = category.querySelectorAll('.law-item');
+                let hasVisibleItems = false;
+                
+                items.forEach(item => {
+                    const title = item.querySelector('.law-title').textContent.toLowerCase();
+                    const description = item.querySelector('.law-description').textContent.toLowerCase();
+                    
+                    if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                        item.style.display = 'block';
+                        hasVisibleItems = true;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+                
+                // Kategorie ausblenden wenn keine sichtbaren Items
+                category.style.display = hasVisibleItems ? 'block' : 'none';
+            });
+        });
+        
+        // Smooth Scrolling für bessere UX
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+<footer style="
+  text-align: center;
+  margin-top: 40px;
+  padding: 16px 8px;
+  font-size: 12px;
+  color: #999;
+  background-color: #fafafa;
+  border-top: 1px solid #eee;
+  border-radius: 0 0 10px 10px;">
+  &copy; <span id="year"></span> Andreas Zott – Alle Rechte vorbehalten<br>
+  <span style="font-size: 11px;">(Sifa) Arbeitssicherheit <span id="year-small"></span></span>
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+        <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 8px;">
+            <a href="impressum.html" style="color: #4f46e5; text-decoration: none; font-size: 13px;">Impressum</a>
+            <a href="datenschutz.html" style="color: #4f46e5; text-decoration: none; font-size: 13px;">Datenschutz</a>
+            <a href="welcome.html" style="color: #4f46e5; text-decoration: none; font-size: 13px;">Startseite</a>
+        </div>
+        <p style="margin: 0; font-size: 12px; color: #6b7280;">
+                   </p>
+
+</footer>
+</body>
+</html>
