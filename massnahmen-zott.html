@@ -5,7 +5,7 @@
   <title>Maßnahmen-Auswertung</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <style>
+ <style>
     body {
       font-family: "Segoe UI", sans-serif;
       padding: 20px;
@@ -124,7 +124,8 @@
 
     @media print {
       .btn-group,
-      .nav-buttons {
+      .nav-buttons,
+      footer {
         display: none !important;
       }
 
@@ -139,7 +140,7 @@
   <div class="info" id="meta-info"></div>
 
   <div class="btn-group">
-    <button onclick="window.print()">📄 Drucken / PDF</button>
+    <button onclick="druckMitFooterAusblenden()">📄 Drucken / PDF</button>
     <button onclick="pdfTeilen()" class="share-button">📄 PDF generieren & teilen 📤</button>
     <button onclick="teilen()" class="share-button">🧾 Text teilen (iPad)</button>
   </div>
@@ -168,9 +169,8 @@
       const data = event.data;
       aktuelleDaten = data;
 
-      // Meta-Daten anzeigen
       document.getElementById('meta-info').innerHTML = `
-        <p><strong>📅 Datum:</strong> ${new Date(data.datum).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })}</p>
+        <p><strong>🗓️ Datum:</strong> ${data.datum}</p>
         <p><strong>🏬 Marktnummer:</strong> ${data.markt}</p>
         <p><strong>👤 Name:</strong> ${data.name}</p>
         <p><strong>🛡️ SiFa:</strong> ${data.sifa}</p>
@@ -180,6 +180,7 @@
       if (data.maßnahmen.length === 0) {
         tbody.innerHTML = `<tr><td colspan="2">🎉 Keine Maßnahmen erforderlich!</td></tr>`;
       } else {
+        tbody.innerHTML = '';
         data.maßnahmen.forEach((m, i) => {
           const row = document.createElement('tr');
           row.innerHTML = `<td>${i + 1}</td><td>${m.beschreibung}</td>`;
@@ -188,13 +189,20 @@
       }
     });
 
+    function druckMitFooterAusblenden() {
+      const footer = document.querySelector("footer");
+      if (footer) footer.style.display = "none";
+      window.print();
+      if (footer) footer.style.display = "";
+    }
+
     async function teilen() {
       if (!aktuelleDaten) {
         alert("❗ Noch keine Daten empfangen.");
         return;
       }
 
-      const text = `Maßnahmenübersicht für Markt ${aktuelleDaten.markt} vom ${new Date(aktuelleDaten.datum).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })}:\n\n` +
+      const text = `Maßnahmenübersicht für Markt ${aktuelleDaten.markt} vom ${aktuelleDaten.datum}:\n\n` +
         aktuelleDaten.maßnahmen.map((m, i) => `${i + 1}. ${m.beschreibung}`).join("\n") +
         `\n\nName: ${aktuelleDaten.name}\nSiFa: ${aktuelleDaten.sifa}`;
 
@@ -221,6 +229,7 @@
       const element = document.body.cloneNode(true);
       element.querySelector('.btn-group')?.remove();
       element.querySelector('.nav-buttons')?.remove();
+      element.querySelector('footer')?.remove(); // Footer entfernen
 
       const opt = {
         margin: [56.7, 56.7, 56.7, 56.7],
@@ -237,7 +246,7 @@
         try {
           await navigator.share({
             title: "Maßnahmen-Auswertung",
-            text: `PDF zur Checkliste vom ${new Date(aktuelleDaten.datum).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })}`,
+            text: `PDF zur Checkliste vom ${aktuelleDaten.datum}`,
             files: [file]
           });
         } catch (err) {
@@ -265,8 +274,7 @@
             <a href="datenschutz.html" style="color: #4f46e5; text-decoration: none; font-size: 13px;">Datenschutz</a>
             <a href="welcome.html" style="color: #4f46e5; text-decoration: none; font-size: 13px;">Startseite</a>
         </div>
-        <p style="margin: 0; font-size: 12px; color: #6b7280;">
-                   </p>
+        <p style="margin: 0; font-size: 12px; color: #6b7280;"></p>
     </div>
 </footer>
 </body>
