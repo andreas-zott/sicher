@@ -115,7 +115,8 @@
 
     @media print {
       .btn-group,
-      .nav-buttons {
+      .nav-buttons,
+      footer {
         display: none !important;
       }
 
@@ -130,7 +131,7 @@
   <section class="info" id="meta-info" aria-label="Metadaten"></section>
 
   <div class="btn-group">
-    <button onclick="window.print()">📄 Drucken / PDF</button>
+    <button onclick="druckMitFooterAusblenden()">📄 Drucken / PDF</button>
     <button onclick="pdfTeilen()">📄 PDF generieren & teilen 📤</button>
     <button onclick="teilen()">🧾 Text teilen (iPad)</button>
   </div>
@@ -164,7 +165,6 @@
 
       const datum = data.datum ? new Date(data.datum).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '—';
 
-      // Metadaten anzeigen
       document.getElementById('meta-info').innerHTML = `
         <p><strong>📅 Datum:</strong> ${datum}</p>
         <p><strong>🏬 Marktnummer:</strong> ${data.markt || '—'}</p>
@@ -172,9 +172,8 @@
         <p><strong>🛡️ SiFa:</strong> ${data.sifa || '—'}</p>
       `;
 
-      // Maßnahmen-Tabelle füllen
       const tbody = document.querySelector('#maßnahmen-tabelle tbody');
-      tbody.innerHTML = ''; // Vorherige Inhalte löschen
+      tbody.innerHTML = '';
 
       if (!Array.isArray(data.maßnahmen) || data.maßnahmen.length === 0) {
         tbody.innerHTML = `<tr><td colspan="2">🎉 Keine Maßnahmen erforderlich!</td></tr>`;
@@ -186,6 +185,13 @@
         });
       }
     });
+
+    function druckMitFooterAusblenden() {
+      const footer = document.querySelector("footer");
+      if (footer) footer.style.display = "none";
+      window.print();
+      if (footer) footer.style.display = "";
+    }
 
     async function teilen() {
       if (!aktuelleDaten) {
@@ -217,10 +223,10 @@
         return;
       }
 
-      // Klonen des Inhalts ohne Buttons
       const clone = document.body.cloneNode(true);
       clone.querySelector('.btn-group')?.remove();
       clone.querySelector('.nav-buttons')?.remove();
+      clone.querySelector('footer')?.remove(); // Footer ebenfalls entfernen
 
       const opt = {
         margin: 56.7,
@@ -265,8 +271,7 @@
             <a href="datenschutz.html" style="color: #4f46e5; text-decoration: none; font-size: 13px;">Datenschutz</a>
             <a href="welcome.html" style="color: #4f46e5; text-decoration: none; font-size: 13px;">Startseite</a>
         </div>
-        <p style="margin: 0; font-size: 12px; color: #6b7280;">
-                   </p>
+        <p style="margin: 0; font-size: 12px; color: #6b7280;"></p>
     </div>
 </footer>
 </body>
