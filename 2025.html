@@ -480,10 +480,11 @@ label {
 <body>
 <div class="print-wrapper">
 <header>
-<div style="display: flex; justify-content: space-between; align-items: center;">
-  <h1 id="titel" style="margin: 0;"></h1>
-  <input id="datum" type="date" style="padding: 8px; font-size: 16px;" />
-</div>
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <h1 id="titel" style="margin: 0;"></h1>
+    <!-- geändert: kein type="date" -->
+    <span id="datum" style="padding: 8px; font-size: 16px; font-weight: bold;"></span>
+  </div>
 </header>
 
 <div class="form-section" style="max-width: 300px;">
@@ -2076,6 +2077,16 @@ function formularZuruecksetzen() {
     alert("🧹 Formular zurückgesetzt.");
   }
 }
+
+// Aktuelles Datum im deutschen Format einsetzen
+const heute = new Date();
+const datumDeutsch = heute.toLocaleDateString("de-DE", {
+  day: "2-digit",
+  month: "2-digit",
+  year: "numeric"
+});
+document.getElementById("datum").textContent = datumDeutsch;
+
 </script>
 
 </body>
