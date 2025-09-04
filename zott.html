@@ -7,7 +7,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon" />
   <link href="/sicher/zott.json" rel="manifest"/>  
-  <style>  
+ <style>  
     body.darkmode .footer {
       display: none !important;
     }    
@@ -205,11 +205,13 @@
       margin-top: 40px;
     }
   </style>
+
 </head>
 <body>
 <h1>Checkliste zur Gefährdungsbeurteilung im Einzelhandel</h1>
   <button id="darkmode-toggle" title="Darkmode umschalten">🌙</button>
-  <header>
+
+ <header>
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <h1 id="titel" style="margin: 0;"></h1>
     <span id="datum" style="padding: 8px; font-size: 16px; font-weight: bold;"></span>
@@ -2732,9 +2734,8 @@
       </div>
       <hr>
       <div class="button-grid">
-        <button onclick="exportiereMassnahmen()" class="modern-button btn-gray">📝 Defizite exportieren</button>
-        <button onclick="teileGesamtenText()">Gesamte Seite als PDF (iPad geeignet)</button>
-        <button onclick="window.print()">🖨️ Dokument drucken</button>
+        <button onclick="exportiereMassnahmen()" class="modern-button btn-gray">📝 Defizite exportieren</button>             
+       <button onclick="window.print()">🖨️ Dokument drucken</button>
         <button onclick="exportMultiPagePDF()">📤 PDF teilen (iPad)</button>
       </div>
     </div>
@@ -3017,6 +3018,72 @@ const datumDeutsch = heute.toLocaleDateString("de-DE", {
   year: "numeric"
 });
 document.getElementById("datum").textContent = datumDeutsch;
+  </script>
+
+  <script>
+    async function exportPDF() {
+      const { jsPDF } = window.jspdf;
+
+      // Neues PDF
+      const pdf = new jsPDF("p", "mm", "a4");
+
+      // --- 1. Gesamten Hauptinhalt per html2canvas einfügen ---
+      const inhalt = document.querySelector("body"); 
+      const canvas = await html2canvas(inhalt, { scale: 2 });
+      const imgData = canvas.toDataURL("image/png");
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+
+      // --- 2. Zusammenfassung ---
+      pdf.addPage();
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(16);
+      pdf.text("Zusammenfassung der Maßnahmen", 20, 30);
+
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(12);
+      const zusammenfassungText = document.querySelector("#zusammenfassung")?.innerText 
+                                || "Keine Maßnahmen dokumentiert.";
+      pdf.text(zusammenfassungText, 20, 45, { maxWidth: 170 });
+
+      // --- 3. Unterschrift ---
+      pdf.addPage();
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(14);
+      pdf.text("Unterschrift", 20, 30);
+
+      const signCanvas = document.querySelector(".signatur-bereich canvas");
+      if (signCanvas) {
+        const signImg = signCanvas.toDataURL("image/png");
+        pdf.addImage(signImg, "PNG", 20, 40, 80, 40);
+      } else {
+        pdf.setFont("helvetica", "italic");
+        pdf.text("Keine Unterschrift vorhanden", 20, 50);
+      }
+
+      // --- 4. Abschlussbestätigung ---
+      pdf.addPage();
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(16);
+      pdf.text("Abschlussbestätigung", 20, 30);
+
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(12);
+      pdf.text("Hiermit wird bestätigt, dass die Gefährdungsbeurteilung abgeschlossen ist.", 20, 45, { maxWidth: 170 });
+
+      // --- 5. PDF speichern ---
+      pdf.save("gefaehrdungsbeurteilung.pdf");
+    }
+
+    // Button anpassen
+    document.addEventListener("DOMContentLoaded", () => {
+      const btn = document.getElementById("pdf-button");
+      if (btn) {
+        btn.addEventListener("click", exportPDF);
+      }
+    });
   </script>
 </body>
 </html>
