@@ -3085,5 +3085,75 @@ document.getElementById("datum").textContent = datumDeutsch;
       }
     });
   </script>
+<script>
+document.getElementById("pdf-button").addEventListener("click", function () {
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF("p", "pt", "a4");
+
+  html2canvas(document.body, { scale: 2 }).then(canvas => {
+    const imgData = canvas.toDataURL("image/png");
+
+    const pdfWidth = 595.28;   // A4 Breite in pt
+    const pdfHeight = 841.89;  // A4 Höhe in pt
+    const imgWidth = pdfWidth;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    let heightLeft = imgHeight;
+    let position = 0;
+
+    // --- Seite 1
+    pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+    heightLeft -= pdfHeight;
+
+    // --- Falls mehrere Seiten nötig sind
+    while (heightLeft > 0) {
+      position = heightLeft - imgHeight;
+      pdf.addPage();
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      heightLeft -= pdfHeight;
+    }
+
+    // --- Signaturfeld exakt platzieren
+    const signatureCanvas = document.querySelector(".signatur-bereich canvas");
+    if (signatureCanvas) {
+      const rect = signatureCanvas.getBoundingClientRect();
+
+      const scaleX = imgWidth / canvas.width;
+      const scaleY = imgHeight / canvas.height;
+
+      const x = rect.left * scaleX;
+      const y = rect.top * scaleY;
+      const w = rect.width * scaleX;
+      const h = rect.height * scaleY;
+
+      const pageIndex = Math.floor(y / pdfHeight);
+      const yOnPage = y - pageIndex * pdfHeight;
+
+      const signatureImg = signatureCanvas.toDataURL("image/png");
+
+      pdf.setPage(pageIndex + 1);
+      pdf.addImage(signatureImg, "PNG", x, yOnPage, w, h);
+    }
+
+    // --- iPad/iOS/Browser: Teilen statt nur speichern
+    const pdfBlob = pdf.output("blob");
+    const file = new File([pdfBlob], "dokument.pdf", { type: "application/pdf" });
+
+    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+      navigator.share({
+        title: "Gefährdungsbeurteilung",
+        text: "Bitte prüfen Sie das PDF-Dokument.",
+        files: [file]
+      }).catch(err => {
+        console.warn("Teilen abgebrochen oder nicht möglich:", err);
+        pdf.save("dokument.pdf"); // Fallback
+      });
+    } else {
+      pdf.save("dokument.pdf"); // Fallback für Desktop
+    }
+  });
+});
+</script>
+
 </body>
 </html>

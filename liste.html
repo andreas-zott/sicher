@@ -1132,19 +1132,24 @@ async function generateAndSharePDF() {
     canvas.parentNode.insertBefore(signatureImg, canvas);
   }
 
-  const element = document.body;
-  const opt = {
-    margin: [20, 20, 20, 20],
-    filename: `arbeitssicherheit-checkliste-${new Date().toISOString().split('T')[0]}.pdf`,
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: {
-      scale: 2,
-      scrollY: 0,
-      useCORS: true,
-      allowTaint: true
-    },
-    jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
-  };
+const element = document.body;
+
+// deutsches Datum formatieren
+const today = new Date();
+const formattedDate = today.toLocaleDateString('de-DE'); // z.B. "06-09-2025"
+
+const opt = {
+  margin: [20, 20, 20, 20],
+  filename: `Arbeitssicherheit-Begehungsprotokoll-${formattedDate}.pdf`,
+  image: { type: 'jpeg', quality: 0.98 },
+  html2canvas: {
+    scale: 2,
+    scrollY: 0,
+    useCORS: true,
+    allowTaint: true
+  },
+  jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
+};
 
   try {
     const blob = await html2pdf().set(opt).from(element).outputPdf('blob');
