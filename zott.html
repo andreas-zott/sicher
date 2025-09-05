@@ -2852,7 +2852,7 @@
       }
       document.querySelectorAll('.button-grid, .footer, .signatur-buttons, button').forEach(el => el.classList.remove('no-print'));
       const pdfBlob = pdf.output("blob");
-      const file = new File([pdfBlob], "seite.pdf", { type: "application/pdf" });
+      const file = new File([pdfBlob], "Begehungsprotokoll.pdf", { type: "application/pdf" });
 
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
         try {
@@ -2867,7 +2867,7 @@
         const url = URL.createObjectURL(pdfBlob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = "seite.pdf";
+        a.download = "Begehungsprotokoll.pdf";
         a.click();
         URL.revokeObjectURL(url);
       }
