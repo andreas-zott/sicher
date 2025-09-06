@@ -349,11 +349,11 @@ async function sharePDF() {
     }
     document.body.removeChild(container);
     const pdfBlob = pdf.output('blob');
-    const file = new File([pdfBlob], 'checkliste.pdf', { type: 'application/pdf' });
+    const file = new File([pdfBlob], 'Begehungsprotokoll.pdf', { type: 'application/pdf' });
     if (navigator.share && navigator.canShare({ files: [file] })) {
       navigator.share({ title: 'Arbeitsschutz‑Checkliste', files: [file] }).catch(err => console.error(err));
     } else {
-      pdf.save('checkliste.pdf');
+      pdf.save('Begehungsprotokoll.pdf');
     }
   });
 }
