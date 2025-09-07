@@ -3198,7 +3198,7 @@ button,
                 }
                 
                 // PDF speichern
-                const filename = `Sicherheitsfragebogen_${marktnummer || 'unbekannt'}_${datum}.pdf`;
+                const filename = `Arbeitssicherheit-Begehungsprotokoll_${marktnummer || 'unbekannt'}_${datum}.pdf`;
                 pdf.save(filename);
                 
             } catch (error) {
@@ -3425,13 +3425,13 @@ button,
 
         // → PDF als Blob erzeugen
         const pdfBlob = pdf.output('blob');
-        const pdfFile = new File([pdfBlob], `Sicherheitsfragebogen_${marktnummer || 'unbekannt'}_${datum}.pdf`, { type: 'application/pdf' });
+        const pdfFile = new File([pdfBlob], `Arbeitssicherheit-Begehungsprotokoll_${marktnummer || 'unbekannt'}_${datum}.pdf`, { type: 'application/pdf' });
 
         // Teilen nur möglich, wenn Web Share API mit Dateien unterstützt wird
         if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
             await navigator.share({
                 title: 'Sicherheits-Fragebogen',
-                text: 'Hier ist der ausgefüllte Sicherheitsfragebogen als PDF.',
+                text: 'Hier ist das ausgefüllte Arbeitssicherheit-Begehungsprotokoll als PDF.',
                 files: [pdfFile]
             });
         } else {
