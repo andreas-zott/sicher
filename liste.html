@@ -225,6 +225,7 @@ margin-top: 0;
     padding: 10px;
     border: 1px solid #dee2e6;
     text-align: left;
+    line-height: 1.35;
   }
   tr:nth-child(even) {
     background-color: #f2f2f2;
@@ -260,6 +261,55 @@ margin-top: 0;
   }
   button:hover {
     background-color: #0056b3;
+
+/* --- PDF / Print improvements: avoid splitting rows and keep sections on pages --- */
+table, thead, tbody, tr, td, th {
+  page-break-inside: avoid;
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  -webkit-region-break-inside: avoid;
+}
+.category-header, .confirmation-section, .signature-container, #maßnahmen-tabelle tr {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+.page-break-before {
+  page-break-before: always !important;
+  break-before: page !important;
+  margin-top: 0;
+}
+.page-break-after {
+  page-break-after: always !important;
+  break-after: page !important;
+}
+/* Ensure long tables flow naturally but do not split rows */
+tbody {
+  display: table-row-group;
+}
+@media print {
+  /* reduce shadows for print and keep white backgrounds */
+  table { box-shadow: none; }
+  .print-wrapper { background: white; }
+}
+
+
+/* Erzwinge Seitenumbruch vor jeder Kategorie */
+.category-header {
+  page-break-before: always !important;
+  break-before: page !important;
+}
+.category-header:first-of-type {
+  page-break-before: auto !important;
+  break-before: auto !important;
+}
+
+
+/* Verhindere, dass Tabellenzeilen durchschnitten werden */
+tr, td, th {
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
+}
+
 </style>
 </head>
 <body>
@@ -580,7 +630,7 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
 <td><input name="4.0 Kassenzone-4" type="radio" value="nein"/></td>
 <td><input name="4.0 Kassenzone-4" type="radio" value="nicht_vorhanden"/></td>
 </tr>
-<tr><td class="page-break-before" colspan="4" style="text-align: left;">5.0 Kühlhaus</td></tr>
+<tr><td class="category-header" colspan="4" style="text-align: left;">5.0 Kühlhaus</td></tr>
 <tr>
 <td style="text-align: left;">Ist in den Kühlhäusern an der Beleuchtung die Überglocke vorhanden?</td>
 <td><input name="5.0 Kühlhaus-0" type="radio" value="ja"/></td>
@@ -1063,6 +1113,7 @@ const today = new Date();
 const formattedDate = today.toLocaleDateString('de-DE'); // z.B. "06-09-2025"
 
 const opt = {
+  pagebreak: { mode: ['css','legacy'], avoid: 'tr' },
   margin: [20, 20, 20, 20],
   filename: `Arbeitssicherheit-Begehungsprotokoll-${formattedDate}.pdf`,
   image: { type: 'jpeg', quality: 0.98 },
@@ -1070,9 +1121,10 @@ const opt = {
     scale: 2,
     scrollY: 0,
     useCORS: true,
-    allowTaint: true
+    allowTaint: true,
+    logging: false
   },
-  jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
+  jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
 };
 
   try {
