@@ -230,45 +230,151 @@ th {
 }
 
 @media print {
+    .page-break-before {
+      page-break-before: always;
+margin-top: 0;
+      break-before: page;
+    }
+    @page {
+      size: A4 portrait;
+      margin: 20mm;
+    }
+    button, .btn, footer, .footer {
+      display: none !important;
+    }
+    input[type="text"], input[type="date"] {
+      border: none;
+      background: transparent;
+      font-weight: bold;
+      color: black;
+    }
+    input[type="radio"] {
+      transform: scale(1.2);
+    }
+    th, .category-header {
+      background-color: #ccc !important;
+      color: black !important;
+    }
+    tr:nth-child(even) {
+      background-color: #eee !important;
+    }
+    body {
+      background: white;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  }
   body {
-    background: white;
-    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    padding: 20px;
   }
-  
-  .print-wrapper {
-    box-shadow: none;
-    border-radius: 0;
+  header h1 {
+    color: #212529;
   }
-  
-  .modern-button, .button-row {
-    display: none !important;
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   }
-  
-  .page-break-before {
-    page-break-before: always;
+  th {
+    background-color: #007BFF;
+    color: white;
+    padding: 12px;
+    text-align: center;
   }
+  td {
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    text-align: left;
+    line-height: 1.35;
+  }
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  tr:hover {
+    background-color: #e6f0ff;
+  }
+  .category-header {
+    background-color: #d1ecf1 !important;
+    color: #0c5460;
+    font-weight: bold;
+    text-align: left;
+    padding: 12px;
+  }
+  input[type="text"], input[type="date"] {
+    width: 100%;
+    max-width: 300px;
+    padding: 8px;
+    font-size: 16px;
+    margin-top: 5px;
+    box-sizing: border-box;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+  }
+  button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  button:hover {
+    background-color: #0056b3;
+
+/* --- PDF / Print improvements: avoid splitting rows and keep sections on pages --- */
+table, thead, tbody, tr, td, th {
+  page-break-inside: avoid;
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  -webkit-region-break-inside: avoid;
+}
+.category-header, .confirmation-section, .signature-container, #maßnahmen-tabelle tr {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+.page-break-before {
+  page-break-before: always !important;
+  break-before: page !important;
+  margin-top: 0;
+}
+.page-break-after {
+  page-break-after: always !important;
+  break-after: page !important;
+}
+/* Ensure long tables flow naturally but do not split rows */
+tbody {
+  display: table-row-group;
+}
+@media print {
+  /* reduce shadows for print and keep white backgrounds */
+  table { box-shadow: none; }
+  .print-wrapper { background: white; }
 }
 
-@media (max-width: 768px) {
-  .checkbox-row {
-    flex-direction: column;
-  }
-  
-  .button-row {
-    flex-direction: column;
-  }
-  
-  table {
-    font-size: 12px;
-  }
-  
-  th, td {
-    padding: 4px;
-  }
+
+/* Erzwinge Seitenumbruch vor jeder Kategorie */
+.category-header {
+  page-break-before: always !important;
+  break-before: page !important;
+}
+.category-header:first-of-type {
+  page-break-before: auto !important;
+  break-before: auto !important;
+}
+
+
+/* Verhindere, dass Tabellenzeilen durchschnitten werden */
+tr, td, th {
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
 }
 </style>
 </head>
-
 <body>
 <div class="print-wrapper">
 <header>
@@ -304,7 +410,7 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
     <th>Frage</th>
     <th>Ja</th>
     <th>Nein</th>
-    <th>Nicht vorhanden</th>
+    <th>n.v.</th>
   </tr>
 </thead>
 <tbody>
@@ -1640,60 +1746,48 @@ if (measure.includes("Schulungen für den Umgang mit gewalttätigen Situationen 
 
   return measure;
 }
-
 function neinFragenInMaßnahmen() {
   const fragenzeilen = document.querySelectorAll('#fragenTabelle tr');
   const maßnahmenTabelleBody = document.getElementById('maßnahmen-tabelle');
   maßnahmenTabelleBody.innerHTML = '';
-
   let dynamicMeasuresCount = 0;
   fragenzeilen.forEach(row => {
     const frageText = row.cells[0]?.innerText;
     const radios = row.querySelectorAll('input[type="radio"]');
     let selected = null;
-
     radios.forEach(r => {
       if (r.checked) selected = r.value;
     });
-
     if (selected === 'nein' && frageText && !frageText.includes('category-header')) {
       const measureText = generateMeasure(frageText);
-
       const newRow = document.createElement('tr');
       const numCell = document.createElement('td');
       const descCell = document.createElement('td');
-
       numCell.textContent = (dynamicMeasuresCount + 1).toString();
       descCell.textContent = measureText;
       descCell.contentEditable = "true";
-
       newRow.appendChild(numCell);
       newRow.appendChild(descCell);
       maßnahmenTabelleBody.appendChild(newRow);
       dynamicMeasuresCount++;
     }
   });
-
   // Add two empty rows for manual input
   for (let i = 0; i < 2; i++) {
     const newRow = document.createElement('tr');
     const numCell = document.createElement('td');
     const descCell = document.createElement('td');
-
     numCell.textContent = (dynamicMeasuresCount + i + 1).toString();
     descCell.textContent = '';
     descCell.contentEditable = "true";
-
     newRow.appendChild(numCell);
     newRow.appendChild(descCell);
     maßnahmenTabelleBody.appendChild(newRow);
   }
 }
-
 function exportiereMassnahmen() {
   const fragenTabelle = document.getElementById('fragenTabelle');
   const maßnahmenTabelle = [];
-
   const rows = fragenTabelle.querySelectorAll('tr');
   rows.forEach((row, index) => {
     const frageZelle = row.querySelector('td');
@@ -1710,12 +1804,10 @@ function exportiereMassnahmen() {
       }
     }
   });
-
   const datum = document.getElementById('datum')?.value || '';
   const markt = document.getElementById('markt')?.value || '';
   const name = document.getElementById('name')?.value || '';
   const sifa = document.getElementById('sifa')?.value || '';
-
   const daten = {
     datum,
     markt,
@@ -1723,35 +1815,29 @@ function exportiereMassnahmen() {
     sifa,
     maßnahmen: maßnahmenTabelle
   };
-
   const newWindow = window.open('massnahmen-sifa.html', 'maßnahmen');
   setTimeout(() => {
     newWindow.postMessage(daten, "*");
   }, 1000);
 }
-
 // Event Listeners
 window.addEventListener("resize", resizeCanvas);
 window.addEventListener("load", () => {
   resizeCanvas();
   restoreSignature();
-
   const datumsfeld = document.getElementById('datum');
   if (datumsfeld) {
     const heute = new Date().toISOString().split('T')[0];
     datumsfeld.value = heute;
   }
-
   // Add event listeners to all radio buttons
   const radioButtons = document.querySelectorAll('#fragenTabelle input[type="radio"]');
   radioButtons.forEach(radio => {
     radio.addEventListener('change', neinFragenInMaßnahmen);
   });
-
   // Initial call to populate measures
   neinFragenInMaßnahmen();
 });
-
 canvas.addEventListener('mousedown', startDrawing);
 canvas.addEventListener('mousemove', draw);
 canvas.addEventListener('mouseup', stopDrawing);
@@ -1759,7 +1845,6 @@ canvas.addEventListener('mouseout', stopDrawing);
 canvas.addEventListener('touchstart', startDrawing, { passive: false });
 canvas.addEventListener('touchmove', draw, { passive: false });
 canvas.addEventListener('touchend', stopDrawing);
-
 // Service Worker optional
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -1774,11 +1859,14 @@ if ('serviceWorker' in navigator) {
   document.getElementById('titel').textContent = `Arbeitssicherheit-Checkliste-${aktuellesJahr}`;
 </script>
 <script>
+  const aktuellesJahr = new Date().getFullYear();
+  document.getElementById('titel').textContent = `Arbeitssicherheit-Checkliste-${aktuellesJahr}`;
+</script>
+<script>
 // Automatisches Laden beim Start
 window.addEventListener('DOMContentLoaded', () => {
   ladeFormular();
 });
-
 // Speichern aller Eingaben
 function speichereFormular() {
   const formData = {};
@@ -1796,13 +1884,11 @@ function speichereFormular() {
   });
   localStorage.setItem('formSicherheit2025', JSON.stringify(formData));
 }
-
 // Laden und Anwenden (inkl. Hervorhebung)
 function ladeFormular() {
   const saved = localStorage.getItem('formSicherheit2025');
   if (!saved) return;
   const data = JSON.parse(saved);
-
   document.querySelectorAll('input').forEach(el => {
     if (el.type === 'radio' || el.type === 'checkbox') {
       if (el.name && data[el.name]) {
@@ -1814,11 +1900,9 @@ function ladeFormular() {
       el.value = data[el.id || el.name];
     }
   });
-
   // Nach dem Laden: Hervorhebung aktualisieren
   aktualisiereHervorhebung();
 }
-
 // Farbige Hervorhebung der Antworten
 function aktualisiereHervorhebung() {
   const zeilen = document.querySelectorAll('#fragenTabelle tbody tr');
@@ -1836,7 +1920,6 @@ function aktualisiereHervorhebung() {
     }
   });
 }
-
 // Speichern bei jeder Eingabeänderung
 document.addEventListener('change', event => {
   if (event.target.matches('input')) {
@@ -1850,7 +1933,6 @@ function manuellSpeichern() {
   speichereFormular();
   alert("✅ Formular gespeichert!");
 }
-
 // Formular zurücksetzen
 function formularZuruecksetzen() {
   if (confirm("⚠️ Formular & Daten wirklich löschen?")) {
@@ -1866,9 +1948,9 @@ function formularZuruecksetzen() {
     alert("🧹 Formular zurückgesetzt.");
   }
 }
-
+// Im Teilen-Script zusätzlich:
 const originalGenerateAndSharePDF = generateAndSharePDF;
-window.generateAndSharePDF = async function () {
+generateAndSharePDF = async function () {
   speichereFormular(); // Vor dem Teilen speichern
   await originalGenerateAndSharePDF(); // Dann ausführen
   ladeFormular(); // Danach alles wiederherstellen
@@ -1882,6 +1964,17 @@ const datumDeutsch = heute.toLocaleDateString("de-DE", {
 });
 document.getElementById("datum").textContent = datumDeutsch;
 </script>
-
+<style>
+/* Visuelle Hervorhebung von Antworten */
+.highlight-ja td:first-child {
+  background-color: #d4edda !important;
+}
+.highlight-nein td:first-child {
+  background-color: #f8d7da !important;
+}
+.highlight-nicht td:first-child {
+  background-color: #e2e3e5 !important;
+}
+</style>
 </body>
 </html>
