@@ -1127,8 +1127,26 @@ const opt = {
   jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
 };
 
+
+// Add page numbers after PDF creation (centered)
+function addPageNumbers(pdf) {
+  const pageCount = pdf.internal.getNumberOfPages();
+  pdf.setFontSize(10);
+  for (let i = 1; i <= pageCount; i++) {
+    pdf.setPage(i);
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    pdf.text('Seite ' + i + ' / ' + pageCount, pageWidth / 2, pageHeight - 10, {align: 'center'});
+  }
+}
+
   try {
-    const blob = await html2pdf().set(opt).from(element).outputPdf('blob');
+    
+    const worker = html2pdf().set(opt).from(element);
+    const pdf = await worker.toPdf().get('pdf');
+    addPageNumbers(pdf);
+    const blob = pdf.output('blob');
+
     const file = new File([blob], opt.filename, { type: "application/pdf" });
 
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
