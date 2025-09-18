@@ -3,11 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <title>Gefährdungsbeurteilung – Interaktive Übersicht</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">async function sharePDF() {
+  const element = document.getElementById('pdfContent');
+  const opt = {
+    margin:       [10, 10, 10, 10],
+    filename:     'zott-checkliste.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
+    jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' },
+    pagebreak:    { mode: ['css', 'legacy'] }
+  };
+  html2pdf().set(opt).from(element).save();
+}
+</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">async function sharePDF() {
+  const element = document.getElementById('pdfContent');
+  const opt = {
+    margin:       [10, 10, 10, 10],
+    filename:     'zott-checkliste.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
+    jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' },
+    pagebreak:    { mode: ['css', 'legacy'] }
+  };
+  html2pdf().set(opt).from(element).save();
+}
+</script>
   <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon" />
   <link href="/sicher/zott.json" rel="manifest"/>  
- <style>  
+ <style>
+/* PDF Optimierungen */
+table, tr, td, th { page-break-inside: avoid !important; }
+h1, h2, h3 { page-break-after: avoid; page-break-inside: avoid; }
+.page-break { page-break-before: always; }
+  
     body.darkmode .footer {
       display: none !important;
     }    
@@ -206,8 +235,22 @@
     }
   </style>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js">async function sharePDF() {
+  const element = document.getElementById('pdfContent');
+  const opt = {
+    margin:       [10, 10, 10, 10],
+    filename:     'zott-checkliste.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
+    jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' },
+    pagebreak:    { mode: ['css', 'legacy'] }
+  };
+  html2pdf().set(opt).from(element).save();
+}
+</script>
 </head>
 <body>
+<div id="pdfContent">
 <h1>Checkliste zur Gefährdungsbeurteilung im Einzelhandel</h1>
   <button id="darkmode-toggle" title="Darkmode umschalten">🌙</button>
 
@@ -3018,7 +3061,19 @@ const datumDeutsch = heute.toLocaleDateString("de-DE", {
   year: "numeric"
 });
 document.getElementById("datum").textContent = datumDeutsch;
-  </script>
+  async function sharePDF() {
+  const element = document.getElementById('pdfContent');
+  const opt = {
+    margin:       [10, 10, 10, 10],
+    filename:     'zott-checkliste.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
+    jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' },
+    pagebreak:    { mode: ['css', 'legacy'] }
+  };
+  html2pdf().set(opt).from(element).save();
+}
+</script>
 
   <script>
     async function exportPDF() {
@@ -3084,7 +3139,19 @@ document.getElementById("datum").textContent = datumDeutsch;
         btn.addEventListener("click", exportPDF);
       }
     });
-  </script>
+  async function sharePDF() {
+  const element = document.getElementById('pdfContent');
+  const opt = {
+    margin:       [10, 10, 10, 10],
+    filename:     'zott-checkliste.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
+    jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' },
+    pagebreak:    { mode: ['css', 'legacy'] }
+  };
+  html2pdf().set(opt).from(element).save();
+}
+</script>
 <script>
 document.getElementById("pdf-button").addEventListener("click", function () {
   const { jsPDF } = window.jspdf;
@@ -3153,7 +3220,20 @@ document.getElementById("pdf-button").addEventListener("click", function () {
     }
   });
 });
+async function sharePDF() {
+  const element = document.getElementById('pdfContent');
+  const opt = {
+    margin:       [10, 10, 10, 10],
+    filename:     'zott-checkliste.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
+    jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' },
+    pagebreak:    { mode: ['css', 'legacy'] }
+  };
+  html2pdf().set(opt).from(element).save();
+}
 </script>
 
+</div>
 </body>
 </html>
