@@ -40,10 +40,27 @@ body {
   font-family: Arial, sans-serif;
   background-color: #eef5ff;
   padding: 20px;
+  background: white !important;
+  color: black !important;
 }
 
 h1, h2, h3 {
   text-align: center;
+  page-break-after: avoid;
+  page-break-inside: avoid;
+}
+
+/* PDF-optimierte Darstellung */
+table, tr, td, th {
+  page-break-inside: avoid !important;
+}
+#checklist, #zusammenfassung {
+  page-break-inside: auto;
+}
+
+/* manuelle Umbrüche erzwingen */
+.page-break {
+  page-break-before: always;
 }
 
 table {
@@ -112,58 +129,59 @@ pre {
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- html2pdf.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="fragen.js"></script>
 </head>
 <body>
 
-<h1>Checkliste zur Gefährdungsbeurteilung im Einzelhandel</h1>
+<div id="pdfContent">
+  <h1>Checkliste zur Gefährdungsbeurteilung im Einzelhandel</h1>
 
-<br>
-<form id="metaForm" style="margin-bottom: 30px; display: flex; gap: 20px; flex-wrap: wrap;">
-  <label>Marktnummer:
-    <input type="text" id="marktnummer" />
-  </label>
-  <label>Name:
-    <input type="text" id="name" />
-  </label>
-  <label>Sifa:
-    <input type="text" id="sifa" />
-  </label>
-  <label>Datum:
-    <input type="text" id="datum" readonly />
-  </label>
-</form>
+  <br>
+  <form id="metaForm" style="margin-bottom: 30px; display: flex; gap: 20px; flex-wrap: wrap;">
+    <label>Marktnummer:
+      <input type="text" id="marktnummer" />
+    </label>
+    <label>Name:
+      <input type="text" id="name" />
+    </label>
+    <label>Sifa:
+      <input type="text" id="sifa" />
+    </label>
+    <label>Datum:
+      <input type="text" id="datum" readonly />
+    </label>
+  </form>
 
-<div style="text-align: center; margin: 40px 0; font-size: 18px;">
-  <strong>Teil der Gefährdungsbeurteilung / Wirksamkeitskontrolle</strong><br><br>
-  Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
-</div>
+  <div style="text-align: center; margin: 40px 0; font-size: 18px;">
+    <strong>Teil der Gefährdungsbeurteilung / Wirksamkeitskontrolle</strong><br><br>
+    Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
+  </div>
 
-<br>
-<table id="checklist">
-  <thead>
-    <tr>
-      <th>Frage</th>
-      <th>Antwort</th>
-      <th>Quelle</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
+  <br>
+  <table id="checklist">
+    <thead>
+      <tr>
+        <th>Frage</th>
+        <th>Antwort</th>
+        <th>Quelle</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
-<h2>Zusammenfassung der Maßnahmen</h2>
-<table id="zusammenfassung">
-  <thead>
-    <tr><th>Frage</th><th>Hinweistext</th></tr>
-  </thead>
-  <tbody></tbody>
-</table>
+  <h2 class="page-break">Zusammenfassung der Maßnahmen</h2>
+  <table id="zusammenfassung">
+    <thead>
+      <tr><th>Frage</th><th>Hinweistext</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
-<h3>Unterschrift</h3>
-<div style="text-align: center;">
-  <canvas id="signature" width="600" height="200" style="border:1px solid #ccc; background-color: white;"></canvas>
-  <div class="buttons-container">
-    <button type="button" onclick="clearSignature()">🗑️ Unterschrift löschen</button>
+  <h3>Unterschrift</h3>
+  <div style="text-align: center;">
+    <canvas id="signature" width="600" height="200" style="border:1px solid #ccc; background-color: white;"></canvas>
   </div>
 </div>
 
@@ -171,6 +189,7 @@ pre {
   <button onclick="openSummaryPage()">📝 Defizite exportieren</button>
   <button onclick="window.print()">📄 Drucken / PDF</button>
   <button onclick="sharePDF()">📤 PDF teilen (iPad)</button>
+  <button type="button" onclick="clearSignature()">🗑️ Unterschrift löschen</button>
 </div>
 
 <footer class="footer">
@@ -188,8 +207,6 @@ const tag = String(heute.getDate()).padStart(2, '0');
 const monat = String(heute.getMonth() + 1).padStart(2, '0');
 const jahr = heute.getFullYear();
 document.getElementById("datum").value = `${tag}.${monat}.${jahr}`;
-
-// Aktuelles Jahr im Footer setzen
 document.getElementById("currentYear").textContent = jahr;
 
 const tbody = document.querySelector("#checklist tbody");
@@ -210,7 +227,6 @@ if (!Array.isArray(window.fragen)) {
 } else {
   fragen.forEach((eintrag) => {
     const tr = document.createElement('tr');
-
     const tdFrage = document.createElement('td');
     tdFrage.textContent = eintrag.frage;
 
@@ -270,7 +286,7 @@ if (!Array.isArray(window.fragen)) {
   });
 }
 
-// Signaturfunktionen
+// Signatur
 const signCanvas = document.getElementById('signature');
 const signCtx = signCanvas.getContext('2d');
 let signing = false;
@@ -300,73 +316,36 @@ const drawSign = (e) => {
   signCtx.stroke();
 };
 
-const endSign = () => {
-  signing = false;
-};
-
-['mousedown', 'touchstart'].forEach(evt => signCanvas.addEventListener(evt, startSign));
-['mousemove', 'touchmove'].forEach(evt => signCanvas.addEventListener(evt, drawSign));
-['mouseup', 'mouseleave', 'touchend'].forEach(evt => signCanvas.addEventListener(evt, endSign));
+const endSign = () => { signing = false; };
+['mousedown','touchstart'].forEach(evt=>signCanvas.addEventListener(evt,startSign));
+['mousemove','touchmove'].forEach(evt=>signCanvas.addEventListener(evt,drawSign));
+['mouseup','mouseleave','touchend'].forEach(evt=>signCanvas.addEventListener(evt,endSign));
 
 function clearSignature() {
   signCtx.clearRect(0, 0, signCanvas.width, signCanvas.height);
 }
 
+// PDF Export mit automatischen Umbrüchen
 async function sharePDF() {
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF('p', 'pt', 'a4');
-  const pageHeight = pdf.internal.pageSize.getHeight();
+  const element = document.getElementById('pdfContent');
+  const opt = {
+    margin:       [20, 20, 20, 20],
+    filename:     'Begehungsprotokoll.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
+    jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' },
+    pagebreak:    { mode: ['css', 'legacy'] }
+  };
 
-  // Zielbereich klonen
-  const elements = document.body.cloneNode(true);
+  const pdfBlob = await html2pdf().set(opt).from(element).outputPdf('blob');
+  const file = new File([pdfBlob], 'Begehungsprotokoll.pdf', { type: 'application/pdf' });
 
-  // Footer und Buttons im Klon entfernen
-  const toRemove = elements.querySelectorAll('.footer, .buttons-container, button');
-  toRemove.forEach(el => el.remove());
-
-  const container = document.createElement('div');
-  container.style.width = '800px';
-  container.style.padding = '20px';
-  container.style.background = 'white';
-  container.style.position = 'absolute';
-  container.style.top = '-10000px';
-  container.appendChild(elements);
-  document.body.appendChild(container);
-
-  await html2canvas(container, { scale: 2 }).then(canvas => {
-    const imgData = canvas.toDataURL('image/png');
-    const imgWidth = pdf.internal.pageSize.getWidth();
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-    let heightLeft = imgHeight;
-    let position = 0;
-    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-    heightLeft -= pageHeight;
-    while (heightLeft > 0) {
-      position -= pageHeight;
-      pdf.addPage();
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-    }
-    document.body.removeChild(container);
-    const pdfBlob = pdf.output('blob');
-    const file = new File([pdfBlob], 'Begehungsprotokoll.pdf', { type: 'application/pdf' });
-    if (navigator.share && navigator.canShare({ files: [file] })) {
-      navigator.share({ title: 'Arbeitsschutz‑Checkliste', files: [file] }).catch(err => console.error(err));
-    } else {
-      pdf.save('Begehungsprotokoll.pdf');
-    }
-  });
-}
-
-function exportMassnahmenAsHTML() {
-  let htmlContent = `<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"><title>Exportierte Maßnahmen</title><style>body { font-family: Arial, sans-serif; margin: 20px; }table { border-collapse: collapse; width: 100%; }th, td { border: 1px solid #ccc; padding: 10px; }th { background-color: #f2f2f2; }</style></head><body><h1>Zusammenfassung der Maßnahmen</h1><table><thead><tr><th>Frage</th><th>Hinweis</th></tr></thead><tbody>`;
-  antwortenMap.forEach((hinweis, frage) => {
-    htmlContent += `<tr><td>${frage}</td><td>${hinweis}</td></tr>`;
-  });
-  htmlContent += `</tbody></table></body></html>`;
-  const blob = new Blob([htmlContent], { type: 'text/html' });
-  const url = URL.createObjectURL(blob);
-  window.open(url, '_blank');
+  if (navigator.share && navigator.canShare({ files: [file] })) {
+    navigator.share({ title: 'Arbeitsschutz-Checkliste', files: [file] })
+      .catch(err => console.error(err));
+  } else {
+    html2pdf().set(opt).from(element).save();
+  }
 }
 
 function openSummaryPage() {
@@ -380,20 +359,13 @@ function openSummaryPage() {
     maßnahmen.push({ frage, beschreibung: hinweis });
   });
 
-  const daten = {
-    markt,
-    name,
-    sifa,
-    datum,
-    maßnahmen
-  };
-
+  const daten = { markt, name, sifa, datum, maßnahmen };
   const newWindow = window.open('massnahmen-2026.html', '_blank');
   const sendData = () => newWindow.postMessage(daten, '*');
   setTimeout(sendData, 500);
 }
 
-// Service Worker registrieren
+// Service Worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker
