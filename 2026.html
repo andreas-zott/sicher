@@ -134,10 +134,8 @@ pre {
 <script src="fragen.js"></script>
 </head>
 <body>
-
 <div id="pdfContent">
   <h1>Checkliste zur Gefährdungsbeurteilung im Einzelhandel</h1>
-
   <br>
   <form id="metaForm" style="margin-bottom: 30px; display: flex; gap: 20px; flex-wrap: wrap;">
     <label>Marktnummer:
@@ -153,12 +151,10 @@ pre {
       <input type="text" id="datum" readonly />
     </label>
   </form>
-
   <div style="text-align: center; margin: 40px 0; font-size: 18px;">
     <strong>Teil der Gefährdungsbeurteilung / Wirksamkeitskontrolle</strong><br><br>
     Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
   </div>
-
   <br>
   <table id="checklist">
     <thead>
@@ -170,7 +166,6 @@ pre {
     </thead>
     <tbody></tbody>
   </table>
-
   <h2 class="page-break">Zusammenfassung der Maßnahmen</h2>
   <table id="zusammenfassung">
     <thead>
@@ -178,20 +173,17 @@ pre {
     </thead>
     <tbody></tbody>
   </table>
-
   <h3>Unterschrift</h3>
   <div style="text-align: center;">
     <canvas id="signature" width="600" height="200" style="border:1px solid #ccc; background-color: white;"></canvas>
   </div>
 </div>
-
 <div class="buttons-container">
   <button onclick="openSummaryPage()">📝 Defizite exportieren</button>
   <button onclick="window.print()">📄 Drucken / PDF</button>
   <button onclick="sharePDF()">📤 PDF teilen (iPad)</button>
   <button type="button" onclick="clearSignature()">🗑️ Unterschrift löschen</button>
 </div>
-
 <footer class="footer">
   <p>
     &copy; <span id="currentYear"></span> Andreas Zott – Alle Rechte vorbehalten.
@@ -199,20 +191,16 @@ pre {
     <a href="impressum.html" rel="noopener noreferrer" target="_blank">Impressum</a>
   </p>
 </footer>
-
 <script>
-// Datum setzen
 const heute = new Date();
 const tag = String(heute.getDate()).padStart(2, '0');
 const monat = String(heute.getMonth() + 1).padStart(2, '0');
 const jahr = heute.getFullYear();
 document.getElementById("datum").value = `${tag}.${monat}.${jahr}`;
 document.getElementById("currentYear").textContent = jahr;
-
 const tbody = document.querySelector("#checklist tbody");
 const summaryBody = document.querySelector("#zusammenfassung tbody");
 const antwortenMap = new Map();
-
 function renderSummary() {
   summaryBody.textContent = "";
   antwortenMap.forEach((hinweis, frage) => {
@@ -221,7 +209,6 @@ function renderSummary() {
     summaryBody.appendChild(tr);
   });
 }
-
 if (!Array.isArray(window.fragen)) {
   alert('Fehler: Die Fragen konnten nicht geladen werden (fragen.js).');
 } else {
@@ -229,7 +216,6 @@ if (!Array.isArray(window.fragen)) {
     const tr = document.createElement('tr');
     const tdFrage = document.createElement('td');
     tdFrage.textContent = eintrag.frage;
-
     const tdAntwort = document.createElement('td');
     const selectAntwort = document.createElement('select');
     ['Ja', 'Nein', 'Nicht vorhanden'].forEach((opt) => {
@@ -239,7 +225,6 @@ if (!Array.isArray(window.fragen)) {
       selectAntwort.appendChild(option);
     });
     tdAntwort.appendChild(selectAntwort);
-
     const tdFormWahl = document.createElement('td');
     const selectForm = document.createElement('select');
     selectForm.className = 'antwortwahl';
@@ -250,7 +235,6 @@ if (!Array.isArray(window.fragen)) {
       selectForm.appendChild(option);
     });
     tdFormWahl.appendChild(selectForm);
-
     const updateHinweis = () => {
       if (selectAntwort.value === 'Nein') {
         const form = selectForm.value || 'bghw';
@@ -261,11 +245,9 @@ if (!Array.isArray(window.fragen)) {
       }
       renderSummary();
     };
-
     selectAntwort.addEventListener('change', () => {
       selectForm.style.display = selectAntwort.value === 'Nein' ? 'inline-block' : 'none';
       updateHinweis();
-
       if (selectAntwort.value === 'Ja') {
         tr.style.backgroundColor = '#e0f8e0';
       } else if (selectAntwort.value === 'Nein') {
@@ -276,21 +258,16 @@ if (!Array.isArray(window.fragen)) {
         tr.style.backgroundColor = '';
       }
     });
-
     selectForm.addEventListener('change', updateHinweis);
-
     tr.appendChild(tdFrage);
     tr.appendChild(tdAntwort);
     tr.appendChild(tdFormWahl);
     tbody.appendChild(tr);
   });
 }
-
-// Signatur
 const signCanvas = document.getElementById('signature');
 const signCtx = signCanvas.getContext('2d');
 let signing = false;
-
 const getPos = (e) => {
   const rect = signCanvas.getBoundingClientRect();
   if (e.touches && e.touches.length) {
@@ -299,7 +276,6 @@ const getPos = (e) => {
     return { x: e.clientX - rect.left, y: e.clientY - rect.top };
   }
 };
-
 const startSign = (e) => {
   e.preventDefault();
   signing = true;
@@ -307,7 +283,6 @@ const startSign = (e) => {
   signCtx.beginPath();
   signCtx.moveTo(pos.x, pos.y);
 };
-
 const drawSign = (e) => {
   if (!signing) return;
   e.preventDefault();
@@ -315,7 +290,6 @@ const drawSign = (e) => {
   signCtx.lineTo(pos.x, pos.y);
   signCtx.stroke();
 };
-
 const endSign = () => { signing = false; };
 ['mousedown','touchstart'].forEach(evt=>signCanvas.addEventListener(evt,startSign));
 ['mousemove','touchmove'].forEach(evt=>signCanvas.addEventListener(evt,drawSign));
@@ -325,7 +299,6 @@ function clearSignature() {
   signCtx.clearRect(0, 0, signCanvas.width, signCanvas.height);
 }
 
-// PDF Export mit automatischen Umbrüchen
 async function sharePDF() {
   const element = document.getElementById('pdfContent');
   const opt = {
@@ -336,10 +309,8 @@ async function sharePDF() {
     jsPDF:        { unit: 'pt', format: 'a4', orientation: 'portrait' },
     pagebreak:    { mode: ['css', 'legacy'] }
   };
-
   const pdfBlob = await html2pdf().set(opt).from(element).outputPdf('blob');
   const file = new File([pdfBlob], 'Begehungsprotokoll.pdf', { type: 'application/pdf' });
-
   if (navigator.share && navigator.canShare({ files: [file] })) {
     navigator.share({ title: 'Arbeitsschutz-Checkliste', files: [file] })
       .catch(err => console.error(err));
@@ -347,25 +318,20 @@ async function sharePDF() {
     html2pdf().set(opt).from(element).save();
   }
 }
-
 function openSummaryPage() {
   const markt = document.getElementById('marktnummer').value.trim();
   const name = document.getElementById('name').value.trim();
   const sifa = document.getElementById('sifa').value.trim();
   const datum = document.getElementById('datum').value;
-
   const maßnahmen = [];
   antwortenMap.forEach((hinweis, frage) => {
     maßnahmen.push({ frage, beschreibung: hinweis });
   });
-
   const daten = { markt, name, sifa, datum, maßnahmen };
   const newWindow = window.open('massnahmen-2026.html', '_blank');
   const sendData = () => newWindow.postMessage(daten, '*');
   setTimeout(sendData, 500);
 }
-
-// Service Worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker
@@ -375,6 +341,5 @@ if ('serviceWorker' in navigator) {
   });
 }
 </script>
-
 </body>
 </html>
