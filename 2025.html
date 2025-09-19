@@ -218,7 +218,6 @@ th {
   text-align: center;
 }
 
-/* Visuelle Hervorhebung von Antworten */
 .highlight-ja td:first-child {
   background-color: #d4edda !important;
 }
@@ -326,7 +325,6 @@ margin-top: 0;
   button:hover {
     background-color: #0056b3;
 
-/* --- PDF / Print improvements: avoid splitting rows and keep sections on pages --- */
 table, thead, tbody, tr, td, th {
   page-break-inside: avoid;
   break-inside: avoid;
@@ -346,18 +344,15 @@ table, thead, tbody, tr, td, th {
   page-break-after: always !important;
   break-after: page !important;
 }
-/* Ensure long tables flow naturally but do not split rows */
+
 tbody {
   display: table-row-group;
 }
 @media print {
-  /* reduce shadows for print and keep white backgrounds */
   table { box-shadow: none; }
   .print-wrapper { background: white; }
 }
 
-
-/* Erzwinge Seitenumbruch vor jeder Kategorie */
 .category-header {
   page-break-before: always !important;
   break-before: page !important;
@@ -367,8 +362,6 @@ tbody {
   break-before: auto !important;
 }
 
-
-/* Verhindere, dass Tabellenzeilen durchschnitten werden */
 tr, td, th {
   page-break-inside: avoid !important;
   break-inside: avoid !important;
@@ -398,12 +391,10 @@ tr, td, th {
   <input id="sifa" style="width: 100%;" type="text"/>
 </div>
 </div>
-
 <div style="text-align: center; margin: 40px 0; font-size: 20px;">
 <strong>Teil der Gefährdungsbeurteilung / Wirksamkeitskontrolle</strong><br/>
 Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
 </div>
-
 <table id="fragenTabelle">
 <thead>
   <tr>
@@ -1079,8 +1070,6 @@ Beschreibung der Maßnahmen zur Beseitigung von Defiziten
   </div>
 </div>
 </div>
-
-<!-- Unterschriftenfeld mit oben links platziertem "Unterschrift"-Label -->
 <div class="signature-container" style="position: relative; max-width: 600px; margin: 0 auto 20px auto;">
 <label style="
   position: absolute;
@@ -1105,12 +1094,9 @@ Beschreibung der Maßnahmen zur Beseitigung von Defiziten
   display: block;
 "></canvas>
 </div>
-<!-- Einzelner großer Button -->
 <button onclick="clearSignature()" class="modern-button btn-danger-outline">
   🗑️ Unterschrift löschen
 </button>
-
-<!-- Zwei Buttons nebeneinander -->
 <div class="button-row">
   <button onclick="exportiereMassnahmen()" class="modern-button btn-gray">
     📝 Defizite exportieren
@@ -1119,8 +1105,6 @@ Beschreibung der Maßnahmen zur Beseitigung von Defiziten
     📄 Drucken / PDF
   </button>
 </div>
-
-<!-- Zwei weitere Buttons nebeneinander -->
 <div class="button-row">
   <button onclick="manuellSpeichern()" class="modern-button btn-green">
     💾 Speichern
@@ -1129,17 +1113,12 @@ Beschreibung der Maßnahmen zur Beseitigung von Defiziten
     🧹 Zurücksetzen
   </button>
 </div>
-
-<!-- Roter Einzel-Button -->
 <button onclick="generateAndSharePDF()" class="modern-button btn-red">
   📤 PDF teilen (iPad)
 </button>
-
-
 <div id="auswertung-container">
   <div id="auswertung"></div>
 </div>
-
 <footer style="
   text-align: center;
   margin-top: 40px;
@@ -1161,35 +1140,28 @@ Beschreibung der Maßnahmen zur Beseitigung von Defiziten
                    </p>
 
 </footer>
-
 <script>
   const year = new Date().getFullYear();
   document.getElementById('year').textContent = year;
   document.getElementById('year-small').textContent = year;
 </script>
 </div>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
-// PDF Generation mit verbesserter Button-Ausblendung für iPad
+
 async function generateAndSharePDF() {
   // Alle Buttons temporär ausblenden
   const buttons = document.querySelectorAll('button, .btn, .btn-group, .buttons, .custom-btn, .btn-medium, .btn-large');
   const originalDisplays = [];
-
   buttons.forEach((btn, index) => {
     originalDisplays[index] = btn.style.display;
     btn.style.display = 'none';
   });
-
-  // Footer ausblenden
   const footer = document.querySelector('footer');
   const originalFooterDisplay = footer ? footer.style.display : '';
   if (footer) {
     footer.style.display = 'none';
   }
-
-  // Canvas durch Bild ersetzen für PDF
   const canvas = document.getElementById('signature-pad');
   let signatureImg = null;
   if (canvas) {
@@ -1203,13 +1175,9 @@ async function generateAndSharePDF() {
     canvas.style.display = 'none';
     canvas.parentNode.insertBefore(signatureImg, canvas);
   }
-
  const element = document.body;
-
-// deutsches Datum formatieren
 const today = new Date();
 const formattedDate = today.toLocaleDateString('de-DE'); // z.B. "06.09.2025"
-
 const opt = {
   margin: [10, 5, 20, 5],
   filename: `Arbeitssicherheit-Begehungsprotokoll-${formattedDate}.pdf`,
@@ -1248,45 +1216,35 @@ const opt = {
     buttons.forEach((btn, index) => {
       btn.style.display = originalDisplays[index];
     });
-
-    // Footer wieder einblenden
+ 
     if (footer) {
       footer.style.display = originalFooterDisplay;
     }
-
-    // Canvas wieder anzeigen und temporäres Bild entfernen
     if (canvas && signatureImg) {
       canvas.style.display = 'block';
       signatureImg.remove();
     }
   }
 }
-
-// Signatur-Canvas Setup
 const canvas = document.getElementById('signature-pad');
 const ctx = canvas.getContext('2d');
 let drawing = false;
-
 function resizeCanvas() {
   const ratio = window.devicePixelRatio || 1;
   const displayWidth = canvas.offsetWidth;
   const displayHeight = canvas.offsetHeight;
   const oldImage = new Image();
   oldImage.src = canvas.toDataURL();
-
   canvas.width = displayWidth * ratio;
   canvas.height = displayHeight * ratio;
   canvas.style.width = displayWidth + "px";
   canvas.style.height = displayHeight + "px";
-
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.scale(ratio, ratio);
-
   oldImage.onload = () => {
     ctx.drawImage(oldImage, 0, 0, displayWidth, displayHeight);
   };
 }
-
 function getX(e) {
   return e.touches ? e.touches[0].clientX - canvas.getBoundingClientRect().left :
                      e.clientX - canvas.getBoundingClientRect().left;
@@ -1334,7 +1292,6 @@ function restoreSignature() {
     image.src = dataURL;
   }
 }
-
 function prepareForPrint() {
   const dataURL = canvas.toDataURL();
   const img = document.createElement("img");
@@ -1345,7 +1302,6 @@ function prepareForPrint() {
   canvas.replaceWith(img);
   window.print();
 }
-
 function generateMeasure(question) {
   let measure = question.trim();
 
@@ -1353,8 +1309,6 @@ function generateMeasure(question) {
   if (measure.endsWith("?")) {
     measure = measure.slice(0, -1);
   }
-
- // Specific rules for more concrete and imperative measures
 
 if (measure.includes("festes, geschlossenes und flaches Schuhwerk")) {
   measure = "Stellen Sie umgehend sicher, dass alle Personen im Markt festes, geschlossenes und flaches Schuhwerk gemäß den Arbeitsschutzbestimmungen tragen.";
@@ -1748,13 +1702,9 @@ if (measure.includes("Betreuung nach einem Überfall organisiert")) {
 if (measure.includes("Schulungen für den Umgang mit gewalttätigen Situationen ermöglicht")) {
   measure = "Ermöglichen Sie Schulungen zum richtigen Verhalten bei gewalttätigen oder bedrohlichen Situationen im Betrieb.";
 }
-
-
-
   if (!measure.endsWith(".")) {
     measure += ".";
   }
-
   return measure;
 }
 function neinFragenInMaßnahmen() {
@@ -1782,8 +1732,7 @@ function neinFragenInMaßnahmen() {
       maßnahmenTabelleBody.appendChild(newRow);
       dynamicMeasuresCount++;
     }
-  });
-  // Add two empty rows for manual input
+  }); 
   for (let i = 0; i < 2; i++) {
     const newRow = document.createElement('tr');
     const numCell = document.createElement('td');
@@ -1831,7 +1780,6 @@ function exportiereMassnahmen() {
     newWindow.postMessage(daten, "*");
   }, 1000);
 }
-// Event Listeners
 window.addEventListener("resize", resizeCanvas);
 window.addEventListener("load", () => {
   resizeCanvas();
@@ -1840,13 +1788,11 @@ window.addEventListener("load", () => {
   if (datumsfeld) {
     const heute = new Date().toISOString().split('T')[0];
     datumsfeld.value = heute;
-  }
-  // Add event listeners to all radio buttons
+  } 
   const radioButtons = document.querySelectorAll('#fragenTabelle input[type="radio"]');
   radioButtons.forEach(radio => {
     radio.addEventListener('change', neinFragenInMaßnahmen);
   });
-  // Initial call to populate measures
   neinFragenInMaßnahmen();
 });
 canvas.addEventListener('mousedown', startDrawing);
@@ -1878,7 +1824,6 @@ if ('serviceWorker' in navigator) {
 window.addEventListener('DOMContentLoaded', () => {
   ladeFormular();
 });
-// Speichern aller Eingaben
 function speichereFormular() {
   const formData = {};
   document.querySelectorAll('input').forEach(el => {
@@ -1895,7 +1840,6 @@ function speichereFormular() {
   });
   localStorage.setItem('formSicherheit2025', JSON.stringify(formData));
 }
-// Laden und Anwenden (inkl. Hervorhebung)
 function ladeFormular() {
   const saved = localStorage.getItem('formSicherheit2025');
   if (!saved) return;
@@ -1914,7 +1858,6 @@ function ladeFormular() {
   // Nach dem Laden: Hervorhebung aktualisieren
   aktualisiereHervorhebung();
 }
-// Farbige Hervorhebung der Antworten
 function aktualisiereHervorhebung() {
   const zeilen = document.querySelectorAll('#fragenTabelle tbody tr');
   zeilen.forEach(row => {
@@ -1931,20 +1874,16 @@ function aktualisiereHervorhebung() {
     }
   });
 }
-// Speichern bei jeder Eingabeänderung
 document.addEventListener('change', event => {
   if (event.target.matches('input')) {
     speichereFormular();
     aktualisiereHervorhebung();
   }
 });
-
-// Manuelles Speichern
 function manuellSpeichern() {
   speichereFormular();
   alert("✅ Formular gespeichert!");
 }
-// Formular zurücksetzen
 function formularZuruecksetzen() {
   if (confirm("⚠️ Formular & Daten wirklich löschen?")) {
     localStorage.removeItem('formSicherheit2025');
@@ -1959,14 +1898,12 @@ function formularZuruecksetzen() {
     alert("🧹 Formular zurückgesetzt.");
   }
 }
-// Im Teilen-Script zusätzlich:
 const originalGenerateAndSharePDF = generateAndSharePDF;
 generateAndSharePDF = async function () {
   speichereFormular(); // Vor dem Teilen speichern
   await originalGenerateAndSharePDF(); // Dann ausführen
   ladeFormular(); // Danach alles wiederherstellen
 };
-// Aktuelles Datum im deutschen Format einsetzen
 const heute = new Date();
 const datumDeutsch = heute.toLocaleDateString("de-DE", {
   day: "2-digit",
@@ -1976,7 +1913,6 @@ const datumDeutsch = heute.toLocaleDateString("de-DE", {
 document.getElementById("datum").textContent = datumDeutsch;
 </script>
 <style>
-/* Visuelle Hervorhebung von Antworten */
 .highlight-ja td:first-child {
   background-color: #d4edda !important;
 }
