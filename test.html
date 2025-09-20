@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="de">
 <head>
 <meta charset="utf-8"/>
@@ -1106,7 +1105,17 @@ async function generateAndSharePDF() {
     canvas.parentNode.insertBefore(signatureImg, canvas);
   }
 
-const element = document.body;
+
+// --- Shrink printable area via CSS transform so html2canvas captures smaller text ---
+    const printable = document.querySelector('.print-wrapper') || document.body;
+    const pdfScale = 0.82; // <--- smaller = more shrink
+    printable.style.transformOrigin = 'top left';
+    printable.style.webkitTransformOrigin = 'top left';
+    printable.style.transform = 'scale(' + pdfScale + ')';
+    printable.style.webkitTransform = 'scale(' + pdfScale + ')';
+    printable.style.width = (100 / pdfScale) + '%';
+    const element = printable;
+
 
 // deutsches Datum formatieren
 const today = new Date();
@@ -1114,7 +1123,7 @@ const formattedDate = today.toLocaleDateString('de-DE'); // z.B. "06-09-2025"
 
 const opt = {
   pagebreak: { mode: ['css','legacy'], avoid: 'tr' },
-  margin: [10, 5, 20, 5],
+  margin: [10, 10, 15, 10],
   filename: `Arbeitssicherheit-Begehungsprotokoll-${formattedDate}.pdf`,
   image: { type: 'jpeg', quality: 0.98 },
   html2canvas: {
@@ -1171,6 +1180,20 @@ function addPageNumbers(pdf) {
       btn.style.display = originalDisplays[index];
     });
     noPrintElems.forEach(el => el.style.display = '');
+
+    // Entferne die temporäre PDF-Transformierung (falls gesetzt)
+    try {
+      if (typeof printable !== 'undefined' && printable) {
+        printable.style.transform = '';
+        printable.style.webkitTransform = '';
+        printable.style.width = '';
+        printable.style.transformOrigin = '';
+        printable.style.webkitTransformOrigin = '';
+      }
+    } catch (e) {
+      console.warn('Fehler beim Zurücksetzen der PDF-Transform:', e);
+    }
+
 
     // Canvas wieder anzeigen und Bild entfernen
     if (canvas && signatureImg) {
