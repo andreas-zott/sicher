@@ -8,15 +8,6 @@
 <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon"/>
 <link href="/sicher/manifest.json" rel="manifest"/>
 <style>
-.highlight-ja td:first-child {
-  background-color: #d4edda !important;
-}
-.highlight-nein td:first-child {
-  background-color: #f8d7da !important;
-}
-.highlight-nicht td:first-child {
-  background-color: #e2e3e5 !important;
-}
 input[type="radio"] {
   appearance: none;
   -webkit-appearance: none;
@@ -173,11 +164,11 @@ margin: 10px auto;
 display: block;
 font-family: inherit;
 }
-@media print {
-.page-break-before {
- page-break-before: always;
- margin-top: 0;
- break-before: page;
+  @media print {
+    .page-break-before {
+      page-break-before: always;
+margin-top: 0;
+      break-before: page;
     }
     @page {
       size: A4 portrait;
@@ -268,8 +259,10 @@ font-family: inherit;
     font-size: 16px;
   }
   button:hover {
-  background-color: #0056b3;
-  table, thead, tbody, tr, td, th {
+    background-color: #0056b3;
+
+/* --- PDF / Print improvements: avoid splitting rows and keep sections on pages --- */
+table, thead, tbody, tr, td, th {
   page-break-inside: avoid;
   break-inside: avoid;
   -webkit-column-break-inside: avoid;
@@ -288,13 +281,18 @@ font-family: inherit;
   page-break-after: always !important;
   break-after: page !important;
 }
+/* Ensure long tables flow naturally but do not split rows */
 tbody {
   display: table-row-group;
 }
-@media print { 
+@media print {
+  /* reduce shadows for print and keep white backgrounds */
   table { box-shadow: none; }
   .print-wrapper { background: white; }
 }
+
+
+/* Erzwinge Seitenumbruch vor jeder Kategorie */
 .category-header {
   page-break-before: always !important;
   break-before: page !important;
@@ -303,10 +301,14 @@ tbody {
   page-break-before: auto !important;
   break-before: auto !important;
 }
+
+
+/* Verhindere, dass Tabellenzeilen durchschnitten werden */
 tr, td, th {
   page-break-inside: avoid !important;
   break-inside: avoid !important;
 }
+
 </style>
 </head>
 <body>
@@ -968,7 +970,7 @@ Beschreibung der Maßnahmen zur Beseitigung von Defiziten
 </tr>
 </thead>
 <tbody id="maßnahmen-tabelle">
-
+<!-- Diese Zeilen werden dynamisch von JavaScript hinzugefügt -->
 </tbody>
 </table>
 <div class="page-break-before confirmation-section">
@@ -996,6 +998,7 @@ Beschreibung der Maßnahmen zur Beseitigung von Defiziten
 </div>
 </div>
 </div>
+<!-- Unterschriftenfeld mit oben links platziertem "Unterschrift"-Label -->
 <div class="signature-container" style="position: relative; max-width: 600px; margin: 0 auto 20px auto;">
 <label style="
   position: absolute;
@@ -1030,6 +1033,7 @@ Beschreibung der Maßnahmen zur Beseitigung von Defiziten
     📄 Drucken / PDF
   </button>
 </div>
+
 </div>
 <div style="display: flex; justify-content: center; gap: 20px; max-width: 600px; margin: 0 auto 40px;">
 <button class="btn-medium btn-green" onclick="manuellSpeichern()" style="flex: 1; max-width: 280px;">
@@ -1070,17 +1074,23 @@ Beschreibung der Maßnahmen zur Beseitigung von Defiziten
   document.getElementById('year').textContent = year;
   document.getElementById('year-small').textContent = year;
 </script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
+// PDF Generation mit verbesserter Button-Ausblendung für iPad
 async function generateAndSharePDF() {
+// Alle Buttons & no-print-Elemente temporär ausblenden
   const buttons = document.querySelectorAll('button, .btn, .btn-group, .buttons, .custom-btn, .btn-medium, .btn-large');
   const noPrintElems = document.querySelectorAll('footer, .no-print');
   const originalDisplays = [];
+
   buttons.forEach((btn, index) => {
     originalDisplays[index] = btn.style.display;
     btn.style.display = 'none';
   });
   noPrintElems.forEach(el => el.style.display = 'none');
+
+  // Canvas durch Bild ersetzen für PDF
   const canvas = document.getElementById('signature-pad');
   let signatureImg = null;
   if (canvas) {
@@ -1094,12 +1104,26 @@ async function generateAndSharePDF() {
     canvas.style.display = 'none';
     canvas.parentNode.insertBefore(signatureImg, canvas);
   }
-const element = document.body;
+
+
+// --- Shrink printable area via CSS transform so html2canvas captures smaller text ---
+    const printable = document.querySelector('.print-wrapper') || document.body;
+    const pdfScale = 0.82; // <--- smaller = more shrink
+    printable.style.transformOrigin = 'top left';
+    printable.style.webkitTransformOrigin = 'top left';
+    printable.style.transform = 'scale(' + pdfScale + ')';
+    printable.style.webkitTransform = 'scale(' + pdfScale + ')';
+    printable.style.width = (100 / pdfScale) + '%';
+    const element = printable;
+
+
+// deutsches Datum formatieren
 const today = new Date();
 const formattedDate = today.toLocaleDateString('de-DE'); // z.B. "06-09-2025"
+
 const opt = {
   pagebreak: { mode: ['css','legacy'], avoid: 'tr' },
-  margin: [10, 5, 20, 5],
+  margin: [10, 10, 15, 10],
   filename: `Arbeitssicherheit-Begehungsprotokoll-${formattedDate}.pdf`,
   image: { type: 'jpeg', quality: 0.98 },
   html2canvas: {
@@ -1111,6 +1135,8 @@ const opt = {
   },
   jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
 };
+
+
 // Add page numbers after PDF creation (centered)
 function addPageNumbers(pdf) {
   const pageCount = pdf.internal.getNumberOfPages();
@@ -1122,12 +1148,16 @@ function addPageNumbers(pdf) {
     pdf.text('Seite ' + i + ' / ' + pageCount, pageWidth / 2, pageHeight - 10, {align: 'center'});
   }
 }
-  try {    
+
+  try {
+    
     const worker = html2pdf().set(opt).from(element);
     const pdf = await worker.toPdf().get('pdf');
     addPageNumbers(pdf);
     const blob = pdf.output('blob');
+
     const file = new File([blob], opt.filename, { type: "application/pdf" });
+
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       await navigator.share({
         title: 'Checkliste Arbeitssicherheit',
@@ -1151,6 +1181,20 @@ function addPageNumbers(pdf) {
     });
     noPrintElems.forEach(el => el.style.display = '');
 
+    // Entferne die temporäre PDF-Transformierung (falls gesetzt)
+    try {
+      if (typeof printable !== 'undefined' && printable) {
+        printable.style.transform = '';
+        printable.style.webkitTransform = '';
+        printable.style.width = '';
+        printable.style.transformOrigin = '';
+        printable.style.webkitTransformOrigin = '';
+      }
+    } catch (e) {
+      console.warn('Fehler beim Zurücksetzen der PDF-Transform:', e);
+    }
+
+
     // Canvas wieder anzeigen und Bild entfernen
     if (canvas && signatureImg) {
       canvas.style.display = 'block';
@@ -1158,55 +1202,69 @@ function addPageNumbers(pdf) {
     }
   }
 }
+
+// Signatur-Canvas Setup
 const canvas = document.getElementById('signature-pad');
 const ctx = canvas.getContext('2d');
 let drawing = false;
+
 function resizeCanvas() {
   const ratio = window.devicePixelRatio || 1;
   const displayWidth = canvas.offsetWidth;
   const displayHeight = canvas.offsetHeight;
   const oldImage = new Image();
   oldImage.src = canvas.toDataURL();
+
   canvas.width = displayWidth * ratio;
   canvas.height = displayHeight * ratio;
   canvas.style.width = displayWidth + "px";
   canvas.style.height = displayHeight + "px";
+
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.scale(ratio, ratio);
+
   oldImage.onload = () => {
     ctx.drawImage(oldImage, 0, 0, displayWidth, displayHeight);
   };
 }
+
 function getX(e) {
   return e.touches ? e.touches[0].clientX - canvas.getBoundingClientRect().left :
                      e.clientX - canvas.getBoundingClientRect().left;
 }
+
 function getY(e) {
   return e.touches ? e.touches[0].clientY - canvas.getBoundingClientRect().top :
                      e.clientY - canvas.getBoundingClientRect().top;
 }
+
 function startDrawing(e) {
   drawing = true;
   ctx.beginPath();
   ctx.moveTo(getX(e), getY(e));
 }
+
 function draw(e) {
   if (!drawing) return;
   ctx.lineTo(getX(e), getY(e));
   ctx.stroke();
 }
+
 function stopDrawing() {
   drawing = false;
   saveSignature();
 }
+
 function clearSignature() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   localStorage.removeItem("signatureImage");
 }
+
 function saveSignature() {
   const dataURL = canvas.toDataURL();
   localStorage.setItem("signatureImage", dataURL);
 }
+
 function restoreSignature() {
   const dataURL = localStorage.getItem("signatureImage");
   if (dataURL) {
@@ -1217,6 +1275,7 @@ function restoreSignature() {
     image.src = dataURL;
   }
 }
+
 function prepareForPrint() {
   const dataURL = canvas.toDataURL();
   const img = document.createElement("img");
@@ -1227,11 +1286,17 @@ function prepareForPrint() {
   canvas.replaceWith(img);
   window.print();
 }
+
 function generateMeasure(question) {
   let measure = question.trim();
+
+  // Remove trailing question mark
   if (measure.endsWith("?")) {
     measure = measure.slice(0, -1);
-  } 
+  }
+
+  // Specific rules for more concrete and imperative measures
+  
 
 if (measure.includes("festes, geschlossenes und flaches Schuhwerk")) {
   measure = "Sorgen Sie gemäß § 3 Abs. 1 ArbSchG dafür, dass alle Personen im Markt festes, geschlossenes und flaches Schuhwerk tragen, um arbeitsbedingte Gesundheitsgefahren wirksam zu vermeiden.";
@@ -1627,6 +1692,7 @@ if (measure.includes("Betreuung nach einem Überfall organisiert")) {
 if (measure.includes("Schulungen für den Umgang mit gewalttätigen Situationen ermöglicht")) {
   measure = "Ermöglichen Sie Mitarbeitenden Schulungen zum Deeskalations- und Konfliktmanagement bei Gewaltvorfällen gemäß § 12 ArbSchG und DGUV Information 206-023.";
 }
+
   if (!measure.endsWith(".")) {
     measure += ".";
   }
@@ -1658,6 +1724,7 @@ function neinFragenInMaßnahmen() {
       dynamicMeasuresCount++;
     }
   });
+  // Add two empty rows for manual input
   for (let i = 0; i < 2; i++) {
     const newRow = document.createElement('tr');
     const numCell = document.createElement('td');
@@ -1705,6 +1772,7 @@ function exportiereMassnahmen() {
     newWindow.postMessage(daten, "*");
   }, 1000);
 }
+// Event Listeners
 window.addEventListener("resize", resizeCanvas);
 window.addEventListener("load", () => {
   resizeCanvas();
@@ -1718,7 +1786,8 @@ window.addEventListener("load", () => {
   const radioButtons = document.querySelectorAll('#fragenTabelle input[type="radio"]');
   radioButtons.forEach(radio => {
     radio.addEventListener('change', neinFragenInMaßnahmen);
-  });  
+  });
+  // Initial call to populate measures
   neinFragenInMaßnahmen();
 });
 canvas.addEventListener('mousedown', startDrawing);
@@ -1736,11 +1805,21 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.error("❌ Service Worker Fehler:", err));
   });
 }
+</script>
+<script>
   const aktuellesJahr = new Date().getFullYear();
   document.getElementById('titel').textContent = `Arbeitssicherheit-Checkliste-${aktuellesJahr}`;
+</script>
+<script>
+  const aktuellesJahr = new Date().getFullYear();
+  document.getElementById('titel').textContent = `Arbeitssicherheit-Checkliste-${aktuellesJahr}`;
+</script>
+<script>
+// Automatisches Laden beim Start
 window.addEventListener('DOMContentLoaded', () => {
   ladeFormular();
 });
+// Speichern aller Eingaben
 function speichereFormular() {
   const formData = {};
   document.querySelectorAll('input').forEach(el => {
@@ -1773,8 +1852,10 @@ function ladeFormular() {
       el.value = data[el.id || el.name];
     }
   });
+  // Nach dem Laden: Hervorhebung aktualisieren
   aktualisiereHervorhebung();
 }
+// Farbige Hervorhebung der Antworten
 function aktualisiereHervorhebung() {
   const zeilen = document.querySelectorAll('#fragenTabelle tbody tr');
   zeilen.forEach(row => {
@@ -1791,16 +1872,20 @@ function aktualisiereHervorhebung() {
     }
   });
 }
+// Speichern bei jeder Eingabeänderung
 document.addEventListener('change', event => {
   if (event.target.matches('input')) {
     speichereFormular();
     aktualisiereHervorhebung();
   }
 });
+
+// Manuelles Speichern
 function manuellSpeichern() {
   speichereFormular();
   alert("✅ Formular gespeichert!");
 }
+// Formular zurücksetzen
 function formularZuruecksetzen() {
   if (confirm("⚠️ Formular & Daten wirklich löschen?")) {
     localStorage.removeItem('formSicherheit2025');
@@ -1815,12 +1900,14 @@ function formularZuruecksetzen() {
     alert("🧹 Formular zurückgesetzt.");
   }
 }
+// Im Teilen-Script zusätzlich:
 const originalGenerateAndSharePDF = generateAndSharePDF;
 generateAndSharePDF = async function () {
   speichereFormular(); // Vor dem Teilen speichern
   await originalGenerateAndSharePDF(); // Dann ausführen
   ladeFormular(); // Danach alles wiederherstellen
 };
+// Aktuelles Datum im deutschen Format einsetzen
 const heute = new Date();
 const datumDeutsch = heute.toLocaleDateString("de-DE", {
   day: "2-digit",
@@ -1829,5 +1916,17 @@ const datumDeutsch = heute.toLocaleDateString("de-DE", {
 });
 document.getElementById("datum").textContent = datumDeutsch;
 </script>
+<style>
+/* Visuelle Hervorhebung von Antworten */
+.highlight-ja td:first-child {
+  background-color: #d4edda !important;
+}
+.highlight-nein td:first-child {
+  background-color: #f8d7da !important;
+}
+.highlight-nicht td:first-child {
+  background-color: #e2e3e5 !important;
+}
+</style>
 </body>
 </html>
