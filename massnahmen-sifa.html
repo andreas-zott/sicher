@@ -11,7 +11,7 @@
       padding: 20px;
       background: #f0f2f5;
       color: #333;
-      max-width: 900px;
+      max-width: 1200px;
       margin: auto;
     }
 
@@ -40,12 +40,19 @@
       padding: 14px;
       border: 1px solid #ccc;
       text-align: left;
-      font-size: 16px;
+      font-size: 14px;
     }
 
     th {
       background-color: #C62828;
       color: white;
+    }
+
+    /* Frage-Spalte kursiv und kleiner */
+    td:nth-child(2) {
+      font-style: italic;
+      font-size: 0.9em;
+      color: #555;
     }
 
     .btn-group {
@@ -102,9 +109,10 @@
       opacity: 1;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 800px) {
       th, td {
-        font-size: 14px;
+        font-size: 12px;
+        padding: 10px;
       }
 
       button {
@@ -121,10 +129,27 @@
       }
 
       body {
-        margin: 30mm;
+        margin: 20mm;
       }
-    }
-  </style>
+      
+      table {
+        font-size: 10pt;
+      }
+      
+      th, td {
+        padding: 8px;
+      }
+    }  
+
+.info, table, tr, td, th {
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
+}
+
+thead {display: table-header-group;}
+tfoot {display: table-footer-group;}
+
+</style>
 </head>
 <body>
   <h1>🛠️ Maßnahmen-Auswertung</h1>
@@ -134,23 +159,19 @@
     <button onclick="druckMitFooterAusblenden()">📄 Drucken / PDF</button>
     <button onclick="pdfTeilen()">📄 PDF generieren & teilen 📤</button>
     <button onclick="teilen()">🧾 Text teilen (iPad)</button>
-  </div>
-
-  <div class="nav-buttons">
-    <button onclick="history.back()">◀ Zurück</button>
-    <button onclick="history.forward()">Vor ▶</button>
-  </div>
+  </div>  
 
   <table id="maßnahmen-tabelle">
     <caption style="display:none;">Liste der Maßnahmen</caption>
     <thead>
       <tr>
-        <th>Nr.</th>
+        <th style="width: 50px;">Nr.</th>
+        <th style="width: 35%;">Frage</th>
         <th>Beschreibung der Maßnahme</th>
       </tr>
     </thead>
     <tbody>
-      <!-- Wird durch JS ersetzt -->
+     
     </tbody>
   </table>
 
@@ -176,11 +197,15 @@
       tbody.innerHTML = '';
 
       if (!Array.isArray(data.maßnahmen) || data.maßnahmen.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="2">🎉 Keine Maßnahmen erforderlich!</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="3" style="text-align: center;">🎉 Keine Maßnahmen erforderlich!</td></tr>`;
       } else {
         data.maßnahmen.forEach((m, i) => {
           const row = document.createElement('tr');
-          row.innerHTML = `<td>${i + 1}</td><td>${m.beschreibung}</td>`;
+          row.innerHTML = `
+            <td>${m.nr || (i + 1)}</td>
+            <td>${m.frage || '—'}</td>
+            <td>${m.beschreibung || '—'}</td>
+          `;
           tbody.appendChild(row);
         });
       }
@@ -200,7 +225,9 @@
       }
 
       const text = `Maßnahmenübersicht für Markt ${aktuelleDaten.markt} vom ${aktuelleDaten.datum}:\n\n` +
-        aktuelleDaten.maßnahmen.map((m, i) => `${i + 1}. ${m.beschreibung}`).join("\n") +
+        aktuelleDaten.maßnahmen.map((m, i) => 
+          `${m.nr || (i + 1)}. ${m.frage ? m.frage + '\n   ' : ''}${m.beschreibung}`
+        ).join("\n\n") +
         `\n\nName: ${aktuelleDaten.name}\nSiFa: ${aktuelleDaten.sifa}`;
 
       if (navigator.share) {
@@ -226,14 +253,14 @@
       const clone = document.body.cloneNode(true);
       clone.querySelector('.btn-group')?.remove();
       clone.querySelector('.nav-buttons')?.remove();
-      clone.querySelector('footer')?.remove(); // Footer ebenfalls entfernen
+      clone.querySelector('footer')?.remove();
 
       const opt = {
         margin: 56.7,
         filename: `Maßnahmen-${aktuelleDaten.markt || 'markt'}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, scrollY: 0 },
-        jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
+        html2canvas: { scale: 2.5, scrollY: 0 },
+        jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }, pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
       };
 
       const blob = await html2pdf().set(opt).from(clone).outputPdf('blob');

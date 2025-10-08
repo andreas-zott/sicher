@@ -33,32 +33,120 @@ input[type="radio"][value="nicht_vorhanden"]:checked {
   background-color: #999;
   border-color: #999;
 }
- {
-  button, 
-  .btn, 
-  footer, 
-  .footer, 
-  .buttons, 
+
+@media print {
+  button,
+  .btn,
+  footer,
+  .footer,
+  .buttons,
   .custom-btn,
   .btn-medium,
   .btn-large {
     display: none !important;
   }
-  #signature-pad, 
-  canvas, 
+  #signature-pad,
+  canvas,
   #auswertung-container {
     display: none !important;
   }
   @page {
     size: A4 portrait;
-    margin: 20mm;
+    margin: 15mm 12mm;
   }
   body {
     background: white !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+    font-size: 9pt !important;
+  }
+
+  h1 { font-size: 14pt !important; }
+  h2 { font-size: 12pt !important; }
+  table { font-size: 8pt !important; }
+  td, th {
+    font-size: 8pt !important;
+    padding: 4px 6px !important;
+    line-height: 1.2 !important;
+  }
+  input[type="text"], input[type="date"] {
+    font-size: 8pt !important;
+  }
+  
+  /* Improved page break handling to prevent empty pages */
+  .category-section {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .category-header {
+    page-break-before: auto !important; /* Changed from always to auto */
+    break-before: auto !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+
+  .category-header:first-of-type {
+    page-break-before: auto !important;
+    break-before: auto !important;
+  }
+
+  .massnahmen-section {
+    page-break-before: auto !important; /* Changed from always to auto */
+    break-before: auto !important;
+    margin-top: 20px !important;
+  }
+  
+  /* Prevent empty rows from creating new pages */
+  .massnahmen-section table tr:empty,
+  .massnahmen-section table tr td:empty {
+    display: none !important;
+  }
+  
+  /* Hide empty measures table if no content */
+  .massnahmen-section:has(tbody:empty) {
+    display: none !important;
+  }
+
+  tr, td, th {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .category-header + tr {
+    page-break-before: avoid !important;
+    break-before: avoid !important;
+  }
+
+  #maßnahmen-tabelle tr {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+  
+  /* Better handling of empty table rows */
+  #maßnahmen-tabelle tr.empty-row {
+    display: none !important;
+  }
+
+  .confirmation-section {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    page-break-before: auto !important; /* Changed from always */
+    margin-top: 20px !important;
+  }
+
+  .signature-container {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+  
+  /* Prevent orphaned content at page end */
+  .page-break-before {
+    page-break-before: auto !important;
+    break-before: auto !important;
   }
 }
+
 #signature-pad {
   border: 2px solid #cccccc;
   border-radius: 12px;
@@ -99,14 +187,14 @@ button:hover {
 }
 .checkbox-row {
   display: flex;
-  gap: 40px; /* Abstand zwischen den Spalten */
+  gap: 40px;
   margin-top: 16px;
   justify-content: space-between;
 }
 .checkbox-column {
   display: flex;
   flex-direction: column;
-  gap: 12px; /* Abstand zwischen Checkboxen in einer Spalte */
+  gap: 12px;
   flex: 1;
 }
 label {
@@ -152,163 +240,70 @@ display: block;
 min-height: 150px;
 margin: 10px auto;
 }
-button.custom-btn,
-button.btn-large,
-button.btn-medium {
-font-size: 16px;
-padding: 10px 20px;
-border-radius: 8px;
-border: none;
-cursor: pointer;
-margin: 10px auto;
-display: block;
-font-family: inherit;
-}
-  @media print {
-    .page-break-before {
-      page-break-before: always;
-margin-top: 0;
-      break-before: page;
-    }
-    @page {
-      size: A4 portrait;
-      margin: 20mm;
-    }
-    button, .btn, footer, .footer {
-      display: none !important;
-    }
-    input[type="text"], input[type="date"] {
-      border: none;
-      background: transparent;
-      font-weight: bold;
-      color: black;
-    }
-    input[type="radio"] {
-      transform: scale(1.2);
-    }
-    th, .category-header {
-      background-color: #ccc !important;
-      color: black !important;
-    }
-    tr:nth-child(even) {
-      background-color: #eee !important;
-    }
-    body {
-      background: white;
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
-    }
-  }
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
-    padding: 20px;
-  }
-  header h1 {
-    color: #212529;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-    background-color: white;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  }
-  th {
-    background-color: #007BFF;
-    color: white;
-    padding: 12px;
-    text-align: center;
-  }
-  td {
-    padding: 10px;
-    border: 1px solid #dee2e6;
-    text-align: left;
-    line-height: 1.35;
-  }
-  tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-  tr:hover {
-    background-color: #e6f0ff;
-  }
-  .category-header {
-    background-color: #d1ecf1 !important;
-    color: #0c5460;
-    font-weight: bold;
-    text-align: left;
-    padding: 12px;
-  }
-  input[type="text"], input[type="date"] {
-    width: 100%;
-    max-width: 300px;
-    padding: 8px;
-    font-size: 16px;
-    margin-top: 5px;
-    box-sizing: border-box;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-  }
-  button {
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 16px;
-  }
-  button:hover {
-    background-color: #0056b3;
-
-/* --- PDF / Print improvements: avoid splitting rows and keep sections on pages --- */
-table, thead, tbody, tr, td, th {
-  page-break-inside: avoid;
-  break-inside: avoid;
-  -webkit-column-break-inside: avoid;
-  -webkit-region-break-inside: avoid;
-}
-.category-header, .confirmation-section, .signature-container, #maßnahmen-tabelle tr {
-  page-break-inside: avoid;
-  break-inside: avoid;
-}
 .page-break-before {
-  page-break-before: always !important;
-  break-before: page !important;
+  page-break-before: always;
   margin-top: 0;
+  break-before: page;
 }
-.page-break-after {
-  page-break-after: always !important;
-  break-after: page !important;
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+  padding: 20px;
 }
-/* Ensure long tables flow naturally but do not split rows */
-tbody {
-  display: table-row-group;
+header h1 {
+  color: #212529;
 }
-@media print {
-  /* reduce shadows for print and keep white backgrounds */
-  table { box-shadow: none; }
-  .print-wrapper { background: white; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
-
-
-/* Erzwinge Seitenumbruch vor jeder Kategorie */
+th {
+  background-color: #007BFF;
+  color: white;
+  padding: 12px;
+  text-align: center;
+}
+td {
+  padding: 10px;
+  border: 1px solid #dee2e6;
+  text-align: left;
+  line-height: 1.35;
+}
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+tr:hover {
+  background-color: #e6f0ff;
+}
 .category-header {
-  page-break-before: always !important;
-  break-before: page !important;
+  background-color: #d1ecf1 !important;
+  color: #0c5460;
+  font-weight: bold;
+  text-align: left;
+  padding: 12px;
 }
-.category-header:first-of-type {
-  page-break-before: auto !important;
-  break-before: auto !important;
+input[type="text"], input[type="date"] {
+  width: 100%;
+  max-width: 300px;
+  padding: 8px;
+  font-size: 16px;
+  margin-top: 5px;
+  box-sizing: border-box;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
 }
-
-
-/* Verhindere, dass Tabellenzeilen durchschnitten werden */
-tr, td, th {
-  page-break-inside: avoid !important;
-  break-inside: avoid !important;
+.highlight-ja td:first-child {
+  background-color: #d4edda !important;
 }
-
+.highlight-nein td:first-child {
+  background-color: #f8d7da !important;
+}
+.highlight-nicht td:first-child {
+  background-color: #e2e3e5 !important;
+}
 </style>
 </head>
 <body>
@@ -363,13 +358,13 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
 <td><input name="1.0 Gesamtmarkt-1" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist die Aufzugsanlage geprüft und in einem ordnungsgemäßen Zustand (ohne sichtbare Beschädigungen und mit funktionsfähigen Schutzeinrichtungen)?</td>
+<td style="text-align: left;">Ist die Aufzugsanlage geprüft und in einem ordnungsgemämen Zustand (ohne sichtbare Beschädigungen und mit funktionsfähigen Schutzeinrichtungen)?</td>
 <td><input name="1.0 Gesamtmarkt-2" type="radio" value="ja"/></td>
 <td><input name="1.0 Gesamtmarkt-2" type="radio" value="nein"/></td>
 <td><input name="1.0 Gesamtmarkt-2" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist die Leergutrücknahme in einem ordnungsgemäßen Zustand (Schutzeinrichtungen intakt, Einzugsstellen gesichert, keine Glasscherben)?</td>
+<td style="text-align: left;">Ist die Leergutrücknahme in einem ordnungsgemämen Zustand (Schutzeinrichtungen intakt, Einzugsstellen gesichert, keine Glasscherben)?</td>
 <td><input name="1.0 Gesamtmarkt-3" type="radio" value="ja"/></td>
 <td><input name="1.0 Gesamtmarkt-3" type="radio" value="nein"/></td>
 <td><input name="1.0 Gesamtmarkt-3" type="radio" value="nicht_vorhanden"/></td>
@@ -393,13 +388,13 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
 <td><input name="1.0 Gesamtmarkt-6" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist der Gabelhubwagen in einem ordnungsgemäßen Zustand ohne sichtbare Beschädigungen?</td>
+<td style="text-align: left;">Ist der Gabelhubwagen in einem ordnungsgemämen Zustand ohne sichtbare Beschädigungen?</td>
 <td><input name="1.0 Gesamtmarkt-7" type="radio" value="ja"/></td>
 <td><input name="1.0 Gesamtmarkt-7" type="radio" value="nein"/></td>
 <td><input name="1.0 Gesamtmarkt-7" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist der elektrische Hubwagen geprüft und in einem ordnungsgemäßen Zustand (keine sichtbaren Beschädigungen, funktionsfähige Schutzeinrichtungen)?</td>
+<td style="text-align: left;">Ist der elektrische Hubwagen geprüft und in einem ordnungsgemämen Zustand (keine sichtbaren Beschädigungen, funktionsfähige Schutzeinrichtungen)?</td>
 <td><input name="1.0 Gesamtmarkt-8" type="radio" value="ja"/></td>
 <td><input name="1.0 Gesamtmarkt-8" type="radio" value="nein"/></td>
 <td><input name="1.0 Gesamtmarkt-8" type="radio" value="nicht_vorhanden"/></td>
@@ -508,7 +503,7 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
 </tr>
 <tr><td class="category-header" colspan="4" style="text-align: left;">2.0 Backstation</td></tr>
 <tr>
-<td style="text-align: left;">Sind die Arbeitsgeräte an der Backstation (Backofen, Backbleche, Brotschneidemaschine) in einem ordnungsgemäßen Zustand?</td>
+<td style="text-align: left;">Sind die Arbeitsgeräte an der Backstation (Backofen, Backbleche, Brotschneidemaschine) in einem ordnungsgemämen Zustand?</td>
 <td><input name="2.0 Backstation-0" type="radio" value="ja"/></td>
 <td><input name="2.0 Backstation-0" type="radio" value="nein"/></td>
 <td><input name="2.0 Backstation-0" type="radio" value="nicht_vorhanden"/></td>
@@ -532,7 +527,7 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
 <td><input name="2.0 Backstation-3" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist der Backhandschuh für die Backstation in einem ordnungsgemäßen Zustand (kein Verschleiß) und besitzt eine lange Stulpe?</td>
+<td style="text-align: left;">Ist der Backhandschuh für die Backstation in einem ordnungsgemämen Zustand (kein Verschleiß) und besitzt eine lange Stulpe?</td>
 <td><input name="2.0 Backstation-4" type="radio" value="ja"/></td>
 <td><input name="2.0 Backstation-4" type="radio" value="nein"/></td>
 <td><input name="2.0 Backstation-4" type="radio" value="nicht_vorhanden"/></td>
@@ -557,7 +552,7 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
 <td><input name="3.0 Serviceabteilung-1" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind die Arbeitsgeräte im Servicebereich in einem ordnungsgemäßen Zustand?</td>
+<td style="text-align: left;">Sind die Arbeitsgeräte im Servicebereich in einem ordnungsgemämen Zustand?</td>
 <td><input name="3.0 Serviceabteilung-2" type="radio" value="ja"/></td>
 <td><input name="3.0 Serviceabteilung-2" type="radio" value="nein"/></td>
 <td><input name="3.0 Serviceabteilung-2" type="radio" value="nicht_vorhanden"/></td>
@@ -593,7 +588,7 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
 <td><input name="3.0 Serviceabteilung-7" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind die Convenience-Geräte in einem ordnungsgemäßen Zustand?</td>
+<td style="text-align: left;">Sind die Convenience-Geräte in einem ordnungsgemämen Zustand?</td>
 <td><input name="3.0 Serviceabteilung-8" type="radio" value="ja"/></td>
 <td><input name="3.0 Serviceabteilung-8" type="radio" value="nein"/></td>
 <td><input name="3.0 Serviceabteilung-8" type="radio" value="nicht_vorhanden"/></td>
@@ -606,7 +601,7 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
 <td><input name="4.0 Kassenzone-0" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist der Fußboden im Kassenbereich in einem ordnungsgemäßen Zustand (ohne sichtbare Beschädigungen)?</td>
+<td style="text-align: left;">Ist der Fußboden im Kassenbereich in einem ordnungsgemämen Zustand (ohne sichtbare Beschädigungen)?</td>
 <td><input name="4.0 Kassenzone-1" type="radio" value="ja"/></td>
 <td><input name="4.0 Kassenzone-1" type="radio" value="nein"/></td>
 <td><input name="4.0 Kassenzone-1" type="radio" value="nicht_vorhanden"/></td>
@@ -686,7 +681,7 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
 <td><input name="6.0 Lager-3" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist die Absturzsicherung in einem ordnungsgemäßen Zustand (ohne sichtbare Beschädigungen und mit Kennzeichnung)?</td>
+<td style="text-align: left;">Ist die Absturzsicherung in einem ordnungsgemämen Zustand (ohne sichtbare Beschädigungen und mit Kennzeichnung)?</td>
 <td><input name="6.0 Lager-4" type="radio" value="ja"/></td>
 <td><input name="6.0 Lager-4" type="radio" value="nein"/></td>
 <td><input name="6.0 Lager-4" type="radio" value="nicht_vorhanden"/></td>
@@ -698,7 +693,7 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
 <td><input name="6.0 Lager-5" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist die Müll-/Papierpresse in einem ordnungsgemäßen Zustand (keine sichtbaren Beschädigungen, intakte Schutzeinrichtungen, fester Stand)?</td>
+<td style="text-align: left;">Ist die Müll-/Papierpresse in einem ordnungsgemämen Zustand (keine sichtbaren Beschädigungen, intakte Schutzeinrichtungen, fester Stand)?</td>
 <td><input name="6.0 Lager-6" type="radio" value="ja"/></td>
 <td><input name="6.0 Lager-6" type="radio" value="nein"/></td>
 <td><input name="6.0 Lager-6" type="radio" value="nicht_vorhanden"/></td>
@@ -742,7 +737,7 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
 <td><input name="8.0 Marktleiterbüro-0" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist der Verbandskasten in einem ordnungsgemäßen Zustand?</td>
+<td style="text-align: left;">Ist der Verbandskasten in einem ordnungsgemämen Zustand?</td>
 <td><input name="8.0 Marktleiterbüro-1" type="radio" value="ja"/></td>
 <td><input name="8.0 Marktleiterbüro-1" type="radio" value="nein"/></td>
 <td><input name="8.0 Marktleiterbüro-1" type="radio" value="nicht_vorhanden"/></td>
@@ -958,21 +953,23 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
 </tbody>
 </table>
 <br/>
-<h2 class="page-break-before" style="text-align: center;">
-Beschreibung der Maßnahmen zur Beseitigung von Defiziten
-</h2>
-<br/>
-<table>
-<thead>
-<tr>
-<th>Nr.</th>
-<th>Beschreibung</th>
-</tr>
-</thead>
-<tbody id="maßnahmen-tabelle">
-<!-- Diese Zeilen werden dynamisch von JavaScript hinzugefügt -->
-</tbody>
-</table>
+<div class="massnahmen-section">
+  <h2 style="text-align: center;">
+    Beschreibung der Maßnahmen zur Beseitigung von Defiziten
+  </h2>
+  <br/>
+  <table>
+    <thead>
+      <tr>
+        <th>Nr.</th>
+        <th>Frage</th>
+        <th>Maßnahme</th>
+      </tr>
+    </thead>
+    <tbody id="maßnahmen-tabelle">
+    </tbody>
+  </table>
+</div>
 <div class="page-break-before confirmation-section">
 <h2>Abschlussbestätigung</h2>
 <div class="checkbox-row">
@@ -998,8 +995,7 @@ Beschreibung der Maßnahmen zur Beseitigung von Defiziten
 </div>
 </div>
 </div>
-<!-- Unterschriftenfeld mit oben links platziertem "Unterschrift"-Label -->
-<div class="signature-container" style="position: relative; max-width: 600px; margin: 0 auto 20px auto;">
+ <div class="signature-container" style="position: relative; max-width: 600px; margin: 0 auto 20px auto;">
 <label style="
   position: absolute;
   top: 8px;
@@ -1034,7 +1030,6 @@ Beschreibung der Maßnahmen zur Beseitigung von Defiziten
   </button>
 </div>
 
-</div>
 <div style="display: flex; justify-content: center; gap: 20px; max-width: 600px; margin: 0 auto 40px;">
 <button class="btn-medium btn-green" onclick="manuellSpeichern()" style="flex: 1; max-width: 280px;">
     💾 Speichern
@@ -1074,23 +1069,35 @@ Beschreibung der Maßnahmen zur Beseitigung von Defiziten
   document.getElementById('year').textContent = year;
   document.getElementById('year-small').textContent = year;
 </script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
-// PDF Generation mit verbesserter Button-Ausblendung für iPad
+// Improved PDF generation function to prevent empty pages
 async function generateAndSharePDF() {
-// Alle Buttons & no-print-Elemente temporär ausblenden
+  // Alle Buttons & no-print-Elemente temporär ausblenden
   const buttons = document.querySelectorAll('button, .btn, .btn-group, .buttons, .custom-btn, .btn-medium, .btn-large');
   const noPrintElems = document.querySelectorAll('footer, .no-print');
   const originalDisplays = [];
-
   buttons.forEach((btn, index) => {
     originalDisplays[index] = btn.style.display;
     btn.style.display = 'none';
   });
   noPrintElems.forEach(el => el.style.display = 'none');
-
-  // Canvas durch Bild ersetzen für PDF
+  
+  // Hide empty rows before PDF generation
+  const emptyRows = document.querySelectorAll('#maßnahmen-tabelle tr.empty-row');
+  emptyRows.forEach(row => {
+    const cells = row.querySelectorAll('td');
+    let hasContent = false;
+    cells.forEach(cell => {
+      if (cell.textContent.trim() && !cell.textContent.match(/^\d+$/)) {
+        hasContent = true;
+      }
+    });
+    if (!hasContent) {
+      row.style.display = 'none';
+    }
+  });
+    
   const canvas = document.getElementById('signature-pad');
   let signatureImg = null;
   if (canvas) {
@@ -1103,61 +1110,60 @@ async function generateAndSharePDF() {
     signatureImg.style.height = '150px';
     canvas.style.display = 'none';
     canvas.parentNode.insertBefore(signatureImg, canvas);
+  }  
+  
+  const printable = document.querySelector('.print-wrapper') || document.body;
+  
+  // Removed problematic transform scaling
+  // const pdfScale = 0.75;
+  // printable.style.transformOrigin = 'top left';
+  // printable.style.webkitTransformOrigin = 'top left';
+  // printable.style.transform = 'scale(' + pdfScale + ')';
+  // printable.style.webkitTransform = 'scale(' + pdfScale + ')';
+  // printable.style.width = (100 / pdfScale) + '%';
+  
+  const element = printable;
+  const today = new Date();
+  const formattedDate = today.toLocaleDateString('de-DE');
+  
+  // Improved PDF options to prevent empty pages
+  const opt = {
+    pagebreak: { 
+      mode: ['css', 'legacy'], 
+      avoid: ['tr', '.category-section', '.confirmation-section', '.signature-container'],
+      before: [] // Removed automatic page breaks
+    },
+    margin: [12, 10, 15, 10],
+    filename: `Arbeitssicherheit-Begehungsprotokoll-${formattedDate}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: {
+      scale: 2,
+      scrollY: 0,
+      useCORS: true,
+      allowTaint: true,
+      logging: false,
+      windowHeight: document.documentElement.scrollHeight // Capture full height
+    },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
+  
+  function addPageNumbers(pdf) {
+    const pageCount = pdf.internal.getNumberOfPages();
+    pdf.setFontSize(8);
+    for (let i = 1; i <= pageCount; i++) {
+      pdf.setPage(i);
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      pdf.text('Seite ' + i + ' / ' + pageCount, pageWidth / 2, pageHeight - 10, {align: 'center'});
+    }
   }
-
-
-// --- Shrink printable area via CSS transform so html2canvas captures smaller text ---
-    const printable = document.querySelector('.print-wrapper') || document.body;
-    const pdfScale = 0.82; // <--- smaller = more shrink
-    printable.style.transformOrigin = 'top left';
-    printable.style.webkitTransformOrigin = 'top left';
-    printable.style.transform = 'scale(' + pdfScale + ')';
-    printable.style.webkitTransform = 'scale(' + pdfScale + ')';
-    printable.style.width = (100 / pdfScale) + '%';
-    const element = printable;
-
-
-// deutsches Datum formatieren
-const today = new Date();
-const formattedDate = today.toLocaleDateString('de-DE'); // z.B. "06-09-2025"
-
-const opt = {
-  pagebreak: { mode: ['css','legacy'], avoid: 'tr' },
-  margin: [10, 10, 15, 10],
-  filename: `Arbeitssicherheit-Begehungsprotokoll-${formattedDate}.pdf`,
-  image: { type: 'jpeg', quality: 0.98 },
-  html2canvas: {
-    scale: 2,
-    scrollY: 0,
-    useCORS: true,
-    allowTaint: true,
-    logging: false
-  },
-  jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-};
-
-
-// Add page numbers after PDF creation (centered)
-function addPageNumbers(pdf) {
-  const pageCount = pdf.internal.getNumberOfPages();
-  pdf.setFontSize(8);
-  for (let i = 1; i <= pageCount; i++) {
-    pdf.setPage(i);
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
-    pdf.text('Seite ' + i + ' / ' + pageCount, pageWidth / 2, pageHeight - 10, {align: 'center'});
-  }
-}
-
+  
   try {
-    
     const worker = html2pdf().set(opt).from(element);
     const pdf = await worker.toPdf().get('pdf');
     addPageNumbers(pdf);
     const blob = pdf.output('blob');
-
     const file = new File([blob], opt.filename, { type: "application/pdf" });
-
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       await navigator.share({
         title: 'Checkliste Arbeitssicherheit',
@@ -1180,22 +1186,25 @@ function addPageNumbers(pdf) {
       btn.style.display = originalDisplays[index];
     });
     noPrintElems.forEach(el => el.style.display = '');
-
-    // Entferne die temporäre PDF-Transformierung (falls gesetzt)
-    try {
-      if (typeof printable !== 'undefined' && printable) {
-        printable.style.transform = '';
-        printable.style.webkitTransform = '';
-        printable.style.width = '';
-        printable.style.transformOrigin = '';
-        printable.style.webkitTransformOrigin = '';
-      }
-    } catch (e) {
-      console.warn('Fehler beim Zurücksetzen der PDF-Transform:', e);
-    }
-
-
-    // Canvas wieder anzeigen und Bild entfernen
+    
+    // Restore empty rows visibility
+    emptyRows.forEach(row => {
+      row.style.display = '';
+    });
+    
+    // Removed transform reset since we don't use it anymore
+    // try {
+    //   if (typeof printable !== 'undefined' && printable) {
+    //     printable.style.transform = '';
+    //     printable.style.webkitTransform = '';
+    //     printable.style.width = '';
+    //     printable.style.transformOrigin = '';
+    //     printable.style.webkitTransformOrigin = '';
+    //   }
+    // } catch (e) {
+    //   console.warn('Fehler beim Zurücksetzen der PDF-Transform:', e);
+    // }   
+    
     if (canvas && signatureImg) {
       canvas.style.display = 'block';
       signatureImg.remove();
@@ -1203,31 +1212,25 @@ function addPageNumbers(pdf) {
   }
 }
 
-// Signatur-Canvas Setup
 const canvas = document.getElementById('signature-pad');
 const ctx = canvas.getContext('2d');
 let drawing = false;
-
 function resizeCanvas() {
   const ratio = window.devicePixelRatio || 1;
   const displayWidth = canvas.offsetWidth;
   const displayHeight = canvas.offsetHeight;
   const oldImage = new Image();
   oldImage.src = canvas.toDataURL();
-
   canvas.width = displayWidth * ratio;
   canvas.height = displayHeight * ratio;
   canvas.style.width = displayWidth + "px";
   canvas.style.height = displayHeight + "px";
-
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.scale(ratio, ratio);
-
   oldImage.onload = () => {
     ctx.drawImage(oldImage, 0, 0, displayWidth, displayHeight);
   };
 }
-
 function getX(e) {
   return e.touches ? e.touches[0].clientX - canvas.getBoundingClientRect().left :
                      e.clientX - canvas.getBoundingClientRect().left;
@@ -1275,7 +1278,6 @@ function restoreSignature() {
     image.src = dataURL;
   }
 }
-
 function prepareForPrint() {
   const dataURL = canvas.toDataURL();
   const img = document.createElement("img");
@@ -1286,7 +1288,6 @@ function prepareForPrint() {
   canvas.replaceWith(img);
   window.print();
 }
-
 function generateMeasure(question) {
   let measure = question.trim();
 
@@ -1295,8 +1296,6 @@ function generateMeasure(question) {
     measure = measure.slice(0, -1);
   }
 
-  // Specific rules for more concrete and imperative measures
-  
 
 if (measure.includes("festes, geschlossenes und flaches Schuhwerk")) {
   measure = "Sorgen Sie gemäß § 3 Abs. 1 ArbSchG dafür, dass alle Personen im Markt festes, geschlossenes und flaches Schuhwerk tragen, um arbeitsbedingte Gesundheitsgefahren wirksam zu vermeiden.";
@@ -1307,7 +1306,7 @@ if (measure.includes("Automatiktüren") || measure.includes("Rolltoren") || meas
 }
 
 if (measure.includes("Aufzugsanlage")) {
-  measure = "Veranlassen Sie gemäß § 4 BetrSichV regelmäßige Prüfungen der Aufzugsanlage, um deren ordnungsgemäßen und sicheren Zustand sicherzustellen.";
+  measure = "Veranlassen Sie gemäß § 4 BetrSichV regelmäßige Prüfungen der Aufzugsanlage, um deren ordnungsgemämen und sicheren Zustand sicherzustellen.";
 }
 
 if (measure.includes("Leergutrücknahme")) {
@@ -1327,7 +1326,7 @@ if (measure.includes("Schaltern und Steckdosen")) {
 }
 
 if (measure.includes("Gabelhubwagen")) {
-  measure = "Sorgen Sie für eine regelmäßige technische Kontrolle und Instandhaltung des Gabelhubwagens gemäß DGUV Vorschrift 68 (Flurförderzeuge), um dessen ordnungsgemäßen Zustand zu gewährleisten.";
+  measure = "Sorgen Sie für eine regelmäßige technische Kontrolle und Instandhaltung des Gabelhubwagens gemäß DGUV Vorschrift 68 (Flurförderzeuge), um dessen ordnungsgemämen Zustand zu gewährleisten.";
 }
 
 if (measure.includes("elektrische Hubwagen")) {
@@ -1363,7 +1362,7 @@ if (measure.includes("Notausgangsbeleuchtung ohne Defekte")) {
 }
 
 if (measure.includes("Notausgänge frei zugänglich")) {
-  measure = "Halten Sie Notausgänge zu jeder Zeit frei zugänglich und vermeiden Sie jedwede Art von Verstellung gemäß § 4 ArbStättV i. V. m. ASR A2.3.";
+  measure = "Halten Sie Notausgänge zu jeder Zeit frei zugänglich und vermeiden Sie jedwede Art von Verstellung gemäß § 4 ArbStättV i. V. m. ASR A2.3.";
 }
 
 if (measure.includes("Sind die Notausgänge und -ausstiege von innen ohne fremde Hilfe zu öffnen und nicht zugestellt")) {
@@ -1402,7 +1401,7 @@ if (measure.includes("Steckverbindungen auf dem Boden")) {
 }
 
 if (measure.includes("Arbeitsgeräte an der Backstation")) {
-  measure = "Stellen Sie sicher, dass sämtliche Arbeitsgeräte in der Backstation regelmäßig gewartet und auf ordnungsgemäßen Zustand geprüft werden (§ 4 ArbSchG, BetrSichV § 10).";
+  measure = "Stellen Sie sicher, dass sämtliche Arbeitsgeräte in der Backstation regelmäßig gewartet und auf ordnungsgemämen Zustand geprüft werden (§ 4 ArbSchG, BetrSichV § 10).";
 }
 
 if (measure.includes("freistehende Handwaschbecken ohne Beschädigungen")) {
@@ -1417,12 +1416,12 @@ if (measure.includes("Zuleitung der VDE-Norm")) {
   measure = "Vergewissern Sie sich, dass sämtliche elektrischen Zuleitungen den Vorgaben der VDE-Normen entsprechen, um elektrische Gefährdungen auszuschließen (§ 3 ArbSchG, BetrSichV).";
 }
 
-if (measure.includes("Ist der Backhandschuh für die Backstation in einem ordnungsgemäßen Zustand")) {
+if (measure.includes("Ist der Backhandschuh für die Backstation in einem ordnungsgemämen Zustand")) {
   measure = "Verwenden Sie nur hitzebeständige Backhandschuhe in einwandfreiem Zustand und mit langer Stulpe gemäß PSA-Benutzungsverordnung und § 3 ArbSchG.";
 }
 
 if (measure.includes("Sind alle Heißgeräte (z. B. Heißtheken, Fritteusen) in technisch einwandfreiem Zustand")) {
-  measure = "Prüfen Sie regelmäßig alle Heißgeräte (z. B. Heißtheken, Fritteusen) auf technische Mängel und dokumentieren Sie die Instandhaltung gemäß BetrSichV § 10.";
+  measure = "Prüfen Sie regelmäßig alle Heißgeräte (z. B. Heißtheken, Fritteusen) auf technische Mängel und dokumentieren Sie die Instandhaltung gemäß BetrSichV § 10.";
 }
 
 if (measure.includes("Hautschutzplan")) {
@@ -1457,7 +1456,7 @@ if (measure.includes("Messerhalter verwendet")) {
   measure = "Sorgen Sie für eine sichere Aufbewahrung von Messern durch geeignete Halterungen gemäß § 3 ArbSchG und DGUV Regel 100-500.";
 }
 
-if (measure.includes("Convenience-Geräte in einem ordnungsgemäßen Zustand")) {
+if (measure.includes("Convenience-Geräte in einem ordnungsgemämen Zustand")) {
   measure = "Führen Sie regelmäßige Wartungen und Funktionsprüfungen an Convenience-Geräten durch, um deren sicheren Betrieb zu gewährleisten (§ 4 BetrSichV).";
 }
 
@@ -1465,12 +1464,12 @@ if (measure.includes("Fußraum frei von Gegenständen")) {
   measure = "Halten Sie den Fußraum dauerhaft frei von Gegenständen, um Unfallgefahren durch Stolpern oder Hängenbleiben zu vermeiden (§ 3 ArbSchG, ASR A1.8).";
 }
 
-if (measure.includes("Fußboden im Kassenbereich in einem ordnungsgemäßen Zustand")) {
+if (measure.includes("Fußboden im Kassenbereich in einem ordnungsgemämen Zustand")) {
   measure = "Sorgen Sie für die Instandhaltung und Rutschhemmung des Fußbodens im Kassenbereich gemäß ASR A1.5/1,2 und § 3 ArbSchG.";
 }
 
 if (measure.includes("Heizgeräte im Kassenraum nicht durch brennbares Material zugestellt")) {
-  measure = "Stellen Sie sicher, dass Heizgeräte frei zugänglich und nicht durch brennbare Materialien blockiert sind, um Brandgefahren zu vermeiden (§ 10 ArbSchG, ASR A2.2).";
+  measure = "Stellen Sie sicher, dass Heizgeräte frei zugänglich und nicht durch brennbare Materialien blockiert sind, um Brandgefahren gemäß ASR A2.2 zu vermeiden.";
 }
 
 if (measure.includes("Kassenstühle in einem funktionsfähigen Zustand")) {
@@ -1518,7 +1517,7 @@ if (measure.includes("Absturzsicherung an der Rampe")) {
   measure = "Sorgen Sie dafür, dass an Rampen mit Absturzkante geeignete Absturzsicherungen gemäß ASR A2.1 installiert sind.";
 }
 
-if (measure.includes("Absturzsicherung in einem ordnungsgemäßen Zustand")) {
+if (measure.includes("Absturzsicherung in einem ordnungsgemämen Zustand")) {
   measure = "Überprüfen Sie regelmäßig die Absturzsicherung auf Schäden und achten Sie auf gut sichtbare Warnkennzeichnungen (§ 4 ArbSchG).";
 }
 
@@ -1526,7 +1525,7 @@ if (measure.includes("Müll-/Papierpresse geprüft")) {
   measure = "Lassen Sie Müll- und Papierpressen regelmäßig durch befähigte Personen gemäß BetrSichV und DGUV Regel 100-500 prüfen.";
 }
 
-if (measure.includes("Müll-/Papierpresse in einem ordnungsgemäßen Zustand")) {
+if (measure.includes("Müll-/Papierpresse in einem ordnungsgemämen Zustand")) {
   measure = "Stellen Sie sicher, dass die Müll-/Papierpresse technisch einwandfrei, standsicher und mit intakten Schutzeinrichtungen betrieben wird (§ 3 ArbSchG, § 4 BetrSichV).";
 }
 
@@ -1535,7 +1534,7 @@ if (measure.includes("Verkehrswege so beschaffen, dass kein Risiko")) {
 }
 
 if (measure.includes("Sozialbereich die aktuellen aushangpflichtigen Gesetze")) {
-  measure = "Bringen Sie im Sozialbereich alle gesetzlich vorgeschriebenen Aushänge (z. B. ArbSchG, JArbSchG, DGUV Vorschrift 1) gut sichtbar und aktuell an (§ 12 ArbSchG).";
+  measure = "Bringen Sie im Sozialbereich alle gesetzlich vorgeschriebenen Aushänge (z. B. ArbSchG, JArbSchG, DGUV Vorschrift 1) gut sichtbar und aktuell an (§ 12 ArbSchG).";
 }
 
 if (measure.includes("Kaffeemaschine und andere hitzeentwickelnde Geräte auf einer nicht brennbaren Unterlage")) {
@@ -1554,7 +1553,7 @@ if (measure.includes("aktuelle Liste sowie Prüfberichte prüfungsbedürftiger E
   measure = "Führen Sie eine vollständige Liste aller prüfpflichtigen Betriebseinrichtungen inklusive Nachweise und Prüfberichte gemäß BetrSichV § 14.";
 }
 
-if (measure.includes("Verbandskasten in einem ordnungsgemäßen Zustand")) {
+if (measure.includes("Verbandskasten in einem ordnungsgemämen Zustand")) {
   measure = "Kontrollieren Sie den Inhalt des Verbandskastens regelmäßig und stellen Sie die Vollständigkeit und Haltbarkeit der Materialien sicher (DIN 13157, DGUV Vorschrift 1).";
 }
 
@@ -1618,7 +1617,7 @@ if (measure.includes("arbeitsmedizinische Vorsorge angeboten")) {
 }
 
 if (measure.includes("Maßnahmen gegen Hauterkrankungen getroffen")) {
-  measure = "Ergreifen Sie geeignete Schutzmaßnahmen (z. B. Hautschutzmittel, Handschuhe, Schulungen) zur Prävention von Hauterkrankungen gemäß § 3 ArbSchG und TRGS 401.";
+  measure = "Ergreifen Sie geeignete Schutzmaßnahmen (z. B. Hautschutzmittel, Handschuhe, Schulungen) zur Prävention von Hauterkrankungen gemäß § 3 ArbSchG und TRGS 401.";
 }
 
 if (measure.includes("Mitarbeitertoiletten und Pausenräume sauber")) {
@@ -1698,11 +1697,14 @@ if (measure.includes("Schulungen für den Umgang mit gewalttätigen Situationen 
   }
   return measure;
 }
+
+// Improved function to mark empty rows and only add them when needed
 function neinFragenInMaßnahmen() {
   const fragenzeilen = document.querySelectorAll('#fragenTabelle tr');
   const maßnahmenTabelleBody = document.getElementById('maßnahmen-tabelle');
   maßnahmenTabelleBody.innerHTML = '';
   let dynamicMeasuresCount = 0;
+
   fragenzeilen.forEach(row => {
     const frageText = row.cells[0]?.innerText;
     const radios = row.querySelectorAll('input[type="radio"]');
@@ -1710,53 +1712,73 @@ function neinFragenInMaßnahmen() {
     radios.forEach(r => {
       if (r.checked) selected = r.value;
     });
+
     if (selected === 'nein' && frageText && !frageText.includes('category-header')) {
       const measureText = generateMeasure(frageText);
       const newRow = document.createElement('tr');
       const numCell = document.createElement('td');
+      const frageCell = document.createElement('td');
       const descCell = document.createElement('td');
+
       numCell.textContent = (dynamicMeasuresCount + 1).toString();
+      frageCell.textContent = frageText;
+      frageCell.style.fontStyle = 'italic';
+      frageCell.style.fontSize = '0.9em';
       descCell.textContent = measureText;
       descCell.contentEditable = "true";
+
       newRow.appendChild(numCell);
+      newRow.appendChild(frageCell);
       newRow.appendChild(descCell);
       maßnahmenTabelleBody.appendChild(newRow);
       dynamicMeasuresCount++;
     }
   });
-  // Add two empty rows for manual input
-  for (let i = 0; i < 2; i++) {
-    const newRow = document.createElement('tr');
-    const numCell = document.createElement('td');
-    const descCell = document.createElement('td');
-    numCell.textContent = (dynamicMeasuresCount + i + 1).toString();
-    descCell.textContent = '';
-    descCell.contentEditable = "true";
-    newRow.appendChild(numCell);
-    newRow.appendChild(descCell);
-    maßnahmenTabelleBody.appendChild(newRow);
+
+  // Only add empty rows if there are already measures, and mark them as empty
+  if (dynamicMeasuresCount > 0) {
+    for (let i = 0; i < 2; i++) {
+      const newRow = document.createElement('tr');
+      newRow.classList.add('empty-row'); // Mark as empty for PDF hiding
+      const numCell = document.createElement('td');
+      const frageCell = document.createElement('td');
+      const descCell = document.createElement('td');
+
+      numCell.textContent = (dynamicMeasuresCount + i + 1).toString();
+      frageCell.textContent = '';
+      frageCell.contentEditable = "true";
+      descCell.textContent = '';
+      descCell.contentEditable = "true";
+
+      newRow.appendChild(numCell);
+      newRow.appendChild(frageCell);
+      newRow.appendChild(descCell);
+      maßnahmenTabelleBody.appendChild(newRow);
+    }
   }
 }
+
 function exportiereMassnahmen() {
-  const fragenTabelle = document.getElementById('fragenTabelle');
-  const maßnahmenTabelle = [];
-  const rows = fragenTabelle.querySelectorAll('tr');
-  rows.forEach((row, index) => {
-    const frageZelle = row.querySelector('td');
-    const radios = row.querySelectorAll('input[type="radio"]');
-    if (radios.length > 0 && frageZelle) {
-      const neinRadio = [...radios].find(r => r.value === 'nein' && r.checked);
-      if (neinRadio) {
-        const frageText = frageZelle.textContent.trim();
-        const maßnahmeText = generateMeasure(frageText);
+  const maßnahmenTabelleBody = document.getElementById('maßnahmen-tabelle');
+  const maßnahmenTabelle = []; 
+  const rows = maßnahmenTabelleBody.querySelectorAll('tr');
+  rows.forEach((row) => {
+    const cells = row.querySelectorAll('td');
+    if (cells.length >= 3) {
+      const nr = cells[0].textContent.trim();
+      const frage = cells[1].textContent.trim();
+      const beschreibung = cells[2].textContent.trim();
+ 
+      if (frage || beschreibung) {
         maßnahmenTabelle.push({
-          nr: index + 1,
-          beschreibung: maßnahmeText
+          nr: parseInt(nr) || maßnahmenTabelle.length + 1,
+          frage: frage,
+          beschreibung: beschreibung
         });
       }
     }
   });
-  const datum = document.getElementById('datum')?.value || '';
+  const datum = document.getElementById('datum')?.textContent || '';
   const markt = document.getElementById('markt')?.value || '';
   const name = document.getElementById('name')?.value || '';
   const sifa = document.getElementById('sifa')?.value || '';
@@ -1772,23 +1794,30 @@ function exportiereMassnahmen() {
     newWindow.postMessage(daten, "*");
   }, 1000);
 }
-// Event Listeners
 window.addEventListener("resize", resizeCanvas);
 window.addEventListener("load", () => {
   resizeCanvas();
   restoreSignature();
   const datumsfeld = document.getElementById('datum');
   if (datumsfeld) {
-    const heute = new Date().toISOString().split('T')[0];
-    datumsfeld.value = heute;
+    const heute = new Date();
+    const datumDeutsch = heute.toLocaleDateString("de-DE", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric"
+    });
+    datumsfeld.textContent = datumDeutsch;
   }
+
   // Add event listeners to all radio buttons
   const radioButtons = document.querySelectorAll('#fragenTabelle input[type="radio"]');
   radioButtons.forEach(radio => {
     radio.addEventListener('change', neinFragenInMaßnahmen);
   });
+
   // Initial call to populate measures
   neinFragenInMaßnahmen();
+  ladeFormular();
 });
 canvas.addEventListener('mousedown', startDrawing);
 canvas.addEventListener('mousemove', draw);
@@ -1805,20 +1834,100 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.error("❌ Service Worker Fehler:", err));
   });
 }
-</script>
-<script>
-  const aktuellesJahr = new Date().getFullYear();
-  document.getElementById('titel').textContent = `Arbeitssicherheit-Checkliste-${aktuellesJahr}`;
-</script>
-<script>
-  const aktuellesJahr = new Date().getFullYear();
-  document.getElementById('titel').textContent = `Arbeitssicherheit-Checkliste-${aktuellesJahr}`;
-</script>
-<script>
+
+function manuellSpeichern() {
+  const formData = {
+    markt: document.getElementById('markt')?.value || '',
+    name: document.getElementById('name')?.value || '',
+    sifa: document.getElementById('sifa')?.value || '',
+    datum: document.getElementById('datum')?.textContent || '',
+    antworten: {},
+    checkboxes: {
+      mangel: document.getElementById('mangel')?.checked || false,
+      massnahmen: document.getElementById('massnahmen')?.checked || false,
+      nachkontrolle: document.getElementById('nachkontrolle')?.checked || false,
+      mitarbeiter: document.getElementById('mitarbeiter')?.checked || false
+    },
+    unterschrift: canvas.toDataURL()
+  };
+
+  const radios = document.querySelectorAll('#fragenTabelle input[type="radio"]:checked');
+  radios.forEach(radio => {
+    formData.antworten[radio.name] = radio.value;
+  });
+
+  localStorage.setItem('arbeitssicherheit_formular', JSON.stringify(formData));
+  alert('✅ Formular wurde gespeichert!');
+}
+
+function ladeFormular() {
+  const gespeichert = localStorage.getItem('arbeitssicherheit_formular');
+  if (!gespeichert) return;
+
+  try {
+    const formData = JSON.parse(gespeichert);
+    
+    if (formData.markt) document.getElementById('markt').value = formData.markt;
+    if (formData.name) document.getElementById('name').value = formData.name;
+    if (formData.sifa) document.getElementById('sifa').value = formData.sifa;
+
+    Object.keys(formData.antworten).forEach(name => {
+      const value = formData.antworten[name];
+      const radio = document.querySelector(`input[name="${name}"][value="${value}"]`);
+      if (radio) radio.checked = true;
+    });
+
+    if (formData.checkboxes) {
+      if (formData.checkboxes.mangel) document.getElementById('mangel').checked = true;
+      if (formData.checkboxes.massnahmen) document.getElementById('massnahmen').checked = true;
+      if (formData.checkboxes.nachkontrolle) document.getElementById('nachkontrolle').checked = true;
+      if (formData.checkboxes.mitarbeiter) document.getElementById('mitarbeiter').checked = true;
+    }
+
+    if (formData.unterschrift) {
+      const img = new Image();
+      img.onload = () => {
+        ctx.drawImage(img, 0, 0, canvas.offsetWidth, canvas.offsetHeight);
+      };
+      img.src = formData.unterschrift;
+    }
+
+    neinFragenInMaßnahmen();
+  } catch (e) {
+    console.error('Fehler beim Laden:', e);
+  }
+}
+
+function formularZuruecksetzen() {
+  if (!confirm('Möchten Sie wirklich alle Eingaben zurücksetzen?')) return;
+  
+  document.getElementById('markt').value = '';
+  document.getElementById('name').value = '';
+  document.getElementById('sifa').value = '';
+  
+  const radios = document.querySelectorAll('#fragenTabelle input[type="radio"]');
+  radios.forEach(radio => radio.checked = false);
+  
+  document.getElementById('mangel').checked = false;
+  document.getElementById('massnahmen').checked = false;
+  document.getElementById('nachkontrolle').checked = false;
+  document.getElementById('mitarbeiter').checked = false;
+  
+  clearSignature();
+  neinFragenInMaßnahmen();
+  localStorage.removeItem('arbeitssicherheit_formular');
+  
+  alert('✅ Formular wurde zurückgesetzt!');
+}
+
+// Set title
+document.getElementById('titel').textContent = 'Arbeitssicherheit-Checkliste-2025';
+
 // Automatisches Laden beim Start
 window.addEventListener('DOMContentLoaded', () => {
   ladeFormular();
 });
+
 // Speichern aller Eingaben
 function speichereFormular() {
   const formData = {};
@@ -1836,11 +1945,13 @@ function speichereFormular() {
   });
   localStorage.setItem('formSicherheit2025', JSON.stringify(formData));
 }
+
 // Laden und Anwenden (inkl. Hervorhebung)
 function ladeFormular() {
   const saved = localStorage.getItem('formSicherheit2025');
   if (!saved) return;
   const data = JSON.parse(saved);
+  
   document.querySelectorAll('input').forEach(el => {
     if (el.type === 'radio' || el.type === 'checkbox') {
       if (el.name && data[el.name]) {
@@ -1852,9 +1963,11 @@ function ladeFormular() {
       el.value = data[el.id || el.name];
     }
   });
+  
   // Nach dem Laden: Hervorhebung aktualisieren
   aktualisiereHervorhebung();
 }
+
 // Farbige Hervorhebung der Antworten
 function aktualisiereHervorhebung() {
   const zeilen = document.querySelectorAll('#fragenTabelle tbody tr');
@@ -1872,6 +1985,7 @@ function aktualisiereHervorhebung() {
     }
   });
 }
+
 // Speichern bei jeder Eingabeänderung
 document.addEventListener('change', event => {
   if (event.target.matches('input')) {
@@ -1879,54 +1993,6 @@ document.addEventListener('change', event => {
     aktualisiereHervorhebung();
   }
 });
-
-// Manuelles Speichern
-function manuellSpeichern() {
-  speichereFormular();
-  alert("✅ Formular gespeichert!");
-}
-// Formular zurücksetzen
-function formularZuruecksetzen() {
-  if (confirm("⚠️ Formular & Daten wirklich löschen?")) {
-    localStorage.removeItem('formSicherheit2025');
-    document.querySelectorAll('input').forEach(el => {
-      if (el.type === 'radio' || el.type === 'checkbox') {
-        el.checked = false;
-      } else {
-        el.value = '';
-      }
-    });
-    aktualisiereHervorhebung();
-    alert("🧹 Formular zurückgesetzt.");
-  }
-}
-// Im Teilen-Script zusätzlich:
-const originalGenerateAndSharePDF = generateAndSharePDF;
-generateAndSharePDF = async function () {
-  speichereFormular(); // Vor dem Teilen speichern
-  await originalGenerateAndSharePDF(); // Dann ausführen
-  ladeFormular(); // Danach alles wiederherstellen
-};
-// Aktuelles Datum im deutschen Format einsetzen
-const heute = new Date();
-const datumDeutsch = heute.toLocaleDateString("de-DE", {
-  day: "2-digit",
-  month: "2-digit",
-  year: "numeric"
-});
-document.getElementById("datum").textContent = datumDeutsch;
 </script>
-<style>
-/* Visuelle Hervorhebung von Antworten */
-.highlight-ja td:first-child {
-  background-color: #d4edda !important;
-}
-.highlight-nein td:first-child {
-  background-color: #f8d7da !important;
-}
-.highlight-nicht td:first-child {
-  background-color: #e2e3e5 !important;
-}
-</style>
 </body>
 </html>
