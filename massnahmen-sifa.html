@@ -1,11 +1,12 @@
 <!DOCTYPE html>
+
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <title>Maßnahmen-Auswertung</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <style>
+<meta charset="utf-8"/>
+<title>Maßnahmen-Auswertung</title>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
     body {
       font-family: Arial, sans-serif;
       padding: 20px;
@@ -150,32 +151,28 @@ thead {display: table-header-group;}
 tfoot {display: table-footer-group;}
 
 </style>
-</head>
+<meta content="Auswertung von Arbeitssicherheitsmaßnahmen – Checkliste und PDF-Export." name="description"/></head>
 <body>
-  <h1>🛠️ Maßnahmen-Auswertung</h1>
-  <section class="info" id="meta-info" aria-label="Metadaten"></section>
-
-  <div class="btn-group">
-    <button onclick="druckMitFooterAusblenden()">📄 Drucken / PDF</button>
-    <button onclick="pdfTeilen()">📄 PDF generieren & teilen 📤</button>
-    <button onclick="teilen()">🧾 Text teilen (iPad)</button>
-  </div>  
-
-  <table id="maßnahmen-tabelle">
-    <caption style="display:none;">Liste der Maßnahmen</caption>
-    <thead>
-      <tr>
-        <th style="width: 50px;">Nr.</th>
-        <th style="width: 35%;">Frage</th>
-        <th>Beschreibung der Maßnahme</th>
-      </tr>
-    </thead>
-    <tbody>
-     
-    </tbody>
-  </table>
-
-  <script>
+<h1>🛠️ Maßnahmen-Auswertung</h1>
+<section aria-label="Metadaten" class="info" id="meta-info"></section>
+<div class="btn-group">
+<button onclick="druckMitFooterAusblenden()">📄 Drucken / PDF</button>
+<button onclick="pdfTeilen()">📄 PDF generieren &amp; teilen 📤</button>
+<button onclick="teilen()">🧾 Text teilen (iPad)</button>
+</div>
+<table id="maßnahmen-tabelle">
+<caption style="display:none;">Liste der Maßnahmen</caption>
+<thead>
+<tr>
+<th style="width: 50px;">Nr.</th>
+<th style="width: 35%;">Frage</th>
+<th>Beschreibung der Maßnahme</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<script>
     let aktuelleDaten = null;
 
     window.addEventListener('message', (event) => {
@@ -263,7 +260,7 @@ tfoot {display: table-footer-group;}
         jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }, pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
       };
 
-      const blob = await html2pdf().set(opt).from(clone).outputPdf('blob');
+      const blob = await html2pdf().set(opt).from(clone).output('blob');
       const file = new File([blob], opt.filename, { type: "application/pdf" });
 
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
@@ -292,14 +289,14 @@ tfoot {display: table-footer-group;}
     margin-top: 40px;
     text-align: center;
 ">
-    <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
-        <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 8px;">
-            <a href="impressum.html" style="color: #4f46e5; text-decoration: none; font-size: 13px;">Impressum</a>
-            <a href="datenschutz.html" style="color: #4f46e5; text-decoration: none; font-size: 13px;">Datenschutz</a>
-            <a href="welcome.html" style="color: #4f46e5; text-decoration: none; font-size: 13px;">Startseite</a>
-        </div>
-        <p style="margin: 0; font-size: 12px; color: #6b7280;"></p>
-    </div>
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+<div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 8px;">
+<a href="impressum.html" style="color: #4f46e5; text-decoration: none; font-size: 13px;">Impressum</a>
+<a href="datenschutz.html" style="color: #4f46e5; text-decoration: none; font-size: 13px;">Datenschutz</a>
+<a href="welcome.html" style="color: #4f46e5; text-decoration: none; font-size: 13px;">Startseite</a>
+</div>
+<p style="margin: 0; font-size: 12px; color: #6b7280;"></p>
+</div>
 </footer>
 </body>
 </html>
