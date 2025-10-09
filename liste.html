@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="de">
 <head>
 <meta charset="utf-8"/>
@@ -105,7 +104,7 @@ input[type="radio"][value="nicht_vorhanden"]:checked {
   }
   
   /* Hide empty measures table if no content */
-  .massnahmen-section tbody:empty {display:none !important;} {
+  .massnahmen-section:has(tbody:empty) {
     display: none !important;
   }
 
@@ -322,8 +321,8 @@ input[type="text"], input[type="date"] {
 </div>
 <div style="margin-bottom: 10px;">
 <label for="name">Name:</label><br/>
-<input id="name" style="width: 100%;" type="text"/>
-</div>
+<input id="name" style="width: 100%;" type="text">
+</input></div>
 <div style="margin-bottom: 10px;">
 <label for="sifa">SiFa:</label><br/>
 <input id="sifa" style="width: 100%;" type="text"/>
@@ -497,7 +496,7 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
 <td><input name="1.0 Gesamtmarkt-24" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Elektrische Steckverbindungen liegen nicht ungeschützt auf dem Boden, insbesondere in Bereichen (z. B. unter Kühl- oder Tiefkühltruhen)?</td>
+<td style="text-align: left;">Sind alle elektrischen Steckverbindungen so angebracht, dass sie nicht ungeschützt auf dem Boden liegen (z. B. unter Kühl- oder Tiefkühltruhen)?</td>
 <td><input name="1.0 Gesamtmarkt-25" type="radio" value="ja"/></td>
 <td><input name="1.0 Gesamtmarkt-25" type="radio" value="nein"/></td>
 <td><input name="1.0 Gesamtmarkt-25" type="radio" value="nicht_vorhanden"/></td>
@@ -955,21 +954,21 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
 </table>
 <br/>
 <div class="massnahmen-section">
-<h2 style="text-align: center;">
+  <h2 style="text-align: center;">
     Beschreibung der Maßnahmen zur Beseitigung von Defiziten
   </h2>
-<br/>
-<table>
-<thead>
-<tr>
-<th>Nr.</th>
-<th>Frage</th>
-<th>Maßnahme</th>
-</tr>
-</thead>
-<tbody id="maßnahmen-tabelle">
-</tbody>
-</table>
+  <br/>
+  <table>
+    <thead>
+      <tr>
+        <th>Nr.</th>
+        <th>Frage</th>
+        <th>Maßnahme</th>
+      </tr>
+    </thead>
+    <tbody id="maßnahmen-tabelle">
+    </tbody>
+  </table>
 </div>
 <div class="page-break-before confirmation-section">
 <h2>Abschlussbestätigung</h2>
@@ -996,7 +995,7 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
 </div>
 </div>
 </div>
-<div class="signature-container" style="position: relative; max-width: 600px; margin: 0 auto 20px auto;">
+ <div class="signature-container" style="position: relative; max-width: 600px; margin: 0 auto 20px auto;">
 <label style="
   position: absolute;
   top: 8px;
@@ -1030,6 +1029,7 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
     📄 Drucken / PDF
   </button>
 </div>
+
 <div style="display: flex; justify-content: center; gap: 20px; max-width: 600px; margin: 0 auto 40px;">
 <button class="btn-medium btn-green" onclick="manuellSpeichern()" style="flex: 1; max-width: 280px;">
     💾 Speichern
@@ -1397,7 +1397,7 @@ if (measure.includes("Sind die Technik- und Heizräume frei von Lagernutzung")) 
 if (measure.includes("Betriebsanweisungen gut zugänglich")) {
   measure = "Halten Sie alle Betriebsanweisungen gut zugänglich und stellen Sie sicher, dass die Beschäftigten über die Inhalte unterwiesen sind (§§ 4, 12 ArbSchG).";
 }
-if (measure.includes("Elektrische Steckverbindungen liegen nicht ungeschützt auf dem Boden, insbesondere in Bereichen")) {
+if (measure.includes("Sind alle elektrischen Steckverbindungen so angebracht, dass sie nicht ungeschützt auf dem Boden liegen")) {
   measure = "Steckverbindungen sind so zu verlegen, dass sie gegen Feuchtigkeit, Schmutz und mechanische Beanspruchung geschützt sind. Leitungen und Verbindungen dürfen nicht auf dem Boden liegen, insbesondere nicht unter Kühlmöbeln und sichern Sie diese gemäß § 3 ArbSchG und ASR A1.5 gegen unbeabsichtigtes Lösen";
 }
 
