@@ -1,159 +1,96 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Arbeitssicherheit-Checkliste-2025</title>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
-<link href="/sicher/favicon.ico" rel="icon" type="image/x-icon"/>
-<link href="/sicher/manifest.json" rel="manifest"/>
-<style>
-input[type="radio"] {
-  appearance: none;
-  -webkit-appearance: none;
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  border: 2px solid #999;
-  background-color: #fff;
-  cursor: pointer;
-  margin: 4px;
-  position: relative;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
-}
-input[type="radio"][value="ja"]:checked {
-  background-color: #4CAF50;
-  border-color: #4CAF50;
-}
-input[type="radio"][value="nein"]:checked {
-  background-color: #C62828;
-  border-color: #C62828;
-}
-input[type="radio"][value="nicht_vorhanden"]:checked {
-  background-color: #999;
-  border-color: #999;
-}
-@media print {
-  button,
-  .btn,
-  footer,
-  .footer,
-  .buttons,
-  .custom-btn,
-  .btn-medium,
-  .btn-large {
-    display: none !important;
-  }
-  #signature-pad,
-  canvas,
-  #auswertung-container {
-    display: none !important;
-  }
-  @page {
-    size: A4 portrait;
-    margin: 15mm 12mm;
-  }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Arbeitssicherheit-Checkliste-2025</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon">
+  <link href="/sicher/manifest.json" rel="manifest">
+  <style>
+
+    :root{
+      --red:#C62828;
+      --green:#28a745;
+      --muted:#6b7280;
+      --bg:#f5f7fa;
+      --card:#fff;
+      --shadow: 0 4px 12px rgba(0,0,0,0.08);
+      --radius:12px;
+    }
+    /* Reset & basics */
+    html,body{margin:0;padding:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:#212529}
+    .print-wrapper{max-width:1100px;margin:20px auto;padding:16px}
+    h1,h2{margin:0 0 8px 0}
+    table{width:100%;border-collapse:collapse;background:var(--bg);margin-bottom:24px;border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+    th,td{padding:10px;border:1px solid #dee2e6;text-align:left;vertical-align:top;line-height:1.35}
+    th{background:var(--red);color:#fff;text-align:center}
+    tr:nth-child(even) td{background:#f8f9fb}
+    tr:hover td{background:#eaf3ff}
+    .category-header{background:var(--bg) !important;color:#0c5460;font-weight:700;padding:12px}
+    input[type="text"], input[type="date"]{width:100%;max-width:320px;padding:8px;border:1px solid #ced4da;border-radius:6px;box-sizing:border-box}
+    /* radio custom */
+    input[type="radio"]{appearance:none;-webkit-appearance:none;width:15px;height:15px;border-radius:50%;border:2px solid #999;background:#fff;cursor:pointer;margin:4px;transition:all .2s}
+    input[type="radio"][value="ja"]:checked{background:var(--green);border-color:var(--green)}
+    input[type="radio"][value="nein"]:checked{background:var(--red);border-color:var(--red)}
+    input[type="radio"][value="nicht_vorhanden"]:checked{background:#999;border-color:#999}
+
+    /* highlights */
+    .highlight-ja td:first-child{background:#d4edda !important}
+    .highlight-nein td:first-child{background:#f8d7da !important}
+    .highlight-nicht td:first-child{background:#e2e3e5 !important}
+
+    /* controls */
+    .info{background:var(--card);padding:20px;border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:18px}
+    
+   
+    
+    .signature-container{max-width:600px;margin:0 auto 20px;position:relative}
+    #signature-pad{border:2px solid #ddd;border-radius:16px;width:100%;height:150px;touch-action:none;display:block}
+    /* measures table */
+    .massnahmen-section table th, .massnahmen-section table td{padding:8px}
+    .empty-row{opacity:.6}
+
+    /* footer */
+    footer{background:#fafafa;padding:14px;border-top:1px solid #eee;border-radius:0 0 10px 10px;color:var(--muted);text-align:center;margin-top:30px}
+
+   @media print {
+  /* Elemente ausblenden */
+  button, .btn-large, .btn-medium, footer, .footer, #footer,
+  #signature-pad, canvas, #auswertung-container { display: none !important; }
+
+  /* Hintergrund & Schrift */
   body {
-    background: white !important;
+    background: #fff !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
-    font-size: 9pt !important;
+    font-size: 9pt;
   }
 
-  h1 { font-size: 14pt !important; }
-  h2 { font-size: 12pt !important; }
-  table { font-size: 8pt !important; }
-  td, th {
-    font-size: 8pt !important;
-    padding: 4px 6px !important;
-    line-height: 1.2 !important;
-  }
-  input[type="text"], input[type="date"] {
-    font-size: 8pt !important;
-  }
-  
-  /* Improved page break handling to prevent empty pages */
-  .category-section {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
+  /* Tabellen */
+  table, th, td { font-size: 8pt; }
+
+  /* Verhindert Seitenumbruch innerhalb bestimmter Abschnitte */
+  .category-section, .confirmation-section, .signature-container {
+    page-break-inside: avoid;
+    break-inside: avoid;
   }
 
-  .category-header {
-    page-break-before: auto !important; /* Changed from always to auto */
-    break-before: auto !important;
-    page-break-after: avoid !important;
-    break-after: avoid !important;
-  }
+  /* Leere Maßnahmen ausblenden */
+  .massnahmen-section:has(tbody:empty) { display: none; }
 
-  .category-header:first-of-type {
-    page-break-before: auto !important;
-    break-before: auto !important;
-  }
-
-  .massnahmen-section {
-    page-break-before: auto !important; /* Changed from always to auto */
-    break-before: auto !important;
-    margin-top: 20px !important;
-  }
-  
-  /* Prevent empty rows from creating new pages */
-  .massnahmen-section table tr:empty,
-  .massnahmen-section table tr td:empty {
-    display: none !important;
-  }
-  
-  /* Hide empty measures table if no content */
-  .massnahmen-section:has(tbody:empty) {
-    display: none !important;
-  }
-
-  tr, td, th {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-
-  .category-header + tr {
-    page-break-before: avoid !important;
-    break-before: avoid !important;
-  }
-
-  #maßnahmen-tabelle tr {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-  
-  /* Better handling of empty table rows */
-  #maßnahmen-tabelle tr.empty-row {
-    display: none !important;
-  }
-
-  .confirmation-section {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-    page-break-before: auto !important; /* Changed from always */
-    margin-top: 20px !important;
-  }
-
-  .signature-container {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-  
-  /* Prevent orphaned content at page end */
-  .page-break-before {
-    page-break-before: auto !important;
-    break-before: auto !important;
-  }
+  /* Seitenformat */
+  @page { size: A4 portrait; margin: 15mm 12mm; }
 }
 
-#signature-pad {
-  border: 2px solid #cccccc;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 600px;
-  height: 150px;
-  touch-action: none;
-}
+
+    /* responsive */
+    @media (max-width:720px){
+      .controls{flex-direction:column}
+      .btn-large{width:100%}
+      .btn-medium{width:100%}
+      input[type="text"], input[type="date"]{max-width:100%}
+    }
 .buttons {
   margin-top: 10px;
 }
@@ -231,140 +168,66 @@ button.btn-gray {
 background-color: #6c757d;
 color: white;
 }
-#signature-image {
-max-width: 600px;
-border: 1px solid #ccc;
-border-radius: 8px;
-display: block;
-min-height: 150px;
-margin: 10px auto;
-}
-.page-break-before {
-  page-break-before: always;
-  margin-top: 0;
-  break-before: page;
-}
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f5f7fa;
-  padding: 20px;
-}
-header h1 {
-  color: #212529;
-}
- table {
-      width: 100%;
-      border-collapse: collapse;
-      background: #f5f7fa;
-      margin-bottom: 30px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      border-radius: 12px;
-      overflow: hidden;
-    }
-th {
-  background-color: #C62828;
-  color: white;
-  padding: 12px;
-  text-align: center;
-}
-td {
-  padding: 10px;
-  border: 1px solid #dee2e6;
-  text-align: left;
-  line-height: 1.35;
-}
-tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-tr:hover {
-  background-color: #e6f0ff;
-}
-.category-header {
-  background-color: #f5f7fa!important;
-  color: #0c5460;
-  font-weight: bold;
-  text-align: left;
-  padding: 12px;
-}
-input[type="text"], input[type="date"] {
-  width: 100%;
-  max-width: 300px;
-  padding: 8px;
-  font-size: 16px;
-  margin-top: 5px;
-  box-sizing: border-box;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-}
-.highlight-ja td:first-child {
-  background-color: #d4edda !important;
-}
-.highlight-nein td:first-child {
-  background-color: #f8d7da !important;
-}
-.highlight-nicht td:first-child {
-  background-color: #e2e3e5 !important;
-}
-  .info {
-      background: white;
-      padding: 24px;
-      border-radius: 16px;
-      margin-bottom: 24px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    }
 
-    .info p {
-      margin: 8px 0;
-      font-size: 16px;
+    /* Footer kleiner */
+    footer{
+      background:#fafafa;
+      border-top:1px solid #eee;
+      color:#666;
+      text-align:center;
+      padding:10px 6px;
+      font-size:12px;
+      margin-top:25px;
+      line-height:1.3;
     }
+    footer a{
+      color:#999;
+      text-decoration:none;
+      font-size:11px;
+    }
+    footer a:hover{text-decoration:underline}
 
-    .info strong {
-      color: #C62828;
-      font-weight: 600;
-    }
-</style>
+  </style>
 </head>
 <body>
-<div class="print-wrapper">
-<header>
-<section class="info" id="meta-info" aria-label="Metadaten">
-<div style="display: flex; justify-content: space-between; align-items: center;">
-<h1 id="titel" style="margin: 0;"></h1>
-<span id="datum" style="padding: 8px; font-size: 16px; font-weight: bold;"></span>
-</div>
-</header>
-<section class="info" id="meta-info" aria-label="Metadaten">
-<div class="form-section" style="max-width: 300px;">
-<section class="info" id="meta-info" aria-label="Metadaten">
-<div style="margin-bottom: 10px;">
-<label for="markt">Marktnummer:</label>
-<input id="markt" placeholder="z. B. M123" required="" type="text"/>
-</div>
-<div style="margin-bottom: 10px;">
-<label for="name">Name:</label><br/>
-<input id="name" style="width: 100%;" type="text">
-</input></div>
-<div style="margin-bottom: 10px;">
-<label for="sifa">SiFa:</label><br/>
-<input id="sifa" style="width: 100%;" type="text"/>
-</div>
-</div>
-<div style="text-align: center; margin: 40px 0; font-size: 20px;">
-<strong>Teil der Gefährdungsbeurteilung / Wirksamkeitskontrolle</strong><br/>
-Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
-</div>
-<table id="fragenTabelle">
-<thead>
-<tr>
-<th>Frage</th>
-<th>Ja</th>
-<th>Nein</th>
-<th>n.v.</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="category-header" colspan="4">1.0 Gesamtmarkt</td>
+  <div class="print-wrapper" role="main">
+    <header class="info" aria-label="Metadaten">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+        <h1 id="titel">Arbeitssicherheit-Checkliste-2025</h1>
+        <div style="text-align:right">
+          <div id="datum" style="font-weight:700"></div>
+          <div style="font-size:12px;color:var(--muted)">Stand: Oktober 2025</div>
+        </div>
+      </div>
+    </header>
+
+    <section class="info" aria-label="Formulardaten">
+      <div style="display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start">
+        <div style="min-width:260px;max-width:420px">
+          <label for="markt">Marktnummer:</label><br>
+          <input id="markt" placeholder="z. B. M123" type="text" />
+          <div style="height:8px"></div>
+          <label for="name">Name:</label><br>
+          <input id="name" type="text" />
+          <div style="height:8px"></div>
+          <label for="sifa">SiFa:</label><br>
+          <input id="sifa" type="text" />
+        </div>
+
+        <div style="flex:1;min-width:280px">
+          <div style="font-size:18px;font-weight:600;margin-bottom:8px">Teil der Gefährdungsbeurteilung / Wirksamkeitskontrolle</div>
+          <div>Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.</div>
+        </div>
+      </div>
+    </section>
+
+    <table id="fragenTabelle" aria-label="Fragen">
+      <thead>
+        <tr><th>Frage</th><th>Ja</th><th>Nein</th><th>n.v.</th></tr>
+      </thead>
+      <tbody>
+        <!-- Kategorie-Header als volle Zeile -->
+      <td class="category-header" colspan="4">1.0 Gesamtmarkt</td>
 </tr>
 <tr>
 <td style="text-align: left;">Tragen alle Personen im Markt festes, geschlossenes und flaches Schuhwerk entsprechend den Vorgaben?</td>
@@ -972,82 +835,45 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
 <td><input name="12.0 Psychische Belastung-16" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 </tbody>
-</table>
-<br/>
-<div class="massnahmen-section">
-  <h2 style="text-align: center;">
-   📋 Beschreibung der Maßnahmen zur Beseitigung von Defiziten
-  </h2>
-  <br/>
-  <table>
-    <thead>
-      <tr>
-        <th>Nr.</th>
-        <th>Frage</th>
-        <th>Maßnahme</th>
-      </tr>
-    </thead>
-    <tbody id="maßnahmen-tabelle">
-    </tbody>
-  </table>
+
+    </table>
+
+    <div class="massnahmen-section info" aria-label="Maßnahmen">
+      <h2 style="text-align:center">📋 Beschreibung der Maßnahmen zur Beseitigung von Defiziten</h2>
+    <>
+      <table aria-label="Maßnahmen Tabelle">
+        <thead>
+          <tr><th>Nr.</th><th>Frage</th><th>Maßnahme</th></tr>
+        </thead>
+        <tbody id="maßnahmen-tabelle">
+         
+        </tbody>
+      </table>
+    </div>
+    <div class="confirmation-section info page-break-before" style="margin-top:18px">
+      <h2>Abschlussbestätigung</h2>
+      <div style="display:flex;gap:20px;flex-wrap:wrap;margin-top:10px">
+        <label><input id="mangel" type="checkbox"> Alle Mängel wurden zur Kenntnis genommen.</label>
+        <label><input id="massnahmen" type="checkbox"> Maßnahmen gemäß Plan werden umgesetzt.</label>
+        <label><input id="nachkontrolle" type="checkbox"> Nachkontrolle wird durchgeführt.</label>
+        <label><input id="mitarbeiter" type="checkbox"> Mitarbeiter wurden informiert.</label>
+      </div>
+    </div>
+    <div class="signature-container" aria-label="Unterschrift">
+      <label style="position:absolute;top:140px;left:480px;background:#fff;padding:0 6px;font-weight:700;font-size:14px;pointer-events:none;z-index:10">✍️ Unterschrift</label>
+      <canvas id="signature-pad" aria-label="Unterschriftsfeld"></canvas>
+      <div style="display:flex;justify-content:center;gap:12px;margin-top:10px">
 </div>
 
-<div class="page-break-before confirmation-section">
-<h2>Abschlussbestätigung</h2>
-<div class="checkbox-row">
-<div class="checkbox-column">
-<label for="mangel">
-<input id="mangel" type="checkbox"/>
-<span>Alle Mängel wurden zur Kenntnis genommen.</span>
-</label>
-<label for="massnahmen">
-<input id="massnahmen" type="checkbox"/>
-<span>Maßnahmen gemäß Plan werden umgesetzt.</span>
-</label>
-</div>
-<div class="checkbox-column">
-<label for="nachkontrolle">
-<input id="nachkontrolle" type="checkbox"/>
-<span>Nachkontrolle wird durchgeführt.</span>
-</label>
-<label for="mitarbeiter">
-<input id="mitarbeiter" type="checkbox"/>
-<span>Mitarbeiter wurden informiert.</span>
-</label>
-</div>
-</div>
-</div>
- <div class="signature-container" style="position: relative; max-width: 600px; margin: 0 auto 20px auto;">
-<label style="
-  position: absolute;
-  top: 8px;
-  left: 12px;
-  background: white;
-  padding: 0 6px;
-  font-weight: bold;
-  font-size: 14px;
-  color: #212529;
-  pointer-events: none;
-  user-select: none;
-  z-index: 10;
-">✍️ Unterschrift</label>
-<canvas id="signature-pad" style="
-  border: 2px solid #ddd;
-  border-radius: 16px;
-  width: 100%;
-  height: 150px;
-  touch-action: none;
-  display: block;
-"></canvas>
-</div>
-<button class="btn-large btn-gray" onclick="clearSignature()" style="display: block; width: 600px; margin: 10px auto;">
-🗑️ Unterschrift löschen
+<!-- Unterschrift löschen -->
+<button class="btn-large btn-gray" onclick="clearSignature()" style="display: block; width: 100%; max-width: 600px; margin: 10px auto;">
+  🗑️ Unterschrift löschen
 </button>
-<div style="display: flex; justify-content: center; gap: 20px; max-width: 600px; margin: 0 auto;">
-<button class="btn-medium btn-gray" onclick="exportiereMassnahmen()" style="flex: 1; max-width: 280px;">
+<div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 10px 0;">
+  <button class="btn-medium btn-gray" onclick="exportiereMassnahmen()" style="flex: 1 1 200px; max-width: 280px;">
     📝 Defizite exportieren
   </button>
-<button class="btn-medium btn-gray" onclick="prepareForPrint()" style="flex: 1; max-width: 280px;">
+  <button class="btn-medium btn-gray" onclick="prepareForPrint()" style="flex: 1 1 200px; max-width: 280px;">
     📄 Drucken / PDF
   </button>
 </div>
@@ -1055,13 +881,15 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
 <button class="btn-medium btn-green" onclick="manuellSpeichern()" style="flex: 1; max-width: 280px;">
     💾 Speichern
   </button>
-<button class="btn-medium btn-gray" onclick="formularZuruecksetzen()" style="flex: 1; max-width: 280px;">
+  <button class="btn-medium btn-blue" onclick="formularZuruecksetzen()" style="flex: 1 1 200px; max-width: 280px;">
     🧹 Zurücksetzen
   </button>
 </div>
+<!-- iPad teilen Button -->
 <button class="custom-btn" onclick="generateAndSharePDF()" style="background-color: #C62828; width: 600px; margin: 10px auto 40px auto; display: block;">
 📤 PDF teilen (iPad)
 </button>
+
 <div id="auswertung-container">
 <div id="auswertung"></div>
 </div>
@@ -1086,231 +914,191 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
 </p>
 </div><div style="font-size:11px; color:#777; margin-top:8px;">Stand: Oktober 2025</div>
 </footer>
-<script>
-  const year = new Date().getFullYear();
-  document.getElementById('year').textContent = year;
-  document.getElementById('year-small').textContent = year;
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script>
-// Improved PDF generation function to prevent empty pages
-async function generateAndSharePDF() {
-  // Alle Buttons & no-print-Elemente temporär ausblenden
-  const buttons = document.querySelectorAll('button, .btn, .btn-group, .buttons, .custom-btn, .btn-medium, .btn-large');
-  const noPrintElems = document.querySelectorAll('footer, .no-print');
-  const originalDisplays = [];
-  buttons.forEach((btn, index) => {
-    originalDisplays[index] = btn.style.display;
-    btn.style.display = 'none';
-  });
-  noPrintElems.forEach(el => el.style.display = 'none');
-  
-  // Hide empty rows before PDF generation
-  const emptyRows = document.querySelectorAll('#maßnahmen-tabelle tr.empty-row');
-  emptyRows.forEach(row => {
-    const cells = row.querySelectorAll('td');
-    let hasContent = false;
-    cells.forEach(cell => {
-      if (cell.textContent.trim() && !cell.textContent.match(/^\d+$/)) {
-        hasContent = true;
+
+  </div>
+
+  <!-- Bibliothek für PDF; falls offline, entferne oder lade lokal -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <script>
+    // --- Hilfsdaten & Init ---
+    document.getElementById('year').textContent = new Date().getFullYear();
+    document.getElementById('datum').textContent = new Date().toLocaleDateString('de-DE');
+
+    // Canvas Signature
+    const canvas = document.getElementById('signature-pad');
+    const ctx = canvas.getContext('2d');
+    let drawing = false;
+
+    function resizeCanvas() {
+      const ratio = window.devicePixelRatio || 1;
+      const w = canvas.offsetWidth;
+      const h = canvas.offsetHeight;
+      const old = document.createElement('img');
+      old.src = canvas.toDataURL();
+      canvas.width = Math.floor(w * ratio);
+      canvas.height = Math.floor(h * ratio);
+      canvas.style.width = w + "px";
+      canvas.style.height = h + "px";
+      ctx.setTransform(ratio,0,0,ratio,0,0);
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      old.onload = () => ctx.drawImage(old,0,0,w,h);
+    }
+    // initial CSS height for canvas fallback
+    if (!canvas.style.height) canvas.style.height = "150px";
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function getPos(e){
+      const rect = canvas.getBoundingClientRect();
+      if (e.touches) return {x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top};
+      return {x: e.clientX - rect.left, y: e.clientY - rect.top};
+    }
+    function startDrawing(e){ drawing=true; ctx.beginPath(); const p=getPos(e); ctx.moveTo(p.x,p.y); e.preventDefault(); }
+    function draw(e){ if(!drawing) return; const p=getPos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); e.preventDefault(); }
+    function stopDrawing(e){ if(!drawing) return; drawing=false; saveSignature(); e && e.preventDefault(); }
+
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mouseleave', stopDrawing);
+    canvas.addEventListener('touchstart', startDrawing);
+    canvas.addEventListener('touchmove', draw);
+    canvas.addEventListener('touchend', stopDrawing);
+
+    function saveSignature(){
+      try {
+        const data = canvas.toDataURL();
+        localStorage.setItem('signatureImage', data);
+      } catch(e){ console.warn('Signature save failed', e); }
+    }
+
+    function clearSignature(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      localStorage.removeItem('signatureImage');
+    }
+
+    // --- Formular Speicherung / Laden ---
+    const STORAGE_KEY = 'arbeitssicherheit_formular_v1';
+
+    function manuellSpeichern(){
+      const formData = {
+        markt: document.getElementById('markt').value || '',
+        name: document.getElementById('name').value || '',
+        sifa: document.getElementById('sifa').value || '',
+        antworten: {},
+        checkboxes: {
+          mangel: !!document.getElementById('mangel').checked,
+          massnahmen: !!document.getElementById('massnahmen').checked,
+          nachkontrolle: !!document.getElementById('nachkontrolle').checked,
+          mitarbeiter: !!document.getElementById('mitarbeiter').checked
+        },
+        unterschrift: localStorage.getItem('signatureImage') || null,
+        savedAt: new Date().toISOString()
+      };
+
+      document.querySelectorAll('#fragenTabelle input[type="radio"]').forEach(r => {
+        if (r.name) {
+          if (!formData.antworten[r.name]) formData.antworten[r.name] = null;
+          if (r.checked) formData.antworten[r.name] = r.value;
+        }
+      });
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
+      alert('✅ Formular wurde gespeichert!');
+    }
+
+    function ladeFormular(){
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      try {
+        const data = JSON.parse(raw);
+        if (data.markt) document.getElementById('markt').value = data.markt;
+        if (data.name) document.getElementById('name').value = data.name;
+        if (data.sifa) document.getElementById('sifa').value = data.sifa;
+        if (data.antworten) {
+          Object.keys(data.antworten).forEach(name => {
+            const val = data.antworten[name];
+            if (!val) return;
+            const el = document.querySelector(`#fragenTabelle input[name="${name}"][value="${val}"]`);
+            if (el) el.checked = true;
+          });
+        }
+        if (data.checkboxes){
+          document.getElementById('mangel').checked = !!data.checkboxes.mangel;
+          document.getElementById('massnahmen').checked = !!data.checkboxes.massnahmen;
+          document.getElementById('nachkontrolle').checked = !!data.checkboxes.nachkontrolle;
+          document.getElementById('mitarbeiter').checked = !!data.checkboxes.mitarbeiter;
+        }
+        if (data.unterschrift){
+          const img = new Image();
+          img.onload = () => ctx.drawImage(img, 0, 0, canvas.offsetWidth, canvas.offsetHeight);
+          img.src = data.unterschrift;
+        }
+        aktualisiereHervorhebung();
+        neinFragenInMaßnahmen();
+      } catch(e){ console.error('Lade-Fehler', e); }
+    }
+
+    // Auto-save bei Änderung
+    document.addEventListener('change', (ev) => {
+      if (ev.target.matches('input')) {
+        // light auto save: only radios/checkboxes/text fields
+        // we don't save signature here to avoid frequent writes
+        const radios = document.querySelectorAll('#fragenTabelle input[type="radio"]');
+        const snapshot = {
+          markt: document.getElementById('markt').value || '',
+          name: document.getElementById('name').value || '',
+          sifa: document.getElementById('sifa').value || '',
+          antworten: {},
+          checkboxes: {
+            mangel: !!document.getElementById('mangel').checked,
+            massnahmen: !!document.getElementById('massnahmen').checked,
+            nachkontrolle: !!document.getElementById('nachkontrolle').checked,
+            mitarbeiter: !!document.getElementById('mitarbeiter').checked
+          },
+          savedAt: new Date().toISOString()
+        };
+        radios.forEach(r => {
+          if (r.name && r.checked) snapshot.antworten[r.name] = r.value;
+        });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot));
+        aktualisiereHervorhebung();
+        neinFragenInMaßnahmen();
       }
     });
-    if (!hasContent) {
-      row.style.display = 'none';
+
+    function formularZuruecksetzen(){
+      if (!confirm('Möchten Sie wirklich alle Eingaben zurücksetzen?')) return;
+      document.getElementById('markt').value = '';
+      document.getElementById('name').value = '';
+      document.getElementById('sifa').value = '';
+      document.querySelectorAll('#fragenTabelle input[type="radio"]').forEach(r => r.checked = false);
+      ['mangel','massnahmen','nachkontrolle','mitarbeiter'].forEach(id => document.getElementById(id).checked = false);
+      document.querySelectorAll('#fragenTabelle tr').forEach(tr => tr.classList.remove('highlight-ja','highlight-nein','highlight-nicht'));
+      clearSignature();
+      localStorage.removeItem(STORAGE_KEY);
+      neinFragenInMaßnahmen();
+      alert('✅ Formular wurde zurückgesetzt!');
     }
-  });
-    
-  const canvas = document.getElementById('signature-pad');
-  let signatureImg = null;
-  if (canvas) {
-    const dataURL = canvas.toDataURL();
-    signatureImg = document.createElement('img');
-    signatureImg.src = dataURL;
-    signatureImg.style.border = '2px solid #000';
-    signatureImg.style.width = '100%';
-    signatureImg.style.maxWidth = '600px';
-    signatureImg.style.height = '150px';
-    canvas.style.display = 'none';
-    canvas.parentNode.insertBefore(signatureImg, canvas);
-  }  
-  
-  const printable = document.querySelector('.print-wrapper') || document.body;
-  
-  // Removed problematic transform scaling
-  // const pdfScale = 0.75;
-  // printable.style.transformOrigin = 'top left';
-  // printable.style.webkitTransformOrigin = 'top left';
-  // printable.style.transform = 'scale(' + pdfScale + ')';
-  // printable.style.webkitTransform = 'scale(' + pdfScale + ')';
-  // printable.style.width = (100 / pdfScale) + '%';
-  
-  const element = printable;
-  const today = new Date();
-  const formattedDate = today.toLocaleDateString('de-DE');
-  
-  // Improved PDF options to prevent empty pages
-  const opt = {
-    pagebreak: { 
-      mode: ['css', 'legacy'], 
-      avoid: ['tr', '.category-section', '.confirmation-section', '.signature-container'],
-      before: [] // Removed automatic page breaks
-    },
-    margin: [12, 10, 15, 10],
-    filename: `Arbeitssicherheit-Begehungsprotokoll-${formattedDate}.pdf`,
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: {
-      scale: 2,
-      scrollY: 0,
-      useCORS: true,
-      allowTaint: true,
-      logging: false,
-      windowHeight: document.documentElement.scrollHeight // Capture full height
-    },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-  };
-  
-  function addPageNumbers(pdf) {
-    const pageCount = pdf.internal.getNumberOfPages();
-    pdf.setFontSize(8);
-    for (let i = 1; i <= pageCount; i++) {
-      pdf.setPage(i);
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
-      pdf.text('Seite ' + i + ' / ' + pageCount, pageWidth / 2, pageHeight - 10, {align: 'center'});
-    }
-  }
-  
-  try {
-    const worker = html2pdf().set(opt).from(element);
-    const pdf = await worker.toPdf().get('pdf');
-    addPageNumbers(pdf);
-    const blob = pdf.output('blob');
-    const file = new File([blob], opt.filename, { type: "application/pdf" });
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      await navigator.share({
-        title: 'Checkliste Arbeitssicherheit',
-        text: 'Anbei die ausgefüllte Arbeitssicherheits-Checkliste als PDF.',
-        files: [file],
+
+    // Hervorhebung basierend auf Auswahl
+    function aktualisiereHervorhebung(){
+      document.querySelectorAll('#fragenTabelle tbody tr').forEach(row => {
+        const radios = row.querySelectorAll('input[type="radio"]');
+        if (!radios.length) return;
+        row.classList.remove('highlight-ja','highlight-nein','highlight-nicht');
+        radios.forEach(r => { if (r.checked){
+          if (r.value === 'ja') row.classList.add('highlight-ja');
+          else if (r.value === 'nein') row.classList.add('highlight-nein');
+          else row.classList.add('highlight-nicht');
+        }});
       });
-    } else {
-      alert("📤 Teilen nicht unterstützt – PDF wird heruntergeladen.");
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = opt.filename;
-      link.click();
     }
-  } catch (error) {
-    console.error("Fehler bei PDF-Generierung:", error);
-    alert("Fehler bei der PDF-Erstellung. Bitte versuchen Sie es erneut.");
-  } finally {
-    // Elemente wieder einblenden
-    buttons.forEach((btn, index) => {
-      btn.style.display = originalDisplays[index];
-    });
-    noPrintElems.forEach(el => el.style.display = '');
-    
-    // Restore empty rows visibility
-    emptyRows.forEach(row => {
-      row.style.display = '';
-    });
-    
-    // Removed transform reset since we don't use it anymore
-    // try {
-    //   if (typeof printable !== 'undefined' && printable) {
-    //     printable.style.transform = '';
-    //     printable.style.webkitTransform = '';
-    //     printable.style.width = '';
-    //     printable.style.transformOrigin = '';
-    //     printable.style.webkitTransformOrigin = '';
-    //   }
-    // } catch (e) {
-    //   console.warn('Fehler beim Zurücksetzen der PDF-Transform:', e);
-    // }   
-    
-    if (canvas && signatureImg) {
-      canvas.style.display = 'block';
-      signatureImg.remove();
-    }
-  }
-}
 
-const canvas = document.getElementById('signature-pad');
-const ctx = canvas.getContext('2d');
-let drawing = false;
-function resizeCanvas() {
-  const ratio = window.devicePixelRatio || 1;
-  const displayWidth = canvas.offsetWidth;
-  const displayHeight = canvas.offsetHeight;
-  const oldImage = new Image();
-  oldImage.src = canvas.toDataURL();
-  canvas.width = displayWidth * ratio;
-  canvas.height = displayHeight * ratio;
-  canvas.style.width = displayWidth + "px";
-  canvas.style.height = displayHeight + "px";
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  ctx.scale(ratio, ratio);
-  oldImage.onload = () => {
-    ctx.drawImage(oldImage, 0, 0, displayWidth, displayHeight);
-  };
-}
-function getX(e) {
-  return e.touches ? e.touches[0].clientX - canvas.getBoundingClientRect().left :
-                     e.clientX - canvas.getBoundingClientRect().left;
-}
-
-function getY(e) {
-  return e.touches ? e.touches[0].clientY - canvas.getBoundingClientRect().top :
-                     e.clientY - canvas.getBoundingClientRect().top;
-}
-
-function startDrawing(e) {
-  drawing = true;
-  ctx.beginPath();
-  ctx.moveTo(getX(e), getY(e));
-}
-
-function draw(e) {
-  if (!drawing) return;
-  ctx.lineTo(getX(e), getY(e));
-  ctx.stroke();
-}
-
-function stopDrawing() {
-  drawing = false;
-  saveSignature();
-}
-
-function clearSignature() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  localStorage.removeItem("signatureImage");
-}
-
-function saveSignature() {
-  const dataURL = canvas.toDataURL();
-  localStorage.setItem("signatureImage", dataURL);
-}
-
-function restoreSignature() {
-  const dataURL = localStorage.getItem("signatureImage");
-  if (dataURL) {
-    const image = new Image();
-    image.onload = () => {
-      ctx.drawImage(image, 0, 0, canvas.offsetWidth, canvas.offsetHeight);
-    };
-    image.src = dataURL;
-  }
-}
-function prepareForPrint() {
-  const dataURL = canvas.toDataURL();
-  const img = document.createElement("img");
-  img.src = dataURL;
-  img.style.border = "2px solid #000";
-  img.style.width = "100%";
-  img.style.maxWidth = "600px";
-  canvas.replaceWith(img);
-  window.print();
-}
-function generateMeasure(question) {
+    // --- Maßnahmen-Generierung (bei 'nein') ---
+   function generateMeasure(question) {
   let measure = question.trim();
 
   // Remove trailing question mark
@@ -1720,77 +1508,61 @@ if (measure.includes("Schulungen für den Umgang mit gewalttätigen Situationen 
   return measure;
 }
 
-// Improved function to mark empty rows and only add them when needed
-function neinFragenInMaßnahmen() {
-  const fragenzeilen = document.querySelectorAll('#fragenTabelle tr');
-  const maßnahmenTabelleBody = document.getElementById('maßnahmen-tabelle');
-  maßnahmenTabelleBody.innerHTML = '';
-  let dynamicMeasuresCount = 0;
 
-  fragenzeilen.forEach(row => {
-    const frageText = row.cells[0]?.innerText;
-    const radios = row.querySelectorAll('input[type="radio"]');
-    let selected = null;
-    radios.forEach(r => {
-      if (r.checked) selected = r.value;
-    });
+    function neinFragenInMaßnahmen(){
+      const rows = document.querySelectorAll('#fragenTabelle tbody tr');
+      const tbody = document.getElementById('maßnahmen-tabelle');
+      tbody.innerHTML = '';
+      let count = 0;
+      rows.forEach(row => {
+        const cell = row.cells[0];
+        if (!cell) return;
+        const text = cell.innerText.trim();
+        const radios = row.querySelectorAll('input[type="radio"]');
+        let selected = null;
+        radios.forEach(r => { if (r.checked) selected = r.value; });
+        if (selected === 'nein' && text && !row.classList.contains('category-header')){
+          const tr = document.createElement('tr');
+          const td1 = document.createElement('td');
+          const td2 = document.createElement('td');
+          const td3 = document.createElement('td');
 
-    if (selected === 'nein' && frageText && !frageText.includes('category-header')) {
-      const measureText = generateMeasure(frageText);
-      const newRow = document.createElement('tr');
-      const numCell = document.createElement('td');
-      const frageCell = document.createElement('td');
-      const descCell = document.createElement('td');
+          td1.textContent = ++count;
+          td2.textContent = text;
+          td2.style.fontStyle = 'italic';
+          td3.textContent = generateMeasure(text);
+          td3.contentEditable = "true";
 
-      numCell.textContent = (dynamicMeasuresCount + 1).toString();
-      frageCell.textContent = frageText;
-      frageCell.style.fontStyle = 'italic';
-      frageCell.style.fontSize = '0.9em';
-      descCell.textContent = measureText;
-      descCell.contentEditable = "true";
+          tr.appendChild(td1); tr.appendChild(td2); tr.appendChild(td3);
+          tbody.appendChild(tr);
+        }
+      });
 
-      newRow.appendChild(numCell);
-      newRow.appendChild(frageCell);
-      newRow.appendChild(descCell);
-      maßnahmenTabelleBody.appendChild(newRow);
-      dynamicMeasuresCount++;
+      // falls Maßnahmen existieren: ein paar leere, editierbare Zeilen hinzufügen
+      if (count > 0) {
+        for (let i=0;i<2;i++){
+          const tr = document.createElement('tr');
+          tr.classList.add('empty-row');
+          const td1=document.createElement('td'); const td2=document.createElement('td'); const td3=document.createElement('td');
+          td1.textContent = count + i + 1; td2.contentEditable='true'; td3.contentEditable='true';
+          tr.appendChild(td1); tr.appendChild(td2); tr.appendChild(td3);
+          tbody.appendChild(tr);
+        }
+      }
     }
-  });
 
-  // Only add empty rows if there are already measures, and mark them as empty
-  if (dynamicMeasuresCount > 0) {
-    for (let i = 0; i < 2; i++) {
-      const newRow = document.createElement('tr');
-      newRow.classList.add('empty-row'); // Mark as empty for PDF hiding
-      const numCell = document.createElement('td');
-      const frageCell = document.createElement('td');
-      const descCell = document.createElement('td');
-
-      numCell.textContent = (dynamicMeasuresCount + i + 1).toString();
-      frageCell.textContent = '';
-      frageCell.contentEditable = "true";
-      descCell.textContent = '';
-      descCell.contentEditable = "true";
-
-      newRow.appendChild(numCell);
-      newRow.appendChild(frageCell);
-      newRow.appendChild(descCell);
-      maßnahmenTabelleBody.appendChild(newRow);
-    }
-  }
-}
-
-function exportiereMassnahmen() {
+   function exportiereMassnahmen() {
   const maßnahmenTabelleBody = document.getElementById('maßnahmen-tabelle');
   const maßnahmenTabelle = []; 
   const rows = maßnahmenTabelleBody.querySelectorAll('tr');
+
   rows.forEach((row) => {
     const cells = row.querySelectorAll('td');
     if (cells.length >= 3) {
       const nr = cells[0].textContent.trim();
       const frage = cells[1].textContent.trim();
       const beschreibung = cells[2].textContent.trim();
- 
+
       if (frage || beschreibung) {
         maßnahmenTabelle.push({
           nr: parseInt(nr) || maßnahmenTabelle.length + 1,
@@ -1800,26 +1572,28 @@ function exportiereMassnahmen() {
       }
     }
   });
+
   const datum = document.getElementById('datum')?.textContent || '';
   const markt = document.getElementById('markt')?.value || '';
   const name = document.getElementById('name')?.value || '';
   const sifa = document.getElementById('sifa')?.value || '';
-  const daten = {
-    datum,
-    markt,
-    name,
-    sifa,
-    maßnahmen: maßnahmenTabelle
-  };
-  const newWindow = window.open('massnahmen-sifa.html', 'maßnahmen');
+
+  const daten = { datum, markt, name, sifa, maßnahmen: maßnahmenTabelle };
+
+  // Neues Fenster öffnen
+  const newWindow = window.open('massnahmen-sifa.html', '_blank');
+
+  // Kurze Verzögerung, damit die Seite geladen ist
   setTimeout(() => {
     newWindow.postMessage(daten, "*");
-  }, 1000);
+  }, 500);
 }
+
 window.addEventListener("resize", resizeCanvas);
 window.addEventListener("load", () => {
   resizeCanvas();
   restoreSignature();
+
   const datumsfeld = document.getElementById('datum');
   if (datumsfeld) {
     const heute = new Date();
@@ -1830,195 +1604,89 @@ window.addEventListener("load", () => {
     });
     datumsfeld.textContent = datumDeutsch;
   }
-
-  // Add event listeners to all radio buttons
-  const radioButtons = document.querySelectorAll('#fragenTabelle input[type="radio"]');
-  radioButtons.forEach(radio => {
-    radio.addEventListener('change', neinFragenInMaßnahmen);
-  });
-
-  // Initial call to populate measures
-  neinFragenInMaßnahmen();
-  ladeFormular();
 });
-canvas.addEventListener('mousedown', startDrawing);
-canvas.addEventListener('mousemove', draw);
-canvas.addEventListener('mouseup', stopDrawing);
-canvas.addEventListener('mouseout', stopDrawing);
-canvas.addEventListener('touchstart', startDrawing, { passive: false });
-canvas.addEventListener('touchmove', draw, { passive: false });
-canvas.addEventListener('touchend', stopDrawing);
-// Service Worker optional
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sicher/sw.js')
-      .then(() => console.log("✅ Service Worker registriert"))
-      .catch(err => console.error("❌ Service Worker Fehler:", err));
-  });
-}
 
-function manuellSpeichern() {
-  const formData = {
-    markt: document.getElementById('markt')?.value || '',
-    name: document.getElementById('name')?.value || '',
-    sifa: document.getElementById('sifa')?.value || '',
-    datum: document.getElementById('datum')?.textContent || '',
-    antworten: {},
-    checkboxes: {
-      mangel: document.getElementById('mangel')?.checked || false,
-      massnahmen: document.getElementById('massnahmen')?.checked || false,
-      nachkontrolle: document.getElementById('nachkontrolle')?.checked || false,
-      mitarbeiter: document.getElementById('mitarbeiter')?.checked || false
-    },
-    unterschrift: canvas.toDataURL()
-  };
 
-  const radios = document.querySelectorAll('#fragenTabelle input[type="radio"]:checked');
-  radios.forEach(radio => {
-    formData.antworten[radio.name] = radio.value;
-  });
+    // --- PDF / Druck ---
+    function prepareForPrint(){ window.print(); }
 
-  localStorage.setItem('arbeitssicherheit_formular', JSON.stringify(formData));
-  alert('✅ Formular wurde gespeichert!');
-}
+    async function generateAndSharePDF(){
+      // temporarily hide controls
+      const controls = document.querySelectorAll('button, .controls');
+      const prev = [];
+      controls.forEach((el,i)=>{ prev[i]=el.style.display; el.style.display='none'; });
 
-function ladeFormular() {
-  const gespeichert = localStorage.getItem('arbeitssicherheit_formular');
-  if (!gespeichert) return;
+      // show signature as img if present
+      let signatureImg = null;
+      const dataSig = localStorage.getItem('signatureImage');
+      if (dataSig){
+        signatureImg = document.createElement('img');
+        signatureImg.src = dataSig;
+        signatureImg.style.maxWidth='600px';
+        signatureImg.style.width='100%';
+        const can = document.getElementById('signature-pad');
+        can.style.display='none';
+        can.parentNode.insertBefore(signatureImg, can);
+      }
 
-  try {
-    const formData = JSON.parse(gespeichert);
-    
-    if (formData.markt) document.getElementById('markt').value = formData.markt;
-    if (formData.name) document.getElementById('name').value = formData.name;
-    if (formData.sifa) document.getElementById('sifa').value = formData.sifa;
+      const opt = {
+        margin: [12,10,15,10],
+        filename: `Arbeitssicherheit-Begehungsprotokoll-${new Date().toLocaleDateString('de-DE')}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale:2, useCORS:true, scrollY:0, windowHeight: document.documentElement.scrollHeight },
+        jsPDF: { unit:'mm', format:'a4', orientation:'portrait' },
+        pagebreak: { mode:['css','legacy'], avoid: ['tr', '.category-section', '.confirmation-section', '.signature-container'] }
+      };
 
-    Object.keys(formData.antworten).forEach(name => {
-      const value = formData.antworten[name];
-      const radio = document.querySelector(`input[name="${name}"][value="${value}"]`);
-      if (radio) radio.checked = true;
+      try {
+        const element = document.querySelector('.print-wrapper');
+        const worker = html2pdf().set(opt).from(element);
+        const pdf = await worker.toPdf().get('pdf');
+        // page numbers
+        const pageCount = pdf.internal.getNumberOfPages();
+        pdf.setFontSize(8);
+        for (let i=1;i<=pageCount;i++){
+          pdf.setPage(i);
+          const pw = pdf.internal.pageSize.getWidth();
+          const ph = pdf.internal.pageSize.getHeight();
+          pdf.text(`Seite ${i} / ${pageCount}`, pw/2, ph-10, {align:'center'});
+        }
+        const blob = pdf.output('blob');
+        const file = new File([blob], opt.filename, {type:'application/pdf'});
+        if (navigator.canShare && navigator.canShare({files:[file]})){
+          await navigator.share({title:'Checkliste Arbeitssicherheit', text:'Anbei die ausgefüllte Checkliste.', files:[file]});
+        } else {
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = opt.filename;
+          link.click();
+          alert('📤 PDF wurde heruntergeladen.');
+        }
+      } catch(e){
+        console.error('PDF failed', e);
+        alert('Fehler bei PDF-Erstellung.');
+      } finally {
+        // restore
+        controls.forEach((el,i)=>el.style.display=prev[i]??'');
+        if (signatureImg){
+          const can = document.getElementById('signature-pad');
+          signatureImg.remove();
+          can.style.display='block';
+        }
+      }
+    }
+
+    // --- Init load ---
+    window.addEventListener('DOMContentLoaded', () => {
+      ladeFormular();
+      // attach simple change listeners to keep highlights in sync
+      document.querySelectorAll('#fragenTabelle input[type="radio"]').forEach(r => r.addEventListener('change', () => {
+        aktualisiereHervorhebung();
+        neinFragenInMaßnahmen();
+      }));
     });
 
-    if (formData.checkboxes) {
-      if (formData.checkboxes.mangel) document.getElementById('mangel').checked = true;
-      if (formData.checkboxes.massnahmen) document.getElementById('massnahmen').checked = true;
-      if (formData.checkboxes.nachkontrolle) document.getElementById('nachkontrolle').checked = true;
-      if (formData.checkboxes.mitarbeiter) document.getElementById('mitarbeiter').checked = true;
-    }
 
-    if (formData.unterschrift) {
-      const img = new Image();
-      img.onload = () => {
-        ctx.drawImage(img, 0, 0, canvas.offsetWidth, canvas.offsetHeight);
-      };
-      img.src = formData.unterschrift;
-    }
-
-    neinFragenInMaßnahmen();
-  } catch (e) {
-    console.error('Fehler beim Laden:', e);
-  }
-}
-
-function formularZuruecksetzen() {
-  if (!confirm('Möchten Sie wirklich alle Eingaben zurücksetzen?')) return;
-  
-  document.getElementById('markt').value = '';
-  document.getElementById('name').value = '';
-  document.getElementById('sifa').value = '';
-  
-  const radios = document.querySelectorAll('#fragenTabelle input[type="radio"]');
-  radios.forEach(radio => radio.checked = false);
-  
-  document.getElementById('mangel').checked = false;
-  document.getElementById('massnahmen').checked = false;
-  document.getElementById('nachkontrolle').checked = false;
-  document.getElementById('mitarbeiter').checked = false;
-
- document.querySelectorAll("tr").forEach(tr => {
-    tr.classList.remove("highlight-ja", "highlight-nein", "highlight-nicht");
-  });
-  
-  clearSignature();
-  neinFragenInMaßnahmen();
-  localStorage.removeItem('arbeitssicherheit_formular');
-  
-  alert('✅ Formular wurde zurückgesetzt!');
-}
-
-// Set title
-document.getElementById('titel').textContent = 'Arbeitssicherheit-Checkliste-2025';
-
-// Automatisches Laden beim Start
-window.addEventListener('DOMContentLoaded', () => {
-  ladeFormular();
-});
-
-// Speichern aller Eingaben
-function speichereFormular() {
-  const formData = {};
-  document.querySelectorAll('input').forEach(el => {
-    if (el.type === 'radio' || el.type === 'checkbox') {
-      if (el.name) {
-        if (!formData[el.name]) formData[el.name] = {};
-        formData[el.name][el.value] = el.checked;
-      } else {
-        formData[el.id] = el.checked;
-      }
-    } else {
-      formData[el.id || el.name] = el.value;
-    }
-  });
-  localStorage.setItem('formSicherheit2025', JSON.stringify(formData));
-}
-
-// Laden und Anwenden (inkl. Hervorhebung)
-function ladeFormular() {
-  const saved = localStorage.getItem('formSicherheit2025');
-  if (!saved) return;
-  const data = JSON.parse(saved);
-  
-  document.querySelectorAll('input').forEach(el => {
-    if (el.type === 'radio' || el.type === 'checkbox') {
-      if (el.name && data[el.name]) {
-        el.checked = !!data[el.name][el.value];
-      } else if (el.id && data[el.id] !== undefined) {
-        el.checked = !!data[el.id];
-      }
-    } else if ((el.id && data[el.id] !== undefined) || (el.name && data[el.name] !== undefined)) {
-      el.value = data[el.id || el.name];
-    }
-  });
-  
-  // Nach dem Laden: Hervorhebung aktualisieren
-  aktualisiereHervorhebung();
-}
-
-// Farbige Hervorhebung der Antworten
-function aktualisiereHervorhebung() {
-  const zeilen = document.querySelectorAll('#fragenTabelle tbody tr');
-  zeilen.forEach(row => {
-    const radios = row.querySelectorAll('input[type="radio"]');
-    if (radios.length) {
-      row.classList.remove('highlight-ja', 'highlight-nein', 'highlight-nicht');
-      radios.forEach(radio => {
-        if (radio.checked) {
-          if (radio.value === 'ja') row.classList.add('highlight-ja');
-          else if (radio.value === 'nein') row.classList.add('highlight-nein');
-          else if (radio.value === 'nicht_vorhanden') row.classList.add('highlight-nicht');
-        }
-      });
-    }
-  });
-}
-
-// Speichern bei jeder Eingabeänderung
-document.addEventListener('change', event => {
-  if (event.target.matches('input')) {
-    speichereFormular();
-    aktualisiereHervorhebung();
-  }
-});
-</script>
+  </script>
 </body>
 </html>
