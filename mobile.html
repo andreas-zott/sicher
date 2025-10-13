@@ -188,49 +188,63 @@ color: white;
     footer a:hover{text-decoration:underline}
 
   
-/* --- MOBILE OPTIMIERUNG (Smartphones unter 768px) --- */
+/* === MOBILE COMPLETE ADAPTATIONS (max-width:768px) === */
 @media (max-width: 768px) {
-  table#fragenTabelle thead {
-    display: none;
-  }
-  table#fragenTabelle,
-  table#fragenTabelle tbody,
-  table#fragenTabelle tr,
-  table#fragenTabelle td {
+  /* General: convert question table rows to cards */
+  table#fragenTabelle thead { display: none; }
+  table#fragenTabelle, table#fragenTabelle tbody, table#fragenTabelle tr, table#fragenTabelle td {
     display: block;
     width: 100%;
   }
   table#fragenTabelle tr {
     background: #fff;
-    border: 1px solid #ddd;
+    border: 1px solid #e6eef8;
     border-radius: 12px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
     margin-bottom: 12px;
-    padding: 10px;
+    padding: 12px;
+    box-sizing: border-box;
   }
   table#fragenTabelle td {
     border: none !important;
     padding: 6px 0 !important;
   }
   table#fragenTabelle td:first-child {
+    display: block;
     font-weight: 600;
+    font-size: 15px;
+    line-height: 1.45;
     color: #111;
-    margin-bottom: 6px;
+    white-space: normal;
+    word-break: break-word;
+    margin-bottom: 10px;
+  }
+
+  /* Radio buttons: placed together in one line under the question */
+  .radio-row {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+  .radio-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    padding: 6px 8px;
+    border-radius: 8px;
   }
   table#fragenTabelle input[type="radio"] {
-    width: 22px;
-    height: 22px;
-    margin-right: 8px;
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    flex: 0 0 auto;
   }
-  table#fragenTabelle td:nth-child(2),
-  table#fragenTabelle td:nth-child(3),
-  table#fragenTabelle td:nth-child(4) {
-    display: inline-block;
-    width: auto;
-    margin-right: 12px;
-  }
+
+  /* Category header */
   .category-header {
-    background: #f1f5f9 !important;
+    background: #f7fbff !important;
     border-left: 4px solid #C62828;
     border-radius: 8px;
     margin-top: 16px;
@@ -238,19 +252,83 @@ color: white;
     font-size: 15px;
     color: #333;
   }
-  button, input, select {
-    font-size: 16px;
+
+  /* Header & form corrections */
+  header.info h1 {
+    font-size: 20px;
+    text-align: center;
+    flex: 1 1 100%;
+    margin: 0 0 8px 0;
+    word-break: break-word;
   }
-  .btn-large, .btn-medium, .custom-btn {
+  header.info > div {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  header.info #datum { text-align: left; }
+
+  section.info { flex-direction: column; gap: 10px; }
+  section.info > div { width: 100% !important; max-width: 100% !important; }
+  section.info input[type="text"], section.info input[type="date"] {
+    width: 100% !important; max-width: 100% !important;
+  }
+  section.info div[style*="font-size:18px"] {
+    font-size: 16px !important;
+    word-wrap: break-word;
+    line-height: 1.4;
+  }
+  .print-wrapper { padding: 10px; }
+
+  /* Buttons touch sizing */
+  button, input, select { font-size: 16px; }
+  .btn-large, .btn-medium, .custom-btn { width: 100% !important; max-width: none !important; }
+
+  /* Signature area */
+  .signature-container { width: 100%; max-width: 100%; }
+  #signature-pad { height: 200px; }
+
+  /* Measures styling: show as cards under Maßnahmen section */
+  .massnahmen-section table, .massnahmen-section thead, .massnahmen-section tbody, .massnahmen-section tr, .massnahmen-section th, .massnahmen-section td {
+    display: block; width: 100%;
+  }
+  .massnahmen-section thead { display: none; }
+  .massnahmen-section tbody tr {
+    background: #fff;
+    border: 1px solid #e6eef8;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    padding: 12px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+  }
+  .massnahmen-section tbody tr td { border: none; padding: 6px 0; display: block; }
+  .massnahmen-section tbody tr td:first-child { font-weight: 700; margin-bottom: 6px; }
+  .inline-measure { margin-left: 6px; margin-top: 8px; padding-left: 8px; border-left: 3px solid rgba(198,40,40,0.12); }
+
+  /* compact spacing for small cards */
+  .measure-card { padding: 10px; }
+}
+
+
+/* --- MOBILE FIX: Hinweistext unter der Tabelle --- */
+@media (max-width: 768px) {
+  .hinweis-text, 
+  #hinweis, 
+  .info-hinweis, 
+  .footer-hinweis {
+    display: block;
     width: 100% !important;
-    max-width: none !important;
-  }
-  .signature-container {
-    width: 100%;
-    max-width: 100%;
-  }
-  #signature-pad {
-    height: 200px;
+    max-width: 100% !important;
+    white-space: normal !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    text-align: center;
+    font-size: 15px;
+    line-height: 1.4;
+    margin-top: 10px;
+    padding: 8px;
+    box-sizing: border-box;
   }
 }
 
@@ -1755,5 +1833,78 @@ window.addEventListener("load", () => {
 
 
   </script>
+<script>
+
+/* === Mobile measures observer and inline insertion === */
+(function(){
+  function styleExistingMeasures() {
+    const tbody = document.getElementById('maßnahmen-tabelle');
+    if (!tbody) return;
+    Array.from(tbody.children).forEach((tr, idx) => {
+      tr.classList.add('measure-card');
+      tr.setAttribute('data-measure-index', idx+1);
+    });
+  }
+
+  function onNewMeasure(tr) {
+    if (!tr || tr.tagName.toLowerCase() !== 'tr') return;
+    tr.classList.add('measure-card');
+    Array.from(tr.querySelectorAll('td')).forEach(td => td.style.display = 'block');
+    // Scroll into view on mobile
+    if (window.innerWidth <= 768) {
+      setTimeout(() => {
+        tr.scrollIntoView({behavior:'smooth', block:'center'});
+        tr.style.transition = 'background-color .35s ease';
+        const orig = tr.style.backgroundColor;
+        tr.style.backgroundColor = '#fffbe6';
+        setTimeout(()=> tr.style.backgroundColor = orig || '', 700);
+      }, 120);
+    }
+    // If the tr has data-question-name attribute, also insert a compact inline measure under question
+    const qname = tr.getAttribute('data-question-name');
+    if (qname && window.innerWidth <= 768) {
+      try {
+        const qInput = document.querySelector('#fragenTabelle input[name="'+qname+'"]');
+        if (qInput) {
+          const qtr = qInput.closest('tr');
+          if (qtr) {
+            // create compact div showing the measure text
+            const compact = document.createElement('div');
+            compact.className = 'inline-measure';
+            const cols = Array.from(tr.children).map(td => td.innerHTML).filter(Boolean);
+            compact.innerHTML = '<strong>Maßnahme:</strong><div>' + cols.slice(1).join(' — ') + '</div>';
+            // remove any previous inline for same question
+            const next = qtr.nextElementSibling;
+            if (next && next.classList && next.classList.contains('inline-measure')) {
+              next.remove();
+            }
+            qtr.parentNode.insertBefore(compact, qtr.nextSibling);
+          }
+        }
+      } catch(e){}
+    }
+  }
+
+  // Observe additions to the measures tbody
+  const tbody = document.getElementById('maßnahmen-tabelle');
+  if (tbody) {
+    styleExistingMeasures();
+    const mo = new MutationObserver((mutations) => {
+      mutations.forEach(m => {
+        m.addedNodes.forEach(n => {
+          if (n.nodeType === 1 && n.tagName.toLowerCase() === 'tr') {
+            onNewMeasure(n);
+          }
+        });
+      });
+    });
+    mo.observe(tbody, {childList: true});
+  }
+
+  // Expose a function to re-run styling if needed
+  window._refreshMeasureLayout = styleExistingMeasures;
+})();
+
+</script>
 </body>
 </html>
