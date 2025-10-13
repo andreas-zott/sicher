@@ -320,8 +320,10 @@ else {
     const cols = 2, rows = 2, imagesPerPage = cols * rows;
     const cellWidth = (pageWidth - margin * 2) / cols;
     const cellHeight = (pageHeight - margin * 2 - 60) / rows;
-
-    const datum = document.getElementById("datum").value;
+const datumInput = document.getElementById("datum").value;
+const [year, month, day] = datumInput.split("-");
+const datum = `${day}.${month}.${year}`;
+    
     const marktnummer = document.getElementById("marktnummer").value;
     const name = document.getElementById("name").value;
     const sifa = document.getElementById("sifa").value;
@@ -403,7 +405,7 @@ else {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "checkliste.pdf";
+      a.download = "Fotos zur Checkliste.pdf";
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
