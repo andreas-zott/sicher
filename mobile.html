@@ -1692,8 +1692,6 @@ window.addEventListener("load", () => {
 async function generateAndSharePDF() {
   try {
     const element = document.querySelector('.print-wrapper');
-
-    // Optionen für html2pdf
     const opt = {
       margin: 0.3,
       filename: 'Arbeitssicherheit-Checkliste.pdf',
@@ -1702,27 +1700,18 @@ async function generateAndSharePDF() {
       jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
     };
 
-    // Prüfen, ob iOS-Gerät
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-
-    // PDF erzeugen
     const pdfBlob = await html2pdf().from(element).set(opt).outputPdf('blob');
 
     if (isIOS) {
-      // === iOS-SPEZIALFALL ===
-      const file = new File([pdfBlob], 'Arbeitssicherheit-Checkliste.pdf', {
-        type: 'application/pdf'
-      });
-
+      const file = new File([pdfBlob], 'Arbeitssicherheit-Checkliste.pdf', { type: 'application/pdf' });
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        // iOS 15+ kann direkt teilen
         await navigator.share({
           title: 'Arbeitssicherheits-Checkliste',
           text: 'PDF der Arbeitssicherheits-Checkliste teilen oder speichern',
           files: [file]
         });
       } else {
-        // Fallback für ältere iOS-Versionen: PDF im neuen Tab anzeigen
         const blobUrl = URL.createObjectURL(pdfBlob);
         const newWindow = window.open(blobUrl, '_blank');
         if (!newWindow) {
@@ -1730,12 +1719,11 @@ async function generateAndSharePDF() {
         }
       }
     } else {
-      // === WINDOWS / ANDROID / DESKTOP ===
       html2pdf().from(element).set(opt).save();
     }
   } catch (err) {
     console.error('PDF-Fehler:', err);
-    alert('❌ PDF konnte nicht erzeugt werden.\nBitte prüfen Sie Safari-Berechtigungen oder Speicherplatz.');
+    alert('❌ PDF konnte nicht erzeugt werden. Bitte prüfen Sie Safari-Berechtigungen oder Speicherplatz.');
   }
 }
 </script>
