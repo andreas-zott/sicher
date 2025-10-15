@@ -1700,32 +1700,35 @@ async function generateAndSharePDF() {
       jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
     };
 
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     const pdfBlob = await html2pdf().from(element).set(opt).outputPdf('blob');
+    const file = new File([pdfBlob], 'Arbeitssicherheit-Checkliste.pdf', { type: 'application/pdf' });
 
-    if (isIOS) {
-      const file = new File([pdfBlob], 'Arbeitssicherheit-Checkliste.pdf', { type: 'application/pdf' });
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({
-          title: 'Arbeitssicherheits-Checkliste',
-          text: 'PDF der Arbeitssicherheits-Checkliste teilen oder speichern',
-          files: [file]
-        });
-      } else {
-        const blobUrl = URL.createObjectURL(pdfBlob);
-        const newWindow = window.open(blobUrl, '_blank');
-        if (!newWindow) {
-          alert('📄 PDF wurde erstellt – bitte Popups im Browser zulassen.');
-        }
-      }
+    // Immer das Teilen-Menü öffnen, falls möglich
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({
+        title: 'Arbeitssicherheits-Checkliste',
+        text: 'PDF der Arbeitssicherheits-Checkliste teilen oder speichern',
+        files: [file]
+      });
+    } else if (navigator.share) {
+      const blobUrl = URL.createObjectURL(pdfBlob);
+      await navigator.share({
+        title: 'Arbeitssicherheits-Checkliste',
+        text: 'Teilen oder Speichern',
+        url: blobUrl
+      });
     } else {
-      html2pdf().from(element).set(opt).save();
+      const blobUrl = URL.createObjectURL(pdfBlob);
+      window.open(blobUrl, '_blank');
+      alert('📄 Teilen-Menü wird nicht unterstützt. PDF im neuen Tab geöffnet.');
     }
   } catch (err) {
     console.error('PDF-Fehler:', err);
-    alert('❌ PDF konnte nicht erzeugt werden. Bitte prüfen Sie Safari-Berechtigungen oder Speicherplatz.');
+    alert('❌ PDF konnte nicht geteilt werden. Bitte Browser-Einstellungen prüfen.');
   }
 }
+
+
 </script>
 </body>
 </html>
