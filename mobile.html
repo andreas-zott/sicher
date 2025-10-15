@@ -1610,86 +1610,7 @@ window.addEventListener("load", () => {
     // --- PDF / Druck ---
     function prepareForPrint(){ window.print(); }
 
-    async function generateAndSharePDF(){
-      // temporarily hide controls
-      const controls = document.querySelectorAll('button, .controls');
-      const prev = [];
-      controls.forEach((el,i)=>{ prev[i]=el.style.display; el.style.display='none'; });
-
-      // show signature as img if present
-      let signatureImg = null;
-      const dataSig = localStorage.getItem('signatureImage');
-      if (dataSig){
-        signatureImg = document.createElement('img');
-        signatureImg.src = dataSig;
-        signatureImg.style.maxWidth='600px';
-        signatureImg.style.width='100%';
-        const can = document.getElementById('signature-pad');
-        can.style.display='none';
-        can.parentNode.insertBefore(signatureImg, can);
-      }
-
-      const opt = {
-        margin: [12,10,15,10],
-        filename: `Arbeitssicherheit-Begehungsprotokoll-${new Date().toLocaleDateString('de-DE')}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale:2, useCORS:true, scrollY:0, windowHeight: document.documentElement.scrollHeight },
-        jsPDF: { unit:'mm', format:'a4', orientation:'portrait' },
-        pagebreak: { mode:['css','legacy'], avoid: ['tr', '.category-section', '.confirmation-section', '.signature-container'] }
-      };
-
-      try {
-        const element = document.querySelector('.print-wrapper');
-        const worker = html2pdf().set(opt).from(element);
-        const pdf = await worker.toPdf().get('pdf');
-        // page numbers
-        const pageCount = pdf.internal.getNumberOfPages();
-        pdf.setFontSize(8);
-        for (let i=1;i<=pageCount;i++){
-          pdf.setPage(i);
-          const pw = pdf.internal.pageSize.getWidth();
-          const ph = pdf.internal.pageSize.getHeight();
-          pdf.text(`Seite ${i} / ${pageCount}`, pw/2, ph-10, {align:'center'});
-        }
-        const blob = pdf.output('blob');
-        const file = new File([blob], opt.filename, {type:'application/pdf'});
-        if (navigator.canShare && navigator.canShare({files:[file]})){
-          await navigator.share({title:'Checkliste Arbeitssicherheit', text:'Anbei die ausgefüllte Checkliste.', files:[file]});
-        } else {
-          const link = document.createElement('a');
-          link.href = URL.createObjectURL(blob);
-          link.download = opt.filename;
-          link.click();
-          alert('📤 PDF wurde heruntergeladen.');
-        }
-      } catch(e){
-        console.error('PDF failed', e);
-        alert('Fehler bei PDF-Erstellung.');
-      } finally {
-        // restore
-        controls.forEach((el,i)=>el.style.display=prev[i]??'');
-        if (signatureImg){
-          const can = document.getElementById('signature-pad');
-          signatureImg.remove();
-          can.style.display='block';
-        }
-      }
-    }
-
-    // --- Init load ---
-    window.addEventListener('DOMContentLoaded', () => {
-      ladeFormular();
-      // attach simple change listeners to keep highlights in sync
-      document.querySelectorAll('#fragenTabelle input[type="radio"]').forEach(r => r.addEventListener('change', () => {
-        aktualisiereHervorhebung();
-        neinFragenInMaßnahmen();
-      }));
-    });
-
-
-  </script>
-<script>
-async function generateAndSharePDF() {
+   async function generateAndSharePDF() {
   try {
     const element = document.querySelector('.print-wrapper');
     const opt = {
@@ -1729,6 +1650,15 @@ async function generateAndSharePDF() {
 }
 
 
+    // --- Init load ---
+    window.addEventListener('DOMContentLoaded', () => {
+      ladeFormular();
+      // attach simple change listeners to keep highlights in sync
+      document.querySelectorAll('#fragenTabelle input[type="radio"]').forEach(r => r.addEventListener('change', () => {
+        aktualisiereHervorhebung();
+        neinFragenInMaßnahmen();
+      }));
+    });
 </script>
 </body>
 </html>
