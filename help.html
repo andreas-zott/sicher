@@ -44,11 +44,9 @@
   }
 
   ul, ol { margin-left: 20px; }
-
   ul li { margin-bottom: 0.7rem; }
 
   .emoji { font-size: 1.2rem; margin-right: 0.6rem; }
-
   .highlight { font-weight: bold; }
 
   .hint {
@@ -127,18 +125,41 @@ Jede Frage muss beantwortet werden, um die Einhaltung von Sicherheitsstandards z
 
 <ul>
   <li>
-    <span class="emoji">🛠️</span><strong>Frage:</strong> Feuerlöscher geprüft?
-    <div class="hint">❗ Bitte Feuerlöscher sofort überprüfen und fehlende Wartungen nachholen.</div>
+    <span class="emoji">🛠️</span><strong>Frage:</strong> Feuerlöscher geprüft?<br>
+    <label><input type="radio" name="feuerloescher" value="ja"> Ja</label>
+    <label><input type="radio" name="feuerloescher" value="nein"> Nein</label>
+    <label><input type="radio" name="feuerloescher" value="nv"> N/V</label>
+    <div class="hint" style="color:red;">❗ Bitte Feuerlöscher sofort überprüfen und fehlende Wartungen nachholen.</div>
   </li>
   <li>
-    <span class="emoji">🚪</span><strong>Frage:</strong> Notausgänge frei und beschildert?
-    <div class="hint">❗ Blockierte oder fehlend beschilderte Notausgänge sofort freiräumen und markieren.</div>
+    <span class="emoji">🚪</span><strong>Frage:</strong> Notausgänge frei und beschildert?<br>
+    <label><input type="radio" name="notausgang" value="ja"> Ja</label>
+    <label><input type="radio" name="notausgang" value="nein"> Nein</label>
+    <label><input type="radio" name="notausgang" value="nv"> N/V</label>
+    <div class="hint" style="color:red;">❗ Blockierte oder fehlend beschilderte Notausgänge sofort freiräumen und markieren.</div>
   </li>
   <li>
-    <span class="emoji">⚡</span><strong>Frage:</strong> Elektrische Geräte überprüft?
-    <div class="hint">❗ Defekte Geräte sofort kennzeichnen und nicht benutzen; Sicherheitsprüfung durchführen.</div>
+    <span class="emoji">⚡</span><strong>Frage:</strong> Elektrische Geräte überprüft?<br>
+    <label><input type="radio" name="elektrisch" value="ja"> Ja</label>
+    <label><input type="radio" name="elektrisch" value="nein"> Nein</label>
+    <label><input type="radio" name="elektrisch" value="nv"> N/V</label>
+    <div class="hint" style="color:red;">❗ Defekte Geräte sofort kennzeichnen und nicht benutzen; Sicherheitsprüfung durchführen.</div>
   </li>
 </ul>
+
+<script>
+  // Hinweis nur bei "Nein" anzeigen
+  document.querySelectorAll('input[type=radio]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      const hint = radio.closest('li').querySelector('.hint');
+      if (radio.value === 'nein') {
+        hint.style.display = 'block';
+      } else {
+        hint.style.display = 'none';
+      }
+    });
+  });
+</script>
 </section>
 
 <section>
@@ -146,9 +167,29 @@ Jede Frage muss beantwortet werden, um die Einhaltung von Sicherheitsstandards z
 <p>Automatische Hinweise werden nur angezeigt, wenn „Nein“ gewählt wird.</p>
 </section>
 
+<h1>Webseiten-Versionen</h1>
+<section>
+<h2>4. Liste für Desktop und Tablets</h2>
+<p>
+Die Seite <a href="list.html">list.html</a> zeigt die Arbeitssicherheits-Checkliste im klassischen Layout, geeignet für Desktop-PCs und Tablets. Sie ist optimiert für größere Bildschirme und bietet die volle Übersicht der Checklistenpunkte.
+</p>
+</section>
+
+<section>
+<h2>5. Mobile Version für iPhone</h2>
+<p>
+Die Seite <a href="mobile.html">mobile.html</a> ist speziell für die Nutzung auf dem iPhone gestaltet. Sie passt das Layout automatisch an kleine Bildschirme an, sodass die Checkliste gut lesbar und einfach zu bedienen ist. 
+</p>
+<p>
+Bei Verwendung auf dem iPad passt sich das Design dynamisch an: Dreht man das iPad ins Querformat, wird das Layout wie auf einem Tablet dargestellt, um mehr Inhalte gleichzeitig sichtbar zu machen.
+</p>
+</section>
+
+</section>
+
 <h1>Abschluss</h1>
 <section>
-<h2>4. Abschluss</h2>
+<h2>6. Abschluss</h2>
 <p>
 Nach dem Ausfüllen können die Ergebnisse zur <strong>Gefährdungsbeurteilung</strong> und <strong>Wirksamkeitskontrolle</strong> genutzt werden. 
 Die Checkliste sollte regelmäßig aktualisiert werden, um gesetzliche Vorgaben einzuhalten.
