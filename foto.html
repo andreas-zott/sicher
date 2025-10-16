@@ -474,14 +474,6 @@ const datum = `${day}.${month}.${year}`;
   const aktuellesJahr = new Date().getFullYear();
   const titel = document.getElementById('titel');
   titel.textContent = titel.textContent.replace(/\d{4}/, aktuellesJahr);
-// Service Worker optional
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sicher/sw.js')
-      .then(() => console.log("✅ Service Worker registriert"))
-      .catch(err => console.error("❌ Service Worker Fehler:", err));
-  });
-}
 </script>
 </body>
 </html>
