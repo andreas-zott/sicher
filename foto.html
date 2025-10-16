@@ -475,5 +475,31 @@ const datum = `${day}.${month}.${year}`;
   const titel = document.getElementById('titel');
   titel.textContent = titel.textContent.replace(/\d{4}/, aktuellesJahr);
 </script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(function(reg) {
+        console.log('Service Worker registriert:', reg.scope);
+        if (reg.waiting) {
+          console.log('Neues SW-Update wartet');
+        }
+        reg.addEventListener('updatefound', () => {
+          const newWorker = reg.installing;
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              console.log('Neue Version installiert. Bitte Seite neu laden, um Update zu aktivieren.');
+            }
+          });
+        });
+      })
+      .catch(function(err) {
+        console.log('Service Worker Registrierung fehlgeschlagen:', err);
+      });
+  });
+}
+</script>
+
 </body>
 </html>
