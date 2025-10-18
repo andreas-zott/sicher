@@ -2099,5 +2099,195 @@ document.addEventListener('change', event => {
   }
 });
 </script>
+
+<!-- Device-aware PDF export override (auto mobile/desktop selection) -->
+<script>
+(function() {
+  function isMobileDevice() {
+    const ua = navigator.userAgent || navigator.vendor || window.opera || "";
+    const isMobileUA = /Mobi|Android|iPhone|iPad|iPod|Tablet/i.test(ua);
+    const smallWidth = (window.innerWidth && window.innerWidth <= 900);
+    return isMobileUA || smallWidth || ('ontouchstart' in window && window.innerWidth <= 1200);
+  }
+
+  function injectMobilePrintStyles() {
+    if (document.getElementById('pdfMobileStyles')) return;
+    const css = `
+    /* Mobile-print optimizations applied when .pdf-mobile class is present on html element */
+    html.pdf-mobile body { font-size: 10px !important; }
+    html.pdf-mobile table { font-size: 8.5pt !important; }
+    html.pdf-mobile th, html.pdf-mobile td { padding: 4px 6px !important; }
+    html.pdf-mobile header h1 { font-size: 13pt !important; }
+    html.pdf-mobile h2 { font-size: 11pt !important; }
+    html.pdf-mobile .confirmation-section { margin-top: 10px !important; padding: 12px !important; }
+    html.pdf-mobile .signature-container canvas,
+    html.pdf-mobile #signature-image { max-width: 100% !important; height: 120px !important; }
+    @media print {
+      html.pdf-mobile @page { size: A4 portrait; margin: 8mm 6mm !important; }
+      html.pdf-mobile body { font-size: 9pt !important; }
+      html.pdf-mobile button, html.pdf-mobile .btn, html.pdf-mobile footer, html.pdf-mobile .no-print { display: none !important; }
+      /* Avoid large shadows, keep simple */
+      html.pdf-mobile table { box-shadow: none !important; border: 0.5px solid #ddd !important; }
+      html.pdf-mobile .page-break-before { page-break-before: auto !important; break-before: auto !important; }
+    }
+    `;
+    const style = document.createElement('style');
+    style.id = 'pdfMobileStyles';
+    style.appendChild(document.createTextNode(css));
+    document.head.appendChild(style);
+  }
+
+  function removeMobileClass() {
+    document.documentElement.classList.remove('pdf-mobile');
+  }
+
+  function addMobileClass() {
+    document.documentElement.classList.add('pdf-mobile');
+  }
+
+  // Override/define the generateAndSharePDF function (replacing the previous implementation at runtime)
+  window.generateAndSharePDF = async function generateAndSharePDF() {
+    // Hide interactive elements
+    const buttons = document.querySelectorAll('button, .btn, .btn-group, .buttons, .custom-btn, .btn-medium, .btn-large');
+    const noPrintElems = document.querySelectorAll('footer, .no-print');
+    const originalDisplays = [];
+    buttons.forEach((btn, index) => {
+      originalDisplays[index] = btn.style.display || '';
+      btn.style.display = 'none';
+    });
+    noPrintElems.forEach(el => el.style.display = 'none');
+
+    // Detect device and set mobile class if needed
+    const mobile = isMobileDevice();
+    if (mobile) {
+      injectMobilePrintStyles();
+      addMobileClass();
+    } else {
+      removeMobileClass();
+    }
+
+    // Hide empty rows in measures table
+    const measuresRows = document.querySelectorAll('#maßnahmen-tabelle tr');
+    measuresRows.forEach(row => {
+      const cells = row.querySelectorAll('td');
+      let hasContent = false;
+      cells.forEach(cell => {
+        if (cell && cell.textContent.trim()) hasContent = true;
+      });
+      if (!hasContent) row.style.display = 'none';
+    });
+
+    // Replace signature canvas with image if present
+    const canvas = document.getElementById('signature-pad');
+    let signatureImg = null;
+    if (canvas) {
+      try {
+        const dataURL = canvas.toDataURL();
+        signatureImg = document.createElement('img');
+        signatureImg.id = 'signature-image';
+        signatureImg.src = dataURL;
+        signatureImg.style.border = '1px solid #000';
+        signatureImg.style.width = '100%';
+        signatureImg.style.maxWidth = '600px';
+        signatureImg.style.height = '120px';
+        canvas.style.display = 'none';
+        canvas.parentNode.insertBefore(signatureImg, canvas);
+      } catch (e) {
+        // canvas may be tainted; ignore and continue without image
+        console.warn('Signature canvas could not be exported:', e);
+      }
+    }
+
+    const printable = document.querySelector('.print-wrapper') || document.body;
+    const today = new Date();
+    const formattedDate = today.toLocaleDateString('de-DE');
+
+    // Choose options based on device type
+    const mobileOptions = {
+      pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', '.category-section', '.confirmation-section', '.signature-container'] },
+      margin: [8, 6, 8, 6], // top, left, bottom, right in mm
+      filename: `Arbeitssicherheit-Begehungsprotokoll-${formattedDate}-mobile.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, scrollY: 0, useCORS: true, allowTaint: true, logging: false, windowHeight: document.documentElement.scrollHeight },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    const desktopOptions = {
+      pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', '.category-section', '.confirmation-section', '.signature-container'] },
+      margin: [12, 10, 15, 10],
+      filename: `Arbeitssicherheit-Begehungsprotokoll-${formattedDate}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, scrollY: 0, useCORS: true, allowTaint: true, logging: false, windowHeight: document.documentElement.scrollHeight },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    const opt = mobile ? mobileOptions : desktopOptions;
+
+    function addPageNumbers(pdf) {
+      try {
+        const pageCount = pdf.internal.getNumberOfPages();
+        pdf.setFontSize(8);
+        for (let i = 1; i <= pageCount; i++) {
+          pdf.setPage(i);
+          const pageWidth = pdf.internal.pageSize.getWidth();
+          const pageHeight = pdf.internal.pageSize.getHeight();
+          pdf.text('Seite ' + i + ' / ' + pageCount, pageWidth / 2, pageHeight - 10, {align: 'center'});
+        }
+      } catch (err) {
+        console.warn('Could not add page numbers:', err);
+      }
+    }
+
+    try {
+      // Use html2pdf as before
+      const worker = html2pdf().set(opt).from(printable);
+      const pdf = await worker.toPdf().get('pdf');
+      addPageNumbers(pdf);
+      const blob = pdf.output('blob');
+      const file = new File([blob], opt.filename, { type: "application/pdf" });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          title: 'Checkliste Arbeitssicherheit',
+          text: 'Anbei die ausgefüllte Arbeitssicherheits-Checkliste als PDF. (mobil optimiert)',
+          files: [file],
+        });
+      } else {
+        // fallback: download
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = opt.filename;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      }
+    } catch (error) {
+      console.error("Fehler bei PDF-Generierung:", error);
+      alert("Fehler bei der PDF-Erstellung. Bitte versuchen Sie es erneut.");
+    } finally {
+      // Restore buttons
+      buttons.forEach((btn, index) => {
+        try { btn.style.display = originalDisplays[index] || ''; } catch(e){}
+      });
+      noPrintElems.forEach(el => el.style.display = '');
+
+      // Restore measures rows visibility
+      measuresRows.forEach(row => row.style.display = '');
+
+      // Remove mobile class after generation to avoid affecting UI permanently
+      removeMobileClass();
+
+      // Remove injected signature image (leave canvas)
+      if (signatureImg && signatureImg.parentNode) {
+        signatureImg.parentNode.removeChild(signatureImg);
+        if (canvas) canvas.style.display = '';
+      }
+    }
+  };
+
+  // Optional: set a small badge in console for debugging
+  console.info('Device-aware PDF export loaded (auto mobile/desktop detection active).');
+})();
+</script>
+
 </body>
 </html>
