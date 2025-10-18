@@ -437,9 +437,9 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
 <thead>
 <tr>
 <th>Frage</th>
-<th>Ja</th>
-<th>Nein</th>
-<th>n.v.</th>
+<th>Bewertung</th>
+<th></th>
+<th></th>
 </tr>
 </thead>
 <tbody>
@@ -2113,7 +2113,6 @@ document.addEventListener('change', event => {
   function injectMobilePrintStyles() {
     if (document.getElementById('pdfMobileStyles')) return;
     const css = `
-    /* Mobile-print optimizations applied when .pdf-mobile class is present on html element */
     html.pdf-mobile body { font-size: 10px !important; }
     html.pdf-mobile table { font-size: 8.5pt !important; }
     html.pdf-mobile th, html.pdf-mobile td { padding: 4px 6px !important; }
@@ -2126,7 +2125,6 @@ document.addEventListener('change', event => {
       html.pdf-mobile @page { size: A4 portrait; margin: 8mm 6mm !important; }
       html.pdf-mobile body { font-size: 9pt !important; }
       html.pdf-mobile button, html.pdf-mobile .btn, html.pdf-mobile footer, html.pdf-mobile .no-print { display: none !important; }
-      /* Avoid large shadows, keep simple */
       html.pdf-mobile table { box-shadow: none !important; border: 0.5px solid #ddd !important; }
       html.pdf-mobile .page-break-before { page-break-before: auto !important; break-before: auto !important; }
     }
@@ -2137,47 +2135,28 @@ document.addEventListener('change', event => {
     document.head.appendChild(style);
   }
 
-  function removeMobileClass() {
-    document.documentElement.classList.remove('pdf-mobile');
-  }
+  function removeMobileClass() { document.documentElement.classList.remove('pdf-mobile'); }
+  function addMobileClass() { document.documentElement.classList.add('pdf-mobile'); }
 
-  function addMobileClass() {
-    document.documentElement.classList.add('pdf-mobile');
-  }
-
-  // Override/define the generateAndSharePDF function (replacing the previous implementation at runtime)
   window.generateAndSharePDF = async function generateAndSharePDF() {
-    // Hide interactive elements
     const buttons = document.querySelectorAll('button, .btn, .btn-group, .buttons, .custom-btn, .btn-medium, .btn-large');
     const noPrintElems = document.querySelectorAll('footer, .no-print');
     const originalDisplays = [];
-    buttons.forEach((btn, index) => {
-      originalDisplays[index] = btn.style.display || '';
-      btn.style.display = 'none';
-    });
+    buttons.forEach((btn, index) => { originalDisplays[index] = btn.style.display || ''; btn.style.display = 'none'; });
     noPrintElems.forEach(el => el.style.display = 'none');
 
-    // Detect device and set mobile class if needed
     const mobile = isMobileDevice();
-    if (mobile) {
-      injectMobilePrintStyles();
-      addMobileClass();
-    } else {
-      removeMobileClass();
-    }
+    if (mobile) { injectMobilePrintStyles(); addMobileClass(); } else { removeMobileClass(); }
 
-    // Hide empty rows in measures table
+    // hide empty measure rows
     const measuresRows = document.querySelectorAll('#maßnahmen-tabelle tr');
     measuresRows.forEach(row => {
       const cells = row.querySelectorAll('td');
       let hasContent = false;
-      cells.forEach(cell => {
-        if (cell && cell.textContent.trim()) hasContent = true;
-      });
+      cells.forEach(cell => { if (cell && cell.textContent.trim()) hasContent = true; });
       if (!hasContent) row.style.display = 'none';
     });
 
-    // Replace signature canvas with image if present
     const canvas = document.getElementById('signature-pad');
     let signatureImg = null;
     if (canvas) {
@@ -2192,20 +2171,16 @@ document.addEventListener('change', event => {
         signatureImg.style.height = '120px';
         canvas.style.display = 'none';
         canvas.parentNode.insertBefore(signatureImg, canvas);
-      } catch (e) {
-        // canvas may be tainted; ignore and continue without image
-        console.warn('Signature canvas could not be exported:', e);
-      }
+      } catch (e) { console.warn('Signature canvas could not be exported:', e); }
     }
 
     const printable = document.querySelector('.print-wrapper') || document.body;
     const today = new Date();
     const formattedDate = today.toLocaleDateString('de-DE');
 
-    // Choose options based on device type
     const mobileOptions = {
       pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', '.category-section', '.confirmation-section', '.signature-container'] },
-      margin: [8, 6, 8, 6], // top, left, bottom, right in mm
+      margin: [8, 6, 8, 6],
       filename: `Arbeitssicherheit-Begehungsprotokoll-${formattedDate}-mobile.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { scale: 2, scrollY: 0, useCORS: true, allowTaint: true, logging: false, windowHeight: document.documentElement.scrollHeight },
@@ -2233,26 +2208,18 @@ document.addEventListener('change', event => {
           const pageHeight = pdf.internal.pageSize.getHeight();
           pdf.text('Seite ' + i + ' / ' + pageCount, pageWidth / 2, pageHeight - 10, {align: 'center'});
         }
-      } catch (err) {
-        console.warn('Could not add page numbers:', err);
-      }
+      } catch (err) { console.warn('Could not add page numbers:', err); }
     }
 
     try {
-      // Use html2pdf as before
       const worker = html2pdf().set(opt).from(printable);
       const pdf = await worker.toPdf().get('pdf');
       addPageNumbers(pdf);
       const blob = pdf.output('blob');
       const file = new File([blob], opt.filename, { type: "application/pdf" });
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({
-          title: 'Checkliste Arbeitssicherheit',
-          text: 'Anbei die ausgefüllte Arbeitssicherheits-Checkliste als PDF. (mobil optimiert)',
-          files: [file],
-        });
+        await navigator.share({ title: 'Checkliste Arbeitssicherheit', text: 'Anbei die ausgefüllte Arbeitssicherheits-Checkliste als PDF. (mobil optimiert)', files: [file] });
       } else {
-        // fallback: download
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
         link.download = opt.filename;
@@ -2264,29 +2231,204 @@ document.addEventListener('change', event => {
       console.error("Fehler bei PDF-Generierung:", error);
       alert("Fehler bei der PDF-Erstellung. Bitte versuchen Sie es erneut.");
     } finally {
-      // Restore buttons
-      buttons.forEach((btn, index) => {
-        try { btn.style.display = originalDisplays[index] || ''; } catch(e){}
-      });
+      buttons.forEach((btn, index) => { try { btn.style.display = originalDisplays[index] || ''; } catch(e){} });
       noPrintElems.forEach(el => el.style.display = '');
-
-      // Restore measures rows visibility
       measuresRows.forEach(row => row.style.display = '');
-
-      // Remove mobile class after generation to avoid affecting UI permanently
       removeMobileClass();
-
-      // Remove injected signature image (leave canvas)
       if (signatureImg && signatureImg.parentNode) {
         signatureImg.parentNode.removeChild(signatureImg);
         if (canvas) canvas.style.display = '';
       }
     }
   };
-
-  // Optional: set a small badge in console for debugging
-  console.info('Device-aware PDF export loaded (auto mobile/desktop detection active).');
+  console.info('Device-aware PDF export loaded.');
 })();
+</script>
+
+
+<!-- Radiobutton label enhancement: compact layout, label text, color-sync for Ja/Nein/n.v. -->
+<style id="radio-enhance-styles">
+.radio-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 8px;
+  font-size: 15px;
+  color: #333;
+  cursor: pointer;
+  user-select: none;
+  vertical-align: middle;
+  line-height: 1;
+}
+.radio-option input[type="radio"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 60%;
+  border: 2px solid #999;
+  background: white;
+  display: inline-block;
+  position: relative;
+  margin: 0;
+  flex: 0 0 auto;
+}
+.radio-option input[type="radio"]::after {
+  content: '';
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: transparent;
+  margin: 2px;
+  transition: background-color 0.12s ease;
+}
+.radio-option.ja input[type="radio"]:checked {
+  border-color: #2e7d32;
+  background: #a5d6a7;
+}
+.radio-option.nein input[type="radio"]:checked {
+  border-color: #c62828;
+  background: #ffcdd2;
+}
+.radio-option.nicht_vorhanden input[type="radio"]:checked {
+  border-color: #777;
+  background: #e0e0e0;
+}
+.radio-option.ja input[type="radio"]:checked + .radio-label-text,
+.radio-option.ja.selected .radio-label-text {
+  color: #2e7d32;
+  font-weight: 600;
+}
+.radio-option.nein input[type="radio"]:checked + .radio-label-text,
+.radio-option.nein.selected .radio-label-text {
+  color: #c62828;
+  font-weight: 600;
+}
+.radio-option.nicht_vorhanden input[type="radio"]:checked + .radio-label-text,
+.radio-option.nicht_vorhanden.selected .radio-label-text {
+  color: #555;
+  font-weight: 600;
+}
+#fragenTabelle td { padding: 6px 6px !important; font-size: 16px !important; vertical-align: middle; }
+@media print {
+  .radio-option input[type="radio"] { box-shadow: none !important; }
+  .radio-option .radio-label-text { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+@media (max-width: 768px) {
+  .radio-option { font-size: 14px; gap: 8px; }
+  #fragenTabelle td { font-size: 15px !important; padding: 8px 8px !important; }
+}
+</style>
+
+<script id="radio-enhance-script">
+document.addEventListener('DOMContentLoaded', function () {
+  function createOption(name, value, klass, text) {
+    var label = document.createElement('label');
+    label.className = 'radio-option ' + klass;
+    var input = document.createElement('input');
+    input.type = 'radio';
+    input.name = name;
+    input.value = value;
+    input.setAttribute('aria-label', text);
+    var span = document.createElement('span');
+    span.className = 'radio-label-text';
+    span.textContent = text;
+    label.appendChild(input);
+    label.appendChild(span);
+
+    label.addEventListener('click', function () {
+      input.checked = true;
+      var evt = document.createEvent('HTMLEvents');
+      evt.initEvent('change', true, false);
+      input.dispatchEvent(evt);
+    });
+
+    input.addEventListener('change', function () {
+      var group = document.getElementsByName(name);
+      for (var i = 0; i < group.length; i++) {
+        var el = group[i];
+        if (el && el.parentNode) el.parentNode.classList.remove('selected');
+      }
+      if (input.checked) label.classList.add('selected');
+    });
+    return label;
+  }
+
+  function transformRow(tr) {
+    if (!tr || tr.querySelector('.radio-option')) return;
+    var headerCell = tr.querySelector('td.category-header');
+    if (headerCell) return;
+    var radios = tr.querySelectorAll('input[type="radio"]');
+    if (!radios || radios.length === 0) return;
+    var baseName = radios[0].name || ('rb-' + Math.random().toString(36).substr(2,6));
+    var container = document.createElement('div');
+    container.style.display = 'flex';
+    container.style.flexWrap = 'wrap';
+    container.style.alignItems = 'center';
+    container.style.gap = '6px';
+    var optJa = createOption(baseName, 'ja', 'ja', 'Ja');
+    var optNein = createOption(baseName, 'nein', 'nein', 'Nein');
+    var optNv = createOption(baseName, 'nicht_vorhanden', 'nicht_vorhanden', 'n.v.');
+    for (var i = 0; i < radios.length; i++) {
+      var r = radios[i];
+      if (r.checked) {
+        if (r.value === 'ja') optJa.querySelector('input').checked = true;
+        if (r.value === 'nein') optNein.querySelector('input').checked = true;
+        if (r.value === 'nicht_vorhanden') optNv.querySelector('input').checked = true;
+      }
+      try { r.parentNode && r.parentNode.removeChild(r); } catch(e) {}
+    }
+    container.appendChild(optJa);
+    container.appendChild(optNein);
+    container.appendChild(optNv);
+    var tds = tr.querySelectorAll('td');
+    var placed = false;
+    for (var j = 0; j < tds.length; j++) {
+      var td = tds[j];
+      if (td.querySelector('input[type="radio"]') || td.querySelector('.radio-option')) {
+        td.innerHTML = '';
+        td.appendChild(container);
+        placed = true;
+        break;
+      }
+    }
+    if (!placed) {
+      if (tds.length >= 2) {
+        tds[1].innerHTML = '';
+        tds[1].appendChild(container);
+      } else {
+        var newTd = document.createElement('td');
+        newTd.appendChild(container);
+        tr.appendChild(newTd);
+      }
+    }
+  }
+
+  var rows = document.querySelectorAll('#fragenTabelle tbody tr');
+  for (var i = 0; i < rows.length; i++) transformRow(rows[i]);
+
+  var target = document.querySelector('#fragenTabelle tbody') || document.body;
+  var observer = new MutationObserver(function (mutations) {
+    mutations.forEach(function (mutation) {
+      for (var k = 0; k < mutation.addedNodes.length; k++) {
+        var node = mutation.addedNodes[k];
+        if (node && node.nodeType === 1 && node.tagName.toLowerCase() === 'tr') {
+          transformRow(node);
+        } else if (node && node.querySelectorAll) {
+          var trs = node.querySelectorAll('tr');
+          for (var t = 0; t < trs.length; t++) transformRow(trs[t]);
+        }
+      }
+    });
+  });
+  observer.observe(target, { childList: true, subtree: true });
+
+  setTimeout(function () {
+    var rows2 = document.querySelectorAll('#fragenTabelle tbody tr');
+    for (var i = 0; i < rows2.length; i++) transformRow(rows2[i]);
+  }, 200);
+});
 </script>
 
 </body>
