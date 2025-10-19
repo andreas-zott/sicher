@@ -352,7 +352,7 @@ input[type="text"], input[type="date"] {
   /* Kategorie-Überschrift hervorheben */
   table#fragenTabelle td.category-header {
     background: #007BFF;
-    color: #fff;
+    color: #000000;
     font-weight: bold;
     text-align: center;
     border-radius: 8px;
@@ -405,34 +405,6 @@ input[type="text"], input[type="date"] {
   }
 }
 
-
-/* Anpassungen 2025 */
-#fragenTabelle td:first-child {
-  font-size: 18px;
-  font-weight: 500;
-}
-#fragenTabelle input[type="radio"] {
-  width: 28px !important;
-  height: 28px !important;
-  margin: 6px 10px 6px 0 !important;
-}
-
-
-/* Force desktop table layout for print/PDF to avoid mobile card styles when printing */
-@media print {
-  table#fragenTabelle { display: table !important; border: none !important; width: 100% !important; box-shadow: none !important; }
-  table#fragenTabelle thead { display: table-header-group !important; }
-  table#fragenTabelle tbody { display: table-row-group !important; }
-  table#fragenTabelle tr { display: table-row !important; background: transparent !important; border: none !important; }
-  table#fragenTabelle td, table#fragenTabelle th { display: table-cell !important; border: 1px solid #dee2e6 !important; padding: 6px 8px !important; }
-  table#fragenTabelle td.category-header { display: table-cell !important; background: #f5e9e9 !important; color: #5b2121 !important; font-weight: bold !important; text-align: left !important; padding: 12px !important; }
-  /* ensure radio options visible and not transformed into mobile card layout */
-  .radio-option { display: inline-flex !important; page-break-inside: avoid !important; }
-  /* reduce any mobile card paddings */
-  body { padding: 12px !important; background: white !important; }
-  /* prevent small-screens media query from taking effect during print */
-  @page { size: A4 portrait; margin: 12mm 10mm; }
-}
 </style>
 </head>
 <body>
@@ -467,116 +439,610 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
 <tr>
 <td class="category-header" colspan="4">1.0 Gesamtmarkt</td>
 </tr>
-<tr><td style="text-align: left;">Tragen alle Personen im Markt festes, geschlossenes und flaches Schuhwerk entsprechend den Vorgaben?</td><td><input name="1.0 Gesamtmarkt-0" type="radio" value="ja"/><input name="1.0 Gesamtmarkt-0" type="radio" value="nein"/><input name="1.0 Gesamtmarkt-0" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Sind an den Automatiktüren, Rolltoren und Schnelllauftoren keine sichtbaren Beschädigungen erkennbar?</td><td><input name="1.0 Gesamtmarkt-1" type="radio" value="ja"/><input name="1.0 Gesamtmarkt-1" type="radio" value="nein"/><input name="1.0 Gesamtmarkt-1" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Ist die Aufzugsanlage geprüft und in einem ordnungsgemämen Zustand (ohne sichtbare Beschädigungen und mit funktionsfähigen Schutzeinrichtungen)?</td><td><input name="1.0 Gesamtmarkt-2" type="radio" value="ja"/><input name="1.0 Gesamtmarkt-2" type="radio" value="nein"/><input name="1.0 Gesamtmarkt-2" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Ist die Leergutrücknahme in einem ordnungsgemämen Zustand (Schutzeinrichtungen intakt, Einzugsstellen gesichert, keine Glasscherben)?</td><td><input name="1.0 Gesamtmarkt-3" type="radio" value="ja"/><input name="1.0 Gesamtmarkt-3" type="radio" value="nein"/><input name="1.0 Gesamtmarkt-3" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Sind die Leitern geprüft gemäß „Leitern und Tritte" (BGV D 36) bzw. GUV-VD360?</td><td><input name="1.0 Gesamtmarkt-4" type="radio" value="ja"/><input name="1.0 Gesamtmarkt-4" type="radio" value="nein"/><input name="1.0 Gesamtmarkt-4" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Werden aus dem Ordersatz geeignete Sicherheitsmesser verwendet?</td><td><input name="1.0 Gesamtmarkt-5" type="radio" value="ja"/><input name="1.0 Gesamtmarkt-5" type="radio" value="nein"/><input name="1.0 Gesamtmarkt-5" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Sind zur Zeit der Begehung keine sichtbaren Beschädigungen an Schaltern und Steckdosen vorhanden?</td><td><input name="1.0 Gesamtmarkt-6" type="radio" value="ja"/><input name="1.0 Gesamtmarkt-6" type="radio" value="nein"/><input name="1.0 Gesamtmarkt-6" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Ist der Gabelhubwagen in einem ordnungsgemämen Zustand ohne sichtbare Beschädigungen?</td><td><input name="1.0 Gesamtmarkt-7" type="radio" value="ja"/><input name="1.0 Gesamtmarkt-7" type="radio" value="nein"/><input name="1.0 Gesamtmarkt-7" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Ist der elektrische Hubwagen geprüft und in einem ordnungsgemämen Zustand (keine sichtbaren Beschädigungen, funktionsfähige Schutzeinrichtungen)?</td><td><input name="1.0 Gesamtmarkt-8" type="radio" value="ja"/><input name="1.0 Gesamtmarkt-8" type="radio" value="nein"/><input name="1.0 Gesamtmarkt-8" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Sind die Feuerlöscheinrichtungen frei zugänglich und nicht durch Ware, Displays oder sonstige Gegenstände blockiert?</td><td><input name="1.0 Gesamtmarkt-9" type="radio" value="ja"/><input name="1.0 Gesamtmarkt-9" type="radio" value="nein"/><input name="1.0 Gesamtmarkt-9" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Sind die Feuerlöscheinrichtungen geprüft, und werden die Prüffristen eingehalten?</td><td><input name="1.0 Gesamtmarkt-10" type="radio" value="ja"/><input name="1.0 Gesamtmarkt-10" type="radio" value="nein"/><input name="1.0 Gesamtmarkt-10" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Sind die Brandschutztüren frei von Zugestellungen und wird ihre Funktion nicht gestört?</td><td><input name="1.0 Gesamtmarkt-11" type="radio" value="ja"/><input name="1.0 Gesamtmarkt-11" type="radio" value="nein"/><input name="1.0 Gesamtmarkt-11" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Sind die Türhaltevorrichtungen und der Schließfolgeregler des Feuerschutzabschlusses in Ordnung?</td><td><input name="1.0 Gesamtmarkt-12" type="radio" value="ja"/><input name="1.0 Gesamtmarkt-12" type="radio" value="nein"/><input name="1.0 Gesamtmarkt-12" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Sind die Brandschutztüren ohne Beschädigungen?</td><td><input name="1.0 Gesamtmarkt-13" type="radio" value="ja"/><input name="1.0 Gesamtmarkt-13" type="radio" value="nein"/><input name="1.0 Gesamtmarkt-13" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Ist ein aktueller Flucht- und Rettungsplan vorhanden?</td><td><input name="1.0 Gesamtmarkt-14" type="radio" value="ja"/><input name="1.0 Gesamtmarkt-14" type="radio" value="nein"/><input name="1.0 Gesamtmarkt-14" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Ist die Notausgangsbeleuchtung ohne Defekte?</td><td><input name="1.0 Gesamtmarkt-15" type="radio" value="ja"/><input name="1.0 Gesamtmarkt-15" type="radio" value="nein"/><input name="1.0 Gesamtmarkt-15" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Sind die Notausgänge frei zugänglich und nicht zugestellt?</td><td><input name="1.0 Gesamtmarkt-16" type="radio" value="ja"/><input name="1.0 Gesamtmarkt-16" type="radio" value="nein"/><input name="1.0 Gesamtmarkt-16" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Sind die Notausgänge und -ausstiege von innen ohne fremde Hilfe zu öffnen und nicht zugestellt?</td><td><input name="1.0 Gesamtmarkt-17" type="radio" value="ja"/><input name="1.0 Gesamtmarkt-17" type="radio" value="nein"/><input name="1.0 Gesamtmarkt-17" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Führen die Notausgänge in sichere Bereiche?</td><td><input name="1.0 Gesamtmarkt-18" type="radio" value="ja"/><input name="1.0 Gesamtmarkt-18" type="radio" value="nein"/><input name="1.0 Gesamtmarkt-18" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Sind die Verkehrswege so beschaffen, dass kein Unfallrisiko durch Stolpern, Ausrutschen oder Umknicken besteht?</td><td><input name="1.0 Gesamtmarkt-19" type="radio" value="ja"/><input name="1.0 Gesamtmarkt-19" type="radio" value="nein"/><input name="1.0 Gesamtmarkt-19" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Sind die Treppen unbeschädigt und frei von Gegenständen?</td><td><input name="1.0 Gesamtmarkt-20" type="radio" value="ja"/><input name="1.0 Gesamtmarkt-20" type="radio" value="nein"/><input name="1.0 Gesamtmarkt-20" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Wird die passende persönliche Schutzausrüstung (z. B. Schutzbrille, Handschuhe) für Tätigkeiten mit Gefahrstoffen zur Verfügung gestellt?</td><td><input name="1.0 Gesamtmarkt-21" type="radio" value="ja"/><input name="1.0 Gesamtmarkt-21" type="radio" value="nein"/><input name="1.0 Gesamtmarkt-21" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Sind die Technik- und Heizräume frei von brennbaren Materialien (z. B. Kisten, Kartons)?</td><td><input name="1.0 Gesamtmarkt-22" type="radio" value="ja"/><input name="1.0 Gesamtmarkt-22" type="radio" value="nein"/><input name="1.0 Gesamtmarkt-22" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Sind die Technik- und Heizräume frei von Lagernutzung?</td><td><input name="1.0 Gesamtmarkt-23" type="radio" value="ja"/><input name="1.0 Gesamtmarkt-23" type="radio" value="nein"/><input name="1.0 Gesamtmarkt-23" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Sind Betriebsanweisungen gut zugänglich und werden Sicherheitsanweisungen eingehalten?</td><td><input name="1.0 Gesamtmarkt-24" type="radio" value="ja"/><input name="1.0 Gesamtmarkt-24" type="radio" value="nein"/><input name="1.0 Gesamtmarkt-24" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Elektrische Steckverbindungen liegen nicht ungeschützt auf dem Boden, insbesondere in Bereichen (z. B. unter Kühl- oder Tiefkühltruhen)?</td><td><input name="1.0 Gesamtmarkt-25" type="radio" value="ja"/><input name="1.0 Gesamtmarkt-25" type="radio" value="nein"/><input name="1.0 Gesamtmarkt-25" type="radio" value="nicht_vorhanden"/></td></tr>
+<td style="text-align: left;">Tragen alle Personen im Markt festes, geschlossenes und flaches Schuhwerk entsprechend den Vorgaben?</td>
+<td><input name="1.0 Gesamtmarkt-0" type="radio" value="ja"/></td>
+<td><input name="1.0 Gesamtmarkt-0" type="radio" value="nein"/></td>
+<td><input name="1.0 Gesamtmarkt-0" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind an den Automatiktüren, Rolltoren und Schnelllauftoren keine sichtbaren Beschädigungen erkennbar?</td>
+<td><input name="1.0 Gesamtmarkt-1" type="radio" value="ja"/></td>
+<td><input name="1.0 Gesamtmarkt-1" type="radio" value="nein"/></td>
+<td><input name="1.0 Gesamtmarkt-1" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist die Aufzugsanlage geprüft und in einem ordnungsgemämen Zustand (ohne sichtbare Beschädigungen und mit funktionsfähigen Schutzeinrichtungen)?</td>
+<td><input name="1.0 Gesamtmarkt-2" type="radio" value="ja"/></td>
+<td><input name="1.0 Gesamtmarkt-2" type="radio" value="nein"/></td>
+<td><input name="1.0 Gesamtmarkt-2" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist die Leergutrücknahme in einem ordnungsgemämen Zustand (Schutzeinrichtungen intakt, Einzugsstellen gesichert, keine Glasscherben)?</td>
+<td><input name="1.0 Gesamtmarkt-3" type="radio" value="ja"/></td>
+<td><input name="1.0 Gesamtmarkt-3" type="radio" value="nein"/></td>
+<td><input name="1.0 Gesamtmarkt-3" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind die Leitern geprüft gemäß „Leitern und Tritte" (BGV D 36) bzw. GUV-VD360?</td>
+<td><input name="1.0 Gesamtmarkt-4" type="radio" value="ja"/></td>
+<td><input name="1.0 Gesamtmarkt-4" type="radio" value="nein"/></td>
+<td><input name="1.0 Gesamtmarkt-4" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Werden aus dem Ordersatz geeignete Sicherheitsmesser verwendet?</td>
+<td><input name="1.0 Gesamtmarkt-5" type="radio" value="ja"/></td>
+<td><input name="1.0 Gesamtmarkt-5" type="radio" value="nein"/></td>
+<td><input name="1.0 Gesamtmarkt-5" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind zur Zeit der Begehung keine sichtbaren Beschädigungen an Schaltern und Steckdosen vorhanden?</td>
+<td><input name="1.0 Gesamtmarkt-6" type="radio" value="ja"/></td>
+<td><input name="1.0 Gesamtmarkt-6" type="radio" value="nein"/></td>
+<td><input name="1.0 Gesamtmarkt-6" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist der Gabelhubwagen in einem ordnungsgemämen Zustand ohne sichtbare Beschädigungen?</td>
+<td><input name="1.0 Gesamtmarkt-7" type="radio" value="ja"/></td>
+<td><input name="1.0 Gesamtmarkt-7" type="radio" value="nein"/></td>
+<td><input name="1.0 Gesamtmarkt-7" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist der elektrische Hubwagen geprüft und in einem ordnungsgemämen Zustand (keine sichtbaren Beschädigungen, funktionsfähige Schutzeinrichtungen)?</td>
+<td><input name="1.0 Gesamtmarkt-8" type="radio" value="ja"/></td>
+<td><input name="1.0 Gesamtmarkt-8" type="radio" value="nein"/></td>
+<td><input name="1.0 Gesamtmarkt-8" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind die Feuerlöscheinrichtungen frei zugänglich und nicht durch Ware, Displays oder sonstige Gegenstände blockiert?</td>
+<td><input name="1.0 Gesamtmarkt-9" type="radio" value="ja"/></td>
+<td><input name="1.0 Gesamtmarkt-9" type="radio" value="nein"/></td>
+<td><input name="1.0 Gesamtmarkt-9" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind die Feuerlöscheinrichtungen geprüft, und werden die Prüffristen eingehalten?</td>
+<td><input name="1.0 Gesamtmarkt-10" type="radio" value="ja"/></td>
+<td><input name="1.0 Gesamtmarkt-10" type="radio" value="nein"/></td>
+<td><input name="1.0 Gesamtmarkt-10" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind die Brandschutztüren frei von Zugestellungen und wird ihre Funktion nicht gestört?</td>
+<td><input name="1.0 Gesamtmarkt-11" type="radio" value="ja"/></td>
+<td><input name="1.0 Gesamtmarkt-11" type="radio" value="nein"/></td>
+<td><input name="1.0 Gesamtmarkt-11" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind die Türhaltevorrichtungen und der Schließfolgeregler des Feuerschutzabschlusses in Ordnung?</td>
+<td><input name="1.0 Gesamtmarkt-12" type="radio" value="ja"/></td>
+<td><input name="1.0 Gesamtmarkt-12" type="radio" value="nein"/></td>
+<td><input name="1.0 Gesamtmarkt-12" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind die Brandschutztüren ohne Beschädigungen?</td>
+<td><input name="1.0 Gesamtmarkt-13" type="radio" value="ja"/></td>
+<td><input name="1.0 Gesamtmarkt-13" type="radio" value="nein"/></td>
+<td><input name="1.0 Gesamtmarkt-13" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist ein aktueller Flucht- und Rettungsplan vorhanden?</td>
+<td><input name="1.0 Gesamtmarkt-14" type="radio" value="ja"/></td>
+<td><input name="1.0 Gesamtmarkt-14" type="radio" value="nein"/></td>
+<td><input name="1.0 Gesamtmarkt-14" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist die Notausgangsbeleuchtung ohne Defekte?</td>
+<td><input name="1.0 Gesamtmarkt-15" type="radio" value="ja"/></td>
+<td><input name="1.0 Gesamtmarkt-15" type="radio" value="nein"/></td>
+<td><input name="1.0 Gesamtmarkt-15" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind die Notausgänge frei zugänglich und nicht zugestellt?</td>
+<td><input name="1.0 Gesamtmarkt-16" type="radio" value="ja"/></td>
+<td><input name="1.0 Gesamtmarkt-16" type="radio" value="nein"/></td>
+<td><input name="1.0 Gesamtmarkt-16" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind die Notausgänge und -ausstiege von innen ohne fremde Hilfe zu öffnen und nicht zugestellt?</td>
+<td><input name="1.0 Gesamtmarkt-17" type="radio" value="ja"/></td>
+<td><input name="1.0 Gesamtmarkt-17" type="radio" value="nein"/></td>
+<td><input name="1.0 Gesamtmarkt-17" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Führen die Notausgänge in sichere Bereiche?</td>
+<td><input name="1.0 Gesamtmarkt-18" type="radio" value="ja"/></td>
+<td><input name="1.0 Gesamtmarkt-18" type="radio" value="nein"/></td>
+<td><input name="1.0 Gesamtmarkt-18" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind die Verkehrswege so beschaffen, dass kein Unfallrisiko durch Stolpern, Ausrutschen oder Umknicken besteht?</td>
+<td><input name="1.0 Gesamtmarkt-19" type="radio" value="ja"/></td>
+<td><input name="1.0 Gesamtmarkt-19" type="radio" value="nein"/></td>
+<td><input name="1.0 Gesamtmarkt-19" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind die Treppen unbeschädigt und frei von Gegenständen?</td>
+<td><input name="1.0 Gesamtmarkt-20" type="radio" value="ja"/></td>
+<td><input name="1.0 Gesamtmarkt-20" type="radio" value="nein"/></td>
+<td><input name="1.0 Gesamtmarkt-20" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Wird die passende persönliche Schutzausrüstung (z. B. Schutzbrille, Handschuhe) für Tätigkeiten mit Gefahrstoffen zur Verfügung gestellt?</td>
+<td><input name="1.0 Gesamtmarkt-21" type="radio" value="ja"/></td>
+<td><input name="1.0 Gesamtmarkt-21" type="radio" value="nein"/></td>
+<td><input name="1.0 Gesamtmarkt-21" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind die Technik- und Heizräume frei von brennbaren Materialien (z. B. Kisten, Kartons)?</td>
+<td><input name="1.0 Gesamtmarkt-22" type="radio" value="ja"/></td>
+<td><input name="1.0 Gesamtmarkt-22" type="radio" value="nein"/></td>
+<td><input name="1.0 Gesamtmarkt-22" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind die Technik- und Heizräume frei von Lagernutzung?</td>
+<td><input name="1.0 Gesamtmarkt-23" type="radio" value="ja"/></td>
+<td><input name="1.0 Gesamtmarkt-23" type="radio" value="nein"/></td>
+<td><input name="1.0 Gesamtmarkt-23" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind Betriebsanweisungen gut zugänglich und werden Sicherheitsanweisungen eingehalten?</td>
+<td><input name="1.0 Gesamtmarkt-24" type="radio" value="ja"/></td>
+<td><input name="1.0 Gesamtmarkt-24" type="radio" value="nein"/></td>
+<td><input name="1.0 Gesamtmarkt-24" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Elektrische Steckverbindungen liegen nicht ungeschützt auf dem Boden, insbesondere in Bereichen (z. B. unter Kühl- oder Tiefkühltruhen)?</td>
+<td><input name="1.0 Gesamtmarkt-25" type="radio" value="ja"/></td>
+<td><input name="1.0 Gesamtmarkt-25" type="radio" value="nein"/></td>
+<td><input name="1.0 Gesamtmarkt-25" type="radio" value="nicht_vorhanden"/></td>
+</tr>
 <tr><td class="category-header" colspan="4" style="text-align: left;">2.0 Backstation</td></tr>
-<tr><td style="text-align: left;">Sind die Arbeitsgeräte an der Backstation (Backofen, Backbleche, Brotschneidemaschine) in einem ordnungsgemämen Zustand?</td><td><input name="2.0 Backstation-0" type="radio" value="ja"/><input name="2.0 Backstation-0" type="radio" value="nein"/><input name="2.0 Backstation-0" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Ist das freistehende Handwaschbecken ohne Beschädigungen?</td><td><input name="2.0 Backstation-1" type="radio" value="ja"/><input name="2.0 Backstation-1" type="radio" value="nein"/><input name="2.0 Backstation-1" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Sind die Elektroleitungen intakt und bilden keine Stolperstellen?</td><td><input name="2.0 Backstation-2" type="radio" value="ja"/><input name="2.0 Backstation-2" type="radio" value="nein"/><input name="2.0 Backstation-2" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Entspricht die Zuleitung der VDE-Norm?</td><td><input name="2.0 Backstation-3" type="radio" value="ja"/><input name="2.0 Backstation-3" type="radio" value="nein"/><input name="2.0 Backstation-3" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Ist der Backhandschuh für die Backstation in einem ordnungsgemämen Zustand (kein Verschleiß) und besitzt eine lange Stulpe?</td><td><input name="2.0 Backstation-4" type="radio" value="ja"/><input name="2.0 Backstation-4" type="radio" value="nein"/><input name="2.0 Backstation-4" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Sind alle Heißgeräte (z. B. Heißtheken, Fritteusen) in technisch einwandfreiem Zustand?</td><td><input name="2.0 Backstation-5" type="radio" value="ja"/><input name="2.0 Backstation-5" type="radio" value="nein"/><input name="2.0 Backstation-5" type="radio" value="nicht_vorhanden"/></td></tr>
+<tr>
+<td style="text-align: left;">Sind die Arbeitsgeräte an der Backstation (Backofen, Backbleche, Brotschneidemaschine) in einem ordnungsgemämen Zustand?</td>
+<td><input name="2.0 Backstation-0" type="radio" value="ja"/></td>
+<td><input name="2.0 Backstation-0" type="radio" value="nein"/></td>
+<td><input name="2.0 Backstation-0" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist das freistehende Handwaschbecken ohne Beschädigungen?</td>
+<td><input name="2.0 Backstation-1" type="radio" value="ja"/></td>
+<td><input name="2.0 Backstation-1" type="radio" value="nein"/></td>
+<td><input name="2.0 Backstation-1" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind die Elektroleitungen intakt und bilden keine Stolperstellen?</td>
+<td><input name="2.0 Backstation-2" type="radio" value="ja"/></td>
+<td><input name="2.0 Backstation-2" type="radio" value="nein"/></td>
+<td><input name="2.0 Backstation-2" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Entspricht die Zuleitung der VDE-Norm?</td>
+<td><input name="2.0 Backstation-3" type="radio" value="ja"/></td>
+<td><input name="2.0 Backstation-3" type="radio" value="nein"/></td>
+<td><input name="2.0 Backstation-3" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist der Backhandschuh für die Backstation in einem ordnungsgemämen Zustand (kein Verschleiß) und besitzt eine lange Stulpe?</td>
+<td><input name="2.0 Backstation-4" type="radio" value="ja"/></td>
+<td><input name="2.0 Backstation-4" type="radio" value="nein"/></td>
+<td><input name="2.0 Backstation-4" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind alle Heißgeräte (z. B. Heißtheken, Fritteusen) in technisch einwandfreiem Zustand?</td>
+<td><input name="2.0 Backstation-5" type="radio" value="ja"/></td>
+<td><input name="2.0 Backstation-5" type="radio" value="nein"/></td>
+<td><input name="2.0 Backstation-5" type="radio" value="nicht_vorhanden"/></td>
+</tr>
 <tr><td class="category-header" colspan="4" style="text-align: left;">3.0 Serviceabteilung</td></tr>
-<tr><td style="text-align: left;">Hängt der Hautschutzplan aus?</td><td><input name="3.0 Serviceabteilung-0" type="radio" value="ja"/><input name="3.0 Serviceabteilung-0" type="radio" value="nein"/><input name="3.0 Serviceabteilung-0" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Werden Hautschutz- und Hautpflegeprodukte zur Verfügung gestellt?</td><td><input name="3.0 Serviceabteilung-1" type="radio" value="ja"/><input name="3.0 Serviceabteilung-1" type="radio" value="nein"/><input name="3.0 Serviceabteilung-1" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Sind die Arbeitsgeräte im Servicebereich in einem ordnungsgemämen Zustand?</td><td><input name="3.0 Serviceabteilung-2" type="radio" value="ja"/><input name="3.0 Serviceabteilung-2" type="radio" value="nein"/><input name="3.0 Serviceabteilung-2" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Bleiben die Thekenscheiben selbstständig in der oberen Stellung stehen?</td><td><input name="3.0 Serviceabteilung-3" type="radio" value="ja"/><input name="3.0 Serviceabteilung-3" type="radio" value="nein"/><input name="3.0 Serviceabteilung-3" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Sind die Glastüren und Glaswände in Augenhöhe gekennzeichnet?</td><td><input name="3.0 Serviceabteilung-4" type="radio" value="ja"/><input name="3.0 Serviceabteilung-4" type="radio" value="nein"/><input name="3.0 Serviceabteilung-4" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Werden Schneidbretter und Messer regelmäßig gereinigt und farbcodiert verwendet?</td><td><input name="3.0 Serviceabteilung-5" type="radio" value="ja"/><input name="3.0 Serviceabteilung-5" type="radio" value="nein"/><input name="3.0 Serviceabteilung-5" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Werden Schneidbretter mit Messereinschub verwendet?</td><td><input name="3.0 Serviceabteilung-6" type="radio" value="ja"/><input name="3.0 Serviceabteilung-6" type="radio" value="nein"/><input name="3.0 Serviceabteilung-6" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Werden Messerhalter verwendet?</td><td><input name="3.0 Serviceabteilung-7" type="radio" value="ja"/><input name="3.0 Serviceabteilung-7" type="radio" value="nein"/><input name="3.0 Serviceabteilung-7" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Sind die Convenience-Geräte in einem ordnungsgemämen Zustand?</td><td><input name="3.0 Serviceabteilung-8" type="radio" value="ja"/><input name="3.0 Serviceabteilung-8" type="radio" value="nein"/><input name="3.0 Serviceabteilung-8" type="radio" value="nicht_vorhanden"/></td></tr>
+<tr>
+<td style="text-align: left;">Hängt der Hautschutzplan aus?</td>
+<td><input name="3.0 Serviceabteilung-0" type="radio" value="ja"/></td>
+<td><input name="3.0 Serviceabteilung-0" type="radio" value="nein"/></td>
+<td><input name="3.0 Serviceabteilung-0" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Werden Hautschutz- und Hautpflegeprodukte zur Verfügung gestellt?</td>
+<td><input name="3.0 Serviceabteilung-1" type="radio" value="ja"/></td>
+<td><input name="3.0 Serviceabteilung-1" type="radio" value="nein"/></td>
+<td><input name="3.0 Serviceabteilung-1" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind die Arbeitsgeräte im Servicebereich in einem ordnungsgemämen Zustand?</td>
+<td><input name="3.0 Serviceabteilung-2" type="radio" value="ja"/></td>
+<td><input name="3.0 Serviceabteilung-2" type="radio" value="nein"/></td>
+<td><input name="3.0 Serviceabteilung-2" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Bleiben die Thekenscheiben selbstständig in der oberen Stellung stehen?</td>
+<td><input name="3.0 Serviceabteilung-3" type="radio" value="ja"/></td>
+<td><input name="3.0 Serviceabteilung-3" type="radio" value="nein"/></td>
+<td><input name="3.0 Serviceabteilung-3" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind die Glastüren und Glaswände in Augenhöhe gekennzeichnet?</td>
+<td><input name="3.0 Serviceabteilung-4" type="radio" value="ja"/></td>
+<td><input name="3.0 Serviceabteilung-4" type="radio" value="nein"/></td>
+<td><input name="3.0 Serviceabteilung-4" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Werden Schneidbretter und Messer regelmäßig gereinigt und farbcodiert verwendet?</td>
+<td><input name="3.0 Serviceabteilung-5" type="radio" value="ja"/></td>
+<td><input name="3.0 Serviceabteilung-5" type="radio" value="nein"/></td>
+<td><input name="3.0 Serviceabteilung-5" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Werden Schneidbretter mit Messereinschub verwendet?</td>
+<td><input name="3.0 Serviceabteilung-6" type="radio" value="ja"/></td>
+<td><input name="3.0 Serviceabteilung-6" type="radio" value="nein"/></td>
+<td><input name="3.0 Serviceabteilung-6" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Werden Messerhalter verwendet?</td>
+<td><input name="3.0 Serviceabteilung-7" type="radio" value="ja"/></td>
+<td><input name="3.0 Serviceabteilung-7" type="radio" value="nein"/></td>
+<td><input name="3.0 Serviceabteilung-7" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind die Convenience-Geräte in einem ordnungsgemämen Zustand?</td>
+<td><input name="3.0 Serviceabteilung-8" type="radio" value="ja"/></td>
+<td><input name="3.0 Serviceabteilung-8" type="radio" value="nein"/></td>
+<td><input name="3.0 Serviceabteilung-8" type="radio" value="nicht_vorhanden"/></td>
+</tr>
 <tr><td class="category-header" colspan="4" style="text-align: left;">4.0 Kassenzone</td></tr>
-<tr><td style="text-align: left;">Ist der Fußraum frei von Gegenständen?</td><td><input name="4.0 Kassenzone-0" type="radio" value="ja"/><input name="4.0 Kassenzone-0" type="radio" value="nein"/><input name="4.0 Kassenzone-0" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Ist der Fußboden im Kassenbereich in einem ordnungsgemämen Zustand (ohne sichtbare Beschädigungen)?</td><td><input name="4.0 Kassenzone-1" type="radio" value="ja"/><input name="4.0 Kassenzone-1" type="radio" value="nein"/><input name="4.0 Kassenzone-1" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Sind die serienmäßig eingebauten Heizgeräte im Kassenraum nicht durch brennbares Material zugestellt?</td><td><input name="4.0 Kassenzone-2" type="radio" value="ja"/><input name="4.0 Kassenzone-2" type="radio" value="nein"/><input name="4.0 Kassenzone-2" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Sind die Kassenstühle in einem funktionsfähigen Zustand?</td><td><input name="4.0 Kassenzone-3" type="radio" value="ja"/><input name="4.0 Kassenzone-3" type="radio" value="nein"/><input name="4.0 Kassenzone-3" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Ist das Transportband unbeschädigt und weist keine Lücke von über 5 mm auf?</td><td><input name="4.0 Kassenzone-4" type="radio" value="ja"/><input name="4.0 Kassenzone-4" type="radio" value="nein"/><input name="4.0 Kassenzone-4" type="radio" value="nicht_vorhanden"/></td></tr>
+<tr>
+<td style="text-align: left;">Ist der Fußraum frei von Gegenständen?</td>
+<td><input name="4.0 Kassenzone-0" type="radio" value="ja"/></td>
+<td><input name="4.0 Kassenzone-0" type="radio" value="nein"/></td>
+<td><input name="4.0 Kassenzone-0" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist der Fußboden im Kassenbereich in einem ordnungsgemämen Zustand (ohne sichtbare Beschädigungen)?</td>
+<td><input name="4.0 Kassenzone-1" type="radio" value="ja"/></td>
+<td><input name="4.0 Kassenzone-1" type="radio" value="nein"/></td>
+<td><input name="4.0 Kassenzone-1" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind die serienmäßig eingebauten Heizgeräte im Kassenraum nicht durch brennbares Material zugestellt?</td>
+<td><input name="4.0 Kassenzone-2" type="radio" value="ja"/></td>
+<td><input name="4.0 Kassenzone-2" type="radio" value="nein"/></td>
+<td><input name="4.0 Kassenzone-2" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind die Kassenstühle in einem funktionsfähigen Zustand?</td>
+<td><input name="4.0 Kassenzone-3" type="radio" value="ja"/></td>
+<td><input name="4.0 Kassenzone-3" type="radio" value="nein"/></td>
+<td><input name="4.0 Kassenzone-3" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist das Transportband unbeschädigt und weist keine Lücke von über 5 mm auf?</td>
+<td><input name="4.0 Kassenzone-4" type="radio" value="ja"/></td>
+<td><input name="4.0 Kassenzone-4" type="radio" value="nein"/></td>
+<td><input name="4.0 Kassenzone-4" type="radio" value="nicht_vorhanden"/></td>
+</tr>
 <tr><td class="category-header" colspan="4" style="text-align: left;">5.0 Kühlhaus</td></tr>
-<tr><td style="text-align: left;">Ist in den Kühlhäusern an der Beleuchtung die Überglocke vorhanden?</td><td><input name="5.0 Kühlhaus-0" type="radio" value="ja"/><input name="5.0 Kühlhaus-0" type="radio" value="nein"/><input name="5.0 Kühlhaus-0" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Ist die Notentriegelung vorhanden und in Ordnung?</td><td><input name="5.0 Kühlhaus-1" type="radio" value="ja"/><input name="5.0 Kühlhaus-1" type="radio" value="nein"/><input name="5.0 Kühlhaus-1" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Sind die Kühlhaustüren von innen mit dem Rettungswegschild ISO 7010 gekennzeichnet?</td><td><input name="5.0 Kühlhaus-2" type="radio" value="ja"/><input name="5.0 Kühlhaus-2" type="radio" value="nein"/><input name="5.0 Kühlhaus-2" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Funktioniert die Beleuchtung einwandfrei?</td><td><input name="5.0 Kühlhaus-3" type="radio" value="ja"/><input name="5.0 Kühlhaus-3" type="radio" value="nein"/><input name="5.0 Kühlhaus-3" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Ist die Notruf-Funktion (wenn vorhanden) in Ordnung und ohne Beschädigungen?</td><td><input name="5.0 Kühlhaus-4" type="radio" value="ja"/><input name="5.0 Kühlhaus-4" type="radio" value="nein"/><input name="5.0 Kühlhaus-4" type="radio" value="nicht_vorhanden"/></td></tr>
+<tr>
+<td style="text-align: left;">Ist in den Kühlhäusern an der Beleuchtung die Überglocke vorhanden?</td>
+<td><input name="5.0 Kühlhaus-0" type="radio" value="ja"/></td>
+<td><input name="5.0 Kühlhaus-0" type="radio" value="nein"/></td>
+<td><input name="5.0 Kühlhaus-0" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist die Notentriegelung vorhanden und in Ordnung?</td>
+<td><input name="5.0 Kühlhaus-1" type="radio" value="ja"/></td>
+<td><input name="5.0 Kühlhaus-1" type="radio" value="nein"/></td>
+<td><input name="5.0 Kühlhaus-1" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind die Kühlhaustüren von innen mit dem Rettungswegschild ISO 7010 gekennzeichnet?</td>
+<td><input name="5.0 Kühlhaus-2" type="radio" value="ja"/></td>
+<td><input name="5.0 Kühlhaus-2" type="radio" value="nein"/></td>
+<td><input name="5.0 Kühlhaus-2" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Funktioniert die Beleuchtung einwandfrei?</td>
+<td><input name="5.0 Kühlhaus-3" type="radio" value="ja"/></td>
+<td><input name="5.0 Kühlhaus-3" type="radio" value="nein"/></td>
+<td><input name="5.0 Kühlhaus-3" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist die Notruf-Funktion (wenn vorhanden) in Ordnung und ohne Beschädigungen?</td>
+<td><input name="5.0 Kühlhaus-4" type="radio" value="ja"/></td>
+<td><input name="5.0 Kühlhaus-4" type="radio" value="nein"/></td>
+<td><input name="5.0 Kühlhaus-4" type="radio" value="nicht_vorhanden"/></td>
+</tr>
 <tr><td class="category-header" colspan="4" style="text-align: left;">6.0 Lager</td></tr>
-<tr><td style="text-align: left;">Sind die Schwerlastregale geprüft?</td><td><input name="6.0 Lager-0" type="radio" value="ja"/><input name="6.0 Lager-0" type="radio" value="nein"/><input name="6.0 Lager-0" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Ist der Anfahrschutz vorhanden?</td><td><input name="6.0 Lager-1" type="radio" value="ja"/><input name="6.0 Lager-1" type="radio" value="nein"/><input name="6.0 Lager-1" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Ist die Traglastangabe an den Schwerlastregalen vorhanden?</td><td><input name="6.0 Lager-2" type="radio" value="ja"/><input name="6.0 Lager-2" type="radio" value="nein"/><input name="6.0 Lager-2" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Befindet sich eine Absturzsicherung an der Rampe?</td><td><input name="6.0 Lager-3" type="radio" value="ja"/><input name="6.0 Lager-3" type="radio" value="nein"/><input name="6.0 Lager-3" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Ist die Absturzsicherung in einem ordnungsgemämen Zustand (ohne sichtbare Beschädigungen und mit Kennzeichnung)?</td><td><input name="6.0 Lager-4" type="radio" value="ja"/><input name="6.0 Lager-4" type="radio" value="nein"/><input name="6.0 Lager-4" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Ist die Müll-/Papierpresse geprüft?</td><td><input name="6.0 Lager-5" type="radio" value="ja"/><input name="6.0 Lager-5" type="radio" value="nein"/><input name="6.0 Lager-5" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Ist die Müll-/Papierpresse in einem ordnungsgemämen Zustand (keine sichtbaren Beschädigungen, intakte Schutzeinrichtungen, fester Stand)?</td><td><input name="6.0 Lager-6" type="radio" value="ja"/><input name="6.0 Lager-6" type="radio" value="nein"/><input name="6.0 Lager-6" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Sind die Verkehrswege so beschaffen, dass kein Risiko zum Stolpern, Ausrutschen oder Umknicken besteht?</td><td><input name="6.0 Lager-7" type="radio" value="ja"/><input name="6.0 Lager-7" type="radio" value="nein"/><input name="6.0 Lager-7" type="radio" value="nicht_vorhanden"/></td></tr>
+<tr>
+<td style="text-align: left;">Sind die Schwerlastregale geprüft?</td>
+<td><input name="6.0 Lager-0" type="radio" value="ja"/></td>
+<td><input name="6.0 Lager-0" type="radio" value="nein"/></td>
+<td><input name="6.0 Lager-0" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist der Anfahrschutz vorhanden?</td>
+<td><input name="6.0 Lager-1" type="radio" value="ja"/></td>
+<td><input name="6.0 Lager-1" type="radio" value="nein"/></td>
+<td><input name="6.0 Lager-1" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist die Traglastangabe an den Schwerlastregalen vorhanden?</td>
+<td><input name="6.0 Lager-2" type="radio" value="ja"/></td>
+<td><input name="6.0 Lager-2" type="radio" value="nein"/></td>
+<td><input name="6.0 Lager-2" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Befindet sich eine Absturzsicherung an der Rampe?</td>
+<td><input name="6.0 Lager-3" type="radio" value="ja"/></td>
+<td><input name="6.0 Lager-3" type="radio" value="nein"/></td>
+<td><input name="6.0 Lager-3" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist die Absturzsicherung in einem ordnungsgemämen Zustand (ohne sichtbare Beschädigungen und mit Kennzeichnung)?</td>
+<td><input name="6.0 Lager-4" type="radio" value="ja"/></td>
+<td><input name="6.0 Lager-4" type="radio" value="nein"/></td>
+<td><input name="6.0 Lager-4" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist die Müll-/Papierpresse geprüft?</td>
+<td><input name="6.0 Lager-5" type="radio" value="ja"/></td>
+<td><input name="6.0 Lager-5" type="radio" value="nein"/></td>
+<td><input name="6.0 Lager-5" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist die Müll-/Papierpresse in einem ordnungsgemämen Zustand (keine sichtbaren Beschädigungen, intakte Schutzeinrichtungen, fester Stand)?</td>
+<td><input name="6.0 Lager-6" type="radio" value="ja"/></td>
+<td><input name="6.0 Lager-6" type="radio" value="nein"/></td>
+<td><input name="6.0 Lager-6" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind die Verkehrswege so beschaffen, dass kein Risiko zum Stolpern, Ausrutschen oder Umknicken besteht?</td>
+<td><input name="6.0 Lager-7" type="radio" value="ja"/></td>
+<td><input name="6.0 Lager-7" type="radio" value="nein"/></td>
+<td><input name="6.0 Lager-7" type="radio" value="nicht_vorhanden"/></td>
+</tr>
 <tr><td class="category-header" colspan="4" style="text-align: left;">7.0 Sozialräume</td></tr>
-<tr><td style="text-align: left;">Hängen im Sozialbereich die aktuellen aushangpflichtigen Gesetze, Unfallverhütungsvorschriften sowie die Brandschutzordnung Teil A aus?</td><td><input name="7.0 Sozialräume-0" type="radio" value="ja"/><input name="7.0 Sozialräume-0" type="radio" value="nein"/><input name="7.0 Sozialräume-0" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Sind die Kaffeemaschine und andere hitzeentwickelnde Geräte auf einer nicht brennbaren Unterlage abgestellt?</td><td><input name="7.0 Sozialräume-1" type="radio" value="ja"/><input name="7.0 Sozialräume-1" type="radio" value="nein"/><input name="7.0 Sozialräume-1" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Ist der Erste-Hilfe-Koffer gut sichtbar an einer geeigneten Stelle montiert?</td><td><input name="7.0 Sozialräume-2" type="radio" value="ja"/><input name="7.0 Sozialräume-2" type="radio" value="nein"/><input name="7.0 Sozialräume-2" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Werden ortsveränderliche elektrische Betriebsmittel (z. B. Leitungen, Steckverbindungen, Leuchten, Geräte) in angemessenen Zeitabständen geprüft?</td><td><input name="7.0 Sozialräume-3" type="radio" value="ja"/><input name="7.0 Sozialräume-3" type="radio" value="nein"/><input name="7.0 Sozialräume-3" type="radio" value="nicht_vorhanden"/></td></tr>
+<tr>
+<td style="text-align: left;">Hängen im Sozialbereich die aktuellen aushangpflichtigen Gesetze, Unfallverhütungsvorschriften sowie die Brandschutzordnung Teil A aus?</td>
+<td><input name="7.0 Sozialräume-0" type="radio" value="ja"/></td>
+<td><input name="7.0 Sozialräume-0" type="radio" value="nein"/></td>
+<td><input name="7.0 Sozialräume-0" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind die Kaffeemaschine und andere hitzeentwickelnde Geräte auf einer nicht brennbaren Unterlage abgestellt?</td>
+<td><input name="7.0 Sozialräume-1" type="radio" value="ja"/></td>
+<td><input name="7.0 Sozialräume-1" type="radio" value="nein"/></td>
+<td><input name="7.0 Sozialräume-1" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist der Erste-Hilfe-Koffer gut sichtbar an einer geeigneten Stelle montiert?</td>
+<td><input name="7.0 Sozialräume-2" type="radio" value="ja"/></td>
+<td><input name="7.0 Sozialräume-2" type="radio" value="nein"/></td>
+<td><input name="7.0 Sozialräume-2" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Werden ortsveränderliche elektrische Betriebsmittel (z. B. Leitungen, Steckverbindungen, Leuchten, Geräte) in angemessenen Zeitabständen geprüft?</td>
+<td><input name="7.0 Sozialräume-3" type="radio" value="ja"/></td>
+<td><input name="7.0 Sozialräume-3" type="radio" value="nein"/></td>
+<td><input name="7.0 Sozialräume-3" type="radio" value="nicht_vorhanden"/></td>
+</tr>
 <tr><td class="category-header" colspan="4" style="text-align: left;">8.0 Marktleiterbüro</td></tr>
-<tr><td style="text-align: left;">Liegt eine aktuelle Liste sowie Prüfberichte prüfungsbedürftiger Einrichtungen vor?</td><td><input name="8.0 Marktleiterbüro-0" type="radio" value="ja"/><input name="8.0 Marktleiterbüro-0" type="radio" value="nein"/><input name="8.0 Marktleiterbüro-0" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Ist der Verbandskasten in einem ordnungsgemämen Zustand?</td><td><input name="8.0 Marktleiterbüro-1" type="radio" value="ja"/><input name="8.0 Marktleiterbüro-1" type="radio" value="nein"/><input name="8.0 Marktleiterbüro-1" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Wird die "Dokumentation Erste Hilfeleistungen" geführt?</td><td><input name="8.0 Marktleiterbüro-2" type="radio" value="ja"/><input name="8.0 Marktleiterbüro-2" type="radio" value="nein"/><input name="8.0 Marktleiterbüro-2" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Sind Maßnahmen getroffen, die den Anreiz zu Raubüberfällen vermindern (z. B. Türspion, feststehender Knauf)?</td><td><input name="8.0 Marktleiterbüro-3" type="radio" value="ja"/><input name="8.0 Marktleiterbüro-3" type="radio" value="nein"/><input name="8.0 Marktleiterbüro-3" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Ist die Tür während des Umgangs mit Zahlungsmitteln verschlossen?</td><td><input name="8.0 Marktleiterbüro-4" type="radio" value="ja"/><input name="8.0 Marktleiterbüro-4" type="radio" value="nein"/><input name="8.0 Marktleiterbüro-4" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Werden neue Mitarbeiter vor Aufnahme der Tätigkeit zum Thema Arbeitssicherheit und Brandschutz unterwiesen?</td><td><input name="8.0 Marktleiterbüro-5" type="radio" value="ja"/><input name="8.0 Marktleiterbüro-5" type="radio" value="nein"/><input name="8.0 Marktleiterbüro-5" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Ist während der gesamten Ladenöffnungszeit mindestens ein Mitarbeiter mit der Qualifikation zum Ersthelfer anwesend?</td><td><input name="8.0 Marktleiterbüro-6" type="radio" value="ja"/><input name="8.0 Marktleiterbüro-6" type="radio" value="nein"/><input name="8.0 Marktleiterbüro-6" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Ist während der gesamten Ladenöffnungszeit mindestens ein Mitarbeiter mit der Qualifikation als Brandschutzhelfer anwesend?</td><td><input name="8.0 Marktleiterbüro-7" type="radio" value="ja"/><input name="8.0 Marktleiterbüro-7" type="radio" value="nein"/><input name="8.0 Marktleiterbüro-7" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Ist ein Sicherheitsbeauftragter ausgebildet und bestellt?</td><td><input name="8.0 Marktleiterbüro-8" type="radio" value="ja"/><input name="8.0 Marktleiterbüro-8" type="radio" value="nein"/><input name="8.0 Marktleiterbüro-8" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Wurde die Gefährdungsbeurteilung (GBO) erstellt und ist sie auf dem aktuellen Stand?</td><td><input name="8.0 Marktleiterbüro-9" type="radio" value="ja"/><input name="8.0 Marktleiterbüro-9" type="radio" value="nein"/><input name="8.0 Marktleiterbüro-9" type="radio" value="nicht_vorhanden"/></td></tr>
+<tr>
+<td style="text-align: left;">Liegt eine aktuelle Liste sowie Prüfberichte prüfungsbedürftiger Einrichtungen vor?</td>
+<td><input name="8.0 Marktleiterbüro-0" type="radio" value="ja"/></td>
+<td><input name="8.0 Marktleiterbüro-0" type="radio" value="nein"/></td>
+<td><input name="8.0 Marktleiterbüro-0" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist der Verbandskasten in einem ordnungsgemämen Zustand?</td>
+<td><input name="8.0 Marktleiterbüro-1" type="radio" value="ja"/></td>
+<td><input name="8.0 Marktleiterbüro-1" type="radio" value="nein"/></td>
+<td><input name="8.0 Marktleiterbüro-1" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Wird die "Dokumentation Erste Hilfeleistungen" geführt?</td>
+<td><input name="8.0 Marktleiterbüro-2" type="radio" value="ja"/></td>
+<td><input name="8.0 Marktleiterbüro-2" type="radio" value="nein"/></td>
+<td><input name="8.0 Marktleiterbüro-2" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind Maßnahmen getroffen, die den Anreiz zu Raubüberfällen vermindern (z. B. Türspion, feststehender Knauf)?</td>
+<td><input name="8.0 Marktleiterbüro-3" type="radio" value="ja"/></td>
+<td><input name="8.0 Marktleiterbüro-3" type="radio" value="nein"/></td>
+<td><input name="8.0 Marktleiterbüro-3" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist die Tür während des Umgangs mit Zahlungsmitteln verschlossen?</td>
+<td><input name="8.0 Marktleiterbüro-4" type="radio" value="ja"/></td>
+<td><input name="8.0 Marktleiterbüro-4" type="radio" value="nein"/></td>
+<td><input name="8.0 Marktleiterbüro-4" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Werden neue Mitarbeiter vor Aufnahme der Tätigkeit zum Thema Arbeitssicherheit und Brandschutz unterwiesen?</td>
+<td><input name="8.0 Marktleiterbüro-5" type="radio" value="ja"/></td>
+<td><input name="8.0 Marktleiterbüro-5" type="radio" value="nein"/></td>
+<td><input name="8.0 Marktleiterbüro-5" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist während der gesamten Ladenöffnungszeit mindestens ein Mitarbeiter mit der Qualifikation zum Ersthelfer anwesend?</td>
+<td><input name="8.0 Marktleiterbüro-6" type="radio" value="ja"/></td>
+<td><input name="8.0 Marktleiterbüro-6" type="radio" value="nein"/></td>
+<td><input name="8.0 Marktleiterbüro-6" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist während der gesamten Ladenöffnungszeit mindestens ein Mitarbeiter mit der Qualifikation als Brandschutzhelfer anwesend?</td>
+<td><input name="8.0 Marktleiterbüro-7" type="radio" value="ja"/></td>
+<td><input name="8.0 Marktleiterbüro-7" type="radio" value="nein"/></td>
+<td><input name="8.0 Marktleiterbüro-7" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist ein Sicherheitsbeauftragter ausgebildet und bestellt?</td>
+<td><input name="8.0 Marktleiterbüro-8" type="radio" value="ja"/></td>
+<td><input name="8.0 Marktleiterbüro-8" type="radio" value="nein"/></td>
+<td><input name="8.0 Marktleiterbüro-8" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Wurde die Gefährdungsbeurteilung (GBO) erstellt und ist sie auf dem aktuellen Stand?</td>
+<td><input name="8.0 Marktleiterbüro-9" type="radio" value="ja"/></td>
+<td><input name="8.0 Marktleiterbüro-9" type="radio" value="nein"/></td>
+<td><input name="8.0 Marktleiterbüro-9" type="radio" value="nicht_vorhanden"/></td>
+</tr>
 <tr><td class="category-header" colspan="4" style="text-align: left;">9.0 CO2 Kühleinrichtungen</td></tr>
-<tr><td style="text-align: left;">Wurden Personen, die sich im Bereich von Kühlanlagen oder Kühlhäusern aufhalten, unterwiesen?</td><td><input name="9.0 CO2 Kühleinrichtungen-0" type="radio" value="ja"/><input name="9.0 CO2 Kühleinrichtungen-0" type="radio" value="nein"/><input name="9.0 CO2 Kühleinrichtungen-0" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Sind die Sensoren nicht mit Material oder sonstigen Gegenständen verstellt?</td><td><input name="9.0 CO2 Kühleinrichtungen-1" type="radio" value="ja"/><input name="9.0 CO2 Kühleinrichtungen-1" type="radio" value="nein"/><input name="9.0 CO2 Kühleinrichtungen-1" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Sind alle Sicherheitsvorrichtungen (Alarmleuchten, Kennzeichnungen, Kühlhaustüren) intakt?</td><td><input name="9.0 CO2 Kühleinrichtungen-2" type="radio" value="ja"/><input name="9.0 CO2 Kühleinrichtungen-2" type="radio" value="nein"/><input name="9.0 CO2 Kühleinrichtungen-2" type="radio" value="nicht_vorhanden"/></td></tr>
+<tr>
+<td style="text-align: left;">Wurden Personen, die sich im Bereich von Kühlanlagen oder Kühlhäusern aufhalten, unterwiesen?</td>
+<td><input name="9.0 CO2 Kühleinrichtungen-0" type="radio" value="ja"/></td>
+<td><input name="9.0 CO2 Kühleinrichtungen-0" type="radio" value="nein"/></td>
+<td><input name="9.0 CO2 Kühleinrichtungen-0" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind die Sensoren nicht mit Material oder sonstigen Gegenständen verstellt?</td>
+<td><input name="9.0 CO2 Kühleinrichtungen-1" type="radio" value="ja"/></td>
+<td><input name="9.0 CO2 Kühleinrichtungen-1" type="radio" value="nein"/></td>
+<td><input name="9.0 CO2 Kühleinrichtungen-1" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind alle Sicherheitsvorrichtungen (Alarmleuchten, Kennzeichnungen, Kühlhaustüren) intakt?</td>
+<td><input name="9.0 CO2 Kühleinrichtungen-2" type="radio" value="ja"/></td>
+<td><input name="9.0 CO2 Kühleinrichtungen-2" type="radio" value="nein"/></td>
+<td><input name="9.0 CO2 Kühleinrichtungen-2" type="radio" value="nicht_vorhanden"/></td>
+</tr>
 <tr><td class="category-header" colspan="4" style="text-align: left;">10.0 Praktikanten</td></tr>
-<tr><td style="text-align: left;">Wurde die Unterweisung von Praktikanten und Schüleraushilfen durchgeführt?</td><td><input name="10.0 Praktikanten-0" type="radio" value="ja"/><input name="10.0 Praktikanten-0" type="radio" value="nein"/><input name="10.0 Praktikanten-0" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Wurde die Unterweisung schriftlich dokumentiert?</td><td><input name="10.0 Praktikanten-1" type="radio" value="ja"/><input name="10.0 Praktikanten-1" type="radio" value="nein"/><input name="10.0 Praktikanten-1" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Haben die Personen die Inhalte der Unterweisung verstanden?</td><td><input name="10.0 Praktikanten-2" type="radio" value="ja"/><input name="10.0 Praktikanten-2" type="radio" value="nein"/><input name="10.0 Praktikanten-2" type="radio" value="nicht_vorhanden"/></td></tr>
+<tr>
+<td style="text-align: left;">Wurde die Unterweisung von Praktikanten und Schüleraushilfen durchgeführt?</td>
+<td><input name="10.0 Praktikanten-0" type="radio" value="ja"/></td>
+<td><input name="10.0 Praktikanten-0" type="radio" value="nein"/></td>
+<td><input name="10.0 Praktikanten-0" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Wurde die Unterweisung schriftlich dokumentiert?</td>
+<td><input name="10.0 Praktikanten-1" type="radio" value="ja"/></td>
+<td><input name="10.0 Praktikanten-1" type="radio" value="nein"/></td>
+<td><input name="10.0 Praktikanten-1" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Haben die Personen die Inhalte der Unterweisung verstanden?</td>
+<td><input name="10.0 Praktikanten-2" type="radio" value="ja"/></td>
+<td><input name="10.0 Praktikanten-2" type="radio" value="nein"/></td>
+<td><input name="10.0 Praktikanten-2" type="radio" value="nicht_vorhanden"/></td>
+</tr>
 <tr><td class="category-header" colspan="4" style="text-align: left;">11.0 Arbeitsmedizin</td></tr>
-<tr><td style="text-align: left;">Wird den Beschäftigten arbeitsmedizinische Vorsorge angeboten?</td><td><input name="11.0 Arbeitsmedizin-0" type="radio" value="ja"/><input name="11.0 Arbeitsmedizin-0" type="radio" value="nein"/><input name="11.0 Arbeitsmedizin-0" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Sind Maßnahmen gegen Hauterkrankungen getroffen?</td><td><input name="11.0 Arbeitsmedizin-1" type="radio" value="ja"/><input name="11.0 Arbeitsmedizin-1" type="radio" value="nein"/><input name="11.0 Arbeitsmedizin-1" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Sind Mitarbeitertoiletten und Pausenräume sauber und mit Seife, Einmalhandtüchern und ggf. Desinfektionsmittel ausgestattet?</td><td><input name="11.0 Arbeitsmedizin-2" type="radio" value="ja"/><input name="11.0 Arbeitsmedizin-2" type="radio" value="nein"/><input name="11.0 Arbeitsmedizin-2" type="radio" value="nicht_vorhanden"/></td></tr>
+<tr>
+<td style="text-align: left;">Wird den Beschäftigten arbeitsmedizinische Vorsorge angeboten?</td>
+<td><input name="11.0 Arbeitsmedizin-0" type="radio" value="ja"/></td>
+<td><input name="11.0 Arbeitsmedizin-0" type="radio" value="nein"/></td>
+<td><input name="11.0 Arbeitsmedizin-0" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind Maßnahmen gegen Hauterkrankungen getroffen?</td>
+<td><input name="11.0 Arbeitsmedizin-1" type="radio" value="ja"/></td>
+<td><input name="11.0 Arbeitsmedizin-1" type="radio" value="nein"/></td>
+<td><input name="11.0 Arbeitsmedizin-1" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind Mitarbeitertoiletten und Pausenräume sauber und mit Seife, Einmalhandtüchern und ggf. Desinfektionsmittel ausgestattet?</td>
+<td><input name="11.0 Arbeitsmedizin-2" type="radio" value="ja"/></td>
+<td><input name="11.0 Arbeitsmedizin-2" type="radio" value="nein"/></td>
+<td><input name="11.0 Arbeitsmedizin-2" type="radio" value="nicht_vorhanden"/></td>
+</tr>
 <tr><td class="category-header" colspan="4" style="text-align: left;">12.0 Psychische Belastung</td></tr>
-<tr><td style="text-align: left;">Werden Wünsche der Beschäftigten bei der Arbeitsplanung berücksichtigt?</td><td><input name="12.0 Psychische Belastung-0" type="radio" value="ja"/><input name="12.0 Psychische Belastung-0" type="radio" value="nein"/><input name="12.0 Psychische Belastung-0" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Ist die Pausenregelung umgesetzt?</td><td><input name="12.0 Psychische Belastung-1" type="radio" value="ja"/><input name="12.0 Psychische Belastung-1" type="radio" value="nein"/><input name="12.0 Psychische Belastung-1" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Ist ein Pausenraum vorhanden?</td><td><input name="12.0 Psychische Belastung-2" type="radio" value="ja"/><input name="12.0 Psychische Belastung-2" type="radio" value="nein"/><input name="12.0 Psychische Belastung-2" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Werden Überstunden gering gehalten?</td><td><input name="12.0 Psychische Belastung-3" type="radio" value="ja"/><input name="12.0 Psychische Belastung-3" type="radio" value="nein"/><input name="12.0 Psychische Belastung-3" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Werden regelmäßige Teambesprechungen durchgeführt?</td><td><input name="12.0 Psychische Belastung-4" type="radio" value="ja"/><input name="12.0 Psychische Belastung-4" type="radio" value="nein"/><input name="12.0 Psychische Belastung-4" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Werden neue Mitarbeiter eingearbeitet?</td><td><input name="12.0 Psychische Belastung-5" type="radio" value="ja"/><input name="12.0 Psychische Belastung-5" type="radio" value="nein"/><input name="12.0 Psychische Belastung-5" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Ist eine Unterweisung zum Thema Brand- und Arbeitsschutz erfolgt?</td><td><input name="12.0 Psychische Belastung-6" type="radio" value="ja"/><input name="12.0 Psychische Belastung-6" type="radio" value="nein"/><input name="12.0 Psychische Belastung-6" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Hängt ein sogenanntes schwarzes Brett im Sozialraum oder Kassenbüro?</td><td><input name="12.0 Psychische Belastung-7" type="radio" value="ja"/><input name="12.0 Psychische Belastung-7" type="radio" value="nein"/><input name="12.0 Psychische Belastung-7" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Werden Entscheidungen transparent erläutert?</td><td><input name="12.0 Psychische Belastung-8" type="radio" value="ja"/><input name="12.0 Psychische Belastung-8" type="radio" value="nein"/><input name="12.0 Psychische Belastung-8" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Gibt es positive Rückmeldungen bei guter Leistung?</td><td><input name="12.0 Psychische Belastung-9" type="radio" value="ja"/><input name="12.0 Psychische Belastung-9" type="radio" value="nein"/><input name="12.0 Psychische Belastung-9" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Wird konstruktive Kritik geübt?</td><td><input name="12.0 Psychische Belastung-10" type="radio" value="ja"/><input name="12.0 Psychische Belastung-10" type="radio" value="nein"/><input name="12.0 Psychische Belastung-10" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Wurden Weiterbildungsmöglichkeiten geschaffen bzw. angeboten?</td><td><input name="12.0 Psychische Belastung-11" type="radio" value="ja"/><input name="12.0 Psychische Belastung-11" type="radio" value="nein"/><input name="12.0 Psychische Belastung-11" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Gibt es einen Aushang zur Information über die Suchtprävention?</td><td><input name="12.0 Psychische Belastung-12" type="radio" value="ja"/><input name="12.0 Psychische Belastung-12" type="radio" value="nein"/><input name="12.0 Psychische Belastung-12" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Ist ein betriebliches Wiedereingliederungsmanagement implementiert?</td><td><input name="12.0 Psychische Belastung-13" type="radio" value="ja"/><input name="12.0 Psychische Belastung-13" type="radio" value="nein"/><input name="12.0 Psychische Belastung-13" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Wird Alleinarbeit vermieden?</td><td><input name="12.0 Psychische Belastung-14" type="radio" value="ja"/><input name="12.0 Psychische Belastung-14" type="radio" value="nein"/><input name="12.0 Psychische Belastung-14" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Ist die Betreuung nach einem Überfall organisiert?</td><td><input name="12.0 Psychische Belastung-15" type="radio" value="ja"/><input name="12.0 Psychische Belastung-15" type="radio" value="nein"/><input name="12.0 Psychische Belastung-15" type="radio" value="nicht_vorhanden"/></td></tr>
-<tr><td style="text-align: left;">Werden Schulungen für den Umgang mit gewalttätigen Situationen ermöglicht?</td><td><input name="12.0 Psychische Belastung-16" type="radio" value="ja"/><input name="12.0 Psychische Belastung-16" type="radio" value="nein"/><input name="12.0 Psychische Belastung-16" type="radio" value="nicht_vorhanden"/></td></tr>
+<tr>
+<td style="text-align: left;">Werden Wünsche der Beschäftigten bei der Arbeitsplanung berücksichtigt?</td>
+<td><input name="12.0 Psychische Belastung-0" type="radio" value="ja"/></td>
+<td><input name="12.0 Psychische Belastung-0" type="radio" value="nein"/></td>
+<td><input name="12.0 Psychische Belastung-0" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist die Pausenregelung umgesetzt?</td>
+<td><input name="12.0 Psychische Belastung-1" type="radio" value="ja"/></td>
+<td><input name="12.0 Psychische Belastung-1" type="radio" value="nein"/></td>
+<td><input name="12.0 Psychische Belastung-1" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist ein Pausenraum vorhanden?</td>
+<td><input name="12.0 Psychische Belastung-2" type="radio" value="ja"/></td>
+<td><input name="12.0 Psychische Belastung-2" type="radio" value="nein"/></td>
+<td><input name="12.0 Psychische Belastung-2" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Werden Überstunden gering gehalten?</td>
+<td><input name="12.0 Psychische Belastung-3" type="radio" value="ja"/></td>
+<td><input name="12.0 Psychische Belastung-3" type="radio" value="nein"/></td>
+<td><input name="12.0 Psychische Belastung-3" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Werden regelmäßige Teambesprechungen durchgeführt?</td>
+<td><input name="12.0 Psychische Belastung-4" type="radio" value="ja"/></td>
+<td><input name="12.0 Psychische Belastung-4" type="radio" value="nein"/></td>
+<td><input name="12.0 Psychische Belastung-4" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Werden neue Mitarbeiter eingearbeitet?</td>
+<td><input name="12.0 Psychische Belastung-5" type="radio" value="ja"/></td>
+<td><input name="12.0 Psychische Belastung-5" type="radio" value="nein"/></td>
+<td><input name="12.0 Psychische Belastung-5" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist eine Unterweisung zum Thema Brand- und Arbeitsschutz erfolgt?</td>
+<td><input name="12.0 Psychische Belastung-6" type="radio" value="ja"/></td>
+<td><input name="12.0 Psychische Belastung-6" type="radio" value="nein"/></td>
+<td><input name="12.0 Psychische Belastung-6" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Hängt ein sogenanntes schwarzes Brett im Sozialraum oder Kassenbüro?</td>
+<td><input name="12.0 Psychische Belastung-7" type="radio" value="ja"/></td>
+<td><input name="12.0 Psychische Belastung-7" type="radio" value="nein"/></td>
+<td><input name="12.0 Psychische Belastung-7" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Werden Entscheidungen transparent erläutert?</td>
+<td><input name="12.0 Psychische Belastung-8" type="radio" value="ja"/></td>
+<td><input name="12.0 Psychische Belastung-8" type="radio" value="nein"/></td>
+<td><input name="12.0 Psychische Belastung-8" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Gibt es positive Rückmeldungen bei guter Leistung?</td>
+<td><input name="12.0 Psychische Belastung-9" type="radio" value="ja"/></td>
+<td><input name="12.0 Psychische Belastung-9" type="radio" value="nein"/></td>
+<td><input name="12.0 Psychische Belastung-9" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Wird konstruktive Kritik geübt?</td>
+<td><input name="12.0 Psychische Belastung-10" type="radio" value="ja"/></td>
+<td><input name="12.0 Psychische Belastung-10" type="radio" value="nein"/></td>
+<td><input name="12.0 Psychische Belastung-10" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Wurden Weiterbildungsmöglichkeiten geschaffen bzw. angeboten?</td>
+<td><input name="12.0 Psychische Belastung-11" type="radio" value="ja"/></td>
+<td><input name="12.0 Psychische Belastung-11" type="radio" value="nein"/></td>
+<td><input name="12.0 Psychische Belastung-11" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Gibt es einen Aushang zur Information über die Suchtprävention?</td>
+<td><input name="12.0 Psychische Belastung-12" type="radio" value="ja"/></td>
+<td><input name="12.0 Psychische Belastung-12" type="radio" value="nein"/></td>
+<td><input name="12.0 Psychische Belastung-12" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist ein betriebliches Wiedereingliederungsmanagement implementiert?</td>
+<td><input name="12.0 Psychische Belastung-13" type="radio" value="ja"/></td>
+<td><input name="12.0 Psychische Belastung-13" type="radio" value="nein"/></td>
+<td><input name="12.0 Psychische Belastung-13" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Wird Alleinarbeit vermieden?</td>
+<td><input name="12.0 Psychische Belastung-14" type="radio" value="ja"/></td>
+<td><input name="12.0 Psychische Belastung-14" type="radio" value="nein"/></td>
+<td><input name="12.0 Psychische Belastung-14" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist die Betreuung nach einem Überfall organisiert?</td>
+<td><input name="12.0 Psychische Belastung-15" type="radio" value="ja"/></td>
+<td><input name="12.0 Psychische Belastung-15" type="radio" value="nein"/></td>
+<td><input name="12.0 Psychische Belastung-15" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Werden Schulungen für den Umgang mit gewalttätigen Situationen ermöglicht?</td>
+<td><input name="12.0 Psychische Belastung-16" type="radio" value="ja"/></td>
+<td><input name="12.0 Psychische Belastung-16" type="radio" value="nein"/></td>
+<td><input name="12.0 Psychische Belastung-16" type="radio" value="nicht_vorhanden"/></td>
+</tr>
 </tbody>
 </table>
 <br/>
@@ -769,7 +1235,7 @@ async function generateAndSharePDF() {
       useCORS: true,
       allowTaint: true,
       logging: false,
-      windowHeight: document.documentElement.scrollHeight, scrollY: -window.scrollY // Capture full height
+      windowHeight: document.documentElement.scrollHeight // Capture full height
     },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
   };
@@ -1625,6 +2091,7 @@ document.addEventListener('change', event => {
   }
 });
 </script>
+
 <!-- Device-aware PDF export override (auto mobile/desktop selection) -->
 <script>
 (function() {
@@ -1708,7 +2175,7 @@ document.addEventListener('change', event => {
       margin: [8, 6, 8, 6],
       filename: `Arbeitssicherheit-Begehungsprotokoll-${formattedDate}-mobile.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, scrollY: 0, useCORS: true, allowTaint: true, logging: false, windowHeight: document.documentElement.scrollHeight, scrollY: -window.scrollY },
+      html2canvas: { scale: 2, scrollY: 0, useCORS: true, allowTaint: true, logging: false, windowHeight: document.documentElement.scrollHeight },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
@@ -1717,7 +2184,7 @@ document.addEventListener('change', event => {
       margin: [12, 10, 15, 10],
       filename: `Arbeitssicherheit-Begehungsprotokoll-${formattedDate}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, scrollY: 0, useCORS: true, allowTaint: true, logging: false, windowHeight: document.documentElement.scrollHeight, scrollY: -window.scrollY },
+      html2canvas: { scale: 2, scrollY: 0, useCORS: true, allowTaint: true, logging: false, windowHeight: document.documentElement.scrollHeight },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
@@ -1769,6 +2236,7 @@ document.addEventListener('change', event => {
   console.info('Device-aware PDF export loaded.');
 })();
 </script>
+
 <!-- Radiobutton label enhancement: compact layout, label text, color-sync for Ja/Nein/n.v. -->
 <style id="radio-enhance-styles">
 .radio-option {
