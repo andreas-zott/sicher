@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="de">
 <head>
 <meta charset="utf-8"/>
@@ -8,288 +7,98 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
 <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon"/>
 <link href="/sicher/manifest-mobile.json" rel="manifest"/>
-<style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+
+:root {
+  --color-ja: #A5D6A7;
+  --color-nein: #C62828;
+  --color-neutral: #999;
+  --color-button: #B71C1C;
+  --color-button-hover: #8B0000;
+  --color-table-header: #B71C1C;
+  --color-table-hover: #fdecea;
+  --color-bg: #f4f4f4;
+  --color-highlight-ja: #d4edda;
+  --color-highlight-nein: #f8d7da;
+  --color-highlight-nicht: #e2e3e5;
+}
+
+body {
+  font-family: 'Inter', Arial, sans-serif;
+  background-color: var(--color-bg);
+  padding: 20px;
+}
 
 input[type="radio"] {
   appearance: none;
   -webkit-appearance: none;
-  width: 15px;
-  height: 15px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
-  border: 2px solid #999;
+  border: 2px solid var(--color-neutral);
   background-color: #fff;
   cursor: pointer;
-  margin: 4px;
-  position: relative;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  margin: 10px 1px 10px 0;
+  transition: background-color 0.3s, border-color 0.3s;
 }
-input[type="radio"][value="ja"]:checked {
-  background-color: #A5D6A7;
-  border-color: #A5D6A7;
+input[type="radio"][value="ja"]:checked { background-color: var(--color-ja); border-color: var(--color-ja); }
+input[type="radio"][value="nein"]:checked { background-color: var(--color-nein); border-color: var(--color-nein); }
+input[type="radio"][value="nicht_vorhanden"]:checked { background-color: var(--color-neutral); border-color: var(--color-neutral); }
+
+button, .custom-btn, .btn-large, .btn-medium {
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 16px;
+  padding: 10px 20px;
+  display: block;
+  margin: 10px auto;
 }
-input[type="radio"][value="nein"]:checked {
-  background-color: #C62828;
-  border-color: #C62828;
-}
-input[type="radio"][value="nicht_vorhanden"]:checked {
-  background-color: #999;
-  border-color: #999;
-}
-
-@media print {
-  button,
-  .btn,
-  footer,
-  .footer,
-  .buttons,
-  .custom-btn,
-  .btn-medium,
-  .btn-large {
-    display: none !important;
-  }
-  #signature-pad,
-  canvas,
-  #auswertung-container {
-    display: none !important;
-  }
-  @page {
-    size: A4 portrait;
-    margin: 15mm 12mm;
-  }
-  body {
-    background: white !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-    font-size: 9pt !important;
-  }
-
-  h1 { font-size: 14pt !important; }
-  h2 { font-size: 12pt !important; }
-  table { font-size: 8pt !important; }
-  td, th {
-    font-size: 8pt !important;
-    padding: 4px 6px !important;
-    line-height: 1.2 !important;
-  }
-  input[type="text"], input[type="date"] {
-    font-size: 8pt !important;
-  }
-  
-  /* Improved page break handling to prevent empty pages */
-  .category-section {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-
-  .category-header {
-    page-break-before: auto !important; /* Changed from always to auto */
-    break-before: auto !important;
-    page-break-after: avoid !important;
-    break-after: avoid !important;
-  }
-
-  .category-header:first-of-type {
-    page-break-before: auto !important;
-    break-before: auto !important;
-  }
-
-  .massnahmen-section {
-    page-break-before: auto !important; /* Changed from always to auto */
-    break-before: auto !important;
-    margin-top: 20px !important;
-  }
-  
-  /* Prevent empty rows from creating new pages */
-  .massnahmen-section table tr:empty,
-  .massnahmen-section table tr td:empty {
-    display: none !important;
-  }
-  
-  /* Hide empty measures table if no content */
-  .massnahmen-section tbody:empty {display:none !important;} {
-    display: none !important;
-  }
-
-  tr, td, th {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-
-  .category-header + tr {
-    page-break-before: avoid !important;
-    break-before: avoid !important;
-  }
-
-  #maßnahmen-tabelle tr {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-  
-  /* Better handling of empty table rows */
-  #maßnahmen-tabelle tr.empty-row {
-    display: none !important;
-  }
-
-  .confirmation-section {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-    page-break-before: auto !important; /* Changed from always */
-    margin-top: 20px !important;
-  }
-
-  .signature-container {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-  
-  /* Prevent orphaned content at page end */
-  .page-break-before {
-    page-break-before: auto !important;
-    break-before: auto !important;
-  }
-}
+button { background-color: var(--color-button); color: #fff; }
+button:hover { background-color: var(--color-button-hover); }
+button.btn-large { width: 600px; }
+button.btn-medium { width: 280px; }
+button.btn-blue { background-color: var(--color-button); color: #fff; }
+button.btn-green { background-color: #388e3c; color: #fff; }
+button.btn-gray { background-color: #6b6b6b; color: #fff; }
 
 #signature-pad {
-  border: 2px solid #cccccc;
+  border: 2px solid #ccc;
   border-radius: 12px;
   width: 100%;
   max-width: 600px;
   height: 150px;
   touch-action: none;
 }
-.buttons {
-  margin-top: 10px;
-}
-#content {
-  max-width: 600px;
-  margin: auto;
-  font-family: 'Inter', Arial, sans-serif;
-}
-button {
-  background-color: #B71C1C;
-  color: white;
-  background-color: #B71C1C;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 10px 16px;
-  cursor: pointer;
-  font-size: 12px;
-  margin-right: 10px;
-}
-button:hover {
-  background-color: #D32F2F;
-  background-color: #8B0000;
-}
+
 .confirmation-section {
   background: #fff;
   border: 1px solid #ccc;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   padding: 24px;
   max-width: 700px;
   margin: 40px auto;
 }
-.checkbox-row {
-  display: flex;
-  gap: 40px;
-  margin-top: 16px;
-  justify-content: space-between;
-}
-.checkbox-column {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  flex: 1;
-}
-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-button.custom-btn,
-button.btn-large,
-button.btn-medium {
-font-size: 16px;
-padding: 10px 20px;
-border-radius: 8px;
-border: none;
-cursor: pointer;
-margin: 10px auto;
-display: block;
-font-family: inherit;
-}
-button.btn-large {
-width: 600px;
-}
-button.btn-medium {
-width: 280px;
-}
-button.btn-blue {
-background-color: #B71C1C;
-color: white;
-}
-button.btn-green {
-background-color: #388e3c;
-color: white;
-}
-button.btn-gray {
-background-color: #6b6b6b;
-color: white;
-}
-#signature-image {
-max-width: 600px;
-border: 1px solid #ccc;
-border-radius: 8px;
-display: block;
-min-height: 150px;
-margin: 10px auto;
-}
-.page-break-before {
-  page-break-before: always;
-  margin-top: 0;
-  break-before: page;
-}
-body {
-  font-family: 'Inter', Arial, sans-serif;
-  background-color: #f4f4f4;
-  padding: 20px;
-}
-header h1 {
-  color: #212529;
-}
+
 table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
-  background-color: white;
+  background-color: #fff;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
-th {
-  background-color: #B71C1C;
-  color: white;
-  padding: 12px;
-  text-align: center;
-}
-td {
-  padding: 10px;
-  border: 1px solid #dee2e6;
-  text-align: left;
-  line-height: 1.35;
-}
-tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-tr:hover {
-  background-color: #fdecea;
-}
-.category-header {
-  background-color: #f5e9e9 !important;
-  color: #5b2121;
-  font-weight: bold;
-  text-align: left;
-  padding: 12px;
-}
+th { background-color: var(--color-table-header); color: #fff; padding: 12px; text-align: center; }
+td { padding: 10px; border: 1px solid #dee2e6; line-height: 1.35; }
+tr:nth-child(even) { background-color: #f2f2f2; }
+tr:hover { background-color: var(--color-table-hover); }
+
+.highlight-ja td:first-child { background-color: var(--color-highlight-ja) !important; }
+.highlight-nein td:first-child { background-color: var(--color-highlight-nein) !important; }
+.highlight-nicht td:first-child { background-color: var(--color-highlight-nicht) !important; }
+
 input[type="text"], input[type="date"] {
   width: 100%;
   max-width: 300px;
@@ -300,112 +109,36 @@ input[type="text"], input[type="date"] {
   border: 1px solid #ced4da;
   border-radius: 4px;
 }
-.highlight-ja td:first-child {
-  background-color: #d4edda !important;
-}
-.highlight-nein td:first-child {
-  background-color: #f8d7da !important;
-}
-.highlight-nicht td:first-child {
-  background-color: #e2e3e5 !important;
-}
 
+.checkbox-row { display: flex; gap: 40px; margin-top: 16px; justify-content: space-between; }
+.checkbox-column { display: flex; flex-direction: column; gap: 12px; flex: 1; }
+label { display: flex; align-items: center; gap: 8px; }
 
-/* --- MOBILE KARTENLAYOUT (nur auf kleinen Bildschirmen) --- */
 @media (max-width: 768px) {
-
-  /* Tabellen in Karten umwandeln */
-  table#fragenTabelle {
-    display: block;
-    border: none;
-  }
-
-  table#fragenTabelle thead {
-    display: none;
-  }
-
-  table#fragenTabelle tbody {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  table#fragenTabelle tr {
-    display: block;
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    padding: 12px 14px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  }
-
-  table#fragenTabelle td {
-    display: block;
-    border: none;
-    padding: 6px 0;
-    font-size: 15px;
-    line-height: 1.4;
-    white-space: normal;
-    word-break: break-word;
-  }
-
-  /* Kategorie-Überschrift hervorheben */
-  table#fragenTabelle td.category-header {
-    background: #007BFF;
-    color: #000000;
-    font-weight: bold;
-    text-align: center;
-    border-radius: 8px;
-    padding: 10px;
-  }
-
-  /* Ja/Nein/n.v. Optionen nebeneinander unter der Frage */
-  table#fragenTabelle td input[type="radio"] {
-    width: 24px;
-    height: 24px;
-    margin: 6px 8px 6px 0;
-  }
-
-  table#fragenTabelle td:nth-child(2),
-  table#fragenTabelle td:nth-child(3),
-  table#fragenTabelle td:nth-child(4) {
-    display: inline-block;
-    width: auto;
-    text-align: center;
-  }
-
-  /* Buttons, Eingabefelder und Container anpassen */
-  button.btn-large,
-  button.btn-medium,
-  button.custom-btn {
-    width: 100% !important;
-    max-width: none;
-    font-size: 16px;
-    padding: 14px;
-    margin: 10px 0;
-  }
-
-  .form-section, .confirmation-section, .signature-container {
-    max-width: 100%;
-    padding: 12px;
-    margin: 10px auto;
-  }
-
-  #signature-pad {
-    height: 200px;
-  }
-
-  .checkbox-row {
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .checkbox-column {
-    width: 100%;
-  }
+  table#fragenTabelle { display: block; border: none; }
+  table#fragenTabelle thead { display: none; }
+  table#fragenTabelle tbody { display: flex; flex-direction: column; gap: 12px; }
+  table#fragenTabelle tr { display: block; border-radius: 12px; padding: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+  table#fragenTabelle td { display: block; padding: 6px 0; font-size: 15px; line-height: 1.4; word-break: break-word; }
+  table#fragenTabelle td.category-header { background: #007BFF; color: #000; font-weight: bold; text-align: center; border-radius: 8px; padding: 10px; }
+  table#fragenTabelle td:nth-child(2), table#fragenTabelle td:nth-child(3), table#fragenTabelle td:nth-child(4) { display: inline-block; width: auto; text-align: center; }
+  button.btn-large, button.btn-medium, button.custom-btn { width: 100% !important; max-width: none; font-size: 16px; padding: 14px; margin: 10px 0; }
+  .form-section, .confirmation-section, .signature-container { max-width: 100%; padding: 12px; margin: 10px auto; }
+  #signature-pad { height: 200px; }
+  .checkbox-row { flex-direction: column; gap: 16px; }
+  .checkbox-column { width: 100%; }
 }
-
-
+@media print {
+  button, .btn, footer, .buttons, #signature-pad, canvas, #auswertung-container { display: none !important; }
+  @page { size: A4 portrait; margin: 15mm 12mm; }
+  body { background: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; font-size: 9pt !important; }
+  h1 { font-size: 14pt !important; }
+  h2 { font-size: 12pt !important; }
+  table, td, th { font-size: 8pt !important; padding: 4px 6px !important; line-height: 1.2 !important; page-break-inside: avoid !important; }
+  input[type="text"], input[type="date"] { font-size: 8pt !important; }
+  .category-section, .massnahmen-section, .confirmation-section, .signature-container { page-break-inside: avoid !important; break-inside: avoid !important; margin-top: 20px !important; }
+  .massnahmen-section tbody:empty, #maßnahmen-tabelle tr.empty-row { display: none !important; }
+}
 /* Anpassungen 2025 */
 #fragenTabelle td:first-child {
   font-size: 20px;
@@ -698,8 +431,7 @@ async function generateAndSharePDF() {
     originalDisplays[index] = btn.style.display;
     btn.style.display = 'none';
   });
-  noPrintElems.forEach(el => el.style.display = 'none');
-  
+  noPrintElems.forEach(el => el.style.display = 'none');  
   // Hide empty rows before PDF generation
   const emptyRows = document.querySelectorAll('#maßnahmen-tabelle tr.empty-row');
   emptyRows.forEach(row => {
@@ -713,8 +445,7 @@ async function generateAndSharePDF() {
     if (!hasContent) {
       row.style.display = 'none';
     }
-  });
-    
+  });    
   const canvas = document.getElementById('signature-pad');
   let signatureImg = null;
   if (canvas) {
@@ -727,22 +458,18 @@ async function generateAndSharePDF() {
     signatureImg.style.height = '150px';
     canvas.style.display = 'none';
     canvas.parentNode.insertBefore(signatureImg, canvas);
-  }  
-  
-  const printable = document.querySelector('.print-wrapper') || document.body;
-  
+  }    
+  const printable = document.querySelector('.print-wrapper') || document.body;  
   // Removed problematic transform scaling
   // const pdfScale = 0.75;
   // printable.style.transformOrigin = 'top left';
   // printable.style.webkitTransformOrigin = 'top left';
   // printable.style.transform = 'scale(' + pdfScale + ')';
   // printable.style.webkitTransform = 'scale(' + pdfScale + ')';
-  // printable.style.width = (100 / pdfScale) + '%';
-  
+  // printable.style.width = (100 / pdfScale) + '%';  
   const element = printable;
   const today = new Date();
-  const formattedDate = today.toLocaleDateString('de-DE');
-  
+  const formattedDate = today.toLocaleDateString('de-DE');  
   // Improved PDF options to prevent empty pages
   const opt = {
     pagebreak: { 
@@ -762,8 +489,7 @@ async function generateAndSharePDF() {
       windowHeight: document.documentElement.scrollHeight // Capture full height
     },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-  };
-  
+  };  
   function addPageNumbers(pdf) {
     const pageCount = pdf.internal.getNumberOfPages();
     pdf.setFontSize(8);
@@ -773,8 +499,7 @@ async function generateAndSharePDF() {
       const pageHeight = pdf.internal.pageSize.getHeight();
       pdf.text('Seite ' + i + ' / ' + pageCount, pageWidth / 2, pageHeight - 10, {align: 'center'});
     }
-  }
-  
+  }  
   try {
     const worker = html2pdf().set(opt).from(element);
     const pdf = await worker.toPdf().get('pdf');
@@ -802,13 +527,11 @@ async function generateAndSharePDF() {
     buttons.forEach((btn, index) => {
       btn.style.display = originalDisplays[index];
     });
-    noPrintElems.forEach(el => el.style.display = '');
-    
+    noPrintElems.forEach(el => el.style.display = '');    
     // Restore empty rows visibility
     emptyRows.forEach(row => {
       row.style.display = '';
-    });
-    
+    });    
     // Removed transform reset since we don't use it anymore
     // try {
     //   if (typeof printable !== 'undefined' && printable) {
@@ -828,7 +551,6 @@ async function generateAndSharePDF() {
     }
   }
 }
-
 const canvas = document.getElementById('signature-pad');
 const ctx = canvas.getContext('2d');
 let drawing = false;
@@ -852,39 +574,32 @@ function getX(e) {
   return e.touches ? e.touches[0].clientX - canvas.getBoundingClientRect().left :
                      e.clientX - canvas.getBoundingClientRect().left;
 }
-
 function getY(e) {
   return e.touches ? e.touches[0].clientY - canvas.getBoundingClientRect().top :
                      e.clientY - canvas.getBoundingClientRect().top;
 }
-
 function startDrawing(e) {
   drawing = true;
   ctx.beginPath();
   ctx.moveTo(getX(e), getY(e));
 }
-
 function draw(e) {
   if (!drawing) return;
   ctx.lineTo(getX(e), getY(e));
   ctx.stroke();
 }
-
 function stopDrawing() {
   drawing = false;
   saveSignature();
 }
-
 function clearSignature() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   localStorage.removeItem("signatureImage");
 }
-
 function saveSignature() {
   const dataURL = canvas.toDataURL();
   localStorage.setItem("signatureImage", dataURL);
 }
-
 function restoreSignature() {
   const dataURL = localStorage.getItem("signatureImage");
   if (dataURL) {
@@ -907,17 +622,13 @@ function prepareForPrint() {
 }
 function generateMeasure(question) {
   let measure = question.trim();
-
   // Remove trailing question mark
   if (measure.endsWith("?")) {
     measure = measure.slice(0, -1);
   }
-
-
 if (measure.includes("festes, geschlossenes und flaches Schuhwerk")) {
   measure = "Sorgen Sie gemäß § 3 Abs. 1 ArbSchG dafür, dass alle Personen im Markt festes, geschlossenes und flaches Schuhwerk tragen, um arbeitsbedingte Gesundheitsgefahren wirksam zu vermeiden.";
 }
-
 if (measure.includes("Automatiktüren") || measure.includes("Rolltoren") || measure.includes("Schnelllauftoren")) {
   measure = "Stellen Sie entsprechend der Betriebssicherheitsverordnung (BetrSichV) sicher, dass alle Automatiktüren, Roll- und Schnelllauftore regelmäßig auf erkennbare Mängel geprüft und instand gehalten werden.";
 }
@@ -1092,8 +803,6 @@ if (measure.includes("Heizgeräte im Kassenraum nicht durch brennbares Material 
 if (measure.includes("Kassenstühle in einem funktionsfähigen Zustand")) {
   measure = "Prüfen Sie Kassenstühle regelmäßig auf Funktionalität und stellen Sie ergonomische Arbeitsmittel gemäß ArbStättV Anhang Nr. 6 bereit.";
 }
-
-
 
 if (measure.includes("Transportband unbeschädigt")) {
   measure = "Überprüfen Sie Transportbänder regelmäßig auf Schäden und sorgen Sie dafür, dass keine Lücken über 5 mm entstehen, um Verletzungsrisiken auszuschließen (§ 3 ArbSchG).";
@@ -1317,14 +1026,12 @@ if (measure.includes("Beziehen Sie Mitarbeiteranregungen in die Entscheidungspro
   }
   return measure;
 }
-
 // Improved function to mark empty rows and only add them when needed
 function neinFragenInMaßnahmen() {
   const fragenzeilen = document.querySelectorAll('#fragenTabelle tr');
   const maßnahmenTabelleBody = document.getElementById('maßnahmen-tabelle');
   maßnahmenTabelleBody.innerHTML = '';
   let dynamicMeasuresCount = 0;
-
   fragenzeilen.forEach(row => {
     const frageText = row.cells[0]?.innerText;
     const radios = row.querySelectorAll('input[type="radio"]');
@@ -1332,21 +1039,18 @@ function neinFragenInMaßnahmen() {
     radios.forEach(r => {
       if (r.checked) selected = r.value;
     });
-
     if (selected === 'nein' && frageText && !frageText.includes('category-header')) {
       const measureText = generateMeasure(frageText);
       const newRow = document.createElement('tr');
       const numCell = document.createElement('td');
       const frageCell = document.createElement('td');
       const descCell = document.createElement('td');
-
       numCell.textContent = (dynamicMeasuresCount + 1).toString();
       frageCell.textContent = frageText;
       frageCell.style.fontStyle = 'italic';
       frageCell.style.fontSize = '0.9em';
       descCell.textContent = measureText;
       descCell.contentEditable = "true";
-
       newRow.appendChild(numCell);
       newRow.appendChild(frageCell);
       newRow.appendChild(descCell);
@@ -1354,7 +1058,6 @@ function neinFragenInMaßnahmen() {
       dynamicMeasuresCount++;
     }
   });
-
   // Only add empty rows if there are already measures, and mark them as empty
   if (dynamicMeasuresCount > 0) {
     for (let i = 0; i < 2; i++) {
@@ -1363,13 +1066,11 @@ function neinFragenInMaßnahmen() {
       const numCell = document.createElement('td');
       const frageCell = document.createElement('td');
       const descCell = document.createElement('td');
-
       numCell.textContent = (dynamicMeasuresCount + i + 1).toString();
       frageCell.textContent = '';
       frageCell.contentEditable = "true";
       descCell.textContent = '';
       descCell.contentEditable = "true";
-
       newRow.appendChild(numCell);
       newRow.appendChild(frageCell);
       newRow.appendChild(descCell);
@@ -1377,7 +1078,6 @@ function neinFragenInMaßnahmen() {
     }
   }
 }
-
 function exportiereMassnahmen() {
   const maßnahmenTabelleBody = document.getElementById('maßnahmen-tabelle');
   const maßnahmenTabelle = []; 
@@ -1387,8 +1087,7 @@ function exportiereMassnahmen() {
     if (cells.length >= 3) {
       const nr = cells[0].textContent.trim();
       const frage = cells[1].textContent.trim();
-      const beschreibung = cells[2].textContent.trim();
- 
+      const beschreibung = cells[2].textContent.trim(); 
       if (frage || beschreibung) {
         maßnahmenTabelle.push({
           nr: parseInt(nr) || maßnahmenTabelle.length + 1,
@@ -1428,13 +1127,11 @@ window.addEventListener("load", () => {
     });
     datumsfeld.textContent = datumDeutsch;
   }
-
   // Add event listeners to all radio buttons
   const radioButtons = document.querySelectorAll('#fragenTabelle input[type="radio"]');
   radioButtons.forEach(radio => {
     radio.addEventListener('change', neinFragenInMaßnahmen);
   });
-
   // Initial call to populate measures
   neinFragenInMaßnahmen();
   ladeFormular();
@@ -1454,7 +1151,6 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.error("❌ Service Worker Fehler:", err));
   });
 }
-
 function manuellSpeichern() {
   const formData = {
     markt: document.getElementById('markt')?.value || '',
@@ -1470,40 +1166,32 @@ function manuellSpeichern() {
     },
     unterschrift: canvas.toDataURL()
   };
-
   const radios = document.querySelectorAll('#fragenTabelle input[type="radio"]:checked');
   radios.forEach(radio => {
     formData.antworten[radio.name] = radio.value;
   });
-
   localStorage.setItem('arbeitssicherheit_formular', JSON.stringify(formData));
   alert('✅ Formular wurde gespeichert!');
 }
-
 function ladeFormular() {
   const gespeichert = localStorage.getItem('arbeitssicherheit_formular');
   if (!gespeichert) return;
-
   try {
-    const formData = JSON.parse(gespeichert);
-    
+    const formData = JSON.parse(gespeichert);    
     if (formData.markt) document.getElementById('markt').value = formData.markt;
     if (formData.name) document.getElementById('name').value = formData.name;
     if (formData.sifa) document.getElementById('sifa').value = formData.sifa;
-
     Object.keys(formData.antworten).forEach(name => {
       const value = formData.antworten[name];
       const radio = document.querySelector(`input[name="${name}"][value="${value}"]`);
       if (radio) radio.checked = true;
     });
-
     if (formData.checkboxes) {
       if (formData.checkboxes.mangel) document.getElementById('mangel').checked = true;
       if (formData.checkboxes.massnahmen) document.getElementById('massnahmen').checked = true;
       if (formData.checkboxes.nachkontrolle) document.getElementById('nachkontrolle').checked = true;
       if (formData.checkboxes.mitarbeiter) document.getElementById('mitarbeiter').checked = true;
     }
-
     if (formData.unterschrift) {
       const img = new Image();
       img.onload = () => {
@@ -1511,47 +1199,36 @@ function ladeFormular() {
       };
       img.src = formData.unterschrift;
     }
-
     neinFragenInMaßnahmen();
   } catch (e) {
     console.error('Fehler beim Laden:', e);
   }
 }
-
 function formularZuruecksetzen() {
-  if (!confirm('Möchten Sie wirklich alle Eingaben zurücksetzen?')) return;
-  
+  if (!confirm('Möchten Sie wirklich alle Eingaben zurücksetzen?')) return;  
   document.getElementById('markt').value = '';
   document.getElementById('name').value = '';
-  document.getElementById('sifa').value = '';
-  
+  document.getElementById('sifa').value = '';  
   const radios = document.querySelectorAll('#fragenTabelle input[type="radio"]');
-  radios.forEach(radio => radio.checked = false);
-  
+  radios.forEach(radio => radio.checked = false);  
   document.getElementById('mangel').checked = false;
   document.getElementById('massnahmen').checked = false;
   document.getElementById('nachkontrolle').checked = false;
   document.getElementById('mitarbeiter').checked = false;
-
  document.querySelectorAll("tr").forEach(tr => {
     tr.classList.remove("highlight-ja", "highlight-nein", "highlight-nicht");
-  });
-  
+  });  
   clearSignature();
   neinFragenInMaßnahmen();
-  localStorage.removeItem('arbeitssicherheit_formular');
-  
+  localStorage.removeItem('arbeitssicherheit_formular');  
   alert('✅ Formular wurde zurückgesetzt!');
 }
-
 // Set title
 document.getElementById('titel').textContent = 'Arbeitssicherheit-Checkliste-2025';
-
 // Automatisches Laden beim Start
 window.addEventListener('DOMContentLoaded', () => {
   ladeFormular();
 });
-
 // Speichern aller Eingaben
 function speichereFormular() {
   const formData = {};
@@ -1569,7 +1246,6 @@ function speichereFormular() {
   });
   localStorage.setItem('formSicherheit2025', JSON.stringify(formData));
 }
-
 // Laden und Anwenden (inkl. Hervorhebung)
 function ladeFormular() {
   const saved = localStorage.getItem('formSicherheit2025');
@@ -1586,12 +1262,10 @@ function ladeFormular() {
     } else if ((el.id && data[el.id] !== undefined) || (el.name && data[el.name] !== undefined)) {
       el.value = data[el.id || el.name];
     }
-  });
-  
+  });  
   // Nach dem Laden: Hervorhebung aktualisieren
   aktualisiereHervorhebung();
 }
-
 // Farbige Hervorhebung der Antworten
 function aktualisiereHervorhebung() {
   const zeilen = document.querySelectorAll('#fragenTabelle tbody tr');
@@ -1609,7 +1283,6 @@ function aktualisiereHervorhebung() {
     }
   });
 }
-
 // Speichern bei jeder Eingabeänderung
 document.addEventListener('change', event => {
   if (event.target.matches('input')) {
@@ -1627,7 +1300,6 @@ document.addEventListener('change', event => {
     const smallWidth = (window.innerWidth && window.innerWidth <= 900);
     return isMobileUA || smallWidth || ('ontouchstart' in window && window.innerWidth <= 1200);
   }
-
   function injectMobilePrintStyles() {
     if (document.getElementById('pdfMobileStyles')) return;
     const css = `
@@ -1652,20 +1324,16 @@ document.addEventListener('change', event => {
     style.appendChild(document.createTextNode(css));
     document.head.appendChild(style);
   }
-
   function removeMobileClass() { document.documentElement.classList.remove('pdf-mobile'); }
   function addMobileClass() { document.documentElement.classList.add('pdf-mobile'); }
-
   window.generateAndSharePDF = async function generateAndSharePDF() {
     const buttons = document.querySelectorAll('button, .btn, .btn-group, .buttons, .custom-btn, .btn-medium, .btn-large');
     const noPrintElems = document.querySelectorAll('footer, .no-print');
     const originalDisplays = [];
     buttons.forEach((btn, index) => { originalDisplays[index] = btn.style.display || ''; btn.style.display = 'none'; });
     noPrintElems.forEach(el => el.style.display = 'none');
-
     const mobile = isMobileDevice();
     if (mobile) { injectMobilePrintStyles(); addMobileClass(); } else { removeMobileClass(); }
-
     // hide empty measure rows
     const measuresRows = document.querySelectorAll('#maßnahmen-tabelle tr');
     measuresRows.forEach(row => {
@@ -1674,7 +1342,6 @@ document.addEventListener('change', event => {
       cells.forEach(cell => { if (cell && cell.textContent.trim()) hasContent = true; });
       if (!hasContent) row.style.display = 'none';
     });
-
     const canvas = document.getElementById('signature-pad');
     let signatureImg = null;
     if (canvas) {
@@ -1691,11 +1358,9 @@ document.addEventListener('change', event => {
         canvas.parentNode.insertBefore(signatureImg, canvas);
       } catch (e) { console.warn('Signature canvas could not be exported:', e); }
     }
-
     const printable = document.querySelector('.print-wrapper') || document.body;
     const today = new Date();
     const formattedDate = today.toLocaleDateString('de-DE');
-
     const mobileOptions = {
       pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', '.category-section', '.confirmation-section', '.signature-container'] },
       margin: [8, 6, 8, 6],
@@ -1704,7 +1369,6 @@ document.addEventListener('change', event => {
       html2canvas: { scale: 2, scrollY: 0, useCORS: true, allowTaint: true, logging: false, windowHeight: document.documentElement.scrollHeight },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
-
     const desktopOptions = {
       pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', '.category-section', '.confirmation-section', '.signature-container'] },
       margin: [12, 10, 15, 10],
@@ -1713,9 +1377,7 @@ document.addEventListener('change', event => {
       html2canvas: { scale: 2, scrollY: 0, useCORS: true, allowTaint: true, logging: false, windowHeight: document.documentElement.scrollHeight },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
-
     const opt = mobile ? mobileOptions : desktopOptions;
-
     function addPageNumbers(pdf) {
       try {
         const pageCount = pdf.internal.getNumberOfPages();
@@ -1728,7 +1390,6 @@ document.addEventListener('change', event => {
         }
       } catch (err) { console.warn('Could not add page numbers:', err); }
     }
-
     try {
       const worker = html2pdf().set(opt).from(printable);
       const pdf = await worker.toPdf().get('pdf');
@@ -1851,14 +1512,12 @@ document.addEventListener('DOMContentLoaded', function () {
     span.textContent = text;
     label.appendChild(input);
     label.appendChild(span);
-
     label.addEventListener('click', function () {
       input.checked = true;
       var evt = document.createEvent('HTMLEvents');
       evt.initEvent('change', true, false);
       input.dispatchEvent(evt);
     });
-
     input.addEventListener('change', function () {
       var group = document.getElementsByName(name);
       for (var i = 0; i < group.length; i++) {
@@ -1869,7 +1528,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     return label;
   }
-
   function transformRow(tr) {
     if (!tr || tr.querySelector('.radio-option')) return;
     var headerCell = tr.querySelector('td.category-header');
@@ -1919,10 +1577,8 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     }
   }
-
   var rows = document.querySelectorAll('#fragenTabelle tbody tr');
   for (var i = 0; i < rows.length; i++) transformRow(rows[i]);
-
   var target = document.querySelector('#fragenTabelle tbody') || document.body;
   var observer = new MutationObserver(function (mutations) {
     mutations.forEach(function (mutation) {
@@ -1938,7 +1594,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
   observer.observe(target, { childList: true, subtree: true });
-
   setTimeout(function () {
     var rows2 = document.querySelectorAll('#fragenTabelle tbody tr');
     for (var i = 0; i < rows2.length; i++) transformRow(rows2[i]);
