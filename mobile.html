@@ -414,7 +414,13 @@ input[type="text"], input[type="date"] {
 #fragenTabelle input[type="radio"] {
   width: 18px !important;
   height: 18px !important;
-  margin: 6px 10px 6px 0 !important;
+  margin: 10px 1px 10px 0 !important;
+}
+
+#fragenTabelle th:nth-child(2),
+#fragenTabelle td:nth-child(2) {
+  width: 170px; /* feste Breite */
+  text-align: center; /* optional */
 }
 </style>
 </head>
@@ -560,6 +566,7 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
 <tr><td style="text-align: left;">Wird Alleinarbeit vermieden?</td><td><input name="12.0 Psychische Belastung-14" type="radio" value="ja"/><input name="12.0 Psychische Belastung-14" type="radio" value="nein"/><input name="12.0 Psychische Belastung-14" type="radio" value="nicht_vorhanden"/></td></tr>
 <tr><td style="text-align: left;">Ist die Betreuung nach einem Überfall organisiert?</td><td><input name="12.0 Psychische Belastung-15" type="radio" value="ja"/><input name="12.0 Psychische Belastung-15" type="radio" value="nein"/><input name="12.0 Psychische Belastung-15" type="radio" value="nicht_vorhanden"/></td></tr>
 <tr><td style="text-align: left;">Werden Schulungen für den Umgang mit gewalttätigen Situationen ermöglicht?</td><td><input name="12.0 Psychische Belastung-16" type="radio" value="ja"/><input name="12.0 Psychische Belastung-16" type="radio" value="nein"/><input name="12.0 Psychische Belastung-16" type="radio" value="nicht_vorhanden"/></td></tr>
+<tr><td style="text-align: left;">Beziehen Sie Mitarbeiteranregungen in die Entscheidungsprozesse mit ein?</td><td><input name="12.0 Psychische Belastung-17" type="radio" value="ja"/><input name="12.0 Psychische Belastung-17" type="radio" value="nein"/><input name="12.0 Psychische Belastung-17" type="radio" value="nicht_vorhanden"/></td></tr>
 </tbody>
 </table>
 <br/>
@@ -1302,6 +1309,9 @@ if (measure.includes("Schulungen für den Umgang mit gewalttätigen Situationen 
   measure = "Ermöglichen Sie Mitarbeitenden Schulungen zum Deeskalations- und Konfliktmanagement bei Gewaltvorfällen gemäß § 12 ArbSchG und DGUV Information 206-023.";
 }
 
+if (measure.includes("Beziehen Sie Mitarbeiteranregungen in die Entscheidungsprozesse mit ein?")) {
+  measure = "Stellen Sie sicher, dass Anregungen der Mitarbeitenden systematisch in Entscheidungsprozesse einbezogen und bei Maßnahmen des Arbeits- und Gesundheitsschutzes angemessen berücksichtigt werden (§ 3 ArbSchG, § 87 BetrVG).";
+}
   if (!measure.endsWith(".")) {
     measure += ".";
   }
