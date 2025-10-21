@@ -472,5 +472,22 @@ const datum = `${day}.${month}.${year}`;
   const titel = document.getElementById('titel');
   titel.textContent = titel.textContent.replace(/\d{4}/, aktuellesJahr);
 </script>
+<script>
+function getQueryParam(name) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(name) || '';
+}
+
+// Wenn Daten übergeben wurden, Felder automatisch füllen
+window.addEventListener('DOMContentLoaded', () => {
+  const marktnummer = getQueryParam('marktnummer');
+  const name = getQueryParam('name');
+  const sifa = getQueryParam('sifa');
+
+  if (marktnummer) document.getElementById('marktnummer').value = marktnummer;
+  if (name) document.getElementById('name').value = name;
+  if (sifa) document.getElementById('sifa').value = sifa;
+});
+</script>
 </body>
 </html>

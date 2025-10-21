@@ -652,11 +652,34 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
   </button>
 <button class="btn-medium btn-gray" onclick="formularZuruecksetzen()" style="flex: 1; max-width: 280px;">
     🧹 Zurücksetzen
-  </button>
 </div>
 <button class="custom-btn" onclick="generateAndSharePDF()" style="background-color: #C62828; width: 600px; margin: 10px auto 40px auto; display: block;">
 📤 PDF teilen (iPad)
-</button>
+  </button>
+<div style="display: flex; justify-content: center; margin-top: 20px;">
+  <button class="btn-green btn-base" onclick="weiterZuFotos()" style="max-width: 600px; width: 100%; text-align: center;" >
+    📸 Zur Foto-Seite
+  </button>
+</div>
+<script>
+function weiterZuFotos() {
+  const marktnummer = document.getElementById('markt')?.value || '';
+  const name = document.getElementById('name')?.value || '';
+  const sifa = document.getElementById('sifa')?.value || '';
+
+  // Prüfen, ob alle Felder ausgefüllt sind
+  if (!marktnummer || !name || !sifa) {
+    alert('Bitte fülle Marktnummer, Name und SiFa aus, bevor du fortfährst.');
+    return;
+  }
+
+  // URL mit Übergabeparametern bauen
+  const url = `foto.html?marktnummer=${encodeURIComponent(marktnummer)}&name=${encodeURIComponent(name)}&sifa=${encodeURIComponent(sifa)}`;
+
+  // Seite in neuem Tab öffnen
+  window.open(url, '_blank');
+}
+</script>	
 <div id="auswertung-container">
 <div id="auswertung"></div>
 </div>
