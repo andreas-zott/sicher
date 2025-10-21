@@ -398,7 +398,11 @@ const datum = `${day}.${month}.${year}`;
       const blob = doc.output("blob");
       const file = new File([blob], filename, { type: "application/pdf" });
       if (!navigator.canShare || !navigator.canShare({ files: [file] })) throw new Error();
-      await navigator.share({ title: "Checkliste", text: `PDF vom ${datum} (${marktnummer})`, files: [file] });
+      await navigator.share({ title: "Checkliste", text: `Sehr geehrte Damen und Herren,
+anbei übermittle ich Ihnen die Begehungsliste  zur sachlichen Prüfung und weiteren Verwendung.
+Für Rückfragen oder ergänzende Informationen stehe ich Ihnen jederzeit gerne zur Verfügung.
+
+Ich danke Ihnen im Voraus für Ihre Aufmerksamkeit.PDF vom ${datum} (${marktnummer})`, files: [file] });
     } catch (e) {
       const doc = await createPDF();
       const blob = doc.output("blob");
