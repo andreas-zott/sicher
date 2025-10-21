@@ -5,192 +5,59 @@
   <title>Maßnahmen-Auswertung</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<style>
+* { box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%); color: #333; margin: 0; padding: 20px; line-height: 1.6; }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-      background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
-      color: #333;
-      margin: 0;
-      padding: 20px;
-      line-height: 1.6;
-    }
+/* --- Tabellen & Inhalt --- */
+table { width: 100%; border-collapse: collapse; background: white; margin-bottom: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-radius: 12px; overflow: hidden; page-break-inside:auto; }
+tr, td, th { page-break-inside: avoid !important; }
+tr:nth-child(15n) { page-break-after: always; }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+.container { max-width: 1200px; margin: 0 auto; }
+h1 { text-align: center; color: #C62828; font-size: 32px; margin-bottom: 30px; }
+.info { background: white; padding: 24px; border-radius: 16px; margin-bottom: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+.info p { margin: 8px 0; font-size: 16px; }
+.info strong { color: #C62828; font-weight: 600; }
 
-    h1 {
-      text-align: center;
-      color: #C62828;
-      font-size: 32px;
-      margin-bottom: 30px;
-    }
+th, td { padding: 16px; text-align: left; font-size: 15px; border-bottom: 1px solid #e0e0e0; }
+th { background-color: #C62828; color: white; font-weight: 600; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background-color: #f9f9f9; }
+td:nth-child(2) { font-style: italic; font-size: 0.9em; color: #555; }
 
-    .info {
-      background: white;
-      padding: 24px;
-      border-radius: 16px;
-      margin-bottom: 24px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    }
+.btn-group { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-bottom: 40px; position: sticky; top: 20px; z-index: 100; background: white; padding: 16px; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+button { background-color: #C62828; color: white; font-size: 16px; padding: 14px 24px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; }
+button:hover { background-color: #8B1F1F; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(198, 40, 40, 0.4); }
+button:active { transform: translateY(0); }
 
-    .info p {
-      margin: 8px 0;
-      font-size: 16px;
-    }
+@media (max-width: 800px) {
+  th, td { font-size: 13px; padding: 12px; }
+  button { font-size: 14px; padding: 12px 20px; width: 100%; justify-content: center; }
+  .btn-group { flex-direction: column; position: static; }
+  h1 { font-size: 24px; }
+}
 
-    .info strong {
-      color: #C62828;
-      font-weight: 600;
-    }
+/* --- Druck / PDF --- */
+@media print {
+  body { background: white; padding: 0; }
+  .btn-group, footer { display: none !important; }
+  table { box-shadow: none; border: 1px solid #ddd; }
+  th, td { padding: 10px; font-size: 11pt; }
+}
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-      margin-bottom: 30px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    th, td {
-      padding: 16px;
-      text-align: left;
-      font-size: 15px;
-      border-bottom: 1px solid #e0e0e0;
-    }
-
-    th {
-      background-color: #C62828;
-      color: white;
-      font-weight: 600;
-    }
-
-    tbody tr:last-child td {
-      border-bottom: none;
-    }
-
-    tbody tr:hover {
-      background-color: #f9f9f9;
-    }
-
-    td:nth-child(2) {
-      font-style: italic;
-      font-size: 0.9em;
-      color: #555;
-    }
-
-    .btn-group {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 16px;
-      margin-bottom: 40px;
-      position: sticky;
-      top: 20px;
-      z-index: 100;
-      background: white;
-      padding: 16px;
-      border-radius: 12px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-    }
-
-    button {
-      background-color: #C62828;
-      color: white;
-      font-size: 16px;
-      padding: 14px 24px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    button:hover {
-      background-color: #8B1F1F;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(198, 40, 40, 0.4);
-    }
-
-    button:active {
-      transform: translateY(0);
-    }
-
-    @media (max-width: 800px) {
-      th, td {
-        font-size: 13px;
-        padding: 12px;
-      }
-
-      button {
-        font-size: 14px;
-        padding: 12px 20px;
-        width: 100%;
-        justify-content: center;
-      }
-
-      .btn-group {
-        flex-direction: column;
-        position: static;
-      }
-
-      h1 {
-        font-size: 24px;
-      }
-    }
-
-    @media print {
-      body {
-        background: white;
-        padding: 0;
-      }
-
-      .btn-group,
-      footer {
-        display: none !important;
-      }
-
-      table {
-        box-shadow: none;
-        border: 1px solid #ddd;
-      }
-
-      th, td {
-        padding: 10px;
-        font-size: 11pt;
-      }
-    }
-
-    footer {
-      background: #f3f4f6;
-      color: #374151;
-      padding: 20px;
-      margin-top: 40px;
-      text-align: center;
-      border-radius: 12px;
-    }
-
-    footer a {
-      color: #C62828;
-      text-decoration: none;
-      margin: 0 12px;
-      font-weight: 500;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
-    }
-  </style>
+/* --- Footer für Bildschirm --- */
+footer {
+  background: #f3f4f6;
+  color: #374151;
+  padding: 20px;
+  margin-top: 40px;
+  text-align: center;
+  border-radius: 12px;
+}
+footer a { color: #C62828; text-decoration: none; margin: 0 12px; font-weight: 500; }
+footer a:hover { text-decoration: underline; }
+</style>
 </head>
 <body>
   <h1>🛠️ Maßnahmen-Auswertung</h1>
@@ -272,6 +139,7 @@
       }
     }
 
+    // --- PDF generieren mit Seitenzahlen ---
     async function pdfTeilen() {
       if (!aktuelleDaten) {
         alert("❗ Noch keine Daten empfangen.");
@@ -291,7 +159,25 @@
         jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
       };
 
-      const blob = await html2pdf().set(opt).from(element).outputPdf('blob');
+      // Generiere PDF
+      const pdf = await html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
+        const totalPages = pdf.internal.getNumberOfPages();
+
+        // Jede Seite durchlaufen und Seitenzahl unten zentriert einfügen
+        for (let i = 1; i <= totalPages; i++) {
+          pdf.setPage(i);
+          pdf.setFontSize(10);
+          pdf.setTextColor(100);
+          const pageWidth = pdf.internal.pageSize.getWidth();
+          const pageHeight = pdf.internal.pageSize.getHeight();
+          const text = `Seite ${i} von ${totalPages}`;
+          const textWidth = pdf.getTextWidth(text);
+          pdf.text(text, (pageWidth - textWidth) / 2, pageHeight - 20); // 20pt Abstand vom unteren Rand
+        }
+        return pdf;
+      });
+
+      const blob = pdf.output('blob');
       const file = new File([blob], opt.filename, { type: "application/pdf" });
 
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
@@ -313,6 +199,7 @@
       }
     }
   </script>
+
 <footer style="
   text-align: center;
   margin-top: 40px;
@@ -333,5 +220,6 @@
 </p>
 </div><div style="font-size:11px; color:#777; margin-top:8px;">Stand: Oktober 2025</div>
 </footer>
+
 </body>
 </html>
