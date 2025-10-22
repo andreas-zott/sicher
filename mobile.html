@@ -1752,30 +1752,47 @@ document.addEventListener('change', event => {
       } catch (err) { console.warn('Could not add page numbers:', err); }
     }
 
-    try {
-      const worker = html2pdf().set(opt).from(printable);
-      const pdf = await worker.toPdf().get('pdf');
-      addPageNumbers(pdf);
-      const blob = pdf.output('blob');
-      const file = new File([blob], opt.filename, { type: "application/pdf" });
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({ title: 'Checkliste Arbeitssicherheit', text: 'Sehr geehrte Damen und Herren,
+ try {
+  const datum = document.getElementById("datum").value;
+  const marktnummer = document.getElementById("markt").value;
+  const name = document.getElementById("name").value;
+  const sifa = document.getElementById("sifa").value;
 
-anbei übermittle ich Ihnen die Begehungsliste für den Markt ${marktnummer} zur sachlichen Prüfung und weiteren Verwendung.
-Für Rückfragen oder ergänzende Informationen stehe ich Ihnen jederzeit gerne zur Verfügung.
+  const worker = html2pdf().set(opt).from(printable);
+  const pdf = await worker.toPdf().get('pdf');
+  addPageNumbers(pdf);
+  const blob = pdf.output('blob');
+  const file = new File([blob], opt.filename, { type: "application/pdf" });
 
-Ich danke Ihnen im Voraus für Ihre Aufmerksamkeit.', files: [file] });
-      } else {
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = opt.filename;
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-      }
-    } catch (error) {
-      console.error("Fehler bei PDF-Generierung:", error);
-      alert("Fehler bei der PDF-Erstellung. Bitte versuchen Sie es erneut.");
+  // 📱 Teilen (iPad, iPhone, Android)
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    await navigator.share({
+      title: `Begehungsliste ${marktnummer}`,
+      text: `Sehr geehrte Damen und Herren,\n\nanbei übermittle ich Ihnen die Begehungsliste für den Markt ${marktnummer} vom ${datum} zur sachlichen Prüfung und weiteren Verwendung.\n\nFür Rückfragen oder ergänzende Informationen stehe ich Ihnen jederzeit gerne zur Verfügung.\n\nMit freundlichen Grüßen\n${name}\nSiFa: ${sifa}`,
+      files: [file]
+    });
+  } else {
+    // 💻 Fallback: PDF speichern + E-Mail öffnen
+    const mailSubject = `Begehungsliste ${marktnummer} vom ${datum}`;
+    const mailBody = `Sehr geehrte Damen und Herren,%0D%0A%0D%0Aanbei übermittle ich Ihnen die Begehungsliste für den Markt ${marktnummer} vom ${datum} zur sachlichen Prüfung und weiteren Verwendung.%0D%0A%0D%0AFür Rückfragen oder ergänzende Informationen stehe ich Ihnen jederzeit gerne zur Verfügung.%0D%0A%0D%0AMit freundlichen Grüßen%0D%0A${encodeURIComponent(name)}%0D%0ASiFa: ${encodeURIComponent(sifa)}`;
+    const mailtoLink = `mailto:?subject=${encodeURIComponent(mailSubject)}&body=${mailBody}`;
+
+    // PDF speichern
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = opt.filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    // E-Mail-Programm öffnen
+    window.location.href = mailtoLink;
+  }
+
+} catch (error) {
+  console.error("Fehler beim Erstellen oder Teilen des PDFs:", error);
+  alert("Beim Erstellen oder Versenden des PDFs ist ein Fehler aufgetreten.");
+}
     } finally {
       buttons.forEach((btn, index) => { try { btn.style.display = originalDisplays[index] || ''; } catch(e){} });
       noPrintElems.forEach(el => el.style.display = '');
