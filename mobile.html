@@ -809,47 +809,15 @@ try {
   addPageNumbers(pdf);
   const blob = pdf.output('blob');
   const file = new File([blob], opt.filename, { type: "application/pdf" });
-// 📱 Teilen / E-Mail-Versand mit automatischer iOS-Erkennung
-async function teilenOderMailen(file, marktnummer, sifa) {
-  const mailSubject = `Arbeitssicherheit Checkliste aus dem Markt ${marktnummer}`;
-  const mailBody = `Sehr geehrte Damen und Herren,
 
-anbei übermittle ich Ihnen die Begehungsliste für den Markt ${marktnummer} zur sachlichen Prüfung und weiteren Verwendung.
-
-Für Rückfragen oder ergänzende Informationen stehe ich Ihnen jederzeit gerne zur Verfügung.
-
-Mit freundlichen Grüßen
-
-Fachkraft für Arbeitssicherheit (SiFa): ${sifa}`;
-
-  const mailtoLink = `mailto:?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}`;
-
-  // 🧠 iOS-Erkennung (iPhone/iPad)
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-
-  try {
-    if (!isIOS && navigator.canShare && navigator.canShare({ files: [file] })) {
-      // 📤 Native Share API (Android, Desktop)
-      await navigator.share({
-        title: mailSubject,
-        text: mailBody,
-        files: [file]
-      });
-    } else {
-      // 💌 iOS oder Fallback → Mail-App öffnen
-      window.location.href = mailtoLink;
-    }
-  } catch (error) {
-    console.error("Fehler beim Teilen:", error);
-    // Wenn Teilen fehlschlägt, Mail-Fallback versuchen
-    window.location.href = mailtoLink;
-  }
-}
 // 📱 Teilen (iPad, iPhone, Android)
 if (navigator.canShare && navigator.canShare({ files: [file] })) {
+  const shareTitle = `Arbeitssicherheit Checkliste aus dem Markt ${marktnummer}`;
+  const shareText = `Sehr geehrte Damen und Herren,\n\nanbei übermittle ich Ihnen die Begehungsliste für den Markt ${marktnummer} zur sachlichen Prüfung und weiteren Verwendung.\n\nFür Rückfragen oder ergänzende Informationen stehe ich Ihnen jederzeit gerne zur Verfügung.\n\nMit freundlichen Grüßen\nFachkraft für Arbeitssicherheit (SiFa): ${sifa}`;
+  
   await navigator.share({
-    title: `Arbeitssicherheit Checkliste aus dem Markt ${marktnummer}`,
-    text: `Sehr geehrte Damen und Herren,\n\nanbei übermittle ich Ihnen die Begehungsliste für den Markt ${marktnummer} zur sachlichen Prüfung und weiteren Verwendung.\n\nFür Rückfragen oder ergänzende Informationen stehe ich Ihnen jederzeit gerne zur Verfügung.\n\nMit freundlichen Grüßen\nFachkraft für Arbeitssicherheit (SiFa): ${sifa}`,
+    title: shareTitle,   // ✅ Titel (Betreff) für Teilen-Dialog
+    text: shareText,
     files: [file]
   });
 } else {
