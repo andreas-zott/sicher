@@ -812,32 +812,32 @@ try {
 
 // 📱 Teilen (iPad, iPhone, Android)
 if (navigator.canShare && navigator.canShare({ files: [file] })) {
-  const shareTitle = `Arbeitssicherheit Checkliste aus dem Markt ${marktnummer}`;
+  const shareTitle = `Arbeitssicherheit-Checkliste aus dem Markt ${marktnummer}`;
   const shareText = `Sehr geehrte Damen und Herren,\n\nanbei übermittle ich Ihnen die Begehungsliste für den Markt ${marktnummer} zur sachlichen Prüfung und weiteren Verwendung.\n\nFür Rückfragen oder ergänzende Informationen stehe ich Ihnen jederzeit gerne zur Verfügung.\n\nMit freundlichen Grüßen\nFachkraft für Arbeitssicherheit (SiFa): ${sifa}`;
-  
+
   await navigator.share({
-    title: shareTitle,   // ✅ Titel (Betreff) für Teilen-Dialog
+    title: shareTitle,   // <-- erscheint im iPad-Teilen-Dialog als Betreff/Titel
     text: shareText,
     files: [file]
   });
 } else {
-  
-    // 💻 Fallback: PDF speichern + E-Mail öffnen
-    const mailSubject = `Arbeitssicherheit Checkliste aus dem Markt ${marktnummer}`;
-    const mailBody = `Sehr geehrte Damen und Herren,%0D%0A%0D%0Aanbei übermittle ich Ihnen die Begehungsliste für den Markt ${marktnummer} zur sachlichen Prüfung und weiteren Verwendung.%0D%0A%0D%0AFür Rückfragen oder ergänzende Informationen stehe ich Ihnen jederzeit gerne zur Verfügung.%0D%0A%0D%0AMit freundlichen Grüßen%0D%0A%0D%0AFachkraft für Arbeitssicherheit (SiFa): ${encodeURIComponent(sifa)}`;
-    const mailtoLink = `mailto:?subject=${encodeURIComponent(mailSubject)}&body=${mailBody}`;
+  // 💻 Fallback: PDF speichern + E-Mail öffnen
+  const mailSubject = `Arbeitssicherheit-Checkliste aus dem Markt ${marktnummer}`;
+  const mailBody =
+    `Sehr geehrte Damen und Herren,%0D%0A%0D%0Aanbei übermittle ich Ihnen die Begehungsliste für den Markt ${marktnummer} zur sachlichen Prüfung und weiteren Verwendung.%0D%0A%0D%0AFür Rückfragen oder ergänzende Informationen stehe ich Ihnen jederzeit gerne zur Verfügung.%0D%0A%0D%0AMit freundlichen Grüßen%0D%0A%0D%0AFachkraft für Arbeitssicherheit (SiFa): ${encodeURIComponent(sifa)}`;
+  const mailtoLink = `mailto:?subject=${encodeURIComponent(mailSubject)}&body=${mailBody}`;
 
-    // PDF speichern
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = opt.filename;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
+  // PDF speichern
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = opt.filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
 
-    // E-Mail-Programm öffnen
-    window.location.href = mailtoLink;
-  }
+  // E-Mail öffnen
+  window.location.href = mailtoLink;
+}
 
 } catch (error) {
     console.error("Fehler bei PDF-Generierung:", error);
