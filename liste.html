@@ -1045,6 +1045,29 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
 <button class="custom-btn" onclick="generateAndSharePDF()" style="background-color: #C62828; width: 600px; margin: 10px auto 40px auto; display: block;">
 📤 PDF teilen (iPad)
 </button>
+<button class="custom-btn" onclick="weiterZuFotos()" style="background-color: green; width: 600px; margin: 10px auto 40px auto; display: block;">
+    📸 Zur Foto-Seite
+  </button>
+</div>
+<script>
+function weiterZuFotos() {
+  const marktnummer = document.getElementById('markt')?.value || '';
+  const name = document.getElementById('name')?.value || '';
+  const sifa = document.getElementById('sifa')?.value || '';
+
+  // Prüfen, ob alle Felder ausgefüllt sind
+  if (!marktnummer || !name || !sifa) {
+    alert('Bitte fülle Marktnummer, Name und SiFa aus, bevor du fortfährst.');
+    return;
+  }
+
+  // URL mit Übergabeparametern bauen
+  const url = `foto.html?marktnummer=${encodeURIComponent(marktnummer)}&name=${encodeURIComponent(name)}&sifa=${encodeURIComponent(sifa)}`;
+
+  // Seite in neuem Tab öffnen
+  window.open(url, '_blank');
+}
+</script>
 <div id="auswertung-container">
 <div id="auswertung"></div>
 </div>
@@ -1162,6 +1185,8 @@ async function generateAndSharePDF() {
       pdf.text('Seite ' + i + ' / ' + pageCount, pageWidth / 2, pageHeight - 10, {align: 'center'});
     }
   }
+
+
   
   try {
     const worker = html2pdf().set(opt).from(element);
