@@ -72,21 +72,58 @@
 
   /* --- Dark Mode --- */
   body.dark-mode { background-color: var(--bg-dark); color: var(--text-dark); }
-  body.dark-mode section { background-color: var(--card-dark); box-shadow: 0 2px 6px rgba(255,255,255,0.05); }
+  body.dark-mode section { background-color: var(--card-dark); box-shadow: 0 2px 6px rgba(255,255,255,0.03); }
   body.dark-mode h1, body.dark-mode h2 { color: var(--accent-light); }
   body.dark-mode footer { color: #aaa; }
 
-  /* --- Dark Mode Button --- */
+  /* --- Dark Mode Button (dezent, kleiner, transparenter Hintergrund) --- */
   #darkModeToggle {
-    position: fixed; top: 1rem; right: 1rem; width: 42px; height: 42px;
-    background: var(--accent); color: #fff; border: none; border-radius: 50%;
-    font-size: 1.2rem; cursor: pointer; z-index: 1000; display: flex;
-    align-items: center; justify-content: center; transition: background 0.3s ease, transform 0.2s ease;
+    position: fixed;
+    top: 0.6rem;
+    right: 0.6rem;
+    width: 28px;
+    height: 28px;
+    background: transparent; /* transparenter Hintergrund */
+    color: inherit;
+    border: none;
+    border-radius: 50%;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s ease, opacity 0.15s ease, background-color 0.15s ease;
+    opacity: 0.85; /* leicht dezenter Eindruck */
+    padding: 0;
   }
-  #darkModeToggle:hover { transform: scale(1.1); }
-  body.dark-mode #darkModeToggle { background: #444; color: #ffeb3b; }
 
-  * { transition: background-color 0.4s ease, color 0.4s ease; }
+  /* very subtle focus outline for accessibility */
+  #darkModeToggle:focus {
+    outline: 2px solid rgba(0, 64, 128, 0.18);
+    outline-offset: 3px;
+    border-radius: 50%;
+  }
+
+  /* minimal hover effect: slight scale, faint translucent backdrop for discoverability */
+  #darkModeToggle:hover {
+    transform: scale(1.06);
+    background-color: rgba(0,0,0,0.04);
+    opacity: 1;
+  }
+
+  /* keep it readable in dark mode while keeping background transparent */
+  body.dark-mode #darkModeToggle {
+    color: #ffeb3b;
+    /* still transparent but give a subtle backdrop on hover only */
+  }
+  body.dark-mode #darkModeToggle:hover {
+    background-color: rgba(255,235,59,0.08);
+  }
+
+  /* remove heavy global transitions to avoid interfering with subtle button */
+  * { transition: background-color 0.3s ease, color 0.3s ease; }
 </style>
 </head>
 
@@ -161,6 +198,22 @@ Jede Frage muss beantwortet werden, um die Einhaltung von Sicherheitsstandards z
       }
     });
   });
+
+  // Dark Mode Toggle Logic (unchanged behaviour)
+  const toggle = document.getElementById('darkModeToggle');
+  const body = document.body;
+
+  if (localStorage.getItem('darkMode') === 'enabled') {
+    body.classList.add('dark-mode');
+    toggle.textContent = '☀️';
+  }
+
+  toggle.addEventListener('click', () => {
+    body.classList.toggle('dark-mode');
+    const isDark = body.classList.contains('dark-mode');
+    localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+    toggle.textContent = isDark ? '☀️' : '🌙';
+  });
 </script>
 </section>
 
@@ -210,41 +263,6 @@ Die Checkliste sollte regelmäßig aktualisiert werden, um gesetzliche Vorgaben 
 </ul>
 </section>
 
-<h1>Webseite in Safari öffnen und als PDF versenden (iPad)</h1>
-<section>
-<h2>1. Webseite mit Safari auf dem iPad öffnen</h2>
-<ul>
-  <li><span class="emoji">🔵</span><strong>Safari öffnen:</strong> Tippe auf das Safari-Symbol auf dem Home-Bildschirm deines iPads.</li>
-  <li><span class="emoji">🌐</span><strong>Webadresse eingeben:</strong> Tippe oben in die Adressleiste und gib ein:<br><code>https://andreas-zott.github.io/sicher/</code><br>Tippe dann auf „Los“.</li>
-  <li><span class="emoji">📄</span><strong>Webseite wird geladen:</strong> Die Seite öffnet sich. Wähle die passende Checkliste für deine iPad-Version aus.</li>
-</ul>
-</section>
-
-<section>
-<h2>2. Teilen-Menü öffnen</h2>
-<ul>
-  <li><span class="emoji">🔗</span>Tippe oben rechts auf das Teilen-Symbol (ein Quadrat mit einem Pfeil nach oben).</li>
-</ul>
-</section>
-
-<section>
-<h2>3. In PDF umwandeln</h2>
-<ul>
-  <li><span class="emoji">🖨️</span>Tippe im Teilen-Menü auf „Drucken“.</li>
-  <li><span class="emoji">⚙️</span>Tippe oben auf „Optionen“ und wähle „PDF“ statt „Web-Archiv“. Tippe auf „Fertig“.</li>
-  <li><span class="emoji">📎</span>Es erscheint eine Vorschau, z. B. „Arbeitssicherheit-2025.pdf“.</li>
-</ul>
-</section>
-
-<section>
-<h2>4. PDF per E-Mail versenden</h2>
-<ul>
-  <li><span class="emoji">📧</span>Tippe im Teilen-Menü auf „Mail“.</li>
-  <li><span class="emoji">📝</span>Eine neue E-Mail öffnet sich mit dem PDF als Anhang. Gib Empfänger, Betreff und Nachricht ein.</li>
-  <li><span class="emoji">📨</span>Tippe oben rechts auf das Senden-Symbol (Pfeil), um die Mail zu verschicken.</li>
-</ul>
-
-</section>
 <footer>
 © <span id="jahr1">2025</span> Andreas Zott. Alle Rechte vorbehalten. (Sifa) Arbeitssicherheit <span id="jahr2">2025</span><br>
 <a href="impressum.html">Impressum</a> | 
@@ -257,22 +275,6 @@ Die Checkliste sollte regelmäßig aktualisiert werden, um gesetzliche Vorgaben 
   const jahr = new Date().getFullYear();
   document.getElementById('jahr1').textContent = jahr;
   document.getElementById('jahr2').textContent = jahr;
-
-  // Dark Mode Toggle
-  const toggle = document.getElementById('darkModeToggle');
-  const body = document.body;
-
-  if (localStorage.getItem('darkMode') === 'enabled') {
-    body.classList.add('dark-mode');
-    toggle.textContent = '☀️';
-  }
-
-  toggle.addEventListener('click', () => {
-    body.classList.toggle('dark-mode');
-    const isDark = body.classList.contains('dark-mode');
-    localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
-    toggle.textContent = isDark ? '☀️' : '🌙';
-  });
 </script>
 </body>
 </html>
