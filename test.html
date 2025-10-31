@@ -837,17 +837,43 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
 <td><input name="11.0 Arbeitsmedizin-0" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind Maßnahmen gegen Hauterkrankungen getroffen?</td>
-<td><input name="11.0 Arbeitsmedizin-1" type="radio" value="ja"/></td>
-<td><input name="11.0 Arbeitsmedizin-1" type="radio" value="nein"/></td>
-<td><input name="11.0 Arbeitsmedizin-1" type="radio" value="nicht_vorhanden"/></td>
+  <td style="text-align: left;">Hat eine arbeitsmedizinische Betreuung vor Ort stattgefunden (z. B. Sprechstunde, Arbeitsplatzbegehung)?</td>
+  <td><input name="11.0 Arbeitsmedizin-1" type="radio" value="ja"/></td>
+  <td><input name="11.0 Arbeitsmedizin-1" type="radio" value="nein"/></td>
+  <td><input name="11.0 Arbeitsmedizin-1" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind Mitarbeitertoiletten und Pausenräume sauber und mit Seife, Einmalhandtüchern und ggf. Desinfektionsmittel ausgestattet?</td>
-<td><input name="11.0 Arbeitsmedizin-2" type="radio" value="ja"/></td>
-<td><input name="11.0 Arbeitsmedizin-2" type="radio" value="nein"/></td>
-<td><input name="11.0 Arbeitsmedizin-2" type="radio" value="nicht_vorhanden"/></td>
+  <td style="text-align: left;">Erfolgten arbeitsmedizinische Beratungen für Beschäftigte oder Führungskräfte?</td>
+  <td><input name="11.0 Arbeitsmedizin-2" type="radio" value="ja"/></td>
+  <td><input name="11.0 Arbeitsmedizin-2" type="radio" value="nein"/></td>
+  <td><input name="11.0 Arbeitsmedizin-2" type="radio" value="nicht_vorhanden"/></td>
 </tr>
+<tr>
+  <td style="text-align: left;">Wird die Zusammenarbeit zwischen Betriebsarzt und Fachkraft für Arbeitssicherheit regelmäßig gepflegt?</td>
+  <td><input name="11.0 Arbeitsmedizin-3" type="radio" value="ja"/></td>
+  <td><input name="11.0 Arbeitsmedizin-3" type="radio" value="nein"/></td>
+  <td><input name="11.0 Arbeitsmedizin-3" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind Maßnahmen gegen Hauterkrankungen getroffen?</td>
+<td><input name="11.0 Arbeitsmedizin-4" type="radio" value="ja"/></td>
+<td><input name="11.0 Arbeitsmedizin-4" type="radio" value="nein"/></td>
+<td><input name="11.0 Arbeitsmedizin-4" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Werden Berichte und Empfehlungen des Betriebsarztes dokumentiert und umgesetzt?</td>
+<td><input name="11.0 Arbeitsmedizin-5" type="radio" value="ja"/></td>
+<td><input name="11.0 Arbeitsmedizin-5" type="radio" value="nein"/></td>
+<td><input name="11.0 Arbeitsmedizin-5" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind sanitäre Anlagen und Pausenräume sauber, funktionsfähig und ausreichend mit Hygieneartikeln bestückt?</td>
+<td><input name="11.0 Arbeitsmedizin-6" type="radio" value="ja"/></td>
+<td><input name="11.0 Arbeitsmedizin-6" type="radio" value="nein"/></td>
+<td><input name="11.0 Arbeitsmedizin-6" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+
+
 <tr><td class="category-header" colspan="4" style="text-align: left;">12.0 Psychische Belastung</td></tr>
 <tr>
 <td style="text-align: left;">Werden Wünsche der Beschäftigten bei der Arbeitsplanung berücksichtigt?</td>
@@ -1605,6 +1631,35 @@ if (measure.includes("Personen die Inhalte der Unterweisung verstanden")) {
   measure = "Die Verständlichkeit der Unterweisung ist zu überprüfen (z. B. durch Rückfragen oder praktische Anwendung). Unterlassene Erfolgskontrolle widerspricht der Wirksamkeitsforderung gemäß § 12 ArbSchG Abs. 1 Satz 2.";
 }
 
+// --- Maßnahmen für Abschnitt 11.0 Arbeitsmedizin ---
+if (measure.includes("arbeitsmedizinische Vorsorge angeboten")) {
+  measure = "Bieten Sie allen Beschäftigten arbeitsmedizinische Vorsorge gemäß ArbMedVV an und dokumentieren Sie das Angebot (ArbMedVV §3 ff.; ASiG §§3,6; DGUV Vorschrift 2).";
+}
+
+if (measure.includes("arbeitsmedizinische Betreuung vor Ort stattgefunden")) {
+  measure = "Stellen Sie sicher, dass eine regelmäßige arbeitsmedizinische Betreuung durch den Betriebsarzt, z. B. mittels Sprechstunden und Arbeitsplatzbegehungen, erfolgt (ASiG §§3,6; DGUV Vorschrift 2; ArbMedVV).";
+}
+
+if (measure.includes("Begehungen durch den Betriebsarzt durchgeführt")) {
+  measure = "Organisieren Sie regelmäßige Begehungen des Betriebsarztes gemäß DGUV Vorschrift 2, um arbeitsmedizinische Belange vor Ort zu überprüfen.";
+}
+
+if (measure.includes("arbeitsmedizinische Beratungen für Beschäftigte oder Führungskräfte")) {
+  measure = "Die regelmäßige arbeitsmedizinische Betreuung durch den Betriebsarzt (z. B. Sprechstunden, Arbeitsplatzbegehungen) ist sicherzustellen. Dies erfolgt gemäß Arbeitssicherheitsgesetz (ASiG §§3, 6), DGUV Vorschrift 2 und Arbeitsmedizinischer Vorsorgeverordnung (ArbMedVV), um Gefährdungen zu erkennen, Prävention zu gewährleisten und die Pflichten des Arbeitgebers nach ArbSchG §3 zu erfüllen.";
+}
+
+if (measure.includes("Zusammenarbeit zwischen Betriebsarzt und Fachkraft für Arbeitssicherheit")) {
+  measure = "Verbessern Sie die Zusammenarbeit zwischen Betriebsarzt und Fachkraft für Arbeitssicherheit im Rahmen des Arbeitsschutzausschusses (ASA) nach § 11 ASiG.";
+}
+
+if (measure.includes("Maßnahmen gegen Hauterkrankungen getroffen")) {
+  measure = "Ergreifen Sie geeignete Schutzmaßnahmen (z. B. Hautschutzmittel, Handschuhe, Schulungen) zur Prävention von Hauterkrankungen gemäß § 3 ArbSchG und TRGS 401.";
+}
+
+if (measure.includes("Berichte und Empfehlungen des Betriebsarztes dokumentiert und umgesetzt")) {
+  measure = "Dokumentieren Sie die Empfehlungen des Betriebsarztes und setzen Sie diese nachweislich um, um die Wirksamkeit der arbeitsmedizinischen Betreuung sicherzustellen (ASiG §§3,6; DGUV Vorschrift 2; ArbMedVV).";
+}
+
 if (measure.includes("arbeitsmedizinische Vorsorge angeboten")) {
   measure = "Arbeitsmedizinische Vorsorge ist für alle betroffenen Beschäftigten aktiv anzubieten, durchzuführen und zu dokumentieren. Das Nichterfüllen dieser Pflicht verstößt gegen § 3 ArbSchG in Verbindung mit ArbMedVV.";
 }
@@ -1612,7 +1667,7 @@ if (measure.includes("Maßnahmen gegen Hauterkrankungen getroffen")) {
   measure = "Schutzmaßnahmen gegen berufsbedingte Hauterkrankungen (z. B. Hautschutzpläne, PSA, Schulungen) sind verpflichtend umzusetzen. Eine Missachtung stellt einen gravierenden Verstoß gegen § 3 ArbSchG sowie die TRGS 401 dar und ist sofort zu beheben.";
 }
 
-if (measure.includes("Mitarbeitertoiletten und Pausenräume sauber")) {
+if (measure.includes("Sind sanitäre Anlagen und Pausenräume sauber")) {
   measure = "Sanitärräume und Pausenbereiche sind regelmäßig zu reinigen und dauerhaft hygienisch einwandfrei zu halten. Jede Vernachlässigung stellt eine Verletzung von § 6 ArbStättV und § 3 ArbSchG dar und ist unverzüglich abzustellen.";
 }
 
