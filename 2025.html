@@ -841,16 +841,40 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
 <td><input name="11.0 Arbeitsmedizin-0" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind Maßnahmen gegen Hauterkrankungen getroffen?</td>
-<td><input name="11.0 Arbeitsmedizin-1" type="radio" value="ja"/></td>
-<td><input name="11.0 Arbeitsmedizin-1" type="radio" value="nein"/></td>
-<td><input name="11.0 Arbeitsmedizin-1" type="radio" value="nicht_vorhanden"/></td>
+  <td style="text-align: left;">Hat eine arbeitsmedizinische Betreuung vor Ort stattgefunden (z. B. Sprechstunde, Arbeitsplatzbegehung)?</td>
+  <td><input name="11.0 Arbeitsmedizin-1" type="radio" value="ja"/></td>
+  <td><input name="11.0 Arbeitsmedizin-1" type="radio" value="nein"/></td>
+  <td><input name="11.0 Arbeitsmedizin-1" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind Mitarbeitertoiletten und Pausenräume sauber und mit Seife, Einmalhandtüchern und ggf. Desinfektionsmittel ausgestattet?</td>
-<td><input name="11.0 Arbeitsmedizin-2" type="radio" value="ja"/></td>
-<td><input name="11.0 Arbeitsmedizin-2" type="radio" value="nein"/></td>
-<td><input name="11.0 Arbeitsmedizin-2" type="radio" value="nicht_vorhanden"/></td>
+  <td style="text-align: left;">Erfolgten arbeitsmedizinische Beratungen für Beschäftigte oder Führungskräfte?</td>
+  <td><input name="11.0 Arbeitsmedizin-2" type="radio" value="ja"/></td>
+  <td><input name="11.0 Arbeitsmedizin-2" type="radio" value="nein"/></td>
+  <td><input name="11.0 Arbeitsmedizin-2" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+  <td style="text-align: left;">Wird die Zusammenarbeit zwischen Betriebsarzt und Fachkraft für Arbeitssicherheit regelmäßig gepflegt?</td>
+  <td><input name="11.0 Arbeitsmedizin-3" type="radio" value="ja"/></td>
+  <td><input name="11.0 Arbeitsmedizin-3" type="radio" value="nein"/></td>
+  <td><input name="11.0 Arbeitsmedizin-3" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind Maßnahmen gegen Hauterkrankungen getroffen?</td>
+<td><input name="11.0 Arbeitsmedizin-4" type="radio" value="ja"/></td>
+<td><input name="11.0 Arbeitsmedizin-4" type="radio" value="nein"/></td>
+<td><input name="11.0 Arbeitsmedizin-4" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Werden Berichte und Empfehlungen des Betriebsarztes dokumentiert und umgesetzt?</td>
+<td><input name="11.0 Arbeitsmedizin-5" type="radio" value="ja"/></td>
+<td><input name="11.0 Arbeitsmedizin-5" type="radio" value="nein"/></td>
+<td><input name="11.0 Arbeitsmedizin-5" type="radio" value="nicht_vorhanden"/></td>
+</tr>
+<tr>
+<td style="text-align: left;">Sind sanitäre Anlagen und Pausenräume sauber, funktionsfähig und ausreichend mit Hygieneartikeln bestückt?</td>
+<td><input name="11.0 Arbeitsmedizin-6" type="radio" value="ja"/></td>
+<td><input name="11.0 Arbeitsmedizin-6" type="radio" value="nein"/></td>
+<td><input name="11.0 Arbeitsmedizin-6" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 <tr><td class="category-header" colspan="4" style="text-align: left;">12.0 Psychische Belastung</td></tr>
 <tr>
@@ -1690,6 +1714,39 @@ if (measure.includes("Betreuung nach einem Überfall organisiert")) {
 
 if (measure.includes("Schulungen für den Umgang mit gewalttätigen Situationen ermöglicht")) {
   measure = "Ermöglichen Sie Schulungen zum richtigen Verhalten bei gewalttätigen oder bedrohlichen Situationen im Betrieb.";
+}
+
+// --- Maßnahmen für Abschnitt 11.0 Arbeitsmedizin ---
+if (measure.includes("arbeitsmedizinische Vorsorge angeboten")) {
+  measure = "Bieten Sie allen Beschäftigten arbeitsmedizinische Vorsorge nach der Verordnung zur arbeitsmedizinischen Vorsorge  an und dokumentieren Sie das Angebot.";
+}
+
+if (measure.includes("arbeitsmedizinische Betreuung vor Ort stattgefunden")) {
+  measure = "Stellen Sie sicher, dass eine regelmäßige arbeitsmedizinische Betreuung vor Ort (z. B. Sprechstunde, Arbeitsplatzbegehung) durch den Betriebsarzt erfolgt.";
+}
+
+if (measure.includes("Begehungen durch den Betriebsarzt durchgeführt")) {
+  measure = "Organisieren Sie regelmäßige Begehungen des Betriebsarztes um arbeitsmedizinische Belange vor Ort zu überprüfen.";
+}
+
+if (measure.includes("arbeitsmedizinische Beratungen für Beschäftigte oder Führungskräfte")) {
+  measure = "Ermöglichen Sie Beratungen durch den Betriebsarzt für Beschäftigte und Führungskräfte, insbesondere zu gesundheitlichen Fragestellungen und Präventionsmaßnahmen.";
+}
+
+if (measure.includes("Zusammenarbeit zwischen Betriebsarzt und Fachkraft für Arbeitssicherheit")) {
+  measure = "Verbessern Sie die Zusammenarbeit zwischen Betriebsarzt und Fachkraft für Arbeitssicherheit im Rahmen des Arbeitsschutzausschusses.";
+}
+
+if (measure.includes("Maßnahmen gegen Hauterkrankungen getroffen")) {
+  measure = "Ergreifen Sie geeignete Schutzmaßnahmen (z. B. Hautschutzmittel, Handschuhe, Schulungen) zur Prävention von Hauterkrankungen.";
+}
+
+if (measure.includes("Berichte und Empfehlungen des Betriebsarztes dokumentiert und umgesetzt")) {
+  measure = "Dokumentieren Sie die Empfehlungen des Betriebsarztes und setzen Sie diese nachweislich um, um die Wirksamkeit der arbeitsmedizinischen Betreuung sicherzustellen.";
+}
+
+if (measure.includes("sanitäre Anlagen und Pausenräume sauber")) {
+  measure = "Stellen Sie sicher, dass sanitäre Anlagen und Pausenräume regelmäßig gereinigt, instand gehalten und mit ausreichenden Hygieneartikeln (Seife, Einmalhandtücher, Desinfektionsmittel) ausgestattet werden.";
 }
   if (!measure.endsWith(".")) {
     measure += ".";
