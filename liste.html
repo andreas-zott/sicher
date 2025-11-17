@@ -631,9 +631,9 @@ Wenn eine Frage mit „nein" beantwortet wurde, besteht Handlungsbedarf.
 </tr>
 <tr>
 <td style="text-align: left;">Sind die Einkaufskörbe ordnungsgemäß im vorgesehenen Ständer abgelegt und ragen nicht in den Verkehrsweg hinein keine Stolpergefahr?</td>
-<td><input name="4.0 Kassenzone-4" type="radio" value="ja"/></td>
-<td><input name="4.0 Kassenzone-4" type="radio" value="nein"/></td>
-<td><input name="4.0 Kassenzone-4" type="radio" value="nicht_vorhanden"/></td>
+<td><input name="4.0 Kassenzone-5" type="radio" value="ja"/></td>
+<td><input name="4.0 Kassenzone-5" type="radio" value="nein"/></td>
+<td><input name="4.0 Kassenzone-5" type="radio" value="nicht_vorhanden"/></td>
 </tr>
 
 <tr><td class="category-header" colspan="4" style="text-align: left;">5.0 Kühlhaus</td></tr>
@@ -2085,5 +2085,28 @@ document.addEventListener('change', event => {
   }
 });
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  // Alle Tabellenzeilen holen
+  const rows = document.querySelectorAll("#fragenTabelle tbody tr");
+
+  let anzahlFragen = 0;
+
+  rows.forEach(row => {
+    // Prüfen, ob diese Zeile mindestens EIN Radio-Input hat
+    const radios = row.querySelectorAll("input[type='radio']");
+    if (radios.length > 0) {
+      anzahlFragen++;
+    }
+  });
+
+  // Titel aktualisieren
+  const titelElement = document.getElementById("titel");
+  if (titelElement) {
+    titelElement.textContent = `Arbeitssicherheits-Checkliste – ${anzahlFragen} Fragen`;
+  }
+});
+</script>
+
 </body>
 </html>
