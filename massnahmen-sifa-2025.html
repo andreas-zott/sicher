@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Maßnahmen zur Beseitigung von Defiziten</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
   <style>
@@ -243,22 +243,31 @@
       text-decoration: underline;
     }
 
+    /* Print optimization: A4 with left margin for hole punching, and control of page breaks */
+    @page {
+      size: A4;
+      margin: 20mm 15mm 15mm 25mm; /* top right bottom left (left bigger for lochung) */
+    }
+    .no-print { display: inline-flex; }
     @media print {
       body {
         background: white;
       }
       
       .actions, .btn {
-        display: none !important;
+        /* kept for compatibility */
       }
       
+      .no-print { display: none !important; }
+      .footer { display: none !important; } /* hide footer on saved PDF/print */
       .container {
         box-shadow: none;
       }
-      
+      .massnahmen-table tr { page-break-inside: avoid; }
       .footer {
         page-break-after: avoid;
       }
+      body { -webkit-print-color-adjust: exact; }
     }
 
     @media (max-width: 768px) {
@@ -336,11 +345,12 @@
         </div>
       </div>
 
-      <div class="actions">
-        <button class="btn btn-secondary" onclick="window.print()">
+      <div class="actions no-print">
+        <!-- Share button wird per JS ergänzt falls nötig; hier bleiben die vorhandenen Buttons -->
+        <button class="btn btn-secondary no-print" onclick="window.print()">
           <i class="fas fa-print"></i> Drucken
         </button>
-        <button class="btn btn-primary" onclick="zurueckZurListe()">
+        <button class="btn btn-primary no-print" onclick="zurueckZurListe()">
           <i class="fas fa-arrow-left"></i> Zurück zur Liste
         </button>
       </div>
@@ -433,5 +443,89 @@
     }
   </script>
 
+  <!-- html2pdf.js for client-side PDF generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+
+  <script>
+    // Create PDF from the .container element and return a Blob Promise
+    function createPdfBlob(filename = 'Maßnahmen.pdf') {
+      const element = document.querySelector('.container');
+      // Clone element to avoid altering DOM during PDF generation
+      const clone = element.cloneNode(true);
+      // Remove elements that should not appear in the PDF
+      clone.querySelectorAll('.no-print, .actions, .btn, .footer').forEach(n => n.remove());
+      // Prepare options
+      const opt = {
+        margin:       [10, 10, 10, 10], // top, left, bottom, right (mm)
+        filename:     filename,
+        image:        { type: 'jpeg', quality: 0.95 },
+        html2canvas:  { scale: 2, useCORS: true },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+      // Generate PDF as blob
+      return new Promise((resolve, reject) => {
+        html2pdf().from(clone).set(opt).outputPdf('blob')
+          .then(blob => resolve(blob))
+          .catch(err => reject(err));
+      });
+    }
+
+    async function teilenUndMailen() {
+      const fileName = `Massnahmen-${new Date().toISOString().slice(0,10)}.pdf`;
+      try {
+        const blob = await createPdfBlob(fileName);
+        const file = new File([blob], fileName, { type: 'application/pdf' });
+
+        // If Web Share API with files is available, prefer that (works on many mobile devices incl. iPad Safari recent)
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: 'Maßnahmen zur Beseitigung von Defiziten',
+            text: 'Anbei die Maßnahmen als PDF.'
+          });
+          return;
+        }
+
+        // Fallback: force download then open mailto with prefilled subject/body
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+
+        // slight delay to ensure browser starts download
+        setTimeout(() => {
+          URL.revokeObjectURL(url);
+          const subject = encodeURIComponent('Maßnahmen zur Beseitigung von Defiziten');
+          const body = encodeURIComponent('Hallo,%0D%0A%0D%0Aanbei die PDF-Datei mit den Maßnahmen. Bitte die Datei als Anhang hinzufügen, falls sie nicht automatisch angehängt wurde.%0D%0A%0D%0AMit freundlichen Grüßen,%0D%0A');
+          // open mail client - note: attachments cannot be prefilled via mailto:
+          window.location.href = `mailto:?subject=${subject}&body=${body}`;
+        }, 600);
+      } catch (err) {
+        console.error('Fehler beim Erstellen/Teilen des PDFs:', err);
+        alert('Fehler beim Erstellen des PDFs. Bitte versuche es erneut oder lade die Seite herunter.');
+      }
+    }
+
+    // Add Share button to actions area (if it doesn't exist)
+    (function addShareButtonToActions(){
+      const actions = document.querySelector('.actions');
+      if (!actions) return;
+      // create share button only if it doesn't exist
+      if (!document.getElementById('shareBtn')) {
+        const btn = document.createElement('button');
+        btn.className = 'btn btn-primary no-print';
+        btn.id = 'shareBtn';
+        btn.type = 'button';
+        btn.title = 'Teilen (PDF generieren & Mail)';
+        btn.innerHTML = '<i class="fas fa-share-alt"></i> 📤 PDF teilen (iPad)';
+        btn.addEventListener('click', teilenUndMailen);
+        // insert at beginning
+        actions.insertBefore(btn, actions.firstChild);
+      }
+    })();
+  </script>
 </body>
 </html>
