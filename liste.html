@@ -122,7 +122,7 @@ input[type="radio"][value="nicht_vorhanden"]:checked {
   }
   
   /* Hide empty measures table if no content */
-  .massnahmen-section tbody:empty {display:none !important;} {
+  .massnahmen-section tbody:empty {display:none !important;}
     display: none !important;
   }
 
@@ -1277,10 +1277,18 @@ async function generateAndSharePDF() {
     const file = new File([blob], opt.filename, { type: "application/pdf" });
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       await navigator.share({
-        title: 'Checkliste Arbeitssicherheit',
-        text: 'Sehr geehrte Damen und Herren,\n\nanbei übermittle ich Ihnen die Begehungsliste zur sachlichen Prüfung und weiteren Verwendung.\n\nFür Rückfragen oder ergänzende Informationen stehe ich Ihnen jederzeit gerne zur Verfügung.\n\nMit freundlichen Grüßen\nFachkraft für Arbeitssicherheit (SiFa).',
-        files: [file],
-      });
+    title: `Arbeitssicherheit-Checkliste aus dem Markt ${marktnummer}`,
+    text: `Sehr geehrte Damen und Herren,
+
+anbei übermittle ich Ihnen die Begehungsliste für den Markt ${marktnummer} zur sachlichen Prüfung und weiteren Verwendung.
+
+Für Rückfragen oder ergänzende Informationen stehe ich Ihnen jederzeit gerne zur Verfügung.
+
+Mit freundlichen Grüßen
+Fachkraft für Arbeitssicherheit (SiFa): ${sifa}
+(${name})`,
+    files: [file],
+});
     } else {
       alert("📤 Teilen nicht unterstützt – PDF wird heruntergeladen.");
       const link = document.createElement("a");
