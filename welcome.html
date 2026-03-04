@@ -4,718 +4,283 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0, user-scalable=no" name="viewport"/>
 <title>Arbeitssicherheit 2025</title>
+
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
-<link href="/sicher/favicon.ico" rel="icon" type="image/x-icon" />
+<link href="/sicher/favicon.ico" rel="icon" type="image/x-icon"/>
 <link href="/sicher/manifest.json" rel="manifest"/>
+
 <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;overflow-x:hidden}
 
-        html, body {
-            height: 100%;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            overflow-x: hidden;
-        }
-
-        body {
-            background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 50%, #e0e7ff 100%);
-            color: #1e293b;
-            transition: all 0.3s ease;
-            min-height: 100vh;
-        }
-
-        body.dark {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
-            color: #e2e8f0;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-      .theme-toggle {
-    position: fixed;
-    top: 10px;
-    right: 20px;
-    z-index: 1000;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    border: 1.5px solid rgba(255, 255, 255, 0.15);
-    background: rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(6px);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    transition: all 0.3s ease;
-    box-shadow: none;
-    -webkit-tap-highlight-color: transparent;
-    opacity: 0.7;
+body{
+background:linear-gradient(135deg,#f8fafc 0%,#e0f2fe 50%,#e0e7ff 100%);
+color:#1e293b;
+min-height:100vh;
+transition:.3s ease
+}
+body.dark{
+background:linear-gradient(135deg,#0f172a 0%,#1e293b 50%,#334155 100%);
+color:#e2e8f0
 }
 
-.theme-toggle:hover,
-.theme-toggle:active {
-    opacity: 1;
-    transform: scale(1.2);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+.container{
+max-width:1200px;
+margin:0 auto;
+padding:20px;
+min-height:100vh;
+display:flex;
+flex-direction:column
 }
 
-body.dark .theme-toggle {
-    background: rgba(30, 41, 59, 0.3);
-    border-color: rgba(255, 255, 255, 0.1);
-}     
+/* Toggle */
+.theme-toggle{
+position:fixed;
+top:10px;
+right:20px;
+z-index:1000;
+width:26px;
+height:26px;
+border-radius:50%;
+border:1px solid rgba(255,255,255,.2);
+background:rgba(255,255,255,.3);
+backdrop-filter:blur(6px);
+cursor:pointer;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:14px;
+opacity:.7;
+transition:.3s ease
+}
+.theme-toggle:hover{opacity:1;transform:scale(1.2)}
+body.dark .theme-toggle{background:rgba(30,41,59,.4)}
 
+/* Header */
+.header{text-align:center;margin-bottom:60px;padding-top:40px}
+.header-icon{
+width:80px;height:80px;
+background:linear-gradient(135deg,#3b82f6,#6366f1);
+border-radius:20px;
+margin:0 auto 20px;
+display:flex;align-items:center;justify-content:center;
+box-shadow:0 10px 30px rgba(59,130,246,.3)
+}
+.header-icon i{font-size:36px;color:#fff}
+.header h1{
+font-size:clamp(2.5rem,5vw,4rem);
+font-weight:700;
+background:linear-gradient(135deg,#3b82f6,#6366f1);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+margin-bottom:15px
+}
+.header p{color:#64748b;font-size:1.2rem}
+body.dark .header p{color:#94a3b8}
 
-        .header {
-            text-align: center;
-            margin-bottom: 60px;
-            padding-top: 40px;
-        }
+/* Tiles */
+.tiles-container{
+background:rgba(255,255,255,.6);
+backdrop-filter:blur(15px);
+border-radius:30px;
+padding:40px;
+margin-bottom:60px;
+box-shadow:0 8px 32px rgba(0,0,0,.1)
+}
+body.dark .tiles-container{background:rgba(30,41,59,.6)}
 
-        .header-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #3b82f6, #6366f1);
-            border-radius: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
-        }
-
-        .header-icon i {
-            font-size: 36px;
-            color: white;
-        }
-
-        .header h1 {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 700;
-            background: linear-gradient(135deg, #3b82f6, #6366f1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 15px;
-            line-height: 1.2;
-        }
-
-        .header p {
-            font-size: 1.2rem;
-            color: #64748b;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        body.dark .header p {
-            color: #94a3b8;
-        }
-  
-        .tiles-container {
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(15px);
-            border-radius: 30px;
-            padding: 40px;
-            margin-bottom: 60px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .tiles-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(99, 102, 241, 0.05));
-            pointer-events: none;
-        }
-
-        body.dark .tiles-container {
-            background: rgba(30, 41, 59, 0.6);
-            border-color: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-
-        body.dark .tiles-container::before {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(99, 102, 241, 0.1));
-        }
-
-        .tiles-container-header {
-            text-align: center;
-            margin-bottom: 30px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .tiles-container-header h2 {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-        }
-
-        body.dark .tiles-container-header h2 {
-            color: #e2e8f0;
-        }
-
-        .tiles-container-header h2 i {
-            color: #3b82f6;
-            font-size: 1.5rem;
-        }
-
-        body.dark .tiles-container-header h2 i {
-            color: #60a5fa;
-        }
-
-        .tiles-container-header p {
-            color: #64748b;
-            font-size: 1rem;
-        }
-
-        body.dark .tiles-container-header p {
-            color: #94a3b8;
-        }
-
-        .tiles-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            position: relative;
-            z-index: 1;
-        }
-
-        @media (max-width: 768px) {
-            .tiles-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-        }
-
-        .tile {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            text-decoration: none;
-            color: inherit;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-            display: block;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            -webkit-tap-highlight-color: transparent;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .tile::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-      .tile:hover::before,
-.tile:active::before,
-.tile:focus::before {
-    opacity: 1;
+.tiles-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:25px
 }
 
-        .tile:hover,
-        .tile:active {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-        }
+.tile{
+background:rgba(255,255,255,.8);
+border-radius:20px;
+padding:30px;
+text-align:center;
+text-decoration:none;
+color:inherit;
+transition:.3s ease;
+box-shadow:0 4px 20px rgba(0,0,0,.08)
+}
+.tile:hover{transform:translateY(-8px);box-shadow:0 15px 40px rgba(0,0,0,.15)}
+body.dark .tile{background:rgba(30,41,59,.8)}
 
-        body.dark .tile {
-            background: rgba(30, 41, 59, 0.8);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
+.tile-icon{
+width:70px;height:70px;
+border-radius:16px;
+display:flex;align-items:center;justify-content:center;
+margin:0 auto 20px;
+box-shadow:0 8px 25px rgba(0,0,0,.15)
+}
+.tile-icon i{font-size:32px;color:#fff}
 
-        .tile-icon {
-            width: 70px;
-            height: 70px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            transition: transform 0.3s ease;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-        }
+.blue{background:linear-gradient(135deg,#3b82f6,#1d4ed8)}
+.emerald{background:linear-gradient(135deg,#10b981,#047857)}
+.purple{background:linear-gradient(135deg,#8b5cf6,#6d28d9)}
+.orange{background:linear-gradient(135deg,#f59e0b,#d97706)}
+.pink{background:linear-gradient(135deg,#ec4899,#be185d)}
 
-        .tile:hover .tile-icon,
-        .tile:active .tile-icon {
-            transform: scale(1.1);
-        }
+/* Content Boxes */
+.description-box{
+background:rgba(255,255,255,.7);
+backdrop-filter:blur(10px);
+border-radius:20px;
+padding:40px;
+margin-bottom:40px;
+box-shadow:0 4px 20px rgba(0,0,0,.08)
+}
+body.dark .description-box{background:rgba(30,41,59,.7)}
 
-        .tile-icon i {
-            font-size: 32px;
-            color: white;
-        }
+.description-box h2{
+font-size:1.8rem;
+margin-bottom:25px;
+display:flex;
+align-items:center;
+gap:10px
+}
 
-        .tile-icon.blue { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
-        .tile-icon.emerald { background: linear-gradient(135deg, #10b981, #047857); }
-        .tile-icon.purple { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
-        .tile-icon.orange { background: linear-gradient(135deg, #f59e0b, #d97706); }
-        .tile-icon.pink { background: linear-gradient(135deg, #ec4899, #be185d); }
-        .tile-icon.indigo { background: linear-gradient(135deg, #6366f1, #4338ca); }
+.feature-list{list-style:none;padding:0}
+.feature-list li{display:flex;gap:10px;margin-bottom:12px}
+.feature-list i{color:#10b981}
+.feature-list a{text-decoration:none;color:inherit}
+.feature-list a:hover{text-decoration:underline}
 
-        .tile h3 {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-            transition: color 0.3s ease;
-        }
-
-        .tile:hover h3,
-        .tile:active h3 {
-            color: #3b82f6;
-        }
-
-        body.dark .tile:hover h3,
-        body.dark .tile:active h3 {
-            color: #60a5fa;
-        }
-
-        .tile p {
-            color: #64748b;
-            font-size: 0.95rem;
-        }
-
-        body.dark .tile p {
-            color: #94a3b8;
-        }
-
-        .description-box {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 40px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        body.dark .description-box {
-            background: rgba(30, 41, 59, 0.7);
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .description-box h2 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .description-box h2 i {
-            color: #3b82f6;
-            font-size: 1.5rem;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .feature-section h3 {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-
-        .feature-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .feature-list li {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            margin-bottom: 15px;
-            padding: 12px;
-            border-radius: 12px;
-            transition: background-color 0.3s ease;
-        }
-
-        .feature-list li:hover {
-            background: rgba(59, 130, 246, 0.05);
-        }
-
-        body.dark .feature-list li:hover {
-            background: rgba(59, 130, 246, 0.1);
-        }
-
-        .feature-list i {
-            color: #10b981;
-            font-size: 1.1rem;
-            margin-top: 2px;
-            flex-shrink: 0;
-        }
-
-        .feature-list a {
-            color: #dc2626;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .feature-list a:hover {
-            color: #b91c1c;
-            text-decoration: underline;
-        }
-
-        body.dark .feature-list a {
-            color: #f87171;
-        }
-
-        body.dark .feature-list a:hover {
-            color: #fca5a5;
-        }
-  
-        .footer {
-            text-align: center;
-            padding: 30px 0;
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
-            color: #64748b;
-            font-size: 0.9rem;
-            margin-top: auto;
-        }
-
-        body.dark .footer {
-            border-top-color: rgba(255, 255, 255, 0.1);
-            color: #94a3b8;
-        }
-
-        .footer a {
-            color: #3b82f6;
-            text-decoration: none;
-            margin: 0 10px;
-            transition: color 0.3s ease;
-        }
-
-        .footer a:hover {
-            color: #1d4ed8;
-            text-decoration: underline;
-        }
-
-        body.dark .footer a {
-            color: #60a5fa;
-        }
-
-        body.dark .footer a:hover {
-            color: #93c5fd;
-        }
-
-        @media (max-width: 1024px) {
-            .container {
-                padding: 15px;
-            }
-
-            .header {
-                margin-bottom: 40px;
-                padding-top: 20px;
-            }
-
-            .tiles-container {
-                padding: 30px;
-                margin-bottom: 40px;
-            }
-
-            .tiles-grid {
-                gap: 20px;
-            }
-
-            .tile {
-                padding: 25px;
-            }
-
-            .description-box {
-                padding: 30px;
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-                gap: 25px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .tiles-container {
-                padding: 20px;
-                border-radius: 20px;
-            }
-
-            .tiles-container-header h2 {
-                font-size: 1.5rem;
-            }
-        }
-
-        @media (hover: none) and (pointer: coarse) {
-            .tile:active {
-                transform: translateY(-4px);
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-            }
-
-            .theme-toggle:active {
-                transform: scale(1.05);
-            }
-        }
-    </style>
+/* Footer */
+.footer{
+text-align:center;
+padding:30px 0;
+margin-top:auto;
+font-size:.9rem;
+color:#64748b;
+border-top:1px solid rgba(0,0,0,.1)
+}
+body.dark .footer{
+border-top:1px solid rgba(255,255,255,.1);
+color:#94a3b8
+}
+.footer a{color:#3b82f6;text-decoration:none;margin:0 8px}
+.footer a:hover{text-decoration:underline}
+</style>
 </head>
+
 <body>
-<button aria-label="Theme umschalten" class="theme-toggle" id="themeToggle">
-        🌙
-    </button>
+
+<button class="theme-toggle" id="themeToggle">🌙</button>
+
 <div class="container">
+
 <header class="header">
-<div class="header-icon">
-<i class="fas fa-shield-alt"></i>
-</div>
-<h1 id="titel" style="margin: 0;"></h1>
+<div class="header-icon"><i class="fas fa-shield-alt"></i></div>
+<h1 id="titel"></h1>
 <p>Moderne Lösungen für Arbeitssicherheit im Einzelhandel</p>
 </header>
+
+<!-- TILES -->
 <div class="tiles-container">
-<div class="tiles-container-header">
-<h2>
-<i class="fas fa-th-large"></i>
-                    Checklisten &amp; Tools
-                </h2>
-<p>Wählen Sie das passende Tool für Ihre Anforderungen</p>
-</div>
 <div class="tiles-grid">
-<a class="tile" href="l1.html" rel="noopener noreferrer" target="_blank">
-<div class="tile-icon blue">
-<i class="fas fa-clipboard-check"></i>
-</div>
-<h3>Checklisten Stand: September 2025</h3>
-<p>Verschiedene Checklisten mit automatischen Antworten</p>
+
+<a class="tile" href="l1.html" target="_blank">
+<div class="tile-icon blue"><i class="fas fa-clipboard-check"></i></div>
+<h3>Checklisten</h3>
+<p>Stand: September 2025</p>
 </a>
-<a class="tile" href="foto.html" rel="noopener noreferrer" target="_blank">
-<div class="tile-icon emerald">
-<i class="fas fa-camera"></i>
-</div>
+
+<a class="tile" href="foto.html" target="_blank">
+<div class="tile-icon emerald"><i class="fas fa-camera"></i></div>
 <h3>Fotoformular</h3>
-<p>Formular zur Erfassung von Arbeitssicherheitsfotos und PDF-Erstellung</p>
+<p>PDF-Erstellung & Versand</p>
 </a>
-<a class="tile" href="help.html" rel="noopener noreferrer" target="_blank">
-<div class="tile-icon blue">
-<i class="fas fa-question-circle"></i>
-</div>
+
+<a class="tile" href="help.html" target="_blank">
+<div class="tile-icon blue"><i class="fas fa-question-circle"></i></div>
 <h3>Anleitung</h3>
-<p>Anleitung zur Nutzung der Arbeitssicherheits-Checkliste</p>
+<p>Hilfestellung zur Nutzung</p>
 </a>
-<a class="tile" href="liste.html" rel="noopener noreferrer" target="_blank">
-<div class="tile-icon pink">
-<i class="fas fa-check-square"></i>
-</div>
+
+<a class="tile" href="liste.html" target="_blank">
+<div class="tile-icon pink"><i class="fas fa-check-square"></i></div>
 <h3>Sicherheits-Fragebogen</h3>
-<p>Stand: September 2025 Checkliste mit automatischen Antworten</p>
+<p>Automatische Antworten</p>
 </a>
-<a class="tile" href="mobile.html" rel="noopener noreferrer" target="_blank">
-<div class="tile-icon purple">
-<i class="fas fa-list-alt"></i>
-</div>
-<h3>Checkliste Mobile Version</h3>
-<p>Stand: September 2025 Checkliste mit automatischen Antworten </p>
+
+<a class="tile" href="mobile.html" target="_blank">
+<div class="tile-icon purple"><i class="fas fa-list-alt"></i></div>
+<h3>Mobile Version</h3>
+<p>Optimiert für Smartphones</p>
 </a>
-<a class="tile" href="gbu-3.html" rel="noopener noreferrer" target="_blank">
-<div class="tile-icon orange">
-<i class="fas fa-info-circle"></i>
-</div>
+
+<a class="tile" href="gbu-3.html" target="_blank">
+<div class="tile-icon orange"><i class="fas fa-info-circle"></i></div>
 <h3>GBU</h3>
-<p>Gefahren frühzeitig identifizieren – Risiken systematisch bewerten</p>
+<p>Risiken systematisch bewerten</p>
 </a>
-    <a class="tile" href="notiz.html" rel="noopener noreferrer" target="_blank">
-      <div class="tile-icon indigo">
-        <i class="fas fa-sticky-note"></i>
-      </div>
-      <h3>Notiz</h3>
-      <p>Wichtige Anmerkungen</p>
-    </a>
-    <a class="tile" href="massnahmen.html" rel="noopener noreferrer" target="_blank">
-      <div class="tile-icon pink">
-        <i class="fas fa-tasks"></i>
-      </div>
-      <h3>Maßnahmen</h3>
-      <p>Umsetzungsschritte</p>
-    </a>
-  <a class="tile" href="zukunft.html" rel="noopener noreferrer" target="_blank">
-  <div class="tile-icon orange">
-    <i class="fas fa-clipboard-list"></i>
-  </div>
-  <h3 title="Gefährdungsbeurteilung">Zukunft</h3>
-  <p>Sicherheit und Gesundheit am Arbeitsplatz.</p>
-</a>
+
 </div>
 </div>
+
+<!-- FUNKTIONEN -->
 <div class="description-box">
-<h2>
-<i class="fas fa-check-circle"></i>
-                Funktionen &amp; Features
-            </h2>
-<div class="features-grid">
-<div class="feature-section">
-<h3>Hauptfunktionen:</h3>
+<h2><i class="fas fa-check-circle"></i>Funktionen & Features</h2>
 <ul class="feature-list">
-<li>
-<i class="fas fa-check-circle"></i>
-<span>Prüf- und Arbeitschecklisten im Einzelhandel.</span>
-</li>
-<li>
-<i class="fas fa-check-circle"></i>
-<span>Mit dem Fotoformular können Bilder direkt aufgenommen und anschließend automatisiert als PDF-Datei versendet werden.</span>
-</li>
-<li>
-<i class="fas fa-check-circle"></i>
-<span>Antworten auf Fragen mit ‚Nein‘ führen jetzt automatisch zur Erfassung entsprechender Maßnahmen.</span>
-</li>
+<li><i class="fas fa-check-circle"></i>Prüf- und Arbeitschecklisten im Einzelhandel</li>
+<li><i class="fas fa-check-circle"></i>Fotoaufnahme mit automatischer PDF-Erstellung</li>
+<li><i class="fas fa-check-circle"></i>Automatische Maßnahmenerfassung bei „Nein“-Antworten</li>
 </ul>
 </div>
-<div class="feature-section">
-<h3>Spezielle Checklisten:</h3>
+
+<!-- SPEZIELLE CHECKLISTEN -->
+<div class="description-box">
+<h2><i class="fas fa-list-check"></i>Spezielle Checklisten</h2>
 <ul class="feature-list">
-</li>
-<li>
-<i class="fas fa-check-circle"></i>
-<a href="theke.html" rel="noopener noreferrer" target="_blank">
-Arbeitssicherheit – Fleischverarbeitung / Metzgerei Theke
-<li>
-<i class="fas fa-check-circle"></i>
-<a href="aushang.html" rel="noopener noreferrer" target="_blank">
-                               Pflicht-Aushänge im Einzelhandel  </a>
-<li>
-<i class="fas fa-check-circle"></i>
-<a href="https://www.dguv.de/de/index.jsp" rel="noopener noreferrer" target="_blank">
-                                Regeln zur Vorschrift 1 "Grundsätze der Prävention"
-  </a>               
-</li>
-</li>
+<li><i class="fas fa-check-circle"></i><a href="theke.html" target="_blank">Arbeitssicherheit – Fleischverarbeitung / Metzgerei Theke</a></li>
+<li><i class="fas fa-check-circle"></i><a href="aushang.html" target="_blank">Pflicht-Aushänge im Einzelhandel</a></li>
+<li><i class="fas fa-check-circle"></i><a href="https://www.dguv.de/de/index.jsp" target="_blank">Regeln zur Vorschrift 1 „Grundsätze der Prävention“</a></li>
 </ul>
 </div>
+
+<!-- GENDERSENSIBLE SPRACHE -->
+<div class="description-box">
+<h2><i class="fas fa-venus-mars"></i>Gendersensible Sprache</h2>
+<p style="margin-bottom:15px;">
+Aus Gründen der besseren Lesbarkeit wird bei Personenbezeichnungen und personenbezogenen Hauptwörtern die jeweils gängige sprachliche Form verwendet.
+</p>
+<p>
+Sämtliche verwendeten Bezeichnungen gelten im Sinne der Gleichbehandlung grundsätzlich für alle Geschlechter. Die verkürzte Sprachform dient ausschließlich der besseren Lesbarkeit und beinhaltet keinerlei Wertung.
+</p>
 </div>
-</div>
+
 <footer class="footer">
-  <p>
-    © <span id="currentYear"></span> Andreas Zott. Alle Rechte vorbehalten.
-    <a href="datenschutz.html" rel="noopener noreferrer" target="_blank">Datenschutz</a> |
-    <a href="impressum.html" rel="noopener noreferrer" target="_blank">Impressum</a>
-  </p>
+<p>
+© <span id="currentYear"></span> Andreas Zott. Alle Rechte vorbehalten.
+<a href="datenschutz.html" target="_blank">Datenschutz</a> |
+<a href="impressum.html" target="_blank">Impressum</a>
+</p>
 </footer>
+
 </div>
+
 <script>
-  // Fügt automatisch das aktuelle Jahr ein
-  document.getElementById("currentYear").textContent = new Date().getFullYear();
-</script>
-<script>
+document.getElementById("currentYear").textContent=new Date().getFullYear();
+document.getElementById("titel").textContent="Arbeitssicherheit-Checkliste-"+new Date().getFullYear();
 
-        // Set current year
-        document.getElementById("currentYear").textContent = new Date().getFullYear();
+const toggle=document.getElementById("themeToggle");
+const body=document.body;
 
-        // Theme toggle functionality
-        const themeToggle = document.getElementById('themeToggle');
-        const body = document.body;
+if(localStorage.getItem("theme")==="dark"){
+body.classList.add("dark");
+toggle.textContent="☀️";
+}
 
-        // Check for saved theme preference or default to light mode
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'dark') {
-            body.classList.add('dark');
-            themeToggle.textContent = '☀️';
-        }
-
-        themeToggle.addEventListener('click', function() {
-            body.classList.toggle('dark');
-            const isDark = body.classList.contains('dark');
-            
-            // Update button icon
-            themeToggle.textContent = isDark ? '☀️' : '🌙';
-            
-            // Save preference
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            
-            // Add haptic feedback for iOS devices
-            if (navigator.vibrate) {
-                navigator.vibrate(50);
-            }
-        });
-
-        // Add touch feedback for better iPad experience
-        const tiles = document.querySelectorAll('.tile');
-        tiles.forEach(tile => {
-            tile.addEventListener('touchstart', function() {
-                this.style.transform = 'translateY(-4px)';
-            });
-            
-            tile.addEventListener('touchend', function() {
-                setTimeout(() => {
-                    this.style.transform = '';
-                }, 150);
-            });
-        });
-
-        // Prevent zoom on double tap for iPad
-        let lastTouchEnd = 0;
-        document.addEventListener('touchend', function (event) {
-            const now = (new Date()).getTime();
-            if (now - lastTouchEnd <= 300) {
-                event.preventDefault();
-            }
-            lastTouchEnd = now;
-        }, false);
-
-        // Add smooth scrolling for anchor links
-      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({ behavior: 'smooth' });
-        }
-    });
+toggle.addEventListener("click",()=>{
+body.classList.toggle("dark");
+const dark=body.classList.contains("dark");
+toggle.textContent=dark?"☀️":"🌙";
+localStorage.setItem("theme",dark?"dark":"light");
 });
-    </script>
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker
-        .register('sw.js')
-        .then(() => console.log("✅ Service Worker registriert"))
-        .catch((err) => console.error("❌ Service Worker Fehler:", err));
-    });
-  }
 </script>
-<script>
-  const aktuellesJahr = new Date().getFullYear();
-  document.getElementById('titel').textContent = `Arbeitssicherheit-Checkliste-${aktuellesJahr}`;
-</script>
+
 </body>
 </html>
