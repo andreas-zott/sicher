@@ -1898,27 +1898,27 @@ function neinFragenInMaßnahmen() {
     }
   });
 
-  // Only add empty rows if there are already measures, and mark them as empty
-  if (dynamicMeasuresCount > 0) {
-    for (let i = 0; i < 2; i++) {
-      const newRow = document.createElement('tr');
-      newRow.classList.add('empty-row'); // Mark as empty for PDF hiding
-      const numCell = document.createElement('td');
-      const frageCell = document.createElement('td');
-      const descCell = document.createElement('td');
+  // Always add 3 visible empty rows for description
+for (let i = 0; i < 3; i++) {
+  const newRow = document.createElement('tr');
+  const numCell = document.createElement('td');
+  const frageCell = document.createElement('td');
+  const descCell = document.createElement('td');
 
-      numCell.textContent = (dynamicMeasuresCount + i + 1).toString();
-      frageCell.textContent = '';
-      frageCell.contentEditable = "true";
-      descCell.textContent = '';
-      descCell.contentEditable = "true";
+  numCell.textContent = (dynamicMeasuresCount + i + 1).toString();
 
-      newRow.appendChild(numCell);
-      newRow.appendChild(frageCell);
-      newRow.appendChild(descCell);
-      maßnahmenTabelleBody.appendChild(newRow);
-    }
-  }
+  // prevent :empty CSS hiding
+  frageCell.innerHTML = "&nbsp;";
+  descCell.innerHTML = "&nbsp;";
+
+  frageCell.contentEditable = "true";
+  descCell.contentEditable = "true";
+
+  newRow.appendChild(numCell);
+  newRow.appendChild(frageCell);
+  newRow.appendChild(descCell);
+  maßnahmenTabelleBody.appendChild(newRow);
+}
 }
 
 function exportiereMassnahmen() {
