@@ -1417,11 +1417,15 @@ async function generateAndSharePDF() {
       
       // Entscheidung: Neue Seite nur wenn nicht genug Platz UND bereits etwas auf der Seite ist
       // Kleine Kategorien (< 80mm) werden zusammengefasst wenn möglich
+      // Kategorie auf neue Seite bringen, wenn sie nicht vollständig passt
+      // (außer sie ist größer als eine ganze Seite - dann muss sie aufgeteilt werden)
+      const maxPageContent = pageHeight - 20 - 18; // Verfügbarer Platz auf einer leeren Seite
+      const categoryFitsOnNewPage = estimatedHeight <= maxPageContent;
       const needsNewPage = !isFirstCategoryOnPage && (
-        // Wenn weniger als 50mm Platz und Kategorie mindestens 40mm braucht
-        (remainingSpace < 50 && estimatedHeight > 40) ||
-        // Oder wenn wirklich gar kein Platz mehr ist
-        remainingSpace < 35
+        // Kategorie passt nicht mehr auf diese Seite, aber würde auf eine neue passen
+        (remainingSpace < estimatedHeight && categoryFitsOnNewPage) ||
+        // Mindestens 30mm für Kategorie-Header + erste Zeilen benötigt
+        remainingSpace < 30
       );
       
       if (needsNewPage) {
@@ -2052,9 +2056,15 @@ async function prepareForPrint() {
       const estimatedHeight = estimateCategoryHeight(header);
       const remainingSpace = pageHeight - 20 - currentY;
       
+      // Kategorie auf neue Seite bringen, wenn sie nicht vollständig passt
+      // (außer sie ist größer als eine ganze Seite - dann muss sie aufgeteilt werden)
+      const maxPageContent = pageHeight - 20 - 18; // Verfügbarer Platz auf einer leeren Seite
+      const categoryFitsOnNewPage = estimatedHeight <= maxPageContent;
       const needsNewPage = !isFirstCategoryOnPage && (
-        (remainingSpace < 50 && estimatedHeight > 40) ||
-        remainingSpace < 35
+        // Kategorie passt nicht mehr auf diese Seite, aber würde auf eine neue passen
+        (remainingSpace < estimatedHeight && categoryFitsOnNewPage) ||
+        // Mindestens 30mm für Kategorie-Header + erste Zeilen benötigt
+        remainingSpace < 30
       );
       
       if (needsNewPage) {
