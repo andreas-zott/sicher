@@ -8,8 +8,18 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
 <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon"/>
 <link href="/sicher/manifest.json" rel="manifest"/>
-
 <style>
+.category-section {
+  break-inside: avoid !important;
+}
+
+@media print {
+  .no-break {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+}
+
 /* PDF-Modus nur wenn aktiv */
 body.pdf-compact-active * {
   font-size: 9px !important;
@@ -49,8 +59,7 @@ body.pdf-compact-active th {
   page-break-inside: avoid !important;
   break-inside: avoid !important;
 }
-</style>
-<style>
+
     .handlungsanweisung-box {
         border: 2px solid #C62828; 
         padding: 18px;
@@ -69,8 +78,7 @@ body.pdf-compact-active th {
     }
 
 #signature-pad, canvas { border: 2px solid #C62828 !important; border-radius: 12px; }
-</style>
-<style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 input[type="radio"] {
   appearance: none;
   -webkit-appearance: none;
@@ -399,121 +407,41 @@ input[type="text"], input[type="date"] {
     margin-bottom: 2px;
 }
 
+@media print {
 
-/* Improved print readability */
-@media print {
-  body, table, td, th {
-    font-size: 7pt !important;
-    line-height: 1.15 !important;
-  }
-  td, th {
-    white-space: normal !important;
-    word-break: break-word !important;
-    hyphens: auto !important;
-  }
-}
-</style>
-<style>
-@media print {
   body {
-    font-size: 10pt !important;
-    line-height: 1.25 !important;
-  }
-
-  h1 { font-size: 16pt !important; }
-  h2 { font-size: 13pt !important; }
-
-  table { font-size: 9pt !important; }
-
-  td, th {
-    font-size: 9pt !important;
-    padding: 6px !important;
-    line-height: 1.25 !important;
-    word-break: break-word !important;
-  }
-
-  tr, td, th {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-
-  .category-header {
-    page-break-before: always !important;
-    break-before: page !important;
-  }
-
-  .category-header:first-of-type {
-    page-break-before: auto !important;
+    font-size: 8pt;
+    background: white;
   }
 
   table {
     page-break-inside: auto;
   }
 
+  tbody {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
   tr {
-    page-break-inside: avoid !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
   }
-
-  .pdf-compact * {
-    font-size: 9pt !important;
-  }
-}
-</style><style>
-@media print {
-  body {
-    font-size: 8pt !important;
-    line-height: 1.1 !important;
-  }
-
-  h1 { font-size: 13pt !important; }
-  h2 { font-size: 11pt !important; }
-
-  table { font-size: 7.5pt !important; }
 
   td, th {
-    font-size: 7.5pt !important;
-    padding: 3px 4px !important;
-    line-height: 1.1 !important;
-    word-break: break-word !important;
-  }
-
-  .radio-wrap {
-    font-size: 6.5pt !important;
-  }
-
-  tr, td, th {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
+    page-break-inside: avoid;
   }
 
   .category-header {
-    page-break-before: always !important;
-    break-before: page !important;
-    font-size: 9pt !important;
-    padding: 6px !important;
+    page-break-before: always;
   }
 
   .category-header:first-of-type {
-    page-break-before: auto !important;
-  }
-
-  /* Remove extra spacing */
-  table {
-    margin-bottom: 10px !important;
-  }
-
-  .handlungsanweisung-box {
-    font-size: 8pt !important;
-    padding: 10px !important;
-  }
-
-  /* Make inputs smaller */
-  input[type="text"], input[type="date"] {
-    font-size: 7pt !important;
-    padding: 4px !important;
+    page-break-before: auto;
   }
 }
-</style></head>
+</style>
+</head>
 <body>
 <div class="print-wrapper">
 <header>
@@ -577,7 +505,6 @@ Auf dieser Grundlage wird eine Maßnahmenliste erstellt, die alle identifizierte
 <tr>
 <td class="category-header" colspan="4">1.0 Gesamtmarkt</td>
 </tr>
-<tr>
 <td style="text-align: left;">Entspricht das getragene Schuhwerk aller im Bereich tätigen Personen den Anforderungen der Gefährdungsbeurteilung (fest, im Zehenbereich geschlossen, flach und rutschhemmend)?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-0" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-0" type="radio" value="nein"/><span>Nein</span></label></td>
@@ -767,7 +694,7 @@ Auf dieser Grundlage wird eine Maßnahmenliste erstellt, die alle identifizierte
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-27" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-27" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
-<tr><td class="category-header" colspan="4" style="text-align: left;">2.0 Backstation</td></tr>
+<td class="category-header" colspan="4">2.0 Backstation</td></tr>
 <tr>
 <td style="text-align: left;">Sind die Arbeitsgeräte an der Backstation (Backofen, Backbleche, Brotschneidemaschine) in einem ordnungsgemäßen Zustand?</td>
 <td><label class="radio-wrap"><input name="2.0 Backstation-0" type="radio" value="ja"/><span>Ja</span></label></td>
@@ -804,7 +731,7 @@ Auf dieser Grundlage wird eine Maßnahmenliste erstellt, die alle identifizierte
 <td><label class="radio-wrap"><input name="2.0 Backstation-5" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="2.0 Backstation-5" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
-<tr><td class="category-header" colspan="4" style="text-align: left;">3.0 Serviceabteilung</td></tr>
+<td class="category-header" colspan="4">3.0 Serviceabteilung</td></tr>
 <tr>
 <td style="text-align: left;">Hängt an den Waschplätzen ein aktueller, auf die Gefährdungsbeurteilung abgestimmter Hautschutzplan gut sichtbar aus?</td>
 <td><label class="radio-wrap"><input name="3.0 Serviceabteilung-0" type="radio" value="ja"/><span>Ja</span></label></td>
@@ -859,7 +786,7 @@ Auf dieser Grundlage wird eine Maßnahmenliste erstellt, die alle identifizierte
 <td><label class="radio-wrap"><input name="3.0 Serviceabteilung-8" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="3.0 Serviceabteilung-8" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
-<tr><td class="category-header" colspan="4" style="text-align: left;">4.0 Kassenzone</td></tr>
+<td class="category-header" colspan="4">4.0 Kassenzone</td></tr>
 <tr>
 <td style="text-align: left;">Ist der Fußraum frei von Gegenständen?</td>
 <td><label class="radio-wrap"><input name="4.0 Kassenzone-0" type="radio" value="ja"/><span>Ja</span></label></td>
@@ -896,7 +823,7 @@ Auf dieser Grundlage wird eine Maßnahmenliste erstellt, die alle identifizierte
 <td><label class="radio-wrap"><input name="4.0 Kassenzone-5" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="4.0 Kassenzone-5" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
-<tr><td class="category-header" colspan="4" style="text-align: left;">5.0 Kühlhaus</td></tr>
+<td class="category-header" colspan="4">5.0 Kühlhaus</td></tr>
 <tr>
 <td style="text-align: left;">Ist an allen Beleuchtungen in den Kühlhäusern die Überwurfkappe (Schutzkappe/Schutzglas) montiert?</td>
 <td><label class="radio-wrap"><input name="5.0 Kühlhaus-0" type="radio" value="ja"/><span>Ja</span></label></td>
@@ -927,7 +854,7 @@ Auf dieser Grundlage wird eine Maßnahmenliste erstellt, die alle identifizierte
 <td><label class="radio-wrap"><input name="5.0 Kühlhaus-4" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="5.0 Kühlhaus-4" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
-<tr><td class="category-header" colspan="4" style="text-align: left;">6.0 Lager</td></tr>
+<td class="category-header" colspan="4">6.0 Lager</td></tr>
 <tr>
 <td style="text-align: left;">Sind die Schwerlastregale geprüft?</td>
 <td><label class="radio-wrap"><input name="6.0 Lager-0" type="radio" value="ja"/><span>Ja</span></label></td>
@@ -976,7 +903,7 @@ Auf dieser Grundlage wird eine Maßnahmenliste erstellt, die alle identifizierte
 <td><label class="radio-wrap"><input name="6.0 Lager-7" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="6.0 Lager-7" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
-<tr><td class="category-header" colspan="4" style="text-align: left;">7.0 Sozialräume</td></tr>
+<td class="category-header" colspan="4">7.0 Sozialräume</td></tr>
 <tr>
 <td style="text-align: left;">Hängen im Sozialbereich die aktuellen aushangpflichtigen Gesetze, Unfallverhütungsvorschriften sowie die Brandschutzordnung Teil A aus?</td>
 <td><label class="radio-wrap"><input name="7.0 Sozialräume-0" type="radio" value="ja"/><span>Ja</span></label></td>
@@ -995,7 +922,7 @@ Auf dieser Grundlage wird eine Maßnahmenliste erstellt, die alle identifizierte
 <td><label class="radio-wrap"><input name="7.0 Sozialräume-3" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="7.0 Sozialräume-3" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
-<tr><td class="category-header" colspan="4" style="text-align: left;">8.0 Marktleiterbüro</td></tr>
+<td class="category-header" colspan="4">8.0 Marktleiterbüro</td></tr>
 <tr>
 <td style="text-align: left;">Liegt eine aktuelle Liste sowie Prüfberichte prüfungsbedürftiger Einrichtungen vor?</td>
 <td><label class="radio-wrap"><input name="8.0 Marktleiterbüro-0" type="radio" value="ja"/><span>Ja</span></label></td>
@@ -1050,7 +977,7 @@ Auf dieser Grundlage wird eine Maßnahmenliste erstellt, die alle identifizierte
 <td><label class="radio-wrap"><input name="8.0 Marktleiterbüro-9" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="8.0 Marktleiterbüro-9" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
-<tr><td class="category-header" colspan="4" style="text-align: left;">9.0 CO2 Kühleinrichtungen</td></tr>
+<td class="category-header" colspan="4">9.0 CO2 Kühleinrichtungen</td></tr>
 <tr>
 <td style="text-align: left;">Wurden Personen, die sich im Bereich von Kühlanlagen oder Kühlhäusern aufhalten, unterwiesen?</td>
 <td><label class="radio-wrap"><input name="9.0 CO2 Kühleinrichtungen-0" type="radio" value="ja"/><span>Ja</span></label></td>
@@ -1069,7 +996,7 @@ Auf dieser Grundlage wird eine Maßnahmenliste erstellt, die alle identifizierte
 <td><label class="radio-wrap"><input name="9.0 CO2 Kühleinrichtungen-2" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="9.0 CO2 Kühleinrichtungen-2" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
-<tr><td class="category-header" colspan="4" style="text-align: left;">10.0 Praktikanten</td></tr>
+<td class="category-header" colspan="4">10.0 Praktikanten</td></tr>
 <tr>
 <td style="text-align: left;">Wurde die Unterweisung von Praktikanten und Schüleraushilfen durchgeführt?</td>
 <td><label class="radio-wrap"><input name="10.0 Praktikanten-0" type="radio" value="ja"/><span>Ja</span></label></td>
@@ -1088,7 +1015,7 @@ Auf dieser Grundlage wird eine Maßnahmenliste erstellt, die alle identifizierte
 <td><label class="radio-wrap"><input name="10.0 Praktikanten-2" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="10.0 Praktikanten-2" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
-<tr><td class="category-header" colspan="4" style="text-align: left;">11.0 Arbeitsmedizin</td></tr>
+<td class="category-header" colspan="4">11.0 Arbeitsmedizin</td></tr>
 <tr>
 <td style="text-align: left;">Wird den Beschäftigten arbeitsmedizinische Vorsorge angeboten?</td>
 <td><label class="radio-wrap"><input name="11.0 Arbeitsmedizin-0" type="radio" value="ja"/><span>Ja</span></label></td>
@@ -1125,7 +1052,7 @@ Auf dieser Grundlage wird eine Maßnahmenliste erstellt, die alle identifizierte
 <td><label class="radio-wrap"><input name="11.0 Arbeitsmedizin-6" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="11.0 Arbeitsmedizin-6" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
-<tr><td class="category-header" colspan="4" style="text-align: left;">12.0 Gefahrstoffe</td></tr>
+<td class="category-header" colspan="4">12.0 Gefahrstoffe</td></tr>
 <tr>
 <td style="text-align: left;">Werden Gefahrstoffe unter strikter Beachtung der Zusammenlagerungsverbote nach TRGS 510 (Abschnitt 7 und Anlage 2) so gelagert, dass gefährliche Wechselwirkungen zwischen verschiedenen Stoffgruppen ausgeschlossen sind?</td>
 <td><label class="radio-wrap"><input name="12.0 Gefahrstoffe-0" type="radio" value="ja"/><span>Ja</span></label></td>
@@ -1138,7 +1065,7 @@ Auf dieser Grundlage wird eine Maßnahmenliste erstellt, die alle identifizierte
 <td><label class="radio-wrap"><input name="12.0 Gefahrstoffe-1" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="12.0 Gefahrstoffe-1" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
-<tr><td class="category-header" colspan="4" style="text-align: left;">13.0 Psychische Belastung</td></tr>
+<td class="category-header" colspan="4">13.0 Psychische Belastung</td></tr>
 <tr>
 <td style="text-align: left;">Werden Wünsche der Beschäftigten bei der Arbeitsplanung berücksichtigt?</td>
 <td><label class="radio-wrap"><input name="13.0 Psychische Belastung-0" type="radio" value="ja"/><span>Ja</span></label></td>
