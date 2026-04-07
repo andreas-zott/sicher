@@ -7,13 +7,15 @@
 <title>Arbeitssicherheit-Checkliste-2026</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
 <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon"/>
-<link href="/sicher/manifest-mobile.json" rel="manifest"/>
+<link href="/sicher/manifest.json" rel="manifest"/>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
     .handlungsanweisung-box {
         border: 2px solid #C62828; 
         padding: 18px;
         border-radius: 10px;
-        background-color: transparent; 
+        background-color: #fff8f8; 
         font-family: Arial, sans-serif;
         margin: 18px 0;
     }
@@ -28,7 +30,7 @@
 
 #signature-pad, canvas { border: 2px solid #C62828 !important; border-radius: 12px; }
 </style>
-<style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+<style>
 input[type="radio"] {
   appearance: none;
   -webkit-appearance: none;
@@ -89,69 +91,31 @@ input[type="radio"][value="nicht_vorhanden"]:checked {
   }
   @page {
     size: A4 portrait;
-    margin: 15mm 12mm;
+    margin: 12mm 10mm;
   }
   body {
     background: white !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
-    font-size: 9pt !important;
+    font-size: 10pt !important;
   }
 
   h1 { font-size: 14pt !important; }
   h2 { font-size: 12pt !important; }
-  table { font-size: 8pt !important; }
+  table { font-size: 9pt !important; }
   td, th {
-    font-size: 8pt !important;
-    padding: 4px 6px !important;
-    line-height: 1.2 !important;
+    font-size: 9pt !important;
+    padding: 6px 8px !important;
+    line-height: 1.4 !important;
   }
   input[type="text"], input[type="date"] {
-    font-size: 8pt !important;
+    font-size: 9pt !important;
   }
   
-  /* Improved page break handling to prevent empty pages */
-  .category-section {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-
-  .category-header {
-    page-break-before: auto !important; /* Changed from always to auto */
-    break-before: auto !important;
-    page-break-after: avoid !important;
-    break-after: avoid !important;
-  }
-
-  .category-header:first-of-type {
-    page-break-before: auto !important;
-    break-before: auto !important;
-  }
-
-  .massnahmen-section {
-    page-break-before: auto !important; /* Changed from always to auto */
-    break-before: auto !important;
-    margin-top: 20px !important;
-  }
-  
-  /* Prevent empty rows from creating new pages */
-  .massnahmen-section table tr:empty,
-  .massnahmen-section table tr td:empty {
-    display: none !important;
-  }
-  
-  /* Hide empty measures table if no content */
-  .massnahmen-section tbody:empty {display:none !important;}
-    }
-
+  /* Prevent row splitting */
   tr, td, th {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
-  }
-
-  .category-header + tr {
-    page-break-before: avoid !important;
-    break-before: avoid !important;
   }
 
   #maßnahmen-tabelle tr {
@@ -167,20 +131,33 @@ input[type="radio"][value="nicht_vorhanden"]:checked {
   .confirmation-section {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
-    page-break-before: auto !important; /* Changed from always */
-    margin-top: 20px !important;
   }
 
   .signature-container {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
   }
-  
-  /* Prevent orphaned content at page end */
-  .page-break-before {
-    page-break-before: auto !important;
-    break-before: auto !important;
-  }
+}
+
+/* PDF Export specific styles - applied via JavaScript */
+.pdf-export-mode .category-page {
+  page-break-before: always !important;
+  break-before: page !important;
+}
+
+.pdf-export-mode .category-page:first-child {
+  page-break-before: auto !important;
+  break-before: auto !important;
+}
+
+.pdf-export-mode .massnahmen-page {
+  page-break-before: always !important;
+  break-before: page !important;
+}
+
+.pdf-export-mode .signature-page {
+  page-break-before: always !important;
+  break-before: page !important;
 }
 
 #signature-pad {
@@ -200,8 +177,6 @@ input[type="radio"][value="nicht_vorhanden"]:checked {
   font-family: 'Inter', Arial, sans-serif;
 }
 button {
-  background-color: #B71C1C;
-  color: white;
   background-color: #B71C1C;
   color: white;
   border: none;
@@ -359,8 +334,8 @@ input[type="text"], input[type="date"] {
 /* Improved print readability */
 @media print {
   body, table, td, th {
-    font-size: 7pt !important;
-    line-height: 1.15 !important;
+    font-size: 9pt !important;
+    line-height: 1.35 !important;
   }
   td, th {
     white-space: normal !important;
@@ -371,234 +346,67 @@ input[type="text"], input[type="date"] {
 </style>
 
 <style>
-/* ===== MODERN DESIGN UPGRADE 2026 ===== */
-body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
-    background: linear-gradient(180deg, #f8f9fb 0%, #eef1f6 100%) !important;
-    padding: 30px !important;
-}
+/* ===== MOBILE OPTIMIERUNG ===== */
+@media (max-width: 768px) {
 
-.print-wrapper {
-    max-width: 1100px;
-    margin: auto;
-}
+  body {
+    padding: 12px;
+    font-size: 16px;
+  }
 
-header {
-    background: white;
-    padding: 25px;
-    border-radius: 16px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-    margin-bottom: 30px;
-}
-
-h1 {
-    font-size: 28px !important;
-    font-weight: 700;
-}
-
-.form-section {
-    background: white;
-    padding: 20px;
-    border-radius: 14px;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.06);
-    margin-bottom: 25px;
-}
-
-.handlungsanweisung-box {
-    background: white !important;
-    border-left: 6px solid #B71C1C !important;
-    border-radius: 14px !important;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-}
-
-table {
-    border-radius: 16px;
-    overflow: hidden;
-    font-size: 16px !important;
-}
-
-th {
-    font-size: 17px !important;
-    padding: 16px !important;
-}
-
-td {
-    padding: 14px !important;
-    font-size: 16px !important;
-}
-
-.category-header {
-    font-size: 18px !important;
-    letter-spacing: 0.5px;
-    padding: 18px !important;
-    border-top: 4px solid #B71C1C !important;
-    background: linear-gradient(90deg,#fff 0%,#fbe9e7 100%) !important;
-}
-
-/* Extra strong separation before Psychische Belastung */
-.category-header {
-    margin-top: 60px !important;
-}
-
-input[type="radio"] {
-    width: 22px !important;
-    height: 22px !important;
-}
-
-.radio-wrap span {
-    font-size: 13px !important;
-}
-
-button {
-    font-size: 18px !important;
-    padding: 14px 22px !important;
-    border-radius: 12px !important;
-}
-
-/* iPad optimization */
-@media (min-width: 768px) {
-    table {
-        font-size: 17px !important;
-    }
-    td {
-        padding: 16px !important;
-    }
-}
-
-/* Clear separation blocks */
-.category-header {
-    position: relative;
-}
-
-.category-header::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -6px;
+  table, thead, tbody, th, td, tr {
+    display: block;
     width: 100%;
-    height: 6px;
-    background: linear-gradient(90deg,#B71C1C,#ef5350);
+  }
+
+  thead {
+    display: none;
+  }
+
+  tr {
+    margin-bottom: 15px;
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+  }
+
+  td {
+    border: none;
+    padding: 8px 0;
+    line-height: 1.6;
+  }
+
+  td:first-child {
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .radio-wrap {
+    flex-direction: row;
+    justify-content: space-around;
+    font-size: 14px;
+  }
+
+  input[type="radio"] {
+    width: 22px;
+    height: 22px;
+    margin: 6px;
+  }
+
+  button {
+    font-size: 18px;
+    padding: 14px;
+    width: 100%;
+  }
+
+  .form-section {
+    max-width: 100% !important;
+  }
+
+  #signature-pad {
+    height: 200px;
+  }
 }
-</style>
-
-
-<style>
-/* ===== iPHONE OPTIMIERUNG 2026 ===== */
-
-/* Base mobile improvements */
-@media (max-width: 767px) {
-
-    body {
-        padding: 12px !important;
-    }
-
-    header {
-        padding: 16px !important;
-        border-radius: 12px !important;
-    }
-
-    h1 {
-        font-size: 20px !important;
-        text-align: left;
-    }
-
-    .form-section {
-        max-width: 100% !important;
-        padding: 16px !important;
-    }
-
-    input[type="text"],
-    input[type="date"] {
-        font-size: 18px !important;
-        padding: 12px !important;
-        max-width: 100% !important;
-    }
-
-    table {
-        font-size: 15px !important;
-        border-radius: 12px !important;
-    }
-
-    th {
-        font-size: 14px !important;
-        padding: 10px !important;
-    }
-
-    td {
-        padding: 12px 8px !important;
-        font-size: 15px !important;
-        vertical-align: top !important;
-    }
-
-    /* Stack question and answers vertically */
-    #fragenTabelle thead {
-        display: none;
-    }
-
-    #fragenTabelle tr {
-        display: block;
-        margin-bottom: 18px;
-        background: white;
-        border-radius: 14px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        padding: 14px;
-    }
-
-    #fragenTabelle td {
-        display: block;
-        border: none !important;
-        padding: 8px 0 !important;
-    }
-
-    #fragenTabelle td:first-child {
-        font-weight: 600;
-        margin-bottom: 8px;
-    }
-
-    /* Answer buttons larger & horizontal */
-    .radio-wrap {
-        flex-direction: row !important;
-        gap: 12px;
-        justify-content: flex-start;
-        font-size: 15px !important;
-    }
-
-    input[type="radio"] {
-        width: 26px !important;
-        height: 26px !important;
-    }
-
-    .radio-wrap span {
-        font-size: 15px !important;
-    }
-
-    button {
-        width: 100% !important;
-        font-size: 18px !important;
-        padding: 16px !important;
-        margin: 12px 0 !important;
-    }
-
-    .handlungsanweisung-box {
-        padding: 16px !important;
-        font-size: 15px !important;
-    }
-
-    .category-header {
-        font-size: 17px !important;
-        padding: 14px !important;
-        margin-top: 25px !important;
-    }
-
-}
-
-/* Improve tap responsiveness */
-button,
-input,
-label {
-    touch-action: manipulation;
-}
-
 </style>
 
 </head>
@@ -615,7 +423,7 @@ label {
 <div class="form-section" style="max-width: 300px;">
 <div style="margin-bottom: 10px;">
 
-<br><br>
+<br/><br/>
 <label for="markt">Marktnummer:</label>
 <input id="markt" placeholder="z. B. M123" required="" type="text"/>
 </div>
@@ -632,7 +440,7 @@ label {
 <div class="handlungsanweisung-box">
 <h2>Anleitung und Nutzungshinweis:</h2>
 <strong>Diese Checkliste dient gemäß § 5 ArbSchG der systematischen Überprüfung von Arbeitssicherheit und Gesundheitsschutz sowie der Identifikation von Gefährdungen und der Ableitung notwendiger Schutzmaßnahmen.</strong><br/>
-<br><br>
+<br/>
 <h2>Handlungsanweisung:</h2>
 <strong>Bewertung &amp; Handlungsbedarf:</strong>
 <p> Wird eine Frage mit „Nein“ beantwortet, liegt eine Abweichung vom Schutzziel vor. Dies bedeutet: Es besteht unmittelbarer Handlungsbedarf. 
@@ -642,13 +450,11 @@ label {
 Die Gesamtverantwortung für die Durchführung der Prüfung sowie die Beseitigung festgestellter Mängel liegt bei der Marktleitung.
 Einzelne Maßnahmen können an fachlich zuständige Personen delegiert werden.
 Die Aufsichts- und Kontrollpflicht verbleibt jedoch bei der Marktleitung.
-     </p>
+</p>
 <strong>Dokumentation:</strong>
 <p>
-<p>
-      Nach Abschluss der Prüfung ist die Checkliste vollständig auszuwerten.
+Nach Abschluss der Prüfung ist die Checkliste vollständig auszuwerten.
 Auf dieser Grundlage wird eine Maßnahmenliste erstellt, die alle identifizierten Defizite sowie die erforderlichen Korrekturmaßnahmen enthält.
-    </p>
 </p>
 <strong>Wirksamkeitskontrolle:</strong>
 <p>
@@ -700,164 +506,165 @@ Auf dieser Grundlage wird eine Maßnahmenliste erstellt, die alle identifizierte
 </tr>
 <tr>
 <td style="text-align: left;">Werden für Tätigkeiten in der Höhe (z. B. in Lager oder Verkaufsraum) geeignete und geprüfte Aufstiegshilfen (z. B. Trittstufen, Rolltritte/Elefantenfüße) in ausreichender Zahl bereitgestellt und bestimmungsgemäß benutzt?</td>
-<td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-31" type="radio" value="ja"/><span>Ja</span></label></td>
-<td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-31" type="radio" value="nein"/><span>Nein</span></label></td>
-<td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-31" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
-</tr>
-<tr>
-<td style="text-align: left;">Sind die Leitern geprüft gemäß DGUV Information 208-016 „Leitern und Tritte“?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-4" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-4" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-4" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
+</tr>
 <tr>
-<td style="text-align: left;">Werden aus dem Ordersatz geeignete Sicherheitsmesser verwendet?</td>
+<td style="text-align: left;">Sind die Leitern geprüft gemäß DGUV Information 208-016 Leitern und Tritte?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-5" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-5" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-5" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind zur Zeit der Begehung keine sichtbaren Beschädigungen an Schaltern und Steckdosen vorhanden?</td>
+<td style="text-align: left;">Werden aus dem Ordersatz geeignete Sicherheitsmesser verwendet?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-6" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-6" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-6" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist der Gabelhubwagen in einem ordnungsgemäßen Zustand ohne sichtbare Beschädigungen?</td>
+<td style="text-align: left;">Sind zur Zeit der Begehung keine sichtbaren Beschädigungen an Schaltern und Steckdosen vorhanden?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-7" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-7" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-7" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist der elektrische Hubwagen geprüft und in einem ordnungsgemäßen Zustand (keine sichtbaren Beschädigungen, funktionsfähige Schutzeinrichtungen)?</td>
+<td style="text-align: left;">Ist der Gabelhubwagen in einem ordnungsgemäßen Zustand ohne sichtbare Beschädigungen?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-8" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-8" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-8" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind die Feuerlöscheinrichtungen frei zugänglich und nicht durch Ware, Displays oder sonstige Gegenstände blockiert?</td>
+<td style="text-align: left;">Ist der elektrische Hubwagen geprüft und in einem ordnungsgemäßen Zustand (keine sichtbaren Beschädigungen, funktionsfähige Schutzeinrichtungen)?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-9" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-9" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-9" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind die Feuerlöscheinrichtungen geprüft, und werden die Prüffristen eingehalten?</td>
+<td style="text-align: left;">Sind die Feuerlöscheinrichtungen frei zugänglich und nicht durch Ware, Displays oder sonstige Gegenstände blockiert?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-10" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-10" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-10" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind die Brandschutztüren frei von Zugestellungen und wird ihre Funktion nicht gestört?</td>
+<td style="text-align: left;">Sind die Feuerlöscheinrichtungen geprüft, und werden die Prüffristen eingehalten?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-11" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-11" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-11" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind die Türhaltevorrichtungen und der Schließfolgeregler des Feuerschutzabschlusses in Ordnung?</td>
+<td style="text-align: left;">Sind die Brandschutztüren frei von Zugestellungen und wird ihre Funktion nicht gestört?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-12" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-12" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-12" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind die Brandschutztüren ohne Beschädigungen?</td>
+<td style="text-align: left;">Sind die Türhaltevorrichtungen und der Schließfolgeregler des Feuerschutzabschlusses in Ordnung?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-13" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-13" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-13" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist ein aktueller Flucht- und Rettungsplan vorhanden?</td>
+<td style="text-align: left;">Sind die Brandschutztüren ohne Beschädigungen?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-14" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-14" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-14" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist die Notausgangsbeleuchtung ohne Defekte?</td>
+<td style="text-align: left;">Ist ein aktueller Flucht- und Rettungsplan vorhanden?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-15" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-15" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-15" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind alle Flucht- und Rettungswege sowie Notausgänge in ihrer gesamten Breite ständig freigehalten und im Außenbereich nicht durch Fahrzeuge oder Lagergut blockiert?</td>
+<td style="text-align: left;">Ist die Notausgangsbeleuchtung ohne Defekte?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-16" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-16" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-16" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind alle Notausgänge und -ausstiege jederzeit ohne fremde Hilfsmittel von innen leicht zu öffnen und ist die Bedienbarkeit der Beschläge sichergestellt?</td>
+<td style="text-align: left;">Sind alle Flucht- und Rettungswege sowie Notausgänge in ihrer gesamten Breite ständig freigehalten und im Außenbereich nicht durch Fahrzeuge oder Lagergut blockiert?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-17" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-17" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-17" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Führen die Notausgänge in sichere Bereiche?</td>
+<td style="text-align: left;">Sind alle Notausgänge und -ausstiege jederzeit ohne fremde Hilfsmittel von innen leicht zu öffnen und ist die Bedienbarkeit der Beschläge sichergestellt?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-18" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-18" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-18" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind die Verkehrswege so beschaffen, dass kein Unfallrisiko durch Stolpern, Ausrutschen oder Umknicken besteht?</td>
+<td style="text-align: left;">Führen die Notausgänge in sichere Bereiche?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-19" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-19" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-19" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind die Treppen unbeschädigt und frei von Gegenständen?</td>
+<td style="text-align: left;">Sind die Verkehrswege so beschaffen, dass kein Unfallrisiko durch Stolpern, Ausrutschen oder Umknicken besteht?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-20" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-20" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-20" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Wird die passende persönliche Schutzausrüstung (z. B. Schutzbrille, Handschuhe) für Tätigkeiten mit Gefahrstoffen zur Verfügung gestellt?</td>
+<td style="text-align: left;">Sind die Treppen unbeschädigt und frei von Gegenständen?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-21" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-21" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-21" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind die Technik- und Heizräume frei von brennbaren Materialien (z. B. Kisten, Kartons)?</td>
+<td style="text-align: left;">Wird die passende persönliche Schutzausrüstung (z. B. Schutzbrille, Handschuhe) für Tätigkeiten mit Gefahrstoffen zur Verfügung gestellt?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-22" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-22" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-22" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind die Technik- und Heizräume frei von Lagernutzung?</td>
+<td style="text-align: left;">Sind die Technik- und Heizräume frei von brennbaren Materialien (z. B. Kisten, Kartons)?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-23" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-23" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-23" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind Betriebsanweisungen gut zugänglich und werden Sicherheitsanweisungen eingehalten?</td>
+<td style="text-align: left;">Sind die Technik- und Heizräume frei von Lagernutzung?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-24" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-24" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-24" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist die Beleuchtung in den Verkaufs- und Lagerbereichen gemäß ASR A3.4 ausreichend dimensioniert (mind. 300 Lux im Verkaufsraum), voll funktionsfähig und so beschaffen, dass Gefahrenhinweise auf Produkten sowie Leckagen in den Regalen jederzeit zweifelsfrei erkennbar sind?</td>
+<td style="text-align: left;">Sind Betriebsanweisungen gut zugänglich und werden Sicherheitsanweisungen eingehalten?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-25" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-25" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-25" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind von der Decke geführte Leitungen und Steckverbindungen durch geeignete mechanische Zugentlastungen (z. B. Stahlseile, Ketten oder spezielle Klemmvorrichtungen) so gesichert, dass keine Zugkräfte auf die elektrischen Kontaktstellen wirken?</td>
-<td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-28" type="radio" value="ja"/><span>Ja</span></label></td>
-<td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-28" type="radio" value="nein"/><span>Nein</span></label></td>
-<td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-28" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
-</tr>
-<tr>
-<td style="text-align: left;">Elektrische Steckverbindungen liegen nicht ungeschützt auf dem Boden, insbesondere in Bereichen (z. B. unter Kühl- oder Tiefkühltruhen)?</td>
-<td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-29" type="radio" value="ja"/><span>Ja</span></label></td>
-<td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-29" type="radio" value="nein"/><span>Nein</span></label></td>
-<td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-29" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
-</tr>
-<tr>
-<td style="text-align: left;">Erfüllen die Standorte der Erste-Hilfe-Koffer die Anforderungen an Sichtbarkeit, Erreichbarkeit und Norm-Kennzeichnung gemäß DGUV?</td>
+<td style="text-align: left;">Ist die Beleuchtung in den Verkaufs- und Lagerbereichen gemäß ASR A3.4 ausreichend dimensioniert (mind. 300 Lux im Verkaufsraum), voll funktionsfähig und so beschaffen, dass Gefahrenhinweise auf Produkten sowie Leckagen in den Regalen jederzeit zweifelsfrei erkennbar sind?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-26" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-26" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-26" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">„Ist das Erste-Hilfe-Material an allen Standorten in vollständigem Zustand und ist das Verfallsdatum der sterilen Inhalte noch nicht überschritten?</td>
+<td style="text-align: left;">Sind von der Decke geführte Leitungen und Steckverbindungen durch geeignete mechanische Zugentlastungen (z. B. Stahlseile, Ketten oder spezielle Klemmvorrichtungen) so gesichert, dass keine Zugkräfte auf die elektrischen Kontaktstellen wirken?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-27" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-27" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-27" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
+</tr>
+<tr>
+<td style="text-align: left;">Elektrische Steckverbindungen liegen nicht ungeschützt auf dem Boden, insbesondere in Bereichen (z. B. unter Kühl- oder Tiefkühltruhen)?</td>
+<td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-28" type="radio" value="ja"/><span>Ja</span></label></td>
+<td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-28" type="radio" value="nein"/><span>Nein</span></label></td>
+<td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-28" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
+</tr>
+<tr>
+<td style="text-align: left;">Erfüllen die Standorte der Erste-Hilfe-Koffer die Anforderungen an Sichtbarkeit, Erreichbarkeit und Norm-Kennzeichnung gemäß DGUV?</td>
+<td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-29" type="radio" value="ja"/><span>Ja</span></label></td>
+<td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-29" type="radio" value="nein"/><span>Nein</span></label></td>
+<td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-29" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist das Erste-Hilfe-Material an allen Standorten in vollständigem Zustand und ist das Verfallsdatum der sterilen Inhalte noch nicht überschritten?</td>
+<td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-30" type="radio" value="ja"/><span>Ja</span></label></td>
+<td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-30" type="radio" value="nein"/><span>Nein</span></label></td>
+<td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-30" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr><td class="category-header" colspan="4" style="text-align: left;">2.0 Backstation</td></tr>
 <tr>
@@ -1244,11 +1051,12 @@ Auf dieser Grundlage wird eine Maßnahmenliste erstellt, die alle identifizierte
 <td><label class="radio-wrap"><input name="13.0 Psychische Belastung-1" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist ein Pausenraum vorhanden?</td>
+<td style="text-align: left;">Dient der Pausenraum primär der Erholung der Beschäftigten und ist er frei von größeren Mengen an betrieblichem Lagergut (z. B. Archivboxen)?</td>
 <td><label class="radio-wrap"><input name="13.0 Psychische Belastung-2" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="13.0 Psychische Belastung-2" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="13.0 Psychische Belastung-2" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
+
 <tr>
 <td style="text-align: left;">Werden Überstunden gering gehalten?</td>
 <td><label class="radio-wrap"><input name="13.0 Psychische Belastung-3" type="radio" value="ja"/><span>Ja</span></label></td>
@@ -1474,155 +1282,586 @@ function weiterZuFotos() {
 </div>
 <p style="margin: 0; font-size: 12px; color: #6b7280;">
 </p>
-</div><div style="font-size:11px; color:#777; margin-top:8px;">Stand: März 2026</div>
+</div><div style="font-size:11px; color:#777; margin-top:8px;">Stand: April 2026</div>
 </footer>
 <script>
   const year = new Date().getFullYear();
   document.getElementById('year').textContent = year;
   document.getElementById('year-small').textContent = year;
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-// Improved PDF generation function to prevent empty pages
+// PDF generation with jsPDF - renders each category on a separate A4 page
+// Uses direct jsPDF text rendering for better iPad compatibility
 async function generateAndSharePDF() {
-  // Alle Buttons & no-print-Elemente temporär ausblenden
-  const buttons = document.querySelectorAll('button, .btn, .btn-group, .buttons, .custom-btn, .btn-medium, .btn-large');
-  const noPrintElems = document.querySelectorAll('footer, .no-print');
-  const originalDisplays = [];
-  buttons.forEach((btn, index) => {
-    originalDisplays[index] = btn.style.display;
-    btn.style.display = 'none';
-  });
-  noPrintElems.forEach(el => el.style.display = 'none');
-  
-  // Hide empty rows before PDF generation
-  const emptyRows = document.querySelectorAll('#maßnahmen-tabelle tr.empty-row');
-  emptyRows.forEach(row => {
-    const cells = row.querySelectorAll('td');
-    let hasContent = false;
-    cells.forEach(cell => {
-      if (cell.textContent.trim() && !cell.textContent.match(/^\d+$/)) {
-        hasContent = true;
-      }
-    });
-    if (!hasContent) {
-      row.style.display = 'none';
-    }
-  });
-    
-  const canvas = document.getElementById('signature-pad');
-  let signatureImg = null;
-  if (canvas) {
-    const dataURL = canvas.toDataURL();
-    signatureImg = document.createElement('img');
-    signatureImg.src = dataURL;
-    signatureImg.style.border = '2px solid #000';
-    signatureImg.style.width = '100%';
-    signatureImg.style.maxWidth = '600px';
-    signatureImg.style.height = '150px';
-    canvas.style.display = 'none';
-    canvas.parentNode.insertBefore(signatureImg, canvas);
-  }  
-  
-  const printable = document.querySelector('.print-wrapper') || document.body;
-  
-  // Removed problematic transform scaling
-  // const pdfScale = 0.75;
-  // printable.style.transformOrigin = 'top left';
-  // printable.style.webkitTransformOrigin = 'top left';
-  // printable.style.transform = 'scale(' + pdfScale + ')';
-  // printable.style.webkitTransform = 'scale(' + pdfScale + ')';
-  // printable.style.width = (100 / pdfScale) + '%';
-  
-  const element = printable;
+  // Show loading indicator
+  const loadingDiv = document.createElement('div');
+  loadingDiv.id = 'pdf-loading';
+  loadingDiv.innerHTML = '<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:9999;"><div style="background:white;padding:30px 50px;border-radius:12px;text-align:center;"><div style="font-size:18px;font-weight:bold;margin-bottom:10px;">PDF wird erstellt...</div><div style="font-size:14px;color:#666;">Bitte warten</div></div></div>';
+  document.body.appendChild(loadingDiv);
+
   const today = new Date();
   const formattedDate = today.toLocaleDateString('de-DE');
-  
-  // Improved PDF options to prevent empty pages
-  const opt = {
-    pagebreak: { 
-      mode: ['css', 'legacy'], 
-      avoid: ['tr', '.category-section', '.confirmation-section', '.signature-container'],
-      before: [] // Removed automatic page breaks
-    },
-    margin: [12, 10, 15, 10],
-    filename: `Arbeitssicherheit-Begehungsprotokoll-${formattedDate}.pdf`,
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: {
-      scale: 2,
-      scrollY: 0,
-      useCORS: true,
-      allowTaint: true,
-      logging: false,
-      windowHeight: document.documentElement.scrollHeight // Capture full height
-    },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-  };
-  
-  function addPageNumbers(pdf) {
-    const pageCount = pdf.internal.getNumberOfPages();
-    pdf.setFontSize(8);
-    for (let i = 1; i <= pageCount; i++) {
-      pdf.setPage(i);
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
-      pdf.text('Seite ' + i + ' / ' + pageCount, pageWidth / 2, pageHeight - 10, {align: 'center'});
-    }
+  const markt = document.getElementById('markt')?.value || 'Unbekannt';
+  const name = document.getElementById('name')?.value || '-';
+  const sifa = document.getElementById('sifa')?.value || '-';
+  const filename = `Arbeitssicherheit-Begehung-${markt}-${formattedDate}.pdf`;
+
+  // Get signature as data URL
+  const signatureCanvas = document.getElementById('signature-pad');
+  let signatureDataURL = null;
+  if (signatureCanvas) {
+    signatureDataURL = signatureCanvas.toDataURL('image/png');
   }
 
-
-  
   try {
-    const worker = html2pdf().set(opt).from(element);
-    const pdf = await worker.toPdf().get('pdf');
-    addPageNumbers(pdf);
-    const blob = pdf.output('blob');
-    const file = new File([blob], opt.filename, { type: "application/pdf" });
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    
+    const pageWidth = 210;
+    const pageHeight = 297;
+    const margin = 15;
+    const contentWidth = pageWidth - 2 * margin;
+    let currentY = margin;
+    
+    // Helper function to add mini header on each page
+    function addMiniHeader() {
+      pdf.setFontSize(8);
+      pdf.setTextColor(100);
+      pdf.text(`Arbeitssicherheit-Checkliste | ${markt}`, margin, 8);
+      pdf.text(formattedDate, pageWidth - margin, 8, { align: 'right' });
+      pdf.setDrawColor(200);
+      pdf.line(margin, 10, pageWidth - margin, 10);
+    }
+    
+    // Helper function to check if we need a new page
+    function checkNewPage(neededHeight) {
+      if (currentY + neededHeight > pageHeight - 20) {
+        pdf.addPage();
+        addMiniHeader();
+        currentY = 18;
+        return true;
+      }
+      return false;
+    }
+    
+    // Funktion für Seitenzahlen am Ende hinzufügen
+    function addPageNumbers() {
+      const totalPages = pdf.internal.getNumberOfPages();
+      for (let i = 1; i <= totalPages; i++) {
+        pdf.setPage(i);
+        pdf.setFontSize(8);
+        pdf.setTextColor(100);
+        pdf.text(`Seite ${i} von ${totalPages}`, pageWidth / 2, pageHeight - 8, { align: 'center' });
+      }
+    }
+    
+    // ===== PAGE 1: Header and Instructions =====
+    // Title
+    pdf.setFontSize(20);
+    pdf.setTextColor(33, 37, 41);
+    pdf.text('Arbeitssicherheit-Checkliste 2026', margin, currentY + 8);
+    
+    pdf.setFontSize(12);
+    pdf.setTextColor(183, 28, 28);
+    pdf.text(formattedDate, pageWidth - margin, currentY + 8, { align: 'right' });
+    
+    pdf.setDrawColor(183, 28, 28);
+    pdf.setLineWidth(0.8);
+    pdf.line(margin, currentY + 12, pageWidth - margin, currentY + 12);
+    
+    currentY += 22;
+    
+    // Form info
+    pdf.setFontSize(11);
+    pdf.setTextColor(0);
+    pdf.text(`Marktnummer: ${markt}`, margin, currentY);
+    currentY += 6;
+    pdf.text(`Name: ${name}`, margin, currentY);
+    currentY += 6;
+    pdf.text(`SiFa: ${sifa}`, margin, currentY);
+    currentY += 12;
+    
+    // Instructions box
+    pdf.setFillColor(255, 248, 248);
+    pdf.setDrawColor(198, 40, 40);
+    pdf.roundedRect(margin, currentY, contentWidth, 85, 3, 3, 'FD');
+    
+    currentY += 8;
+    pdf.setFontSize(12);
+    pdf.setTextColor(0, 64, 128);
+    pdf.text('Anleitung und Nutzungshinweis:', margin + 5, currentY);
+    
+    currentY += 8;
+    pdf.setFontSize(9);
+    pdf.setTextColor(0);
+    const instructionText = pdf.splitTextToSize(
+      'Diese Checkliste dient gemäß § 5 ArbSchG der systematischen Überprüfung von Arbeitssicherheit und Gesundheitsschutz sowie der Identifikation von Gefährdungen und der Ableitung notwendiger Schutzmaßnahmen.',
+      contentWidth - 10
+    );
+    pdf.text(instructionText, margin + 5, currentY);
+    
+    currentY += instructionText.length * 4 + 6;
+    pdf.setFontSize(10);
+    pdf.setFont(undefined, 'bold');
+    pdf.text('Bewertung & Handlungsbedarf:', margin + 5, currentY);
+    pdf.setFont(undefined, 'normal');
+    currentY += 5;
+    pdf.setFontSize(9);
+    const bewertungText = pdf.splitTextToSize(
+      'Wird eine Frage mit "Nein" beantwortet, liegt eine Abweichung vom Schutzziel vor. Es besteht unmittelbarer Handlungsbedarf.',
+      contentWidth - 10
+    );
+    pdf.text(bewertungText, margin + 5, currentY);
+    
+    currentY += bewertungText.length * 4 + 6;
+    pdf.setFontSize(10);
+    pdf.setFont(undefined, 'bold');
+    pdf.text('Verantwortung:', margin + 5, currentY);
+    pdf.setFont(undefined, 'normal');
+    currentY += 5;
+    pdf.setFontSize(9);
+    const verantwortungText = pdf.splitTextToSize(
+      'Die Gesamtverantwortung liegt bei der Marktleitung. Einzelne Maßnahmen können delegiert werden, die Kontrollpflicht verbleibt bei der Marktleitung.',
+      contentWidth - 10
+    );
+    pdf.text(verantwortungText, margin + 5, currentY);
+    
+    // ===== CATEGORY PAGES - Kleinere Kategorien auf einer Seite zusammenfassen =====
+    const categoryHeaders = document.querySelectorAll('.category-header');
+    const colWidths = [contentWidth * 0.7, contentWidth * 0.1, contentWidth * 0.1, contentWidth * 0.1];
+    
+    // Zähler für Antworten
+    let totalJa = 0;
+    let totalNein = 0;
+    let totalNV = 0;
+    let totalUnanswered = 0;
+    
+    // Helper function to count rows in a category
+    function countCategoryRows(header) {
+      let count = 0;
+      let row = header.closest('tr').nextElementSibling;
+      while (row && !row.querySelector('.category-header')) {
+        if (row.querySelectorAll('td').length >= 4) count++;
+        row = row.nextElementSibling;
+      }
+      return count;
+    }
+    
+    // Helper function to estimate category height (header + table header + rows)
+    function estimateCategoryHeight(header) {
+      const rowCount = countCategoryRows(header);
+      // Category title (16) + table header (8) + approx 10px per row
+      return 16 + 8 + (rowCount * 10);
+    }
+    
+    // Helper function to draw table header
+    function drawTableHeader() {
+      pdf.setFillColor(183, 28, 28);
+      pdf.rect(margin, currentY, contentWidth, 8, 'F');
+      pdf.setFontSize(9);
+      pdf.setTextColor(255);
+      pdf.text('Frage', margin + 3, currentY + 5.5);
+      pdf.text('Ja', margin + colWidths[0] + colWidths[1]/2, currentY + 5.5, { align: 'center' });
+      pdf.text('Nein', margin + colWidths[0] + colWidths[1] + colWidths[2]/2, currentY + 5.5, { align: 'center' });
+      pdf.text('N/V', margin + colWidths[0] + colWidths[1] + colWidths[2] + colWidths[3]/2, currentY + 5.5, { align: 'center' });
+      currentY += 8;
+    }
+    
+    // Start first category page
+    pdf.addPage();
+    addMiniHeader();
+    currentY = 18;
+    
+    let isFirstCategoryOnPage = true;
+    
+    categoryHeaders.forEach((header, catIndex) => {
+      const categoryName = header.textContent.trim();
+      const estimatedHeight = estimateCategoryHeight(header);
+      const remainingSpace = pageHeight - 20 - currentY;
+      
+      // Entscheidung: Neue Seite nur wenn nicht genug Platz UND bereits etwas auf der Seite ist
+      // Kleine Kategorien (< 80mm) werden zusammengefasst wenn möglich
+      // Kategorie auf neue Seite bringen, wenn sie nicht vollständig passt
+      // (außer sie ist größer als eine ganze Seite - dann muss sie aufgeteilt werden)
+      const maxPageContent = pageHeight - 20 - 18; // Verfügbarer Platz auf einer leeren Seite
+      const categoryFitsOnNewPage = estimatedHeight <= maxPageContent;
+      const needsNewPage = !isFirstCategoryOnPage && (
+        // Kategorie passt nicht mehr auf diese Seite, aber würde auf eine neue passen
+        (remainingSpace < estimatedHeight && categoryFitsOnNewPage) ||
+        // Mindestens 30mm für Kategorie-Header + erste Zeilen benötigt
+        remainingSpace < 30
+      );
+      
+      if (needsNewPage) {
+        pdf.addPage();
+        addMiniHeader();
+        currentY = 18;
+        isFirstCategoryOnPage = true;
+      } else if (!isFirstCategoryOnPage) {
+        // Etwas Abstand zwischen Kategorien auf derselben Seite
+        currentY += 8;
+      }
+      
+      // Category title
+      pdf.setFillColor(245, 233, 233);
+      pdf.roundedRect(margin, currentY, contentWidth, 10, 2, 2, 'F');
+      pdf.setFontSize(13);
+      pdf.setTextColor(91, 33, 33);
+      pdf.text(categoryName, margin + 5, currentY + 7);
+      currentY += 16;
+      
+      // Table header
+      drawTableHeader();
+      
+      // Get rows for this category
+      let currentRow = header.closest('tr').nextElementSibling;
+      let rowIndex = 0;
+      
+      while (currentRow && !currentRow.querySelector('.category-header')) {
+        const cells = currentRow.querySelectorAll('td');
+        if (cells.length >= 4) {
+          const question = cells[0].textContent.trim();
+          
+          // Check radio states
+          let jaChecked = false, neinChecked = false, nvChecked = false;
+          const radios = currentRow.querySelectorAll('input[type="radio"]');
+          radios.forEach(radio => {
+            if (radio.checked) {
+              if (radio.value === 'ja') jaChecked = true;
+              else if (radio.value === 'nein') neinChecked = true;
+              else if (radio.value === 'nicht_vorhanden') nvChecked = true;
+            }
+          });
+          
+          // Calculate row height based on text
+          pdf.setFontSize(9);
+          const questionLines = pdf.splitTextToSize(question, colWidths[0] - 6);
+          const rowHeight = Math.max(8, questionLines.length * 4 + 4);
+          
+          // Check if we need a new page
+          if (currentY + rowHeight > pageHeight - 20) {
+            pdf.addPage();
+            addMiniHeader();
+            currentY = 18;
+            
+            // Repeat table header
+            drawTableHeader();
+          }
+          
+          // Row background
+          if (rowIndex % 2 === 1) {
+            pdf.setFillColor(248, 248, 248);
+            pdf.rect(margin, currentY, contentWidth, rowHeight, 'F');
+          }
+          
+          // Draw cell borders
+          pdf.setDrawColor(222, 226, 230);
+          pdf.rect(margin, currentY, colWidths[0], rowHeight);
+          pdf.rect(margin + colWidths[0], currentY, colWidths[1], rowHeight);
+          pdf.rect(margin + colWidths[0] + colWidths[1], currentY, colWidths[2], rowHeight);
+          pdf.rect(margin + colWidths[0] + colWidths[1] + colWidths[2], currentY, colWidths[3], rowHeight);
+          
+          // Question text
+          pdf.setTextColor(0);
+          pdf.text(questionLines, margin + 3, currentY + 4);
+          
+          // Answer mit Text "Ja", "Nein", "N/V"
+          const checkY = currentY + rowHeight / 2;
+          
+          if (jaChecked) {
+            totalJa++;
+            pdf.setFillColor(212, 237, 218);
+            pdf.rect(margin + colWidths[0], currentY, colWidths[1], rowHeight, 'F');
+            pdf.setTextColor(46, 125, 50);
+            pdf.setFontSize(9);
+            pdf.setFont(undefined, 'bold');
+            pdf.text('Ja', margin + colWidths[0] + colWidths[1]/2, checkY + 1, { align: 'center' });
+            pdf.setFont(undefined, 'normal');
+          }
+          if (neinChecked) {
+            totalNein++;
+            pdf.setFillColor(248, 215, 218);
+            pdf.rect(margin + colWidths[0] + colWidths[1], currentY, colWidths[2], rowHeight, 'F');
+            pdf.setTextColor(198, 40, 40);
+            pdf.setFontSize(9);
+            pdf.setFont(undefined, 'bold');
+            pdf.text('Nein', margin + colWidths[0] + colWidths[1] + colWidths[2]/2, checkY + 1, { align: 'center' });
+            pdf.setFont(undefined, 'normal');
+          }
+          if (nvChecked) {
+            totalNV++;
+            pdf.setFillColor(226, 227, 229);
+            pdf.rect(margin + colWidths[0] + colWidths[1] + colWidths[2], currentY, colWidths[3], rowHeight, 'F');
+            pdf.setTextColor(102);
+            pdf.setFontSize(8);
+            pdf.text('N/V', margin + colWidths[0] + colWidths[1] + colWidths[2] + colWidths[3]/2, checkY + 1, { align: 'center' });
+          }
+          if (!jaChecked && !neinChecked && !nvChecked) {
+            totalUnanswered++;
+          }
+          
+          currentY += rowHeight;
+          rowIndex++;
+        }
+        currentRow = currentRow.nextElementSibling;
+      }
+      
+      isFirstCategoryOnPage = false;
+    });
+    
+    // ===== MEASURES PAGE =====
+    pdf.addPage();
+    addMiniHeader();
+    currentY = 18;
+    
+    pdf.setFontSize(16);
+    pdf.setTextColor(183, 28, 28);
+    pdf.text('Festgestellte Defizite und Maßnahmen', margin, currentY + 5);
+    currentY += 15;
+    
+    // Table header
+    const measureColWidths = [contentWidth * 0.08, contentWidth * 0.42, contentWidth * 0.50];
+    pdf.setFillColor(183, 28, 28);
+    pdf.rect(margin, currentY, contentWidth, 8, 'F');
+    pdf.setFontSize(9);
+    pdf.setTextColor(255);
+    pdf.text('Nr.', margin + measureColWidths[0]/2, currentY + 5.5, { align: 'center' });
+    pdf.text('Feststellung', margin + measureColWidths[0] + 3, currentY + 5.5);
+    pdf.text('Maßnahme', margin + measureColWidths[0] + measureColWidths[1] + 3, currentY + 5.5);
+    currentY += 8;
+    
+    const measuresRows = document.querySelectorAll('#maßnahmen-tabelle tr');
+    let hasContent = false;
+    let measureIndex = 0;
+    
+    measuresRows.forEach((row) => {
+      const cells = row.querySelectorAll('td');
+      if (cells.length >= 3) {
+        const nr = cells[0].textContent.trim();
+        const frage = cells[1].textContent.trim();
+        const massnahme = cells[2].textContent.trim();
+        
+        if (frage && frage !== '\u00A0' && frage.length > 1) {
+          hasContent = true;
+          
+          pdf.setFontSize(8);
+          const frageLines = pdf.splitTextToSize(frage, measureColWidths[1] - 6);
+          const massnahmeLines = pdf.splitTextToSize(massnahme || '-', measureColWidths[2] - 6);
+          const rowHeight = Math.max(10, Math.max(frageLines.length, massnahmeLines.length) * 3.5 + 4);
+          
+          // Check for new page
+          if (currentY + rowHeight > pageHeight - 20) {
+            pdf.addPage();
+            addMiniHeader();
+            currentY = 18;
+            
+            // Repeat header
+            pdf.setFillColor(183, 28, 28);
+            pdf.rect(margin, currentY, contentWidth, 8, 'F');
+            pdf.setFontSize(9);
+            pdf.setTextColor(255);
+            pdf.text('Nr.', margin + measureColWidths[0]/2, currentY + 5.5, { align: 'center' });
+            pdf.text('Feststellung', margin + measureColWidths[0] + 3, currentY + 5.5);
+            pdf.text('Maßnahme', margin + measureColWidths[0] + measureColWidths[1] + 3, currentY + 5.5);
+            currentY += 8;
+          }
+          
+          // Row background
+          if (measureIndex % 2 === 1) {
+            pdf.setFillColor(248, 248, 248);
+            pdf.rect(margin, currentY, contentWidth, rowHeight, 'F');
+          }
+          
+          // Draw cells
+          pdf.setDrawColor(222, 226, 230);
+          pdf.rect(margin, currentY, measureColWidths[0], rowHeight);
+          pdf.rect(margin + measureColWidths[0], currentY, measureColWidths[1], rowHeight);
+          pdf.rect(margin + measureColWidths[0] + measureColWidths[1], currentY, measureColWidths[2], rowHeight);
+          
+          // Content
+          pdf.setTextColor(0);
+          pdf.setFontSize(9);
+          pdf.setFont(undefined, 'bold');
+          pdf.text(nr, margin + measureColWidths[0]/2, currentY + 5, { align: 'center' });
+          pdf.setFont(undefined, 'italic');
+          pdf.setFontSize(8);
+          pdf.text(frageLines, margin + measureColWidths[0] + 3, currentY + 4);
+          pdf.setFont(undefined, 'normal');
+          pdf.text(massnahmeLines, margin + measureColWidths[0] + measureColWidths[1] + 3, currentY + 4);
+          
+          currentY += rowHeight;
+          measureIndex++;
+        }
+      }
+    });
+    
+    if (!hasContent) {
+      pdf.setFillColor(212, 237, 218);
+      pdf.rect(margin, currentY, contentWidth, 15, 'F');
+      pdf.setDrawColor(222, 226, 230);
+      pdf.rect(margin, currentY, contentWidth, 15);
+      pdf.setTextColor(46, 125, 50);
+      pdf.setFontSize(11);
+      pdf.setFont(undefined, 'bold');
+      pdf.text('Keine Defizite festgestellt - alle Prüfpunkte bestanden.', pageWidth / 2, currentY + 9, { align: 'center' });
+    }
+    
+    // ===== SIGNATURE PAGE =====
+    pdf.addPage();
+    addMiniHeader();
+    currentY = 18;
+    
+    pdf.setFontSize(16);
+    pdf.setTextColor(183, 28, 28);
+    pdf.text('Bestätigung und Unterschrift', margin, currentY + 5);
+    currentY += 18;
+    
+    // Signature section (Prüfungsergebnis entfernt)
+    pdf.setFontSize(12);
+    pdf.setTextColor(33, 37, 41);
+    pdf.setFont(undefined, 'bold');
+    pdf.text('Unterschrift', margin, currentY);
+    pdf.setFont(undefined, 'normal');
+    
+    currentY += 5;
+    pdf.setFillColor(250, 250, 250);
+    pdf.setDrawColor(198, 40, 40);
+    pdf.roundedRect(margin, currentY, contentWidth, 50, 3, 3, 'FD');
+    
+    if (signatureDataURL && signatureDataURL !== 'data:,') {
+      try {
+        pdf.addImage(signatureDataURL, 'PNG', margin + 20, currentY + 5, contentWidth - 40, 40);
+      } catch (e) {
+        pdf.setTextColor(150);
+        pdf.setFontSize(10);
+        pdf.text('Unterschrift nicht verfügbar', pageWidth / 2, currentY + 25, { align: 'center' });
+      }
+    } else {
+      pdf.setTextColor(150);
+      pdf.setFontSize(10);
+      pdf.text('Keine Unterschrift vorhanden', pageWidth / 2, currentY + 25, { align: 'center' });
+    }
+    
+    currentY += 60;
+    
+    // ===== ZUSAMMENFASSUNG DER ANTWORTEN =====
+    pdf.setFontSize(12);
+    pdf.setTextColor(33, 37, 41);
+    pdf.setFont(undefined, 'bold');
+    pdf.text('Zusammenfassung der Antworten', margin, currentY);
+    pdf.setFont(undefined, 'normal');
+    currentY += 8;
+    
+    const totalQuestions = totalJa + totalNein + totalNV + totalUnanswered;
+    
+    // Zusammenfassungs-Box
+    pdf.setFillColor(248, 249, 250);
+    pdf.setDrawColor(200);
+    pdf.roundedRect(margin, currentY, contentWidth, 35, 3, 3, 'FD');
+    
+    const summaryStartY = currentY + 8;
+    const colWidth = contentWidth / 4;
+    
+    // Ja
+    pdf.setFillColor(212, 237, 218);
+    pdf.roundedRect(margin + 5, summaryStartY, colWidth - 10, 20, 2, 2, 'F');
+    pdf.setTextColor(46, 125, 50);
+    pdf.setFontSize(14);
+    pdf.setFont(undefined, 'bold');
+    pdf.text(`${totalJa}`, margin + colWidth/2, summaryStartY + 10, { align: 'center' });
+    pdf.setFontSize(8);
+    pdf.setFont(undefined, 'normal');
+    pdf.text('Ja', margin + colWidth/2, summaryStartY + 17, { align: 'center' });
+    
+    // Nein
+    pdf.setFillColor(248, 215, 218);
+    pdf.roundedRect(margin + colWidth + 5, summaryStartY, colWidth - 10, 20, 2, 2, 'F');
+    pdf.setTextColor(198, 40, 40);
+    pdf.setFontSize(14);
+    pdf.setFont(undefined, 'bold');
+    pdf.text(`${totalNein}`, margin + colWidth + colWidth/2, summaryStartY + 10, { align: 'center' });
+    pdf.setFontSize(8);
+    pdf.setFont(undefined, 'normal');
+    pdf.text('Nein', margin + colWidth + colWidth/2, summaryStartY + 17, { align: 'center' });
+    
+    // N/V
+    pdf.setFillColor(226, 227, 229);
+    pdf.roundedRect(margin + colWidth * 2 + 5, summaryStartY, colWidth - 10, 20, 2, 2, 'F');
+    pdf.setTextColor(102);
+    pdf.setFontSize(14);
+    pdf.setFont(undefined, 'bold');
+    pdf.text(`${totalNV}`, margin + colWidth * 2 + colWidth/2, summaryStartY + 10, { align: 'center' });
+    pdf.setFontSize(8);
+    pdf.setFont(undefined, 'normal');
+    pdf.text('N/V', margin + colWidth * 2 + colWidth/2, summaryStartY + 17, { align: 'center' });
+    
+    // Gesamt
+    pdf.setFillColor(255, 255, 255);
+    pdf.setDrawColor(183, 28, 28);
+    pdf.roundedRect(margin + colWidth * 3 + 5, summaryStartY, colWidth - 10, 20, 2, 2, 'FD');
+    pdf.setTextColor(183, 28, 28);
+    pdf.setFontSize(14);
+    pdf.setFont(undefined, 'bold');
+    pdf.text(`${totalQuestions}`, margin + colWidth * 3 + colWidth/2, summaryStartY + 10, { align: 'center' });
+    pdf.setFontSize(8);
+    pdf.setFont(undefined, 'normal');
+    pdf.text('Gesamt', margin + colWidth * 3 + colWidth/2, summaryStartY + 17, { align: 'center' });
+    
+    currentY += 45;
+    
+    // Footer note
+    pdf.setDrawColor(200);
+    pdf.line(margin, currentY, pageWidth - margin, currentY);
+    currentY += 8;
+    pdf.setFontSize(8);
+    pdf.setTextColor(100);
+    const footerNote = pdf.splitTextToSize(
+      'Hinweis: Dieses Dokument wurde elektronisch erstellt und ist auch ohne handschriftliche Unterschrift gültig, sofern die digitale Signatur vorliegt.',
+      contentWidth
+    );
+    pdf.text(footerNote, margin, currentY);
+    currentY += footerNote.length * 3 + 5;
+    pdf.text(`Erstellt am: ${formattedDate} | Markt: ${markt} | SiFa: ${sifa}`, margin, currentY);
+    
+    // Add page numbers to all pages
+    const totalPages = pdf.internal.getNumberOfPages();
+    for (let i = 1; i <= totalPages; i++) {
+      pdf.setPage(i);
+      pdf.setFontSize(8);
+      pdf.setTextColor(100);
+      pdf.text(`Seite ${i} von ${totalPages}`, pageWidth / 2, pageHeight - 8, { align: 'center' });
+  }
+  
+  // Seitenzahlen hinzufügen
+  addPageNumbers();
+  
+  // Generate blob and share/download
+  const blob = pdf.output('blob');
+    const file = new File([blob], filename, { type: 'application/pdf' });
+    
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       await navigator.share({
-        title: 'Checkliste Arbeitssicherheit',
-        text: 'Sehr geehrte Damen und Herren,\n\nanbei übermittle ich Ihnen die Begehungsliste zur sachlichen Prüfung und weiteren Verwendung.\n\nFür Rückfragen oder ergänzende Informationen stehe ich Ihnen jederzeit gerne zur Verfügung.\n\nMit freundlichen Grüßen\nFachkraft für Arbeitssicherheit (SiFa).',
+        title: 'Arbeitssicherheit-Checkliste',
+        text: `Sehr geehrte Damen und Herren,\n\nim Rahmen der turnusmäßigen Arbeitssicherheitsbegehung übersende ich Ihnen anbei das Begehungsprotokoll des Marktes  ${markt} zur sachlichen Prüfung.\n\
+
+Bitte prüfen Sie die dokumentierten Feststellungen und veranlassen Sie die Umsetzung der erforderlichen Maßnahmen..\n\nMit freundlichen Grüßen\nFachkraft für Arbeitssicherheit (SiFa).`,
         files: [file],
       });
     } else {
-      alert("📤 Teilen nicht unterstützt – PDF wird heruntergeladen.");
-      const link = document.createElement("a");
+      const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
-      link.download = opt.filename;
+      link.download = filename;
       link.click();
+      URL.revokeObjectURL(link.href);
+      alert('PDF wurde heruntergeladen.');
     }
+    
   } catch (error) {
-    console.error("Fehler bei PDF-Generierung:", error);
-    alert("Fehler bei der PDF-Erstellung. Bitte versuchen Sie es erneut.");
+    console.error('Fehler bei PDF-Generierung:', error);
+    alert('Fehler bei der PDF-Erstellung: ' + error.message);
   } finally {
-    // Elemente wieder einblenden
-    buttons.forEach((btn, index) => {
-      btn.style.display = originalDisplays[index];
-    });
-    noPrintElems.forEach(el => el.style.display = '');
-    
-    // Restore empty rows visibility
-    emptyRows.forEach(row => {
-      row.style.display = '';
-    });
-    
-    // Removed transform reset since we don't use it anymore
-    // try {
-    //   if (typeof printable !== 'undefined' && printable) {
-    //     printable.style.transform = '';
-    //     printable.style.webkitTransform = '';
-    //     printable.style.width = '';
-    //     printable.style.transformOrigin = '';
-    //     printable.style.webkitTransformOrigin = '';
-    //   }
-    // } catch (e) {
-    //   console.warn('Fehler beim Zurücksetzen der PDF-Transform:', e);
-    // }   
-    
-    if (canvas && signatureImg) {
-      canvas.style.display = 'block';
-      signatureImg.remove();
-    }
+    document.getElementById('pdf-loading')?.remove();
   }
 }
 
@@ -1692,15 +1931,517 @@ function restoreSignature() {
     image.src = dataURL;
   }
 }
-function prepareForPrint() {
-  const dataURL = canvas.toDataURL();
-  const img = document.createElement("img");
-  img.src = dataURL;
-  img.style.border = "2px solid #000";
-  img.style.width = "100%";
-  img.style.maxWidth = "600px";
-  canvas.replaceWith(img);
-  window.print();
+async function prepareForPrint() {
+  // Nutzt die gleiche PDF-Generierung wie der iPad-Button, aber öffnet das PDF direkt
+  const loadingDiv = document.createElement('div');
+  loadingDiv.id = 'pdf-loading';
+  loadingDiv.innerHTML = `
+    <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+      <div style="background: white; padding: 30px 50px; border-radius: 15px; text-align: center;">
+        <div style="font-size: 24px; margin-bottom: 15px;">PDF wird erstellt...</div>
+        <div style="width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid #C62828; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+      </div>
+    </div>
+    <style>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
+  `;
+  document.body.appendChild(loadingDiv);
+  
+  await new Promise(resolve => setTimeout(resolve, 100));
+  
+  try {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    
+    const pageWidth = 210;
+    const pageHeight = 297;
+    const margin = 10;
+    const contentWidth = pageWidth - (margin * 2);
+    let currentY = 0;
+    
+    // Get form data
+    const markt = document.getElementById('markt')?.value || 'Nicht angegeben';
+    const name = document.getElementById('name')?.value || 'Nicht angegeben';
+    const sifa = document.getElementById('sifa')?.value || 'Nicht angegeben';
+    const datumInput = document.getElementById('datum')?.value;
+    const formattedDate = datumInput ? new Date(datumInput).toLocaleDateString('de-DE') : new Date().toLocaleDateString('de-DE');
+    
+    // ===== TITLE PAGE =====
+    pdf.setFillColor(183, 28, 28);
+    pdf.rect(0, 0, pageWidth, 50, 'F');
+    
+    pdf.setTextColor(255);
+    pdf.setFontSize(22);
+    pdf.text('Arbeitssicherheits-Checkliste', pageWidth / 2, 22, { align: 'center' });
+    pdf.setFontSize(12);
+    pdf.text('Sicherheitsfachkraft (SiFa) Begehung', pageWidth / 2, 35, { align: 'center' });
+    pdf.setFontSize(10);
+    pdf.text(formattedDate, pageWidth / 2, 45, { align: 'center' });
+    
+    currentY = 60;
+    
+    // Info box
+    pdf.setFillColor(248, 249, 250);
+    pdf.setDrawColor(222, 226, 230);
+    pdf.roundedRect(margin, currentY, contentWidth, 40, 3, 3, 'FD');
+    
+    pdf.setFontSize(11);
+    pdf.setTextColor(33, 37, 41);
+    const infoStartY = currentY + 10;
+    
+    pdf.setFont(undefined, 'bold');
+    pdf.text('Markt:', margin + 8, infoStartY);
+    pdf.setFont(undefined, 'normal');
+    pdf.text(markt, margin + 35, infoStartY);
+    
+    pdf.setFont(undefined, 'bold');
+    pdf.text('Marktleitung:', margin + contentWidth/2, infoStartY);
+    pdf.setFont(undefined, 'normal');
+    pdf.text(name, margin + contentWidth/2 + 30, infoStartY);
+    
+    pdf.setFont(undefined, 'bold');
+    pdf.text('SiFa:', margin + 8, infoStartY + 12);
+    pdf.setFont(undefined, 'normal');
+    pdf.text(sifa, margin + 35, infoStartY + 12);
+    
+    pdf.setFont(undefined, 'bold');
+    pdf.text('Datum:', margin + contentWidth/2, infoStartY + 12);
+    pdf.setFont(undefined, 'normal');
+    pdf.text(formattedDate, margin + contentWidth/2 + 30, infoStartY + 12);
+    
+    currentY += 50;
+    
+    // ===== ANLEITUNG UND NUTZUNGSHINWEIS =====
+    pdf.setFillColor(255, 248, 248);
+    pdf.setDrawColor(198, 40, 40);
+    pdf.roundedRect(margin, currentY, contentWidth, 85, 3, 3, 'FD');
+    
+    currentY += 8;
+    pdf.setFontSize(12);
+    pdf.setTextColor(0, 64, 128);
+    pdf.text('Anleitung und Nutzungshinweis:', margin + 5, currentY);
+    
+    currentY += 8;
+    pdf.setFontSize(9);
+    pdf.setTextColor(0);
+    const instructionText = pdf.splitTextToSize(
+      'Diese Checkliste dient gemäß § 5 ArbSchG der systematischen Überprüfung von Arbeitssicherheit und Gesundheitsschutz sowie der Identifikation von Gefährdungen und der Ableitung notwendiger Schutzmaßnahmen.',
+      contentWidth - 10
+    );
+    pdf.text(instructionText, margin + 5, currentY);
+    
+    currentY += instructionText.length * 4 + 6;
+    pdf.setFontSize(10);
+    pdf.setFont(undefined, 'bold');
+    pdf.text('Bewertung & Handlungsbedarf:', margin + 5, currentY);
+    pdf.setFont(undefined, 'normal');
+    currentY += 5;
+    pdf.setFontSize(9);
+    const bewertungText = pdf.splitTextToSize(
+      'Wird eine Frage mit "Nein" beantwortet, liegt eine Abweichung vom Schutzziel vor. Es besteht unmittelbarer Handlungsbedarf.',
+      contentWidth - 10
+    );
+    pdf.text(bewertungText, margin + 5, currentY);
+    
+    currentY += bewertungText.length * 4 + 6;
+    pdf.setFontSize(10);
+    pdf.setFont(undefined, 'bold');
+    pdf.text('Verantwortung:', margin + 5, currentY);
+    pdf.setFont(undefined, 'normal');
+    currentY += 5;
+    pdf.setFontSize(9);
+    const verantwortungText = pdf.splitTextToSize(
+      'Die Gesamtverantwortung liegt bei der Marktleitung. Einzelne Maßnahmen können delegiert werden, die Kontrollpflicht verbleibt bei der Marktleitung.',
+      contentWidth - 10
+    );
+    pdf.text(verantwortungText, margin + 5, currentY);
+    
+    // Mini header function (ohne KAUFLAND)
+    function addMiniHeader() {
+      pdf.setFillColor(183, 28, 28);
+      pdf.rect(0, 0, pageWidth, 12, 'F');
+      pdf.setTextColor(255);
+      pdf.setFontSize(8);
+      pdf.text(`Arbeitssicherheit | Markt: ${markt} | Datum: ${formattedDate}`, pageWidth / 2, 8, { align: 'center' });
+    }
+    
+    // Funktion für Seitenzahlen am Ende hinzufügen
+    function addPageNumbers() {
+      const totalPages = pdf.internal.getNumberOfPages();
+      for (let i = 1; i <= totalPages; i++) {
+        pdf.setPage(i);
+        pdf.setFontSize(8);
+        pdf.setTextColor(100);
+        pdf.text(`Seite ${i} von ${totalPages}`, pageWidth / 2, pageHeight - 8, { align: 'center' });
+      }
+    }
+    
+    // ===== CATEGORY PAGES =====
+    const categoryHeaders = document.querySelectorAll('.category-header');
+    const colWidths = [contentWidth * 0.7, contentWidth * 0.1, contentWidth * 0.1, contentWidth * 0.1];
+    
+    // Zähler für Antworten
+    let totalJa = 0;
+    let totalNein = 0;
+    let totalNV = 0;
+    let totalUnanswered = 0;
+    
+    function countCategoryRows(header) {
+      let count = 0;
+      let row = header.closest('tr').nextElementSibling;
+      while (row && !row.querySelector('.category-header')) {
+        if (row.querySelectorAll('td').length >= 4) count++;
+        row = row.nextElementSibling;
+      }
+      return count;
+    }
+    
+    function estimateCategoryHeight(header) {
+      const rowCount = countCategoryRows(header);
+      return 16 + 8 + (rowCount * 10);
+    }
+    
+    function drawTableHeader() {
+      pdf.setFillColor(183, 28, 28);
+      pdf.rect(margin, currentY, contentWidth, 8, 'F');
+      pdf.setFontSize(9);
+      pdf.setTextColor(255);
+      pdf.text('Frage', margin + 3, currentY + 5.5);
+      pdf.text('Ja', margin + colWidths[0] + colWidths[1]/2, currentY + 5.5, { align: 'center' });
+      pdf.text('Nein', margin + colWidths[0] + colWidths[1] + colWidths[2]/2, currentY + 5.5, { align: 'center' });
+      pdf.text('N/V', margin + colWidths[0] + colWidths[1] + colWidths[2] + colWidths[3]/2, currentY + 5.5, { align: 'center' });
+      currentY += 8;
+    }
+    
+    pdf.addPage();
+    addMiniHeader();
+    currentY = 18;
+    
+    let isFirstCategoryOnPage = true;
+    
+    categoryHeaders.forEach((header, catIndex) => {
+      const categoryName = header.textContent.trim();
+      const estimatedHeight = estimateCategoryHeight(header);
+      const remainingSpace = pageHeight - 20 - currentY;
+      
+      // Kategorie auf neue Seite bringen, wenn sie nicht vollständig passt
+      // (außer sie ist größer als eine ganze Seite - dann muss sie aufgeteilt werden)
+      const maxPageContent = pageHeight - 20 - 18; // Verfügbarer Platz auf einer leeren Seite
+      const categoryFitsOnNewPage = estimatedHeight <= maxPageContent;
+      const needsNewPage = !isFirstCategoryOnPage && (
+        // Kategorie passt nicht mehr auf diese Seite, aber würde auf eine neue passen
+        (remainingSpace < estimatedHeight && categoryFitsOnNewPage) ||
+        // Mindestens 30mm für Kategorie-Header + erste Zeilen benötigt
+        remainingSpace < 30
+      );
+      
+      if (needsNewPage) {
+        pdf.addPage();
+        addMiniHeader();
+        currentY = 18;
+        isFirstCategoryOnPage = true;
+      } else if (!isFirstCategoryOnPage) {
+        currentY += 8;
+      }
+      
+      pdf.setFillColor(245, 233, 233);
+      pdf.roundedRect(margin, currentY, contentWidth, 10, 2, 2, 'F');
+      pdf.setFontSize(13);
+      pdf.setTextColor(91, 33, 33);
+      pdf.text(categoryName, margin + 5, currentY + 7);
+      currentY += 16;
+      
+      drawTableHeader();
+      
+      let currentRow = header.closest('tr').nextElementSibling;
+      let rowIndex = 0;
+      
+      while (currentRow && !currentRow.querySelector('.category-header')) {
+        const cells = currentRow.querySelectorAll('td');
+        if (cells.length >= 4) {
+          const question = cells[0].textContent.trim();
+          
+          let jaChecked = false, neinChecked = false, nvChecked = false;
+          const radios = currentRow.querySelectorAll('input[type="radio"]');
+          radios.forEach(radio => {
+            if (radio.checked) {
+              if (radio.value === 'ja') jaChecked = true;
+              else if (radio.value === 'nein') neinChecked = true;
+              else if (radio.value === 'nicht_vorhanden') nvChecked = true;
+            }
+          });
+          
+          pdf.setFontSize(9);
+          const questionLines = pdf.splitTextToSize(question, colWidths[0] - 6);
+          const rowHeight = Math.max(8, questionLines.length * 4 + 4);
+          
+          if (currentY + rowHeight > pageHeight - 20) {
+            pdf.addPage();
+            addMiniHeader();
+            currentY = 18;
+            drawTableHeader();
+          }
+          
+          if (rowIndex % 2 === 1) {
+            pdf.setFillColor(248, 248, 248);
+            pdf.rect(margin, currentY, contentWidth, rowHeight, 'F');
+          }
+          
+          pdf.setDrawColor(222, 226, 230);
+          pdf.rect(margin, currentY, colWidths[0], rowHeight);
+          pdf.rect(margin + colWidths[0], currentY, colWidths[1], rowHeight);
+          pdf.rect(margin + colWidths[0] + colWidths[1], currentY, colWidths[2], rowHeight);
+          pdf.rect(margin + colWidths[0] + colWidths[1] + colWidths[2], currentY, colWidths[3], rowHeight);
+          
+          pdf.setTextColor(0);
+          pdf.text(questionLines, margin + 3, currentY + 4);
+          
+          const checkY = currentY + rowHeight / 2;
+          
+          if (jaChecked) {
+            totalJa++;
+            pdf.setFillColor(212, 237, 218);
+            pdf.rect(margin + colWidths[0], currentY, colWidths[1], rowHeight, 'F');
+            pdf.setTextColor(46, 125, 50);
+            pdf.setFontSize(9);
+            pdf.setFont(undefined, 'bold');
+            pdf.text('Ja', margin + colWidths[0] + colWidths[1]/2, checkY + 1, { align: 'center' });
+            pdf.setFont(undefined, 'normal');
+          }
+          if (neinChecked) {
+            totalNein++;
+            pdf.setFillColor(248, 215, 218);
+            pdf.rect(margin + colWidths[0] + colWidths[1], currentY, colWidths[2], rowHeight, 'F');
+            pdf.setTextColor(198, 40, 40);
+            pdf.setFontSize(9);
+            pdf.setFont(undefined, 'bold');
+            pdf.text('Nein', margin + colWidths[0] + colWidths[1] + colWidths[2]/2, checkY + 1, { align: 'center' });
+            pdf.setFont(undefined, 'normal');
+          }
+          if (nvChecked) {
+            totalNV++;
+            pdf.setFillColor(226, 227, 229);
+            pdf.rect(margin + colWidths[0] + colWidths[1] + colWidths[2], currentY, colWidths[3], rowHeight, 'F');
+            pdf.setTextColor(102);
+            pdf.setFontSize(8);
+            pdf.text('N/V', margin + colWidths[0] + colWidths[1] + colWidths[2] + colWidths[3]/2, checkY + 1, { align: 'center' });
+          }
+          if (!jaChecked && !neinChecked && !nvChecked) {
+            totalUnanswered++;
+          }
+          
+          currentY += rowHeight;
+          rowIndex++;
+        }
+        currentRow = currentRow.nextElementSibling;
+      }
+      
+      isFirstCategoryOnPage = false;
+    });
+    
+    // ===== MASSNAHMEN PAGE =====
+    const massnahmenRows = document.querySelectorAll('#maßnahmen-tabelle tbody tr');
+    const filledMassnahmen = Array.from(massnahmenRows).filter(row => {
+      const cells = row.querySelectorAll('td');
+      return cells.length >= 3 && cells[0].textContent.trim() !== '';
+    });
+    
+    if (filledMassnahmen.length > 0) {
+      pdf.addPage();
+      addMiniHeader();
+      currentY = 18;
+      
+      pdf.setFontSize(16);
+      pdf.setTextColor(183, 28, 28);
+      pdf.text('Festgestellte Defizite und Maßnahmen', margin, currentY + 5);
+      currentY += 15;
+      
+      const mColWidths = [contentWidth * 0.35, contentWidth * 0.45, contentWidth * 0.2];
+      
+      pdf.setFillColor(183, 28, 28);
+      pdf.rect(margin, currentY, contentWidth, 8, 'F');
+      pdf.setFontSize(9);
+      pdf.setTextColor(255);
+      pdf.text('Defizit', margin + 3, currentY + 5.5);
+      pdf.text('Maßnahme', margin + mColWidths[0] + 3, currentY + 5.5);
+      pdf.text('Termin', margin + mColWidths[0] + mColWidths[1] + 3, currentY + 5.5);
+      currentY += 8;
+      
+      filledMassnahmen.forEach((row, idx) => {
+        const cells = row.querySelectorAll('td');
+        const defizit = cells[0]?.textContent.trim() || '';
+        const massnahme = cells[1]?.textContent.trim() || '';
+        const termin = cells[2]?.querySelector('input')?.value || '';
+        
+        pdf.setFontSize(8);
+        const defizitLines = pdf.splitTextToSize(defizit, mColWidths[0] - 6);
+        const massnahmeLines = pdf.splitTextToSize(massnahme, mColWidths[1] - 6);
+        const maxLines = Math.max(defizitLines.length, massnahmeLines.length, 1);
+        const rowHeight = Math.max(8, maxLines * 3.5 + 4);
+        
+        if (currentY + rowHeight > pageHeight - 20) {
+          pdf.addPage();
+          addMiniHeader();
+          currentY = 18;
+          
+          pdf.setFillColor(183, 28, 28);
+          pdf.rect(margin, currentY, contentWidth, 8, 'F');
+          pdf.setFontSize(9);
+          pdf.setTextColor(255);
+          pdf.text('Defizit', margin + 3, currentY + 5.5);
+          pdf.text('Maßnahme', margin + mColWidths[0] + 3, currentY + 5.5);
+          pdf.text('Termin', margin + mColWidths[0] + mColWidths[1] + 3, currentY + 5.5);
+          currentY += 8;
+        }
+        
+        if (idx % 2 === 1) {
+          pdf.setFillColor(255, 243, 243);
+          pdf.rect(margin, currentY, contentWidth, rowHeight, 'F');
+        }
+        
+        pdf.setDrawColor(222, 226, 230);
+        pdf.rect(margin, currentY, mColWidths[0], rowHeight);
+        pdf.rect(margin + mColWidths[0], currentY, mColWidths[1], rowHeight);
+        pdf.rect(margin + mColWidths[0] + mColWidths[1], currentY, mColWidths[2], rowHeight);
+        
+        pdf.setTextColor(0);
+        pdf.setFontSize(8);
+        pdf.text(defizitLines, margin + 2, currentY + 3.5);
+        pdf.text(massnahmeLines, margin + mColWidths[0] + 2, currentY + 3.5);
+        if (termin) {
+          const formattedTermin = new Date(termin).toLocaleDateString('de-DE');
+          pdf.text(formattedTermin, margin + mColWidths[0] + mColWidths[1] + 2, currentY + rowHeight/2 + 1);
+        }
+        
+        currentY += rowHeight;
+      });
+    }
+    
+    // ===== SIGNATURE PAGE =====
+    pdf.addPage();
+    addMiniHeader();
+    currentY = 18;
+    
+    pdf.setFontSize(16);
+    pdf.setTextColor(183, 28, 28);
+    pdf.text('Bestätigung und Unterschrift', margin, currentY + 5);
+    currentY += 18;
+    
+    pdf.setFontSize(12);
+    pdf.setTextColor(33, 37, 41);
+    pdf.setFont(undefined, 'bold');
+    pdf.text('Unterschrift', margin, currentY);
+    pdf.setFont(undefined, 'normal');
+    
+    currentY += 8;
+    
+    // Signature image
+    const signatureData = canvas.toDataURL('image/png');
+    const signatureWidth = 100;
+    const signatureHeight = 40;
+    
+    pdf.setDrawColor(200);
+    pdf.setFillColor(255);
+    pdf.roundedRect(margin, currentY, signatureWidth, signatureHeight, 3, 3, 'FD');
+    
+    try {
+      pdf.addImage(signatureData, 'PNG', margin + 2, currentY + 2, signatureWidth - 4, signatureHeight - 4);
+    } catch (e) {
+      pdf.setFontSize(10);
+      pdf.setTextColor(150);
+      pdf.text('Unterschrift nicht verfügbar', margin + 10, currentY + signatureHeight/2);
+    }
+    
+    currentY += 60;
+    
+    // ===== ZUSAMMENFASSUNG DER ANTWORTEN =====
+    pdf.setFontSize(12);
+    pdf.setTextColor(33, 37, 41);
+    pdf.setFont(undefined, 'bold');
+    pdf.text('Zusammenfassung der Antworten', margin, currentY);
+    pdf.setFont(undefined, 'normal');
+    currentY += 8;
+    
+    const totalQuestions = totalJa + totalNein + totalNV + totalUnanswered;
+    
+    pdf.setFillColor(248, 249, 250);
+    pdf.setDrawColor(200);
+    pdf.roundedRect(margin, currentY, contentWidth, 35, 3, 3, 'FD');
+    
+    const summaryStartY = currentY + 8;
+    const sumColWidth = contentWidth / 4;
+    
+    pdf.setFillColor(212, 237, 218);
+    pdf.roundedRect(margin + 5, summaryStartY, sumColWidth - 10, 20, 2, 2, 'F');
+    pdf.setTextColor(46, 125, 50);
+    pdf.setFontSize(14);
+    pdf.setFont(undefined, 'bold');
+    pdf.text(`${totalJa}`, margin + sumColWidth/2, summaryStartY + 10, { align: 'center' });
+    pdf.setFontSize(8);
+    pdf.setFont(undefined, 'normal');
+    pdf.text('Ja', margin + sumColWidth/2, summaryStartY + 17, { align: 'center' });
+    
+    pdf.setFillColor(248, 215, 218);
+    pdf.roundedRect(margin + sumColWidth + 5, summaryStartY, sumColWidth - 10, 20, 2, 2, 'F');
+    pdf.setTextColor(198, 40, 40);
+    pdf.setFontSize(14);
+    pdf.setFont(undefined, 'bold');
+    pdf.text(`${totalNein}`, margin + sumColWidth + sumColWidth/2, summaryStartY + 10, { align: 'center' });
+    pdf.setFontSize(8);
+    pdf.setFont(undefined, 'normal');
+    pdf.text('Nein', margin + sumColWidth + sumColWidth/2, summaryStartY + 17, { align: 'center' });
+    
+    pdf.setFillColor(226, 227, 229);
+    pdf.roundedRect(margin + sumColWidth * 2 + 5, summaryStartY, sumColWidth - 10, 20, 2, 2, 'F');
+    pdf.setTextColor(102);
+    pdf.setFontSize(14);
+    pdf.setFont(undefined, 'bold');
+    pdf.text(`${totalNV}`, margin + sumColWidth * 2 + sumColWidth/2, summaryStartY + 10, { align: 'center' });
+    pdf.setFontSize(8);
+    pdf.setFont(undefined, 'normal');
+    pdf.text('N/V', margin + sumColWidth * 2 + sumColWidth/2, summaryStartY + 17, { align: 'center' });
+    
+    pdf.setFillColor(255, 255, 255);
+    pdf.setDrawColor(183, 28, 28);
+    pdf.roundedRect(margin + sumColWidth * 3 + 5, summaryStartY, sumColWidth - 10, 20, 2, 2, 'FD');
+    pdf.setTextColor(183, 28, 28);
+    pdf.setFontSize(14);
+    pdf.setFont(undefined, 'bold');
+    pdf.text(`${totalQuestions}`, margin + sumColWidth * 3 + sumColWidth/2, summaryStartY + 10, { align: 'center' });
+    pdf.setFontSize(8);
+    pdf.setFont(undefined, 'normal');
+    pdf.text('Gesamt', margin + sumColWidth * 3 + sumColWidth/2, summaryStartY + 17, { align: 'center' });
+    
+    currentY += 45;
+    
+    // Footer note
+    pdf.setDrawColor(200);
+    pdf.line(margin, currentY, pageWidth - margin, currentY);
+    currentY += 8;
+    pdf.setFontSize(8);
+    pdf.setTextColor(100);
+    const footerNote = pdf.splitTextToSize(
+      'Hinweis: Dieses Dokument wurde elektronisch erstellt und ist auch ohne handschriftliche Unterschrift gültig, sofern die digitale Signatur vorliegt.',
+      contentWidth
+    );
+    pdf.text(footerNote, margin, currentY);
+    currentY += footerNote.length * 3 + 5;
+    pdf.text(`Erstellt am: ${formattedDate} | Markt: ${markt} | SiFa: ${sifa}`, margin, currentY);
+    
+    // Seitenzahlen hinzufügen
+    addPageNumbers();
+    
+    // PDF öffnen (zum Drucken oder Speichern)
+    const pdfBlob = pdf.output('blob');
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+    window.open(pdfUrl, '_blank');
+    
+    document.getElementById('pdf-loading')?.remove();
+    
+  } catch (error) {
+    console.error('PDF generation error:', error);
+    document.getElementById('pdf-loading')?.remove();
+    alert('Fehler beim Erstellen des PDFs: ' + error.message);
+  }
 }
 function generateMeasure(question) {
   let measure = question.trim();
@@ -1747,9 +2488,10 @@ if (measure.includes("Leergutrücknahme")) {
   measure = "Stellen Sie sicher, dass die Leergutrücknahme gemäß DGUV Regel 100-500 (Kapitel 2.10) technisch einwandfrei, mit funktionierenden Schutzeinrichtungen versehen und frei von Gefährdungen durch Glasscherben ist.";
 }
 
-if (measure.includes("Leitern") || measure.includes("Tritte")) {
+if (measure.includes("Leitern geprüft gemäß DGUV")) {
   measure = "Führen Sie regelmäßige Prüfungen aller Leitern und Tritte nach DGUV Information 208-016 sowie gemäß den Regelungen der BetrSichV durch und dokumentieren Sie diese nachvollziehbar.";
 }
+
 
 if (measure.includes("Werden für Tätigkeiten in der Höhe (z. B. in Lager oder Verkaufsraum) geeignete und geprüfte Aufstiegshilfen (z. B. Trittstufen, Rolltritte/Elefantenfüße) in ausreichender Zahl bereitgestellt und bestimmungsgemäß benutzt") || measure.includes("Elefantenfüße")) {
   measure = "Stellen Sie sicher, dass für Arbeiten in der Höhe ausschließlich geprüfte und unbeschädigte Aufstiegshilfen (gemäß DGUV Information 208-016) verwendet werden; untersagen Sie die Nutzung ungeeigneter Ersatzlösungen wie Kisten oder Regalböden.";
@@ -2003,7 +2745,7 @@ if (measure.includes("Erfüllen die Standorte der Erste-Hilfe-Koffer die Anforde
   measure = "Platzieren Sie den Erste-Hilfe-Koffer gut sichtbar, dauerhaft zugänglich und gemäß DGUV Vorschrift 1 an einem geeigneten Ort.";
 }
 
-if (measure.includes("„Ist das Erste-Hilfe-Material an allen Standorten in vollständigem Zustand und ist das Verfallsdatum der sterilen Inhalte noch nicht überschritten")) {
+if (measure.includes("Ist das Erste-Hilfe-Material an allen Standorten in vollständigem Zustand und ist das Verfallsdatum der sterilen Inhalte noch nicht überschritten")) {
   measure = "Inhalt der Verbandkästen regelmäßig kontrollieren; Vollständigkeit und Haltbarkeit der Materialien (DIN 13157, DGUV Vorschrift 1) sicherstellen und abgelaufene oder fehlende Bestände sofort ersetzen.";
 }
 
@@ -2055,7 +2797,7 @@ if (measure.includes("Unterweisung von Praktikanten und Schüleraushilfen durchg
 }
 
 if (measure.includes("Unterweisung schriftlich dokumentiert")) {
-  measure = "Dokumentieren Sie alle durchgeführten Unterweisungen rechtskonform und archivieren Sie die Nachweise gemäß § 6 ArbSchG.";
+  measure = "Dokumentieren Sie alle durchgeführten Unterweisungen rechtskonform und archivieren Sie die Nachweise gemä   § 6 ArbSchG.";
 }
 
 if (measure.includes("Personen die Inhalte der Unterweisung verstanden")) {
@@ -2103,8 +2845,8 @@ if (measure.includes("Pausenregelung umgesetzt")) {
   measure = "Stellen Sie sicher, dass die gesetzlichen Pausenregelungen gemäß § 4 ArbZG eingehalten und in der Arbeitszeitplanung berücksichtigt werden.";
 }
 
-if (measure.includes("Pausenraum vorhanden")) {
-  measure = "Halten Sie einen geeigneten Pausenraum gemäß ArbStättV Anhang Nr. 4.2 bereit, der sauber, beheizbar und mit Sitzmöglichkeiten ausgestattet ist.";
+if (measure.includes("Pausenraum")) {
+  measure = "Nach der Arbeitsstättenverordnung (ArbStättV) und der technischen Regel ASR A4.2 dient der Pausenraum ausschließlich der Erholung der Beschäftigten. Prüfung alternativer Lagerkapazitäten, um die Aufenthaltsqualität im Pausenraum zu erhöhen und die Brandlast (durch Papier) in den Sozialräumen zu reduzieren.";
 }
 
 if (measure.includes("Überstunden gering gehalten")) {
