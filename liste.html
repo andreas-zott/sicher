@@ -363,8 +363,12 @@ input[type="text"], input[type="date"] {
 <input id="markt" placeholder="z. B. M123" required="" type="text"/>
 </div>
 <div style="margin-bottom: 10px;">
-<label for="name">Name:</label>
+<label for="name">Teilnehmer:</label>
 <input id="name" style="width: 100%;" type="text"/>
+</div>
+<div style="margin-bottom: 10px;">
+<label for="Marktleitung">Marktleitung:</label>
+<input id="Marktleitung" style="width: 100%;" type="text"/>
 </div>
 <div style="margin-bottom: 10px;">
 <label for="sifa">SiFa:</label>
@@ -1239,6 +1243,7 @@ async function generateAndSharePDF() {
   const formattedDate = today.toLocaleDateString('de-DE');
   const markt = document.getElementById('markt')?.value || 'Unbekannt';
   const name = document.getElementById('name')?.value || '-';
+  const marktleitung = document.getElementById('Marktleitung')?.value || '-';
   const sifa = document.getElementById('sifa')?.value || '-';
   const filename = `Arbeitssicherheit-Begehung-${markt}-${formattedDate}.pdf`;
 
@@ -1312,7 +1317,9 @@ async function generateAndSharePDF() {
     pdf.setTextColor(0);
     pdf.text(`Marktnummer: ${markt}`, margin, currentY);
     currentY += 6;
-    pdf.text(`Name: ${name}`, margin, currentY);
+    pdf.text(`Marktleitung: ${marktleitung}`, margin, currentY);
+    currentY += 6;
+    pdf.text(`Teilnehmer: ${name}`, margin, currentY);
     currentY += 6;
     pdf.text(`SiFa: ${sifa}`, margin, currentY);
     currentY += 12;
@@ -1894,6 +1901,7 @@ async function prepareForPrint() {
     let currentY = 0;
     
     // Get form data
+const marktleitung = document.getElementById('Marktleitung')?.value || '-';
     const markt = document.getElementById('markt')?.value || 'Nicht angegeben';
     const name = document.getElementById('name')?.value || 'Nicht angegeben';
     const sifa = document.getElementById('sifa')?.value || 'Nicht angegeben';
@@ -1914,36 +1922,56 @@ async function prepareForPrint() {
     
     currentY = 60;
     
-    // Info box
-    pdf.setFillColor(248, 249, 250);
-    pdf.setDrawColor(222, 226, 230);
-    pdf.roundedRect(margin, currentY, contentWidth, 40, 3, 3, 'FD');
-    
-    pdf.setFontSize(11);
-    pdf.setTextColor(33, 37, 41);
-    const infoStartY = currentY + 10;
-    
-    pdf.setFont(undefined, 'bold');
-    pdf.text('Markt:', margin + 8, infoStartY);
-    pdf.setFont(undefined, 'normal');
-    pdf.text(markt, margin + 35, infoStartY);
-    
-    pdf.setFont(undefined, 'bold');
-    pdf.text('Marktleitung:', margin + contentWidth/2, infoStartY);
-    pdf.setFont(undefined, 'normal');
-    pdf.text(name, margin + contentWidth/2 + 30, infoStartY);
-    
-    pdf.setFont(undefined, 'bold');
-    pdf.text('SiFa:', margin + 8, infoStartY + 12);
-    pdf.setFont(undefined, 'normal');
-    pdf.text(sifa, margin + 35, infoStartY + 12);
-    
-    pdf.setFont(undefined, 'bold');
-    pdf.text('Datum:', margin + contentWidth/2, infoStartY + 12);
-    pdf.setFont(undefined, 'normal');
-    pdf.text(formattedDate, margin + contentWidth/2 + 30, infoStartY + 12);
-    
-    currentY += 50;
+  // Info box
+pdf.setFillColor(248, 249, 250);
+pdf.setDrawColor(222, 226, 230);
+pdf.roundedRect(margin, currentY, contentWidth, 55, 3, 3, 'FD');
+
+pdf.setFontSize(11);
+pdf.setTextColor(33, 37, 41);
+
+const leftX = margin + 8;
+const rightX = margin + contentWidth - 50;
+let y = currentY + 10;
+
+// DATUM oben rechts
+pdf.setFont(undefined, 'bold');
+pdf.text('Datum:', rightX, y);
+pdf.setFont(undefined, 'normal');
+pdf.text(formattedDate, rightX + 25, y);
+
+// 1. Marktnummer
+pdf.setFont(undefined, 'bold');
+pdf.text('Marktnummer:', leftX, y);
+pdf.setFont(undefined, 'normal');
+pdf.text(markt, leftX + 40, y);
+
+y += 10;
+
+// 2. Marktleitung
+pdf.setFont(undefined, 'bold');
+pdf.text('Marktleitung:', leftX, y);
+pdf.setFont(undefined, 'normal');
+pdf.text(marktleitung, leftX + 40, y);
+
+y += 10;
+
+// 3. Teilnehmer
+pdf.setFont(undefined, 'bold');
+pdf.text('Teilnehmer:', leftX, y);
+pdf.setFont(undefined, 'normal');
+pdf.text(name, leftX + 40, y);
+
+y += 10;
+
+// 4. SiFa
+pdf.setFont(undefined, 'bold');
+pdf.text('SiFa:', leftX, y);
+pdf.setFont(undefined, 'normal');
+pdf.text(sifa, leftX + 40, y);
+
+currentY += 65;   
+ 
     
     // ===== ANLEITUNG UND NUTZUNGSHINWEIS =====
     pdf.setFillColor(255, 248, 248);
@@ -2931,11 +2959,13 @@ function exportiereMassnahmen() {
   });
   const datum = document.getElementById('datum')?.textContent || '';
   const markt = document.getElementById('markt')?.value || '';
+ const marktleitung = document.getElementById('Marktleitung')?.value || '';
   const name = document.getElementById('name')?.value || '';
   const sifa = document.getElementById('sifa')?.value || '';
   const daten = {
     datum,
     markt,
+marktleitung,
     name,
     sifa,
     maßnahmen: maßnahmenTabelle
@@ -2945,6 +2975,7 @@ function exportiereMassnahmen() {
     newWindow.postMessage(daten, "*");
   }, 1000);
 }
+
 window.addEventListener("resize", resizeCanvas);
 window.addEventListener("load", () => {
   resizeCanvas();
@@ -2989,7 +3020,8 @@ if ('serviceWorker' in navigator) {
 function manuellSpeichern() {
   const formData = {
     markt: document.getElementById('markt')?.value || '',
-    name: document.getElementById('name')?.value || '',
+    teilnehmer: document.getElementById('teilnehmer')?.value || '',
+marktleitung: document.getElementById('Marktleitung')?.value || '',
     sifa: document.getElementById('sifa')?.value || '',
     datum: document.getElementById('datum')?.textContent || '',
     antworten: {},

@@ -181,13 +181,26 @@ tfoot {display: table-footer-group;}
 
       aktuelleDaten = data;
 
-      const datum = data.datum ? new Date(data.datum).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '—';
+      let datum = '—';
+if (data.datum) {
+  if (/^\d{2}\.\d{2}\.\d{4}$/.test(data.datum)) {
+    datum = data.datum; // already German format
+  } else {
+    const d = new Date(data.datum);
+    if (!isNaN(d)) {
+      datum = d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    } else {
+      datum = data.datum;
+    }
+  }
+}
 
       document.getElementById('meta-info').innerHTML = `
-        <p><strong>📅 Datum:</strong> ${data.datum}</p>
-        <p><strong>🏬 Marktnummer:</strong> ${data.markt || '—'}</p>
-        <p><strong>👤 Name:</strong> ${data.name || '—'}</p>
-        <p><strong>🛡️ SiFa:</strong> ${data.sifa || '—'}</p>
+ <p><strong>📅 Datum:</strong> ${datum}</p>
+  <p><strong>🏬 Marktnummer:</strong> ${data.markt || '—'}</p>
+  <p><strong>👤 Marktleitung:</strong> ${data.marktleitung || '—'}</p>
+  <p><strong>👤 Teilnehmer:</strong> ${data.name || '—'}</p>
+  <p><strong>🛡️ SiFa:</strong> ${data.sifa || '—'}</p>
       `;
 
       const tbody = document.querySelector('#maßnahmen-tabelle tbody');
