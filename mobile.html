@@ -6,8 +6,60 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Arbeitssicherheit-Checkliste-2026</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
-<link href="/sicher/favicon.ico" rel="icon" type="image/x-icon"/>
-<link href="/sicher/manifest-mobile.json" rel="manifest"/>
+<link href="favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="mobile.json" rel="manifest"/>
+<style>
+.question {
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.options {
+  display: flex;
+  gap: 10px;
+}
+
+.option input {
+  display: none;
+}
+
+.option span {
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  font-size: 13px;
+  transition: 0.2s;
+}
+
+.option input:checked + span {
+  background: #eee;
+}
+
+.option input[value="ja"]:checked + span {
+  background: #e8f5e9;
+  color: var(--success);
+  border-color: var(--success);
+}
+
+.option input[value="nein"]:checked + span {
+  background: #fdecea;
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+.option input[value="nv"]:checked + span {
+  background: #eee;
+  color: var(--neutral);
+}
+
+@media (max-width: 600px) {
+  .options {
+    flex-direction: column;
+  }
+}
+
+</style>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 
@@ -344,92 +396,41 @@ input[type="text"], input[type="date"] {
   }
 }
 </style>
-
-<style>
-/* ===== MOBILE OPTIMIERUNG ===== */
-@media (max-width: 768px) {
-
-  body {
-    padding: 12px;
-    font-size: 16px;
-  }
-
-  table, thead, tbody, th, td, tr {
-    display: block;
-    width: 100%;
-  }
-
-  thead {
-    display: none;
-  }
-
-  tr {
-    margin-bottom: 15px;
-    background: white;
-    border-radius: 10px;
-    padding: 10px;
-  }
-
-  td {
-    border: none;
-    padding: 8px 0;
-    line-height: 1.6;
-  }
-
-  td:first-child {
-    font-weight: 600;
-    margin-bottom: 8px;
-  }
-
-  .radio-wrap {
-    flex-direction: row;
-    justify-content: space-around;
-    font-size: 14px;
-  }
-
-  input[type="radio"] {
-    width: 22px;
-    height: 22px;
-    margin: 6px;
-  }
-
-  button {
-    font-size: 18px;
-    padding: 14px;
-    width: 100%;
-  }
-
-  .form-section {
-    max-width: 100% !important;
-  }
-
-  #signature-pad {
-    height: 200px;
-  }
+<meta content="yes" name="apple-mobile-web-app-capable"/><meta content="default" name="apple-mobile-web-app-status-bar-style"/><link href="icon.png" rel="apple-touch-icon"/><style>
+button, input {
+  font-size: 16px !important;
 }
-</style>
 
-</head>
+input[type="radio"] {
+  width: 22px !important;
+  height: 22px !important;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+</style></head>
 <body>
 <div class="print-wrapper">
 <header>
 <div style="display: flex; justify-content: space-between; align-items: center;">
 <h1 id="titel" style="margin: 0;"></h1>
-
 <span id="datum" style="padding: 8px; font-size: 16px; font-weight: bold;"></span>
-
 </div>
 </header>
 <div class="form-section" style="max-width: 300px;">
 <div style="margin-bottom: 10px;">
-
 <br/><br/>
 <label for="markt">Marktnummer:</label>
 <input id="markt" placeholder="z. B. M123" required="" type="text"/>
 </div>
 <div style="margin-bottom: 10px;">
-<label for="name">Name:</label>
+<label for="name">Teilnehmer:</label>
 <input id="name" style="width: 100%;" type="text"/>
+</div>
+<div style="margin-bottom: 10px;">
+<label for="Marktleitung">Marktleitung:</label>
+<input id="Marktleitung" style="width: 100%;" type="text"/>
 </div>
 <div style="margin-bottom: 10px;">
 <label for="sifa">SiFa:</label>
@@ -461,7 +462,7 @@ Auf dieser Grundlage wird eine Maßnahmenliste erstellt, die alle identifizierte
   Die Marktleitung prüft die Umsetzung der Maßnahmen unmittelbar nach deren Durchführung im Rahmen der Protokollkontrolle   
     </p>
 </div>
-<table id="fragenTabelle">
+<div class="table-wrapper"><table id="fragenTabelle">
 <thead>
 <tr>
 <th>Frage</th>
@@ -1056,7 +1057,6 @@ Auf dieser Grundlage wird eine Maßnahmenliste erstellt, die alle identifizierte
 <td><label class="radio-wrap"><input name="13.0 Psychische Belastung-2" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="13.0 Psychische Belastung-2" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
-
 <tr>
 <td style="text-align: left;">Werden Überstunden gering gehalten?</td>
 <td><label class="radio-wrap"><input name="13.0 Psychische Belastung-3" type="radio" value="ja"/><span>Ja</span></label></td>
@@ -1148,7 +1148,7 @@ Auf dieser Grundlage wird eine Maßnahmenliste erstellt, die alle identifizierte
 <td><label class="radio-wrap"><input name="13.0 Psychische Belastung-17" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <br/>
 <div class="massnahmen-section">
 <h2 class="force-pagebreak" style="text-align: center;">
@@ -1304,6 +1304,7 @@ async function generateAndSharePDF() {
   const formattedDate = today.toLocaleDateString('de-DE');
   const markt = document.getElementById('markt')?.value || 'Unbekannt';
   const name = document.getElementById('name')?.value || '-';
+  const marktleitung = document.getElementById('Marktleitung')?.value || '-';
   const sifa = document.getElementById('sifa')?.value || '-';
   const filename = `Arbeitssicherheit-Begehung-${markt}-${formattedDate}.pdf`;
 
@@ -1377,7 +1378,9 @@ async function generateAndSharePDF() {
     pdf.setTextColor(0);
     pdf.text(`Marktnummer: ${markt}`, margin, currentY);
     currentY += 6;
-    pdf.text(`Name: ${name}`, margin, currentY);
+    pdf.text(`Marktleitung: ${marktleitung}`, margin, currentY);
+    currentY += 6;
+    pdf.text(`Teilnehmer: ${name}`, margin, currentY);
     currentY += 6;
     pdf.text(`SiFa: ${sifa}`, margin, currentY);
     currentY += 12;
@@ -1959,6 +1962,7 @@ async function prepareForPrint() {
     let currentY = 0;
     
     // Get form data
+const marktleitung = document.getElementById('Marktleitung')?.value || '-';
     const markt = document.getElementById('markt')?.value || 'Nicht angegeben';
     const name = document.getElementById('name')?.value || 'Nicht angegeben';
     const sifa = document.getElementById('sifa')?.value || 'Nicht angegeben';
@@ -1979,36 +1983,56 @@ async function prepareForPrint() {
     
     currentY = 60;
     
-    // Info box
-    pdf.setFillColor(248, 249, 250);
-    pdf.setDrawColor(222, 226, 230);
-    pdf.roundedRect(margin, currentY, contentWidth, 40, 3, 3, 'FD');
-    
-    pdf.setFontSize(11);
-    pdf.setTextColor(33, 37, 41);
-    const infoStartY = currentY + 10;
-    
-    pdf.setFont(undefined, 'bold');
-    pdf.text('Markt:', margin + 8, infoStartY);
-    pdf.setFont(undefined, 'normal');
-    pdf.text(markt, margin + 35, infoStartY);
-    
-    pdf.setFont(undefined, 'bold');
-    pdf.text('Marktleitung:', margin + contentWidth/2, infoStartY);
-    pdf.setFont(undefined, 'normal');
-    pdf.text(name, margin + contentWidth/2 + 30, infoStartY);
-    
-    pdf.setFont(undefined, 'bold');
-    pdf.text('SiFa:', margin + 8, infoStartY + 12);
-    pdf.setFont(undefined, 'normal');
-    pdf.text(sifa, margin + 35, infoStartY + 12);
-    
-    pdf.setFont(undefined, 'bold');
-    pdf.text('Datum:', margin + contentWidth/2, infoStartY + 12);
-    pdf.setFont(undefined, 'normal');
-    pdf.text(formattedDate, margin + contentWidth/2 + 30, infoStartY + 12);
-    
-    currentY += 50;
+  // Info box
+pdf.setFillColor(248, 249, 250);
+pdf.setDrawColor(222, 226, 230);
+pdf.roundedRect(margin, currentY, contentWidth, 55, 3, 3, 'FD');
+
+pdf.setFontSize(11);
+pdf.setTextColor(33, 37, 41);
+
+const leftX = margin + 8;
+const rightX = margin + contentWidth - 50;
+let y = currentY + 10;
+
+// DATUM oben rechts
+pdf.setFont(undefined, 'bold');
+pdf.text('Datum:', rightX, y);
+pdf.setFont(undefined, 'normal');
+pdf.text(formattedDate, rightX + 25, y);
+
+// 1. Marktnummer
+pdf.setFont(undefined, 'bold');
+pdf.text('Marktnummer:', leftX, y);
+pdf.setFont(undefined, 'normal');
+pdf.text(markt, leftX + 40, y);
+
+y += 10;
+
+// 2. Marktleitung
+pdf.setFont(undefined, 'bold');
+pdf.text('Marktleitung:', leftX, y);
+pdf.setFont(undefined, 'normal');
+pdf.text(marktleitung, leftX + 40, y);
+
+y += 10;
+
+// 3. Teilnehmer
+pdf.setFont(undefined, 'bold');
+pdf.text('Teilnehmer:', leftX, y);
+pdf.setFont(undefined, 'normal');
+pdf.text(name, leftX + 40, y);
+
+y += 10;
+
+// 4. SiFa
+pdf.setFont(undefined, 'bold');
+pdf.text('SiFa:', leftX, y);
+pdf.setFont(undefined, 'normal');
+pdf.text(sifa, leftX + 40, y);
+
+currentY += 65;   
+ 
     
     // ===== ANLEITUNG UND NUTZUNGSHINWEIS =====
     pdf.setFillColor(255, 248, 248);
@@ -2996,11 +3020,13 @@ function exportiereMassnahmen() {
   });
   const datum = document.getElementById('datum')?.textContent || '';
   const markt = document.getElementById('markt')?.value || '';
+ const marktleitung = document.getElementById('Marktleitung')?.value || '';
   const name = document.getElementById('name')?.value || '';
   const sifa = document.getElementById('sifa')?.value || '';
   const daten = {
     datum,
     markt,
+marktleitung,
     name,
     sifa,
     maßnahmen: maßnahmenTabelle
@@ -3010,6 +3036,7 @@ function exportiereMassnahmen() {
     newWindow.postMessage(daten, "*");
   }, 1000);
 }
+
 window.addEventListener("resize", resizeCanvas);
 window.addEventListener("load", () => {
   resizeCanvas();
@@ -3054,7 +3081,8 @@ if ('serviceWorker' in navigator) {
 function manuellSpeichern() {
   const formData = {
     markt: document.getElementById('markt')?.value || '',
-    name: document.getElementById('name')?.value || '',
+    teilnehmer: document.getElementById('teilnehmer')?.value || '',
+marktleitung: document.getElementById('Marktleitung')?.value || '',
     sifa: document.getElementById('sifa')?.value || '',
     datum: document.getElementById('datum')?.textContent || '',
     antworten: {},
@@ -3236,5 +3264,11 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 </script>
-</body>
+<script>
+document.addEventListener("touchstart", function(e) {
+  if (e.target.tagName === "CANVAS") {
+    e.preventDefault();
+  }
+}, { passive: false });
+</script></body>
 </html>
