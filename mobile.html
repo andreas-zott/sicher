@@ -9,65 +9,11 @@
 <link href="favicon.ico" rel="icon" type="image/x-icon"/>
 <link href="/sicher/manifest-mobile.json" rel="manifest"/>
 <style>
-.question {
-  margin-bottom: 12px;
-  font-size: 14px;
-}
-
-.options {
-  display: flex;
-  gap: 10px;
-}
-
-.option input {
-  display: none;
-}
-
-.option span {
-  padding: 6px 12px;
-  border-radius: 20px;
-  border: 1px solid #ddd;
-  cursor: pointer;
-  font-size: 13px;
-  transition: 0.2s;
-}
-
-.option input:checked + span {
-  background: #eee;
-}
-
-.option input[value="ja"]:checked + span {
-  background: #e8f5e9;
-  color: var(--success);
-  border-color: var(--success);
-}
-
-.option input[value="nein"]:checked + span {
-  background: #fdecea;
-  color: var(--danger);
-  border-color: var(--danger);
-}
-
-.option input[value="nv"]:checked + span {
-  background: #eee;
-  color: var(--neutral);
-}
-
-@media (max-width: 600px) {
-  .options {
-    flex-direction: column;
-  }
-}
-
-</style>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-
     .handlungsanweisung-box {
         border: 2px solid #C62828; 
         padding: 18px;
         border-radius: 10px;
-        background-color: #fff8f8; 
+        background-color: #; 
         font-family: Arial, sans-serif;
         margin: 18px 0;
     }
@@ -82,7 +28,7 @@
 
 #signature-pad, canvas { border: 2px solid #C62828 !important; border-radius: 12px; }
 </style>
-<style>
+<style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 input[type="radio"] {
   appearance: none;
   -webkit-appearance: none;
@@ -143,31 +89,70 @@ input[type="radio"][value="nicht_vorhanden"]:checked {
   }
   @page {
     size: A4 portrait;
-    margin: 12mm 10mm;
+    margin: 15mm 12mm;
   }
   body {
     background: white !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
-    font-size: 10pt !important;
+    font-size: 9pt !important;
   }
 
   h1 { font-size: 14pt !important; }
   h2 { font-size: 12pt !important; }
-  table { font-size: 9pt !important; }
+  table { font-size: 8pt !important; }
   td, th {
-    font-size: 9pt !important;
-    padding: 6px 8px !important;
-    line-height: 1.4 !important;
+    font-size: 8pt !important;
+    padding: 4px 6px !important;
+    line-height: 1.2 !important;
   }
   input[type="text"], input[type="date"] {
-    font-size: 9pt !important;
+    font-size: 8pt !important;
   }
   
-  /* Prevent row splitting */
+  /* Improved page break handling to prevent empty pages */
+  .category-section {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .category-header {
+    page-break-before: auto !important; /* Changed from always to auto */
+    break-before: auto !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+
+  .category-header:first-of-type {
+    page-break-before: auto !important;
+    break-before: auto !important;
+  }
+
+  .massnahmen-section {
+    page-break-before: auto !important; /* Changed from always to auto */
+    break-before: auto !important;
+    margin-top: 20px !important;
+  }
+  
+  /* Prevent empty rows from creating new pages */
+  .massnahmen-section table tr:empty,
+  .massnahmen-section table tr td:empty {
+    display: none !important;
+  }
+  
+  /* Hide empty measures table if no content */
+  .massnahmen-section tbody:empty {display:none !important;}
+    display: none !important;
+  }
+
   tr, td, th {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
+  }
+
+  .category-header + tr {
+    page-break-before: avoid !important;
+    break-before: avoid !important;
   }
 
   #maßnahmen-tabelle tr {
@@ -183,33 +168,20 @@ input[type="radio"][value="nicht_vorhanden"]:checked {
   .confirmation-section {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
+    page-break-before: auto !important; /* Changed from always */
+    margin-top: 20px !important;
   }
 
   .signature-container {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
   }
-}
-
-/* PDF Export specific styles - applied via JavaScript */
-.pdf-export-mode .category-page {
-  page-break-before: always !important;
-  break-before: page !important;
-}
-
-.pdf-export-mode .category-page:first-child {
-  page-break-before: auto !important;
-  break-before: auto !important;
-}
-
-.pdf-export-mode .massnahmen-page {
-  page-break-before: always !important;
-  break-before: page !important;
-}
-
-.pdf-export-mode .signature-page {
-  page-break-before: always !important;
-  break-before: page !important;
+  
+  /* Prevent orphaned content at page end */
+  .page-break-before {
+    page-break-before: auto !important;
+    break-before: auto !important;
+  }
 }
 
 #signature-pad {
@@ -231,6 +203,8 @@ input[type="radio"][value="nicht_vorhanden"]:checked {
 button {
   background-color: #B71C1C;
   color: white;
+  background-color: #B71C1C;
+  color: white;
   border: none;
   border-radius: 4px;
   padding: 10px 16px;
@@ -239,6 +213,7 @@ button {
   margin-right: 10px;
 }
 button:hover {
+  background-color: #D32F2F;
   background-color: #8B0000;
 }
 .confirmation-section {
@@ -386,8 +361,8 @@ input[type="text"], input[type="date"] {
 /* Improved print readability */
 @media print {
   body, table, td, th {
-    font-size: 9pt !important;
-    line-height: 1.35 !important;
+    font-size: 7pt !important;
+    line-height: 1.15 !important;
   }
   td, th {
     white-space: normal !important;
@@ -396,19 +371,236 @@ input[type="text"], input[type="date"] {
   }
 }
 </style>
-<meta content="yes" name="apple-mobile-web-app-capable"/><meta content="default" name="apple-mobile-web-app-status-bar-style"/><link href="mobile.png" rel="apple-touch-icon"/><style>
-button, input {
-  font-size: 16px !important;
+
+<style>
+/* ===== MODERN DESIGN UPGRADE 2026 ===== */
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    background: linear-gradient(180deg, #f8f9fb 0%, #eef1f6 100%) !important;
+    padding: 30px !important;
+}
+
+.print-wrapper {
+    max-width: 1100px;
+    margin: auto;
+}
+
+header {
+    background: white;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    margin-bottom: 30px;
+}
+
+h1 {
+    font-size: 28px !important;
+    font-weight: 700;
+}
+
+.form-section {
+    background: white;
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+    margin-bottom: 25px;
+}
+
+.handlungsanweisung-box {
+    background: white !important;
+    border-left: 6px solid #B71C1C !important;
+    border-radius: 14px !important;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+table {
+    border-radius: 16px;
+    overflow: hidden;
+    font-size: 16px !important;
+}
+
+th {
+    font-size: 17px !important;
+    padding: 16px !important;
+}
+
+td {
+    padding: 14px !important;
+    font-size: 16px !important;
+}
+
+.category-header {
+    font-size: 18px !important;
+    letter-spacing: 0.5px;
+    padding: 18px !important;
+    border-top: 4px solid #B71C1C !important;
+    background: linear-gradient(90deg,#fff 0%,#fbe9e7 100%) !important;
+}
+
+/* Extra strong separation before Psychische Belastung */
+.category-header:contains("13.0 Psychische Belastung") {
+    margin-top: 60px !important;
 }
 
 input[type="radio"] {
-  width: 22px !important;
-  height: 22px !important;
+    width: 22px !important;
+    height: 22px !important;
 }
 
-.table-wrapper {
-  overflow-x: auto;
+.radio-wrap span {
+    font-size: 13px !important;
 }
+
+button {
+    font-size: 18px !important;
+    padding: 14px 22px !important;
+    border-radius: 12px !important;
+}
+
+/* iPad optimization */
+@media (min-width: 768px) {
+    table {
+        font-size: 17px !important;
+    }
+    td {
+        padding: 16px !important;
+    }
+}
+
+/* Clear separation blocks */
+.category-header {
+    position: relative;
+}
+
+.category-header::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 100%;
+    height: 6px;
+    background: linear-gradient(90deg,#B71C1C,#ef5350);
+}
+</style>
+
+
+<style>
+/* ===== iPHONE OPTIMIERUNG 2026 ===== */
+
+/* Base mobile improvements */
+@media (max-width: 767px) {
+
+    body {
+        padding: 12px !important;
+    }
+
+    header {
+        padding: 16px !important;
+        border-radius: 12px !important;
+    }
+
+    h1 {
+        font-size: 20px !important;
+        text-align: left;
+    }
+
+    .form-section {
+        max-width: 100% !important;
+        padding: 16px !important;
+    }
+
+    input[type="text"],
+    input[type="date"] {
+        font-size: 18px !important;
+        padding: 12px !important;
+        max-width: 100% !important;
+    }
+
+    table {
+        font-size: 15px !important;
+        border-radius: 12px !important;
+    }
+
+    th {
+        font-size: 14px !important;
+        padding: 10px !important;
+    }
+
+    td {
+        padding: 12px 8px !important;
+        font-size: 15px !important;
+        vertical-align: top !important;
+    }
+
+    /* Stack question and answers vertically */
+    #fragenTabelle thead {
+        display: none;
+    }
+
+    #fragenTabelle tr {
+        display: block;
+        margin-bottom: 18px;
+        background: white;
+        border-radius: 14px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        padding: 14px;
+    }
+
+    #fragenTabelle td {
+        display: block;
+        border: none !important;
+        padding: 8px 0 !important;
+    }
+
+    #fragenTabelle td:first-child {
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    /* Answer buttons larger & horizontal */
+    .radio-wrap {
+        flex-direction: row !important;
+        gap: 12px;
+        justify-content: flex-start;
+        font-size: 15px !important;
+    }
+
+    input[type="radio"] {
+        width: 26px !important;
+        height: 26px !important;
+    }
+
+    .radio-wrap span {
+        font-size: 15px !important;
+    }
+
+    button {
+        width: 100% !important;
+        font-size: 18px !important;
+        padding: 16px !important;
+        margin: 12px 0 !important;
+    }
+
+    .handlungsanweisung-box {
+        padding: 16px !important;
+        font-size: 15px !important;
+    }
+
+    .category-header {
+        font-size: 17px !important;
+        padding: 14px !important;
+        margin-top: 25px !important;
+    }
+
+}
+
+/* Improve tap responsiveness */
+button,
+input,
+label {
+    touch-action: manipulation;
+}
+
 </style></head>
 <h1 id="titel"></h1>
 <p id="untertitel"></p>
