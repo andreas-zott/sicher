@@ -1,11 +1,15 @@
 <!DOCTYPE html>
+
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arbeitssicherheits-Audit Tool</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Arbeitssicherheits-Audit</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<link href="/sicher/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="/sicher/audit.json" rel="manifest"/>
+<style>
+
         * {
             margin: 0;
             padding: 0;
@@ -481,20 +485,25 @@
                 justify-content: center;
             }
         }
-        
         @media print {
-            .action-bar, .signature-actions, .btn {
-                display: none !important;
-            }
-            
-            .category {
-                break-inside: avoid;
-            }
-            
-            .category.open .category-content {
-                display: block !important;
-            }
-        }
+    .action-bar, 
+    .signature-actions, 
+    .btn,
+    footer,          /* falls echtes <footer>-Element */
+    .footer,         /* falls Klasse */
+    #footer {        /* falls ID */
+        display: none !important;
+    }
+    
+    .category {
+        break-inside: avoid;
+    }
+    
+    .category.open .category-content {
+        display: block !important;
+    }
+}
+
     </style>
 </head>
 <body>
@@ -541,6 +550,9 @@
             </button>
             <button class="btn btn-danger" onclick="resetAll()">
                 <span>&#128465;</span> Zuruecksetzen
+            </button>
+ <button class="btn btn-secondary" onclick="generateAndSharePDF()">
+                <span>&#128196;</span>📤 PDF teilen (iPad)
             </button>
         </div>
         
@@ -2123,6 +2135,44 @@ if (measure.includes("Beziehen Sie Mitarbeiteranregungen in die Entscheidungspro
             }, 3000);
         }
     </script>
+<script>
+async function generateAndSharePDF() {
+    try {
+        // Seite klonen
+        const content = document.documentElement.cloneNode(true);
+
+        // Buttons entfernen für saubere Ausgabe
+        content.querySelectorAll('.action-bar, .btn').forEach(el => el.remove());
+
+        // HTML erzeugen
+        const htmlString = "<!DOCTYPE html>" + content.outerHTML;
+
+        // Datei erzeugen
+        const blob = new Blob([htmlString], { type: 'text/html' });
+        const file = new File([blob], "Audit-Bericht.html", { type: "text/html" });
+
+        // iPad / iPhone Share API
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({
+                title: "Audit Bericht",
+                text: "Audit Bericht",
+                files: [file]
+            });
+        } else {
+            // Fallback
+            window.print();
+        }
+
+    } catch (err) {
+        console.error(err);
+        alert("Teilen fehlgeschlagen – Druckdialog wird geöffnet.");
+        window.print();
+    }
+}
+
+
+  </script>
+
 <footer style="
   text-align: center;
   margin-top: 40px;
