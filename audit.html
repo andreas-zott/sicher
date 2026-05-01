@@ -9,6 +9,8 @@
 <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon"/>
 <link href="/sicher/audit.json" rel="manifest"/>
 <style>
+
+
         * {
             margin: 0;
             padding: 0;
@@ -499,7 +501,9 @@
             }
         }
     </style>
+
 </head>
+
 <body>
     <div class="container">
         <header>
@@ -542,6 +546,10 @@
             <button class="btn btn-primary" onclick="exportPdf()">
                 <span>&#128196;</span> Als PDF exportieren
             </button>
+            <button class="btn btn-secondary" onclick="generateAndSharePDF()">
+                <span>&#128196;</span>📤 PDF teilen (iPad)
+            </button>
+</button>
             <button class="btn btn-danger" onclick="resetAll()">
                 <span>&#128465;</span> Zuruecksetzen
             </button>
@@ -2119,6 +2127,51 @@ if (measure.includes("Beziehen Sie Mitarbeiteranregungen in die Entscheidungspro
         }
 
     </script>
+  <script>
+async function generateAndSharePDF() {
+    try {
+        // Seite klonen
+        const content = document.documentElement.cloneNode(true);
+
+        // Buttons entfernen für saubere Ausgabe
+        content.querySelectorAll('.action-bar, .btn').forEach(el => el.remove());
+
+        // HTML erzeugen
+        const htmlString = "<!DOCTYPE html>" + content.outerHTML;
+
+        // Datei erzeugen
+        const blob = new Blob([htmlString], { type: 'text/html' });
+        const file = new File([blob], "Audit-Bericht.html", { type: "text/html" });
+
+        // iPad / iPhone Share API
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({
+                title: "Audit Bericht",
+                text: "Audit Bericht",
+                files: [file]
+            });
+        } else {
+            // Fallback
+            window.print();
+        }
+
+    } catch (err) {
+        console.error(err);
+        alert("Teilen fehlgeschlagen – Druckdialog wird geöffnet.");
+        window.print();
+    }
+}
+
+
+
+
+
+
+
+
+
+
+  </script>
 <footer style="
   text-align: center;
   margin-top: 40px;
