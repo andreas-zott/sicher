@@ -1,19 +1,11 @@
 <!DOCTYPE html>
-
 <html lang="de">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Arbeitssicherheits-Audit</title>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
-<link href="/sicher/favicon.ico" rel="icon" type="image/x-icon"/>
-<link href="/sicher/audit.json" rel="manifest"/>
-<style>
-
-
-
-
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arbeitssicherheits-Audit Tool</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
         * {
             margin: 0;
             padding: 0;
@@ -329,7 +321,6 @@
             padding: 40px;
             color: #64748b;
         }
-
         
         /* Signature */
         .signature-section {
@@ -490,15 +481,7 @@
                 justify-content: center;
             }
         }
-
-        @media print {
-    .action-bar, 
-    .signature-actions, 
-    .btn,
-    footer {
-        display: none !important;
-    }
-}
+        
         @media print {
             .action-bar, .signature-actions, .btn {
                 display: none !important;
@@ -513,9 +496,7 @@
             }
         }
     </style>
-
 </head>
-
 <body>
     <div class="container">
         <header>
@@ -558,10 +539,6 @@
             <button class="btn btn-primary" onclick="exportPdf()">
                 <span>&#128196;</span> Als PDF exportieren
             </button>
-            <button class="btn btn-secondary" onclick="generateAndSharePDF()">
-                <span>&#128196;</span>📤 PDF teilen (iPad)
-            </button>
-</button>
             <button class="btn btn-danger" onclick="resetAll()">
                 <span>&#128465;</span> Zuruecksetzen
             </button>
@@ -1735,7 +1712,15 @@ if (measure.includes("Beziehen Sie Mitarbeiteranregungen in die Entscheidungspro
                 
                 html += `<tr>
                     <td>${m.question}</td>
-                  
+
+                  <td>
+    <textarea 
+        placeholder="Massnahme eingeben"
+        onchange="updateMeasure('${qId}', 'measure', this.value)"
+        rows="5"
+        style="width: 100%; resize: vertical;"
+    >${m.measure}</textarea>
+</td>
                     <td><input type="text" value="${m.responsible}" placeholder="Name" onchange="updateMeasure('${qId}', 'responsible', this.value)"></td>
                     <td><input type="date" value="${m.deadline}" onchange="updateMeasure('${qId}', 'deadline', this.value)"></td>
                     <td>
@@ -2137,45 +2122,7 @@ if (measure.includes("Beziehen Sie Mitarbeiteranregungen in die Entscheidungspro
                 toast.classList.remove('show');
             }, 3000);
         }
-
     </script>
-  <script>
-async function generateAndSharePDF() {
-    try {
-        // Seite klonen
-        const content = document.documentElement.cloneNode(true);
-
-        // Buttons entfernen für saubere Ausgabe
-        content.querySelectorAll('.action-bar, .btn').forEach(el => el.remove());
-
-        // HTML erzeugen
-        const htmlString = "<!DOCTYPE html>" + content.outerHTML;
-
-        // Datei erzeugen
-        const blob = new Blob([htmlString], { type: 'text/html' });
-        const file = new File([blob], "Audit-Bericht.html", { type: "text/html" });
-
-        // iPad / iPhone Share API
-        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-            await navigator.share({
-                title: "Audit Bericht",
-                text: "Audit Bericht",
-                files: [file]
-            });
-        } else {
-            // Fallback
-            window.print();
-        }
-
-    } catch (err) {
-        console.error(err);
-        alert("Teilen fehlgeschlagen – Druckdialog wird geöffnet.");
-        window.print();
-    }
-}
-
-
-  </script>
 <footer style="
   text-align: center;
   margin-top: 40px;
@@ -2197,5 +2144,6 @@ async function generateAndSharePDF() {
 </p>
 </div><div style="font-size:11px; color:#777; margin-top:8px;">Stand: April 2026</div>
 </footer>
+
 </body>
 </html>
