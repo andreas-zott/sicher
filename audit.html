@@ -19,6 +19,15 @@
     align-items: center;       /* 👉 vertikal sauber */
 }
 
+.action-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 300px);
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+
 
 /* Seitenlogik für PDF */
 .page-break {
@@ -644,10 +653,10 @@ Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung d
                 <span>&#128190;</span> Speichern
             </button>
             <button class="btn btn-success" onclick="exportJson()">
-                <span>&#128229;</span> Als JSON exportieren
+                <span>&#128229;</span>JSON exportieren
             </button>
             <button class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">
-                <span>&#128194;</span> JSON laden
+                <span>&#128194;</span>JSON laden
             </button>
             <input type="file" id="fileInput" class="file-input" accept=".json" onchange="importJson(event)">
             <button class="btn btn-primary" onclick="exportPdf()">
@@ -755,7 +764,7 @@ Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung d
                     'Sind die Verkehrswege so beschaffen, dass kein Unfallrisiko durch Stolpern, Ausrutschen oder Umknicken besteht?',
                     'Sind die Treppen unbeschädigt und frei von Gegenständen?',
 'Sind Feuerloescher vorhanden und geprueft?',
-                    'Sind Betriebsanweisungen gut zugänglich und werden Sicherheitsanweisungen eingehalten?',
+                    'Sind Betriebsanweisungen gut zug  nglich und werden Sicherheitsanweisungen eingehalten?',
                     'Ist die Beleuchtung in den Verkaufs- und Lagerbereichen gemäß ASR A3.4 ausreichend dimensioniert (mind. 300 Lux im Verkaufsraum), voll funktionsfähig und so beschaffen, dass Gefahrenhinweise auf Produkten sowie Leckagen in den Regalen jederzeit zweifelsfrei erkennbar sind?',
                                     
                     'Sind Notausgaenge gekennzeichnet und frei zugaenglich?'
@@ -2033,18 +2042,51 @@ if (measure.includes("Beziehen Sie Mitarbeiteranregungen in die Entscheidungspro
             }
         }
         
-        function exportJson() {
-            const data = getFormData();
-            const json = JSON.stringify(data, null, 2);
-            const blob = new Blob([json], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `audit-${data.markt || 'export'}-${data.datum || 'datum'}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-            showToast('JSON exportiert!', 'success');
+function exportJson() {
+  const data = getFormData();
+  const json = JSON.stringify(data, null, 2);
+  const filename = `audit-${data.markt || 'export'}-${data.datum || 'datum'}.json`;
+  
+  // Versuche File System Access API (zeigt "Speichern unter" Dialog)
+  if ('showSaveFilePicker' in window) {
+    (async () => {
+      try {
+        const handle = await window.showSaveFilePicker({
+          suggestedName: filename,
+          types: [{
+            description: 'JSON Datei',
+            accept: { 'application/json': ['.json'] }
+          }]
+        });
+        const writable = await handle.createWritable();
+        await writable.write(json);
+        await writable.close();
+        showToast('JSON erfolgreich gespeichert!', 'success');
+      } catch (err) {
+        // Benutzer hat abgebrochen oder Fehler
+        if (err.name !== 'AbortError') {
+          console.error('Speichern fehlgeschlagen:', err);
+          // Fallback zum normalen Download
+          fallbackDownload();
         }
+      }
+    })();
+  } else {
+    // Fallback fuer Browser ohne File System Access API (z.B. iPad Safari)
+    fallbackDownload();
+  }
+  
+  function fallbackDownload() {
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('JSON exportiert!', 'success');
+  }
+  }
         
         function importJson(event) {
             const file = event.target.files[0];
@@ -2873,20 +2915,7 @@ async function generateAndSharePDF() {
 </script>
 
         <div class="action-bar">
-            <button class="btn btn-primary" onclick="saveToStorage()">
-                <span>&#128190;</span> Speichern
-            </button>
-            <button class="btn btn-success" onclick="exportJson()">
-                <span>&#128229;</span> Als JSON exportieren
-            </button>
-            <button class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">
-                <span>&#128194;</span> JSON laden
-            </button>
-            <input type="file" id="fileInput" class="file-input" accept=".json" onchange="importJson(event)">
-            <button class="btn btn-primary" onclick="exportPdf()">
-                <span>&#128196;</span> Als PDF exportieren
-            </button>
-            <button class="btn btn-danger" onclick="resetAll()">
+                      <button class="btn btn-danger" onclick="resetAll()">
                 <span>&#128465;</span> Zuruecksetzen
             </button>
  <button class="btn btn-secondary" onclick="generateAndSharePDF()">
