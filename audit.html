@@ -1875,13 +1875,16 @@ if (measure.includes("Beziehen Sie Mitarbeiteranregungen in die Entscheidungspro
                     <td>${m.question}</td>
 
                   <td>
-    <textarea 
-        placeholder="Massnahme eingeben"
-        onchange="updateMeasure('${qId}', 'measure', this.value)"
-        rows="5"
-        style="width: 100%; resize: vertical;"
-    >${m.measure}</textarea>
+<textarea 
+    placeholder="Massnahme eingeben"
+    oninput="autoResize(this); updateMeasure('${qId}', 'measure', this.value)"
+    rows="5"
+    style="width: 100%; resize: none; overflow: hidden;"
+>${m.measure}</textarea>
+
+
 </td>
+
                     <td><input type="text" value="${m.responsible}" placeholder="Name" onchange="updateMeasure('${qId}', 'responsible', this.value)"></td>
                     <td><input type="date" value="${m.deadline}" onchange="updateMeasure('${qId}', 'deadline', this.value)"></td>
                     <td>
@@ -2988,7 +2991,6 @@ async function generateAndSharePDF() {
         document.getElementById('pdf-loading')?.remove();
     }
 }
-
 </script>
         <div class="action-bar">
                       <button class="btn btn-danger" onclick="resetAll()">
