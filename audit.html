@@ -8,6 +8,19 @@
 <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon"/>
 <link href="/sicher/audit.json" rel="manifest"/>
 <style>
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.header-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.logo {
+    height: 60px; /* Größe anpassen */
+}
 .action-bar {
     display: flex;
     flex-wrap: wrap;
@@ -73,7 +86,7 @@ table, tr, td {
         }
         
         header {
-            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+             background: linear-gradient(135deg, #b30000 0%, #ff4d4d 100%);
             color: white;
             padding: 24px;
             border-radius: 12px;
@@ -591,10 +604,13 @@ table, tr, td {
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>Arbeitssicherheits-Audit Tool</h1>
-            <p>Checkliste und Massnahmenplan</p>
-        </header>
+        <header class="header">
+    <div class="header-text">
+        <h1>Arbeitssicherheits-Audit Tool</h1>
+        <p>Checkliste und Massnahmenplan</p>
+    </div>
+     <div class="logo-text"></div>
+</header>
         
         <!-- Dashboard -->
         <div class="dashboard">
@@ -665,6 +681,9 @@ Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung d
             </button>
  <button class="btn btn-secondary" onclick="generateAndSharePDF()">
                 <span>&#128196;</span>📤 PDF teilen (iPad)
+            </button>
+            <button class="btn btn-success" onclick="openMassnahmenplan()">
+                <span>⚠</span> Massnahmenplan öffnen
             </button>
         </div>
         
@@ -2321,6 +2340,45 @@ function sharePage() {
     }
 }
 
+// Massnahmenplan öffnen und Daten übertragen
+function openMassnahmenplan() {
+    // Prüfen ob Massnahmen vorhanden sind
+    const measureKeys = Object.keys(measures);
+    if (measureKeys.length === 0) {
+        showToast('Keine Massnahmen vorhanden. Wählen Sie "Nein" bei Prüfpunkten, um Massnahmen hinzuzufügen.', 'error');
+        return;
+    }
+    
+    // Daten sammeln (inkl. Unterschriften)
+    const massnahmenData = {
+        markt: document.getElementById('markt').value,
+        datum: document.getElementById('datum').value,
+        teilnehmer: document.getElementById('teilnehmer').value,
+        marktleitung: document.getElementById('marktleitung').value,
+        sifa: document.getElementById('sifa').value,
+        measures: measures,
+        signatures: signatures
+    };
+    
+    // Daten in localStorage speichern für Fallback
+    localStorage.setItem('massnahmenplanData', JSON.stringify(massnahmenData));
+    
+    // Daten als Base64 kodieren für URL-Übertragung
+    try {
+        const jsonStr = JSON.stringify(massnahmenData);
+        const encodedData = btoa(encodeURIComponent(jsonStr));
+        
+        // Zur Massnahmenplan-Seite navigieren
+        window.open('Massnahmenplan.html?data=' + encodedData, '_blank');
+        showToast('Massnahmenplan wird geöffnet...', 'success');
+    } catch (e) {
+        console.error('Fehler beim Öffnen des Massnahmenplans:', e);
+        // Fallback: Nur mit localStorage öffnen
+        window.open('Massnahmenplan.html', '_blank');
+        showToast('Massnahmenplan wird geöffnet...', 'success');
+    }
+}
+
 </script>
 <script>
 // PDF generation with jsPDF - renders each category on a separate A4 page
@@ -2945,6 +3003,9 @@ fetch('http://DEINE_NAS_IP/save_json.php', {
             </button>
  <button class="btn btn-secondary" onclick="generateAndSharePDF()">
                 <span>&#128196;</span>📤 PDF teilen (iPad)
+            </button>
+            <button class="btn btn-success" onclick="openMassnahmenplan()">
+                <span>⚠</span> Massnahmenplan öffnen
             </button>
         </div>
 <footer style="
