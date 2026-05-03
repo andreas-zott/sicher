@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="de">
 <head>
 <meta charset="utf-8"/>
@@ -9,7 +8,6 @@
 <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon"/>
 <link href="/sicher/audit.json" rel="manifest"/>
 <style>
-
 .action-bar {
     display: flex;
     flex-wrap: wrap;
@@ -789,6 +787,19 @@ Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung d
            ]
             },
             {
+
+ id: ' sozialräume',
+                name: ' Sozialräume',
+                questions: [
+                    'Hängen im Sozialbereich die aktuellen aushangpflichtigen Gesetze, Unfallverhütungsvorschriften sowie die Brandschutzordnung Teil A aus?',
+                    'Sind die Kaffeemaschine und andere hitzeentwickelnde Geräte auf einer nicht brennbaren Unterlage abgestellt?',
+                    'Werden ortsveränderliche elektrische Betriebsmittel (z. B. Leitungen, Steckverbindungen, Leuchten, Geräte) in angemessenen Zeitabständen geprüft?',
+ 'Dient der Pausenraum primär der Erholung der Beschäftigten und ist er frei von größeren Mengen an betrieblichem Lagergut (z. B. Archivboxen)?'
+
+
+                ]
+            },
+            {
                 id: 'erstehilfe',
                 name: 'Erste Hilfe',
                 questions: [
@@ -942,8 +953,8 @@ id: '  kassenzone',
                 ]
             },
             {
-                id: 'organisation',
-                name: 'Organisation',
+                id: 'marktleiterbüro',
+                name: 'Marktleiterbüro',
                 questions: [
                     'Liegt eine aktuelle Liste sowie Prüfberichte prüfungsbedürftiger Einrichtungen vor?',
                     'Sind Maßnahmen getroffen, die den Anreiz zu Raubüberfällen vermindern (z. B. Türspion, feststehender Knauf)?',
@@ -963,13 +974,26 @@ id: '  kassenzone',
                 ]
             },
             {
+
+id: 'dokumentation',
+                name: 'Dokumentation',
+                questions: [
+                  'Wird die Dokumentation von Erste-Hilfe-Leistungen ordnungsgemäß geführt und aufbewahrt?',
+                    'Ist ein Sicherheitsbeauftragter ausgebildet und bestellt?',
+ 'Ist während der gesamten Ladenöffnungszeit mindestens ein Mitarbeiter mit der Qualifikation als Brandschutzhelfer anwesend?',
+ 'Erfolgte die letzte Unterweisung zum Umgang mit Zahlungsmitteln innerhalb der letzten 6 Monate?',
+                    'Wurden bei der Unterweisung aktuelle Änderungen in den betrieblichen Abläufen oder neue Sicherheitstechniken berücksichtigt?'
+
+    ]
+            },
+            {
+
                 id: ' psychische Belastung',
                 name: ' Psychische Belastung',
                 questions: [
                     'Werden Wünsche der Beschäftigten bei der Arbeitsplanung berücksichtigt?',
                     'Ist die Pausenregelung umgesetzt?',
-                    'Dient der Pausenraum primär der Erholung der Beschäftigten und ist er frei von größeren Mengen an betrieblichem Lagergut (z. B. Archivboxen)?',
-                    'Werden Überstunden gering gehalten?',
+                                       'Werden Überstunden gering gehalten?',
  'Werden regelmäßige Teambesprechungen durchgeführt?',
                     'Werden neue Mitarbeiter eingearbeitet?',
                     'Ist eine Unterweisung zum Thema Brand- und Arbeitsschutz erfolgt?',
@@ -983,20 +1007,12 @@ id: '  kassenzone',
  'Ist die Betreuung nach einem Überfall organisiert?',
  'Werden Schulungen für den Umgang mit gewalttätigen Situationen ermöglicht?',
                     'Beziehen Sie Mitarbeiteranregungen in die Entscheidungsprozesse mit ein?'
-                ]
-            },
-            {
-                id: 'dokumentation',
-                name: 'Dokumentation',
-                questions: [
-                    'Liegt eine aktuelle Liste sowie Prüfberichte prüfungsbedürftiger Einrichtungen vor?',
-                    'Wird die Dokumentation von Erste-Hilfe-Leistungen ordnungsgemäß geführt und aufbewahrt?',
-                    'Ist ein Sicherheitsbeauftragter ausgebildet und bestellt?',
- 'Ist während der gesamten Ladenöffnungszeit mindestens ein Mitarbeiter mit der Qualifikation als Brandschutzhelfer anwesend?',
- 'Erfolgte die letzte Unterweisung zum Umgang mit Zahlungsmitteln innerhalb der letzten 6 Monate?',
-                    'Wurden bei der Unterweisung aktuelle Änderungen in den betrieblichen Abläufen oder neue Sicherheitstechniken berücksichtigt?'
+            
+                
                 ]
             }
+
+
         ];
         
         // State
@@ -2046,6 +2062,7 @@ function exportJson() {
   const data = getFormData();
   const json = JSON.stringify(data, null, 2);
   const filename = `audit-${data.markt || 'export'}-${data.datum || 'datum'}.json`;
+
   
   // Versuche File System Access API (zeigt "Speichern unter" Dialog)
   if ('showSaveFilePicker' in window) {
@@ -2072,6 +2089,7 @@ function exportJson() {
       }
     })();
   } else {
+
     // Fallback fuer Browser ohne File System Access API (z.B. iPad Safari)
     fallbackDownload();
   }
@@ -2912,8 +2930,15 @@ async function generateAndSharePDF() {
         document.getElementById('pdf-loading')?.remove();
     }
 }
-</script>
+const data = { name: "Beispiel", wert: 123 };
 
+fetch('http://DEINE_NAS_IP/save_json.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+})
+.then(response => console.log('Gespeichert:', response.status));
+</script>
         <div class="action-bar">
                       <button class="btn btn-danger" onclick="resetAll()">
                 <span>&#128465;</span> Zuruecksetzen
@@ -2922,7 +2947,6 @@ async function generateAndSharePDF() {
                 <span>&#128196;</span>📤 PDF teilen (iPad)
             </button>
         </div>
-
 <footer style="
   text-align: center;
   margin-top: 40px;
