@@ -2365,8 +2365,10 @@ function openMassnahmenplan() {
     
     // Daten als Base64 kodieren für URL-Übertragung
     try {
-        const jsonStr = JSON.stringify(massnahmenData);
-        const encodedData = btoa(encodeURIComponent(jsonStr));
+         const jsonStr = JSON.stringify(massnahmenData);
+  localStorage.setItem('massnahmenplanData', jsonStr);
+
+        
         
         // Zur Massnahmenplan-Seite navigieren
         window.open('Massnahmenplan.html?data=' + encodedData, '_blank');
