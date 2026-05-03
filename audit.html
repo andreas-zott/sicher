@@ -609,7 +609,7 @@ table, tr, td {
         <h1>Arbeitssicherheits-Audit Tool</h1>
         <p>Checkliste und Massnahmenplan</p>
     </div>
-     <div class="logo-text"></div>
+     <div class="logo-text">...</div>
 </header>
         
         <!-- Dashboard -->
@@ -824,6 +824,7 @@ Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung d
                 questions: [
                     'Erfüllen die Standorte der Erste-Hilfe-Koffer die Anforderungen an Sichtbarkeit, Erreichbarkeit und Norm-Kennzeichnung gemäß DGUV?',                 
                     'Ist das Erste-Hilfe-Material an allen Standorten in vollständigem Zustand und ist das Verfallsdatum der sterilen Inhalte noch nicht überschritten?',
+'Wird die Dokumentation von Erste-Hilfe-Leistungen ordnungsgemäß geführt?',
  'Ist während der gesamten Öffnungszeit die erforderliche Anzahl an ausgebildeten Ersthelfern gemäß DGUV Vorschrift 1 anwesend?',
                     'Ist eine Notrufnummer ausgehaengt?',
                     'Sind Erste-Hilfe-Anweisungen vorhanden?'
@@ -964,11 +965,11 @@ id: '  kassenzone',
                 name: 'Gefahrstoffe',
                 questions: [
                     'Werden Gefahrstoffe unter strikter Beachtung der Zusammenlagerungsverbote nach TRGS 510 (Abschnitt 7 und Anlage 2) so gelagert, dass gefährliche Wechselwirkungen zwischen verschiedenen Stoffgruppen ausgeschlossen sind?',
- 'Wird die passende persönliche Schutzausrüstung (z. B. Schutzbrille, Handschuhe) für Tätigkeiten mit Gefahrstoffen zur Verfügung gestellt?',
-
-                    'Sind Sicherheitsdatenblaetter verfuegbar?',
+ 'Wird die passende persönliche Schutzausrüstung (z. B. Schutzbrille, Handschuhe) für Tätigkeiten mit Gefahrstoffen zur Verfügung gestellt?',                 
                     'Ist die in den Betriebsanweisungen geforderte Persönliche Schutzausrüstung in unmittelbarer Nähe und einsatzbereit vorhanden?',
-                                       'Sind Mitarbeiter unterwiesen?'
+                                      
+ 'Sind Sicherheitsdatenblaetter verfuegbar?',
+'Sind Mitarbeiter unterwiesen?'
                 ]
             },
             {
@@ -978,10 +979,11 @@ id: '  kassenzone',
                     'Liegt eine aktuelle Liste sowie Prüfberichte prüfungsbedürftiger Einrichtungen vor?',
                     'Sind Maßnahmen getroffen, die den Anreiz zu Raubüberfällen vermindern (z. B. Türspion, feststehender Knauf)?',
                     'Ist die Tür während des Umgangs mit Zahlungsmitteln verschlossen?',
-'Sind Unterweisungen dokumentiert?',
-                    'Werden neue Mitarbeiter vor Aufnahme der Tätigkeit zum Thema Arbeitssicherheit und Brandschutz unterwiesen?',                 
+
+                    'Werden neue Mitarbeiter vor Aufnahme der Tätigkeit zum Thema Arbeitssicherheit und Brandschutz unterwiesen?',
                  
-                 'Wurde die Gefährdungsbeurteilung (GBO) erstellt und ist sie auf dem aktuellen Stand?',
+                 'Sind Unterweisungen dokumentiert?'
+                 
                 ]
             },
             {
@@ -1001,7 +1003,8 @@ id: 'dokumentation',
                     'Ist ein Sicherheitsbeauftragter ausgebildet und bestellt?',
  'Ist während der gesamten Ladenöffnungszeit mindestens ein Mitarbeiter mit der Qualifikation als Brandschutzhelfer anwesend?',
  'Erfolgte die letzte Unterweisung zum Umgang mit Zahlungsmitteln innerhalb der letzten 6 Monate?',
-                    'Wurden bei der Unterweisung aktuelle Änderungen in den betrieblichen Abläufen oder neue Sicherheitstechniken berücksichtigt?'
+                    'Wurden bei der Unterweisung aktuelle Änderungen in den betrieblichen Abläufen oder neue Sicherheitstechniken berücksichtigt?',
+'Wurde die Gefährdungsbeurteilung (GBO) erstellt und ist sie auf dem aktuellen Stand?',
 
     ]
             },
@@ -1125,7 +1128,7 @@ id: 'dokumentation',
                 measure = measure.slice(0, -1);
             }
             
-            // Brandschutz
+            
             if (measure.includes("Feuerloescheinrichtungen frei zugaenglich") || measure.includes("Feuerloescher vorhanden")) {
                 return "Halten Sie alle Feuerloescheinrichtungen gemaess ASR A2.2 und § 10 ArbSchG stets frei zugaenglich, um eine unverzuegliche Nutzung im Brandfall zu gewaehrleisten.";
             }
@@ -1148,7 +1151,7 @@ id: 'dokumentation',
                 return "Haengen Sie einen aktuellen und uebersichtlichen Flucht- und Rettungsplan gemaess ASR A1.3 und § 4 ArbStaettV gut sichtbar aus.";
             }
             
-            // Erste Hilfe
+         
             if (measure.includes("Erste-Hilfe-Kasten") || measure.includes("Verbandkasten")) {
                 return "Platzieren Sie den Erste-Hilfe-Koffer gut sichtbar, dauerhaft zugaenglich und gemaess DGUV Vorschrift 1 an einem geeigneten Ort. Inhalt regelmaessig kontrollieren.";
             }
@@ -1162,7 +1165,7 @@ id: 'dokumentation',
                 return "Inhalt der Verbandkaesten regelmaessig kontrollieren; Vollstaendigkeit und Haltbarkeit der Materialien (DIN 13157, DGUV Vorschrift 1) sicherstellen.";
             }
             
-            // Elektrische Sicherheit
+           
             if (measure.includes("elektrische Anlagen geprueft") || measure.includes("E-Check")) {
                 return "Fuehren Sie regelmaessige Pruefungen ortsveraenderlicher elektrischer Betriebsmittel durch befaehigte Elektrofachkraefte gemaess DGUV Vorschrift 3 und TRBS 1201 durch.";
             }
@@ -1170,7 +1173,7 @@ id: 'dokumentation',
                 return "Veranlassen Sie die regelmaessige Sichtpruefung aller Schalter und Steckdosen und stellen Sie gemaess TRBS 1201 sicher, dass keine erkennbaren Schaeden vorliegen.";
             }
             if (measure.includes("Schaltschraenke")) {
-                return "Halten Sie Schaltschraenke stets verschlossen und kennzeichnen Sie diese ordnungsgemaess gemaess DIN VDE 0100.";
+                return "Halten Sie Schaltschraenke stets frei von Gegenstände.";
             }
             if (measure.includes("FI-Schutzschalter")) {
                 return "Pruefen Sie FI-Schutzschalter regelmaessig auf Funktionsfaehigkeit gemaess DGUV Vorschrift 3.";
@@ -1179,7 +1182,7 @@ id: 'dokumentation',
                 return "Fuehren Sie regelmaessige Sichtpruefungen elektrischer Leitungen durch, um sicherzustellen, dass keine Stolper- oder Brandgefahren gemaess DGUV Vorschrift 3 entstehen.";
             }
             
-            // Lager und Regale
+           
             if (measure.includes("Regale standsicher") || measure.includes("Regale") && measure.includes("geprueft")) {
                 return "Veranlassen Sie regelmaessige Pruefungen aller Schwerlastregale durch befaehigte Personen gemaess BetrSichV § 14 sowie DGUV Regel 108-007.";
             }
@@ -1196,7 +1199,7 @@ id: 'dokumentation',
                 return "Stellen Sie eine ausreichende, blendfreie und funktionstüchtige Beleuchtung aller Arbeitsbereiche gemaess ASR A3.4 sicher.";
             }
             
-            // Hygiene
+           
             if (measure.includes("Sanitaerraeume") || measure.includes("sanitaere Anlagen")) {
                 return "Stellen Sie sicher, dass sanitaere Anlagen regelmaessig gereinigt, instand gehalten und mit ausreichenden Hygieneartikeln ausgestattet werden - gemaess ArbStaettV Anhang Nr. 4.1 und ASR A4.1.";
             }
@@ -1210,7 +1213,7 @@ id: 'dokumentation',
                 return "Stellen Sie ausreichend Abfallbehaelter bereit und entsorgen Sie Abfaelle regelmaessig.";
             }
             
-            // Arbeitsmittel
+          
             if (measure.includes("Maschinen geprueft")) {
                 return "Stellen Sie sicher, dass saemtliche Arbeitsgeraete regelmaessig gewartet und auf ordnungsgemaessen Zustand geprueft werden (§ 4 ArbSchG, BetrSichV § 10).";
             }
@@ -1227,7 +1230,7 @@ id: 'dokumentation',
                 return "Pruefen Sie Werkzeuge regelmaessig auf Beschaedigungen und ersetzen Sie defekte Werkzeuge umgehend.";
             }
             
-            // Verkehrswege
+       
             if (measure.includes("Verkehrswege") && measure.includes("sicher")) {
                 return "Gestalten und erhalten Sie Verkehrswege so, dass sie frei von Stolper-, Rutsch- oder Sturzgefahren sind (§ 3a ArbStaettV, ASR A1.8).";
             }
@@ -1244,7 +1247,7 @@ id: 'dokumentation',
                 return "Gestalten Sie Parkplaetze sicher mit ausreichender Beleuchtung und Kennzeichnung.";
             }
             
-            // Gefahrstoffe
+          
             if (measure.includes("Gefahrstoffverzeichnis")) {
                 return "Erstellen und aktualisieren Sie ein vollstaendiges Gefahrstoffverzeichnis gemaess GefStoffV.";
             }
@@ -1261,7 +1264,7 @@ id: 'dokumentation',
                 return "Fuehren Sie regelmaessige Unterweisungen gemaess § 12 ArbSchG durch und dokumentieren Sie diese schriftlich.";
             }
             
-            // Organisation
+          
             if (measure.includes("Unterweisungen dokumentiert")) {
                 return "Dokumentieren Sie alle durchgefuehrten Unterweisungen rechtskonform und archivieren Sie die Nachweise gemaess § 6 ArbSchG.";
             }
@@ -1278,7 +1281,7 @@ id: 'dokumentation',
                 return "Fuehren Sie regelmaessige Sicherheitsbegehungen durch und dokumentieren Sie die Ergebnisse.";
             }
             
-            // Notfallmanagement
+           
             if (measure.includes("Notfallplan")) {
                 return "Erstellen Sie einen umfassenden Notfallplan und machen Sie diesen allen Mitarbeitern bekannt.";
             }
@@ -1295,7 +1298,7 @@ id: 'dokumentation',
                 return "Stellen Sie sicher, dass die Alarmierung im Notfall funktioniert und alle Mitarbeiter informiert sind.";
             }
             
-            // Ergonomie
+           
             if (measure.includes("Arbeitsplätze ergonomisch")) {
                 return "Gestalten Sie Arbeitsplaetze ergonomisch gemaess ArbStaettV und den Technischen Regeln.";
             }
@@ -1312,12 +1315,12 @@ id: 'dokumentation',
                 return "Sorgen Sie fuer eine angemessene Klimatisierung gemaess ASR A3.5.";
             }
             
-            // Dokumentation
+       
             if (measure.includes("Prüfprotokolle")) {
                 return "Fuehren Sie eine vollstaendige Liste aller pruefpflichtigen Betriebseinrichtungen inklusive Nachweise und Pruefberichte gemaess BetrSichV § 14.";
             }
             if (measure.includes("Erste-Hilfe-Leistungen")) {
-                return "Fuehren Sie eine schriftliche Dokumentation aller Erste-Hilfe-Leistungen im Verbandbuch gemaess § 24 DGUV Vorschrift 1 und bewahren Sie diese vier Jahre auf.";
+                return "Fuehren Sie eine schriftliche Dokumentation aller Erste-Hilfe-Leistungen gemaess § 24 DGUV Vorschrift 1 und bewahren Sie diese vier Jahre auf.";
             }
             if (measure.includes("Betriebsanweisungen aktuell")) {
                 return "Aktualisieren Sie alle Betriebsanweisungen regelmaessig und stellen Sie deren Verfuegbarkeit sicher.";
@@ -1628,7 +1631,7 @@ if (measure.includes("Ist das Erste-Hilfe-Material an allen Standorten in vollst
 }
 
 if (measure.includes("Dokumentation Erste-Hilfe-Leistungen")) {
-  measure = "Führen Sie eine schriftliche Dokumentation aller Erste-Hilfe-Leistungen im Verbandbuch gemäß § 24 DGUV Vorschrift 1 und bewahren Sie diese vier Jahre auf.";
+  measure = "Führen Sie eine schriftliche Dokumentation aller Erste-Hilfe-Leistungen gemäß § 24 DGUV Vorschrift 1 und bewahren Sie diese vier Jahre auf.";
 }
 
 if (measure.includes("Anreiz zu Raubüberfällen vermindern")) {
@@ -1785,6 +1788,7 @@ if (measure.includes("Schulungen für den Umgang mit gewalttätigen Situationen 
 if (measure.includes("Beziehen Sie Mitarbeiteranregungen in die Entscheidungsprozesse mit ein")) {
   measure = "Stellen Sie sicher, dass Anregungen der Mitarbeitenden systematisch in Entscheidungsprozesse einbezogen und bei Maßnahmen des Arbeits- und Gesundheitsschutzes angemessen berücksichtigt werden (§ 3 ArbSchG, § 87 BetrVG).";
 }
+
 
             
             // Default: Transform question into action statement
@@ -3022,7 +3026,7 @@ async function generateAndSharePDF() {
 </div>
 <p style="margin: 0; font-size: 12px; color: #6b7280;">
 </p>
-</div><div style="font-size:11px; color:#777; margin-top:8px;">Stand: April 2026</div>
+</div><div style="font-size:11px; color:#777; margin-top:8px;">Stand: Mai 2026</div>
 </footer>
 
 </body>
