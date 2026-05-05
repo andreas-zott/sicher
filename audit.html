@@ -979,15 +979,24 @@ id: '  kassenzone',
                     'Liegt eine aktuelle Liste sowie Prüfberichte prüfungsbedürftiger Einrichtungen vor?',
                     'Sind Maßnahmen getroffen, die den Anreiz zu Raubüberfällen vermindern (z. B. Türspion, feststehender Knauf)?',
                     'Ist die Tür während des Umgangs mit Zahlungsmitteln verschlossen?',
-
-                    'Werden neue Mitarbeiter vor Aufnahme der Tätigkeit zum Thema Arbeitssicherheit und Brandschutz unterwiesen?',
-                 
+                    'Werden neue Mitarbeiter vor Aufnahme der Tätigkeit zum Thema Arbeitssicherheit und Brandschutz unterwiesen?',                 
                  'Sind Unterweisungen dokumentiert?'
                  
                 ]
             },
             {
-                id: 'notfall',
+
+     id: ' barrierefreien WC ',
+                name: ' Barrierefreies WC ',
+                questions: [
+                    'Hängt die Notrufschnur (Zugschnur) bis maximal 10 cm über dem Fußboden herab, um nach einem Sturz erreichbar zu sein?',                   
+                  'Wird der Alarm an eine ständig besetzte Stelle (z. B. Empfang, Leitwarte) weitergeleitet?',
+'Werden die Zugschnüre und Signalgeber in regelmäßigen Intervallen (z. B. monatlich) auf Funktion geprüft?',
+'Sind die Beschäftigten über das Verhalten bei einem Alarm unterwiesen?',
+'Ist sichergestellt, dass die Tür im Notfall von außen entriegelt werden kann (Notentriegelung)?'
+                ]
+            },
+            {            id: 'notfall',
                 name: 'Notfallmanagement',
                 questions: [
                     'Ist ein Notfallplan vorhanden?',                   
@@ -1127,7 +1136,22 @@ id: 'dokumentation',
             if (measure.endsWith("?")) {
                 measure = measure.slice(0, -1);
             }
-            
+
+  if (measure.includes("Notrufschnur (Zugschnur) bis maximal 10 cm über dem Fußboden")) {
+    return "Stellen Sie sicher, dass die Notrufschnur gemaess DIN VDE 0834 bis maximal 10 cm ueber dem Fussboden herabreicht, damit sie auch nach einem Sturz erreichbar ist.";
+}
+
+if (measure.includes("Alarm an eine ständig besetzte Stelle")) {
+    return "Sorgen Sie dafuer, dass jeder Notruf an eine staendig besetzte Stelle (z. B. Empfang oder Leitwarte) weitergeleitet wird.";
+}
+
+if (measure.includes("Beschäftigten über das Verhalten bei einem Alarm unterwiesen")) {
+    return "Unterweisen Sie alle Beschaeftigten regelmaessig im Verhalten bei Notrufalarm (Reaktion, Hilfeleistung, Alarmverfolgung).";
+}
+
+if (measure.includes("Tür im Notfall von außen entriegelt werden kann")) {
+    return "Stellen Sie sicher, dass eine Notentriegelung vorhanden ist, sodass die Tuere im Notfall von aussen geoeffnet werden kann.";
+}      
             
             if (measure.includes("Feuerloescheinrichtungen frei zugaenglich") || measure.includes("Feuerloescher vorhanden")) {
                 return "Halten Sie alle Feuerloescheinrichtungen gemaess ASR A2.2 und § 10 ArbSchG stets frei zugaenglich, um eine unverzuegliche Nutzung im Brandfall zu gewaehrleisten.";
