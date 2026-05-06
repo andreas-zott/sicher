@@ -26,8 +26,8 @@
     flex-wrap: wrap;
     gap: 12px;
     margin-bottom: 24px;
-    justify-content: center;   /* 👉 horizontal mittig */
-    align-items: center;       /* 👉 vertikal sauber */
+    justify-content: center;  
+    align-items: center;      
 }
 
 .action-bar {
@@ -38,9 +38,6 @@
     margin-bottom: 24px;
 }
 
-
-
-/* Seitenlogik für PDF */
 .page-break {
     page-break-before: always;
     break-before: page;
@@ -54,13 +51,11 @@ tr {
     break-inside: avoid;
 }
 
-/* Tabellen sauber umbrechen */
 table, tr, td {
     page-break-inside: avoid;
     break-inside: avoid;
 }
 
-/* Nur offene Kategorien drucken */
 @media print {
     .category:not(.open) {
         display: none !important;
@@ -142,8 +137,7 @@ table, tr, td {
         .card.done .card-value { color: #22c55e; }
         .card.total .card-value { color: #3b82f6; }
         
-        /* Form Section */
-        .section {
+          .section {
             background: white;
             border-radius: 12px;
             padding: 24px;
@@ -191,9 +185,8 @@ table, tr, td {
             outline: none;
             border-color: #3b82f6;
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-        
-        /* Category */
+        }        
+
         .category {
             border: 1px solid #e2e8f0;
             border-radius: 10px;
@@ -263,9 +256,8 @@ table, tr, td {
         
         .category.open .category-content {
             display: block;
-        }
-        
-        /* Question Table */
+        }        
+    
         .question-table {
             width: 100%;
             border-collapse: collapse;
@@ -331,7 +323,6 @@ table, tr, td {
         .radio-label.no { color: #dc2626; }
         .radio-label.na { color: #64748b; }
         
-        /* Measures Table */
         .measures-table {
             width: 100%;
             border-collapse: collapse;
@@ -380,9 +371,8 @@ table, tr, td {
             text-align: center;
             padding: 40px;
             color: #64748b;
-        }
-        
-        /* Signature */
+        }        
+
         .signature-section {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -413,7 +403,6 @@ table, tr, td {
             gap: 8px;
         }
         
-        /* Buttons */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -473,7 +462,6 @@ table, tr, td {
             display: none;
         }
         
-        /* Toast Notification */
         .toast {
             position: fixed;
             bottom: 24px;
@@ -502,7 +490,6 @@ table, tr, td {
             background: #dc2626;
         }
         
-        /* Responsive */
         @media (max-width: 768px) {
             .container {
                 padding: 12px;
@@ -564,7 +551,6 @@ table, tr, td {
     }
 }
 
-        /* Handlungsanweisung Box */
         .handlungsanweisung-box {
             background: white;
             border-radius: 12px;
@@ -610,9 +596,8 @@ table, tr, td {
         <p>Checkliste und Massnahmenplan</p>
     </div>
      <div class="logo-text">...</div>
-</header>
-        
-        <!-- Dashboard -->
+</header>       
+    
         <div class="dashboard">
             <div class="card open">
                 <div class="card-label">Offen</div>
@@ -631,7 +616,6 @@ table, tr, td {
                 <div class="card-value" id="dashTotal">0</div>
             </div>
         </div>
-
 
 <div class="handlungsanweisung-box">
 <h2>Anleitung und Nutzungshinweis:</h2>
@@ -659,7 +643,7 @@ Auf dieser Grundlage wird eine Maßnahmenliste erstellt, die alle identifizierte
 Bei Bedarf werden externe Fachfirmen mit der Mängelbeseitigung beauftragt.
 Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung der Wirksamkeit.  
     </p>
-</div>       
+</div>      
  
         <div class="action-bar">
             <button class="btn btn-primary" onclick="saveToStorage()">
@@ -772,10 +756,8 @@ Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung d
                     'Werden aus dem Ordersatz geeignete Sicherheitsmesser verwendet?',
                     'Sind die Verkehrswege so beschaffen, dass kein Unfallrisiko durch Stolpern, Ausrutschen oder Umknicken besteht?',
                     'Sind die Treppen unbeschädigt und frei von Gegenständen?',
-'Sind Feuerloescher vorhanden und geprueft?',
                     'Sind Betriebsanweisungen gut zug  nglich und werden Sicherheitsanweisungen eingehalten?',
-                    'Ist die Beleuchtung in den Verkaufs- und Lagerbereichen gemäß ASR A3.4 ausreichend dimensioniert (mind. 300 Lux im Verkaufsraum), voll funktionsfähig und so beschaffen, dass Gefahrenhinweise auf Produkten sowie Leckagen in den Regalen jederzeit zweifelsfrei erkennbar sind?'
-                                    
+                    'Ist die Beleuchtung in den Verkaufs- und Lagerbereichen gemäß ASR A3.4 ausreichend dimensioniert (mind. 300 Lux im Verkaufsraum), voll funktionsfähig und so beschaffen, dass Gefahrenhinweise auf Produkten sowie Leckagen in den Regalen jederzeit zweifelsfrei erkennbar sind?'                                   
                 
                 ]
             },
@@ -807,9 +789,7 @@ Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung d
                     'Sind die Kaffeemaschine und andere hitzeentwickelnde Geräte auf einer nicht brennbaren Unterlage abgestellt?',
                     'Werden ortsveränderliche elektrische Betriebsmittel (z. B. Leitungen, Steckverbindungen, Leuchten, Geräte) in angemessenen Zeitabständen geprüft?',
  'Dient der Pausenraum primär der Erholung der Beschäftigten und ist er frei von größeren Mengen an betrieblichem Lagergut (z. B. Archivboxen)?'
-
-
-                ]
+           ]
             },
             {
                 id: 'erstehilfe',
@@ -844,9 +824,8 @@ id: 'CO2 Kühleinrichtungen',
                     'Ist die Notentriegelung vorhanden und in Ordnung?',
                     'Sind die Sensoren nicht mit Material oder sonstigen Gegenständen verstellt?',
                     'Funktioniert die Beleuchtung einwandfrei?',
-  'Sind alle Sicherheitsvorrichtungen (Alarmleuchten, Kennzeichnungen, Kühlhaustüren) intakt?'                                
-                 
-                              
+  'Sind alle Sicherheitsvorrichtungen (Alarmleuchten, Kennzeichnungen, Kühlhaustüren) intakt?'                               
+                                              
                 ]
             },
             {
@@ -860,8 +839,8 @@ id: 'kühlhaus',
                     'Sind die Kühlhaustüren von innen mit dem Rettungswegschild ISO 7010 gekennzeichnet?',
                     'Funktioniert die Beleuchtung einwandfrei?',
   'Ist die Notruf-Funktion (wenn vorhanden) in Ordnung und ohne Beschädigungen?'                                
-                 
-                              
+               
+                           
                 ]
             },
             {
@@ -888,7 +867,6 @@ id: 'kühlhaus',
                     'Wurde die Unterweisung von Praktikanten und Schüleraushilfen durchgeführt?',
                     'Wurde die Unterweisung schriftlich dokumentiert?',
                     'Haben die Personen die Inhalte der Unterweisung verstanden?'
-
 
                 ]
             },
@@ -947,8 +925,7 @@ id: '  kassenzone',
                     'Sind die Kassenstühle in einem funktionsfähigen Zustand?',
   'Ist das Transportband unbeschädigt und weist keine Lücke von über 5 mm auf?',
                     'Sind die Einkaufskörbe ordnungsgemäß im vorgesehenen Ständer abgelegt und ragen nicht in den Verkehrsweg hinein, sodass keine Stolpergefahr besteht?'                                    
-                 
-                              
+                                              
                 ]
             },
             {
@@ -972,9 +949,7 @@ id: '  kassenzone',
                     'Sind Maßnahmen getroffen, die den Anreiz zu Raubüberfällen vermindern (z. B. Türspion, feststehender Knauf)?',
                     'Ist die Tür während des Umgangs mit Zahlungsmitteln verschlossen?',
                     'Werden neue Mitarbeiter vor Aufnahme der Tätigkeit zum Thema Arbeitssicherheit und Brandschutz unterwiesen?'                
-                 
-                 
-                ]
+                                                 ]
             },
             {
 
@@ -1032,8 +1007,7 @@ id: 'dokumentation',
  'Werden Schulungen für den Umgang mit gewalttätigen Situationen ermöglicht?',
                     'Beziehen Sie Mitarbeiteranregungen in die Entscheidungsprozesse mit ein?'
             
-                
-                ]
+                                ]
             }
 
 
@@ -1045,23 +1019,19 @@ id: 'dokumentation',
         let signatures = {
             sigPruefer: null,
             sigMarktleitung: null
-        };
-        
+        };        
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('datum').valueAsDate = new Date();
             renderChecklist();
             initSignatures();
             loadFromStorage();
-            updateDashboard();
-        });
-        
+            updateDashboard();        });        
         // Render Checklist
         function renderChecklist() {
             const container = document.getElementById('checklistContainer');
             let html = '';
-            let questionIndex = 1;
-            
+            let questionIndex = 1;            
             categories.forEach(cat => {
                 html += `<div class="category" id="cat-${cat.id}">
                     <div class="category-header" onclick="toggleCategory('${cat.id}')">
@@ -1085,8 +1055,7 @@ id: 'dokumentation',
                                     <th style="width: 220px;">Bewertung</th>
                                 </tr>
                             </thead>
-                            <tbody>`;
-                
+                            <tbody>`;                
                 cat.questions.forEach((q, idx) => {
                     const qId = `${cat.id}-${idx}`;
                     html += `<tr>
@@ -1107,28 +1076,22 @@ id: 'dokumentation',
                         </td>
                     </tr>`;
                     questionIndex++;
-                });
-                
+                });                
                 html += `</tbody></table></div></div>`;
-            });
-            
+            });            
             container.innerHTML = html;
         }
         
         // Toggle Category
         function toggleCategory(catId) {
             const cat = document.getElementById(`cat-${catId}`);
-            cat.classList.toggle('open');
-        }
-        
+            cat.classList.toggle('open');        }        
         // Generate automatic measure based on question
         function generateMeasure(question) {
-            let measure = question.trim();
-            
+            let measure = question.trim();            
             // Remove trailing question mark
             if (measure.endsWith("?")) {
-                measure = measure.slice(0, -1);
-            }
+                measure = measure.slice(0, -1);            }
 
   if (measure.includes("Notrufschnur (Zugschnur) bis maximal 10 cm über dem Fußboden")) {
     return "Stellen Sie sicher, dass die Notrufschnur gemaess DIN VDE 0834 bis maximal 10 cm ueber dem Fussboden herabreicht, damit sie auch nach einem Sturz erreichbar ist.";
@@ -1141,28 +1104,28 @@ if (measure.includes("Beschäftigten über das Verhalten bei einem Alarm unterwi
 }
 if (measure.includes("Tür im Notfall von außen entriegelt werden kann")) {
     return "Stellen Sie sicher, dass eine Notentriegelung vorhanden ist, sodass die Tür im Notfall von aussen geöffnet werden kann.";
-}    
+}  
             
             if (measure.includes("Feuerlöscheinrichtungen frei zugaenglich") || measure.includes("Feuerlöscher vorhanden")) {
                 return "Halten Sie alle Feuerlöscheinrichtungen gemaess ASR A2.2 und § 10 ArbSchG stets frei zugaenglich, um eine unverzuegliche Nutzung im Brandfall zu gewaehrleisten.";
             }
-            if (measure.includes("Feuerlöscheinrichtungen geprueft") || measure.includes("Feuerlöscher") && measure.includes("geprueft")) {
-                return "Veranlassen Sie Pruefungen aller Feuerloescher durch befaehigte Personen nach DIN 14406-4 und sorgen Sie fuer die Einhaltung der vorgeschriebenen Prueffristen gemaess § 10 ArbSchG.";
+            if (measure.includes("Feuerlöscheinrichtungen geprüft") || measure.includes("Feuerlöscher") && measure.includes("geprüft")) {
+                return "Veranlassen Sie Pruefungen aller Feuerloescher durch befaehigte Personen nach DIN 14406-4 und sorgen Sie fuer die Einhaltung der vorgeschriebenen Prüffristen gemaess § 10 ArbSchG.";
             }
             if (measure.includes("Brandschutztüren frei")) {
-                return "Achten Sie gemaess ASR A2.3 darauf, dass Brandschutztueren jederzeit frei zugaenglich und in ihrer Funktion nicht beeintraechtigt sind.";
+                return "Achten Sie gemaess ASR A2.3 darauf, dass Brandschutztüren jederzeit frei zugänglich und in ihrer Funktion nicht beeintraechtigt sind.";
             }
-            if (measure.includes("Brandschutztüren") && measure.includes("funktionsfaehig")) {
+            if (measure.includes("Brandschutztüren") && measure.includes("funktionsfähig")) {
                 return "Pruefen Sie regelmaessig den Zustand aller Brandschutztüren auf Beschaedigungen und stellen Sie ihre uneingeschränkte Schutzwirkung sicher (§ 4 ArbSchG).";
             }
             if (measure.includes("Brandmeldeanlage")) {
-                return "Stellen Sie sicher, dass die Brandmeldeanlage regelmaessig geprueft und gewartet wird gemaess DIN 14675 und § 10 ArbSchG.";
+                return "Stellen Sie sicher, dass die Brandmeldeanlage regelmaessig geprüft und gewartet wird gemaess DIN 14675 und § 10 ArbSchG.";
             }
-            if (measure.includes("Flucht- und Rettungsweg") || measure.includes("Notausgaeng")) {
-                return "Stellen Sie die sofortige Beraeumung sicher. Halten Sie Notausgaenge zu jeder Zeit frei zugaenglich gemaess § 4 ArbStaettV i. V. m. ASR A2.3.";
+            if (measure.includes("Flucht- und Rettungsweg") || measure.includes("Notausgäng")) {
+                return "Stellen Sie die sofortige Beräumung sicher. Halten Sie Notausgänge zu jeder Zeit frei zugaenglich gemaess § 4 ArbStaettV i. V. m. ASR A2.3.";
             }
             if (measure.includes("Flucht- und Rettungsplan")) {
-                return "Haengen Sie einen aktuellen und uebersichtlichen Flucht- und Rettungsplan gemaess ASR A1.3 und § 4 ArbStaettV gut sichtbar aus.";
+                return "Hängen Sie einen aktuellen und Flucht- und Rettungsplan gemaess ASR A1.3 und § 4 ArbStaettV gut sichtbar aus.";
             }            
          
             if (measure.includes("Erste-Hilfe-Kasten") || measure.includes("Verbandkasten")) {
@@ -1175,14 +1138,14 @@ if (measure.includes("Tür im Notfall von außen entriegelt werden kann")) {
                 return "Haengen Sie Notrufnummern gut sichtbar aus und stellen Sie sicher, dass alle Mitarbeiter diese kennen.";
             }
             if (measure.includes("Erste-Hilfe-Material") || measure.includes("Verfallsdatum")) {
-                return "Inhalt der Verbandkaesten regelmaessig kontrollieren; Vollständigkeit und Haltbarkeit der Materialien (DIN 13157, DGUV Vorschrift 1) sicherstellen.";
+                return "Inhalt der Verbandkaesten regelmässig kontrollieren; Vollständigkeit und Haltbarkeit der Materialien (DIN 13157, DGUV Vorschrift 1) sicherstellen.";
             }           
            
             if (measure.includes("elektrische Anlagen geprüft") || measure.includes("E-Check")) {
                 return "Führen Sie regelmaessige Prüfungen ortsveraenderlicher elektrischer Betriebsmittel durch befaehigte Elektrofachkräfte gemaess DGUV Vorschrift 3 und TRBS 1201 durch.";
             }
             if (measure.includes("Steckdosen") || measure.includes("Schalter")) {
-                return "Veranlassen Sie die regelmaessige Sichtpruefung aller Schalter und Steckdosen und stellen Sie gemaess TRBS 1201 sicher, dass keine erkennbaren Schaeden vorliegen.";
+                return "Veranlassen Sie die regelmaessige Sichtprüfung aller Schalter und Steckdosen und stellen Sie gemaess TRBS 1201 sicher, dass keine erkennbaren Schaeden vorliegen.";
             }
             if (measure.includes("Schaltschränke")) {
                 return "Halten Sie Schaltschränke stets frei von Gegenstände.";
@@ -1214,7 +1177,7 @@ if (measure.includes("Tür im Notfall von außen entriegelt werden kann")) {
                 return "Nach der Arbeitsstättenverordnung (ArbStaettV) und ASR A4.2 dient der Pausenraum ausschliesslich der Erholung der Beschaeftigten.";
             }
             if (measure.includes("Reinigung dokumentiert")) {
-                return "Dokumentieren Sie die Reinigung ordnungsgemaess und fuehren Sie Reinigungsplaene.";
+                return "Dokumentieren Sie die Reinigung ordnungsgemäß und führen Sie Reinigungspläne.";
             }                    
           
             if (measure.includes("Maschinen geprüft")) {
@@ -1224,13 +1187,13 @@ if (measure.includes("Tür im Notfall von außen entriegelt werden kann")) {
                 return "Sorgen Sie dafuer, dass alle sicherheitstechnischen Vorrichtungen stets funktionstüchtig und unbeschaedigt sind (§ 4 BetrSichV).";
             }
             if (measure.includes("Betriebsanweisungen")) {
-                return "Halten Sie alle Betriebsanweisungen gut zugaenglich und stellen Sie sicher, dass die Beschaeftigten ueber die Inhalte unterwiesen sind (§§ 4, 12 ArbSchG).";
+                return "Halten Sie alle Betriebsanweisungen gut zugaenglich und stellen Sie sicher, dass die Beschäftigten ueber die Inhalte unterwiesen sind (§§ 4, 12 ArbSchG).";
             }
-            if (measure.includes("PSA") || measure.includes("Schutzausruestung")) {
-                return "Stellen Sie geeignete persönliche Schutzausrüstung (PSA) bereit und weisen Sie die Beschaeftigten gemaess § 3 ArbSchG und § 2 PSA-Benutzungsverordnung ein.";
+            if (measure.includes("PSA") || measure.includes("Schutzausrüstung")) {
+                return "Stellen Sie geeignete persönliche Schutzausrüstung (PSA) bereit und weisen Sie die Beschäftigten gemaess § 3 ArbSchG und § 2 PSA-Benutzungsverordnung ein.";
             }
             if (measure.includes("Werkzeuge")) {
-                return "Pruefen Sie Werkzeuge regelmässig auf Beschaedigungen und ersetzen Sie defekte Werkzeuge umgehend.";
+                return "Pruefen Sie Werkzeuge regelmässig auf Beschädigungen und ersetzen Sie defekte Werkzeuge umgehend.";
             }            
        
             if (measure.includes("Verkehrswege") && measure.includes("sicher")) {
@@ -1247,7 +1210,7 @@ if (measure.includes("Tür im Notfall von außen entriegelt werden kann")) {
             }                   
                   
             if (measure.includes("Sicherheitsdatenblätter")) {
-                return "Halten Sie aktuelle Sicherheitsdatenblaetter fuer alle Gefahrstoffe bereit und machen Sie diese den Mitarbeitern zugaenglich.";
+                return "Halten Sie aktuelle Sicherheitsdatenblätter fuer alle Gefahrstoffe bereit und machen Sie diese den Mitarbeitern zugaenglich.";
             }
             if (measure.includes("Gefahrstoffe") && measure.includes("gelagert")) {
                 return "Gefahrstoffe nach TRGS 510 neu trennen und entsprechend den Zusammenlagerungsregeln getrennt lagern.";
@@ -1256,7 +1219,7 @@ if (measure.includes("Tür im Notfall von außen entriegelt werden kann")) {
                 return "Stellen Sie geeignete Auffangwannen fuer Gefahrstoffe bereit gemaess TRGS 510.";
  }
             if (measure.includes("Wurden bei der Unterweisung aktuelle Änderungen in den betrieblichen Abläufen oder neue Sicherheitstechniken berücksichtigt?") || measure.includes("Unterweisung")) {
-                return "Führen Sie regelmaessige Unterweisungen gemaess § 12 ArbSchG durch und dokumentieren Sie diese schriftlich.";
+                return "Führen Sie regelmäßige Unterweisungen gemaess § 12 ArbSchG durch und dokumentieren Sie diese schriftlich.";
 
             }
             if (measure.includes("Mitarbeiter unterwiesen") || measure.includes("Unterweisung")) {
@@ -1764,23 +1727,17 @@ if (measure.includes("Schulungen für den Umgang mit gewalttätigen Situationen 
 if (measure.includes("Beziehen Sie Mitarbeiteranregungen in die Entscheidungsprozesse mit ein")) {
   measure = "Stellen Sie sicher, dass Anregungen der Mitarbeitenden systematisch in Entscheidungsprozesse einbezogen und bei Maßnahmen des Arbeits- und Gesundheitsschutzes angemessen berücksichtigt werden (§ 3 ArbSchG, § 87 BetrVG).";
 }
-
-
             
             // Default: Transform question into action statement
             if (!measure.endsWith(".")) {
-                measure += ".";
-            }
-            
+                measure += ".";            }            
             // Basic transformations for questions starting with common patterns
             if (measure.startsWith("Sind ") || measure.startsWith("Ist ")) {
                 measure = "Stellen Sie sicher, dass " + measure.substring(measure.indexOf(" ") + 1).toLowerCase();
             } else if (measure.startsWith("Werden ")) {
                 measure = "Stellen Sie sicher, dass " + measure.substring(7).toLowerCase();
-            }
-            
-            return measure;
-        }
+            }            
+            return measure;        }
         
         // Handle Answer
         function handleAnswer(qId, value, catId, questionText) {
@@ -1795,13 +1752,11 @@ if (measure.includes("Beziehen Sie Mitarbeiteranregungen in die Entscheidungspro
                         measure: autoMeasure,
                         responsible: '',
                         deadline: '',
-                        status: 'offen'
-                    };
+                        status: 'offen'                    };
                 }
             } else {
                 delete measures[qId];
-            }
-            
+            }            
             updateCategoryStats(catId);
             renderMeasures();
             updateDashboard();
@@ -1819,12 +1774,10 @@ if (measure.includes("Beziehen Sie Mitarbeiteranregungen in die Entscheidungspro
                     answered++;
                     if (answers[qId] === 'nein') issues++;
                 }
-            });
-            
+            });            
             document.getElementById(`stat-answered-${catId}`).textContent = `${answered}/${cat.questions.length}`;
             document.getElementById(`stat-issues-${catId}`).textContent = `${issues} Maengel`;
-        }
-        
+        }        
         // Render Measures
         function renderMeasures() {
             const container = document.getElementById('measuresContainer');
@@ -1832,9 +1785,7 @@ if (measure.includes("Beziehen Sie Mitarbeiteranregungen in die Entscheidungspro
             
             if (measureKeys.length === 0) {
                 container.innerHTML = '<p class="no-measures">Keine Massnahmen erforderlich. Waehlen Sie "Nein" bei Prüfpunkten, um Massnahmen hinzuzufuegen.</p>';
-                return;
-            }
-            
+                return;            }            
             let html = `<table class="measures-table">
                 <thead>
                     <tr>
@@ -1845,15 +1796,12 @@ if (measure.includes("Beziehen Sie Mitarbeiteranregungen in die Entscheidungspro
                         <th style="width: 10%;">Status</th>
                     </tr>
                 </thead>
-                <tbody>`;
-            
+                <tbody>`;            
             measureKeys.forEach(qId => {
                 const m = measures[qId];
-                const statusClass = m.status === 'offen' ? 'open' : m.status === 'bearbeitung' ? 'progress' : 'done';
-                
+                const statusClass = m.status === 'offen' ? 'open' : m.status === 'bearbeitung' ? 'progress' : 'done';                
                 html += `<tr>
                     <td>${m.question}</td>
-
                   <td>
 <textarea 
     placeholder="Massnahme eingeben"
@@ -1861,10 +1809,7 @@ if (measure.includes("Beziehen Sie Mitarbeiteranregungen in die Entscheidungspro
     rows="5"
     style="width: 100%; resize: none; overflow: hidden;"
 >${m.measure}</textarea>
-
-
 </td>
-
                     <td><input type="text" value="${m.responsible}" placeholder="Name" onchange="updateMeasure('${qId}', 'responsible', this.value)"></td>
                     <td><input type="date" value="${m.deadline}" onchange="updateMeasure('${qId}', 'deadline', this.value)"></td>
                     <td>
@@ -1875,20 +1820,16 @@ if (measure.includes("Beziehen Sie Mitarbeiteranregungen in die Entscheidungspro
                         </select>
                     </td>
                 </tr>`;
-            });
-            
+            });            
             html += '</tbody></table>';
-            container.innerHTML = html;
-        }
+            container.innerHTML = html;        }
         
         // Update Measure
         function updateMeasure(qId, field, value) {
             if (measures[qId]) {
                 measures[qId][field] = value;
-                updateDashboard();
-            }
-        }
-        
+                updateDashboard();            }
+        }        
         // Update Dashboard
         function updateDashboard() {
             const measureValues = Object.values(measures);
@@ -1901,50 +1842,42 @@ if (measure.includes("Beziehen Sie Mitarbeiteranregungen in die Entscheidungspro
             document.getElementById('dashProgress').textContent = progress;
             document.getElementById('dashDone').textContent = done;
             document.getElementById('dashTotal').textContent = total;
-        }
-        
+        }        
         // Signature Handling
         function initSignatures() {
             ['sigPruefer', 'sigMarktleitung'].forEach(id => {
                 const canvas = document.getElementById(id);
                 const ctx = canvas.getContext('2d');
                 let drawing = false;
-                let lastX, lastY;
-                
+                let lastX, lastY;                
                 canvas.addEventListener('mousedown', (e) => {
                     drawing = true;
                     const rect = canvas.getBoundingClientRect();
                     lastX = e.clientX - rect.left;
                     lastY = e.clientY - rect.top;
-                });
-                
+                });                
                 canvas.addEventListener('mousemove', (e) => {
                     if (!drawing) return;
                     const rect = canvas.getBoundingClientRect();
                     const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    
+                    const y = e.clientY - rect.top;                    
                     ctx.beginPath();
                     ctx.moveTo(lastX, lastY);
                     ctx.lineTo(x, y);
                     ctx.strokeStyle = '#1e293b';
                     ctx.lineWidth = 2;
                     ctx.lineCap = 'round';
-                    ctx.stroke();
-                    
+                    ctx.stroke();                    
                     lastX = x;
                     lastY = y;
-                });
-                
+                });                
                 canvas.addEventListener('mouseup', () => {
                     drawing = false;
                     signatures[id] = canvas.toDataURL();
-                });
-                
+                });                
                 canvas.addEventListener('mouseleave', () => {
                     drawing = false;
-                });
-                
+                });                
                 // Touch support
                 canvas.addEventListener('touchstart', (e) => {
                     e.preventDefault();
@@ -1953,42 +1886,36 @@ if (measure.includes("Beziehen Sie Mitarbeiteranregungen in die Entscheidungspro
                     const touch = e.touches[0];
                     lastX = touch.clientX - rect.left;
                     lastY = touch.clientY - rect.top;
-                });
-                
+                });                
                 canvas.addEventListener('touchmove', (e) => {
                     e.preventDefault();
                     if (!drawing) return;
                     const rect = canvas.getBoundingClientRect();
                     const touch = e.touches[0];
                     const x = touch.clientX - rect.left;
-                    const y = touch.clientY - rect.top;
-                    
+                    const y = touch.clientY - rect.top;                    
                     ctx.beginPath();
                     ctx.moveTo(lastX, lastY);
                     ctx.lineTo(x, y);
                     ctx.strokeStyle = '#1e293b';
                     ctx.lineWidth = 2;
                     ctx.lineCap = 'round';
-                    ctx.stroke();
-                    
+                    ctx.stroke();                    
                     lastX = x;
                     lastY = y;
-                });
-                
+                });                
                 canvas.addEventListener('touchend', () => {
                     drawing = false;
                     signatures[id] = canvas.toDataURL();
                 });
             });
-        }
-        
+        }        
         function clearSignature(id) {
             const canvas = document.getElementById(id);
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             signatures[id] = null;
-        }
-        
+        }        
         // Save/Load Functions
         function getFormData() {
             return {
@@ -2008,20 +1935,17 @@ if (measure.includes("Beziehen Sie Mitarbeiteranregungen in die Entscheidungspro
             if (data.datum) document.getElementById('datum').value = data.datum;
             if (data.teilnehmer) document.getElementById('teilnehmer').value = data.teilnehmer;
             if (data.marktleitung) document.getElementById('marktleitung').value = data.marktleitung;
-            if (data.sifa) document.getElementById('sifa').value = data.sifa;
-            
+            if (data.sifa) document.getElementById('sifa').value = data.sifa;            
             if (data.answers) {
                 answers = data.answers;
                 Object.keys(answers).forEach(qId => {
                     const radio = document.querySelector(`input[name="${qId}"][value="${answers[qId]}"]`);
                     if (radio) radio.checked = true;
                 });
-            }
-            
+            }            
             if (data.measures) {
                 measures = data.measures;
-            }
-            
+            }            
             if (data.signatures) {
                 signatures = data.signatures;
                 ['sigPruefer', 'sigMarktleitung'].forEach(id => {
@@ -2035,19 +1959,16 @@ if (measure.includes("Beziehen Sie Mitarbeiteranregungen in die Entscheidungspro
                         img.src = signatures[id];
                     }
                 });
-            }
-            
+            }            
             categories.forEach(cat => updateCategoryStats(cat.id));
             renderMeasures();
             updateDashboard();
-        }
-        
+        }        
         function saveToStorage() {
             const data = getFormData();
             localStorage.setItem('auditData', JSON.stringify(data));
             showToast('Erfolgreich gespeichert!', 'success');
-        }
-        
+        }        
         function loadFromStorage() {
             const saved = localStorage.getItem('auditData');
             if (saved) {
@@ -2058,14 +1979,11 @@ if (measure.includes("Beziehen Sie Mitarbeiteranregungen in die Entscheidungspro
                     console.error('Fehler beim Laden:', e);
                 }
             }
-        }
-        
+        }        
 function exportJson() {
   const data = getFormData();
   const json = JSON.stringify(data, null, 2);
-  const filename = `audit-${data.markt || 'export'}-${data.datum || 'datum'}.json`;
-
-  
+  const filename = `audit-${data.markt || 'export'}-${data.datum || 'datum'}.json`;  
   // Versuche File System Access API (zeigt "Speichern unter" Dialog)
   if ('showSaveFilePicker' in window) {
     (async () => {
@@ -2091,11 +2009,9 @@ function exportJson() {
       }
     })();
   } else {
-
     // Fallback fuer Browser ohne File System Access API (z.B. iPad Safari)
     fallbackDownload();
-  }
-  
+  }  
   function fallbackDownload() {
     const blob = new Blob([json], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -2106,8 +2022,7 @@ function exportJson() {
     URL.revokeObjectURL(url);
     showToast('JSON exportiert!', 'success');
   }
-  }
-        
+  }        
         function importJson(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -2123,48 +2038,37 @@ function exportJson() {
                 }
             };
             reader.readAsText(file);
-            event.target.value = '';
-        }
-        
+            event.target.value = '';        }        
         function resetAll() {
-            if (!confirm('Alle Daten zuruecksetzen? Dies kann nicht rueckgaengig gemacht werden.')) return;
-            
+            if (!confirm('Alle Daten zuruecksetzen? Dies kann nicht rueckgaengig gemacht werden.')) return;            
             answers = {};
             measures = {};
-            signatures = { sigPruefer: null, sigMarktleitung: null };
-            
+            signatures = { sigPruefer: null, sigMarktleitung: null };            
             document.getElementById('markt').value = '';
             document.getElementById('datum').valueAsDate = new Date();
             document.getElementById('teilnehmer').value = '';
             document.getElementById('marktleitung').value = '';
-            document.getElementById('sifa').value = '';
-            
-            document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
-            
+            document.getElementById('sifa').value = '';            
+            document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);            
             clearSignature('sigPruefer');
-            clearSignature('sigMarktleitung');
-            
+            clearSignature('sigMarktleitung');            
             categories.forEach(cat => updateCategoryStats(cat.id));
             renderMeasures();
-            updateDashboard();
-            
+            updateDashboard();            
             localStorage.removeItem('auditData');
-            showToast('Alle Daten zurueckgesetzt!', 'success');
-        }
+            showToast('Alle Daten zurueckgesetzt!', 'success');        }
         
         // PDF Export
         function exportPdf() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             const data = getFormData();
-            let y = 20;
-            
+            let y = 20;            
             // Header
             doc.setFontSize(18);
             doc.setFont('helvetica', 'bold');
             doc.text('Arbeitssicherheits-Audit', 105, y, { align: 'center' });
-            y += 15;
-            
+            y += 15;            
             // Form Data
             doc.setFontSize(11);
             doc.setFont('helvetica', 'normal');
@@ -2175,77 +2079,64 @@ function exportJson() {
             y += 7;
             doc.text(`Marktleitung: ${data.marktleitung || '-'}`, 20, y);
             doc.text(`SiFa: ${data.sifa || '-'}`, 120, y);
-            y += 12;
-            
+            y += 12;            
             // Summary
             const measureValues = Object.values(measures);
             const open = measureValues.filter(m => m.status === 'offen').length;
             const progress = measureValues.filter(m => m.status === 'bearbeitung').length;
-            const done = measureValues.filter(m => m.status === 'erledigt').length;
-            
+            const done = measureValues.filter(m => m.status === 'erledigt').length;            
             doc.setFillColor(240, 240, 240);
             doc.rect(20, y, 170, 12, 'F');
             doc.setFont('helvetica', 'bold');
             doc.text('Zusammenfassung:', 25, y + 8);
             doc.setFont('helvetica', 'normal');
             doc.text(`Offen: ${open}  |  In Bearbeitung: ${progress}  |  Erledigt: ${done}  |  Gesamt: ${measureValues.length}`, 70, y + 8);
-            y += 20;
-            
+            y += 20;            
             // Checklist Results
             doc.setFontSize(14);
             doc.setFont('helvetica', 'bold');
             doc.text('Checkliste Ergebnisse', 20, y);
-            y += 8;
-            
+            y += 8;            
             doc.setFontSize(10);
-            doc.setFont('helvetica', 'normal');
-            
+            doc.setFont('helvetica', 'normal');            
             categories.forEach(cat => {
                 if (y > 270) {
                     doc.addPage();
                     y = 20;
-                }
-                
+                }                
                 doc.setFont('helvetica', 'bold');
                 doc.text(cat.name, 20, y);
                 y += 5;
-                doc.setFont('helvetica', 'normal');
-                
+                doc.setFont('helvetica', 'normal');                
                 cat.questions.forEach((q, idx) => {
                     const qId = `${cat.id}-${idx}`;
                     const answer = answers[qId] || '-';
-                    const answerText = answer === 'ja' ? 'Ja' : answer === 'nein' ? 'NEIN' : answer === 'nv' ? 'N.V.' : '-';
-                    
+                    const answerText = answer === 'ja' ? 'Ja' : answer === 'nein' ? 'NEIN' : answer === 'nv' ? 'N.V.' : '-';                    
                     if (y > 280) {
                         doc.addPage();
                         y = 20;
-                    }
-                    
+                    }                    
                     doc.text(`  - ${q.substring(0, 60)}${q.length > 60 ? '...' : ''}: ${answerText}`, 20, y);
                     y += 5;
                 });
                 y += 3;
-            });
-            
+            });            
             // Measures
             if (measureValues.length > 0) {
                 if (y > 240) {
                     doc.addPage();
                     y = 20;
-                }
-                
+                }                
                 doc.setFontSize(14);
                 doc.setFont('helvetica', 'bold');
                 doc.text('Massnahmenplan', 20, y);
-                y += 10;
-                
+                y += 10;                
                 doc.setFontSize(9);
                 measureValues.forEach((m, idx) => {
                     if (y > 270) {
                         doc.addPage();
                         y = 20;
-                    }
-                    
+                    }                    
                     doc.setFont('helvetica', 'bold');
                     doc.text(`${idx + 1}. ${m.question.substring(0, 50)}${m.question.length > 50 ? '...' : ''}`, 20, y);
                     y += 5;
@@ -2255,20 +2146,17 @@ function exportJson() {
                     doc.text(`   Verantwortlich: ${m.responsible || '-'}  |  Frist: ${m.deadline || '-'}  |  Status: ${m.status}`, 20, y);
                     y += 7;
                 });
-            }
-            
+            }            
             // Signatures
             if (signatures.sigPruefer || signatures.sigMarktleitung) {
                 if (y > 220) {
                     doc.addPage();
                     y = 20;
-                }
-                
+                }                
                 doc.setFontSize(12);
                 doc.setFont('helvetica', 'bold');
                 doc.text('Unterschriften', 20, y);
-                y += 10;
-                
+                y += 10;                
                 if (signatures.sigPruefer) {
                     doc.text('Pruefer:', 20, y);
                     y += 5;
@@ -2276,8 +2164,7 @@ function exportJson() {
                         doc.addImage(signatures.sigPruefer, 'PNG', 20, y, 60, 25);
                     } catch (e) {}
                     y += 30;
-                }
-                
+                }                
                 if (signatures.sigMarktleitung) {
                     doc.text('Marktleitung:', 20, y);
                     y += 5;
@@ -2285,12 +2172,10 @@ function exportJson() {
                         doc.addImage(signatures.sigMarktleitung, 'PNG', 20, y, 60, 25);
                     } catch (e) {}
                 }
-            }
-            
+            }            
             doc.save(`audit-${data.markt || 'bericht'}-${data.datum || 'datum'}.pdf`);
             showToast('PDF exportiert!', 'success');
-        }
-        
+        }        
         // Toast Notification
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
@@ -2300,17 +2185,13 @@ function exportJson() {
             setTimeout(() => {
                 toast.classList.remove('show');
             }, 3000);
-        }
-    
+        }    
 function exportPdf() {
     window.print();
 }
-
 function printPage() {
     window.print();
 }
-
-
 function sharePage() {
     if (navigator.share) {
         navigator.share({
@@ -2322,7 +2203,6 @@ function sharePage() {
         alert('Teilen wird auf diesem Gerät nicht unterstützt.');
     }
 }
-
 // Massnahmenplan öffnen und Daten übertragen
 function openMassnahmenplan() {
     // Prüfen ob Massnahmen vorhanden sind
@@ -2330,8 +2210,7 @@ function openMassnahmenplan() {
     if (measureKeys.length === 0) {
         showToast('Keine Massnahmen vorhanden. Wählen Sie "Nein" bei Prüfpunkten, um Massnahmen hinzuzufügen.', 'error');
         return;
-    }
-    
+    }    
     // Daten sammeln (inkl. Unterschriften)
     const massnahmenData = {
         markt: document.getElementById('markt').value,
@@ -2341,11 +2220,9 @@ function openMassnahmenplan() {
         sifa: document.getElementById('sifa').value,
         measures: measures,
         signatures: signatures
-    };
-    
+    };    
     // Daten in localStorage speichern für Fallback
-    localStorage.setItem('massnahmenplanData', JSON.stringify(massnahmenData));
-    
+    localStorage.setItem('massnahmenplanData', JSON.stringify(massnahmenData));    
     // Daten als Base64 kodieren für URL-Übertragung
     try {
             const jsonStr = JSON.stringify(massnahmenData);
@@ -2361,7 +2238,6 @@ function openMassnahmenplan() {
         showToast('Massnahmenplan wird geöffnet...', 'success');
     }
 }
-
 </script>
 <script>
 // PDF generation with jsPDF - renders each category on a separate A4 page
@@ -2371,16 +2247,14 @@ async function generateAndSharePDF() {
     const loadingDiv = document.createElement('div');
     loadingDiv.id = 'pdf-loading';
     loadingDiv.innerHTML = '<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:9999;"><div style="background:white;padding:30px 50px;border-radius:12px;text-align:center;"><div style="font-size:18px;font-weight:bold;margin-bottom:10px;">PDF wird erstellt...</div><div style="font-size:14px;color:#666;">Bitte warten</div></div></div>';
-    document.body.appendChild(loadingDiv);
-    
+    document.body.appendChild(loadingDiv);    
     const today = new Date();
     const formattedDate = today.toLocaleDateString('de-DE');
     const markt = document.getElementById('markt')?.value || 'Unbekannt';
     const teilnehmer = document.getElementById('teilnehmer')?.value || '-';
     const marktleitung = document.getElementById('marktleitung')?.value || '-';
     const sifa = document.getElementById('sifa')?.value || '-';
-    const filename = `Arbeitssicherheit-Audit-${markt}-${formattedDate.replace(/\./g, '-')}.pdf`;
-    
+    const filename = `Arbeitssicherheit-Audit-${markt}-${formattedDate.replace(/\./g, '-')}.pdf`;    
     // Get signatures as data URL
     let sigPrueferDataURL = null;
     let sigMarktleitungDataURL = null;
@@ -2401,8 +2275,7 @@ async function generateAndSharePDF() {
         const pageHeight = 297;
         const margin = 15;
         const contentWidth = pageWidth - 2 * margin;
-        let currentY = margin;
-        
+        let currentY = margin;        
         // Helper function to add mini header on each page
         function addMiniHeader() {
             pdf.setFontSize(7);
@@ -2411,8 +2284,7 @@ async function generateAndSharePDF() {
             pdf.text(formattedDate, pageWidth - margin, 8, { align: 'right' });
             pdf.setDrawColor(200);
             pdf.line(margin, 10, pageWidth - margin, 10);
-        }
-        
+        }        
         // Helper function to check if we need a new page
         function checkNewPage(neededHeight) {
             if (currentY + neededHeight > pageHeight - 20) {
@@ -2422,8 +2294,7 @@ async function generateAndSharePDF() {
                 return true;
             }
             return false;
-        }
-        
+        }        
         // Funktion für Seitenzahlen am Ende hinzufügen
         function addPageNumbers() {
             const totalPages = pdf.internal.getNumberOfPages();
@@ -2433,9 +2304,8 @@ async function generateAndSharePDF() {
                 pdf.setTextColor(100);
                 pdf.text(`Seite ${i} von ${totalPages}`, pageWidth / 2, pageHeight - 8, { align: 'center' });
             }
-        }
-        
-        // ===== PAGE 1: Header and Form Info =====
+        }        
+       
         // Title
         pdf.setFontSize(18);
         pdf.setTextColor(30, 64, 175);
@@ -2463,7 +2333,7 @@ async function generateAndSharePDF() {
         pdf.text(`SiFa: ${sifa}`, margin, currentY);
         currentY += 12;
         
-        // ===== HANDLUNGSANWEISUNG BOX =====
+       
         // Box-Rahmen zeichnen
         pdf.setDrawColor(59, 130, 246);
         pdf.setLineWidth(0.5);
@@ -2573,8 +2443,7 @@ async function generateAndSharePDF() {
             pdf.text('Nein', margin + colWidths[0] + colWidths[1] + colWidths[2]/2, currentY + 5, { align: 'center' });
             pdf.text('N.V.', margin + colWidths[0] + colWidths[1] + colWidths[2] + colWidths[3]/2, currentY + 5, { align: 'center' });
             currentY += 7;
-        }
-        
+        }        
         // Iterate through categories
         categories.forEach((cat, catIndex) => {
             // Berechne die geschaetzte Gesamthoehe der Kategorie
@@ -2587,8 +2456,7 @@ async function generateAndSharePDF() {
                 const questionLines = pdf.splitTextToSize(questionText, colWidths[0] - 6);
                 const rowHeight = Math.max(7, questionLines.length * 3.5 + 3);
                 estimatedCategoryHeight += rowHeight;
-            });
-            
+            });            
             // Erste Kategorie (Gesamtmarkt) immer auf neuer Seite starten
             // Oder wenn die gesamte Kategorie nicht mehr auf die aktuelle Seite passt
             const availableSpace = pageHeight - 20 - currentY;
@@ -2600,65 +2468,53 @@ async function generateAndSharePDF() {
             } else {
                 // Etwas Abstand zwischen Kategorien
                 currentY += 8;
-            }
-            
+            }            
             // Category title
             pdf.setFillColor(241, 245, 249);
             pdf.roundedRect(margin, currentY, contentWidth, 9, 2, 2, 'F');
             pdf.setFontSize(11);
             pdf.setTextColor(30, 41, 59);
             pdf.text(cat.name, margin + 5, currentY + 6);
-            currentY += 14;
-            
+            currentY += 14;            
             // Table header
-            drawTableHeader();
-            
+            drawTableHeader();            
             // Get rows for this category
             cat.questions.forEach((question, qIdx) => {
                 const qId = `${cat.id}-${qIdx}`;
-                const answer = answers[qId] || null;
-                
+                const answer = answers[qId] || null;                
                 // Check answer
                 let jaChecked = answer === 'ja';
                 let neinChecked = answer === 'nein';
-                let nvChecked = answer === 'nv';
-                
+                let nvChecked = answer === 'nv';                
                 // Calculate row height based on text
                 pdf.setFontSize(8);
                 const questionText = `${globalQuestionIndex}. ${question}`;
                 const questionLines = pdf.splitTextToSize(questionText, colWidths[0] - 6);
-                const rowHeight = Math.max(7, questionLines.length * 3.5 + 3);
-                
+                const rowHeight = Math.max(7, questionLines.length * 3.5 + 3);                
                 // Check if we need a new page (sollte selten vorkommen da Kategorie vorberechnet)
                 if (currentY + rowHeight > pageHeight - 20) {
                     pdf.addPage();
                     addMiniHeader();
-                    currentY = 18;
-                    
+                    currentY = 18;                    
                     // Repeat table header
                     drawTableHeader();
-                }
-                
+                }                
                 // Row background
                 if (qIdx % 2 === 1) {
                     pdf.setFillColor(248, 250, 252);
                     pdf.rect(margin, currentY, contentWidth, rowHeight, 'F');
-                }
-                
+                }                
                 // Draw cell borders
                 pdf.setDrawColor(226, 232, 240);
                 pdf.rect(margin, currentY, colWidths[0], rowHeight);
                 pdf.rect(margin + colWidths[0], currentY, colWidths[1], rowHeight);
                 pdf.rect(margin + colWidths[0] + colWidths[1], currentY, colWidths[2], rowHeight);
-                pdf.rect(margin + colWidths[0] + colWidths[1] + colWidths[2], currentY, colWidths[3], rowHeight);
-                
+                pdf.rect(margin + colWidths[0] + colWidths[1] + colWidths[2], currentY, colWidths[3], rowHeight);                
                 // Question text
                 pdf.setTextColor(0);
-                pdf.text(questionLines, margin + 3, currentY + 3.5);
-                
+                pdf.text(questionLines, margin + 3, currentY + 3.5);                
                 // Answer mit Text "Ja", "Nein", "N.V."
-                const checkY = currentY + rowHeight / 2;
-                
+                const checkY = currentY + rowHeight / 2;                
                 if (jaChecked) {
                     totalJa++;
                     pdf.setFillColor(220, 252, 231);
@@ -2689,23 +2545,19 @@ async function generateAndSharePDF() {
                 }
                 if (!jaChecked && !neinChecked && !nvChecked) {
                     totalUnanswered++;
-                }
-                
+                }                
                 currentY += rowHeight;
                 globalQuestionIndex++;
             });
-        });
-        
-        // ===== MEASURES PAGE =====
+        });        
+     
         pdf.addPage();
         addMiniHeader();
-        currentY = 18;
-        
+        currentY = 18;        
         pdf.setFontSize(14);
         pdf.setTextColor(30, 64, 175);
         pdf.text('Massnahmenplan', margin, currentY + 5);
-        currentY += 15;
-        
+        currentY += 15;        
         // Table header for measures
         const measureColWidths = [contentWidth * 0.05, contentWidth * 0.35, contentWidth * 0.30, contentWidth * 0.15, contentWidth * 0.15];
         pdf.setFillColor(254, 243, 199);
@@ -2717,28 +2569,23 @@ async function generateAndSharePDF() {
         pdf.text('Massnahme', margin + measureColWidths[0] + measureColWidths[1] + 3, currentY + 5);
         pdf.text('Verantw.', margin + measureColWidths[0] + measureColWidths[1] + measureColWidths[2] + 3, currentY + 5);
         pdf.text('Status', margin + measureColWidths[0] + measureColWidths[1] + measureColWidths[2] + measureColWidths[3] + 3, currentY + 5);
-        currentY += 7;
-        
+        currentY += 7;        
         const measureValues = Object.values(measures);
         let hasContent = false;
-        let measureIndex = 0;
-        
+        let measureIndex = 0;        
         measureValues.forEach((m, idx) => {
             if (m && m.question) {
-                hasContent = true;
-                
+                hasContent = true;                
                 pdf.setFontSize(7);
                 const frageLines = pdf.splitTextToSize(m.question || '-', measureColWidths[1] - 6);
                 const massnahmeLines = pdf.splitTextToSize(m.measure || '-', measureColWidths[2] - 6);
-                const rowHeight = Math.max(8, Math.max(frageLines.length, massnahmeLines.length) * 3 + 4);
-                
+                const rowHeight = Math.max(8, Math.max(frageLines.length, massnahmeLines.length) * 3 + 4);                
                 // Check for new page
                 if (currentY + rowHeight > pageHeight - 20) {
                     pdf.addPage();
                     addMiniHeader();
                     currentY = 18;
-                    
-                    // Repeat header
+                                        // Repeat header
                     pdf.setFillColor(254, 243, 199);
                     pdf.rect(margin, currentY, contentWidth, 7, 'F');
                     pdf.setFontSize(7);
@@ -2749,14 +2596,12 @@ async function generateAndSharePDF() {
                     pdf.text('Verantw.', margin + measureColWidths[0] + measureColWidths[1] + measureColWidths[2] + 3, currentY + 5);
                     pdf.text('Status', margin + measureColWidths[0] + measureColWidths[1] + measureColWidths[2] + measureColWidths[3] + 3, currentY + 5);
                     currentY += 7;
-                }
-                
+                }                
                 // Row background
                 if (measureIndex % 2 === 1) {
                     pdf.setFillColor(248, 250, 252);
                     pdf.rect(margin, currentY, contentWidth, rowHeight, 'F');
-                }
-                
+                }                
                 // Draw cells
                 pdf.setDrawColor(226, 232, 240);
                 let xPos = margin;
@@ -2774,16 +2619,14 @@ async function generateAndSharePDF() {
                 pdf.setFontSize(7);
                 pdf.text(frageLines, margin + measureColWidths[0] + 3, currentY + 3.5);
                 pdf.text(massnahmeLines, margin + measureColWidths[0] + measureColWidths[1] + 3, currentY + 3.5);
-                pdf.text(m.responsible || '-', margin + measureColWidths[0] + measureColWidths[1] + measureColWidths[2] + 3, currentY + 5);
-                
+                pdf.text(m.responsible || '-', margin + measureColWidths[0] + measureColWidths[1] + measureColWidths[2] + 3, currentY + 5);                
                 // Status with color
                 const statusText = m.status === 'offen' ? 'Offen' : m.status === 'bearbeitung' ? 'In Bearb.' : m.status === 'erledigt' ? 'Erledigt' : '-';
                 if (m.status === 'offen') pdf.setTextColor(220, 38, 38);
                 else if (m.status === 'bearbeitung') pdf.setTextColor(217, 119, 6);
                 else if (m.status === 'erledigt') pdf.setTextColor(22, 163, 74);
                 else pdf.setTextColor(0);
-                pdf.text(statusText, margin + measureColWidths[0] + measureColWidths[1] + measureColWidths[2] + measureColWidths[3] + 3, currentY + 5);
-                
+                pdf.text(statusText, margin + measureColWidths[0] + measureColWidths[1] + measureColWidths[2] + measureColWidths[3] + 3, currentY + 5);                
                 currentY += rowHeight;
                 measureIndex++;
             }
@@ -2798,30 +2641,25 @@ async function generateAndSharePDF() {
             pdf.setFontSize(10);
             pdf.setFont(undefined, 'bold');
             pdf.text('Keine Massnahmen erforderlich - alle Prüfpunkte bestanden.', pageWidth / 2, currentY + 9, { align: 'center' });
-        }
-        
-        // ===== SIGNATURE PAGE =====
+        }       
+
         pdf.addPage();
         addMiniHeader();
-        currentY = 18;
-        
+        currentY = 18;        
         pdf.setFontSize(14);
         pdf.setTextColor(30, 64, 175);
         pdf.text('Unterschriften', margin, currentY + 5);
-        currentY += 18;
-        
+        currentY += 18;        
         // Pruefer signature
         pdf.setFontSize(10);
         pdf.setTextColor(33, 37, 41);
         pdf.setFont(undefined, 'bold');
         pdf.text('Pruefer', margin, currentY);
-        pdf.setFont(undefined, 'normal');
-        
+        pdf.setFont(undefined, 'normal');        
         currentY += 5;
         pdf.setFillColor(250, 250, 250);
         pdf.setDrawColor(203, 213, 225);
-        pdf.roundedRect(margin, currentY, contentWidth / 2 - 10, 40, 3, 3, 'FD');
-        
+        pdf.roundedRect(margin, currentY, contentWidth / 2 - 10, 40, 3, 3, 'FD');        
         if (sigPrueferDataURL && sigPrueferDataURL !== 'data:,') {
             try {
                 pdf.addImage(sigPrueferDataURL, 'PNG', margin + 5, currentY + 3, contentWidth / 2 - 20, 34);
@@ -2845,8 +2683,7 @@ async function generateAndSharePDF() {
         
         pdf.setFillColor(250, 250, 250);
         pdf.setDrawColor(203, 213, 225);
-        pdf.roundedRect(margin + contentWidth / 2 + 10, currentY, contentWidth / 2 - 10, 40, 3, 3, 'FD');
-        
+        pdf.roundedRect(margin + contentWidth / 2 + 10, currentY, contentWidth / 2 - 10, 40, 3, 3, 'FD');        
         if (sigMarktleitungDataURL && sigMarktleitungDataURL !== 'data:,') {
             try {
                 pdf.addImage(sigMarktleitungDataURL, 'PNG', margin + contentWidth / 2 + 15, currentY + 3, contentWidth / 2 - 20, 34);
@@ -2861,26 +2698,20 @@ async function generateAndSharePDF() {
             pdf.text('Keine Unterschrift vorhanden', margin + contentWidth * 3 / 4 + 5, currentY + 20, { align: 'center' });
         }
         
-        currentY += 55;
-        
-        // ===== ZUSAMMENFASSUNG DER ANTWORTEN =====
-        pdf.setFontSize(12);
+        currentY += 55;        
+              pdf.setFontSize(12);
         pdf.setTextColor(33, 37, 41);
         pdf.setFont(undefined, 'bold');
         pdf.text('Zusammenfassung der Antworten', margin, currentY);
         pdf.setFont(undefined, 'normal');
-        currentY += 8;
-        
-        const totalQuestions = totalJa + totalNein + totalNV + totalUnanswered;
-        
+        currentY += 8;        
+        const totalQuestions = totalJa + totalNein + totalNV + totalUnanswered;        
         // Zusammenfassungs-Box
         pdf.setFillColor(248, 250, 252);
         pdf.setDrawColor(200);
-        pdf.roundedRect(margin, currentY, contentWidth, 35, 3, 3, 'FD');
-        
+        pdf.roundedRect(margin, currentY, contentWidth, 35, 3, 3, 'FD');        
         const summaryStartY = currentY + 8;
-        const colWidth = contentWidth / 4;
-        
+        const colWidth = contentWidth / 4;        
         // Ja
         pdf.setFillColor(220, 252, 231);
         pdf.roundedRect(margin + 5, summaryStartY, colWidth - 10, 20, 2, 2, 'F');
@@ -2890,8 +2721,7 @@ async function generateAndSharePDF() {
         pdf.text(`${totalJa}`, margin + colWidth/2, summaryStartY + 10, { align: 'center' });
         pdf.setFontSize(8);
         pdf.setFont(undefined, 'normal');
-        pdf.text('Ja', margin + colWidth/2, summaryStartY + 17, { align: 'center' });
-        
+        pdf.text('Ja', margin + colWidth/2, summaryStartY + 17, { align: 'center' });        
         // Nein
         pdf.setFillColor(254, 226, 226);
         pdf.roundedRect(margin + colWidth + 5, summaryStartY, colWidth - 10, 20, 2, 2, 'F');
