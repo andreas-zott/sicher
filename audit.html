@@ -929,7 +929,7 @@ id: 'kassenzone',
  'Wird die passende persönliche Schutzausrüstung (z. B. Schutzbrille, Handschuhe) für Tätigkeiten mit Gefahrstoffen zur Verfügung gestellt?',                 
                     'Ist die in den Betriebsanweisungen geforderte Persönliche Schutzausrüstung in unmittelbarer Nähe und einsatzbereit vorhanden?',
                                       
- 'Sind Sicherheitsdatenblaetter verfügbar?',
+ 'Sind Sicherheitsdatenblätter verfügbar?',
 'Sind Mitarbeiter unterwiesen?'
                 ]
             },
@@ -1089,180 +1089,37 @@ id: 'dokumentation',
     return "Stellen Sie sicher, dass die Notrufschnur gemaess DIN VDE 0834 bis maximal 10 cm ueber dem Fussboden herabreicht, damit sie auch nach einem Sturz erreichbar ist.";
 }
 if (measure.includes("Alarm an eine ständig besetzte Stelle")) {
-    return "Sorgen Sie dafuer, dass jeder Notruf an eine staendig besetzte Stelle (z. B. Empfang oder Leitwarte) weitergeleitet wird.";
+    return "Sorgen Sie dafür, dass jeder Notruf an eine ständig besetzte Stelle (z. B. Empfang oder Leitwarte) weitergeleitet wird.";
 }
 if (measure.includes("Beschäftigten über das Verhalten bei einem Alarm unterwiesen")) {
     return "Unterweisen Sie alle Beschaeftigten regelmaessig im Verhalten bei Notrufalarm (Reaktion, Hilfeleistung, Alarmverfolgung).";
 }
-if (measure.includes("Tür im Notfall von außen entriegelt werden kann")) {
-    return "Stellen Sie sicher, dass eine Notentriegelung vorhanden ist, sodass die Tür im Notfall von aussen geöffnet werden kann.";
+if (measure.includes("Sind Sicherheitsdatenblätter verfügbar?")) {
+    return "Stellen Sie sicher, dass Sicherheitsdatenblätter verfügbar sind.";
 }  
-            
+
+if (measure.includes("Erfolgte die letzte Unterweisung zum Umgang mit Zahlungsmitteln innerhalb der letzten 6 Monate")) {
+    return "Frist: Die Wiederholungsunterweisung muss zwingend innerhalb von 6 Monaten stattfinden, nicht nur jährlich..";
+}  
+ if (measure.includes("Tür im Notfall von außen entriegelt werden kann")) {
+    return "Stellen Sie sicher, dass eine Notentriegelung vorhanden ist, sodass die Tür im Notfall von aussen geöffnet werden kann.";
+}           
             if (measure.includes("Feuerlöscheinrichtungen frei zugaenglich") || measure.includes("Feuerlöscher vorhanden")) {
                 return "Halten Sie alle Feuerlöscheinrichtungen gemaess ASR A2.2 und § 10 ArbSchG stets frei zugaenglich, um eine unverzuegliche Nutzung im Brandfall zu gewaehrleisten.";
             }
             if (measure.includes("Feuerlöscheinrichtungen geprüft") || measure.includes("Feuerlöscher") && measure.includes("geprüft")) {
                 return "Veranlassen Sie Pruefungen aller Feuerlöscher durch befaehigte Personen nach DIN 14406-4 und sorgen Sie für die Einhaltung der vorgeschriebenen Prüffristen gemaess § 10 ArbSchG.";
             }
-            if (measure.includes("Brandschutztüren frei")) {
-                return "Achten Sie gemaess ASR A2.3 darauf, dass Brandschutztüren jederzeit frei zugänglich und in ihrer Funktion nicht beeintraechtigt sind.";
-            }
-            if (measure.includes("Brandschutztüren") && measure.includes("funktionsfähig")) {
-                return "Pruefen Sie regelmaessig den Zustand aller Brandschutztüren auf Beschaedigungen und stellen Sie ihre uneingeschränkte Schutzwirkung sicher (§ 4 ArbSchG).";
-            }
-            if (measure.includes("Brandmeldeanlage")) {
-                return "Stellen Sie sicher, dass die Brandmeldeanlage regelmaessig geprüft und gewartet wird gemaess DIN 14675 und § 10 ArbSchG.";
-            }
-            if (measure.includes("Flucht- und Rettungsweg") || measure.includes("Notausgäng")) {
-                return "Stellen Sie die sofortige Beräumung sicher. Halten Sie Notausgänge zu jeder Zeit frei zugaenglich gemaess § 4 ArbStaettV i. V. m. ASR A2.3.";
-            }
-            if (measure.includes("Flucht- und Rettungsplan")) {
-                return "Hängen Sie einen aktuellen und Flucht- und Rettungsplan gemaess ASR A1.3 und § 4 ArbStaettV gut sichtbar aus.";
-            }            
-         
-            if (measure.includes("Erste-Hilfe-Kasten") || measure.includes("Verbandkasten")) {
-                return "Platzieren Sie den Erste-Hilfe-Koffer gut sichtbar, dauerhaft zugaenglich und gemaess DGUV Vorschrift 1 an einem geeigneten Ort. Inhalt regelmaessig kontrollieren.";
-            }
-            if (measure.includes("Ersthelfer")) {
-                return "Stellen Sie sicher, dass während der gesamten Betriebszeiten mindestens ein ausgebildeter Ersthelfer nach DGUV Vorschrift 1 § 26 anwesend ist.";
-            }
-            if (measure.includes("Notrufnummer")) {
-                return "Haengen Sie Notrufnummern gut sichtbar aus und stellen Sie sicher, dass alle Mitarbeiter diese kennen.";
-            }
-            if (measure.includes("Erste-Hilfe-Material") || measure.includes("Verfallsdatum")) {
-                return "Inhalt der Verbandkaesten regelmässig kontrollieren; Vollständigkeit und Haltbarkeit der Materialien (DIN 13157, DGUV Vorschrift 1) sicherstellen.";
-            }           
-           
-            if (measure.includes("elektrische Anlagen geprüft") || measure.includes("E-Check")) {
-                return "Führen Sie regelmaessige Prüfungen ortsveraenderlicher elektrischer Betriebsmittel durch befaehigte Elektrofachkräfte gemaess DGUV Vorschrift 3 und TRBS 1201 durch.";
-            }
-            if (measure.includes("Steckdosen") || measure.includes("Schalter")) {
-                return "Veranlassen Sie die regelmaessige Sichtprüfung aller Schalter und Steckdosen und stellen Sie gemaess TRBS 1201 sicher, dass keine erkennbaren Schaeden vorliegen.";
-            }
-            if (measure.includes("Schaltschränke")) {
-                return "Halten Sie Schaltschränke stets frei von Gegenständen.";
-            }
-
-            if (measure.includes("Elektroleitungen") || measure.includes("Kabel")) {
-                return "Führen Sie regelmaessige Sichtprüfungen elektrischer Leitungen durch, um sicherzustellen, dass keine Stolper- oder Brandgefahren gemaess DGUV Vorschrift 3 entstehen.";
-            }           
-           
-            if (measure.includes("Regale standsicher") || measure.includes("Regale") && measure.includes("geprüft")) {
-                return "Veranlassen Sie regelmaessige Prüfungen aller Schwerlastregale durch befähigte Personen gemaess BetrSichV § 14 sowie DGUV Regel 108-007.";
-            }
-            if (measure.includes("Traglasten") || measure.includes("Traglastangabe")) {
-                return "Bringen Sie an jedem Regal deutlich sichtbare und dauerhafte Traglastangaben an, wie es § 4 BetrSichV i.V.m. TRBS 1201 fordert.";
-            }
-            if (measure.includes("Leitern") || measure.includes("Tritte")) {
-                return "Fuehren Sie regelmaessige Prüfungen aller Leitern und Tritte nach DGUV Information 208-016 sowie gemaess den Regelungen der BetrSichV durch.";
-            }
-            if (measure.includes("Verkehrswege im Lager") || measure.includes("Verkehrswege frei")) {
-                return "Gestalten und erhalten Sie Verkehrswege so, dass sie frei von Stolper-, Rutsch- oder Sturzgefahren sind (§ 3a ArbStaettV, ASR A1.8).";
-            }
-            if (measure.includes("Beleuchtung") && (measure.includes("Lager") || measure.includes("ausreichend"))) {
-                return "Stellen Sie eine ausreichende, blendfreie und funktionstüchtige Beleuchtung aller Arbeitsbereiche gemaess ASR A3.4 sicher.";
-            }          
-           
-            if (measure.includes("Sanitaerräume") || measure.includes("sanitaere Anlagen")) {
-                return "Stellen Sie sicher, dass sanitaere Anlagen regelmaessig gereinigt, instand gehalten und mit ausreichenden Hygieneartikeln ausgestattet werden - gemaess ArbStaettV Anhang Nr. 4.1 und ASR A4.1.";
-            }
-            if (measure.includes("Pausenraeume") || measure.includes("Pausenraum")) {
-                return "Nach der Arbeitsstättenverordnung (ArbStaettV) und ASR A4.2 dient der Pausenraum ausschliesslich der Erholung der Beschäftigten.";
-            }
-            if (measure.includes("Reinigung dokumentiert")) {
-                return "Dokumentieren Sie die Reinigung ordnungsgemäß und führen Sie Reinigungspläne.";
-            }                    
-          
-            if (measure.includes("Maschinen geprüft")) {
-                return "Stellen Sie sicher, dass sämtliche Arbeitsgeräte regelmaessig gewartet und auf ordnungsgemaessen Zustand geprüft werden (§ 4 ArbSchG, BetrSichV § 10).";
-            }
-            if (measure.includes("Schutzeinrichtungen")) {
-                return "Sorgen Sie dafuer, dass alle sicherheitstechnischen Vorrichtungen stets funktionstüchtig und unbeschaedigt sind (§ 4 BetrSichV).";
-            }
-            if (measure.includes("Betriebsanweisungen")) {
-                return "Halten Sie alle Betriebsanweisungen gut zugaenglich und stellen Sie sicher, dass die Beschäftigten ueber die Inhalte unterwiesen sind (§§ 4, 12 ArbSchG).";
-            }
-            if (measure.includes("PSA") || measure.includes("Schutzausrüstung")) {
-                return "Stellen Sie geeignete persönliche Schutzausrüstung (PSA) bereit und weisen Sie die Beschäftigten gemaess § 3 ArbSchG und § 2 PSA-Benutzungsverordnung ein.";
-            }
-            if (measure.includes("Werkzeuge")) {
-                return "Pruefen Sie Werkzeuge regelmässig auf Beschädigungen und ersetzen Sie defekte Werkzeuge umgehend.";
-            }            
-       
-            if (measure.includes("Verkehrswege") && measure.includes("sicher")) {
-                return "Gestalten und erhalten Sie Verkehrswege so, dass sie frei von Stolper-, Rutsch- oder Sturzgefahren sind (§ 3a ArbStaettV, ASR A1.8).";
-            }
-            if (measure.includes("Stolperstellen")) {
-                return "Beseitigen Sie Stolperstellen umgehend oder kennzeichnen Sie diese deutlich sichtbar.";
-            }
-            if (measure.includes("Treppen") || measure.includes("Handlaeufe")) {
-                return "Stellen Sie sicher, dass alle Treppen frei von Hindernissen sind und keine baulichen Maengel aufweisen, um die Unfallgefahr gemaess ASR A1.8 zu minimieren.";
-            }
-            if (measure.includes("Beleuchtung ausreichend")) {
-                return "Stellen Sie eine ausreichende Beleuchtung aller Arbeitsbereiche und Verkehrswege gemaess ASR A3.4 sicher.";
-            }                   
-                  
-            if (measure.includes("Sicherheitsdatenblätter")) {
-                return "Halten Sie aktuelle Sicherheitsdatenblätter für alle Gefahrstoffe bereit und machen Sie diese den Mitarbeitern zugaenglich.";
-            }
-            if (measure.includes("Gefahrstoffe") && measure.includes("gelagert")) {
-                return "Gefahrstoffe nach TRGS 510 neu trennen und entsprechend den Zusammenlagerungsregeln getrennt lagern.";
-            }
-            if (measure.includes("Auffangwannen")) {
-                return "Stellen Sie geeignete Auffangwannen für Gefahrstoffe bereit gemaess TRGS 510.";
- }
-            if (measure.includes("Wurden bei der Unterweisung aktuelle Änderungen in den betrieblichen Abläufen oder neue Sicherheitstechniken berücksichtigt?") || measure.includes("Unterweisung")) {
-                return "Führen Sie regelmäßige Unterweisungen gemaess § 12 ArbSchG durch und dokumentieren Sie diese schriftlich.";
-
-            }
-            if (measure.includes("Mitarbeiter unterwiesen") || measure.includes("Unterweisung")) {
-                return "Führen Sie regelmaessige Unterweisungen gemaess § 12 ArbSchG durch und dokumentieren Sie diese schriftlich.";
-            }  
-          if (measure.includes("Sind Unterweisungen dokumentiert") || measure.includes("Unterweisung")) {
-                return "Führen Sie regelmaessige Unterweisungen gemaess § 12 ArbSchG durch und dokumentieren Sie diese schriftlich.";
-            }          
-           
-            if (measure.includes("Gefährdungsbeurteilung")) {
-                return "Erstellen und aktualisieren Sie regelmaessig eine schriftliche Gefährdungsbeurteilung gemaess § 5 ArbSchG und § 3 BetrSichV.";
-            }
-            if (measure.includes("Verantwortlichkeiten")) {
-                return "Regeln Sie Verantwortlichkeiten klar und dokumentieren Sie diese schriftlich.";
-            }
-            if (measure.includes("Beinahe-Unfälle")) {
-                return "Erfassen und analysieren Sie Beinahe-Unfaelle systematisch, um praeventive Maßnahmen abzuleiten.";
-            }                   
-           
-            if (measure.includes("Notfallplan")) {
-                return "Erstellen Sie einen umfassenden Notfallplan und machen Sie diesen allen Mitarbeitern bekannt.";
-            }                     
             
-            if (measure.includes("Alarmierung")) {
-                return "Stellen Sie sicher, dass die Alarmierung im Notfall funktioniert und alle Mitarbeiter informiert sind.";
-            }            
-           
-            if (measure.includes("Arbeitsplätze ergonomisch")) {
-                return "Gestalten Sie Arbeitsplätze ergonomisch gemaess ArbStaettV und den Technischen Regeln.";
-            }          
-           
-            if (measure.includes("Pausen eingehalten")) {
-                return "Stellen Sie sicher, dass die gesetzlichen Pausenregelungen gemaess § 4 ArbZG eingehalten werden.";
-            }
-            if (measure.includes("Klimatisierung")) {
-                return "Sorgen Sie für eine angemessene Klimatisierung gemaess ASR A3.5.";
-            }            
+            
+                      
        
-            if (measure.includes("Prüfprotokolle")) {
-                return "Fuehren Sie eine vollstaendige Liste aller prüfpflichtigen Betriebseinrichtungen inklusive Nachweise und Pruefberichte gemäss BetrSichV § 14.";
-            }
+           
             if (measure.includes("Wird die Dokumentation von Erste-Hilfe-Leistungen ordnungsgemäß geführt und aufbewahrt")) {
-                return "Fuehren Sie eine schriftliche Dokumentation aller Erste-Hilfe-Leistungen gemaess § 24 DGUV Vorschrift 1 und bewahren Sie diese vier Jahre auf.";
+                return "Führen Sie eine schriftliche Dokumentation aller Erste-Hilfe-Leistungen gemaess § 24 DGUV Vorschrift 1 und bewahren Sie diese vier Jahre auf.";
             }
-            if (measure.includes("Betriebsanweisungen aktuell")) {
-                return "Aktualisieren Sie alle Betriebsanweisungen regelmaessig und stellen Sie deren Verfuegbarkeit sicher.";
-            }
-            if (measure.includes("Schulungsnachweise")) {
-                return "Fuehren Sie Schulungsnachweise ordnungsgemaess und archivieren Sie diese.";
-            }        
+           
+                  
 
 if (measure.includes("Ist die Beleuchtung in den Verkaufs- und Lagerbereichen gemäß ASR A3.4 ausreichend dimensioniert (mind. 300 Lux im Verkaufsraum), voll funktionsfähig und so beschaffen, dass Gefahrenhinweise auf Produkten sowie Leckagen in den Regalen jederzeit zweifelsfrei erkennbar sind")) {
   measure = "Beleuchtung gemäß ASR A3.4 anpassen (mind. 300 Lux), defekte Leuchten instand setzen und ausreichende Ausleuchtung zur sicheren Erkennung von Gefahren sicherstellen.";
