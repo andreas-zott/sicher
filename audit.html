@@ -22,20 +22,12 @@
     height: 60px; /* Größe anpassen */
 }
 .action-bar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 24px;
-    justify-content: center;  
-    align-items: center;      
-}
-
-.action-bar {
     display: grid;
-    grid-template-columns: repeat(auto-fit, 300px);
+    grid-template-columns: repeat(auto-fit, minmax(260px, 300px));
     justify-content: center;
     gap: 12px;
     margin-bottom: 24px;
+    align-items: center;
 }
 
 .page-break {
@@ -593,7 +585,7 @@ table, tr, td {
         <header class="header">
     <div class="header-text">
         <h1>Arbeitssicherheits-Audit Tool</h1>
-        <p>Checkliste und Massnahmenplan</p>
+        <p>Checkliste und Maßnahmenplan</p>
     </div>
      <div class="logo-text">...</div>
 </header>       
@@ -660,13 +652,13 @@ Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung d
                 <span>&#128196;</span> Als PDF exportieren
             </button>
             <button class="btn btn-danger" onclick="resetAll()">
-                <span>&#128465;</span> Zuruecksetzen
+                <span>&#128465;</span> Zurücksetzen
             </button>
  <button class="btn btn-secondary" onclick="generateAndSharePDF()">
                 <span></span>📤 PDF teilen (iPad)
             </button>
-            <button class="btn btn-success" onclick="openMassnahmenplan()">
-                <span>⚠</span> Massnahmenplan öffnen
+            <button class="btn btn-success" onclick="openMaßnahmenplan()">
+                <span>⚠</span> Maßnahmenplan öffnen
             </button>
         </div>       
 
@@ -707,10 +699,10 @@ Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung d
 
         <div class="section">
             <h2 class="section-title">
-                <span>&#9888;</span> Massnahmenplan
+                <span>&#9888;</span> Maßnahmenplan
             </h2>
             <div id="measuresContainer">
-                <p class="no-measures">Keine Massnahmen erforderlich. Waehlen Sie "Nein" bei Prüfpunkten, um Massnahmen hinzuzufuegen.</p>
+                <p class="no-measures">Keine Maßnahmen erforderlich. Waehlen Sie "Nein" bei Prüfpunkten, um Maßnahmen hinzuzufuegen.</p>
             </div>
         </div>        
 
@@ -756,7 +748,7 @@ Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung d
                     'Werden aus dem Ordersatz geeignete Sicherheitsmesser verwendet?',
                     'Sind die Verkehrswege so beschaffen, dass kein Unfallrisiko durch Stolpern, Ausrutschen oder Umknicken besteht?',
                     'Sind die Treppen unbeschädigt und frei von Gegenständen?',
-                    'Sind Betriebsanweisungen gut zug  nglich und werden Sicherheitsanweisungen eingehalten?',
+                    'Sind Betriebsanweisungen gut zugänglich und werden Sicherheitsanweisungen eingehalten?',
                     'Ist die Beleuchtung in den Verkaufs- und Lagerbereichen gemäß ASR A3.4 ausreichend dimensioniert (mind. 300 Lux im Verkaufsraum), voll funktionsfähig und so beschaffen, dass Gefahrenhinweise auf Produkten sowie Leckagen in den Regalen jederzeit zweifelsfrei erkennbar sind?'                                   
                 
                 ]
@@ -775,7 +767,7 @@ Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung d
                     'Sind alle Flucht- und Rettungswege sowie Notausgänge in ihrer gesamten Breite ständig freigehalten und im Außenbereich nicht durch Fahrzeuge oder Lagergut blockiert?',
    'Sind alle Notausgänge und -ausstiege jederzeit ohne fremde Hilfsmittel von innen leicht zu öffnen und ist die Bedienbarkeit der Beschläge sichergestellt?',  
 'Führen die Notausgänge in sichere Bereiche?',
- 'Ist die Brandmeldeanlage funktionsfaehig?',
+ 'Ist die Brandmeldeanlage funktionsfähig?',
 'Sind die Technik- und Heizräume frei von brennbaren Materialien (z. B. Kisten, Kartons)?',
 'Sind die Technik- und Heizräume frei von Lagernutzung?'
            ]
@@ -817,7 +809,7 @@ Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung d
             {
 
 
-id: 'CO2 Kühleinrichtungen',
+id: 'co2-kuehleinrichtungen',
                 name: 'CO2 Kühleinrichtungen',
                 questions: [
                     'Wurden Personen, die sich im Bereich von Kühlanlagen oder Kühlhäusern aufhalten, unterwiesen?',
@@ -861,7 +853,7 @@ id: 'kühlhaus',
             },
             {
 
-    id: ' praktikanten',
+    id: 'praktikanten',
                 name: ' Praktikanten',
                 questions: [
                     'Wurde die Unterweisung von Praktikanten und Schüleraushilfen durchgeführt?',
@@ -871,7 +863,7 @@ id: 'kühlhaus',
                 ]
             },
             {
-                id: ' arbeitsmedizin',
+                id: 'arbeitsmedizin',
                 name: ' Arbeitsmedizin',
                 questions: [
                     'Wird den Beschäftigten arbeitsmedizinische Vorsorge angeboten?',
@@ -884,22 +876,22 @@ id: 'kühlhaus',
                 ]
             },
             {
-                id: ' backstation',
+                id: 'backstation',
                 name: ' Backstation',
                 questions: [
                     'Sind die Arbeitsgeräte an der Backstation (Backofen, Backbleche, Brotschneidemaschine) in einem ordnungsgemäßen Zustand?',
                     'Ist das freistehende Handwaschbecken ohne Beschädigungen?',
                     'Sind die Elektroleitungen intakt und bilden keine Stolperstellen?',
                     'Entspricht die Zuleitung der VDE-Norm?',
-  'Sind alle Maschinen geprueft und dokumentiert?',
-                    'Sind Schutzeinrichtungen vorhanden und funktionsfaehig?',
+  'Sind alle Maschinen geprüft und dokumentiert?',
+                    'Sind Schutzeinrichtungen vorhanden und funktionsfähig?',
                     'Sind Betriebsanweisungen ausgehaengt?',
                     'Ist der Backhandschuh für die Backstation in einem ordnungsgemäßen Zustand (kein Verschleiß) und besitzt eine lange Stulpe?',
                     'Sind alle Heißgeräte (z. B. Heißtheken, Fritteusen) in technisch einwandfreiem Zustand?'
                 ]
             },
             {
-                id: ' serviceabteilung',
+                id: 'serviceabteilung',
                 name: 'Serviceabteilung',
                 questions: [
                     'Hängt an den Waschplätzen ein aktueller, auf die Gefährdungsbeurteilung abgestimmter Hautschutzplan gut sichtbar aus?',
@@ -916,7 +908,7 @@ id: 'kühlhaus',
             },
             {
 
-id: '  kassenzone',
+id: 'kassenzone',
                 name: ' Kassenzone',
                 questions: [
                     'Ist der Fußraum frei von Gegenständen?',
@@ -953,7 +945,7 @@ id: '  kassenzone',
             },
             {
 
-     id: 'barrierefreien WC ',
+     id: 'barrierefreies-wc',
                 name: 'Barrierefreies WC ',
                 questions: [
                     'Hängt die Notrufschnur (Zugschnur) bis maximal 10 cm über dem Fußboden herab, um nach einem Sturz erreichbar zu sein?',                   
@@ -987,7 +979,7 @@ id: 'dokumentation',
             },
             {
 
-                id: ' psychische Belastung',
+                id: 'psychische-belastung',
                 name: ' Psychische Belastung',
                 questions: [
                     'Werden Wünsche der Beschäftigten bei der Arbeitsplanung berücksichtigt?',
@@ -1110,7 +1102,7 @@ if (measure.includes("Tür im Notfall von außen entriegelt werden kann")) {
                 return "Halten Sie alle Feuerlöscheinrichtungen gemaess ASR A2.2 und § 10 ArbSchG stets frei zugaenglich, um eine unverzuegliche Nutzung im Brandfall zu gewaehrleisten.";
             }
             if (measure.includes("Feuerlöscheinrichtungen geprüft") || measure.includes("Feuerlöscher") && measure.includes("geprüft")) {
-                return "Veranlassen Sie Pruefungen aller Feuerloescher durch befaehigte Personen nach DIN 14406-4 und sorgen Sie fuer die Einhaltung der vorgeschriebenen Prüffristen gemaess § 10 ArbSchG.";
+                return "Veranlassen Sie Pruefungen aller Feuerlöscher durch befaehigte Personen nach DIN 14406-4 und sorgen Sie für die Einhaltung der vorgeschriebenen Prüffristen gemaess § 10 ArbSchG.";
             }
             if (measure.includes("Brandschutztüren frei")) {
                 return "Achten Sie gemaess ASR A2.3 darauf, dass Brandschutztüren jederzeit frei zugänglich und in ihrer Funktion nicht beeintraechtigt sind.";
@@ -1148,10 +1140,11 @@ if (measure.includes("Tür im Notfall von außen entriegelt werden kann")) {
                 return "Veranlassen Sie die regelmaessige Sichtprüfung aller Schalter und Steckdosen und stellen Sie gemaess TRBS 1201 sicher, dass keine erkennbaren Schaeden vorliegen.";
             }
             if (measure.includes("Schaltschränke")) {
-                return "Halten Sie Schaltschränke stets frei von Gegenstände.";
-         
+                return "Halten Sie Schaltschränke stets frei von Gegenständen.";
+            }
+
             if (measure.includes("Elektroleitungen") || measure.includes("Kabel")) {
-                return "Fuehren Sie regelmaessige Sichtprüfungen elektrischer Leitungen durch, um sicherzustellen, dass keine Stolper- oder Brandgefahren gemaess DGUV Vorschrift 3 entstehen.";
+                return "Führen Sie regelmaessige Sichtprüfungen elektrischer Leitungen durch, um sicherzustellen, dass keine Stolper- oder Brandgefahren gemaess DGUV Vorschrift 3 entstehen.";
             }           
            
             if (measure.includes("Regale standsicher") || measure.includes("Regale") && measure.includes("geprüft")) {
@@ -1174,14 +1167,14 @@ if (measure.includes("Tür im Notfall von außen entriegelt werden kann")) {
                 return "Stellen Sie sicher, dass sanitaere Anlagen regelmaessig gereinigt, instand gehalten und mit ausreichenden Hygieneartikeln ausgestattet werden - gemaess ArbStaettV Anhang Nr. 4.1 und ASR A4.1.";
             }
             if (measure.includes("Pausenraeume") || measure.includes("Pausenraum")) {
-                return "Nach der Arbeitsstättenverordnung (ArbStaettV) und ASR A4.2 dient der Pausenraum ausschliesslich der Erholung der Beschaeftigten.";
+                return "Nach der Arbeitsstättenverordnung (ArbStaettV) und ASR A4.2 dient der Pausenraum ausschliesslich der Erholung der Beschäftigten.";
             }
             if (measure.includes("Reinigung dokumentiert")) {
                 return "Dokumentieren Sie die Reinigung ordnungsgemäß und führen Sie Reinigungspläne.";
             }                    
           
             if (measure.includes("Maschinen geprüft")) {
-                return "Stellen Sie sicher, dass sämtliche Arbeitsgeräte regelmaessig gewartet und auf ordnungsgemaessen Zustand geprueft werden (§ 4 ArbSchG, BetrSichV § 10).";
+                return "Stellen Sie sicher, dass sämtliche Arbeitsgeräte regelmaessig gewartet und auf ordnungsgemaessen Zustand geprüft werden (§ 4 ArbSchG, BetrSichV § 10).";
             }
             if (measure.includes("Schutzeinrichtungen")) {
                 return "Sorgen Sie dafuer, dass alle sicherheitstechnischen Vorrichtungen stets funktionstüchtig und unbeschaedigt sind (§ 4 BetrSichV).";
@@ -1210,13 +1203,13 @@ if (measure.includes("Tür im Notfall von außen entriegelt werden kann")) {
             }                   
                   
             if (measure.includes("Sicherheitsdatenblätter")) {
-                return "Halten Sie aktuelle Sicherheitsdatenblätter fuer alle Gefahrstoffe bereit und machen Sie diese den Mitarbeitern zugaenglich.";
+                return "Halten Sie aktuelle Sicherheitsdatenblätter für alle Gefahrstoffe bereit und machen Sie diese den Mitarbeitern zugaenglich.";
             }
             if (measure.includes("Gefahrstoffe") && measure.includes("gelagert")) {
                 return "Gefahrstoffe nach TRGS 510 neu trennen und entsprechend den Zusammenlagerungsregeln getrennt lagern.";
             }
             if (measure.includes("Auffangwannen")) {
-                return "Stellen Sie geeignete Auffangwannen fuer Gefahrstoffe bereit gemaess TRGS 510.";
+                return "Stellen Sie geeignete Auffangwannen für Gefahrstoffe bereit gemaess TRGS 510.";
  }
             if (measure.includes("Wurden bei der Unterweisung aktuelle Änderungen in den betrieblichen Abläufen oder neue Sicherheitstechniken berücksichtigt?") || measure.includes("Unterweisung")) {
                 return "Führen Sie regelmäßige Unterweisungen gemaess § 12 ArbSchG durch und dokumentieren Sie diese schriftlich.";
@@ -1236,7 +1229,7 @@ if (measure.includes("Tür im Notfall von außen entriegelt werden kann")) {
                 return "Regeln Sie Verantwortlichkeiten klar und dokumentieren Sie diese schriftlich.";
             }
             if (measure.includes("Beinahe-Unfälle")) {
-                return "Erfassen und analysieren Sie Beinahe-Unfaelle systematisch, um praeventive Massnahmen abzuleiten.";
+                return "Erfassen und analysieren Sie Beinahe-Unfaelle systematisch, um praeventive Maßnahmen abzuleiten.";
             }                   
            
             if (measure.includes("Notfallplan")) {
@@ -1255,7 +1248,7 @@ if (measure.includes("Tür im Notfall von außen entriegelt werden kann")) {
                 return "Stellen Sie sicher, dass die gesetzlichen Pausenregelungen gemaess § 4 ArbZG eingehalten werden.";
             }
             if (measure.includes("Klimatisierung")) {
-                return "Sorgen Sie fuer eine angemessene Klimatisierung gemaess ASR A3.5.";
+                return "Sorgen Sie für eine angemessene Klimatisierung gemaess ASR A3.5.";
             }            
        
             if (measure.includes("Prüfprotokolle")) {
@@ -1270,7 +1263,7 @@ if (measure.includes("Tür im Notfall von außen entriegelt werden kann")) {
             if (measure.includes("Schulungsnachweise")) {
                 return "Fuehren Sie Schulungsnachweise ordnungsgemaess und archivieren Sie diese.";
             }        
-   }
+
 if (measure.includes("Ist die Beleuchtung in den Verkaufs- und Lagerbereichen gemäß ASR A3.4 ausreichend dimensioniert (mind. 300 Lux im Verkaufsraum), voll funktionsfähig und so beschaffen, dass Gefahrenhinweise auf Produkten sowie Leckagen in den Regalen jederzeit zweifelsfrei erkennbar sind")) {
   measure = "Beleuchtung gemäß ASR A3.4 anpassen (mind. 300 Lux), defekte Leuchten instand setzen und ausreichende Ausleuchtung zur sicheren Erkennung von Gefahren sicherstellen.";
 }
@@ -1728,6 +1721,23 @@ if (measure.includes("Beziehen Sie Mitarbeiteranregungen in die Entscheidungspro
   measure = "Stellen Sie sicher, dass Anregungen der Mitarbeitenden systematisch in Entscheidungsprozesse einbezogen und bei Maßnahmen des Arbeits- und Gesundheitsschutzes angemessen berücksichtigt werden (§ 3 ArbSchG, § 87 BetrVG).";
 }
             
+if (measure.includes("Unterweisung") || measure.includes("unterwiesen")) {
+  return "Führen Sie unverzüglich eine dokumentierte Unterweisung gemäß § 12 ArbSchG durch und stellen Sie sicher, dass alle betroffenen Beschäftigten die Inhalte verstanden haben.";
+}
+
+if (measure.includes("Sicherheitsbeauftragter")) {
+  return "Bestellen Sie einen geeigneten Sicherheitsbeauftragten gemäß § 22 SGB VII und dokumentieren Sie die Beauftragung schriftlich.";
+}
+
+if (measure.includes("Brandschutzhelfer")) {
+  return "Stellen Sie sicher, dass ausreichend ausgebildete Brandschutzhelfer gemäß ASR A2.2 während der gesamten Betriebszeit anwesend sind.";
+}
+
+if (measure.includes("arbeitsmedizinische Vorsorge")) {
+  return "Bieten Sie den Beschäftigten arbeitsmedizinische Vorsorge gemäß ArbMedVV an und dokumentieren Sie die Durchführung nachvollziehbar.";
+}
+
+
             // Default: Transform question into action statement
             if (!measure.endsWith(".")) {
                 measure += ".";            }            
@@ -1737,6 +1747,10 @@ if (measure.includes("Beziehen Sie Mitarbeiteranregungen in die Entscheidungspro
             } else if (measure.startsWith("Werden ")) {
                 measure = "Stellen Sie sicher, dass " + measure.substring(7).toLowerCase();
             }            
+            if (measure.trim().length < 10) {
+                return "Prüfen Sie den Sachverhalt und leiten Sie geeignete Maßnahmen gemäß ArbSchG und BetrSichV ein.";
+            }
+
             return measure;        }
         
         // Handle Answer
@@ -1784,7 +1798,7 @@ if (measure.includes("Beziehen Sie Mitarbeiteranregungen in die Entscheidungspro
             const measureKeys = Object.keys(measures);
             
             if (measureKeys.length === 0) {
-                container.innerHTML = '<p class="no-measures">Keine Massnahmen erforderlich. Waehlen Sie "Nein" bei Prüfpunkten, um Massnahmen hinzuzufuegen.</p>';
+                container.innerHTML = '<p class="no-measures">Keine Maßnahmen erforderlich. Waehlen Sie "Nein" bei Prüfpunkten, um Maßnahmen hinzuzufuegen.</p>';
                 return;            }            
             let html = `<table class="measures-table">
                 <thead>
@@ -2009,7 +2023,7 @@ function exportJson() {
       }
     })();
   } else {
-    // Fallback fuer Browser ohne File System Access API (z.B. iPad Safari)
+    // Fallback für Browser ohne File System Access API (z.B. iPad Safari)
     fallbackDownload();
   }  
   function fallbackDownload() {
@@ -2129,7 +2143,7 @@ function exportJson() {
                 }                
                 doc.setFontSize(14);
                 doc.setFont('helvetica', 'bold');
-                doc.text('Massnahmenplan', 20, y);
+                doc.text('Maßnahmenplan', 20, y);
                 y += 10;                
                 doc.setFontSize(9);
                 measureValues.forEach((m, idx) => {
@@ -2203,12 +2217,12 @@ function sharePage() {
         alert('Teilen wird auf diesem Gerät nicht unterstützt.');
     }
 }
-// Massnahmenplan öffnen und Daten übertragen
-function openMassnahmenplan() {
-    // Prüfen ob Massnahmen vorhanden sind
+// Maßnahmenplan öffnen und Daten übertragen
+function openMaßnahmenplan() {
+    // Prüfen ob Maßnahmen vorhanden sind
     const measureKeys = Object.keys(measures);
     if (measureKeys.length === 0) {
-        showToast('Keine Massnahmen vorhanden. Wählen Sie "Nein" bei Prüfpunkten, um Massnahmen hinzuzufügen.', 'error');
+        showToast('Keine Maßnahmen vorhanden. Wählen Sie "Nein" bei Prüfpunkten, um Maßnahmen hinzuzufügen.', 'error');
         return;
     }    
     // Daten sammeln (inkl. Unterschriften)
@@ -2228,14 +2242,14 @@ function openMassnahmenplan() {
             const jsonStr = JSON.stringify(massnahmenData);
          localStorage.setItem('massnahmenplanData', jsonStr);
         
-        // Zur Massnahmenplan-Seite navigieren
-        window.open('Massnahmenplan.html?data=' + encodedData, '_blank');
-        showToast('Massnahmenplan wird geöffnet...', 'success');
+        // Zur Maßnahmenplan-Seite navigieren
+        window.open('Maßnahmenplan.html?data=' + encodedData, '_blank');
+        showToast('Maßnahmenplan wird geöffnet...', 'success');
     } catch (e) {
-        console.error('Fehler beim Öffnen des Massnahmenplans:', e);
+        console.error('Fehler beim Öffnen des Maßnahmenplans:', e);
         // Fallback: Nur mit localStorage öffnen
-        window.open('Massnahmenplan.html', '_blank');
-        showToast('Massnahmenplan wird geöffnet...', 'success');
+        window.open('Maßnahmenplan.html', '_blank');
+        showToast('Maßnahmenplan wird geöffnet...', 'success');
     }
 }
 </script>
@@ -2361,7 +2375,7 @@ async function generateAndSharePDF() {
         
         pdf.setFontSize(7);
         pdf.setTextColor(30, 41, 59);
-        const introText = 'Dieses Audit-Tool dient der systematischen Ueberpruefung von Arbeitssicherheit und Gesundheitsschutz gemaess Paragraph 5 ArbSchG. Ziel ist die fruehzeitige Identifikation von Gefaehrdungen sowie die konsequente Ableitung und Nachverfolgung erforderlicher Massnahmen.';
+        const introText = 'Dieses Audit-Tool dient der systematischen Ueberpruefung von Arbeitssicherheit und Gesundheitsschutz gemaess Paragraph 5 ArbSchG. Ziel ist die fruehzeitige Identifikation von Gefaehrdungen sowie die konsequente Ableitung und Nachverfolgung erforderlicher Maßnahmen.';
         const introLines = pdf.splitTextToSize(introText, boxWidth);
         pdf.text(introLines, boxMargin, boxY);
         boxY += introLines.length * 3 + 4;
@@ -2392,7 +2406,7 @@ async function generateAndSharePDF() {
         pdf.setFont(undefined, 'normal');
         boxY += 3;
         pdf.setTextColor(71, 85, 105);
-        const verantwortungText = 'Die Gesamtverantwortung fuer die Durchfuehrung der Pruefung sowie die Beseitigung festgestellter Maengel liegt bei der Marktleitung. Die Aufsichts- und Kontrollpflicht verbleibt bei der Marktleitung.';
+        const verantwortungText = 'Die Gesamtverantwortung für die Durchfuehrung der Pruefung sowie die Beseitigung festgestellter Maengel liegt bei der Marktleitung. Die Aufsichts- und Kontrollpflicht verbleibt bei der Marktleitung.';
         const verantwortungLines = pdf.splitTextToSize(verantwortungText, boxWidth);
         pdf.text(verantwortungLines, boxMargin, boxY);
         boxY += verantwortungLines.length * 3 + 3;
@@ -2404,7 +2418,7 @@ async function generateAndSharePDF() {
         pdf.setFont(undefined, 'normal');
         boxY += 3;
         pdf.setTextColor(71, 85, 105);
-        const dokumentationText = 'Nach Abschluss der Pruefung ist die Checkliste vollstaendig auszuwerten. Auf dieser Grundlage wird eine Massnahmenliste erstellt.';
+        const dokumentationText = 'Nach Abschluss der Pruefung ist die Checkliste vollstaendig auszuwerten. Auf dieser Grundlage wird eine Maßnahmenliste erstellt.';
         const dokumentationLines = pdf.splitTextToSize(dokumentationText, boxWidth);
         pdf.text(dokumentationLines, boxMargin, boxY);
         boxY += dokumentationLines.length * 3 + 3;
@@ -2416,7 +2430,7 @@ async function generateAndSharePDF() {
         pdf.setFont(undefined, 'normal');
         boxY += 3;
         pdf.setTextColor(71, 85, 105);
-        const wirksamkeitText = 'Die Marktleitung prueft die Umsetzung der festgelegten Massnahmen zeitnah. Nach Abschluss der Massnahmen erfolgt eine erneute Kontrolle zur Ueberpruefung der Wirksamkeit.';
+        const wirksamkeitText = 'Die Marktleitung prueft die Umsetzung der festgelegten Maßnahmen zeitnah. Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Ueberpruefung der Wirksamkeit.';
         const wirksamkeitLines = pdf.splitTextToSize(wirksamkeitText, boxWidth);
         pdf.text(wirksamkeitLines, boxMargin, boxY);
         
@@ -2556,7 +2570,7 @@ async function generateAndSharePDF() {
         currentY = 18;        
         pdf.setFontSize(14);
         pdf.setTextColor(30, 64, 175);
-        pdf.text('Massnahmenplan', margin, currentY + 5);
+        pdf.text('Maßnahmenplan', margin, currentY + 5);
         currentY += 15;        
         // Table header for measures
         const measureColWidths = [contentWidth * 0.05, contentWidth * 0.35, contentWidth * 0.30, contentWidth * 0.15, contentWidth * 0.15];
@@ -2640,7 +2654,7 @@ async function generateAndSharePDF() {
             pdf.setTextColor(22, 163, 74);
             pdf.setFontSize(10);
             pdf.setFont(undefined, 'bold');
-            pdf.text('Keine Massnahmen erforderlich - alle Prüfpunkte bestanden.', pageWidth / 2, currentY + 9, { align: 'center' });
+            pdf.text('Keine Maßnahmen erforderlich - alle Prüfpunkte bestanden.', pageWidth / 2, currentY + 9, { align: 'center' });
         }       
 
         pdf.addPage();
@@ -2801,16 +2815,17 @@ async function generateAndSharePDF() {
         document.getElementById('pdf-loading')?.remove();
     }
 }
+
 </script>
         <div class="action-bar">
                       <button class="btn btn-danger" onclick="resetAll()">
-                <span>&#128465;</span> Zuruecksetzen
+                <span>&#128465;</span> Zurücksetzen
             </button>
  <button class="btn btn-secondary" onclick="generateAndSharePDF()">
                 <span></span>📤 PDF teilen (iPad)
             </button>
-            <button class="btn btn-success" onclick="openMassnahmenplan()">
-                <span>⚠</span> Massnahmenplan öffnen
+            <button class="btn btn-success" onclick="openMaßnahmenplan()">
+                <span>⚠</span> Maßnahmenplan öffnen
             </button>
         </div>
 <footer style="
