@@ -791,7 +791,7 @@ Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung d
                     'Ist das Erste-Hilfe-Material an allen Standorten in vollständigem Zustand und ist das Verfallsdatum der sterilen Inhalte noch nicht überschritten?',
 'Wird die Dokumentation von Erste-Hilfe-Leistungen ordnungsgemäß geführt?',
  'Ist während der gesamten Öffnungszeit die erforderliche Anzahl an ausgebildeten Ersthelfern gemäß DGUV Vorschrift 1 anwesend?',
-                    'Ist eine Notrufnummer ausgehaengt?',
+                    'Ist eine Notrufnummer ausgehängt?',
                     'Sind Erste-Hilfe-Anweisungen vorhanden?'
                 ]
             },
@@ -1084,6 +1084,19 @@ id: 'dokumentation',
             // Remove trailing question mark
             if (measure.endsWith("?")) {
                 measure = measure.slice(0, -1);            }
+  
+
+if (measure.includes("Sind Erste-Hilfe-Anweisungen vorhanden")) {
+    return "Stellen Sie sicher, das der Aushang Erste Hilfe (DGUV Information 204-001) aufgehängt wird.";
+}
+
+if (measure.includes("Ist eine Notrufnummer ausgehängt")) {
+    return "Stellen Sie sicher, das der Aushang mit den Notruf Nummern aufgehängt wird.";
+}
+
+if (measure.includes("Ist während der gesamten Öffnungszeit die erforderliche Anzahl an ausgebildeten Ersthelfern gemäß DGUV Vorschrift 1 anwesend")) {
+    return "Sicherstellen dass während der gesamten Öffnungszeit die erforderliche Anzahl an ausgebildeten Ersthelfern anwesend ist Dienst- und Schichtplanung entsprechend anpassen sowie regelmäßige Prüfung der Ersthelferqualifikationen und Gültigkeiten durchführen.";
+}
 
   if (measure.includes("Notrufschnur (Zugschnur) bis maximal 10 cm über dem Fußboden")) {
     return "Stellen Sie sicher, dass die Notrufschnur gemaess DIN VDE 0834 bis maximal 10 cm ueber dem Fussboden herabreicht, damit sie auch nach einem Sturz erreichbar ist.";
@@ -1113,7 +1126,9 @@ if (measure.includes("Erfolgte die letzte Unterweisung zum Umgang mit Zahlungsmi
  
             if (measure.includes("Wird die Dokumentation von Erste-Hilfe-Leistungen ordnungsgemäß geführt und aufbewahrt")) {
                 return "Führen Sie eine schriftliche Dokumentation aller Erste-Hilfe-Leistungen gemaess § 24 DGUV Vorschrift 1 und bewahren Sie diese vier Jahre auf.";
-            }          
+            } 
+
+        
                   
 
 if (measure.includes("Ist die Beleuchtung in den Verkaufs- und Lagerbereichen gemäß ASR A3.4 ausreichend dimensioniert (mind. 300 Lux im Verkaufsraum), voll funktionsfähig und so beschaffen, dass Gefahrenhinweise auf Produkten sowie Leckagen in den Regalen jederzeit zweifelsfrei erkennbar sind")) {
@@ -1585,6 +1600,10 @@ if (measure.includes("Brandschutzhelfer")) {
 
 if (measure.includes("arbeitsmedizinische Vorsorge")) {
   return "Bieten Sie den Beschäftigten arbeitsmedizinische Vorsorge gemäß ArbMedVV an und dokumentieren Sie die Durchführung nachvollziehbar.";
+}
+
+if (measure.includes("Sind Erste-Hilfe-Anweisungen vorhanden")) {
+  return "Aushang Erste Hilfe DGUV Information 204-001.";
 }
 
 
