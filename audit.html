@@ -702,7 +702,7 @@ Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung d
                 <span>&#9888;</span> Maßnahmenplan
             </h2>
             <div id="measuresContainer">
-                <p class="no-measures">Keine Maßnahmen erforderlich. Waehlen Sie "Nein" bei Prüfpunkten, um Maßnahmen hinzuzufuegen.</p>
+                <p class="no-measures">Keine Maßnahmen erforderlich. Wählen Sie „Nein“ bei Prüfpunkten, um Maßnahmen hinzuzufügen.</p>
             </div>
         </div>        
 
@@ -712,17 +712,17 @@ Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung d
             </h2>
             <div class="signature-section">
                 <div class="signature-box">
-                    <label>Pruefer</label>
-                    <canvas id="sigPruefer" class="signature-canvas" width="350" height="150"></canvas>
+                    <label>Prüfer</label>
+                    <canvas id="sigPrüfer" class="signature-canvas" width="350" height="150"></canvas>
                     <div class="signature-actions">
-                        <button class="btn btn-small btn-secondary" onclick="clearSignature('sigPruefer')">Loeschen</button>
+                        <button class="btn btn-small btn-secondary" onclick="clearSignature('sigPrüfer')">Löschen</button>
                     </div>
                 </div>
                 <div class="signature-box">
                     <label>Marktleitung</label>
                     <canvas id="sigMarktleitung" class="signature-canvas" width="350" height="150"></canvas>
                     <div class="signature-actions">
-                        <button class="btn btn-small btn-secondary" onclick="clearSignature('sigMarktleitung')">Loeschen</button>
+                        <button class="btn btn-small btn-secondary" onclick="clearSignature('sigMarktleitung')">Löschen</button>
                     </div>
                 </div>
             </div>
@@ -1010,7 +1010,7 @@ id: 'dokumentation',
         let answers = {};
         let measures = {};
         let signatures = {
-            sigPruefer: null,
+            sigPrüfer: null,
             sigMarktleitung: null
         };        
         // Initialize
@@ -1696,7 +1696,7 @@ if (measure.includes("Sind Erste-Hilfe-Anweisungen vorhanden")) {
             const measureKeys = Object.keys(measures);
             
             if (measureKeys.length === 0) {
-                container.innerHTML = '<p class="no-measures">Keine Maßnahmen erforderlich. Waehlen Sie "Nein" bei Prüfpunkten, um Maßnahmen hinzuzufuegen.</p>';
+                container.innerHTML = '<p class="no-measures">Keine Maßnahmen erforderlich. Wählen Sie „Nein“ bei Prüfpunkten, um Maßnahmen hinzuzufügen.</p>';
                 return;            }            
             let html = `<table class="measures-table">
                 <thead>
@@ -1757,7 +1757,7 @@ if (measure.includes("Sind Erste-Hilfe-Anweisungen vorhanden")) {
         }        
         // Signature Handling
         function initSignatures() {
-            ['sigPruefer', 'sigMarktleitung'].forEach(id => {
+            ['sigPrüfer', 'sigMarktleitung'].forEach(id => {
                 const canvas = document.getElementById(id);
                 const ctx = canvas.getContext('2d');
                 let drawing = false;
@@ -1860,7 +1860,7 @@ if (measure.includes("Sind Erste-Hilfe-Anweisungen vorhanden")) {
             }            
             if (data.signatures) {
                 signatures = data.signatures;
-                ['sigPruefer', 'sigMarktleitung'].forEach(id => {
+                ['sigPrüfer', 'sigMarktleitung'].forEach(id => {
                     if (signatures[id]) {
                         const canvas = document.getElementById(id);
                         const ctx = canvas.getContext('2d');
@@ -1955,14 +1955,14 @@ function exportJson() {
             if (!confirm('Alle Daten zuruecksetzen? Dies kann nicht rueckgaengig gemacht werden.')) return;            
             answers = {};
             measures = {};
-            signatures = { sigPruefer: null, sigMarktleitung: null };            
+            signatures = { sigPrüfer: null, sigMarktleitung: null };            
             document.getElementById('markt').value = '';
             document.getElementById('datum').valueAsDate = new Date();
             document.getElementById('teilnehmer').value = '';
             document.getElementById('marktleitung').value = '';
             document.getElementById('sifa').value = '';            
             document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);            
-            clearSignature('sigPruefer');
+            clearSignature('sigPrüfer');
             clearSignature('sigMarktleitung');            
             categories.forEach(cat => updateCategoryStats(cat.id));
             renderMeasures();
@@ -2060,7 +2060,7 @@ function exportJson() {
                 });
             }            
             // Signatures
-            if (signatures.sigPruefer || signatures.sigMarktleitung) {
+            if (signatures.sigPrüfer || signatures.sigMarktleitung) {
                 if (y > 220) {
                     doc.addPage();
                     y = 20;
@@ -2069,11 +2069,11 @@ function exportJson() {
                 doc.setFont('helvetica', 'bold');
                 doc.text('Unterschriften', 20, y);
                 y += 10;                
-                if (signatures.sigPruefer) {
-                    doc.text('Pruefer:', 20, y);
+                if (signatures.sigPrüfer) {
+                    doc.text('Prüfer:', 20, y);
                     y += 5;
                     try {
-                        doc.addImage(signatures.sigPruefer, 'PNG', 20, y, 60, 25);
+                        doc.addImage(signatures.sigPrüfer, 'PNG', 20, y, 60, 25);
                     } catch (e) {}
                     y += 30;
                 }                
@@ -2168,12 +2168,12 @@ async function generateAndSharePDF() {
     const sifa = document.getElementById('sifa')?.value || '-';
     const filename = `Arbeitssicherheit-Audit-${markt}-${formattedDate.replace(/\./g, '-')}.pdf`;    
     // Get signatures as data URL
-    let sigPrueferDataURL = null;
+    let sigPrüferDataURL = null;
     let sigMarktleitungDataURL = null;
-    const sigPrueferCanvas = document.getElementById('sigPruefer');
+    const sigPrüferCanvas = document.getElementById('sigPrüfer');
     const sigMarktleitungCanvas = document.getElementById('sigMarktleitung');
-    if (sigPrueferCanvas) {
-        sigPrueferDataURL = sigPrueferCanvas.toDataURL('image/png');
+    if (sigPrüferCanvas) {
+        sigPrüferDataURL = sigPrüferCanvas.toDataURL('image/png');
     }
     if (sigMarktleitungCanvas) {
         sigMarktleitungDataURL = sigMarktleitungCanvas.toDataURL('image/png');
@@ -2562,19 +2562,19 @@ async function generateAndSharePDF() {
         pdf.setTextColor(30, 64, 175);
         pdf.text('Unterschriften', margin, currentY + 5);
         currentY += 18;        
-        // Pruefer signature
+        // Prüfer signature
         pdf.setFontSize(10);
         pdf.setTextColor(33, 37, 41);
         pdf.setFont(undefined, 'bold');
-        pdf.text('Pruefer', margin, currentY);
+        pdf.text('Prüfer', margin, currentY);
         pdf.setFont(undefined, 'normal');        
         currentY += 5;
         pdf.setFillColor(250, 250, 250);
         pdf.setDrawColor(203, 213, 225);
         pdf.roundedRect(margin, currentY, contentWidth / 2 - 10, 40, 3, 3, 'FD');        
-        if (sigPrueferDataURL && sigPrueferDataURL !== 'data:,') {
+        if (sigPrüferDataURL && sigPrüferDataURL !== 'data:,') {
             try {
-                pdf.addImage(sigPrueferDataURL, 'PNG', margin + 5, currentY + 3, contentWidth / 2 - 20, 34);
+                pdf.addImage(sigPrüferDataURL, 'PNG', margin + 5, currentY + 3, contentWidth / 2 - 20, 34);
             } catch (e) {
                 pdf.setTextColor(150);
                 pdf.setFontSize(9);
