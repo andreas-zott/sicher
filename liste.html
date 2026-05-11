@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="de">
 <head>
 <meta charset="utf-8"/>
@@ -9,9 +8,7 @@
 <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon"/>
 <link href="/sicher/manifest.json" rel="manifest"/>
 <style>
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-
     .handlungsanweisung-box {
         border: 2px solid #C62828; 
         padding: 18px;
@@ -28,7 +25,6 @@
         margin: 10px 0;
         line-height: 1.5;
     }
-
 #signature-pad, canvas { border: 2px solid #C62828 !important; border-radius: 12px; }
 </style>
 <style>
@@ -365,6 +361,7 @@ input[type="text"], input[type="date"] {
     hyphens: auto !important;
   }
 }
+
 </style>
 </head>
 <body>
@@ -1825,6 +1822,53 @@ pdf.text(wirksamkeitText, margin + 5, currentY);
     pdf.text('Bestätigung und Unterschrift', margin, currentY + 5);
     currentY += 18;
     
+    // ===== ABSCHLUSSBESTÄTIGUNG =====
+    const bestaetigungen = [
+      {
+        checked: document.getElementById('mangel')?.checked,
+        text: 'Alle Mängel wurden zur Kenntnis genommen.'
+      },
+      {
+        checked: document.getElementById('massnahmen')?.checked,
+        text: 'Maßnahmen gemäß Plan werden umgesetzt.'
+      },
+      {
+        checked: document.getElementById('nachkontrolle')?.checked,
+        text: 'Nachkontrolle wird durchgeführt.'
+      },
+      {
+        checked: document.getElementById('mitarbeiter')?.checked,
+        text: 'Mitarbeiter wurden informiert.'
+      }
+    ];
+
+    pdf.setFontSize(12);
+    pdf.setTextColor(33, 37, 41);
+    pdf.setFont(undefined, 'bold');
+    pdf.text('Abschlussbestätigung', margin, currentY);
+    pdf.setFont(undefined, 'normal');
+
+    currentY += 8;
+
+    bestaetigungen.forEach((item, index) => {
+      const posY = currentY + (index * 10);
+
+      pdf.setDrawColor(120);
+      pdf.rect(margin, posY - 4, 4, 4);
+
+      if (item.checked) {
+        pdf.setLineWidth(0.6);
+        pdf.line(margin + 0.8, posY - 2, margin + 1.8, posY - 0.5);
+        pdf.line(margin + 1.8, posY - 0.5, margin + 3.5, posY - 3.5);
+      }
+
+      pdf.setFontSize(10);
+      pdf.setTextColor(0);
+      pdf.text(item.text, margin + 7, posY);
+    });
+
+    currentY += 50;
+
     // Signature section (Prüfungsergebnis entfernt)
     pdf.setFontSize(12);
     pdf.setTextColor(33, 37, 41);
@@ -1943,6 +1987,8 @@ pdf.text(wirksamkeitText, margin + 5, currentY);
   
   // Seitenzahlen hinzufügen
   addPageNumbers();
+
+
   
   // Generate blob and share/download
   const blob = pdf.output('blob');
