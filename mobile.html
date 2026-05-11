@@ -477,50 +477,6 @@ input[type="radio"] {
 }
 </style>
 
-
-<style>
-/* Kategorien optisch trennen */
-.category-header td,
-tr:has(.category-header) td {
-    background: #B71C1C !important;
-    color: white !important;
-    font-size: 18px !important;
-    font-weight: bold !important;
-    border-radius: 12px !important;
-    padding: 14px !important;
-    margin-top: 28px !important;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-}
-
-/* Abstand zwischen Bereichen */
-.category-block,
-tbody tr {
-    margin-bottom: 14px;
-}
-
-/* Mobile Karten schöner trennen */
-@media (max-width: 600px) {
-
-  tr {
-    border: 2px solid #ececec;
-  }
-
-  tr:has(.category-header) {
-    border: none !important;
-    background: transparent !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-    margin-top: 30px !important;
-    margin-bottom: 14px !important;
-  }
-
-  .category-header {
-    border-radius: 14px;
-    overflow: hidden;
-  }
-}
-</style>
-
 </head>
 <body>
 <h1 id="titel">Arbeitssicherheits-Audit mit automatischer Maßnahmenableitung bei Abweichungen</h1>
@@ -1969,6 +1925,7 @@ pdf.text(wirksamkeitText, margin + 5, currentY);
       pdf.setFont(undefined, 'bold');
       pdf.text('Keine Defizite festgestellt - alle Prüfpunkte bestanden.', pageWidth / 2, currentY + 9, { align: 'center' });
     }
+
     
     // ===== SIGNATURE PAGE =====
     pdf.addPage();
@@ -2007,6 +1964,56 @@ pdf.text(wirksamkeitText, margin + 5, currentY);
     }
     
     currentY += 60;
+
+// ===== ABSCHLUSSBESTÄTIGUNG =====
+const bestaetigungen = [
+  {
+    checked: document.getElementById('mangel')?.checked,
+    text: 'Alle Mängel wurden zur Kenntnis genommen.'
+  },
+  {
+    checked: document.getElementById('massnahmen')?.checked,
+    text: 'Maßnahmen gemäß Plan werden umgesetzt.'
+  },
+  {
+    checked: document.getElementById('nachkontrolle')?.checked,
+    text: 'Nachkontrolle wird durchgeführt.'
+  },
+  {
+    checked: document.getElementById('mitarbeiter')?.checked,
+    text: 'Mitarbeiter wurden informiert.'
+  }
+];
+
+pdf.setFontSize(12);
+pdf.setTextColor(33, 37, 41);
+pdf.setFont(undefined, 'bold');
+pdf.text('Abschlussbestätigung', margin, currentY);
+pdf.setFont(undefined, 'normal');
+
+currentY += 8;
+
+bestaetigungen.forEach((item, index) => {
+  const posY = currentY + (index * 10);
+
+  // Checkbox zeichnen
+  pdf.setDrawColor(120);
+  pdf.rect(margin, posY - 4, 4, 4);
+
+  // Haken wenn aktiviert
+  if (item.checked) {
+    pdf.setLineWidth(0.6);
+    pdf.line(margin + 0.8, posY - 2, margin + 1.8, posY - 0.5);
+    pdf.line(margin + 1.8, posY - 0.5, margin + 3.5, posY - 3.5);
+  }
+
+  // Text
+  pdf.setFontSize(10);
+  pdf.setTextColor(0);
+  pdf.text(item.text, margin + 7, posY);
+});
+
+currentY += 50;
     
     // ===== ZUSAMMENFASSUNG DER ANTWORTEN =====
     pdf.setFontSize(12);
@@ -3660,6 +3667,7 @@ document.addEventListener("touchstart", function(e) {
     e.preventDefault();
   }
 }, { passive: false });
+
 </script>
 </body>
 </html>
