@@ -1253,6 +1253,9 @@ id: 'dokumentation',
 if (measure.includes("Sind die Annahmegeräte unbeschädigt und funktionsfähig")) {
     return "Beschädigte oder defekte Annahmegeräte unverzüglich instand setzen oder außer Betrieb nehmen.";
 }
+if (measure.includes("Zugschnüre und Signalgeber in regelmäßigen Intervallen")) {
+    return "Prüfen Sie die Zugschnüre und Signalgeber gemäß DIN VDE 0834 regelmäßig, mindestens jedoch monatlich, auf ihre einwandfreie Funktion und dokumentieren Sie die Ergebnisse nachvollziehbar.";
+}
 if (measure.includes("Werden Rollbahnen nicht betreten")) {
     return "Beschäftigte unterweisen und unzulässiges Betreten der Rollbahnen verhindern.";
 }
@@ -1339,7 +1342,7 @@ if (measure.includes("Alarm an eine ständig besetzte Stelle")) {
     return "Sorgen Sie dafür, dass jeder Notruf an eine ständig besetzte Stelle (z. B. Empfang oder Leitwarte) weitergeleitet wird.";
 }
 if (measure.includes("Beschäftigten über das Verhalten bei einem Alarm unterwiesen")) {
-    return "Unterweisen Sie alle Beschaeftigten regelmaessig im Verhalten bei Notrufalarm (Reaktion, Hilfeleistung, Alarmverfolgung).";
+    return "Unterweisen Sie alle Beschäftigten regelmaessig im Verhalten bei Notrufalarm (Reaktion, Hilfeleistung, Alarmverfolgung).";
 }
 if (measure.includes("Sind Sicherheitsdatenblätter verfügbar")) {
     return "Stellen Sie sicher, dass Sicherheitsdatenblätter verfügbar sind.";
@@ -1355,7 +1358,7 @@ if (measure.includes("Erfolgte die letzte Unterweisung zum Umgang mit Zahlungsmi
                 return "Halten Sie alle Feuerlöscheinrichtungen gemaess ASR A2.2 und § 10 ArbSchG stets frei zugaenglich, um eine unverzuegliche Nutzung im Brandfall zu gewaehrleisten.";
             }
             if (measure.includes("Feuerlöscheinrichtungen geprüft") || measure.includes("Feuerlöscher") && measure.includes("geprüft")) {
-                return "Veranlassen Sie Pruefungen aller Feuerlöscher durch befaehigte Personen nach DIN 14406-4 und sorgen Sie für die Einhaltung der vorgeschriebenen Prüffristen gemaess § 10 ArbSchG.";
+                return "Veranlassen Sie Prüfungen aller Feuerlöscher durch befaehigte Personen nach DIN 14406-4 und sorgen Sie für die Einhaltung der vorgeschriebenen Prüffristen gemaess § 10 ArbSchG.";
             }          
  
             if (measure.includes("Wird die Dokumentation von Erste-Hilfe-Leistungen ordnungsgemäß geführt und aufbewahrt")) {
@@ -2481,7 +2484,7 @@ async function generateAndSharePDF() {
         
         pdf.setFontSize(7);
         pdf.setTextColor(30, 41, 59);
-        const introText = 'Dieses Audit-Tool dient der systematischen Ueberpruefung von Arbeitssicherheit und Gesundheitsschutz gemaess Paragraph 5 ArbSchG. Ziel ist die fruehzeitige Identifikation von Gefaehrdungen sowie die konsequente Ableitung und Nachverfolgung erforderlicher Maßnahmen.';
+        const introText = 'Dieses Audit-Tool dient der systematischen Ueberprüfung von Arbeitssicherheit und Gesundheitsschutz gemaess Paragraph 5 ArbSchG. Ziel ist die fruehzeitige Identifikation von Gefaehrdungen sowie die konsequente Ableitung und Nachverfolgung erforderlicher Maßnahmen.';
         const introLines = pdf.splitTextToSize(introText, boxWidth);
         pdf.text(introLines, boxMargin, boxY);
         boxY += introLines.length * 3 + 4;
@@ -2500,7 +2503,7 @@ async function generateAndSharePDF() {
         pdf.setFont(undefined, 'normal');
         boxY += 3;
         pdf.setTextColor(71, 85, 105);
-        const bewertungText = 'Die Bewertung erfolgt anhand definierter Pruefkriterien. Wird eine Frage mit "Nein" beantwortet, liegt eine Abweichung vom Schutzziel vor. In diesem Fall wird automatisch eine Massnahme generiert, deren Umsetzung verbindlich sicherzustellen ist.';
+        const bewertungText = 'Die Bewertung erfolgt anhand definierter Prüfkriterien. Wird eine Frage mit "Nein" beantwortet, liegt eine Abweichung vom Schutzziel vor. In diesem Fall wird automatisch eine Massnahme generiert, deren Umsetzung verbindlich sicherzustellen ist.';
         const bewertungLines = pdf.splitTextToSize(bewertungText, boxWidth);
         pdf.text(bewertungLines, boxMargin, boxY);
         boxY += bewertungLines.length * 3 + 3;
@@ -2512,7 +2515,7 @@ async function generateAndSharePDF() {
         pdf.setFont(undefined, 'normal');
         boxY += 3;
         pdf.setTextColor(71, 85, 105);
-        const verantwortungText = 'Die Gesamtverantwortung für die Durchfuehrung der Pruefung sowie die Beseitigung festgestellter Maengel liegt bei der Marktleitung. Die Aufsichts- und Kontrollpflicht verbleibt bei der Marktleitung.';
+        const verantwortungText = 'Die Gesamtverantwortung für die Durchfuehrung der Prüfung sowie die Beseitigung festgestellter Maengel liegt bei der Marktleitung. Die Aufsichts- und Kontrollpflicht verbleibt bei der Marktleitung.';
         const verantwortungLines = pdf.splitTextToSize(verantwortungText, boxWidth);
         pdf.text(verantwortungLines, boxMargin, boxY);
         boxY += verantwortungLines.length * 3 + 3;
@@ -2524,7 +2527,7 @@ async function generateAndSharePDF() {
         pdf.setFont(undefined, 'normal');
         boxY += 3;
         pdf.setTextColor(71, 85, 105);
-        const dokumentationText = 'Nach Abschluss der Pruefung ist die Checkliste vollstaendig auszuwerten. Auf dieser Grundlage wird eine Maßnahmenliste erstellt.';
+        const dokumentationText = 'Nach Abschluss der Prüfung ist die Checkliste vollstaendig auszuwerten. Auf dieser Grundlage wird eine Maßnahmenliste erstellt.';
         const dokumentationLines = pdf.splitTextToSize(dokumentationText, boxWidth);
         pdf.text(dokumentationLines, boxMargin, boxY);
         boxY += dokumentationLines.length * 3 + 3;
@@ -2536,7 +2539,7 @@ async function generateAndSharePDF() {
         pdf.setFont(undefined, 'normal');
         boxY += 3;
         pdf.setTextColor(71, 85, 105);
-        const wirksamkeitText = 'Die Marktleitung prueft die Umsetzung der festgelegten Maßnahmen zeitnah. Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Ueberpruefung der Wirksamkeit.';
+        const wirksamkeitText = 'Die Marktleitung prüft die Umsetzung der festgelegten Maßnahmen zeitnah. Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Ueberprüfung der Wirksamkeit.';
         const wirksamkeitLines = pdf.splitTextToSize(wirksamkeitText, boxWidth);
         pdf.text(wirksamkeitLines, boxMargin, boxY);
         
