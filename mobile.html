@@ -6,7 +6,7 @@
 <title>Arbeitssicherheits-Audit</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
 <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon"/>
-<link href="/sicher/mobile.json" rel="manifest"/>
+<link href="/sicher/manifest.json" rel="manifest"/>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
     .handlungsanweisung-box {
@@ -27,6 +27,16 @@
     }
 #signature-pad, canvas { border: 2px solid #C62828 !important; border-radius: 12px; }
 
+.fasten-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  /* Buttons mittig */
+  justify-content: center;
+
+  margin-top: 10px;
+}
 /* Bereichsüberschriften */
 tr:has(.category-header) {
   border: none !important;
@@ -71,6 +81,7 @@ input[type="radio"][value="nicht_vorhanden"]:checked {
   background-color: #999;
   border-color: #999;
 }
+
 /* Kompakter Modus nur für PDF-Export */
 .pdf-compact * {
     font-size: 10px !important;
@@ -139,6 +150,7 @@ input[type="radio"][value="nicht_vorhanden"]:checked {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
   }
+
   .signature-container {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
@@ -273,6 +285,13 @@ table {
   margin-bottom: 20px;
   background-color: white;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.info-text{
+  margin-top:10px;
+  margin-bottom:8px;
+  font-size:14px;
+  color:#555;
+  text-align:center;
 }
 
 /* Kopfzeile komplett abgerundet (oben + unten) */
@@ -491,6 +510,33 @@ input[type="text"], input[type="date"] {
   .category-header {
     font-size: 17px !important;
     border-radius: 12px !important;
+  }
+}
+
+
+.freitext-section{
+  background:#fff;
+  border:2px solid #C62828;
+  border-radius:12px;
+  padding:20px;
+  margin:30px auto;
+  max-width:700px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+#freitextfeld{
+  width:100%;
+  min-height:220px;
+  border:1px solid #ccc;
+  border-radius:10px;
+  padding:14px;
+  font-size:16px;
+  box-sizing:border-box;
+  resize:vertical;
+  font-family:inherit;
+}
+@media print{
+  .hide-empty-freitext{
+    display:none !important;
   }
 }
 
@@ -1452,6 +1498,52 @@ in angemessenen Zeitabständen geprüft?
 </label>
 </div>
 </div>
+
+</div>
+<div id="freitext-container" class="freitext-section hide-empty-freitext">
+  <h2>Freies Bemerkungsfeld / Besonderheiten</h2>
+  <textarea
+    id="freitextfeld"
+    placeholder="Hier können zusätzliche Hinweise, Besonderheiten oder freie Bemerkungen eingetragen werden..."
+  ></textarea>
+<p class="info-text">
+  Die unteren Buttons fügen vorgefertigte Standardtexte automatisch in das Freitextfeld ein.
+</p>
+  <!-- F-Tasten Buttons UNTER dem Feld -->
+  <div class="fasten-buttons">
+
+    <button type="button" class="f-btn" data-text="Notiz: Die Überprüfung der Arbeitssicherheit verlief sehr produktiv. Das Marktmanagement zeigte ein tiefgehendes Verständnis für die betrieblichen Sicherheitsanforderungen und unterstützte die gemeinsame Bewertung maßgeblich.">
+  Notiz
+    </button>
+
+    <button type="button" class="f-btn" data-text="Notiz: Die Überprüfung der Arbeitssicherheit verlief sehr produktiv. Das Marktmanagement zeigte ein tiefgehendes Verständnis für die betrieblichen Sicherheitsanforderungen und unterstützte die gemeinsame Bewertung maßgeblich. Durch die zusätzliche Teilnahme des Sicherheitsbeauftragten bzw. der Stellvertretung konnten praxisnahe Aspekte direkt vor Ort fundiert abgestimmt werden.">
+Notiz
+    </button>
+
+    <button type="button" class="f-btn" data-text="Hinweis zum Ablauf: Aufgrund akuter Verpflichtungen der Marktleitung im Bereich der Warenpräsenz und des laufenden Betriebs wurde die Begehung in einem kompakten Zeitfenster durchgeführt. Die Rahmenbedingungen waren dabei durch einen allgemeinen Zeitdruck und eine herausfordernde Personaldecke geprägt. Der Fokus lag daher zielgerichtet auf den wesentlichen Kern- und Gefahrenbereichen. Detail- und Nebenbereiche wurden stichprobenartig betrachtet; die ergänzende Nachprüfung dieser Abschnitte erfolgt im Rahmen einer zeitnahen Folgebegehung.">
+  Hinweis
+    </button>  
+
+    <button type="button" class="f-btn" data-text="Hinweis zur Kooperation: Der Rundgang war durch eine ausgeprägte Distanzierung der Marktleitung von den Themen des Arbeitsschutzes geprägt. Vom Erstkontakt bei der Terminfindung bis zum Abschluss der Begehung fehlte es an der erforderlichen Unterstützung und Einbindung der Verantwortlichen. Dieses mangelnde Engagement erschwert die Implementierung einer gelebten Sicherheitskultur im Markt erheblich.">
+      Hinweis
+    </button>
+ <button type="button" class="f-btn" data-text="Fazit: Ein sehr produktiver Rundgang, der von einem partnerschaftlichen Austausch geprägt war. Die Überprüfung der Arbeitssicherheit profitierte maßgeblich von dem tiefen Verständnis des Marktmanagements für die operativen Abläufe. Die reibungslose Zusammenarbeit und die konsequente praktische Umsetzung der Vorgaben vor Ort sind ausdrücklich positiv hervorzuheben..">
+      Fazit positiv 
+    </button>
+    </button>
+ <button type="button" class="f-btn" data-text="Fazit: Der gemeinsame Rundgang machte deutlich, dass bei der Umsetzung der Arbeitssicherheitsstandards vor Ort noch spürbarer Nachholbedarf besteht. Die Abstimmung mit der Marktleitung gestaltete sich stellenweise schwierig. Um das Sicherheitsniveau im Markt auf den geforderten Standard zu bringen, ist eine intensivere Unterstützung und Sensibilisierung des Managements im Tagesgeschäft erforderlich.">
+      Fazit negativ 
+    </button>
+
+ <button type="button" class="f-btn clear-btn" data-text="">
+  Löschen
+</button>
+</div>
+<script>
+  document.querySelector(".clear-btn").addEventListener("click", function () {
+    document.getElementById("freitextfeld").value = "";
+  });
+</script>
 </div>
 <div class="signature-container" style="position: relative; max-width: 600px; margin: 0 auto 20px auto;">
 <label style="
@@ -1476,6 +1568,7 @@ in angemessenen Zeitabständen geprüft?
   display: block;
 "></canvas>
 </div>
+
 <button class="btn-large btn-gray" 
         onclick="if(confirm('Möchtest du die Unterschrift wirklich löschen?')) { clearSignature(); }" 
         style="display: block; width: 100%; max-width: 600px; margin: 10px auto;">
@@ -1557,6 +1650,7 @@ function weiterZuFotos() {
 // PDF generation with jsPDF - renders each category on a separate A4 page
 // Uses direct jsPDF text rendering for better iPad compatibility
 async function generateAndSharePDF() {
+
   // Show loading indicator
   const loadingDiv = document.createElement('div');
   loadingDiv.id = 'pdf-loading';
@@ -1612,7 +1706,8 @@ async function generateAndSharePDF() {
         pdf.setTextColor(100);
         pdf.text(`Seite ${i} von ${totalPages}`, pageWidth / 2, pageHeight - 8, { align: 'center' });
       }
-    }    
+    }  
+  
     // ===== PAGE 1: Header and Instructions =====
     // Title
     pdf.setFontSize(20);
@@ -2003,31 +2098,53 @@ pdf.text(wirksamkeitText, margin + 5, currentY);
       pdf.text(item.text, margin + 7, posY);
     });
     currentY += 50;
-    // Signature section (Prüfungsergebnis entfernt)
-    pdf.setFontSize(12);
-    pdf.setTextColor(33, 37, 41);
-    pdf.setFont(undefined, 'bold');
-    pdf.text('Unterschrift', margin, currentY);
-    pdf.setFont(undefined, 'normal');    
-    currentY += 5;
-    pdf.setFillColor(250, 250, 250);
-    pdf.setDrawColor(198, 40, 40);
-    pdf.roundedRect(margin, currentY, contentWidth, 50, 3, 3, 'FD');    
-    if (signatureDataURL && signatureDataURL !== 'data:,') {
-      try {
-        pdf.addImage(signatureDataURL, 'PNG', margin + 20, currentY + 5, contentWidth - 40, 40);
-      } catch (e) {
-        pdf.setTextColor(150);
-        pdf.setFontSize(10);
-        pdf.text('Unterschrift nicht verfügbar', pageWidth / 2, currentY + 25, { align: 'center' });
-      }
-    } else {
-      pdf.setTextColor(150);
-      pdf.setFontSize(10);
-      pdf.text('Keine Unterschrift vorhanden', pageWidth / 2, currentY + 25, { align: 'center' });
-    }    
-    currentY += 60;
-    
+
+// ===== FREITEXT =====
+const freitext = document.getElementById('freitextfeld')?.value?.trim();
+
+if (freitext) {
+  // Neue Seite falls nötig (Puffer für Überschrift + erste Zeilen erhöht)
+  if (currentY > 230) {
+    pdf.addPage();
+    currentY = 20;
+  }
+
+  pdf.setFontSize(12);
+  pdf.setTextColor(33, 37, 41); // Dunkelgrau für Konsistenz
+  pdf.setFont(undefined, 'bold');
+  pdf.text('Freies Bemerkungsfeld / Besonderheiten', margin, currentY);
+
+  currentY += 8;
+
+  pdf.setFont(undefined, 'normal');
+  pdf.setFontSize(10);
+
+  // Text umbrechen auf Breite des Rahmens (Innenabstand berücksichtigt)
+  const splitText = pdf.splitTextToSize(freitext, 162); 
+
+  // Dynamische Rahmenhöhe berechnen (Zeilenanzahl * Zeilenhöhe + Innenabstand)
+  const boxHeight = Math.max(20, splitText.length * 5 + 10); 
+
+  // Falls die Box nicht mehr auf die Seite passt, Seite umbrechen
+  if (currentY + boxHeight > 275) {
+    pdf.addPage();
+    currentY = 20;
+  }
+
+  // Rahmen-Styling analog zum Unterschriftenfeld (Rot, abgerundet, hellgrau gefüllt)
+  pdf.setFillColor(250, 250, 250); // Hellgrauer Hintergrund
+  pdf.setDrawColor(198, 40, 40);   // Rote Rahmenfarbe
+  
+  // Abgerundeten Rahmen zeichnen ('FD' = Fill and Draw)
+  pdf.roundedRect(margin, currentY - 4, 170, boxHeight, 3, 3, 'FD');
+
+  // Text einfügen (mit 4mm Innenabstand nach rechts und unten)
+  pdf.setTextColor(33, 37, 41);
+  pdf.text(splitText, margin + 4, currentY + 3);
+
+  // Y-Position für das nächste Element (Unterschrift) aktualisieren
+  currentY += boxHeight + 10;
+}    
     // ===== ZUSAMMENFASSUNG DER ANTWORTEN =====
     pdf.setFontSize(12);
     pdf.setTextColor(33, 37, 41);
@@ -2338,6 +2455,33 @@ async function prepareForPrint() {
   .category-header {
     font-size: 17px !important;
     border-radius: 12px !important;
+  }
+}
+
+
+.freitext-section{
+  background:#fff;
+  border:2px solid #C62828;
+  border-radius:12px;
+  padding:20px;
+  margin:30px auto;
+  max-width:700px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+#freitextfeld{
+  width:100%;
+  min-height:220px;
+  border:1px solid #ccc;
+  border-radius:10px;
+  padding:14px;
+  font-size:16px;
+  box-sizing:border-box;
+  resize:vertical;
+  font-family:inherit;
+}
+@media print{
+  .hide-empty-freitext{
+    display:none !important;
   }
 }
 
@@ -3559,6 +3703,78 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const freitext = document.getElementById("freitextfeld");
+    const container = document.getElementById("freitext-container");
+
+    function updateFreitextVisibility() {
+        if (freitext.value.trim() !== "") {
+            container.classList.remove("hide-empty-freitext");
+        } else {
+            container.classList.add("hide-empty-freitext");
+        }
+    }
+
+    // Initial ausblenden wenn leer
+    updateFreitextVisibility();
+
+    freitext.addEventListener("input", updateFreitextVisibility);
+
+    // Vor Druck/PDF prüfen
+    window.addEventListener("beforeprint", updateFreitextVisibility);
+});
+
+const freitextfeld = document.getElementById('freitextfeld');
+
+// ===== Text einfügen =====
+function insertText(text) {
+
+  const start = freitextfeld.selectionStart;
+  const end = freitextfeld.selectionEnd;
+
+  freitextfeld.value =
+    freitextfeld.value.substring(0, start) +
+    text +
+    freitextfeld.value.substring(end);
+
+  freitextfeld.selectionStart =
+    freitextfeld.selectionEnd =
+    start + text.length;
+
+  freitextfeld.focus();
+}
+
+// ===== Button-Klick =====
+document.querySelectorAll('.f-btn').forEach(button => {
+
+  button.addEventListener('click', () => {
+    insertText(button.dataset.text);
+  });
+
+});
+
+// ===== Echte F-Tasten =====
+const fTexte = {
+  F2: 'Notiz: Aufgrund der hohen operativen Auslastung des Marktmanagements gestaltete sich die Terminfindung im Vorfeld als Herausforderung, sodass die Begehung erst nach mehreren Anläufen koordiniert werden konnte.',
+  F3: 'Notiz: Obwohl sich die Terminfindung im Vorfeld schwierig gestaltete, verlief die anschließende Überprüfung der Arbeitssicherheit sehr produktiv.',
+  F4: 'Hinweis zum Ablauf: Die Terminfindung für die Begehung gestaltete sich im Vorfeld organisatorisch schwierig. Aufgrund zeitnaher Anschlusstermine des Marktmanagements, die der Sicherung des Warenbestands dienten, wurde der Rundgang schließlich in einem kompakten Zeitfenster durchgeführt. Die Rahmenbedingungen vor Ort waren dabei durch einen allgemeinen Zeitdruck und eine herausfordernde Personaldecke geprägt.Der Fokus lag daher zielgerichtet auf den wesentlichen Kern- und Gefahrenbereichen. Durch die zusätzliche Teilnahme des Sicherheitsbeauftragten bzw. der Stellvertretung konnten praxisnahe Aspekte direkt vor Ort fundiert abgestimmt werden. Detail- und Nebenbereiche wurden stichprobenartig betrachtet; die ergänzende Nachprüfung dieser Abschnitte erfolgt im Rahmen einer zeitnahen Folgebegehung.',
+  F5: 'Hinweis zur Weiterarbeit: Für das Erreichen des geforderten Sicherheitsniveaus ist die konsequente Bearbeitung der Gefährdungsbeurteilung von elementarer Bedeutung. Sie dient im Markt als Steuerungs- und Kontrollwerkzeug, um Gefahrenquellen im Tagesgeschäft frühzeitig zu erkennen, Unfälle zu vermeiden und die Mitarbeiter nachhaltig zu schützen.',
+  F6: 'Vorgabe für die Folgebegehung: Da die Gefährdungsbeurteilung das wichtigste Instrument im Arbeitsschutz darstellt, ist deren aktuelle Bearbeitung und Umsetzung zwingende Voraussetzung für den nächsten Termin. Bis zur anstehenden Folgebegehung ist das Dokument durch das Marktmanagement zu prüfen und entsprechend zu aktualisieren, damit die offenen Detailbereiche final bewertet werden können.'
+};
+
+document.addEventListener('keydown', function(event) {
+
+  if (fTexte[event.code]) {
+
+    event.preventDefault();
+    insertText(fTexte[event.code]);
+  }
+
+});
+
 </script>
 
 </body>
