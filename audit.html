@@ -723,6 +723,65 @@ table, tr, td {
             }
         }
 
+
+/* ===== iPad Optimierte Action Bar ===== */
+
+.sticky-action-bar {
+    position: sticky;
+    bottom: 10px;
+    z-index: 999;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(10px);
+    padding: 12px;
+    border-radius: 18px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+.menu-dropdown {
+    position: relative;
+}
+
+.menu-dropdown summary {
+    list-style: none;
+}
+
+.menu-dropdown summary::-webkit-details-marker {
+    display: none;
+}
+
+.menu-content {
+    position: absolute;
+    right: 0;
+    bottom: 60px;
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: white;
+    padding: 14px;
+    border-radius: 16px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+}
+
+.menu-content .btn {
+    width: 100%;
+    justify-content: flex-start;
+}
+
+@media (max-width: 768px) {
+
+    .sticky-action-bar {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .menu-content {
+        width: 240px;
+    }
+}
+
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -784,38 +843,58 @@ Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung d
     </p>
 </div>      
  
-        <div class="action-bar">
-<button class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">
-                <span>&#128194;</span>JSON laden
-            </button>
- <button class="btn btn-success" onclick="exportJson()">
-                <span>💾</span>Direkt auf NAS speichern
-            </button>
+        
+<div class="action-bar sticky-action-bar">
+
+    <button class="btn btn-primary" onclick="saveToStorage()">
+        💾 Speichern
+    </button>
+
+    <button class="btn btn-secondary" onclick="generateAndSharePDF()">
+        📤 PDF teilen
+    </button>
+
+    <button class="btn btn-success" onclick="openMaßnahmenplan()">
+        ⚠ Maßnahmenplan
+    </button>
+
+    <details class="menu-dropdown">
+        <summary class="btn btn-secondary">☰ Mehr</summary>
+
+        <div class="menu-content">
+
             <button class="btn btn-primary" onclick="downloadJson()">
-                <span>⬇️</span> JSON lokal speichern
-            </button>   
-            <button class="btn btn-primary" onclick="saveToStorage()">
-                <span>&#128190;</span> Speichern
-            </button>           
+                ⬇️ JSON lokal speichern
+            </button>
 
-         
-            <input type="file" id="fileInput" class="file-input" accept=".json" onchange="importJson(event)">
+            <button class="btn btn-success" onclick="exportJson()">
+                💾 Direkt auf NAS speichern
+            </button>
+
+            <button class="btn btn-secondary"
+                    onclick="document.getElementById('fileInput').click()">
+                📂 JSON laden
+            </button>
+
             <button class="btn btn-primary" onclick="exportPdf()">
-                <span>🖨️</span> Drucken
+                🖨️ Drucken
             </button>
-<button class="btn btn-secondary" onclick="generateAndSharePDF()">
-                <span></span>📤 PDF teilen (iPad)
-            </button>
-            <button class="btn btn-danger" onclick="resetAll()">
-                <span>&#128465;</span> Zurücksetzen
-            </button>
- 
-            <button class="btn btn-success" onclick="openMaßnahmenplan()">
-                <span>⚠</span> Maßnahmenplan öffnen
-            </button>
-        </div>       
 
-        <div class="section">
+            <button class="btn btn-danger" onclick="resetAll()">
+                🗑️ Zurücksetzen
+            </button>
+
+        </div>
+    </details>
+
+    <input type="file"
+           id="fileInput"
+           class="file-input"
+           accept=".json"
+           onchange="importJson(event)">
+
+</div>
+<div class="section">
             <h2 class="section-title">
                 <span>&#128203;</span> Auditdaten
             </h2>
