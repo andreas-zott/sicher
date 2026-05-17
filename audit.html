@@ -785,25 +785,31 @@ Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung d
 </div>      
  
         <div class="action-bar">
-            <button class="btn btn-primary" onclick="saveToStorage()">
-                <span>&#128190;</span> Speichern
-            </button>
-            <button class="btn btn-success" onclick="exportJson()">
-                <span>&#128229;</span>JSON exportieren
-            </button>
-            <button class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">
+<button class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">
                 <span>&#128194;</span>JSON laden
             </button>
+ <button class="btn btn-success" onclick="exportJson()">
+                <span>💾</span>Direkt auf NAS speichern
+            </button>
+            <button class="btn btn-primary" onclick="downloadJson()">
+                <span>⬇️</span> JSON lokal speichern
+            </button>   
+            <button class="btn btn-primary" onclick="saveToStorage()">
+                <span>&#128190;</span> Speichern
+            </button>           
+
+         
             <input type="file" id="fileInput" class="file-input" accept=".json" onchange="importJson(event)">
             <button class="btn btn-primary" onclick="exportPdf()">
                 <span>🖨️</span> Drucken
             </button>
+<button class="btn btn-secondary" onclick="generateAndSharePDF()">
+                <span></span>📤 PDF teilen (iPad)
+            </button>
             <button class="btn btn-danger" onclick="resetAll()">
                 <span>&#128465;</span> Zurücksetzen
             </button>
- <button class="btn btn-secondary" onclick="generateAndSharePDF()">
-                <span></span>📤 PDF teilen (iPad)
-            </button>
+ 
             <button class="btn btn-success" onclick="openMaßnahmenplan()">
                 <span>⚠</span> Maßnahmenplan öffnen
             </button>
@@ -2103,49 +2109,110 @@ if (measure.includes("Sind Erste-Hilfe-Anweisungen vorhanden")) {
                 }
             }
         }        
-function exportJson() {
-  const data = getFormData();
-  const json = JSON.stringify(data, null, 2);
-  const filename = `audit-${data.markt || 'export'}-${data.datum || 'datum'}.json`;  
-  // Versuche File System Access API (zeigt "Speichern unter" Dialog)
-  if ('showSaveFilePicker' in window) {
-    (async () => {
-      try {
-        const handle = await window.showSaveFilePicker({
-          suggestedName: filename,
-          types: [{
-            description: 'JSON Datei',
-            accept: { 'application/json': ['.json'] }
-          }]
-        });
-        const writable = await handle.createWritable();
-        await writable.write(json);
-        await writable.close();
-        showToast('JSON erfolgreich gespeichert!', 'success');
-      } catch (err) {
-        // Benutzer hat abgebrochen oder Fehler
-        if (err.name !== 'AbortError') {
-          console.error('Speichern fehlgeschlagen:', err);
-          // Fallback zum normalen Download
-          fallbackDownload();
-        }
-      }
-    })();
-  } else {
-    // Fallback für Browser ohne File System Access API (z.B. iPad Safari)
-    fallbackDownload();
-  }  
-  function fallbackDownload() {
-    const blob = new Blob([json], { type: 'application/json' });
+
+
+function downloadJson() {
+    const data = getFormData();
+
+    // Marktname / Marktnummer holen
+    const markt = (document.getElementById('markt').value || 'Markt')
+        .trim()
+        .replace(/[^a-zA-Z0-9_-]/g, '_');
+
+    // Deutsches Datum erzeugen
+    let deutschesDatum = 'ohne-datum';
+
+    const datumWert = document.getElementById('datum').value;
+
+    if (datumWert) {
+        const datumObj = new Date(datumWert);
+
+        deutschesDatum = datumObj
+            .toLocaleDateString('de-DE')
+            .replace(/\./g, '-');
+    }
+
+    const sifa = (document.getElementById('sifa').value || 'SiFa')
+        .trim()
+        .replace(/[^a-zA-Z0-9_-]/g, '_');
+
+    const dateiname = `${markt}_${deutschesDatum}_${sifa}.json`;
+
+    // JSON Datei erzeugen
+    const blob = new Blob(
+        [JSON.stringify(data, null, 2)],
+        { type: 'application/json' }
+    );
+
+    // Download-Link erzeugen
     const url = URL.createObjectURL(blob);
+
     const a = document.createElement('a');
     a.href = url;
-    a.download = filename;
+    a.download = dateiname;
+
+    document.body.appendChild(a);
     a.click();
+
+    document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    showToast('JSON exportiert!', 'success');
-  }
-  }        
+
+    showToast('JSON-Datei lokal gespeichert!', 'success');
+}
+
+function exportJson() {
+    const data = getFormData();
+
+    // Marktname / Marktnummer holen
+    const markt = (document.getElementById('markt').value || 'Markt')
+        .trim()
+        .replace(/[^a-zA-Z0-9_-]/g, '_');
+
+    // Deutsches Datum erzeugen
+    let deutschesDatum = 'ohne-datum';
+
+    const datumWert = document.getElementById('datum').value;
+
+    if (datumWert) {
+        const datumObj = new Date(datumWert);
+
+        deutschesDatum = datumObj
+            .toLocaleDateString('de-DE')
+            .replace(/\./g, '-');
+    }
+
+    // Dateiname zusammensetzen
+  const sifa = (document.getElementById('sifa').value || 'SiFa')
+    .trim()
+    .replace(/[^a-zA-Z0-9_-]/g, '_');
+
+data.dateiname = `${markt}_${deutschesDatum}_${sifa}.json`;
+
+    showToast('Speichere auf NAS...', 'success');
+
+    fetch('upload.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data, null, 2)
+    })
+    .then(response => response.json())
+    .then(result => {
+
+        if (result.status === 'success') {
+            showToast(result.message, 'success');
+        } else {
+            showToast(result.message, 'error');
+        }
+
+    })
+    .catch(error => {
+        console.error(error);
+        showToast('Fehler beim Speichern!', 'error');
+    });
+}
+        
         function importJson(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -2928,6 +2995,7 @@ async function generateAndSharePDF() {
 function weiterZuFotos() {
   window.open('foto.html', '_blank');
 }
+
 </script>
         <div class="action-bar">
                       <button class="btn btn-danger" onclick="resetAll()">
