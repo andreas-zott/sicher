@@ -294,6 +294,87 @@ table {
   text-align:center;
 }
 
+/* ===== iPad Optimierte Action Bar ===== */
+
+
+
+.sticky-action-bar {
+
+    /* zuerst unsichtbar */
+    display: none;
+
+    margin-top: 30px;
+
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(10px);
+
+    padding: 12px;
+    border-radius: 18px;
+
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+/* wird eingeblendet */
+.sticky-action-bar.show {
+    display: grid;
+}
+
+.menu-dropdown {
+    position: relative;
+}
+
+.menu-dropdown summary {
+    list-style: none;
+    cursor: pointer;
+}
+
+.menu-dropdown summary::-webkit-details-marker {
+    display: none;
+}
+
+.menu-content {
+
+    position: absolute;
+
+    right: 0;
+    bottom: 40px;
+
+    width: 280px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    background: white;
+
+    padding: 14px;
+    border-radius: 16px;
+
+    box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+}
+
+.menu-content .btn {
+    width: 100%;
+    justify-content: flex-start;
+}
+
+
+/* Mobile / iPad */
+
+@media (max-width: 600px) {
+
+    .sticky-action-bar {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .menu-content {
+        width: 240px;
+    }
+}
+
 /* Kopfzeile komplett abgerundet (oben + unten) */
 
 .table-header-row th:first-child {
@@ -569,25 +650,11 @@ input[type="text"], input[type="date"] {
 <div style="margin-bottom: 10px;">
 <label for="sifa">SiFa:</label>
 <input id="sifa" style="width: 100%;" type="text"/>
-</div>
+<br/>
 </div> 
 <div style="display: flex; justify-content: center; align-items: center; gap: 16px; margin: 20px 0 40px 0;">
-  <button class="custom-btn"
-          onclick="weiterZuFotos()"
-          style="background-color: green; width: 200px; margin: 0;">
-    📸 Zur Foto-Seite
-  </button>
-  <button class="btn-medium btn-red"
-          onclick="formularZuruecksetzen()"
-          style="width: 200px; margin: 0;">
-    🧹 Zurücksetzen
-  </button>
-<button class="custom-btn" onclick="generateAndSharePDF()" 
-        style="background-color: green; width: 200px; margin: 0;">
-  📤 PDF teilen (iPad)
 </div>
 </div>
-<br/>
 <div class="handlungsanweisung-box">
 <h2>Anleitung und Nutzungshinweis:</h2>
 <strong>Dieses Audit-Tool dient der systematischen Überprüfung von Arbeitssicherheit und Gesundheitsschutz gemäß § 5 ArbSchG.
@@ -615,6 +682,8 @@ Bei Bedarf werden externe Fachfirmen mit der Mängelbeseitigung beauftragt.
 Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung der Wirksamkeit.  
     </p>
 </div>
+<br>
+<br>
 <table id="fragenTabelle">
 <thead>
 <tr class="table-header-row">
@@ -1574,29 +1643,40 @@ Notiz
         style="display: block; width: 100%; max-width: 600px; margin: 10px auto;">
   🗑️ Unterschrift löschen
 </button>
-<div style="display: flex; justify-content: center; gap: 20px; max-width: 600px; margin: 0 auto;">
-<button class="btn-medium btn-gray" onclick="exportiereMassnahmen()" style="flex: 1; max-width: 280px;">
-    📝 Defizite exportieren
-  </button>
-<button class="btn-medium btn-gray" onclick="prepareForPrint()" style="flex: 1; max-width: 280px;">
-    📄 Drucken / PDF
-  </button>
+
+<div class="action-bar sticky-action-bar">    
+ <button class="btn btn-danger"
+                    onclick="formularZuruecksetzen()">
+                🗑️ Zurücksetzen
+            </button>
+
+    <button class="btn btn-secondary" onclick="generateAndSharePDF()">
+        📤 PDF teilen
+    </button>
+    <button class="btn btn-success" onclick="exportiereMassnahmen()">
+       📝 Defizite exportieren
+    </button>
+    <details class="menu-dropdown">
+        <summary class="btn btn-secondary">
+            ☰ Mehr
+        </summary>
+        <div class="menu-content">
+ <button class="btn btn-danger"
+                    onclick="formularZuruecksetzen()">
+                🗑️ Zurücksetzen
+            </button>
+<button class="btn btn-primary" onclick="manuellSpeichern()">
+        💾 Speichern
+    </button>
+<button class="btn btn-primary"
+                    onclick="prepareForPrint()">
+                🖨️ Drucken
+            </button>
+<button class="btn btn-primary"
+                    onclick="weiterZuFotos()">
+                📸 Zur Foto-Seite
+            </button>        
 </div>
-<div style="display: flex; justify-content: center; gap: 20px; max-width: 600px; margin: 0 auto 40px;">
-<button class="btn-medium btn-green" onclick="manuellSpeichern()" style="flex: 1; max-width: 280px;">
-    💾 Speichern
-  </button>
-<button class="btn-medium btn-gray" onclick="formularZuruecksetzen()" style="flex: 1; max-width: 280px;">
-    🧹 Zurücksetzen
-  </button>
-</div>
-<button class="custom-btn" onclick="generateAndSharePDF()" 
-        style="background-color: #C62828; width: 100%; max-width: 600px; margin: 10px auto 40px auto; display: block;">
-  📤 PDF teilen (iPad)
-<button class="custom-btn" onclick="weiterZuFotos()" 
-        style="background-color: green; width: 100%; max-width: 600px; margin: 10px auto 40px auto; display: block;">
-  📸 Zur Foto-Seite
-</button>
 </div>
 <script>
 function weiterZuFotos() {
@@ -3775,7 +3855,33 @@ document.addEventListener('keydown', function(event) {
 
 });
 
+
+window.addEventListener('scroll', function () {
+
+    const actionBar = document.querySelector('.sticky-action-bar');
+
+    // Höhe der Seite
+    const documentHeight = document.documentElement.scrollHeight;
+
+    // aktuelle Scrollposition
+    const scrollPosition = window.innerHeight + window.scrollY;
+
+    // Abstand zum Seitenende
+    const distanceFromBottom = documentHeight - scrollPosition;
+
+    // erscheint erst 300px vor Seitenende
+    if (distanceFromBottom < 300) {
+
+        actionBar.style.display = 'grid';
+
+    } else {
+
+        actionBar.style.display = 'none';
+    }
+});
+
 </script>
+
 
 </body>
 </html>
