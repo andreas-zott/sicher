@@ -8,9 +8,7 @@
 <link href="/sicher/favicon.ico" rel="icon" type="image/x-icon"/>
 <link href="/sicher/manifest.json" rel="manifest"/>
 <style>
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-
 .handlungsanweisung-box {
     border: 2px solid #C62828; 
     padding: 18px;
@@ -31,12 +29,10 @@
     line-height: 1.5;
 }
 
-
 #signature-pad { 
     border: 2px solid #C62828 !important; 
     border-radius: 12px; 
 }
-
 .fasten-buttons {
     display: flex;
     flex-wrap: wrap;
@@ -45,13 +41,11 @@
     justify-content: center;
     margin-top: 10px;
 }
-
 tr:has(.category-header) {
   border: none !important;
   background: transparent !important;
   box-shadow: none !important;
 }
-
 
 .category-header td,
 tr:has(.category-header) td {
@@ -97,6 +91,7 @@ input[type="radio"][value="nicht_vorhanden"]:checked {
   background-color: #999;
   border-color: #999;
 }
+
 .pdf-compact p, 
 .pdf-compact label, 
 .pdf-compact span,
@@ -116,6 +111,28 @@ input[type="radio"][value="nicht_vorhanden"]:checked {
 .pdf-compact .radio-wrap {
     font-size: 8px !important;
 }
+
+@media print {
+  
+  .hide-empty-freitext {
+    display: none !important;
+  }
+}
+
+@media (max-width: 600px) {
+    .sticky-action-bar {
+        grid-template-columns: 1fr 1fr;
+    }
+    .menu-content {
+        width: 240px;
+    }
+}
+
+.input-error {
+  border: 2px solid #dc3545 !important;
+  background-color: #fff8f8;
+}
+
 @media print {
   button,
   .btn,
@@ -175,7 +192,8 @@ input[type="radio"][value="nicht_vorhanden"]:checked {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
 }
-}
+} 
+
 .pdf-export-mode .category-page {
   page-break-before: always !important;
   break-before: page !important;
@@ -192,7 +210,6 @@ input[type="radio"][value="nicht_vorhanden"]:checked {
   page-break-before: always !important;
   break-before: page !important;
 }
-
 #signature-pad {
   border: 2px solid #C62828;
   border-radius: 12px;
@@ -264,6 +281,7 @@ button.btn-medium {
   font-family: inherit;
   box-sizing: border-box; 
 }
+
 button.btn-large {
   width: 100%;
   max-width: 600px;
@@ -299,7 +317,6 @@ button.btn-gray {
   margin-top: 0;
   break-before: page;
 }
-
 body {
   font-family: 'Inter', Arial, sans-serif;
   background-color: #f4f4f4;
@@ -327,17 +344,16 @@ table {
   text-align: center;
 }
 
-.sticky-action-bar {
+.sticky-action-bar { 
     display: none;  
-
+  
     position: fixed;
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
     width: calc(100% - 40px);
-    max-width: 600px;
-    /* Hoher z-index garantiert, dass keine Tabellen durchschimmern */
-    z-index: 9999; 
+    max-width: 600px;  
+    z-index: 9999;
 
     grid-template-columns: repeat(4, 1fr);
     gap: 10px;
@@ -371,12 +387,15 @@ table {
 
 .menu-content {
     position: absolute;
-    right: 0;  
+    right: 0;
+    /* REPARIERT: Abstand erhöht, damit das Menü über der fixierten Bar schwebt */
     bottom: 55px; 
     width: 280px;
+
     display: flex;
     flex-direction: column;
     gap: 8px;
+
     background: white;
     padding: 14px;
     border-radius: 16px;
@@ -387,15 +406,6 @@ table {
     width: 100%;
     justify-content: flex-start;
     box-sizing: border-box;
-}
-
-@media (max-width: 600px) {
-    .sticky-action-bar {
-        grid-template-columns: 1fr 1fr;
-    }
-    .menu-content {
-        width: 240px;
-    }
 }
 
 .table-header-row th:first-child {
@@ -650,13 +660,6 @@ input[type="text"], input[type="date"] {
   resize: vertical;
   font-family: inherit;
 }
-
-@media print {
-  
-  .hide-empty-freitext {
-    display: none !important;
-  }
-}
 </style>
 </head>
 </head>
@@ -678,7 +681,8 @@ input[type="text"], input[type="date"] {
       <label for="markt">Marktnummer:</label>
       <input id="markt" placeholder="z. B. 0123" required="" type="text"/>
     </div>
-    <div style="margin-bottom: 10px;">   
+    <div style="margin-bottom: 10px;">
+      <!-- REPARIERT: for-Attribut für exakte Touch-Bedienung hinzugefügt -->
       <label for="name">Teilnehmer:</label>
       <input id="name" style="width: 100%;" type="text"/>
     </div>
@@ -728,13 +732,15 @@ input[type="text"], input[type="date"] {
             <th>n.v.</th>
         </tr>
     </thead>
-    <tbody>        
+    <tbody>
+        <!-- REPARIERT: class="is-category-row" für den mobilen Block-Modus ergänzt -->
         <tr class="is-category-row">
             <td class="category-header" colspan="4">1.0 Gesamtmarkt</td>
         </tr>
         <tr>
             <td style="text-align: left;">Entspricht das getragene Schuhwerk aller im Bereich tätigen Personen den Anforderungen der Gefährdungsbeurteilung (fest, im Zehenbereich geschlossen, flach und rutschhemmend)?</td>
-            <td>               
+            <td>
+                <!-- REPARIERT: IDs und for-Attribute für barrierefreie Touch-Bedienung auf dem iPad -->
                 <label class="radio-wrap" for="gm-0-ja">
                     <input id="gm-0-ja" name="1.0 Gesamtmarkt-0" type="radio" value="ja"/>
                     <span>Ja</span>
@@ -946,7 +952,6 @@ input[type="text"], input[type="date"] {
 <td><label class="radio-wrap"><input name="2.0 Brandschutz-13" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="2.0 Brandschutz-13" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
-<tr>
 <tr><td class="category-header" colspan="4" style="text-align: left;">3.0 Backstation</td></tr>
 <tr>
 <td style="text-align: left;">Sind die Arbeitsgeräte an der Backstation (Backofen, Backbleche, Brotschneidemaschine) in einem ordnungsgemäßen Zustand?</td>
@@ -1235,7 +1240,6 @@ input[type="text"], input[type="date"] {
 10.0 Sozialräume
 </td>
 </tr>
-
 <tr>
 <td style="text-align: left;">
 Hängen im Sozialbereich die aktuellen aushangpflichtigen Gesetze, 
@@ -1245,7 +1249,6 @@ Unfallverhütungsvorschriften sowie die Brandschutzordnung Teil A aus?
 <td><label class="radio-wrap"><input name="10.0 Sozialräume-0" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="10.0 Sozialräume-0" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
-
 <tr>
 <td style="text-align: left;">
 Sind die Kaffeemaschine und andere hitzeentwickelnde Geräte 
@@ -1255,7 +1258,6 @@ auf einer nicht brennbaren Unterlage abgestellt?
 <td><label class="radio-wrap"><input name="10.0 Sozialräume-1" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="10.0 Sozialräume-1" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
-
 <tr>
 <td style="text-align: left;">
 Dient der Pausenraum primär der Erholung der Beschäftigten 
@@ -1266,7 +1268,6 @@ und ist er frei von größeren Mengen an betrieblichem Lagergut
 <td><label class="radio-wrap"><input name="10.0 Sozialräume-3" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="10.0 Sozialräume-3" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
-
 <tr>
 <td style="text-align: left;">
 Werden ortsveränderliche elektrische Betriebsmittel 
@@ -1277,7 +1278,6 @@ in angemessenen Zeitabständen geprüft?
 <td><label class="radio-wrap"><input name="10.0 Sozialräume-4" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="10.0 Sozialräume-4" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
-
 <tr><td class="category-header" colspan="4" style="text-align: left;">11.0 Marktleiterbüro</td></tr>
 <tr>
 <td style="text-align: left;">Liegt eine aktuelle Liste sowie Prüfberichte prüfungsbedürftiger Einrichtungen vor?</td>
@@ -1400,7 +1400,8 @@ in angemessenen Zeitabständen geprüft?
 <td><label class="radio-wrap"><input name="14.0 Gefahrstoffe-2" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="14.0 Gefahrstoffe-2" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="14.0 Gefahrstoffe-2" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
-</tr>
+
+<tr>
 <td style="text-align: left;">Sind Sicherheitsdatenblätter verfügbar?</td>
 <td><label class="radio-wrap"><input name="14.0 Gefahrstoffe-3" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="14.0 Gefahrstoffe-3" type="radio" value="nein"/><span>Nein</span></label></td>
@@ -1573,119 +1574,188 @@ in angemessenen Zeitabständen geprüft?
 <td><label class="radio-wrap"><input name="17.0 Psychische Belastung-17" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
+
+
 </tr></tr></tbody>
 </table>
-<br/>
+<br>
 <div class="massnahmen-section">
-<h2 class="force-pagebreak" style="text-align: center;">
+  <h2 class="force-pagebreak" style="text-align: center;">
     Beschreibung der Maßnahmen zur Beseitigung von Defiziten
   </h2>
-<br/>
-<table>
-<thead>
-<tr class="table-header-row">
-<th>Nr.</th>
-<th>Frage</th>
-<th>Maßnahme</th>
-</tr>
-</thead>
-<tbody id="maßnahmen-tabelle">
-</tbody>
-</table>
-</div>
+  
+  <table>
+    <thead>
+      <tr class="table-header-row">
+        <th>Nr.</th>
+        <th>Frage</th>
+        <th>Maßnahme</th>
+      </tr>
+    </thead>
+    <tbody id="maßnahmen-tabelle">
+      <!-- Wird dynamisch per JavaScript befüllt -->
+    </tbody>
+  </table>
+</div> <!-- .massnahmen-section korrekt geschlossen -->
+
 <div class="page-break-before confirmation-section">
-<h2>Abschlussbestätigung</h2>
-<div class="checkbox-row">
-<div class="checkbox-column">
-<label for="mangel">
-<input id="mangel" type="checkbox"/>
-<span>Alle Mängel wurden zur Kenntnis genommen.</span>
-</label>
-<label for="massnahmen">
-<input id="massnahmen" type="checkbox"/>
-<span>Maßnahmen gemäß Plan werden umgesetzt.</span>
-</label>
+  <h2>Abschlussbestätigung</h2>
+  
+  <div class="checkbox-row">
+    <div class="checkbox-column">
+      <label>
+        <input id="mangel" type="checkbox"/>
+        <span>Alle Mängel wurden zur Kenntnis genommen.</span>
+      </label>
+      <label>
+        <input id="massnahmen" type="checkbox"/>
+        <span>Maßnahmen gemäß Plan werden umgesetzt.</span>
+      </label>
+    </div>
+
+    
+    <div class="checkbox-column">
+      <label>
+        <input id="nachkontrolle" type="checkbox"/>
+        <span>Nachkontrolle wird durchgeführt.</span>
+      </label>
+      <label>
+        <input id="mitarbeiter" type="checkbox"/>
+        <span>Mitarbeiter wurden informiert.</span>
+      </label>
+    </div>
+  </div> <!-- .checkbox-row geschlossen -->
+</div> <!-- .confirmation-section geschlossen -->
 </div>
-<div class="checkbox-column">
-<label for="nachkontrolle">
-<input id="nachkontrolle" type="checkbox"/>
-<span>Nachkontrolle wird durchgeführt.</span>
-</label>
-<label for="mitarbeiter">
-<input id="mitarbeiter" type="checkbox"/>
-<span>Mitarbeiter wurden informiert.</span>
-</label>
 </div>
-</div>
-</div>
-<div class="signature-container" style="position: relative; max-width: 600px; margin: 0 auto 20px auto;">
-<label style="
-  position: absolute;
-  top: 8px;
-  left: 12px;
-  background: white;
-  padding: 0 6px;
-  font-weight: bold;
-  font-size: 14px;
-  color: #212529;
-  pointer-events: none;
-  user-select: none;
-  z-index: 10;
-">Unterschrift</label>
-<canvas id="signature-pad" style="
-  border: 2px solid #ddd;
-  border-radius: 16px;
-  width: 100%;
-  height: 150px;
-  touch-action: none;
-  display: block;
-"></canvas>
-</div>
-<button class="btn-large btn-gray" 
-        onclick="if(confirm('Möchtest du die Unterschrift wirklich löschen?')) { clearSignature(); }" 
-        style="display: block; width: 100%; max-width: 600px; margin: 10px auto;">
-  🗑️ Unterschrift löschen
-</button>
-<div style="display: flex; justify-content: center; gap: 20px; max-width: 600px; margin: 0 auto;">
-<button class="btn-medium btn-gray" onclick="exportiereMassnahmen()" style="flex: 1; max-width: 280px;">
-    📝 Defizite exportieren
-  </button>
-<button class="btn-medium btn-gray" onclick="prepareForPrint()" style="flex: 1; max-width: 280px;">
-    📄 Drucken / PDF
-  </button>
-</div>
-<div style="display: flex; justify-content: center; gap: 20px; max-width: 600px; margin: 0 auto 40px;">
-<button class="btn-medium btn-green" onclick="manuellSpeichern()" style="flex: 1; max-width: 280px;">
-    💾 Speichern
-  </button>
-<button class="btn-medium btn-gray" onclick="formularZuruecksetzen()" style="flex: 1; max-width: 280px;">
-    🧹 Zurücksetzen
-  </button>
-</div>
-<button class="custom-btn" onclick="generateAndSharePDF()" 
-        style="background-color: #C62828; width: 100%; max-width: 600px; margin: 10px auto 40px auto; display: block;">
-  📤 PDF teilen (iPad)
-<button class="custom-btn" onclick="weiterZuFotos()" 
-        style="background-color: green; width: 100%; max-width: 600px; margin: 10px auto 40px auto; display: block;">
-  📸 Zur Foto-Seite
-</button>
+<div class="freitext-section hide-empty-freitext" id="freitext-container">
+  <h2>Freies Bemerkungsfeld / Besonderheiten</h2>
+  <textarea id="freitextfeld" placeholder="Hier können zusätzliche Hinweise, Besonderheiten oder freie Bemerkungen eingetragen werden..."></textarea>
+  <p class="info-text">
+    Die unteren Buttons fügen vorgefertigte Standardtexte automatisch in das Freitextfeld ein.
+  </p>
+  
+  <!-- F-Tasten Buttons UNTER dem Feld -->
+  <div class="fasten-buttons">
+    <button class="f-btn" data-text="Notiz: Die Überprüfung der Arbeitssicherheit verlief sehr produktiv. Das Marktmanagement zeigte ein tiefgehendes Verständnis für die betrieblichen Sicherheitsanforderungen und unterstützte die gemeinsame Bewertung maßgeblich." type="button">
+      Notiz
+    </button>
+    <button class="f-btn" data-text="Notiz: Die Überprüfung der Arbeitssicherheit verlief sehr produktiv. Das Marktmanagement zeigte ein tiefgehendes Verständnis für die betrieblichen Sicherheitsanforderungen und unterstützte die gemeinsame Bewertung maßgeblich. Durch die zusätzliche Teilnahme des Sicherheitsbeauftragten bzw. der Stellvertretung konnten praxisnahe Aspekte direkt vor Ort fundiert abgestimmt werden." type="button">
+      Notiz
+    </button>
+    <button class="f-btn" data-text="Hinweis zum Ablauf: Aufgrund akuter Verpflichtungen der Marktleitung im Bereich der Warenpräsenz und des laufenden Betriebs wurde die Begehung in einem kompakten Zeitfenster durchgeführt. Die Rahmenbedingungen waren dabei durch einen allgemeinen Zeitdruck und eine herausfordernde Personaldecke geprägt. Der Fokus lag daher zielgerichtet auf den wesentlichen Kern- und Gefahrenbereichen. Detail- und Nebenbereiche wurden stichprobenartig betrachtet; die ergänzende Nachprüfung dieser Abschnitte erfolgt im Rahmen einer zeitnahen Folgebegehung." type="button">
+      Ablauf
+    </button>
+    <button class="f-btn" data-text="Hinweis zur Kooperation: Der Rundgang was durch eine ausgeprägte Distanzierung der Marktleitung von den Themen des Arbeitsschutzes geprägt. Vom Erstkontakt bei der Terminfindung bis zum Abschluss der Begehung fehlte es an der erforderlichen Unterstützung und Einbindung der Verantwortlichen. Dieses mangelnde Engagement erschwert die Implementierung einer gelebten Sicherheitskultur im Markt erheblich." type="button">
+     Kooperation
+    </button>
+    <button class="f-btn" data-text="Fazit: Ein sehr produktiver Rundgang, der von einem partnerschaftlichen Austausch geprägt war. Die Überprüfung der Arbeitssicherheit profitierte maßgeblich von dem tiefen Verständnis des Marktmanagements für die operativen Abläufe. Die reibungslose Zusammenarbeit und die konsequente praktische Umsetzung der Vorgaben vor Ort sind ausdrücklich positiv hervorzuheben." type="button">
+     positiv 
+    </button>
+    <button class="f-btn" data-text="Fazit: Der gemeinsame Rundgang machte deutlich, dass bei der Umsetzung der Arbeitssicherheitsstandards vor Ort noch spürbarer Nachholbedarf besteht. Die Abstimmung mit der Marktleitung gestaltete sich stellenweise schwierig. Um das Sicherheitsniveau im Markt auf den geforderten Standard zu bringen, ist eine intensivere Unterstützung und Sensibilisierung des Managements im Tagesgeschäft erforderlich." type="button">
+  negativ 
+    </button>
+    <button class="f-btn clear-btn" data-text="" type="button">
+      Löschen
+    </button>
+  </div> 
 </div>
 <script>
+  document.querySelector(".clear-btn").addEventListener("click", function () {
+    document.getElementById("freitextfeld").value = "";
+  });
+</script>
+</div>
+<div class="signature-container" style="position: relative; max-width: 600px; margin: 0 auto 20px auto;">
+  <label style="
+    position: absolute;
+    top: 8px;
+    left: 12px;
+    background: white;
+    padding: 0 6px;
+    font-weight: bold;
+    font-size: 14px;
+    color: #212529;
+    pointer-events: none;
+    user-select: none;
+    z-index: 10;
+  ">Unterschrift</label> 
+
+  <canvas id="signature-pad" width="600" height="150" style="
+    border: 2px solid #ddd;
+    border-radius: 16px;
+    width: 100%;
+    height: 150px;
+    touch-action: none;
+    display: block;
+  "></canvas>
+</div>
+<button class="btn-large btn-gray" onclick="if(confirm('Möchtest du die Unterschrift wirklich löschen?')) { clearSignature(); }" style="display: block; width: 100%; max-width: 600px; margin: 10px auto;">
+  🗑️ Unterschrift löschen
+</button>
+<div class="action-bar sticky-action-bar">
+<button class="btn btn-danger" onclick="formularZuruecksetzen()">
+                🗑️ Zurücksetzen
+            </button>
+<button class="btn btn-secondary" onclick="generateAndSharePDF()">
+        📤 PDF teilen
+    </button>
+<button class="btn btn-success" onclick="exportiereMassnahmen()">
+       📝 Defizite exportieren
+    </button>
+<details class="menu-dropdown">
+<summary class="btn btn-secondary">
+            ☰ Mehr
+        </summary>
+<div class="menu-content">
+<button class="btn btn-danger" onclick="formularZuruecksetzen()">
+                🗑️ Zurücksetzen
+            </button>
+<button class="btn btn-primary" onclick="manuellSpeichern()">
+        💾 Speichern
+    </button>
+<button class="btn btn-primary" onclick="prepareForPrint()">
+                🖨️ Drucken
+            </button>
+<button class="btn btn-primary" onclick="weiterZuFotos()">
+                📸 Zur Foto-Seite
+            </button>
+</div>
+</details></div>
+<script>
 function weiterZuFotos() {
-  const marktnummer = document.getElementById('markt')?.value || '';
-  const name = document.getElementById('name')?.value || '';
-  const sifa = document.getElementById('sifa')?.value || '';
+  const marktnummerElement = document.getElementById('markt');
+  const nameElement = document.getElementById('name');
+  const sifaElement = document.getElementById('sifa');
+
+  const marktnummer = marktnummerElement?.value?.trim() || '';
+  const name = nameElement?.value?.trim() || '';
+  const sifa = sifaElement?.value?.trim() || '';
+
+  // Fehler-Status zurücksetzen
+  [marktnummerElement, nameElement, sifaElement].forEach(el => el?.classList.remove('input-error'));
 
   // Prüfen, ob alle Felder ausgefüllt sind
   if (!marktnummer || !name || !sifa) {
-    alert('Bitte fülle Marktnummer, Name und SiFa aus, bevor du fortfährst.');
+    if (!marktnummer) marktnummerElement?.classList.add('input-error');
+    if (!name) nameElement?.classList.add('input-error');
+    if (!sifa) sifaElement?.classList.add('input-error');
+    
+    alert('Bitte füllen Sie Marktnummer, Name und SiFa aus, bevor Sie fortfahren.');
     return;
   }
+
   // URL mit Übergabeparametern bauen
   const url = `foto.html?marktnummer=${encodeURIComponent(marktnummer)}&name=${encodeURIComponent(name)}&sifa=${encodeURIComponent(sifa)}`;
 
-  // Seite in neuem Tab öffnen
-  window.open(url, '_blank');
+  // Verhalten steuern: true = neuer Tab (Achtung bei Popup-Blockern), false = gleicher Tab (empfohlen)
+  const imNeuenTabOeffnen = false;
+
+  if (imNeuenTabOeffnen) {
+    window.open(url, '_blank');
+  } else {
+    window.location.href = url;
+  }
 }
 </script>
 <div id="auswertung-container">
@@ -1699,41 +1769,67 @@ function weiterZuFotos() {
   color: #999;
   background-color: #f7f7f7;
   border-top: 1px solid #eee;
-  border-radius: 0 0 10px 10px;">
-  © <span id="year"></span> Andreas Zott – Alle Rechte vorbehalten<br/>
-<span style="font-size: 11px;">(Sifa) Arbeitssicherheit <span id="year-small"></span></span>
-<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
-<div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 8px;">
-<a href="impressum.html" style="color: #D32F2F; text-decoration: none; font-size: 13px;">Impressum</a>
-<a href="datenschutz.html" style="color: #D32F2F; text-decoration: none; font-size: 13px;">Datenschutz</a>
-<a href="welcome.html" style="color: #D32F2F; text-decoration: none; font-size: 13px;">Startseite</a>
-</div>
-<p style="margin: 0; font-size: 12px; color: #6b7280;">
-</p>
-</div><div style="font-size:11px; color:#777; margin-top:8px;">Stand: April 2026</div>
+  border-radius: 0 0 10px 10px;
+">
+
+  <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+    
+    <div>
+      © <span id="year"></span> Andreas Zott – Alle Rechte vorbehalten<br/>
+      <span style="font-size: 11px;">(Sifa) Arbeitssicherheit <span id="year-small"></span></span>
+    </div>
+
+    <div style="display: flex; justify-content: center; gap: 20px; margin: 12px 0 8px 0;">
+      <a href="impressum.html" style="color: #D32F2F; text-decoration: none; font-size: 13px;">Impressum</a>
+      <a href="datenschutz.html" style="color: #D32F2F; text-decoration: none; font-size: 13px;">Datenschutz</a>
+      <a href="welcome.html" style="color: #D32F2F; text-decoration: none; font-size: 13px;">Startseite</a>
+    </div>
+
+    <div style="font-size: 11px; color: #777; margin-top: 8px;">Stand: April 2026</div>
+    
+  </div>
 </footer>
+
 <script>
-  const year = new Date().getFullYear();
-  document.getElementById('year').textContent = year;
-  document.getElementById('year-small').textContent = year;
+  // Wartet, bis das HTML vollständig geladen ist
+  document.addEventListener("DOMContentLoaded", function() {
+    const currentYear = new Date().getFullYear();
+    const yearEl = document.getElementById('year');
+    const yearSmallEl = document.getElementById('year-small');
+    
+    // Sicherheitsprüfung vor der Zuweisung
+    if (yearEl) yearEl.textContent = currentYear;
+    if (yearSmallEl) yearSmallEl.textContent = currentYear;
+  });
 </script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 // PDF generation with jsPDF - renders each category on a separate A4 page
 // Uses direct jsPDF text rendering for better iPad compatibility
 async function generateAndSharePDF() {
-  // Show loading indicator
-  const loadingDiv = document.createElement('div');
-  loadingDiv.id = 'pdf-loading';
-  loadingDiv.innerHTML = '<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:9999;"><div style="background:white;padding:30px 50px;border-radius:12px;text-align:center;"><div style="font-size:18px;font-weight:bold;margin-bottom:10px;">PDF wird erstellt...</div><div style="font-size:14px;color:#666;">Bitte warten</div></div></div>';
-  document.body.appendChild(loadingDiv);
-  const today = new Date();
-  const formattedDate = today.toLocaleDateString('de-DE');
-  const markt = document.getElementById('markt')?.value || 'Unbekannt';
-  const name = document.getElementById('name')?.value || '-';
-  const marktleitung = document.getElementById('Marktleitung')?.value || '-';
-  const sifa = document.getElementById('sifa')?.value || '-';
-  const filename = `Arbeitssicherheit-Begehung-${markt}-${formattedDate}.pdf`;
+
+ // Show loading indicator
+const loadingDiv = document.createElement('div');
+loadingDiv.id = 'pdf-loading';
+loadingDiv.innerHTML = '<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:9999;"><div style="background:white;padding:30px 50px;border-radius:12px;text-align:center;"><div style="font-size:18px;font-weight:bold;margin-bottom:10px;">PDF wird erstellt...</div><div style="font-size:14px;color:#666;">Bitte warten</div></div></div>';
+document.body.appendChild(loadingDiv);
+
+const today = new Date();
+const formattedDate = today.toLocaleDateString('de-DE');
+
+// Werte auslesen (Sicherheits-Check für Klein-/Großschreibung bei marktleitung)
+const marktRaw = document.getElementById('markt')?.value || 'Unbekannt';
+const name = document.getElementById('name')?.value || '-';
+const marktleitung = (document.getElementById('marktleitung') || document.getElementById('Marktleitung'))?.value || '-';
+const sifa = document.getElementById('sifa')?.value || '-';
+
+// WICHTIG: Illegale Zeichen für Dateinamen entfernen (ersetzt sie durch einen Bindestrich)
+const safeMarkt = marktRaw.trim().replace(/[/\\?%*:|"<>\s]/g, '-');
+
+// Sicherer Dateiname
+const filename = `Arbeitssicherheit-Begehung-${safeMarkt}-${formattedDate}.pdf`;
+
 
   // Get signature as data URL
   const signatureCanvas = document.getElementById('signature-pad');
@@ -1777,7 +1873,8 @@ async function generateAndSharePDF() {
         pdf.setTextColor(100);
         pdf.text(`Seite ${i} von ${totalPages}`, pageWidth / 2, pageHeight - 8, { align: 'center' });
       }
-    }    
+    }  
+  
     // ===== PAGE 1: Header and Instructions =====
     // Title
     pdf.setFontSize(20);
@@ -1794,14 +1891,20 @@ async function generateAndSharePDF() {
     // Form info
     pdf.setFontSize(11);
     pdf.setTextColor(0);
-    pdf.text(`Marktnummer: ${markt}`, margin, currentY);
+    const mNummer = (markt && markt.value) ? markt.value : markt;
+    const mLeitung = (marktleitung && marktleitung.value) ? marktleitung.value : marktleitung;
+    const mName = (name && name.value) ? name.value : name;
+    const mSifa = (sifa && sifa.value) ? sifa.value : sifa;
+  pdf.text(`Marktnummer: ${mNummer}`, margin, currentY);
     currentY += 6;
-    pdf.text(`Marktleitung: ${marktleitung}`, margin, currentY);
+    pdf.text(`Marktleitung: ${mLeitung}`, margin, currentY);
     currentY += 6;
-    pdf.text(`Teilnehmer: ${name}`, margin, currentY);
+    pdf.text(`Teilnehmer: ${mName}`, margin, currentY);
     currentY += 6;
-    pdf.text(`SiFa: ${sifa}`, margin, currentY);
-    currentY += 12;    
+    pdf.text(`SiFa: ${mSifa}`, margin, currentY);
+    currentY += 12; 
+    currentY += 12;
+    
     // Instructions box
     pdf.setFillColor(255, 248, 248);
     pdf.setDrawColor(198, 40, 40);
@@ -2168,31 +2271,125 @@ pdf.text(wirksamkeitText, margin + 5, currentY);
       pdf.text(item.text, margin + 7, posY);
     });
     currentY += 50;
-    // Signature section (Prüfungsergebnis entfernt)
-    pdf.setFontSize(12);
-    pdf.setTextColor(33, 37, 41);
-    pdf.setFont(undefined, 'bold');
-    pdf.text('Unterschrift', margin, currentY);
-    pdf.setFont(undefined, 'normal');    
-    currentY += 5;
-    pdf.setFillColor(250, 250, 250);
-    pdf.setDrawColor(198, 40, 40);
-    pdf.roundedRect(margin, currentY, contentWidth, 50, 3, 3, 'FD');    
-    if (signatureDataURL && signatureDataURL !== 'data:,') {
-      try {
-        pdf.addImage(signatureDataURL, 'PNG', margin + 20, currentY + 5, contentWidth - 40, 40);
-      } catch (e) {
-        pdf.setTextColor(150);
-        pdf.setFontSize(10);
-        pdf.text('Unterschrift nicht verfügbar', pageWidth / 2, currentY + 25, { align: 'center' });
-      }
-    } else {
-      pdf.setTextColor(150);
-      pdf.setFontSize(10);
-      pdf.text('Keine Unterschrift vorhanden', pageWidth / 2, currentY + 25, { align: 'center' });
-    }    
-    currentY += 60;
-    
+
+// ===== FREITEXT =====
+const freitext = document.getElementById('freitextfeld')?.value?.trim();
+
+if (freitext) {
+  // Neue Seite falls nötig (Puffer für Überschrift + erste Zeilen erhöht)
+  if (currentY > 230) {
+    pdf.addPage();
+    if (typeof addMiniHeader === 'function') addMiniHeader();
+    currentY = 20;
+  }
+
+  pdf.setFontSize(12);
+  pdf.setTextColor(33, 37, 41); // Dunkelgrau für Konsistenz
+  pdf.setFont(undefined, 'bold');
+  pdf.text('Freies Bemerkungsfeld / Besonderheiten', margin, currentY);
+
+  currentY += 8;
+
+  pdf.setFont(undefined, 'normal');
+  pdf.setFontSize(10);
+
+  // Text umbrechen auf Breite des Rahmens (Innenabstand berücksichtigt)
+  const splitText = pdf.splitTextToSize(freitext, 162); 
+
+  // Dynamische Rahmenhöhe berechnen (Zeilenanzahl * Zeilenhöhe + Innenabstand)
+  const boxHeight = Math.max(20, splitText.length * 5 + 10); 
+
+  // Falls die Box nicht mehr auf die Seite passt, Seite umbrechen
+  if (currentY + boxHeight > 275) {
+    pdf.addPage();
+    if (typeof addMiniHeader === 'function') addMiniHeader();
+    currentY = 20;
+  }
+
+  // Rahmen-Styling analog zum Unterschriftenfeld (Rot, abgerundet, hellgrau gefüllt)
+  pdf.setFillColor(250, 250, 250); // Hellgrauer Hintergrund
+  pdf.setDrawColor(198, 40, 40);   // Rote Rahmenfarbe
+  
+  // Abgerundeten Rahmen zeichnen ('FD' = Fill and Draw)
+  pdf.roundedRect(margin, currentY - 4, 170, boxHeight, 3, 3, 'FD');
+
+  // Text einfügen (mit 4mm Innenabstand nach rechts und unten)
+  pdf.setTextColor(33, 37, 41);
+  pdf.text(splitText, margin + 4, currentY + 3);
+
+  // Y-Position für das nächste Element (Unterschrift) aktualisieren
+  currentY += boxHeight + 10;
+} 
+
+
+// ===== SICHERHEITS-CHECK FÜR UNTERSCHRIFTENFELD =====
+const signatureHeight = 45; 
+
+if (currentY + signatureHeight > 275) {
+  pdf.addPage();
+  if (typeof addMiniHeader === 'function') addMiniHeader();
+  currentY = 20; 
+}
+
+
+// ===== SIGNATURE AREA / UNTERSCHRIFTENFELD =====
+// Titel für den Unterschriftenbereich
+pdf.setFontSize(14);
+pdf.setTextColor(183, 28, 28); // Dunkelrot
+pdf.setFont(undefined, 'bold');
+pdf.text('Bestätigung und Unterschrift', margin, currentY + 5);
+currentY += 15;
+
+// Linien- und Text-Styling für die Unterschrift
+pdf.setDrawColor(150, 150, 150); // Graue Linien
+pdf.setLineWidth(0.5);
+pdf.setFontSize(10);
+pdf.setTextColor(33, 37, 41);
+
+
+// --- DATUM AUS DEM INPUT-FELD AUSLESEN ---
+// Holt das Datum aus dem HTML-Feld. Wenn leer, wird das heutige Datum generiert.
+let eingabeDatum = document.getElementById('datumfeld')?.value?.trim();
+if (!eingabeDatum) {
+  const heute = new Date();
+  eingabeDatum = heute.toLocaleDateString('de-DE'); // Format: DD.MM.YYYY
+}
+
+
+// --- AUSGABE IM PDF ---
+pdf.setFont(undefined, 'normal');
+
+// Linke Seite: Nur das Datum ÜBER die Linie schreiben
+pdf.text(eingabeDatum, margin, currentY + 12); 
+
+// Linke Seite: Die graue Linie zeichnen
+pdf.line(margin, currentY + 15, margin + 60, currentY + 15);
+// Beschriftung UNTER der Linie
+pdf.text('Datum', margin, currentY + 20);
+
+
+// Rechte Seite: Unterschrift der Marktleitung
+const rightSideX = margin + 90;
+// Die graue Linie zeichnen
+pdf.line(rightSideX, currentY + 15, rightSideX + 80, currentY + 15);
+
+pdf.text('Unterschrift Marktleitung', rightSideX, currentY + 20);
+
+
+// ===== DIGITALE UNTERSCHRIFT AUS CANVAS EINFÜGEN =====
+const canvas = document.getElementById('signature-canvas') || document.querySelector('canvas');
+
+if (canvas) {
+  const signatureImgData = canvas.toDataURL('image/png');
+  if (signatureImgData && signatureImgData !== "data:,") {
+    // Platziert die Unterschrift direkt über der rechten grauen Linie (Marktleitung)
+    pdf.addImage(signatureImgData, 'PNG', rightSideX + 5, currentY - 5, 70, 18);
+  }
+}
+
+// Endgültige Y-Position nach unten verschieben
+currentY += 30;
+ 
     // ===== ZUSAMMENFASSUNG DER ANTWORTEN =====
     pdf.setFontSize(12);
     pdf.setTextColor(33, 37, 41);
@@ -2261,7 +2458,7 @@ pdf.text(wirksamkeitText, margin + 5, currentY);
     );
     pdf.text(footerNote, margin, currentY);
     currentY += footerNote.length * 3 + 5;
-    pdf.text(`Erstellt am: ${formattedDate} | Markt: ${markt} | SiFa: ${sifa}`, margin, currentY);    
+    pdf.text(`Erstellt am: ${formattedDate} | : ${markt} | SiFa: ${sifa}`, margin, currentY);    
     // Add page numbers to all pages
     const totalPages = pdf.internal.getNumberOfPages();
     for (let i = 1; i <= totalPages; i++) {
@@ -2506,6 +2703,33 @@ async function prepareForPrint() {
   }
 }
 
+
+.freitext-section{
+  background:#fff;
+  border:2px solid #C62828;
+  border-radius:12px;
+  padding:20px;
+  margin:30px auto;
+  max-width:700px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+#freitextfeld{
+  width:100%;
+  min-height:220px;
+  border:1px solid #ccc;
+  border-radius:10px;
+  padding:14px;
+  font-size:16px;
+  box-sizing:border-box;
+  resize:vertical;
+  font-family:inherit;
+}
+@media print{
+  .hide-empty-freitext{
+    display:none !important;
+  }
+}
+
 </style>
   `;
   document.body.appendChild(loadingDiv);
@@ -2521,7 +2745,7 @@ async function prepareForPrint() {
     let currentY = 0;    
     // Get form data
 const marktleitung = document.getElementById('Marktleitung')?.value || '-';
-    const markt = document.getElementById('markt')?.value || 'Nicht angegeben';
+       const markt = document.getElementById('markt')?.value || 'Nicht angegeben';
     const name = document.getElementById('name')?.value || 'Nicht angegeben';
     const sifa = document.getElementById('sifa')?.value || 'Nicht angegeben';
     const datumInput = document.getElementById('datum')?.value;
@@ -3641,49 +3865,76 @@ function speichereFormular() {
 function ladeFormular() {
   const saved = localStorage.getItem('formSicherheit2025');
   if (!saved) return;
+  
   const data = JSON.parse(saved);  
-  document.querySelectorAll('input').forEach(el => {
-    if (el.type === 'radio' || el.type === 'checkbox') {
-      if (el.name && data[el.name]) {
-        el.checked = !!data[el.name][el.value];
-      } else if (el.id && data[el.id] !== undefined) {
-        el.checked = !!data[el.id];
+  
+  // WICHTIG: Erweitert auf textarea und select, damit das Freitextfeld geladen wird!
+  document.querySelectorAll('input, textarea, select').forEach(el => {
+    const key = el.id || el.name;
+    if (!key || data[key] === undefined) return;
+
+    if (el.type === 'radio') {
+      // Prüft, ob der gespeicherte Wert (String) mit dem Wert des Radio-Buttons übereinstimmt
+      el.checked = (data[key] === el.value);
+    } 
+    else if (el.type === 'checkbox') {
+      // Handhabung für Checkboxen
+      if (typeof data[key] === 'object') {
+        el.checked = !!data[key][el.value];
+      } else {
+        el.checked = !!data[key];
       }
-    } else if ((el.id && data[el.id] !== undefined) || (el.name && data[el.name] !== undefined)) {
-      el.value = data[el.id || el.name];
+    } 
+    else {
+      // Für Textfelder, Textareas und Dropdowns
+      el.value = data[key];
     }
   });  
+  
   // Nach dem Laden: Hervorhebung aktualisieren
-  aktualisiereHervorhebung();
+  if (typeof aktualisiereHervorhebung === 'function') {
+    aktualisiereHervorhebung();
+  }
 }
+
 // Farbige Hervorhebung der Antworten
 function aktualisiereHervorhebung() {
   const zeilen = document.querySelectorAll('#fragenTabelle tbody tr');
+  
   zeilen.forEach(row => {
-    const radios = row.querySelectorAll('input[type="radio"]');
-    if (radios.length) {
-      row.classList.remove('highlight-ja', 'highlight-nein', 'highlight-nicht');
-      radios.forEach(radio => {
-        if (radio.checked) {
-          if (radio.value === 'ja') row.classList.add('highlight-ja');
-          else if (radio.value === 'nein') row.classList.add('highlight-nein');
-          else if (radio.value === 'nicht_vorhanden') row.classList.add('highlight-nicht');
-        }
-      });
+    // Direkt das ausgewählte Radio-Element der Zeile finden
+    const checkedRadio = row.querySelector('input[type="radio"]:checked');
+    
+    // Zuerst alle alten Highlight-Klassen entfernen
+    row.classList.remove('highlight-ja', 'highlight-nein', 'highlight-nicht');
+    
+    // Wenn ein Radio-Button ausgewählt ist, die passende Klasse setzen
+    if (checkedRadio) {
+      if (checkedRadio.value === 'ja') {
+        row.classList.add('highlight-ja');
+      } else if (checkedRadio.value === 'nein') {
+        row.classList.add('highlight-nein');
+      } else if (checkedRadio.value === 'nicht_vorhanden') {
+        row.classList.add('highlight-nicht');
+      }
     }
   });
 }
-// Speichern bei jeder Eingabeänderung
+
+// Speichern bei jeder Eingabeänderung (Input und Textarea)
 document.addEventListener('change', event => {
-  if (event.target.matches('input')) {
-    speichereFormular();
-    aktualisiereHervorhebung();
+  if (event.target.matches('input, textarea')) {
+    // Hinweis: Die folgenden beiden Funktionen müssen in Ihrem Code definiert sein!
+    if (typeof speichereFormular === 'function') speichereFormular();
+    if (typeof aktualisiereHervorhebung === 'function') aktualisiereHervorhebung();
   }
 });
+
 document.addEventListener("DOMContentLoaded", function () {
   // Alle Tabellenzeilen holen
   const rows = document.querySelectorAll("#fragenTabelle tbody tr");
   let anzahlFragen = 0;
+
   rows.forEach(row => {
     // Prüfen, ob diese Zeile mindestens EIN Radio-Input hat
     const radios = row.querySelectorAll("input[type='radio']");
@@ -3691,6 +3942,11 @@ document.addEventListener("DOMContentLoaded", function () {
       anzahlFragen++;
     }
   });
+
+  // Hier können Sie jetzt die Variable 'anzahlFragen' für den Titel nutzen!
+  console.log(`Es wurden ${anzahlFragen} Fragen gezählt.`);
+});
+
   // Titel aktualisieren
 const titelElement = document.getElementById("titel");
 const untertitelElement = document.getElementById("untertitel");
@@ -3698,33 +3954,134 @@ const untertitelElement = document.getElementById("untertitel");
 if (titelElement && untertitelElement) {
   titelElement.textContent = "Arbeitssicherheits-Audit mit automatischer Maßnahmen-Ableitung bei Abweichungen";
 
-untertitelElement.textContent = `Systematische Filialprüfung mit automatischer Maßnahmen-Ableitung und Wirksamkeitskontrolle (${anzahlFragen} Prüfpunkte)`;
+  // Sicherheitsabfrage: Falls anzahlFragen nicht definiert ist, wird "0" oder ein Standardtext genutzt
+  const fragenAnzahl = (typeof anzahlFragen !== 'undefined') ? anzahlFragen : 0;
+
+  untertitelElement.textContent = `Systematische Filialprüfung mit automatischer Maßnahmen-Ableitung und Wirksamkeitskontrolle (${fragenAnzahl} Prüfpunkte)`;
 }
-});
+
+// Touch-Verhalten für Canvas-Elemente (z. B. Unterschriftenfelder)
 document.addEventListener("touchstart", function(e) {
   if (e.target.tagName === "CANVAS") {
     e.preventDefault();
   }
 }, { passive: false });
-</script>
 
-<script>
 document.addEventListener("DOMContentLoaded", function () {
   const rows = document.querySelectorAll("#fragenTabelle tbody tr");
 
   rows.forEach(row => {
     const cells = row.querySelectorAll("td");
 
-    if (cells.length === 4 && !cells[0].classList.contains("category-header")) {
+    // Sicherstellen, dass es sich nicht um eine Kategorie-Überschrift handelt
+    // und mindestens 4 Zellen vorhanden sind (1 für Frage, 3 für Ja/Nein/NV)
+    if (cells.length >= 4 && !cells[0].classList.contains("category-header")) {
       const labels = ["Ja", "Nein", "N/V"];
 
-      for (let i = 1; i < cells.length; i++) {
-        cells[i].setAttribute("data-label", labels[i - 1]);
+      // Schleife läuft exakt dreimal für die Indizes 1, 2 und 3
+      for (let i = 0; i < labels.length; i++) {
+        cells[i + 1].setAttribute("data-label", labels[i]);
       }
     }
   });
 });
-</script>
 
-</body>
+document.addEventListener("DOMContentLoaded", function () {
+    // Die globale Variable 'freitextfeld' ist hier bereits durch das Hauptskript bekannt
+    const container = document.getElementById("freitext-container");
+
+    function updateFreitextVisibility() {
+        // Sicherheitsabfrage, falls das Feld nicht existiert
+        if (!freitextfeld) return;
+
+        if (freitextfeld.value.trim() !== "") {
+            container.classList.remove("hide-empty-freitext");
+        } else {
+            container.classList.add("hide-empty-freitext");
+        }
+    }
+
+    // Initial prüfen und ausblenden wenn leer
+    updateFreitextVisibility();
+
+    // Event-Listener hinzufügen
+    if (freitextfeld) {
+        freitextfeld.addEventListener("input", updateFreitextVisibility);
+    }
+
+    // Vor Druck/PDF prüfen
+    window.addEventListener("beforeprint", updateFreitextVisibility);
+});
+
+// Diese globale Zuweisung reicht für alle Skripte auf der Seite aus:
+const freitextfeld = document.getElementById('freitextfeld');
+// ===== Text einfügen =====
+function insertText(text) {
+  if (!freitextfeld) {
+    console.error('Das Freitextfeld wurde im DOM nicht gefunden. Bitte prüfen Sie die ID.');
+    return;
+  }
+
+  const start = freitextfeld.selectionStart;
+  const end = freitextfeld.selectionEnd;
+
+  freitextfeld.value =
+    freitextfeld.value.substring(0, start) +
+    text +
+    freitextfeld.value.substring(end);
+
+  freitextfeld.selectionStart =
+    freitextfeld.selectionEnd =
+    start + text.length;
+
+  freitextfeld.focus();
+}
+
+// ===== Button-Klick =====
+document.querySelectorAll('.f-btn').forEach(button => {
+  button.addEventListener('click', () => {
+    insertText(button.dataset.text);
+  });
+});
+
+// ===== Echte F-Tasten =====
+const fTexte = {
+  F2: 'Notiz: Aufgrund der hohen operativen Auslastung des Marktmanagements gestaltete sich die Terminfindung im Vorfeld als Herausforderung, sodass die Begehung erst nach mehreren Anläufen koordiniert werden konnte.',
+  F3: 'Notiz: Obwohl sich die Terminfindung im Vorfeld schwierig gestaltete, verlief die anschließende Überprüfung der Arbeitssicherheit sehr produktiv.',
+  F4: 'Hinweis zum Ablauf: Die Terminfindung für die Begehung gestaltete sich im Vorfeld organisatorisch schwierig. Aufgrund zeitnaher Anschlusstermine des Marktmanagements, die der Sicherung des Warenbestands dienten, wurde der Rundgang schließlich in einem kompakten Zeitfenster durchgeführt. Die Rahmenbedingungen vor Ort waren dabei durch einen allgemeinen Zeitdruck und eine herausfordernde Personaldecke geprägt. Der Fokus lag daher zielgerichtet auf den wesentlichen Kern- und Gefahrenbereichen. Durch die zusätzliche Teilnahme des Sicherheitsbeauftragten bzw. der Stellvertretung konnten praxisnahe Aspekte direkt vor Ort fundiert abgestimmt werden. Detail- und Nebenbereiche wurden stichprobenartig betrachtet; die ergänzende Nachprüfung dieser Abschnitte erfolgt im Rahmen einer zeitnahen Folgebegehung.',
+  F5: 'Hinweis zur Weiterarbeit: Für das Erreichen des geforderten Sicherheitsniveaus ist die konsequente Bearbeitung der Gefährdungsbeurteilung von elementarer Bedeutung. Sie dient im Markt als Steuerungs- und Kontrollwerkzeug, um Gefahrenquellen im Tagesgeschäft frühzeitig zu erkennen, Unfälle zu vermeiden und die Mitarbeiter nachhaltig zu schützen.',
+  F6: 'Vorgabe für die Folgebegehung: Da die Gefährdungsbeurteilung das wichtigste Instrument im Arbeitsschutz darstellt, ist deren aktuelle Bearbeitung und Umsetzung zwingende Voraussetzung für den nächsten Termin. Bis zur anstehenden Folgebegehung ist das Dokument durch das Marktmanagement zu prüfen und entsprechend zu aktualisieren, damit die offenen Detailbereiche final bewertet werden können.'
+};
+
+document.addEventListener('keydown', function(event) {
+  if (fTexte[event.code]) {
+    event.preventDefault();
+    insertText(fTexte[event.code]);
+  }
+});
+
+// ===== Scroll-Verhalten für die Action-Bar =====
+window.addEventListener('scroll', function () {
+    const actionBar = document.querySelector('.sticky-action-bar');
+    
+    // Sicherheitsabfrage, falls das Element auf der Seite fehlt
+    if (!actionBar) return;
+
+    // Höhe der Seite
+    const documentHeight = document.documentElement.scrollHeight;
+
+    // aktuelle Scrollposition
+    const scrollPosition = window.innerHeight + window.scrollY;
+
+    // Abstand zum Seitenende
+    const distanceFromBottom = documentHeight - scrollPosition;
+
+    // erscheint erst 300px vor Seitenende
+    if (distanceFromBottom < 300) {
+        actionBar.style.display = 'grid';
+    } else {
+        actionBar.style.display = 'none';
+    }
+});
+</script></br></div></body>
 </html>
