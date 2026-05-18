@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="de">
 <head>
 <meta charset="utf-8"/>
@@ -10,43 +9,49 @@
 <link href="/sicher/manifest.json" rel="manifest"/>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-    .handlungsanweisung-box {
-        border: 2px solid #C62828; 
-        padding: 18px;
-        border-radius: 10px;
-        background-color: #fff8f8; 
-        font-family: Arial, sans-serif;
-        margin: 18px 0;
-    }
-    .handlungsanweisung-box h2 {
-        color: #004080;
-        margin-top: 0;
-    }
-    .handlungsanweisung-box p {
-        margin: 10px 0;
-        line-height: 1.5;
-    }
-#signature-pad, canvas { border: 2px solid #C62828 !important; border-radius: 12px; }
+
+.handlungsanweisung-box {
+    border: 2px solid #C62828; 
+    padding: 18px;
+    border-radius: 10px;
+    background-color: #fff8f8; 
+    /* OPTIMIERT: Nutzt nun die importierte 'Inter' für ein einheitliches Design */
+    font-family: 'Inter', Arial, sans-serif;
+    margin: 18px 0;
+}
+
+.handlungsanweisung-box h2 {
+    color: #004080;
+    margin-top: 0;
+}
+
+.handlungsanweisung-box p {
+    margin: 10px 0;
+    line-height: 1.5;
+}
+
+
+#signature-pad { 
+    border: 2px solid #C62828 !important; 
+    border-radius: 12px; 
+}
 
 .fasten-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-
-  /* Buttons mittig */
-  justify-content: center;
-
-  margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    /* Buttons mittig */
+    justify-content: center;
+    margin-top: 10px;
 }
 /* Bereichsüberschriften */
 tr:has(.category-header) {
   border: none !important;
   background: transparent !important;
   box-shadow: none !important;
-  margin-top: 30px !important;
-  margin-bottom: 16px !important;
-  padding: 0 !important;
 }
+
+
 .category-header td,
 tr:has(.category-header) td {
   background: #B71C1C !important;
@@ -56,7 +61,13 @@ tr:has(.category-header) td {
   border-radius: 14px !important;
   padding: 14px !important;
   box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+  /* Erzeugt den gewünschten visuellen Abstand vor der neuen Kategorie */
+  margin-top: 30px !important; 
+  display: inline-block; 
+  width: 100%;
+  box-sizing: border-box;
 }
+
 input[type="radio"] {
   appearance: none;
   -webkit-appearance: none;
@@ -65,29 +76,39 @@ input[type="radio"] {
   border-radius: 50%;
   border: 2px solid #999;
   background-color: #fff;
-  cursor: pointer;
+  cursor: pointer; 
   margin: 4px;
   position: relative;
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
+
 input[type="radio"][value="ja"]:checked {
   background-color: #A5D6A7;
   border-color: #A5D6A7;
 }
+
 input[type="radio"][value="nein"]:checked {
   background-color: #C62828;
   border-color: #C62828;
 }
+
 input[type="radio"][value="nicht_vorhanden"]:checked {
   background-color: #999;
   border-color: #999;
 }
 
-/* Kompakter Modus nur für PDF-Export */
-.pdf-compact * {
+
+
+.pdf-compact p, 
+.pdf-compact label, 
+.pdf-compact span,
+.pdf-compact input {
     font-size: 10px !important;
     line-height: 1.15 !important;
 }
+.pdf-compact h1 { font-size: 14px !important; }
+.pdf-compact h2 { font-size: 12px !important; }
+
 .pdf-compact table td,
 .pdf-compact table th {
     padding: 3px 4px !important;
@@ -97,6 +118,8 @@ input[type="radio"][value="nicht_vorhanden"]:checked {
 .pdf-compact .radio-wrap {
     font-size: 8px !important;
 }
+
+/* Druck-Layout */
 @media print {
   button,
   .btn,
@@ -134,30 +157,31 @@ input[type="radio"][value="nicht_vorhanden"]:checked {
   input[type="text"], input[type="date"] {
     font-size: 9pt !important;
   }  
-  /* Prevent row splitting */
+
   tr, td, th {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
   }
-  #maßnahmen-tabelle tr {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }  
-  /* Better handling of empty table rows */
-  #maßnahmen-tabelle tr.empty-row {
-    display: none !important;
-  }
-  .confirmation-section {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
 
-  .signature-container {
+#maßnahmen-tabelle tr {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
-  }
+}  
+
+#maßnahmen-tabelle tr.empty-row {
+    display: none !important;
 }
-/* PDF Export specific styles - applied via JavaScript */
+.confirmation-section {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+}
+.signature-container {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+}
+} 
+
+
 .pdf-export-mode .category-page {
   page-break-before: always !important;
   break-before: page !important;
@@ -174,6 +198,7 @@ input[type="radio"][value="nicht_vorhanden"]:checked {
   page-break-before: always !important;
   break-before: page !important;
 }
+
 #signature-pad {
   border: 2px solid #C62828;
   border-radius: 12px;
@@ -186,9 +211,11 @@ input[type="radio"][value="nicht_vorhanden"]:checked {
   margin-top: 10px;
 }
 #content {
+  width: 100%;
   max-width: 600px;
   margin: auto;
   font-family: 'Inter', Arial, sans-serif;
+  box-sizing: border-box;
 }
 button {
   background-color: #B71C1C;
@@ -211,6 +238,7 @@ button:hover {
   padding: 24px;
   max-width: 700px;
   margin: 40px auto;
+  box-sizing: border-box;
 }
 .checkbox-row {
   display: flex;
@@ -232,93 +260,108 @@ label {
 button.custom-btn,
 button.btn-large,
 button.btn-medium {
-font-size: 16px;
-padding: 10px 20px;
-border-radius: 8px;
-border: none;
-cursor: pointer;
-margin: 10px auto;
-display: block;
-font-family: inherit;
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  margin: 10px auto;
+  display: block;
+  font-family: inherit;
+  box-sizing: border-box; 
 }
+
+
 button.btn-large {
-width: 600px;
+  width: 100%;
+  max-width: 600px;
 }
 button.btn-medium {
-width: 280px;
+  width: 100%;
+  max-width: 280px;
 }
+
 button.btn-blue {
-background-color: #B71C1C;
-color: white;
+  background-color: #B71C1C;
+  color: white;
 }
 button.btn-green {
-background-color: #388e3c;
-color: white;
+  background-color: #388e3c;
+  color: white;
 }
 button.btn-gray {
-background-color: #6b6b6b;
-color: white;
+  background-color: #6b6b6b;
+  color: white;
 }
 #signature-image {
-max-width: 600px;
-border: 2px solid #C62828;
-border-radius: 8px;
-display: block;
-min-height: 150px;
-margin: 10px auto;
+  width: 100%;
+  max-width: 600px;
+  border: 2px solid #C62828;
+  border-radius: 8px;
+  display: block;
+  min-height: 150px;
+  margin: 10px auto;
 }
 .page-break-before {
   page-break-before: always;
   margin-top: 0;
   break-before: page;
 }
+
 body {
   font-family: 'Inter', Arial, sans-serif;
   background-color: #f4f4f4;
   padding: 20px;
 }
+
 header h1 {
   color: #212529;
 }
+
 table {
-  width: 100%;
-  border-collapse: collapse;
+  width: 100%; 
+  border-collapse: separate;
+  border-spacing: 0;
   margin-bottom: 20px;
   background-color: white;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
-.info-text{
-  margin-top:10px;
-  margin-bottom:8px;
-  font-size:14px;
-  color:#555;
-  text-align:center;
+
+.info-text {
+  margin-top: 10px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #555;
+  text-align: center;
 }
 
-/* ===== iPad Optimierte Action Bar ===== */
-
-
-
 .sticky-action-bar {
-
-    /* zuerst unsichtbar */
+    /* Zuerst unsichtbar */
     display: none;
-
-    margin-top: 30px;
+    
+    /* REPARIERT: Fixiert die Leiste am unteren Rand des iPad-Bildschirms */
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 40px);
+    max-width: 600px;
+    /* Hoher z-index garantiert, dass keine Tabellen durchschimmern */
+    z-index: 9999; 
 
     grid-template-columns: repeat(4, 1fr);
     gap: 10px;
 
-    background: rgba(255,255,255,0.96);
+    background: rgba(255, 255, 255, 0.96);
+     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
 
     padding: 12px;
     border-radius: 18px;
-
     box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    box-sizing: border-box;
 }
 
-/* wird eingeblendet */
 .sticky-action-bar.show {
     display: grid;
 }
@@ -337,12 +380,10 @@ table {
 }
 
 .menu-content {
-
     position: absolute;
-
     right: 0;
-    bottom: 40px;
-
+    /* REPARIERT: Abstand erhöht, damit das Menü über der fixierten Bar schwebt */
+    bottom: 55px; 
     width: 280px;
 
     display: flex;
@@ -350,33 +391,25 @@ table {
     gap: 8px;
 
     background: white;
-
     padding: 14px;
     border-radius: 16px;
-
     box-shadow: 0 12px 30px rgba(0,0,0,0.18);
 }
 
 .menu-content .btn {
     width: 100%;
     justify-content: flex-start;
+    box-sizing: border-box;
 }
 
-
-/* Mobile / iPad */
-
 @media (max-width: 600px) {
-
     .sticky-action-bar {
         grid-template-columns: 1fr 1fr;
     }
-
     .menu-content {
         width: 240px;
     }
 }
-
-/* Kopfzeile komplett abgerundet (oben + unten) */
 
 .table-header-row th:first-child {
   border-top-left-radius: 14px;
@@ -424,16 +457,26 @@ input[type="text"], input[type="date"] {
   border: 1px solid #ced4da;
   border-radius: 4px;
 }
-.highlight-ja td:first-child {
+
+.highlight-ja td:first-child,
+.highlight-ja td {
   background-color: #d4edda !important;
 }
-.highlight-nein td:first-child {
+.highlight-nein td:first-child,
+.highlight-nein td {
   background-color: #f8d7da !important;
 }
-.highlight-nicht td:first-child {
+.highlight-nicht td:first-child,
+.highlight-nicht td {
   background-color: #e2e3e5 !important;
 }
-/* Radio-Buttons vertikal mit Text darunter */
+
+@media screen and (max-width: 768px) {
+  .highlight-ja td, .highlight-nein td, .highlight-nicht td {
+    background-color: inherit !important;
+  }
+}
+
 .radio-wrap {
     display: flex;
     flex-direction: column;
@@ -444,8 +487,6 @@ input[type="text"], input[type="date"] {
 .radio-wrap input[type="radio"] {
     margin-bottom: 2px;
 }
-
-/* Improved print readability */
 @media print {
   body, table, td, th {
     font-size: 9pt !important;
@@ -458,7 +499,6 @@ input[type="text"], input[type="date"] {
   }
 }
 
-/* ===== Mobile Optimierung für iPhone ===== */
 @media screen and (max-width: 768px) {
   body {
     padding: 10px !important;
@@ -491,6 +531,7 @@ input[type="text"], input[type="date"] {
   tr {
     display: block;
     width: 100%;
+    box-sizing: border-box;
   }
 
   thead {
@@ -510,8 +551,9 @@ input[type="text"], input[type="date"] {
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     border: 1px solid #ddd;
   }
-
-  tr:has(.category-header) {
+ 
+  tr:has(.category-header),
+  tr.is-category-row {
     padding: 0 !important;
     background: transparent !important;
     box-shadow: none !important;
@@ -565,17 +607,16 @@ input[type="text"], input[type="date"] {
     min-height: 52px;
     font-size: 16px !important;
   }
-
-  div[style*="display: flex"] {
+ 
+  .form-section div[style*="display: flex"],
+  .print-wrapper div[style*="display: flex"]:not(.no-mobile-collapse) {
     flex-direction: column !important;
     align-items: stretch !important;
   }
-
   .checkbox-row {
     flex-direction: column !important;
     gap: 12px !important;
   }
-
   #signature-pad,
   canvas,
   #signature-image {
@@ -592,118 +633,144 @@ input[type="text"], input[type="date"] {
   .category-header {
     font-size: 17px !important;
     border-radius: 12px !important;
+    /* REPARIERT: Garantiert eine geschlossene, zentrierte Karte im mobilen Block-Modus */
+    display: block !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
+  }
+} 
+
+.freitext-section {
+  background: #fff;
+  border: 2px solid #C62828;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 30px auto;
+  max-width: 700px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  box-sizing: border-box;
+}
+
+#freitextfeld {
+  width: 100%;
+  min-height: 220px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 16px;
+  box-sizing: border-box;
+  resize: vertical;
+  font-family: inherit;
+}
+
+@media print {
+  
+  .hide-empty-freitext {
+    display: none !important;
   }
 }
 
-
-.freitext-section{
-  background:#fff;
-  border:2px solid #C62828;
-  border-radius:12px;
-  padding:20px;
-  margin:30px auto;
-  max-width:700px;
-  box-shadow:0 4px 12px rgba(0,0,0,0.08);
-}
-#freitextfeld{
-  width:100%;
-  min-height:220px;
-  border:1px solid #ccc;
-  border-radius:10px;
-  padding:14px;
-  font-size:16px;
-  box-sizing:border-box;
-  resize:vertical;
-  font-family:inherit;
-}
-@media print{
-  .hide-empty-freitext{
-    display:none !important;
-  }
-}
 
 </style>
+</head>
 </head>
 <body>
 <h1 id="titel">Arbeitssicherheits-Audit mit automatischer Maßnahmen-Ableitung bei Abweichungen</h1>
 <p id="untertitel">Systematische Filialprüfung mit automatischer Maßnahmen-Ableitung und Wirksamkeitskontrolle (119 Prüfpunkte)</p>
+
 <div class="print-wrapper">
-<header>
-<div style="display: flex; justify-content: space-between; align-items: center;">
-<h1 id="titel" style="margin: 0;"></h1>
-<span id="datum" style="padding: 8px; font-size: 16px; font-weight: bold;"></span>
-</div>
-</header>
-<div class="form-section" style="max-width: 300px;">
-<div style="margin-bottom: 10px;">
-<br/><br/>
-<label for="markt">Marktnummer:</label>
-<input id="markt" placeholder="z. B. 0123" required="" type="text"/>
-</div>
-<div style="margin-bottom: 10px;">
-<label for="name">Teilnehmer:</label>
-<input id="name" style="width: 100%;" type="text"/>
-</div>
-<div style="margin-bottom: 10px;">
-<label for="Marktleitung">Marktleitung:</label>
-<input id="Marktleitung" style="width: 100%;" type="text"/>
-</div>
-<div style="margin-bottom: 10px;">
-<label for="sifa">SiFa:</label>
-<input id="sifa" style="width: 100%;" type="text"/>
-<br/>
-</div>
-<div style="display: flex; justify-content: center; align-items: center; gap: 16px; margin: 20px 0 40px 0;">
-</div>
-</div>
-<div class="handlungsanweisung-box">
-<h2>Anleitung und Nutzungshinweis:</h2>
-<strong>Dieses Audit-Tool dient der systematischen Überprüfung von Arbeitssicherheit und Gesundheitsschutz gemäß § 5 ArbSchG.
-Ziel ist die frühzeitige Identifikation von Gefährdungen sowie die konsequente Ableitung und Nachverfolgung erforderlicher Maßnahmen.</strong><br/>
-<br/>
-<h2>Handlungsanweisung:</h2>
-<strong>Bewertung &amp; Handlungsbedarf:</strong>
-<p> Die Bewertung erfolgt anhand definierter Prüfkriterien.
-Wird eine Frage mit „Nein“ beantwortet, liegt eine Abweichung vom Schutzziel vor. In diesem Fall wird automatisch eine Maßnahme generiert, deren Umsetzung verbindlich sicherzustellen ist.
-</p><strong>Verantwortung:</strong>
-<p>
-Die Gesamtverantwortung für die Durchführung der Prüfung sowie die Beseitigung festgestellter Mängel liegt bei der Marktleitung.
-Einzelne Maßnahmen können an fachlich zuständige Personen delegiert werden.
-Die Aufsichts- und Kontrollpflicht verbleibt jedoch bei der Marktleitung.
-</p>
-<strong>Dokumentation:</strong>
-<p>
-Nach Abschluss der Prüfung ist die Checkliste vollständig auszuwerten.
-Auf dieser Grundlage wird eine Maßnahmenliste erstellt, die alle identifizierten Defizite sowie die erforderlichen Korrekturmaßnahmen enthält.
-</p>
-<strong>Wirksamkeitskontrolle:</strong>
-<p>
-  Die Marktleitung prüft die Umsetzung der festgelegten Maßnahmen zeitnah nach deren Durchführung im Rahmen der Protokollkontrolle.
-Bei Bedarf werden externe Fachfirmen mit der Mängelbeseitigung beauftragt.
-Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung der Wirksamkeit.  
-    </p>
-</div>
+  <header>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <!-- REPARIERT: ID geändert, um Konflikte beim JavaScript-Zugriff zu verhindern -->
+      <h1 id="titel-header" style="margin: 0;"></h1>
+      <span id="datum" style="padding: 8px; font-size: 16px; font-weight: bold;"></span>
+    </div>
+  </header>
+
+  <div class="form-section" style="max-width: 300px;">
+    <div style="margin-bottom: 10px;">
+      <label for="markt">Marktnummer:</label>
+      <input id="markt" placeholder="z. B. 0123" required="" type="text"/>
+    </div>
+    <div style="margin-bottom: 10px;">
+      <!-- REPARIERT: for-Attribut für exakte Touch-Bedienung hinzugefügt -->
+      <label for="name">Teilnehmer:</label>
+      <input id="name" style="width: 100%;" type="text"/>
+    </div>
+    <div style="margin-bottom: 10px;">
+      <label for="Marktleitung">Marktleitung:</label>
+      <input id="Marktleitung" style="width: 100%;" type="text"/>
+    </div>
+    <div style="margin-bottom: 10px;">
+      <label for="sifa">SiFa:</label>
+      <input id="sifa" style="width: 100%;" type="text"/>
+    </div> 
+  </div>
+
+  <div class="handlungsanweisung-box">
+    <h2>Anleitung und Nutzungshinweis:</h2>
+    <strong>Dieses Audit-Tool dient der systematischen Überprüfung von Arbeitssicherheit und Gesundheitsschutz gemäß § 5 ArbSchG.
+    Ziel ist die frühzeitige Identifikation von Gefährdungen sowie die konsequente Ableitung und Nachverfolgung erforderlicher Maßnahmen.</strong>
+    <br/><br/>
+    
+    <h2>Handlungsanweisung:</h2>
+    <strong>Bewertung &amp; Handlungsbedarf:</strong>
+    <p>Die Bewertung erfolgt anhand definierter Prüfkriterien.
+    Wird eine Frage mit „Nein“ beantwortet, liegt eine Abweichung vom Schutzziel vor. In diesem Fall wird automatisch eine Maßnahme generiert, deren Umsetzung verbindlich sicherzustellen ist.</p>
+    
+    <strong>Verantwortung:</strong>
+    <p>Die Gesamtverantwortung für die Durchführung der Prüfung sowie die Beseitigung festgestellter Mängel liegt bei der Marktleitung.
+    Einzelne Maßnahmen können an fachlich zuständige Personen delegiert werden.
+    Die Aufsichts- und Kontrollpflicht verbleibt jedoch bei der Marktleitung.</p>
+    
+    <strong>Dokumentation:</strong>
+    <p>Nach Abschluss der Prüfung ist die Checkliste vollständig auszuwerten.
+    Auf dieser Grundlage wird eine Maßnahmenliste erstellt, die alle identifizierten Defizite sowie die erforderlichen Korrekturmaßnahmen enthält.</p>
+    
+    <strong>Wirksamkeitskontrolle:</strong>
+    <p>Die Marktleitung prüft die Umsetzung der festgelegten Maßnahmen zeitnah nach deren Durchführung im Rahmen der Protokollkontrolle.
+    Bei Bedarf werden externe Fachfirmen mit der Mängelbeseitigung beauftragt.
+    Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung der Wirksamkeit.</p>
+  </div>
 <br/>
 <br/>
 <table id="fragenTabelle">
-<thead>
-<tr class="table-header-row">
-<th>Frage</th>
-<th>Ja</th>
-<th>Nein</th>
-<th>n.v.</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="category-header" colspan="4">1.0 Gesamtmarkt</td>
-</tr>
-<tr>
-<td style="text-align: left;">Entspricht das getragene Schuhwerk aller im Bereich tätigen Personen den Anforderungen der Gefährdungsbeurteilung (fest, im Zehenbereich geschlossen, flach und rutschhemmend)?</td>
-<td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-0" type="radio" value="ja"/><span>Ja</span></label></td>
-<td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-0" type="radio" value="nein"/><span>Nein</span></label></td>
-<td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-0" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
-</tr>
+    <thead>
+        <tr class="table-header-row">
+            <th>Frage</th>
+            <th>Ja</th>
+            <th>Nein</th>
+            <th>n.v.</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- REPARIERT: class="is-category-row" für den mobilen Block-Modus ergänzt -->
+        <tr class="is-category-row">
+            <td class="category-header" colspan="4">1.0 Gesamtmarkt</td>
+        </tr>
+        <tr>
+            <td style="text-align: left;">Entspricht das getragene Schuhwerk aller im Bereich tätigen Personen den Anforderungen der Gefährdungsbeurteilung (fest, im Zehenbereich geschlossen, flach und rutschhemmend)?</td>
+            <td>
+                <!-- REPARIERT: IDs und for-Attribute für barrierefreie Touch-Bedienung auf dem iPad -->
+                <label class="radio-wrap" for="gm-0-ja">
+                    <input id="gm-0-ja" name="1.0 Gesamtmarkt-0" type="radio" value="ja"/>
+                    <span>Ja</span>
+                </label>
+            </td>
+            <td>
+                <label class="radio-wrap" for="gm-0-nein">
+                    <input id="gm-0-nein" name="1.0 Gesamtmarkt-0" type="radio" value="nein"/>
+                    <span>Nein</span>
+                </label>
+            </td>
+            <td>
+                <label class="radio-wrap" for="gm-0-nv">
+                    <input id="gm-0-nv" name="1.0 Gesamtmarkt-0" type="radio" value="nicht_vorhanden"/>
+                    <span>N/V</span>
+                </label>
+            </td>
+        </tr>
 <tr>
 <td style="text-align: left;">Beachten die Mitarbeitenden die Betriebsanweisung für Flurförderfahrzeuge insbes. PSA-Pflicht, Traglasten, Verbot der Personenmitnahme?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-1" type="radio" value="ja"/><span>Ja</span></label></td>
