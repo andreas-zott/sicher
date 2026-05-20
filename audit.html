@@ -17,7 +17,6 @@
     display: flex;
     flex-direction: column;
 }
-
 .logo {
     height: 60px; /* Größe anpassen */
 }
@@ -29,7 +28,6 @@
     margin-bottom: 24px;
     align-items: center;
 }
-
 .page-break {
     page-break-before: always;
     break-before: page;
@@ -37,17 +35,14 @@
 tr {
     page-break-inside: avoid;
 }
-
 .avoid-break {
     page-break-inside: avoid;
     break-inside: avoid;
 }
-
 table, tr, td {
     page-break-inside: avoid;
     break-inside: avoid;
 }
-
 @media print {
     .category:not(.open) {
         display: none !important;
@@ -57,21 +52,18 @@ table, tr, td {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-        
+        }        
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
             background: #f1f5f9;
             color: #1e293b;
             line-height: 1.6;
-        }
-        
+        }        
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-        }
-        
+        }        
         header {
              background: linear-gradient(135deg, #b30000 0%, #ff4d4d 100%);
             color: white;
@@ -79,27 +71,23 @@ table, tr, td {
             border-radius: 12px;
             margin-bottom: 24px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-        
+        }        
         header h1 {
             font-size: 1.75rem;
             font-weight: 700;
             margin-bottom: 4px;
-        }
-        
+        }        
         header p {
             opacity: 0.9;
             font-size: 0.95rem;
-        }
-        
-        /* Dashboard Cards */
+        }      
+   
         .dashboard {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 16px;
             margin-bottom: 24px;
-        }
-        
+        }        
         .card {
             background: white;
             border-radius: 12px;
@@ -111,32 +99,27 @@ table, tr, td {
         .card.open { border-color: #ef4444; }
         .card.progress { border-color: #f59e0b; }
         .card.done { border-color: #22c55e; }
-        .card.total { border-color: #3b82f6; }
-        
+        .card.total { border-color: #3b82f6; }        
         .card-label {
             font-size: 0.875rem;
             color: #64748b;
             margin-bottom: 4px;
-        }
-        
+        }        
         .card-value {
             font-size: 2rem;
             font-weight: 700;
-        }
-        
+        }        
         .card.open .card-value { color: #ef4444; }
         .card.progress .card-value { color: #f59e0b; }
         .card.done .card-value { color: #22c55e; }
-        .card.total .card-value { color: #3b82f6; }
-        
+        .card.total .card-value { color: #3b82f6; }        
           .section {
             background: white;
             border-radius: 12px;
             padding: 24px;
             margin-bottom: 24px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-        
+        }        
         .section-title {
             font-size: 1.25rem;
             font-weight: 600;
@@ -145,47 +128,41 @@ table, tr, td {
             display: flex;
             align-items: center;
             gap: 8px;
-        }
-        
+        }        
         .form-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 16px;
-        }
-        
+        }        
         .form-group {
             display: flex;
             flex-direction: column;
             gap: 6px;
-        }
-        
+        }        
         .form-group label {
             font-size: 0.875rem;
             font-weight: 500;
             color: #475569;
-        }
-        
+        }        
         .form-group input {
             padding: 10px 14px;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
             font-size: 0.95rem;
             transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        
+        }        
         .form-group input:focus {
             outline: none;
             border-color: #3b82f6;
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }        
+        }       
 
         .category {
             border: 1px solid #e2e8f0;
             border-radius: 10px;
             margin-bottom: 12px;
             overflow: hidden;
-        }
-        
+        }        
         .category-header {
             display: flex;
             justify-content: space-between;
@@ -195,66 +172,54 @@ table, tr, td {
             cursor: pointer;
             user-select: none;
             transition: background 0.2s;
-        }
-        
+        }        
         .category-header:hover {
             background: #f1f5f9;
-        }
-        
+        }        
         .category-title {
             font-weight: 600;
             color: #1e293b;
             display: flex;
             align-items: center;
             gap: 10px;
-        }
-        
+        }        
         .category-toggle {
             font-size: 1.25rem;
             color: #64748b;
             transition: transform 0.2s;
-        }
-        
+        }        
         .category.open .category-toggle {
             transform: rotate(180deg);
-        }
-        
+        }        
         .category-stats {
             display: flex;
             gap: 12px;
             font-size: 0.8rem;
-        }
-        
+        }        
         .stat {
             padding: 3px 10px;
             border-radius: 20px;
             font-weight: 500;
-        }
-        
+        }        
         .stat.answered {
             background: #dbeafe;
             color: #1e40af;
-        }
-        
+        }        
         .stat.issues {
             background: #fee2e2;
             color: #dc2626;
-        }
-        
+        }        
         .category-content {
             display: none;
             padding: 0;
-        }
-        
+        }        
         .category.open .category-content {
             display: block;
-        }        
-    
+        } 
         .question-table {
             width: 100%;
             border-collapse: collapse;
-        }
-        
+        }        
         .question-table th {
             background: #f1f5f9;
             padding: 12px 16px;
@@ -263,33 +228,27 @@ table, tr, td {
             font-size: 0.85rem;
             color: #475569;
             border-bottom: 1px solid #e2e8f0;
-        }
-        
+        }        
         .question-table td {
             padding: 12px 16px;
             border-bottom: 1px solid #f1f5f9;
             vertical-align: middle;
-        }
-        
+        }        
         .question-table tr:hover {
             background: #fafafa;
-        }
-        
+        }        
         .question-number {
             font-weight: 600;
             color: #64748b;
             width: 50px;
-        }
-        
+        }        
         .question-text {
             color: #1e293b;
-        }
-        
+        }        
         .radio-group {
             display: flex;
             gap: 16px;
-        }
-        
+        }        
         .radio-label {
             display: flex;
             align-items: center;
@@ -299,27 +258,22 @@ table, tr, td {
             border-radius: 6px;
             transition: background 0.2s;
             font-size: 0.9rem;
-        }
-        
+        }        
         .radio-label:hover {
             background: #f1f5f9;
-        }
-        
+        }        
         .radio-label input {
             accent-color: #3b82f6;
             width: 16px;
             height: 16px;
-        }
-        
+        }        
         .radio-label.yes { color: #16a34a; }
         .radio-label.no { color: #dc2626; }
-        .radio-label.na { color: #64748b; }
-        
+        .radio-label.na { color: #64748b; }        
         .measures-table {
             width: 100%;
             border-collapse: collapse;
-        }
-        
+        }        
         .measures-table th {
             background: #fef3c7;
             padding: 12px 14px;
@@ -328,14 +282,12 @@ table, tr, td {
             font-size: 0.85rem;
             color: #92400e;
             border-bottom: 2px solid #fcd34d;
-        }
-        
+        }        
         .measures-table td {
             padding: 10px 14px;
             border-bottom: 1px solid #f1f5f9;
             vertical-align: top;
-        }
-        
+        }        
         .measures-table input,
         .measures-table select {
             width: 100%;
@@ -343,58 +295,49 @@ table, tr, td {
             border: 1px solid #e2e8f0;
             border-radius: 6px;
             font-size: 0.9rem;
-        }
-        
+        }        
         .measures-table input:focus,
         .measures-table select:focus {
             outline: none;
             border-color: #3b82f6;
-        }
-        
+        }        
         .status-select {
             font-weight: 500;
-        }
-        
+        }        
         .status-select.open { color: #dc2626; background: #fef2f2; }
         .status-select.progress { color: #d97706; background: #fffbeb; }
-        .status-select.done { color: #16a34a; background: #f0fdf4; }
-        
+        .status-select.done { color: #16a34a; background: #f0fdf4; }        
         .no-measures {
             text-align: center;
             padding: 40px;
             color: #64748b;
-        }        
+        } 
 
         .signature-section {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 24px;
-        }
-        
+        }        
         .signature-box {
             display: flex;
             flex-direction: column;
             gap: 8px;
-        }
-        
+        }        
         .signature-box label {
             font-weight: 500;
             color: #475569;
-        }
-        
+        }        
         .signature-canvas {
             border: 2px dashed #cbd5e1;
             border-radius: 8px;
             background: #fafafa;
             cursor: crosshair;
             touch-action: none;
-        }
-        
+        }        
         .signature-actions {
             display: flex;
             gap: 8px;
-        }
-        
+        }        
         .btn {
             display: inline-flex;
             align-items: center;
@@ -406,54 +349,43 @@ table, tr, td {
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s;
-        }
-        
+        }        
         .btn-primary {
             background: #3b82f6;
             color: white;
-        }
-        
+        }        
         .btn-primary:hover {
             background: #2563eb;
-        }
-        
+        }        
         .btn-success {
             background: #22c55e;
             color: white;
-        }
-        
+        }        
         .btn-success:hover {
             background: #16a34a;
-        }
-        
+        }        
         .btn-secondary {
             background: #e2e8f0;
             color: #475569;
-        }
-        
+        }        
         .btn-secondary:hover {
             background: #cbd5e1;
-        }
-        
+        }        
         .btn-danger {
             background: #fee2e2;
             color: #dc2626;
-        }
-        
+        }        
         .btn-danger:hover {
             background: #fecaca;
-        }
-        
+        }        
         .btn-small {
             padding: 6px 12px;
             font-size: 0.85rem;
-        }        
-      
+        }      
         
         .file-input {
             display: none;
-        }
-        
+        }        
         .toast {
             position: fixed;
             bottom: 24px;
@@ -467,47 +399,37 @@ table, tr, td {
             opacity: 0;
             transition: all 0.3s;
             z-index: 1000;
-        }
-        
+        }        
         .toast.show {
             transform: translateY(0);
             opacity: 1;
-        }
-        
+        }        
         .toast.success {
             background: #16a34a;
-        }
-        
+        }        
         .toast.error {
             background: #dc2626;
-        }
-        
+        }        
         @media (max-width: 768px) {
             .container {
                 padding: 12px;
-            }
-            
+            }            
             header {
                 padding: 16px;
-            }
-            
+            }            
             header h1 {
                 font-size: 1.25rem;
-            }
-            
+            }            
             .section {
                 padding: 16px;
-            }
-            
+            }            
             .radio-group {
                 flex-direction: column;
                 gap: 8px;
-            }
-            
+            }            
             .action-bar {
                 flex-direction: column;
-            }
-            
+            }            
             .btn {
                 width: 100%;
                 justify-content: center;
@@ -521,16 +443,13 @@ table, tr, td {
     .footer,         /* falls Klasse */
     #footer {        /* falls ID */
         display: none !important;
-    }
-    
+    }    
     .category {
         break-inside: avoid;
-    }
-    
+    }    
     .category.open .category-content {
         display: block !important;
-    }
-    
+    }    
     .handlungsanweisung-box {
         display: block !important;
         page-break-inside: avoid;
@@ -542,7 +461,6 @@ table, tr, td {
         print-color-adjust: exact;
     }
 }
-
         .handlungsanweisung-box {
             background: white;
             border-radius: 12px;
@@ -551,82 +469,67 @@ table, tr, td {
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             border: 1px solid #e2e8f0;
             border-left: 4px solid #3b82f6;
-        }
-        
+        }        
         .handlungsanweisung-box h2 {
             font-size: 1.1rem;
             font-weight: 600;
             color: #1e40af;
             margin-bottom: 12px;
             margin-top: 16px;
-        }
-        
+        }        
         .handlungsanweisung-box h2:first-child {
             margin-top: 0;
-        }
-        
+        }        
         .handlungsanweisung-box strong {
             color: #1e293b;
             font-weight: 600;
-        }
-        
+        }        
         .handlungsanweisung-box p {
             color: #475569;
             margin-bottom: 12px;
             line-height: 1.6;
-        }
+        }  
 
-    
-
-        /* iPhone / Mobile Optimierungen */
-        @media (max-width: 768px) {
+   
+       @media (max-width: 768px) {
             body {
                 font-size: 16px;
                 overflow-x: hidden;
             }
-
             .container {
                 width: 100%;
                 max-width: 100%;
                 padding: 10px;
             }
-
             .header {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 12px;
             }
-
             .dashboard {
                 grid-template-columns: 1fr 1fr;
                 gap: 10px;
             }
-
             .card {
                 padding: 14px;
             }
-
             .card-value {
                 font-size: 1.5rem;
             }
-
             .form-grid,
             .signature-section {
                 grid-template-columns: 1fr;
             }
-
             .action-bar {
                 display: grid;
                 grid-template-columns: 1fr;
                 gap: 10px;
             }
-
             .btn {
                 width: 100%;
                 min-height: 48px;
                 font-size: 1rem;
             }
-
             .question-table,
             .question-table thead,
             .question-table tbody,
@@ -636,38 +539,31 @@ table, tr, td {
                 display: block;
                 width: 100%;
             }
-
             .question-table thead {
                 display: none;
             }
-
             .question-table tr {
                 border-bottom: 1px solid #e2e8f0;
                 padding: 12px 0;
             }
-
             .question-table td {
                 border: none;
                 padding: 6px 0;
             }
-
             .question-number {
                 font-size: 0.9rem;
                 margin-bottom: 4px;
             }
-
             .question-text {
                 font-size: 0.95rem;
                 margin-bottom: 10px;
             }
-
             .radio-group {
                 flex-direction: row;
                 justify-content: space-between;
                 gap: 6px;
                 flex-wrap: wrap;
             }
-
             .radio-label {
                 flex: 1;
                 justify-content: center;
@@ -676,7 +572,6 @@ table, tr, td {
                 border: 1px solid #e2e8f0;
                 background: #f8fafc;
             }
-
             .measures-table,
             .measures-table thead,
             .measures-table tbody,
@@ -686,11 +581,9 @@ table, tr, td {
                 display: block;
                 width: 100%;
             }
-
             .measures-table thead {
                 display: none;
             }
-
             .measures-table tr {
                 margin-bottom: 14px;
                 border: 1px solid #e2e8f0;
@@ -698,23 +591,19 @@ table, tr, td {
                 padding: 10px;
                 background: #fff;
             }
-
             .measures-table td {
                 border: none;
                 padding: 6px 0;
             }
-
             .signature-canvas {
                 width: 100%;
                 height: 180px;
             }
-
             input,
             select,
             textarea {
                 font-size: 16px !important;
             }
-
             .toast {
                 left: 10px;
                 right: 10px;
@@ -722,9 +611,6 @@ table, tr, td {
                 width: auto;
             }
         }
-
-
-/* ===== iPad Optimierte Action Bar ===== */
 
 .sticky-action-bar {
     position: sticky;
@@ -739,19 +625,15 @@ table, tr, td {
     border-radius: 18px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.12);
 }
-
 .menu-dropdown {
     position: relative;
 }
-
 .menu-dropdown summary {
     list-style: none;
 }
-
 .menu-dropdown summary::-webkit-details-marker {
     display: none;
 }
-
 .menu-content {
     position: absolute;
     right: 0;
@@ -765,23 +647,19 @@ table, tr, td {
     border-radius: 16px;
     box-shadow: 0 12px 30px rgba(0,0,0,0.18);
 }
-
 .menu-content .btn {
     width: 100%;
     justify-content: flex-start;
 }
-
 @media (max-width: 768px) {
 
     .sticky-action-bar {
         grid-template-columns: 1fr 1fr;
     }
-
     .menu-content {
         width: 240px;
     }
 }
-
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -794,9 +672,8 @@ table, tr, td {
         <p>Checkliste und Maßnahmenplan</p>
     </div>
      <div class="logo-text">...</div>
-</header>       
-    
-        <div class="dashboard">
+</header>    
+    <div class="dashboard">
             <div class="card open">
                 <div class="card-label">Offen</div>
                 <div class="card-value" id="dashOpen">0</div>
@@ -814,7 +691,6 @@ table, tr, td {
                 <div class="card-value" id="dashTotal">0</div>
             </div>
         </div>
-
 <div class="handlungsanweisung-box">
 <h2>Anleitung und Nutzungshinweis:</h2>
 <strong>Dieses Audit-Tool dient der systematischen Überprüfung von Arbeitssicherheit und Gesundheitsschutz gemäß § 5 ArbSchG.
@@ -841,58 +717,44 @@ Auf dieser Grundlage wird eine Maßnahmenliste erstellt, die alle identifizierte
 Bei Bedarf werden externe Fachfirmen mit der Mängelbeseitigung beauftragt.
 Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung der Wirksamkeit.  
     </p>
-</div>      
- 
-        
-<div class="action-bar sticky-action-bar">
+</div>  
+    <div class="action-bar sticky-action-bar">
 
     <button class="btn btn-primary" onclick="saveToStorage()">
         💾 Speichern
     </button>
-
     <button class="btn btn-secondary" onclick="generateAndSharePDF()">
         📤 PDF teilen
     </button>
-
     <button class="btn btn-success" onclick="openMaßnahmenplan()">
         ⚠ Maßnahmenplan
     </button>
-
     <details class="menu-dropdown">
         <summary class="btn btn-secondary">☰ Mehr</summary>
-
         <div class="menu-content">
-
             <button class="btn btn-primary" onclick="downloadJson()">
                 ⬇️ JSON lokal speichern
             </button>
-
             <button class="btn btn-success" onclick="exportJson()">
                 💾 Direkt auf NAS speichern
             </button>
-
             <button class="btn btn-secondary"
                     onclick="document.getElementById('fileInput').click()">
                 📂 JSON laden
             </button>
-
             <button class="btn btn-primary" onclick="exportPdf()">
                 🖨️ Drucken
             </button>
-
             <button class="btn btn-danger" onclick="resetAll()">
                 🗑️ Zurücksetzen
             </button>
-
         </div>
     </details>
-
     <input type="file"
            id="fileInput"
            class="file-input"
            accept=".json"
            onchange="importJson(event)">
-
 </div>
 <div class="section">
             <h2 class="section-title">
@@ -920,25 +782,22 @@ Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung d
                     <input type="text" id="sifa" placeholder="Name der SiFa">
                 </div>
             </div>
-        </div>       
-
-        <div class="section">
+        </div> 
+ <div class="section">
             <h2 class="section-title">
                 <span>&#9989;</span> Checkliste
             </h2>
             <div id="checklistContainer"></div>
-        </div>        
-
-        <div class="section">
+        </div> 
+<div class="section">
             <h2 class="section-title">
                 <span>&#9888;</span> Maßnahmenplan
             </h2>
             <div id="measuresContainer">
                 <p class="no-measures">Keine Maßnahmen erforderlich. Wählen Sie „Nein“ bei Prüfpunkten, um Maßnahmen hinzuzufügen.</p>
             </div>
-        </div>        
-
-        <div class="section">
+        </div>
+ <div class="section">
             <h2 class="section-title">
                 <span>&#9999;</span> Unterschriften
             </h2>
@@ -2534,12 +2393,10 @@ async function generateAndSharePDF() {
     }
     if (sigMarktleitungCanvas) {
         sigMarktleitungDataURL = sigMarktleitungCanvas.toDataURL('image/png');
-    }
-    
+    }    
     try {
         const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-        
+        const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });        
         const pageWidth = 210;
         const pageHeight = 297;
         const margin = 15;
@@ -2573,23 +2430,19 @@ async function generateAndSharePDF() {
                 pdf.setTextColor(100);
                 pdf.text(`Seite ${i} von ${totalPages}`, pageWidth / 2, pageHeight - 8, { align: 'center' });
             }
-        }        
+        }       
        
         // Title
         pdf.setFontSize(18);
         pdf.setTextColor(30, 64, 175);
-        pdf.text('Arbeitssicherheits-Audit', margin, currentY + 8);
-        
+        pdf.text('Arbeitssicherheits-Audit', margin, currentY + 8);        
         pdf.setFontSize(10);
         pdf.setTextColor(59, 130, 246);
-        pdf.text(formattedDate, pageWidth - margin, currentY + 8, { align: 'right' });
-        
+        pdf.text(formattedDate, pageWidth - margin, currentY + 8, { align: 'right' });        
         pdf.setDrawColor(59, 130, 246);
         pdf.setLineWidth(0.8);
-        pdf.line(margin, currentY + 12, pageWidth - margin, currentY + 12);
-        
-        currentY += 22;
-        
+        pdf.line(margin, currentY + 12, pageWidth - margin, currentY + 12);        
+        currentY += 22;        
         // Form info
         pdf.setFontSize(9);
         pdf.setTextColor(0);
@@ -2600,47 +2453,39 @@ async function generateAndSharePDF() {
         pdf.text(`Teilnehmer: ${teilnehmer}`, margin, currentY);
         currentY += 5;
         pdf.text(`SiFa: ${sifa}`, margin, currentY);
-        currentY += 12;
-        
+        currentY += 12;       
        
         // Box-Rahmen zeichnen
         pdf.setDrawColor(59, 130, 246);
         pdf.setLineWidth(0.5);
-        pdf.setFillColor(255, 255, 255);
-        
+        pdf.setFillColor(255, 255, 255);        
         // Linker blauer Balken
         pdf.setFillColor(59, 130, 246);
-        pdf.rect(margin, currentY, 1.5, 95, 'F');
-        
+        pdf.rect(margin, currentY, 1.5, 95, 'F');        
         // Box-Umrandung
         pdf.setDrawColor(226, 232, 240);
         pdf.setFillColor(255, 255, 255);
-        pdf.rect(margin + 1.5, currentY, contentWidth - 1.5, 95, 'FD');
-        
+        pdf.rect(margin + 1.5, currentY, contentWidth - 1.5, 95, 'FD');        
         let boxY = currentY + 5;
         const boxMargin = margin + 5;
-        const boxWidth = contentWidth - 8;
-        
+        const boxWidth = contentWidth - 8;        
         // Titel: Anleitung und Nutzungshinweis
         pdf.setFontSize(10);
         pdf.setTextColor(30, 64, 175);
         pdf.setFont(undefined, 'bold');
         pdf.text('Anleitung und Nutzungshinweis:', boxMargin, boxY);
-        boxY += 5;
-        
+        boxY += 5;        
         pdf.setFontSize(7);
         pdf.setTextColor(30, 41, 59);
-        const introText = 'Dieses Audit-Tool dient der systematischen Ueberprüfung von Arbeitssicherheit und Gesundheitsschutz gemaess Paragraph 5 ArbSchG. Ziel ist die fruehzeitige Identifikation von Gefaehrdungen sowie die konsequente Ableitung und Nachverfolgung erforderlicher Maßnahmen.';
+        const introText = 'Dieses Audit-Tool dient der systematischen Überprüfung von Arbeitssicherheit und Gesundheitsschutz gemäß Paragraph 5 ArbSchG. Ziel ist die frühzeitige Identifikation von Gefährdungen sowie die konsequente Ableitung und Nachverfolgung erforderlicher Maßnahmen.';
         const introLines = pdf.splitTextToSize(introText, boxWidth);
         pdf.text(introLines, boxMargin, boxY);
-        boxY += introLines.length * 3 + 4;
-        
+        boxY += introLines.length * 3 + 4;        
         // Handlungsanweisung Titel
         pdf.setFontSize(9);
         pdf.setTextColor(30, 64, 175);
         pdf.text('Handlungsanweisung:', boxMargin, boxY);
-        boxY += 5;
-        
+        boxY += 5;        
         // Bewertung & Handlungsbedarf
         pdf.setFontSize(7);
         pdf.setTextColor(30, 41, 59);
@@ -2652,8 +2497,7 @@ async function generateAndSharePDF() {
         const bewertungText = 'Die Bewertung erfolgt anhand definierter Prüfkriterien. Wird eine Frage mit "Nein" beantwortet, liegt eine Abweichung vom Schutzziel vor. In diesem Fall wird automatisch eine Massnahme generiert, deren Umsetzung verbindlich sicherzustellen ist.';
         const bewertungLines = pdf.splitTextToSize(bewertungText, boxWidth);
         pdf.text(bewertungLines, boxMargin, boxY);
-        boxY += bewertungLines.length * 3 + 3;
-        
+        boxY += bewertungLines.length * 3 + 3;        
         // Verantwortung
         pdf.setTextColor(30, 41, 59);
         pdf.setFont(undefined, 'bold');
@@ -2661,11 +2505,10 @@ async function generateAndSharePDF() {
         pdf.setFont(undefined, 'normal');
         boxY += 3;
         pdf.setTextColor(71, 85, 105);
-        const verantwortungText = 'Die Gesamtverantwortung für die Durchfuehrung der Prüfung sowie die Beseitigung festgestellter Maengel liegt bei der Marktleitung. Die Aufsichts- und Kontrollpflicht verbleibt bei der Marktleitung.';
+        const verantwortungText = 'Die Gesamtverantwortung für die Durchführung der Prüfung sowie die Beseitigung festgestellter Mängel liegt bei der Marktleitung. Die Aufsichts- und Kontrollpflicht verbleibt bei der Marktleitung.';
         const verantwortungLines = pdf.splitTextToSize(verantwortungText, boxWidth);
         pdf.text(verantwortungLines, boxMargin, boxY);
-        boxY += verantwortungLines.length * 3 + 3;
-        
+        boxY += verantwortungLines.length * 3 + 3;        
         // Dokumentation
         pdf.setTextColor(30, 41, 59);
         pdf.setFont(undefined, 'bold');
@@ -2687,13 +2530,10 @@ async function generateAndSharePDF() {
         pdf.setTextColor(71, 85, 105);
         const wirksamkeitText = 'Die Marktleitung prüft die Umsetzung der festgelegten Maßnahmen zeitnah. Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Ueberprüfung der Wirksamkeit.';
         const wirksamkeitLines = pdf.splitTextToSize(wirksamkeitText, boxWidth);
-        pdf.text(wirksamkeitLines, boxMargin, boxY);
-        
-        currentY += 100;
-        
+        pdf.text(wirksamkeitLines, boxMargin, boxY);        
+        currentY += 100;        
         // ===== CATEGORY PAGES - Jede Kategorie auf neuer Seite =====
-        const colWidths = [contentWidth * 0.7, contentWidth * 0.1, contentWidth * 0.1, contentWidth * 0.1];
-        
+        const colWidths = [contentWidth * 0.7, contentWidth * 0.1, contentWidth * 0.1, contentWidth * 0.1];        
         // Zähler für Antworten
         let totalJa = 0;
         let totalNein = 0;
@@ -2818,7 +2658,7 @@ async function generateAndSharePDF() {
                 currentY += rowHeight;
                 globalQuestionIndex++;
             });
-        });        
+        });      
      
         pdf.addPage();
         addMiniHeader();
@@ -2854,7 +2694,7 @@ async function generateAndSharePDF() {
                     pdf.addPage();
                     addMiniHeader();
                     currentY = 18;
-                                        // Repeat header
+               // Repeat header
                     pdf.setFillColor(254, 243, 199);
                     pdf.rect(margin, currentY, contentWidth, 7, 'F');
                     pdf.setFontSize(7);
@@ -2877,8 +2717,7 @@ async function generateAndSharePDF() {
                 measureColWidths.forEach(w => {
                     pdf.rect(xPos, currentY, w, rowHeight);
                     xPos += w;
-                });
-                
+                });                
                 // Content
                 pdf.setTextColor(0);
                 pdf.setFontSize(8);
@@ -2899,8 +2738,7 @@ async function generateAndSharePDF() {
                 currentY += rowHeight;
                 measureIndex++;
             }
-        });
-        
+        });        
         if (!hasContent) {
             pdf.setFillColor(220, 252, 231);
             pdf.rect(margin, currentY, contentWidth, 15, 'F');
@@ -2910,7 +2748,7 @@ async function generateAndSharePDF() {
             pdf.setFontSize(10);
             pdf.setFont(undefined, 'bold');
             pdf.text('Keine Maßnahmen erforderlich - alle Prüfpunkte bestanden.', pageWidth / 2, currentY + 9, { align: 'center' });
-        }       
+        }      
 
         pdf.addPage();
         addMiniHeader();
@@ -2941,15 +2779,13 @@ async function generateAndSharePDF() {
             pdf.setTextColor(150);
             pdf.setFontSize(9);
             pdf.text('Keine Unterschrift vorhanden', margin + (contentWidth / 4) - 5, currentY + 20, { align: 'center' });
-        }
-        
+        }        
         // Marktleitung signature
         pdf.setFontSize(10);
         pdf.setTextColor(33, 37, 41);
         pdf.setFont(undefined, 'bold');
         pdf.text('Marktleitung', margin + contentWidth / 2 + 10, currentY - 5);
-        pdf.setFont(undefined, 'normal');
-        
+        pdf.setFont(undefined, 'normal');        
         pdf.setFillColor(250, 250, 250);
         pdf.setDrawColor(203, 213, 225);
         pdf.roundedRect(margin + contentWidth / 2 + 10, currentY, contentWidth / 2 - 10, 40, 3, 3, 'FD');        
@@ -2965,8 +2801,7 @@ async function generateAndSharePDF() {
             pdf.setTextColor(150);
             pdf.setFontSize(9);
             pdf.text('Keine Unterschrift vorhanden', margin + contentWidth * 3 / 4 + 5, currentY + 20, { align: 'center' });
-        }
-        
+        }        
         currentY += 55;        
               pdf.setFontSize(12);
         pdf.setTextColor(33, 37, 41);
@@ -3011,8 +2846,7 @@ async function generateAndSharePDF() {
         pdf.text(`${totalNV}`, margin + colWidth * 2 + colWidth/2, summaryStartY + 10, { align: 'center' });
         pdf.setFontSize(8);
         pdf.setFont(undefined, 'normal');
-        pdf.text('N.V.', margin + colWidth * 2 + colWidth/2, summaryStartY + 17, { align: 'center' });
-        
+        pdf.text('N.V.', margin + colWidth * 2 + colWidth/2, summaryStartY + 17, { align: 'center' });        
         // Gesamt
         pdf.setFillColor(255, 255, 255);
         pdf.setDrawColor(59, 130, 246);
@@ -3023,10 +2857,8 @@ async function generateAndSharePDF() {
         pdf.text(`${totalQuestions}`, margin + colWidth * 3 + colWidth/2, summaryStartY + 10, { align: 'center' });
         pdf.setFontSize(8);
         pdf.setFont(undefined, 'normal');
-        pdf.text('Gesamt', margin + colWidth * 3 + colWidth/2, summaryStartY + 17, { align: 'center' });
-        
-        currentY += 45;
-        
+        pdf.text('Gesamt', margin + colWidth * 3 + colWidth/2, summaryStartY + 17, { align: 'center' });        
+        currentY += 45;        
         // Footer note
         pdf.setDrawColor(200);
         pdf.line(margin, currentY, pageWidth - margin, currentY);
@@ -3039,11 +2871,9 @@ async function generateAndSharePDF() {
         );
         pdf.text(footerNote, margin, currentY);
         currentY += footerNote.length * 3 + 5;
-        pdf.text(`Erstellt am: ${formattedDate} | Markt: ${markt} | SiFa: ${sifa}`, margin, currentY);
-        
+        pdf.text(`Erstellt am: ${formattedDate} | Markt: ${markt} | SiFa: ${sifa}`, margin, currentY);        
         // Add page numbers to all pages
-        addPageNumbers();
-        
+        addPageNumbers();        
         // Generate blob and share/download
         const blob = pdf.output('blob');
         const file = new File([blob], filename, { type: 'application/pdf' });
@@ -3061,8 +2891,7 @@ async function generateAndSharePDF() {
             link.click();
             URL.revokeObjectURL(link.href);
             alert('PDF wurde heruntergeladen.');
-        }
-        
+        }        
     } catch (error) {
         console.error('Fehler bei PDF-Generierung:', error);
         alert('Fehler bei der PDF-Erstellung: ' + error.message);
@@ -3070,11 +2899,9 @@ async function generateAndSharePDF() {
         document.getElementById('pdf-loading')?.remove();
     }
 }
-
 function weiterZuFotos() {
   window.open('foto.html', '_blank');
 }
-
 </script>
         <div class="action-bar">
                       <button class="btn btn-danger" onclick="resetAll()">
@@ -3111,6 +2938,5 @@ function weiterZuFotos() {
 </p>
 </div><div style="font-size:11px; color:#777; margin-top:8px;">Stand: Mai 2026</div>
 </footer>
-
 </body>
 </html>
