@@ -20,6 +20,7 @@
 .logo {
     height: 60px; /* Größe anpassen */
 }
+
 .action-bar {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 300px));
@@ -612,19 +613,45 @@ table, tr, td {
             }
         }
 
-.sticky-action-bar {
-    position: sticky;
-    bottom: 10px;
-    z-index: 999;
+/* GEMEINSAME STYLES (Hintergrund, Rahmen, Abstände der Buttons) */
+.action-bar {
+    box-sizing: border-box;                
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    
+    /* DYNAMISCHER REIHENUMBRUCH: Buttons brechen sauber ab einer Breite von 150px um */
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
+    
     gap: 10px;
-    background: rgba(255,255,255,0.96);
+    background: rgba(255, 255, 255, 0.96);
     backdrop-filter: blur(10px);
     padding: 12px;
     border-radius: 18px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    
+    max-width: 1100px;                     
+    width: 95%;                            
+    margin: 0 auto;                        
 }
+
+/* OBERE ACTION BAR (Klebt unten am Bildschirm, solange man scrollt) */
+.sticky-action-bar {
+    position: sticky;
+    bottom: 15px;          
+    z-index: 999;
+    margin-top: 40px;      
+    margin-bottom: 40px;   
+}
+
+/* UNTERE ACTION BAR (Sitzt fest und zentriert ganz am Ende der Seite) */
+.bottom-action-bar {
+    position: static;      
+    margin-top: 50px;      
+    margin-bottom: 30px;   
+}
+
+
+
+
 .menu-dropdown {
     position: relative;
 }
@@ -717,12 +744,16 @@ Auf dieser Grundlage wird eine Maßnahmenliste erstellt, die alle identifizierte
 Bei Bedarf werden externe Fachfirmen mit der Mängelbeseitigung beauftragt.
 Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung der Wirksamkeit.  
     </p>
-</div>  
+</div>
+
+
+  
     <div class="action-bar sticky-action-bar">
 
-    <button class="btn btn-primary" onclick="saveToStorage()">
-        💾 Speichern
-    </button>
+ </button>
+            <button class="btn btn-danger" onclick="resetAll()">
+                🗑️ Zurücksetzen
+            </button>    
     <button class="btn btn-secondary" onclick="generateAndSharePDF()">
         📤 PDF teilen
     </button>
@@ -745,8 +776,13 @@ Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung d
             <button class="btn btn-primary" onclick="exportPdf()">
                 🖨️ Drucken
             </button>
-            <button class="btn btn-danger" onclick="resetAll()">
-                🗑️ Zurücksetzen
+           </button>
+    <button class="btn btn-primary" onclick="saveToStorage()">
+        💾 Speichern
+    </button>
+<button class="btn btn-primary"
+                    onclick="weiterZuFotos()">
+                📸 Zur Foto-Seite
             </button>
         </div>
     </details>
@@ -798,6 +834,12 @@ Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung d
             </div>
         </div>
  <div class="section">
+
+
+
+
+
+
             <h2 class="section-title">
                 <span>&#9999;</span> Unterschriften
             </h2>
@@ -2901,21 +2943,57 @@ async function generateAndSharePDF() {
 function weiterZuFotos() {
   window.open('foto.html', '_blank');
 }
-</script>
-        <div class="action-bar">
-                      <button class="btn btn-danger" onclick="resetAll()">
-                <span>&#128465;</span> Zurücksetzen
+</script>     
+
+<div class="action-bar bottom-action-bar">
+
+ <button class="btn btn-danger"
+                    onclick="formularZuruecksetzen()">
+                🗑️ Zurücksetzen
+            </button>    
+
+    <button class="btn btn-secondary" onclick="generateAndSharePDF()">
+        📤 PDF teilen
+    </button><button class="btn btn-success" onclick="openMaßnahmenplan()">
+        ⚠ Maßnahmenplan
+    </button>
+
+     <details class="menu-dropdown">
+        <summary class="btn btn-secondary">☰ Mehr</summary>
+        <div class="menu-content">
+            <button class="btn btn-primary" onclick="downloadJson()">
+                ⬇️ JSON lokal speichern
             </button>
- <button class="btn btn-secondary" onclick="generateAndSharePDF()">
-                <span></span>📤 PDF teilen (iPad)
+            <button class="btn btn-success" onclick="exportJson()">
+                💾 Direkt auf NAS speichern
             </button>
-  <button class="btn btn-danger" onclick="weiterZuFotos()">
-                <span>📸</span>Zur Foto-Seite
+            <button class="btn btn-secondary"
+                    onclick="document.getElementById('fileInput').click()">
+                📂 JSON laden
             </button>
-            <button class="btn btn-success" onclick="openMaßnahmenplan()">
-                <span>⚠</span> Maßnahmenplan öffnen
+            <button class="btn btn-primary" onclick="exportPdf()">
+                🖨️ Drucken
             </button>
-        </div>
+           </button>
+    <button class="btn btn-primary" onclick="saveToStorage()">
+        💾 Speichern
+    </button>
+<button class="btn btn-primary"
+                    onclick="weiterZuFotos()">
+                📸 Zur Foto-Seite
+            </button>
+</div>
+</details>
+
+  <input type="file"
+           id="fileInput"
+           class="file-input"
+           accept=".json"
+           onchange="importJson(event)">
+
+</div>
+
+
 <footer style="
   text-align: center;
   margin-top: 40px;
