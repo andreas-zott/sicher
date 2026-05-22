@@ -30,7 +30,7 @@
     line-height: 1.5;
 }
 
-/* OPTIMIERT: Betrifft jetzt nur noch das spezifische Unterschriften-Canvas */
+
 #signature-pad { 
     border: 2px solid #C62828 !important; 
     border-radius: 12px; 
@@ -51,7 +51,7 @@ tr:has(.category-header) {
   box-shadow: none !important;
 }
 
-/* REPARIERT: Margins/Paddings auf das td-Element verlagert, da tr diese ignoriert */
+
 .category-header td,
 tr:has(.category-header) td {
   background: #B71C1C !important;
@@ -97,7 +97,7 @@ input[type="radio"][value="nicht_vorhanden"]:checked {
   border-color: #999;
 }
 
-/* Kompakter Modus nur für PDF-Export */
+
 /* OPTIMIERT: Visuelle Hierarchie für Überschriften und Texte im Kompaktmodus beibehalten */
 .pdf-compact p, 
 .pdf-compact label, 
@@ -157,17 +157,17 @@ input[type="radio"][value="nicht_vorhanden"]:checked {
   input[type="text"], input[type="date"] {
     font-size: 9pt !important;
   }  
-  /* Verhindert das Aufteilen von Zeilen beim Seitenumbruch */
+
   tr, td, th {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
   }
-  /* Hinweis: Hier wird im echten CSS der @media print Block geschlossen */
+
 #maßnahmen-tabelle tr {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
 }  
-/* Besseres Handling von leeren Zeilen im Ausdruck */
+
 #maßnahmen-tabelle tr.empty-row {
     display: none !important;
 }
@@ -179,7 +179,7 @@ input[type="radio"][value="nicht_vorhanden"]:checked {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
 }
-} /* Schließt den @media print Block korrekt ab */
+} 
 
 /* Spezifische Stile für den PDF-Export - per JavaScript zugewiesen */
 .pdf-export-mode .category-page {
@@ -271,7 +271,7 @@ button.btn-medium {
   box-sizing: border-box; /* Garantiert saubere Breitenberechnung inklusive Padding */
 }
 
-/* REPARIERT: Starre Breiten durch flüssige max-width-Regeln ersetzt für Smartphones */
+
 button.btn-large {
   width: 100%;
   max-width: 600px;
@@ -320,7 +320,7 @@ header h1 {
 
 table {
   width: 100%;
-  /* OPTIMIERT: Ermöglicht abgerundete Ecken an Tabellenköpfen, ohne die Rahmen zu zerstören */
+  
   border-collapse: separate;
   border-spacing: 0;
   margin-bottom: 20px;
@@ -335,18 +335,19 @@ table {
   color: #555;
   text-align: center;
 }
+
 /* ===== iPad Optimierte Action Bar ===== */
 
 .sticky-action-bar {
     /* Zuerst unsichtbar */
     display: none;
     
-    /* REPARIERT: Fixiert die Leiste am unteren Rand des iPad-Bildschirms */
+   
     position: fixed;
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    width: calc(100% - 40px);
+    width: calc(100% - 10px);
     max-width: 600px;
     /* Hoher z-index garantiert, dass keine Tabellen durchschimmern */
     z-index: 9999; 
@@ -379,7 +380,7 @@ table {
     cursor: pointer;
 }
 
-/* Verhindert den kleinen Standard-Pfeil in Safari auf dem iPad */
+
 .menu-dropdown summary::-webkit-details-marker {
     display: none;
 }
@@ -416,8 +417,7 @@ table {
     }
 }
 
-/* Kopfzeile komplett abgerundet (oben + unten) */
-/* WICHTIG: Damit diese Rundung greift, muss die übergeordnete Tabelle 'border-collapse: separate;' besitzen! */
+
 .table-header-row th:first-child {
   border-top-left-radius: 14px;
   border-bottom-left-radius: 14px;
@@ -465,7 +465,7 @@ input[type="text"], input[type="date"] {
   border-radius: 4px;
 }
 
-/* OPTIMIERT: Färbt im Desktop-Modus die erste Zelle, ist aber vorbereitet für den mobilen Block-Modus */
+
 .highlight-ja td:first-child,
 .highlight-ja td {
   background-color: #d4edda !important;
@@ -479,13 +479,12 @@ input[type="text"], input[type="date"] {
   background-color: #e2e3e5 !important;
 }
 
-/* Verhindert, dass im mobilen Block-Modus die Radio-Buttons den grünen/roten Hintergrund überschreiben */
+
 @media screen and (max-width: 768px) {
   .highlight-ja td, .highlight-nein td, .highlight-nicht td {
     background-color: inherit !important;
   }
 }
-/* Radio-Buttons vertikal mit Text darunter */
 .radio-wrap {
     display: flex;
     flex-direction: column;
@@ -497,7 +496,7 @@ input[type="text"], input[type="date"] {
     margin-bottom: 2px;
 }
 
-/* Improved print readability */
+
 @media print {
   body, table, td, th {
     font-size: 9pt !important;
@@ -564,8 +563,7 @@ input[type="text"], input[type="date"] {
     border: 1px solid #ddd;
   }
 
-  /* OPTIMIERT: Falls :has() fehlschlägt, geben wir der Tabellenzeile im HTML 
-     idealerweise direkt eine zusätzliche Klasse wie <tr class="is-category-row"> */
+ 
   tr:has(.category-header),
   tr.is-category-row {
     padding: 0 !important;
@@ -622,7 +620,7 @@ input[type="text"], input[type="date"] {
     font-size: 16px !important;
   }
 
-  /* OPTIMIERT: Flex-Kompression auf die Formularbereiche beschränkt statt global alles zu plätten */
+
   .form-section div[style*="display: flex"],
   .print-wrapper div[style*="display: flex"]:not(.no-mobile-collapse) {
     flex-direction: column !important;
@@ -656,7 +654,7 @@ input[type="text"], input[type="date"] {
     box-sizing: border-box !important;
     text-align: center !important;
   }
-} /* Schließt den mobilen @media screen Block fehlerfrei ab */
+} 
 
 
 /* ===== Freitextbereich außerhalb der Tabelle ===== */
@@ -682,20 +680,33 @@ input[type="text"], input[type="date"] {
   resize: vertical;
   font-family: inherit;
 }
-
 @media print {
-  /* Blendete leere Bemerkungsfelder beim Ausdrucken vollautomatisch aus */
+ 
   .hide-empty-freitext {
     display: none !important;
   }
 }
 
+/* ===== Footer / Bottom Safe Area Fix ===== */
+.footer-counter,
+.footer-spacer,
+body {
+  padding-bottom: 50px !important;
+}
+
+@media screen and (max-width: 768px) {
+  .footer-counter,
+  .footer-spacer,
+  body {
+    padding-bottom: 180px !important;
+  }
+}
 </style>
 </head>
 </head>
 <body>
 <h1 id="titel">Arbeitssicherheits-Audit mit automatischer Maßnahmen-Ableitung bei Abweichungen</h1>
-<p id="untertitel">Systematische Filialprüfung mit automatischer Maßnahmen-Ableitung und Wirksamkeitskontrolle (119 Prüfpunkte)</p>
+<p id="untertitel">Systematische Filialprüfung mit automatischer Maßnahmen-Ableitung und Wirksamkeitskontrolle</p>
 
 <div class="print-wrapper">
   <header>
@@ -712,7 +723,7 @@ input[type="text"], input[type="date"] {
       <input id="markt" placeholder="z. B. 0123" required="" type="text"/>
     </div>
     <div style="margin-bottom: 10px;">
-      <!-- REPARIERT: for-Attribut für exakte Touch-Bedienung hinzugefügt -->
+     
       <label for="name">Teilnehmer:</label>
       <input id="name" style="width: 100%;" type="text"/>
     </div>
@@ -763,14 +774,14 @@ input[type="text"], input[type="date"] {
         </tr>
     </thead>
     <tbody>
-        <!-- REPARIERT: class="is-category-row" für den mobilen Block-Modus ergänzt -->
+       
         <tr class="is-category-row">
             <td class="category-header" colspan="4">1.0 Gesamtmarkt</td>
         </tr>
         <tr>
             <td style="text-align: left;">Entspricht das getragene Schuhwerk aller im Bereich tätigen Personen den Anforderungen der Gefährdungsbeurteilung (fest, im Zehenbereich geschlossen, flach und rutschhemmend)?</td>
             <td>
-                <!-- REPARIERT: IDs und for-Attribute für barrierefreie Touch-Bedienung auf dem iPad -->
+                
                 <label class="radio-wrap" for="gm-0-ja">
                     <input id="gm-0-ja" name="1.0 Gesamtmarkt-0" type="radio" value="ja"/>
                     <span>Ja</span>
@@ -3870,7 +3881,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 const freitextfeld = document.getElementById('freitextfeld');
 
-// ===== Text einfügen =====
+
 function insertText(text) {
 
   const start = freitextfeld.selectionStart;
@@ -3888,7 +3899,7 @@ function insertText(text) {
   freitextfeld.focus();
 }
 
-// ===== Button-Klick =====
+
 document.querySelectorAll('.f-btn').forEach(button => {
 
   button.addEventListener('click', () => {
@@ -3942,5 +3953,7 @@ window.addEventListener('scroll', function () {
 });
 
 </script>
-</br></div></body>
+</br></div>
+<div class="footer-counter"></div>
+</body>
 </html>
