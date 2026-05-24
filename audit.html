@@ -2130,6 +2130,7 @@ if (measure.includes("Sind Erste-Hilfe-Anweisungen vorhanden")) {
                 teilnehmer: document.getElementById('teilnehmer').value,
                 marktleitung: document.getElementById('marktleitung').value,
                 sifa: document.getElementById('sifa').value,
+                remarks: document.getElementById('remarksField') ? document.getElementById('remarksField').value : '',
                 answers: answers,
                 measures: measures,
                 signatures: signatures
@@ -2141,7 +2142,11 @@ if (measure.includes("Sind Erste-Hilfe-Anweisungen vorhanden")) {
             if (data.datum) document.getElementById('datum').value = data.datum;
             if (data.teilnehmer) document.getElementById('teilnehmer').value = data.teilnehmer;
             if (data.marktleitung) document.getElementById('marktleitung').value = data.marktleitung;
-            if (data.sifa) document.getElementById('sifa').value = data.sifa;            
+            if (data.sifa) document.getElementById('sifa').value = data.sifa;
+            if (typeof data.remarks !== 'undefined' && document.getElementById('remarksField')) {
+                document.getElementById('remarksField').value = data.remarks;
+                handleRemarksChange();
+            }            
             if (data.answers) {
                 answers = data.answers;
                 Object.keys(answers).forEach(qId => {
@@ -2315,7 +2320,12 @@ data.dateiname = `${markt}_${deutschesDatum}_${sifa}.json`;
             document.getElementById('datum').valueAsDate = new Date();
             document.getElementById('teilnehmer').value = '';
             document.getElementById('marktleitung').value = '';
-            document.getElementById('sifa').value = '';            
+            document.getElementById('sifa').value = '';
+            const remarksField = document.getElementById('remarksField');
+            if (remarksField) {
+                remarksField.value = '';
+                handleRemarksChange();
+            }
             document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);            
             clearSignature('sigPrüfer');
             clearSignature('sigMarktleitung');            
