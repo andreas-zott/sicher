@@ -44,6 +44,48 @@ table, tr, td {
     page-break-inside: avoid;
     break-inside: avoid;
 }
+
+        .remarks-section {
+            display: block;
+        }
+
+        .remarks-section.hidden-print {
+            display: block;
+        }
+
+        .remarks-textarea {
+            width: 100%;
+            min-height: 140px;
+            padding: 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            resize: vertical;
+            line-height: 1.6;
+            font-family: inherit;
+            background: #fff;
+            color: #1e293b;
+        }
+
+        .remarks-textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .remarks-print-box {
+            display: none;
+            margin-top: 12px;
+            padding: 18px;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid #3b82f6;
+            border-radius: 10px;
+            background: #fff;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            color: #334155;
+        }
+
 @media print {
     .category:not(.open) {
         display: none !important;
@@ -461,6 +503,24 @@ table, tr, td {
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
     }
+
+    .remarks-section:not(.hidden-print) {
+        display: block !important;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    .remarks-section.hidden-print {
+        display: none !important;
+    }
+
+    .remarks-textarea {
+        display: none !important;
+    }
+
+    .remarks-print-box.has-content {
+        display: block !important;
+    }
 }
         .handlungsanweisung-box {
             background: white;
@@ -833,6 +893,20 @@ Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung d
                 <p class="no-measures">Keine Maßnahmen erforderlich. Wählen Sie „Nein“ bei Prüfpunkten, um Maßnahmen hinzuzufügen.</p>
             </div>
         </div>
+
+<div class="section remarks-section" id="remarksSection">
+            <h2 class="section-title">
+                <span>&#128221;</span> Bemerkungsfeld / Besonderheiten
+            </h2>
+
+            <div class="form-group">
+                <label for="remarksField">Freitextfeld für zusätzliche Hinweise und Besonderheiten</label>
+                <textarea id="remarksField" class="remarks-textarea" placeholder="Zusätzliche Bemerkungen, Besonderheiten oder Hinweise eingeben..." oninput="handleRemarksChange()"></textarea>
+            </div>
+
+            <div id="remarksPrintBox" class="remarks-print-box"></div>
+        </div>
+
  <div class="section">
 
 
@@ -1169,8 +1243,31 @@ id: 'dokumentation',
             renderChecklist();
             initSignatures();
             loadFromStorage();
+            handleRemarksChange();
             updateDashboard();        });        
-        // Render Checklist
+        
+        // Bemerkungen
+        function handleRemarksChange() {
+            const field = document.getElementById('remarksField');
+            const section = document.getElementById('remarksSection');
+            const printBox = document.getElementById('remarksPrintBox');
+
+            if (!field || !section || !printBox) return;
+
+            const value = field.value.trim();
+
+            if (value.length > 0) {
+                section.classList.remove('hidden-print');
+                printBox.classList.add('has-content');
+                printBox.textContent = value;
+            } else {
+                section.classList.add('hidden-print');
+                printBox.classList.remove('has-content');
+                printBox.textContent = '';
+            }
+        }
+
+// Render Checklist
         function renderChecklist() {
             const container = document.getElementById('checklistContainer');
             let html = '';
@@ -2843,7 +2940,42 @@ async function generateAndSharePDF() {
             pdf.setFontSize(9);
             pdf.text('Keine Unterschrift vorhanden', margin + contentWidth * 3 / 4 + 5, currentY + 20, { align: 'center' });
         }        
-        currentY += 55;        
+
+        currentY += 55;
+
+        // Bemerkungsfeld / Besonderheiten
+        const remarksValue = document.getElementById('remarksField')?.value?.trim() || '';
+
+        if (remarksValue) {
+            const remarksLines = pdf.splitTextToSize(remarksValue, contentWidth - 12);
+            const remarksHeight = Math.max(22, remarksLines.length * 5 + 16);
+
+            checkNewPage(remarksHeight + 10);
+
+            pdf.setFontSize(12);
+            pdf.setTextColor(33, 37, 41);
+            pdf.setFont(undefined, 'bold');
+            pdf.text('Bemerkungsfeld / Besonderheiten', margin, currentY);
+            pdf.setFont(undefined, 'normal');
+
+            currentY += 6;
+
+            // Rahmen
+            pdf.setFillColor(255, 255, 255);
+            pdf.setDrawColor(226, 232, 240);
+            pdf.roundedRect(margin, currentY, contentWidth, remarksHeight, 3, 3, 'FD');
+
+            // Linker blauer Balken
+            pdf.setFillColor(59, 130, 246);
+            pdf.rect(margin, currentY, 2, remarksHeight, 'F');
+
+            pdf.setFontSize(9);
+            pdf.setTextColor(71, 85, 105);
+            pdf.text(remarksLines, margin + 6, currentY + 8);
+
+            currentY += remarksHeight + 10;
+        }
+
               pdf.setFontSize(12);
         pdf.setTextColor(33, 37, 41);
         pdf.setFont(undefined, 'bold');
