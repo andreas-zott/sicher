@@ -5,8 +5,8 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Arbeitssicherheits-Audit</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
-<link href="/sicher/favicon.ico" rel="icon" type="image/x-icon"/>
-<link href="/sicher/audit.json" rel="manifest"/>
+<link href="favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="audit.json" rel="manifest"/>
 <style>
 .header {
     display: flex;
@@ -69,8 +69,8 @@ table, tr, td {
 
         .remarks-textarea:focus {
             outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            border-color: #b30000;
+            box-shadow: 0 0 0 3px rgba(179, 0, 0, 0.1);
         }
 
         .remarks-print-box {
@@ -78,7 +78,7 @@ table, tr, td {
             margin-top: 12px;
             padding: 18px;
             border: 1px solid #e2e8f0;
-            border-left: 4px solid #3b82f6;
+            border-left: 4px solid #b30000;
             border-radius: 10px;
             background: #fff;
             white-space: pre-wrap;
@@ -142,7 +142,7 @@ table, tr, td {
         .card.open { border-color: #ef4444; }
         .card.progress { border-color: #f59e0b; }
         .card.done { border-color: #22c55e; }
-        .card.total { border-color: #3b82f6; }        
+        .card.total { border-color: #b30000; }        
         .card-label {
             font-size: 0.875rem;
             color: #64748b;
@@ -155,7 +155,7 @@ table, tr, td {
         .card.open .card-value { color: #ef4444; }
         .card.progress .card-value { color: #f59e0b; }
         .card.done .card-value { color: #22c55e; }
-        .card.total .card-value { color: #3b82f6; }        
+        .card.total .card-value { color: #b30000; }        
           .section {
             background: white;
             border-radius: 12px;
@@ -196,8 +196,8 @@ table, tr, td {
         }        
         .form-group input:focus {
             outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            border-color: #b30000;
+            box-shadow: 0 0 0 3px rgba(179, 0, 0, 0.1);
         }       
 
         .category {
@@ -246,7 +246,7 @@ table, tr, td {
         }        
         .stat.answered {
             background: #dbeafe;
-            color: #1e40af;
+            color: #b30000;
         }        
         .stat.issues {
             background: #fee2e2;
@@ -306,7 +306,7 @@ table, tr, td {
             background: #f1f5f9;
         }        
         .radio-label input {
-            accent-color: #3b82f6;
+            accent-color: #b30000;
             width: 16px;
             height: 16px;
         }        
@@ -342,7 +342,7 @@ table, tr, td {
         .measures-table input:focus,
         .measures-table select:focus {
             outline: none;
-            border-color: #3b82f6;
+            border-color: #b30000;
         }        
         .status-select {
             font-weight: 500;
@@ -394,11 +394,11 @@ table, tr, td {
             transition: all 0.2s;
         }        
         .btn-primary {
-            background: #3b82f6;
+            background: #b30000;
             color: white;
         }        
         .btn-primary:hover {
-            background: #2563eb;
+            background: #8f0000;
         }        
         .btn-success {
             background: #22c55e;
@@ -498,7 +498,7 @@ table, tr, td {
         page-break-inside: avoid;
         break-inside: avoid;
         border: 1px solid #e2e8f0;
-        border-left: 4px solid #3b82f6;
+        border-left: 4px solid #b30000;
         background: white !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
@@ -529,12 +529,12 @@ table, tr, td {
             margin-bottom: 24px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             border: 1px solid #e2e8f0;
-            border-left: 4px solid #3b82f6;
+            border-left: 4px solid #b30000;
         }        
         .handlungsanweisung-box h2 {
             font-size: 1.1rem;
             font-weight: 600;
-            color: #1e40af;
+            color: #b30000;
             margin-bottom: 12px;
             margin-top: 16px;
         }        
@@ -2583,12 +2583,12 @@ async function generateAndSharePDF() {
        
         // Title
         pdf.setFontSize(18);
-        pdf.setTextColor(30, 64, 175);
+        pdf.setTextColor(179, 0, 0);
         pdf.text('Arbeitssicherheits-Audit', margin, currentY + 8);        
         pdf.setFontSize(10);
-        pdf.setTextColor(59, 130, 246);
+        pdf.setTextColor(179, 0, 0);
         pdf.text(formattedDate, pageWidth - margin, currentY + 8, { align: 'right' });        
-        pdf.setDrawColor(59, 130, 246);
+        pdf.setDrawColor(179, 0, 0);
         pdf.setLineWidth(0.8);
         pdf.line(margin, currentY + 12, pageWidth - margin, currentY + 12);        
         currentY += 22;        
@@ -2605,11 +2605,11 @@ async function generateAndSharePDF() {
         currentY += 12;       
        
         // Box-Rahmen zeichnen
-        pdf.setDrawColor(59, 130, 246);
+        pdf.setDrawColor(179, 0, 0);
         pdf.setLineWidth(0.5);
         pdf.setFillColor(255, 255, 255);        
         // Linker blauer Balken
-        pdf.setFillColor(59, 130, 246);
+        pdf.setFillColor(179, 0, 0);
         pdf.rect(margin, currentY, 1.5, 95, 'F');        
         // Box-Umrandung
         pdf.setDrawColor(226, 232, 240);
@@ -2620,7 +2620,7 @@ async function generateAndSharePDF() {
         const boxWidth = contentWidth - 8;        
         // Titel: Anleitung und Nutzungshinweis
         pdf.setFontSize(10);
-        pdf.setTextColor(30, 64, 175);
+        pdf.setTextColor(179, 0, 0);
         pdf.setFont(undefined, 'bold');
         pdf.text('Anleitung und Nutzungshinweis:', boxMargin, boxY);
         boxY += 5;        
@@ -2632,7 +2632,7 @@ async function generateAndSharePDF() {
         boxY += introLines.length * 3 + 4;        
         // Handlungsanweisung Titel
         pdf.setFontSize(9);
-        pdf.setTextColor(30, 64, 175);
+        pdf.setTextColor(179, 0, 0);
         pdf.text('Handlungsanweisung:', boxMargin, boxY);
         boxY += 5;        
         // Bewertung & Handlungsbedarf
@@ -2691,7 +2691,7 @@ async function generateAndSharePDF() {
         
         // Helper function to draw table header
         function drawTableHeader() {
-            pdf.setFillColor(59, 130, 246);
+            pdf.setFillColor(179, 0, 0);
             pdf.rect(margin, currentY, contentWidth, 7, 'F');
             pdf.setFontSize(8);
             pdf.setTextColor(255);
@@ -2812,7 +2812,7 @@ async function generateAndSharePDF() {
         addMiniHeader();
         currentY = 18;        
         pdf.setFontSize(14);
-        pdf.setTextColor(30, 64, 175);
+        pdf.setTextColor(179, 0, 0);
         pdf.text('Maßnahmenplan', margin, currentY + 5);
         currentY += 15;        
         // Table header for measures
@@ -2902,7 +2902,7 @@ async function generateAndSharePDF() {
         addMiniHeader();
         currentY = 18;        
         pdf.setFontSize(14);
-        pdf.setTextColor(30, 64, 175);
+        pdf.setTextColor(179, 0, 0);
         pdf.text('Unterschriften', margin, currentY + 5);
         currentY += 18;        
         // Prüfer signature
@@ -2976,7 +2976,7 @@ async function generateAndSharePDF() {
             pdf.roundedRect(margin, currentY, contentWidth, remarksHeight, 3, 3, 'FD');
 
             // Linker blauer Balken
-            pdf.setFillColor(59, 130, 246);
+            pdf.setFillColor(179, 0, 0);
             pdf.rect(margin, currentY, 2, remarksHeight, 'F');
 
             pdf.setFontSize(9);
@@ -3032,9 +3032,9 @@ async function generateAndSharePDF() {
         pdf.text('N.V.', margin + colWidth * 2 + colWidth/2, summaryStartY + 17, { align: 'center' });        
         // Gesamt
         pdf.setFillColor(255, 255, 255);
-        pdf.setDrawColor(59, 130, 246);
+        pdf.setDrawColor(179, 0, 0);
         pdf.roundedRect(margin + colWidth * 3 + 5, summaryStartY, colWidth - 10, 20, 2, 2, 'FD');
-        pdf.setTextColor(59, 130, 246);
+        pdf.setTextColor(179, 0, 0);
         pdf.setFontSize(14);
         pdf.setFont(undefined, 'bold');
         pdf.text(`${totalQuestions}`, margin + colWidth * 3 + colWidth/2, summaryStartY + 10, { align: 'center' });
