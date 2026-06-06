@@ -225,7 +225,7 @@
 
                     <div class="signature-actions">
                         <button class="btn-secondary btn-small" onclick="clearSignature('pruefer')">
-                            Loeschen
+                            Löschen
                         </button>
                     </div>
                 </div>
@@ -260,9 +260,9 @@
             Drucken
         </button>
 
-        <button class="btn-primary" onclick="exportMeasuresPDF()">
-            PDF Export
-        </button>
+      <button class="btn-primary" onclick="generateAndSharePDF()">
+        PDF Export
+    </button>
     </div>
 </section>
             
@@ -463,6 +463,93 @@
 
     </script>
 <script>
+
+async function generateAndSharePDF() {
+
+    try {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        let y = 15;
+
+        // HEADER
+        doc.setFontSize(16);
+        doc.text("Arbeitssicherheits-Audit", 10, y);
+        y += 10;
+
+        const firma = document.getElementById("firma")?.value || "-";
+        const standort = document.getElementById("standort")?.value || "-";
+        const pruefer = document.getElementById("pruefer")?.value || "-";
+        const datum = document.getElementById("datum")?.value || "-";
+
+        doc.setFontSize(11);
+        doc.text(`Firma: ${firma}`, 10, y); y += 7;
+        doc.text(`Standort: ${standort}`, 10, y); y += 7;
+        doc.text(`Prüfer: ${pruefer}`, 10, y); y += 7;
+        doc.text(`Datum: ${datum}`, 10, y); y += 10;
+
+        // CHECKLISTE
+        doc.setFontSize(12);
+        doc.text("Checkliste:", 10, y);
+        y += 8;
+
+        document.querySelectorAll(".checklist-item").forEach((item, i) => {
+
+            const title =
+                item.querySelector(".item-title")?.innerText ||
+                `Punkt ${i + 1}`;
+
+            const status =
+                item.querySelector(".rating-btn.selected")?.innerText || "Offen";
+
+            const line = `${i + 1}. ${title} [${status}]`;
+
+            const lines = doc.splitTextToSize(line, 180);
+
+            doc.text(lines, 10, y);
+            y += lines.length * 6;
+
+            if (y > 270) {
+                doc.addPage();
+                y = 15;
+            }
+        });
+      
+        doc.addPage();
+        y = 20;
+
+        doc.setFontSize(14);
+        doc.text("Unterschriften", 10, y);
+        y += 15;
+
+        function addSignature(id, label) {
+
+            const canvas = document.getElementById(id);
+            if (!canvas) return;
+
+            const img = canvas.toDataURL("image/png");
+
+            doc.setFontSize(11);
+            doc.text(label, 10, y);
+            y += 5;
+
+            doc.addImage(img, "PNG", 10, y, 80, 30);
+            y += 45;
+        }
+
+        addSignature("signature-pruefer", "Prüfer:");
+        addSignature("signature-verantwortlicher", "Verantwortlicher:");
+
+        doc.save("audit.pdf");
+
+    } catch (err) {
+        console.error(err);
+        alert("PDF Export fehlgeschlagen");
+    }
+}
+
+       
+
 
 function exportMeasuresPDF() {
 
