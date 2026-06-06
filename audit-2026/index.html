@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arbeitssicherheits-Audit Tool</title>
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- jsPDF lokal oder CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        /* Inline-Anzeige der empfohlenen Maßnahme unter einem Mangel */
+        .measure-suggestion {
+            margin-top: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-left: 4px solid #b30000;
+            background: #fff5f5;
+            border-radius: 4px;
+        }
+
+        .measure-label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #b30000;
+            margin-bottom: 0.25rem;
+        }
+
+        .measure-text {
+            margin: 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #1f2937;
+        }
+
+        @media print {
+            @page {
+                size: A4;
+                margin: 12mm;
+            }
+
+            .header,
+            .footer,
+            .action-bar,
+            .filter-buttons,
+            .signature-actions {
+                display: none !important;
+            }
+
+            html,
+            body {
+                background: white;
+                color: black;
+                font-size: 11px;
+                line-height: 1.4;
+            }
+
+            .main-content {
+                width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            .card,
+            .checklist-item,
+            .signature-block {
+                box-shadow: none !important;
+                border: 1px solid #ccc;
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
+            .card {
+                margin-bottom: 12px;
+                padding: 10px;
+            }
+
+            .checklist-item {
+                margin-bottom: 10px;
+                padding: 8px;
+            }
+
+            .item-title,
+            .measure-text,
+            textarea,
+            p,
+            span {
+                word-break: break-word;
+                overflow-wrap: break-word;
+                white-space: pre-wrap;
+            }
+
+            textarea {
+                min-height: auto !important;
+                height: auto !important;
+            }
+
+            .signatures-section {
+                page-break-before: always;
+                break-before: page;
+            }
+
+            .signatures-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .signature-block {
+                margin-top: 20px;
+                padding: 12px;
+            }
+
+            .signature-canvas {
+                width: 100% !important;
+                max-width: 100%;
+                border: 1px solid #000;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="images/logo.png" alt="Sicherheits-Audit Logo" class="logo">
+                <div class="title-section">
+                    <h1>Arbeitssicherheits-Audit</h1>
+                    <p class="subtitle">Checkliste gemäß Paragraph 5 ArbSchG</p>
+                </div>
+            </div>
+
+            <nav class="nav">
+                <a href="index.html" class="nav-link active">Checkliste</a>
+                <a href="massnahmenplan.html" class="nav-link">Massnahmenplan</a>
+                <a href="fotos.html" class="nav-link">Fotos</a>
+                <a href="impressum.html" class="nav-link">Impressum</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+
+        <section class="card company-info">
+            <h2 class="card-title">Betriebsinformationen</h2>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="firma">Firma / Betrieb</label>
+                    <input type="text" id="firma" placeholder="Name des Unternehmens">
+                </div>
+
+                <div class="form-group">
+                    <label for="standort">Standort / Bereich</label>
+                    <input type="text" id="standort" placeholder="Adresse oder Bereich">
+                </div>
+
+                <div class="form-group">
+                    <label for="pruefer">Prüfer</label>
+                    <input type="text" id="pruefer" placeholder="Name des Pruefers">
+                </div>
+
+                <div class="form-group">
+                    <label for="datum">Datum</label>
+                    <input type="date" id="datum">
+                </div>
+            </div>
+        </section>
+
+        <section class="dashboard-cards">
+            <div class="stat-card">
+                <div class="stat-content">
+                    <span class="stat-value" id="stat-ok">0</span>
+                    <span class="stat-label">In Ordnung</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-content">
+                    <span class="stat-value" id="stat-mangel">0</span>
+                    <span class="stat-label">Mängel</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-content">
+                    <span class="stat-value" id="stat-na">0</span>
+                    <span class="stat-label">Nicht zutreffend</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-content">
+                    <span class="stat-value" id="stat-total">0</span>
+                    <span class="stat-label">Gesamt bewertet</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="card checklist-section">
+            <div class="card-header">
+                <h2 class="card-title">Prüfpunkte</h2>
+
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">Alle</button>
+                    <button class="filter-btn" data-filter="ok">OK</button>
+                    <button class="filter-btn" data-filter="mangel">Mangel</button>
+                    <button class="filter-btn" data-filter="na">N/A</button>
+                    <button class="filter-btn" data-filter="offen">Offen</button>
+                </div>
+            </div>
+
+            <div id="checklist-container"></div>
+        </section>
+
+        <section class="card signatures-section">
+            <h2 class="card-title">Unterschriften</h2>
+
+            <div class="signatures-grid">
+                <div class="signature-block">
+                    <label>Prüfer</label>
+                    <canvas id="signature-pruefer" class="signature-canvas" width="400" height="150"></canvas>
+
+                    <div class="signature-actions">
+                        <button class="btn-secondary btn-small" onclick="clearSignature('pruefer')">
+                            Loeschen
+                        </button>
+                    </div>
+                </div>
+
+                <div class="signature-block">
+                    <label>Verantwortlicher</label>
+                    <canvas id="signature-verantwortlicher" class="signature-canvas" width="400" height="150"></canvas>
+
+                    <div class="signature-actions">
+                        <button class="btn-secondary btn-small" onclick="clearSignature('verantwortlicher')">
+                            Löschen
+                        </button>
+                    </div>
+                </div>
+            </div>
+       </section>
+
+<section class="action-bar">
+    <div class="button-group">
+        <button class="btn-secondary" onclick="resetAudit()">
+            Zurücksetzen
+        </button>
+            </div>
+
+
+<section class="action-bar">
+    
+    </div>
+
+    <div class="action-right">
+        <button class="btn-secondary" onclick="printAudit()">
+            Drucken
+        </button>
+
+        <button class="btn-primary" onclick="exportMeasuresPDF()">
+            PDF Export
+        </button>
+    </div>
+</section>
+            
+
+    </main>
+
+    <footer class="footer">
+        <p>Arbeitssicherheits-Audit Tool - Version 1.1</p>
+
+        <div class="footer-links">
+            <a href="datenschutz.html">Datenschutz</a>
+            <a href="impressum.html">Impressum</a>
+        </div>
+    </footer>
+
+    <script src="js/audit-data.js"></script>
+    <script src="js/text.js"></script>
+    <script src="js/app.js"></script>
+
+    <script>
+
+        // ==========================================
+        // Druckfunktion fuer Tauri/Desktop
+        // ==========================================
+        function printAudit() {
+
+            // Vor dem Drucken alle Textfelder automatisch an Inhalt anpassen
+            document.querySelectorAll("textarea").forEach((textarea) => {
+                textarea.style.height = "auto";
+                textarea.style.height = textarea.scrollHeight + "px";
+            });
+
+            // Kleine Verzögerung damit das Layout korrekt berechnet wird
+            setTimeout(() => {
+                window.print();
+            }, 150);
+        }
+
+        // ==========================================
+        // Tauri-kompatibler PDF Export
+        // ==========================================
+        async function exportPDF() {
+
+            try {
+
+                const { jsPDF } = window.jspdf;
+
+                const doc = new jsPDF({
+                    orientation: "portrait",
+                    unit: "mm",
+                    format: "a4"
+                });
+
+                let y = 20;
+
+                doc.setFontSize(18);
+                doc.text("Arbeitssicherheits-Audit", 20, y);
+
+                y += 12;
+
+                const firma = document.getElementById("firma").value || "-";
+                const standort = document.getElementById("standort").value || "-";
+                const pruefer = document.getElementById("pruefer").value || "-";
+                const datum = document.getElementById("datum").value || "-";
+
+                doc.setFontSize(11);
+
+                doc.text(`Firma: ${firma}`, 20, y);
+                y += 8;
+
+                doc.text(`Standort: ${standort}`, 20, y);
+                y += 8;
+
+                doc.text(`Pruefer: ${pruefer}`, 20, y);
+                y += 8;
+
+                doc.text(`Datum: ${datum}`, 20, y);
+                y += 15;
+
+                doc.setFontSize(14);
+                doc.text("Checkliste", 20, y);
+
+                y += 10;
+
+                const checklistItems = document.querySelectorAll(".checklist-item");
+
+                checklistItems.forEach((item, index) => {
+
+                    const title =
+                        item.querySelector(".item-title")?.innerText ||
+                        `Pruefpunkt ${index + 1}`;
+
+                    const itemId = item.getAttribute("data-item-id");
+
+                    let status = "offen";
+                    const selectedBtn = item.querySelector(".rating-btn.selected");
+                    if (selectedBtn) {
+                        if (selectedBtn.classList.contains("ok")) status = "ok";
+                        else if (selectedBtn.classList.contains("mangel")) status = "mangel";
+                        else if (selectedBtn.classList.contains("na")) status = "na";
+                    }
+
+                    const kommentar =
+                        item.querySelector("textarea")?.value || "";
+
+                    let statusText = "";
+
+                    switch (status) {
+                        case "ok":
+                            statusText = "OK";
+                            break;
+
+                        case "mangel":
+                            statusText = "Mangel";
+                            break;
+
+                        case "na":
+                            statusText = "Nicht zutreffend";
+                            break;
+
+                        default:
+                            statusText = "Offen";
+                    }
+
+                    const line = `${index + 1}. ${title} [${statusText}]`;
+
+                    const splitText = doc.splitTextToSize(line, 170);
+
+                    let estimatedHeight = (splitText.length * 7) + 10;
+
+                    if (kommentar.trim() !== "") {
+                        estimatedHeight += 18;
+                    }
+
+                    if (status === "mangel" && typeof getMeasureText === "function") {
+                        estimatedHeight += 18;
+                    }
+
+                    if (y + estimatedHeight > 270) {
+                        doc.addPage();
+                        y = 20;
+                    }
+
+                    doc.text(splitText, 20, y);
+
+                    y += splitText.length * 7;
+
+                    if (kommentar.trim() !== "") {
+
+                        const commentText =
+                            doc.splitTextToSize(
+                                "Kommentar: " + kommentar,
+                                160
+                            );
+
+                        doc.setFontSize(10);
+
+                        doc.text(commentText, 28, y);
+
+                        y += commentText.length * 6;
+
+                        doc.setFontSize(11);
+                    }
+
+                    if (status === "mangel" && typeof getMeasureText === "function") {
+                        const measureText = doc.splitTextToSize(
+                            "Maßnahme: " + getMeasureText(itemId),
+                            160
+                        );
+                        doc.setFontSize(10);
+                        doc.text(measureText, 28, y);
+                        y += measureText.length * 6;
+                        doc.setFontSize(11);
+                    }
+
+                    y += 5;
+
+                    if (y > 270) {
+                        doc.addPage();
+                        y = 20;
+                    }
+                });
+
+                // Download
+                doc.save("arbeitssicherheits-audit.pdf");
+
+            } catch (err) {
+
+                console.error("PDF Fehler:", err);
+
+                alert(
+                    "PDF Export fehlgeschlagen. Druckdialog wird geöffnet."
+                );
+
+                window.print();
+            }
+        }
+
+    </script>
+<script>
+
+function exportMeasuresPDF() {
+
+    alert("PDF Export gestartet");
+
+    window.print();
+
+}
+
+</script>
+  
+</body>
+</html>
