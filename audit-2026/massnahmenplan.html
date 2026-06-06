@@ -113,7 +113,7 @@
         Drucken
     </button>
 
-    <button class="btn-primary" onclick="exportMeasuresPDF()">
+          <button class="btn-primary" onclick="generateAndSharePDF()">
         PDF Export
     </button>
 
@@ -183,278 +183,275 @@
     <script src="js/massnahmenplan.js"></script>
 <script src="js/app.js"></script>
  
+ 
  <script>
 
-     // ==========================================
-// Tauri Druckfunktion DIN A4 optimiert
-// ==========================================
-function printAudit() {
+        // ==========================================
+        // Druckfunktion fuer Tauri/Desktop
+        // ==========================================
+        function printAudit() {
 
-    document.title = "Massnahmenplan";
+            // Vor dem Drucken alle Textfelder automatisch an Inhalt anpassen
+            document.querySelectorAll("textarea").forEach((textarea) => {
+                textarea.style.height = "auto";
+                textarea.style.height = textarea.scrollHeight + "px";
+            });
 
-    const style = document.createElement("style");
-
-    style.id = "print-style";
-
-    style.innerHTML = `
-        @media print {
-
-            @page {
-                size: A4 portrait;
-                margin: 10mm;
-            }
-
-            body {
-                background: white !important;
-            }
-
-            .header,
-            .footer,
-            .action-bar,
-            .btn-primary,
-            .btn-secondary,
-            .modal-overlay {
-                display: none !important;
-            }
-
-            .main-content {
-                width: 100% !important;
-                max-width: 100% !important;
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-
-            .card {
-                box-shadow: none !important;
-                border: 1px solid #ccc;
-            }
-
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                font-size: 10pt;
-            }
-
-            th,
-            td {
-                border: 1px solid #ccc;
-                padding: 6px;
-                word-break: break-word;
-            }
-
-            tr {
-                page-break-inside: avoid;
-            }
-
-            thead {
-                display: table-header-group;
-            }
+            // Kleine Verzögerung damit das Layout korrekt berechnet wird
+            setTimeout(() => {
+                window.print();
+            }, 150);
         }
-    `;
 
-    document.head.appendChild(style);
+        // ==========================================
+        // Tauri-kompatibler PDF Export
+        // ==========================================
+        async function exportPDF() {
 
-    setTimeout(() => {
-        window.print();
+            try {
 
-        setTimeout(() => {
-            const oldStyle =
-                document.getElementById("print-style");
+                const { jsPDF } = window.jspdf;
 
-            if (oldStyle) {
-                oldStyle.remove();
-            }
-        }, 1000);
+                const doc = new jsPDF({
+                    orientation: "portrait",
+                    unit: "mm",
+                    format: "a4"
+                });
 
-    }, 250);
-}
+                let y = 20;
 
-async function exportMeasuresPDF() {
+                doc.setFontSize(18);
+                doc.text("Arbeitssicherheits-Audit", 20, y);
 
-    if (
-        !measuresState ||
-        measuresState.measures.length === 0
-    ) {
-        alert("Keine Maßnahmen vorhanden.");
-        return;
-    }
+                y += 12;
 
-    const { jsPDF } = window.jspdf;
+                const firma = document.getElementById("firma").value || "-";
+                const standort = document.getElementById("standort").value || "-";
+                const pruefer = document.getElementById("pruefer").value || "-";
+                const datum = document.getElementById("datum").value || "-";
 
-    const doc = new jsPDF({
-        orientation: "portrait",
-        unit: "mm",
-        format: "a4"
-    });
+                doc.setFontSize(11);
 
-    let y = 15;
+                doc.text(`Firma: ${firma}`, 20, y);
+                y += 8;
 
-    const pageHeight = 297;
+                doc.text(`Standort: ${standort}`, 20, y);
+                y += 8;
 
-    doc.setFontSize(18);
-    doc.setFont(undefined, "bold");
+                doc.text(`Pruefer: ${pruefer}`, 20, y);
+                y += 8;
 
-    doc.text(
-        "Massnahmenplan",
-        105,
-        y,
-        { align: "center" }
-    );
+                doc.text(`Datum: ${datum}`, 20, y);
+                y += 15;
 
-    y += 12;
+                doc.setFontSize(14);
+                doc.text("Checkliste", 20, y);
 
-    doc.setFontSize(10);
-    doc.setFont(undefined, "normal");
+                y += 10;
 
-    doc.text(
-        `Erstellt am ${new Date().toLocaleDateString("de-DE")}`,
-        105,
-        y,
-        { align: "center" }
-    );
+                const checklistItems = document.querySelectorAll(".checklist-item");
 
-    y += 15;
+                checklistItems.forEach((item, index) => {
 
-    function drawHeader() {
+                    const title =
+                        item.querySelector(".item-title")?.innerText ||
+                        `Pruefpunkt ${index + 1}`;
 
-        doc.setFillColor(240, 240, 240);
+                    const itemId = item.getAttribute("data-item-id");
 
-        doc.rect(
-            10,
-            y - 5,
-            190,
-            8,
-            "F"
-        );
+                    let status = "offen";
+                    const selectedBtn = item.querySelector(".rating-btn.selected");
+                    if (selectedBtn) {
+                        if (selectedBtn.classList.contains("ok")) status = "ok";
+                        else if (selectedBtn.classList.contains("mangel")) status = "mangel";
+                        else if (selectedBtn.classList.contains("na")) status = "na";
+                    }
 
-        doc.setFont(undefined, "bold");
+                    const kommentar =
+                        item.querySelector("textarea")?.value || "";
 
-        doc.text("Nr.", 12, y);
-        doc.text("Beschreibung", 22, y);
-        doc.text("Prio", 120, y);
-        doc.text("Status", 145, y);
-        doc.text("Fällig", 175, y);
+                    let statusText = "";
 
-        doc.setFont(undefined, "normal");
+                    switch (status) {
+                        case "ok":
+                            statusText = "OK";
+                            break;
 
-        y += 8;
-    }
+                        case "mangel":
+                            statusText = "Mangel";
+                            break;
 
-    drawHeader();
+                        case "na":
+                            statusText = "Nicht zutreffend";
+                            break;
 
-    measuresState.measures.forEach(
-        (measure, index) => {
+                        default:
+                            statusText = "Offen";
+                    }
 
-            const lines =
-                doc.splitTextToSize(
-                    measure.description,
-                    90
+                    const line = `${index + 1}. ${title} [${statusText}]`;
+
+                    const splitText = doc.splitTextToSize(line, 170);
+
+                    let estimatedHeight = (splitText.length * 7) + 10;
+
+                    if (kommentar.trim() !== "") {
+                        estimatedHeight += 18;
+                    }
+
+                    if (status === "mangel" && typeof getMeasureText === "function") {
+                        estimatedHeight += 18;
+                    }
+
+                    if (y + estimatedHeight > 270) {
+                        doc.addPage();
+                        y = 20;
+                    }
+
+                    doc.text(splitText, 20, y);
+
+                    y += splitText.length * 7;
+
+                    if (kommentar.trim() !== "") {
+
+                        const commentText =
+                            doc.splitTextToSize(
+                                "Kommentar: " + kommentar,
+                                160
+                            );
+
+                        doc.setFontSize(10);
+
+                        doc.text(commentText, 28, y);
+
+                        y += commentText.length * 6;
+
+                        doc.setFontSize(11);
+                    }
+
+                    if (status === "mangel" && typeof getMeasureText === "function") {
+                        const measureText = doc.splitTextToSize(
+                            "Maßnahme: " + getMeasureText(itemId),
+                            160
+                        );
+                        doc.setFontSize(10);
+                        doc.text(measureText, 28, y);
+                        y += measureText.length * 6;
+                        doc.setFontSize(11);
+                    }
+
+                    y += 5;
+
+                    if (y > 270) {
+                        doc.addPage();
+                        y = 20;
+                    }
+                });
+
+                // Download
+                doc.save("arbeitssicherheits-audit.pdf");
+
+            } catch (err) {
+
+                console.error("PDF Fehler:", err);
+
+                alert(
+                    "PDF Export fehlgeschlagen. Druckdialog wird geöffnet."
                 );
 
-            const rowHeight =
-                Math.max(
-                    8,
-                    lines.length * 5
-                ) + 4;
-
-            if (
-                y + rowHeight >
-                pageHeight - 15
-            ) {
-
-                doc.addPage();
-
-                y = 15;
-
-                drawHeader();
+                window.print();
             }
-
-            doc.text(
-                String(index + 1),
-                12,
-                y
-            );
-
-            lines.forEach(
-                (line, i) => {
-
-                    doc.text(
-                        line,
-                        22,
-                        y + (i * 5)
-                    );
-                }
-            );
-
-            doc.text(
-                measure.priority || "-",
-                120,
-                y
-            );
-
-            doc.text(
-                formatStatus(
-                    measure.status
-                ),
-                145,
-                y
-            );
-
-            doc.text(
-                measure.dueDate
-                    ? formatDate(
-                          measure.dueDate
-                      )
-                    : "-",
-                175,
-                y
-            );
-
-            y += rowHeight;
-
-            doc.line(
-                10,
-                y - 2,
-                200,
-                y - 2
-            );
         }
-    );
 
-    const pages =
-        doc.getNumberOfPages();
-
-    for (
-        let i = 1;
-        i <= pages;
-        i++
-    ) {
-
-        doc.setPage(i);
-
-        doc.setFontSize(8);
-
-        doc.text(
-            `Seite ${i} von ${pages}`,
-            195,
-            290,
-            {
-                align: "right"
-            }
-        );
-    }
-
-    doc.save(
-        `Massnahmenplan_${
-            new Date()
-                .toISOString()
-                .split("T")[0]
-        }.pdf`
-    );
-}
     </script>
-
 <script>
+
+async function generateAndSharePDF() {
+
+    try {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        let y = 15;
+
+        // HEADER
+        doc.setFontSize(16);
+        doc.text("Arbeitssicherheits-Audit", 10, y);
+        y += 10;
+
+        const firma = document.getElementById("firma")?.value || "-";
+        const standort = document.getElementById("standort")?.value || "-";
+        const pruefer = document.getElementById("pruefer")?.value || "-";
+        const datum = document.getElementById("datum")?.value || "-";
+
+        doc.setFontSize(11);
+        doc.text(`Firma: ${firma}`, 10, y); y += 7;
+        doc.text(`Standort: ${standort}`, 10, y); y += 7;
+        doc.text(`Prüfer: ${pruefer}`, 10, y); y += 7;
+        doc.text(`Datum: ${datum}`, 10, y); y += 10;
+
+        // CHECKLISTE
+        doc.setFontSize(12);
+        doc.text("Checkliste:", 10, y);
+        y += 8;
+
+        document.querySelectorAll(".checklist-item").forEach((item, i) => {
+
+            const title =
+                item.querySelector(".item-title")?.innerText ||
+                `Punkt ${i + 1}`;
+
+            const status =
+                item.querySelector(".rating-btn.selected")?.innerText || "Offen";
+
+            const line = `${i + 1}. ${title} [${status}]`;
+
+            const lines = doc.splitTextToSize(line, 180);
+
+            doc.text(lines, 10, y);
+            y += lines.length * 6;
+
+            if (y > 270) {
+                doc.addPage();
+                y = 15;
+            }
+        });
+      
+        doc.addPage();
+        y = 20;
+
+        doc.setFontSize(14);
+        doc.text("Unterschriften", 10, y);
+        y += 15;
+
+        function addSignature(id, label) {
+
+            const canvas = document.getElementById(id);
+            if (!canvas) return;
+
+            const img = canvas.toDataURL("image/png");
+
+            doc.setFontSize(11);
+            doc.text(label, 10, y);
+            y += 5;
+
+            doc.addImage(img, "PNG", 10, y, 80, 30);
+            y += 45;
+        }
+
+        addSignature("signature-pruefer", "Prüfer:");
+        addSignature("signature-verantwortlicher", "Verantwortlicher:");
+
+        doc.save("audit.pdf");
+
+    } catch (err) {
+        console.error(err);
+        alert("PDF Export fehlgeschlagen");
+    }
+}
+
+       
+
 
 function exportMeasuresPDF() {
 
@@ -465,5 +462,6 @@ function exportMeasuresPDF() {
 }
 
 </script>
+  
 </body>
 </html>
