@@ -10,9 +10,39 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
-.category-content.collapsed {
-    display: none;
+/* ==========================================
+   Kleine kompakte Prüfpunkte-Badges
+========================================== */
+
+.category-badge {
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 130px;
+    height: 30px;
+
+    padding: 0 0.75rem;
+
+    border-radius: 8px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    white-space: nowrap;
 }
+
+/* iPad */
+@media (max-width: 1024px) {
+
+    .category-badge {
+        min-width: 110px;
+        height: 28px;
+        font-size: 12px;
+    }
+}
+
 
         /* Inline-Anzeige der empfohlenen Maßnahme unter einem Mangel */
         .measure-suggestion {
@@ -501,7 +531,7 @@ function renderChecklist() {
                     <svg xmlns="http://w3.org" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: ${isOpen ? 'rotate(90deg)' : 'rotate(0deg)'}; transition: transform 0.2s;"><path d="m9 18 6-6-6-6"/></svg>
                     ${category.name}
                 </span>
-                <span class="category-badge">${filteredItems.length} / ${category.items.length} Pruefpunkte</span>
+                <span class="category-badge">${filteredItems.length} / ${category.items.length} Prüfpunkte</span>
             </div>
             <!-- Klasse "collapsed" wird nur hinzugefügt, wenn sie NICHT offen ist -->
             <div class="category-content ${isOpen ? '' : 'collapsed'}" id="category-${category.id}">
