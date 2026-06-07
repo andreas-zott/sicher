@@ -10,16 +10,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
-        .category-badge {
-    width: 140px;              /* fixe Breite statt min-width */
-    height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+.category-content.collapsed {
+    display: none;
 }
+
         /* Inline-Anzeige der empfohlenen Maßnahme unter einem Mangel */
         .measure-suggestion {
             margin-top: 0.75rem;
@@ -270,9 +264,9 @@
             Drucken
         </button>
 
-      <button class="btn-primary" onclick="generateAndSharePDF()">
-        PDF Export
-    </button>
+        <button class="btn-primary" onclick="exportMeasuresPDF()">
+            PDF Export
+        </button>
     </div>
 </section>
             
@@ -474,93 +468,6 @@
     </script>
 <script>
 
-async function generateAndSharePDF() {
-
-    try {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-
-        let y = 15;
-
-        // HEADER
-        doc.setFontSize(16);
-        doc.text("Arbeitssicherheits-Audit", 10, y);
-        y += 10;
-
-        const firma = document.getElementById("firma")?.value || "-";
-        const standort = document.getElementById("standort")?.value || "-";
-        const pruefer = document.getElementById("pruefer")?.value || "-";
-        const datum = document.getElementById("datum")?.value || "-";
-
-        doc.setFontSize(11);
-        doc.text(`Firma: ${firma}`, 10, y); y += 7;
-        doc.text(`Standort: ${standort}`, 10, y); y += 7;
-        doc.text(`Prüfer: ${pruefer}`, 10, y); y += 7;
-        doc.text(`Datum: ${datum}`, 10, y); y += 10;
-
-        // CHECKLISTE
-        doc.setFontSize(12);
-        doc.text("Checkliste:", 10, y);
-        y += 8;
-
-        document.querySelectorAll(".checklist-item").forEach((item, i) => {
-
-            const title =
-                item.querySelector(".item-title")?.innerText ||
-                `Punkt ${i + 1}`;
-
-            const status =
-                item.querySelector(".rating-btn.selected")?.innerText || "Offen";
-
-            const line = `${i + 1}. ${title} [${status}]`;
-
-            const lines = doc.splitTextToSize(line, 180);
-
-            doc.text(lines, 10, y);
-            y += lines.length * 6;
-
-            if (y > 270) {
-                doc.addPage();
-                y = 15;
-            }
-        });
-      
-        doc.addPage();
-        y = 20;
-
-        doc.setFontSize(14);
-        doc.text("Unterschriften", 10, y);
-        y += 15;
-
-        function addSignature(id, label) {
-
-            const canvas = document.getElementById(id);
-            if (!canvas) return;
-
-            const img = canvas.toDataURL("image/png");
-
-            doc.setFontSize(11);
-            doc.text(label, 10, y);
-            y += 5;
-
-            doc.addImage(img, "PNG", 10, y, 80, 30);
-            y += 45;
-        }
-
-        addSignature("signature-pruefer", "Prüfer:");
-        addSignature("signature-verantwortlicher", "Verantwortlicher:");
-
-        doc.save("audit.pdf");
-
-    } catch (err) {
-        console.error(err);
-        alert("PDF Export fehlgeschlagen");
-    }
-}
-
-       
-
-
 function exportMeasuresPDF() {
 
     alert("PDF Export gestartet");
@@ -568,6 +475,62 @@ function exportMeasuresPDF() {
     window.print();
 
 }
+
+// Speichert die IDs der aktuell geöffneten Kategorien
+let openCategories = new Set();
+
+function renderChecklist() {
+    const container = document.getElementById('checklist-container');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    AUDIT_CATEGORIES.forEach(category => {
+        const filteredItems = filterItems(category.items);
+        if (filteredItems.length === 0 && currentFilter !== 'all') return;
+        
+        // Prüfen, ob diese Kategorie offen sein soll
+        const isOpen = openCategories.has(category.id);
+        
+        const categoryEl = document.createElement('div');
+        categoryEl.className = 'category-section';
+        categoryEl.innerHTML = `
+            <div class="category-header" onclick="toggleCategory('${category.id}')">
+                <span class="category-title">
+                    <!-- Icon-Drehung angepasst an den Zustand -->
+                    <svg xmlns="http://w3.org" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: ${isOpen ? 'rotate(90deg)' : 'rotate(0deg)'}; transition: transform 0.2s;"><path d="m9 18 6-6-6-6"/></svg>
+                    ${category.name}
+                </span>
+                <span class="category-badge">${filteredItems.length} / ${category.items.length} Pruefpunkte</span>
+            </div>
+            <!-- Klasse "collapsed" wird nur hinzugefügt, wenn sie NICHT offen ist -->
+            <div class="category-content ${isOpen ? '' : 'collapsed'}" id="category-${category.id}">
+                ${renderCategoryItems(filteredItems)}
+            </div>
+        `;
+        container.appendChild(categoryEl);
+    });
+}
+
+function toggleCategory(categoryId) {
+    const content = document.getElementById(`category-${categoryId}`);
+    const header = content.previousElementSibling;
+    const icon = header.querySelector('svg');
+    
+    content.classList.toggle('collapsed');
+    
+    const isCollapsed = content.classList.contains('collapsed');
+    
+    // Zustand im Set speichern oder löschen
+    if (isCollapsed) {
+        openCategories.delete(categoryId);
+        icon.style.transform = 'rotate(0deg)';
+    } else {
+        openCategories.add(categoryId);
+        icon.style.transform = 'rotate(90deg)';
+    }
+}
+
 
 </script>
   
