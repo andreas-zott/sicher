@@ -204,3 +204,4 @@ function autoSave() { localStorage.setItem('auditState', JSON.stringify(auditSta
 function showToast(msg, type) { /* unverändert */ }
 function findItemById(id) { /* unverändert */ }
 function getMeasureText(id) { /* unverändert */ }
+
