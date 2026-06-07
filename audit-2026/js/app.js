@@ -65,12 +65,14 @@ function renderChecklist() {
         categoryEl.innerHTML = `
             <div class="category-header" onclick="toggleCategory('${category.id}')">
                 <span class="category-title">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                    <!-- Icon startet ohne Drehung (style="transform: rotate(0deg);") -->
+                    <svg xmlns="http://w3.org" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(0deg); transition: transform 0.2s;"><path d="m9 18 6-6-6-6"/></svg>
                     ${category.name}
                 </span>
                 <span class="category-badge">${filteredItems.length} / ${category.items.length} Pruefpunkte</span>
             </div>
-            <div class="category-content" id="category-${category.id}">
+            <!-- Klasse "collapsed" hier direkt standardmäßig hinzugefügt -->
+            <div class="category-content collapsed" id="category-${category.id}">
                 ${renderCategoryItems(filteredItems)}
             </div>
         `;
