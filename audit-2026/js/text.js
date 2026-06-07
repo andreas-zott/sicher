@@ -1,137 +1,343 @@
 // ===== Vordefinierte Maßnahmen-Texte je Prüfpunkt =====
 // Wird als globale Variable bereitgestellt, damit klassische Scripts
 // (app.js) ohne Modul-Import darauf zugreifen können.
+
+// ===== Vordefinierte Maßnahmen-Texte je Prüfpunkt =====
+
 const MEASURES_TEXT = {
 
     Gesamtmarkt: {
-        "1.1": "Es ist sicherzustellen, dass alle Mitarbeitenden geeignetes Sicherheitsschuhwerk gemäß Gefährdungsbeurteilung tragen. Kontrollen sind regelmäßig durchzuführen und bei Bedarf Ersatzschuhe bereitzustellen.",
-        "1.2": "Die Betriebsanweisung für Flurförderfahrzeuge ist regelmäßig zu unterweisen und die Einhaltung (PSA, Traglasten, Personenmitnahmeverbot) durch Stichproben zu kontrollieren.",
-        "1.3": "Automatiktüren, Schnelllauftore und Rolltore sind durch eine befähigte Person prüfen zu lassen. Festgestellte Mängel sind unverzüglich zu beheben.",
-        "1.4": "Die Aufzugsanlage ist durch eine zugelassene Prüfstelle regelmäßig zu prüfen. Beschädigungen oder Funktionsstörungen sind sofort zu melden und zu beseitigen.",
-        "1.5": "Die Leergutrücknahme ist regelmäßig auf Sauberkeit und Sicherheit zu kontrollieren. Glasscherben sind sofort zu entfernen und Schutzeinrichtungen instand zu halten.",
-        "1.6": "Geeignete und geprüfte Aufstiegshilfen sind bereitzustellen und deren bestimmungsgemäße Nutzung durch Unterweisung sicherzustellen.",
-        "1.7": "Leitern sind gemäß DGUV Information 208-016 regelmäßig zu prüfen und beschädigte Leitern sofort aus dem Verkehr zu ziehen.",
-        "1.8": "Es dürfen ausschließlich geprüfte Sicherheitsmesser verwendet werden. Mitarbeitende sind entsprechend zu unterweisen.",
-        "1.9": "Verkehrswege sind regelmäßig zu kontrollieren und frei von Stolper- und Rutschgefahren zu halten.",
-        "1.10": "Treppen sind regelmäßig auf Schäden zu prüfen und frei von Gegenständen zu halten.",
-        "1.11": "Betriebsanweisungen sind gut sichtbar auszuhängen und deren Einhaltung regelmäßig zu kontrollieren.",
-        "1.12": "Die Beleuchtung ist gemäß ASR A3.4 zu prüfen und bei Unterschreitung der Lichtstärke instand zu setzen oder zu ergänzen."
+        "1.1": "Gemäß Gefährdungsbeurteilung und DGUV Vorschrift 1 ist sicherzustellen, dass alle Beschäftigten geeignetes, festes, geschlossenes und rutschhemmendes Schuhwerk tragen. Die Einhaltung ist regelmäßig zu kontrollieren.",
+
+        "1.2": "Beschäftigte sind regelmäßig anhand der Betriebsanweisung zum sicheren Umgang mit Flurförderfahrzeugen zu unterweisen. PSA-Pflicht, Traglastbegrenzungen und das Verbot der Personenmitnahme sind konsequent einzuhalten.",
+
+        "1.3": "Automatiktüren, Schnelllauftore und Rolltore sind gemäß ASR A1.7 sowie BetrSichV regelmäßig durch befähigte Personen zu prüfen. Mängel sind unverzüglich zu beseitigen.",
+
+        "1.4": "Aufzugsanlagen sind gemäß BetrSichV wiederkehrend durch zugelassene Überwachungsstellen zu prüfen und in sicherem Zustand zu halten.",
+
+        "1.5": "Die Leergutrücknahme ist regelmäßig auf Beschädigungen, Glasscherben und funktionierende Schutzeinrichtungen zu kontrollieren.",
+
+        "1.6": "Geeignete und geprüfte Aufstiegshilfen sind bereitzustellen. Die Nutzung hat gemäß DGUV Information 208-016 zu erfolgen.",
+
+        "1.7": "Leitern und Tritte sind regelmäßig durch befähigte Personen zu prüfen. Beschädigte Leitern sind sofort auszusondern.",
+
+        "1.8": "Es dürfen ausschließlich geeignete Sicherheitsmesser aus dem freigegebenen Ordersatz verwendet werden.",
+
+        "1.9": "Verkehrswege sind gemäß ASR A1.5 frei von Stolper-, Rutsch- und Sturzgefahren zu halten.",
+
+        "1.10": "Treppen sind frei von Gegenständen zu halten und regelmäßig auf Schäden zu kontrollieren.",
+
+        "1.11": "Betriebsanweisungen sind aktuell, zugänglich und für Beschäftigte verständlich bereitzustellen.",
+
+        "1.12": "Die Beleuchtung ist gemäß ASR A3.4 sicherzustellen. Gefahrenstellen und Leckagen müssen jederzeit eindeutig erkennbar sein."
     },
 
     Brandschutz: {
-        "2.1": "Feuerlöscheinrichtungen sind regelmäßig durch Fachfirmen zu prüfen und Prüffristen strikt einzuhalten.",
-        "2.2": "Feuerlöscher sind jederzeit frei zugänglich zu halten und dürfen nicht verstellt werden.",
-        "2.3": "Wandhydranten sind regelmäßig auf unbeschädigte Prüfsiegel und Funktionsfähigkeit zu kontrollieren.",
-        "2.4": "Brandschutztüren sind stets frei von Zugestellungen zu halten.",
-        "2.5": "Türhaltevorrichtungen und Schließfolgeregler sind regelmäßig zu prüfen und instand zu halten.",
-        "2.6": "Beschädigte Brandschutztüren sind unverzüglich instand zu setzen oder zu ersetzen.",
-        "2.7": "Ein aktueller Flucht- und Rettungsplan ist gut sichtbar auszuhängen und bei Änderungen zu aktualisieren.",
-        "2.8": "Die Notausgangsbeleuchtung ist regelmäßig zu prüfen und defekte Leuchten sind sofort zu ersetzen.",
-        "2.9": "Flucht- und Rettungswege sind jederzeit freizuhalten und regelmäßig zu kontrollieren.",
-        "2.10": "Notausgänge müssen jederzeit leicht und ohne Hilfsmittel zu öffnen sein.",
-        "2.11": "Es ist sicherzustellen, dass alle Notausgänge in sichere Bereiche führen und nicht blockiert sind.",
-        "2.12": "Die Brandmeldeanlage ist regelmäßig zu warten und auf Funktionsfähigkeit zu prüfen.",
-        "2.13": "Die Einfüllöffnung des Presscontainers ist nach Betriebsschluss konsequent zu verschließen.",
-        "2.14": "Technik- und Heizräume sind konsequent frei von brennbaren Materialien zu halten.",
-        "2.15": "Technik- und Heizräume dürfen nicht als Lagerflächen genutzt werden."
+        "2.1": "Feuerlöscheinrichtungen sind gemäß ASR A2.2 regelmäßig durch sachkundige Personen zu prüfen.",
+
+        "2.2": "Feuerlöscher und Wandhydranten sind jederzeit frei zugänglich zu halten.",
+
+        "2.3": "Prüfsiegel der Wandhydranten sind regelmäßig auf Unversehrtheit zu kontrollieren.",
+
+        "2.4": "Brandschutztüren dürfen nicht verstellt oder blockiert werden.",
+
+        "2.5": "Türhaltevorrichtungen und Schließfolgeregler sind regelmäßig auf Funktion zu prüfen.",
+
+        "2.6": "Beschädigte Brandschutztüren sind unverzüglich instand zu setzen.",
+
+        "2.7": "Ein aktueller Flucht- und Rettungsplan ist gut sichtbar auszuhängen.",
+
+        "2.8": "Die Sicherheits- und Notbeleuchtung ist regelmäßig zu prüfen.",
+
+        "2.9": "Flucht- und Rettungswege sind jederzeit vollständig freizuhalten.",
+
+        "2.10": "Notausgänge müssen jederzeit ohne Hilfsmittel leicht zu öffnen sein.",
+
+        "2.11": "Notausgänge müssen in sichere Bereiche führen.",
+
+        "2.12": "Die Brandmeldeanlage ist regelmäßig zu warten und auf Funktion zu prüfen.",
+
+        "2.13": "Die Einfüllöffnung des Presscontainers ist nach Betriebsschluss mechanisch zu sichern.",
+
+        "2.14": "Technik- und Heizräume sind frei von brennbaren Materialien zu halten.",
+
+        "2.15": "Technik- und Heizräume dürfen nicht als Lagerfläche genutzt werden."
     },
 
-    Sozialraeume: {
-        "3.1": "Aushangpflichtige Gesetze und Vorschriften sind aktuell zu halten und gut sichtbar auszuhängen.",
-        "3.2": "Hitzeentwickelnde Geräte sind auf nicht brennbaren Unterlagen zu betreiben.",
-        "3.3": "Ortsveränderliche elektrische Betriebsmittel sind regelmäßig nach DGUV V3 zu prüfen.",
-        "3.4": "Der Pausenraum ist ausschließlich zur Erholung der Beschäftigten zu nutzen und entsprechend freizuhalten."
+    Sozialräume: {
+        "3.1": "Aushangpflichtige Gesetze und Vorschriften sind aktuell und gut sichtbar auszuhängen.",
+
+        "3.2": "Hitzeentwickelnde Geräte sind ausschließlich auf nicht brennbaren Unterlagen zu betreiben.",
+
+        "3.3": "Ortsveränderliche elektrische Betriebsmittel sind regelmäßig gemäß DGUV Vorschrift 3 zu prüfen.",
+
+        "3.4": "Pausenräume sind frei von betrieblichem Lagergut zu halten."
     },
 
     "Erste Hilfe": {
-        "4.1": "Erste-Hilfe-Koffer sind an geeigneten, gut erreichbaren Standorten zu platzieren.",
-        "4.2": "Erste-Hilfe-Material ist regelmäßig zu prüfen und abgelaufene Materialien sind zu ersetzen.",
-        "4.3": "Erste-Hilfe-Leistungen sind vollständig und ordnungsgemäß zu dokumentieren.",
-        "4.4": "Die gesetzlich vorgeschriebene Anzahl an Ersthelfern ist jederzeit sicherzustellen.",
+        "4.1": "Erste-Hilfe-Koffer sind sichtbar gekennzeichnet und leicht erreichbar bereitzuhalten.",
+
+        "4.2": "Erste-Hilfe-Materialien sind regelmäßig auf Vollständigkeit und Haltbarkeit zu prüfen.",
+
+        "4.3": "Erste-Hilfe-Leistungen sind gemäß DGUV Vorschrift 1 vollständig zu dokumentieren.",
+
+        "4.4": "Die erforderliche Anzahl an Ersthelfern ist während der gesamten Betriebszeit sicherzustellen.",
+
         "4.5": "Notrufnummern sind gut sichtbar auszuhängen.",
-        "4.6": "Erste-Hilfe-Anweisungen sind aktuell zu halten und gut sichtbar bereitzustellen."
+
+        "4.6": "Erste-Hilfe-Anweisungen sind aktuell bereitzustellen."
     },
 
     "Elektrische Sicherheit": {
-        "5.1": "Schalter und Steckdosen sind regelmäßig auf Beschädigungen zu prüfen und defekte Teile zu ersetzen.",
-        "5.2": "Deckenleitungen sind fachgerecht zu befestigen und zugentlastet zu führen.",
-        "5.3": "Steckdosen und Kabel sind in einwandfreiem Zustand zu halten und regelmäßig zu prüfen.",
-        "5.4": "Steckverbindungen dürfen nicht ungeschützt auf dem Boden liegen.",
-        "5.5": "Provisorische Elektroinstallationen sind zu vermeiden bzw. fachgerecht zu beseitigen."
+        "5.1": "Beschädigte Schalter und Steckdosen sind unverzüglich instand zu setzen.",
+
+        "5.2": "Leitungen und Steckverbindungen sind fachgerecht zugentlastet zu befestigen.",
+
+        "5.3": "Steckdosen und Kabel sind regelmäßig auf Schäden zu prüfen.",
+
+        "5.4": "Elektrische Steckverbindungen dürfen nicht ungeschützt auf dem Boden liegen.",
+
+        "5.5": "Provisorische Elektroinstallationen sind unverzüglich fachgerecht zu beseitigen."
     },
 
-    Lager: {
-        "6.1": "Elektrische Hubwagen sind regelmäßig zu prüfen und nur in einwandfreiem Zustand zu betreiben.",
-        "6.2": "Gabelhubwagen sind regelmäßig auf Schäden zu kontrollieren.",
-        "6.3": "Schwerlastregale sind gemäß Vorgaben regelmäßig zu prüfen.",
-        "6.4": "Anfahrschutz ist an allen relevanten Stellen vorzuhalten und instand zu halten.",
-        "6.5": "Traglastangaben sind gut sichtbar anzubringen.",
-        "6.6": "Absturzsicherungen an Rampen sind verpflichtend vorzuhalten.",
-        "6.7": "Absturzsicherungen sind eindeutig zu kennzeichnen und funktionsfähig zu halten.",
-        "6.8": "Müll-/Papierpressen sind regelmäßig zu prüfen.",
-        "6.9": "Müll-/Papierpressen sind in technisch einwandfreiem Zustand zu halten.",
-        "6.10": "Verkehrswege im Lager sind frei und sicher begehbar zu halten."
+    "CO2 Kühleinrichtungen": {
+        "6.1": "Beschäftigte sind regelmäßig über Gefahren durch CO2-Kühlanlagen zu unterweisen.",
+
+        "6.2": "Notentriegelungen sind regelmäßig auf Funktion zu prüfen.",
+
+        "6.3": "Sensoren dürfen nicht verstellt oder verdeckt werden.",
+
+        "6.4": "Die Beleuchtung ist funktionsfähig zu halten.",
+
+        "6.5": "Sicherheitsvorrichtungen sind regelmäßig auf Funktion zu prüfen."
     },
 
-    Backstation: {
-        "7.1": "Arbeitsgeräte der Backstation sind regelmäßig zu prüfen und instand zu halten.",
-        "7.2": "Handwaschbecken sind in hygienisch und technisch einwandfreiem Zustand zu halten.",
-        "7.3": "Elektroleitungen sind regelmäßig auf Schäden zu prüfen und Stolperstellen zu vermeiden.",
-        "7.4": "Zuleitungen müssen der geltenden VDE-Norm entsprechen.",
-        "7.5": "Alle Maschinen sind regelmäßig zu prüfen und zu dokumentieren.",
-        "7.6": "Schutzeinrichtungen sind zu installieren und funktionsfähig zu halten.",
-        "7.7": "Betriebsanweisungen sind gut sichtbar auszuhängen.",
-        "7.8": "Backhandschuhe sind regelmäßig auf Zustand und Eignung zu prüfen.",
-        "7.9": "Heißgeräte sind regelmäßig technisch zu warten."
+    Kühlhaus: {
+        "7.1": "Beleuchtungen in Kühlhäusern sind mit geeigneten Schutzkappen zu versehen.",
+
+        "7.2": "Die Notentriegelung ist regelmäßig zu prüfen.",
+
+        "7.3": "Kühlhaustüren sind gemäß ISO 7010 als Rettungsweg zu kennzeichnen.",
+
+        "7.4": "Die Beleuchtung ist funktionsfähig zu halten.",
+
+        "7.5": "Vorhandene Notrufsysteme sind regelmäßig auf Funktion zu prüfen."
     },
+
+    "Lager und Regale": {
+        "8.1": "Elektrische Hubwagen sind regelmäßig gemäß BetrSichV zu prüfen.",
+
+        "8.2": "Gabelhubwagen sind regelmäßig auf Beschädigungen zu kontrollieren.",
+
+        "8.3": "Schwerlastregale sind regelmäßig durch befähigte Personen zu prüfen.",
+
+        "8.4": "Anfahrschutz ist an gefährdeten Stellen vorzuhalten.",
+
+        "8.5": "Traglastangaben sind gut sichtbar anzubringen.",
+
+        "8.6": "Absturzsicherungen an Rampen sind bereitzustellen.",
+
+        "8.7": "Absturzsicherungen sind regelmäßig auf Schäden zu prüfen.",
+
+        "8.8": "Müll- und Papierpressen sind regelmäßig zu prüfen.",
+
+        "8.9": "Müll- und Papierpressen sind in sicherem Zustand zu halten.",
+
+        "8.10": "Verkehrswege im Lager sind sicher und frei begehbar zu halten."
+    },
+
+    Leergut: {
+        "9.1": "Leergutannahmegeräte sind regelmäßig auf Beschädigungen und Funktion zu prüfen.",
+
+        "9.2": "Rollbahnen dürfen aus Sicherheitsgründen nicht betreten werden.",
+
+        "9.3": "Beschädigte Paletten und Kisten sind unverzüglich auszusortieren.",
+
+        "9.4": "Lasten sind ergonomisch und sicher zu transportieren.",
+
+        "9.5": "Persönliche Schutzausrüstung ist bereitzustellen und zu tragen.",
+
+        "9.6": "Bruchmaterialien und Abfälle sind ordnungsgemäß zu entsorgen.",
+
+        "9.7": "Maximale Stapelhöhen sind einzuhalten.",
+
+        "9.8": "Lagerflächen sind sauber und rutschfrei zu halten."
+    },
+
+
+    Arbeitsmedizin: {
+        "11.1": "Arbeitsmedizinische Vorsorge ist gemäß ArbMedVV anzubieten.",
+
+        "11.2": "Eine regelmäßige arbeitsmedizinische Betreuung ist sicherzustellen.",
+
+        "11.3": "Arbeitsmedizinische Beratungen sind zu dokumentieren.",
+
+        "11.4": "Geeignete Maßnahmen zum Hautschutz sind umzusetzen.",
+
+        "11.5": "Empfehlungen des Betriebsarztes sind umzusetzen und nachzuverfolgen.",
+
+        "11.6": "Sanitärräume und Pausenräume sind hygienisch sauber zu halten."
+    },
+
+
+      Backstation: {
+        "12.1": "Arbeitsgeräte der Backstation sind regelmäßig auf sicheren Zustand zu prüfen.",
+
+        "12.2": "Handwaschbecken sind hygienisch sauber und funktionsfähig zu halten.",
+
+        "12.3": "Elektroleitungen dürfen keine Stolperstellen verursachen.",
+
+        "12.4": "Elektrische Anschlüsse müssen den geltenden VDE-Bestimmungen entsprechen.",
+
+        "12.5": "Maschinenprüfungen sind regelmäßig durchzuführen und zu dokumentieren.",
+
+        "12.6": "Schutzeinrichtungen müssen vorhanden und funktionsfähig sein.",
+
+        "12.7": "Betriebsanweisungen sind gut sichtbar auszuhängen.",
+
+        "12.8": "Backhandschuhe sind regelmäßig auf Verschleiß zu prüfen.",
+
+        "12.9": "Heißgeräte sind regelmäßig technisch zu warten."
+    },
+
+     Serviceabteilung: {
+        "13.1": "Ein aktueller Hautschutzplan ist gut sichtbar auszuhängen.",
+
+        "13.2": "Geeignete Hautschutz- und Hautpflegeprodukte sind bereitzustellen.",
+
+        "13.3": "Arbeitsgeräte sind regelmäßig auf sicheren Zustand zu prüfen.",
+
+        "13.4": "Aufklappbare Thekenscheiben müssen sicher offen stehen bleiben.",
+
+        "13.5": "Glasflächen sind in Augenhöhe zu kennzeichnen.",
+
+        "13.6": "Schneidbretter und Messer sind hygienisch zu reinigen.",
+
+        "13.7": "Geeignete Schneidbretter mit Messereinschub sind zu verwenden.",
+
+        "13.8": "Messerhalter sind bereitzustellen und zu verwenden.",
+
+        "13.9": "Convenience-Geräte sind regelmäßig zu prüfen.",
+
+        "13.10": "Die Beleuchtung im Servicebereich ist ausreichend sicherzustellen."
+    },
+
 
     Kassenzone: {
-        "8.1": "Der Fußraum ist frei von Gegenständen zu halten.",
-        "8.2": "Der Boden im Kassenbereich ist instand zu halten und frei von Schäden.",
-        "8.3": "Heizgeräte sind frei von brennbaren Materialien zu halten.",
-        "8.4": "Kassenstühle sind regelmäßig auf Funktionsfähigkeit zu prüfen.",
-        "8.5": "Transportbänder sind regelmäßig zu warten und Schäden zu beheben.",
-        "8.6": "Einkaufskörbe sind geordnet zu lagern."
+        "14.1": "Der Fußraum ist frei von Gegenständen zu halten.",
+
+        "14.2": "Der Bodenbelag ist regelmäßig auf Schäden zu prüfen.",
+
+        "14.3": "Heizgeräte dürfen nicht durch brennbare Materialien verstellt werden.",
+
+        "14.4": "Kassenstühle sind regelmäßig auf sicheren Zustand zu prüfen.",
+
+        "14.5": "Transportbänder sind regelmäßig zu warten.",
+
+        "14.6": "Einkaufskörbe sind ordnungsgemäß zu lagern."
+
     },
 
-    Notfallmanagement: {
-        "9.1": "Ein aktueller Notfallplan ist zu erstellen und auszuhängen.",
-        "9.2": "Mitarbeitende sind regelmäßig zum Verhalten bei Notfällen zu unterweisen.",
-        "9.3": "Zuständigkeiten im Notfall sind klar zu definieren und zu kommunizieren.",
-        "9.4": "Alarmierungswege sind eindeutig festzulegen und zu testen."
+     Gefahrstoffe: {
+        "15.1": "Gefahrstoffe sind gemäß TRGS 510 unter Einhaltung der Zusammenlagerungsverbote sicher zu lagern. Gefährliche Wechselwirkungen zwischen Stoffgruppen sind auszuschließen.",
+
+        "15.2": "Geeignete persönliche Schutzausrüstung ist entsprechend Gefährdungsbeurteilung und Sicherheitsdatenblatt bereitzustellen und zu verwenden.",
+
+        "15.3": "Die in den Betriebsanweisungen geforderte PSA ist jederzeit vollständig und einsatzbereit bereitzuhalten.",
+
+        "15.4": "Aktuelle Sicherheitsdatenblätter müssen in deutscher Sprache verfügbar und für Beschäftigte jederzeit zugänglich sein.",
+
+        "15.5": "Beschäftigte sind vor Aufnahme der Tätigkeit und danach regelmäßig gemäß GefStoffV zu unterweisen."
     },
 
-    Dokumentation: {
-        "10.1": "Erste-Hilfe-Dokumentation ist vollständig und korrekt zu führen.",
-        "10.2": "Ein Sicherheitsbeauftragter ist schriftlich zu bestellen.",
-        "10.3": "Mindestens ein Brandschutzhelfer muss jederzeit verfügbar sein.",
-        "10.4": "Unterweisungen zum Umgang mit Zahlungsmitteln sind regelmäßig zu aktualisieren.",
-        "10.5": "Alle Unterweisungen sind vollständig zu dokumentieren.",
-        "10.6": "Aktuelle Änderungen sind zeitnah in alle Dokumente einzuarbeiten.",
-        "10.7": "Die Gefährdungsbeurteilung ist regelmäßig zu aktualisieren."
+    Marktleiterbüro: {
+        "16.1": "Aktuelle Listen und Prüfberichte prüfpflichtiger Anlagen und Einrichtungen sind vollständig vorzuhalten und regelmäßig zu aktualisieren.",
+
+        "16.2": "Geeignete organisatorische und technische Maßnahmen zur Reduzierung des Überfallrisikos sind umzusetzen.",
+
+        "16.3": "Während des Umgangs mit Zahlungsmitteln ist die Bürotür verschlossen zu halten.",
+
+        "16.4": "Neue Beschäftigte sind vor Tätigkeitsaufnahme zu Arbeitssicherheit, Brandschutz und betrieblichen Gefährdungen zu unterweisen."
     },
 
-    Psychische_belastung: {
-        "11.1": "Arbeitsplanung ist unter Berücksichtigung der Mitarbeiterwünsche zu gestalten.",
-        "11.2": "Pausenregelungen sind konsequent umzusetzen.",
-        "11.3": "Überstunden sind auf ein Minimum zu reduzieren.",
-        "11.4": "Regelmäßige Teambesprechungen sind durchzuführen.",
-        "11.5": "Neue Mitarbeitende sind strukturiert einzuarbeiten.",
-        "11.6": "Unterweisungen zu Brand- und Arbeitsschutz sind regelmäßig durchzuführen.",
-        "11.7": "Ein schwarzes Brett ist gut sichtbar bereitzustellen.",
-        "11.8": "Entscheidungen sind transparent zu kommunizieren.",
-        "11.9": "Positive Rückmeldungen sind regelmäßig zu geben.",
-        "11.10": "Konstruktive Kritik ist sachlich und regelmäßig zu üben.",
-        "11.11": "Informationen zur Suchtprävention sind auszuhängen.",
-        "11.12": "Ein betriebliches Wiedereingliederungsmanagement ist zu implementieren.",
-        "11.13": "Alleinarbeit ist möglichst zu vermeiden.",
-        "11.14": "Eine Betreuung nach Überfällen ist organisatorisch sicherzustellen.",
-        "11.15": "Schulungen zum Umgang mit Gewalt sind anzubieten.",
-        "11.16": "Mitarbeiteranregungen sind aktiv in Entscheidungen einzubeziehen."
+   "Barrierefreies WC": {
+        "17.1": "Die Notrufschnur muss gemäß DIN 18040 bis maximal 10 cm über dem Fußboden erreichbar sein.",
+
+        "17.2": "Der Alarm ist an eine ständig besetzte oder überwachte Stelle weiterzuleiten.",
+
+        "17.3": "Notrufeinrichtungen sind regelmäßig auf Funktion zu prüfen und zu dokumentieren.",
+
+        "17.4": "Beschäftigte sind regelmäßig zum Verhalten bei Notrufen zu unterweisen.",
+
+        "17.5": "Die Tür muss im Notfall jederzeit von außen entriegelt werden können."
     },
+
+
+       Notfallmanagement: {
+        "18.1": "Ein aktueller Notfall- und Alarmplan ist bereitzustellen und den Beschäftigten bekannt zu machen.",
+
+        "18.2": "Beschäftigte sind regelmäßig zum Verhalten bei Brand, Unfall und Evakuierung zu unterweisen.",
+
+        "18.3": "Zuständigkeiten und Verantwortlichkeiten im Notfall sind eindeutig festzulegen.",
+
+        "18.4": "Alarmierungswege und Meldeketten sind verbindlich festzulegen und regelmäßig zu testen."
+    },
+
+     Dokumentation: {
+        "19.1": "Dokumentationen über Erste-Hilfe-Leistungen sind vollständig, vertraulich und entsprechend der gesetzlichen Aufbewahrungsfristen aufzubewahren.",
+
+        "19.2": "Ein Sicherheitsbeauftragter ist gemäß DGUV Vorschrift 1 schriftlich zu bestellen.",
+
+        "19.3": "Während der gesamten Ladenöffnungszeit ist mindestens ein ausgebildeter Brandschutzhelfer anwesend zu halten.",
+
+        "19.4": "Unterweisungen zum Umgang mit Zahlungsmitteln sind mindestens halbjährlich durchzuführen und zu dokumentieren.",
+
+        "19.5": "Alle Unterweisungen sind nachvollziehbar und rechtssicher zu dokumentieren.",
+
+        "19.6": "Änderungen betrieblicher Abläufe oder neuer Sicherheitstechniken sind zeitnah in Unterweisungen zu integrieren.",
+
+        "19.7": "Die Gefährdungsbeurteilung ist regelmäßig zu überprüfen und bei Änderungen unverzüglich anzupassen."
+    },
+
+
+  "Psychische Belastung": {
+        "20.1": "Mitarbeiterwünsche sind im Rahmen der Arbeitszeitgestaltung angemessen zu berücksichtigen.",
+
+        "20.2": "Die gesetzlichen Pausenregelungen sind einzuhalten und organisatorisch sicherzustellen.",
+
+        "20.3": "Überstunden sind auf das notwendige Maß zu begrenzen.",
+
+        "20.4": "Regelmäßige Teambesprechungen zur Verbesserung der Kommunikation sind durchzuführen.",
+
+        "20.5": "Neue Beschäftigte sind strukturiert einzuarbeiten und fachlich zu begleiten.",
+
+        "20.6": "Unterweisungen zu Brand- und Arbeitsschutz sind regelmäßig durchzuführen und zu dokumentieren.",
+
+        "20.7": "Ein schwarzes Brett oder vergleichbares Informationsmedium ist bereitzustellen.",
+
+        "20.8": "Betriebliche Entscheidungen sind nachvollziehbar und transparent zu kommunizieren.",
+
+        "20.9": "Positive Leistungen und sicherheitsgerechtes Verhalten sind anzuerkennen.",
+
+        "20.10": "Konstruktive Kritik ist sachlich und wertschätzend zu vermitteln.",
+
+        "20.11": "Informationen und Ansprechpartner zur Suchtprävention sind bereitzustellen.",
+
+        "20.12": "Ein betriebliches Eingliederungsmanagement gemäß §167 SGB IX ist umzusetzen.",
+
+        "20.13": "Alleinarbeit ist im Rahmen der Gefährdungsbeurteilung möglichst zu vermeiden.",
+
+        "20.14": "Maßnahmen zur Betreuung von Beschäftigten nach Überfall- oder Gewaltvorfällen sind organisatorisch sicherzustellen.",
+
+        "20.15": "Schulungen zum Umgang mit aggressiven oder gewalttätigen Situationen sind anzubieten.",
+
+        "20.16": "Mitarbeiteranregungen sind aktiv in Entscheidungs- und Verbesserungsprozesse einzubeziehen."
+    },
+
 
     default: "Geeignete Maßnahmen zur Mängelbeseitigung festlegen und dokumentieren."
 };
+
 
 // Flache Zuordnung: Prüfpunkt-ID -> Maßnahmen-Text (über alle Kategorien hinweg).
 const MEASURES_BY_ID = (() => {
