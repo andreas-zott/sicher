@@ -5,43 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arbeitssicherheits-Audit Tool</title>
     <link rel="icon" href="favicon.ico">
+<link href="audit.json" rel="manifest"/>
     <link rel="stylesheet" href="css/styles.css">
     <!-- jsPDF lokal oder CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
-/* ==========================================
-   Kleine kompakte Prüfpunkte-Badges
-========================================== */
-
-.category-badge {
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    min-width: 130px;
-    height: 30px;
-
-    padding: 0 0.75rem;
-
-    border-radius: 8px;
-
-    font-size: 13px;
-    font-weight: 600;
-
-    white-space: nowrap;
-}
-
-/* iPad */
-@media (max-width: 1024px) {
-
-    .category-badge {
-        min-width: 110px;
-        height: 28px;
-        font-size: 12px;
-    }
-}
 
 
         /* Inline-Anzeige der empfohlenen Maßnahme unter einem Mangel */
@@ -561,7 +530,14 @@ function toggleCategory(categoryId) {
     }
 }
 
-
+// Service Worker optional
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js')
+      .then(() => console.log("✅ Service Worker registriert"))
+      .catch(err => console.error("❌ Service Worker Fehler:", err));
+  });
+}
 </script>
   
 </body>
