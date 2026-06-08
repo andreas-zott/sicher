@@ -1,674 +1,822 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Massnahmenplan - Arbeitssicherheits-Audit</title>
-    <link rel="icon" href="favicon.ico">
-    <link rel="stylesheet" href="css/styles.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Massnahmenplan - Arbeitssicherheits-Audit
+    </title>
+
+    <link
+        rel="icon"
+        href="favicon.ico"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/styles.css"
+    >
+
+    <!-- jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- ==========================================
+         DIN A4 DRUCKLAYOUT
+    ========================================== -->
+
+    <style>
+
+        @media print {
+
+            @page {
+                size: A4 portrait;
+                margin: 12mm;
+            }
+
+            body {
+                background: white !important;
+                color: black !important;
+                font-size: 11pt;
+            }
+
+            .header,
+            .footer,
+            .action-bar,
+            .btn-primary,
+            .btn-secondary,
+            .modal-overlay,
+            nav {
+                display: none !important;
+            }
+
+            .main-content {
+                width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            .card {
+                border: none !important;
+                box-shadow: none !important;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                page-break-inside: auto;
+            }
+
+            tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+
+            th,
+            td {
+                border: 1px solid #ccc;
+                padding: 6px;
+                vertical-align: top;
+                word-break: break-word;
+            }
+
+            td {
+                white-space: pre-wrap;
+            }
+
+            .dashboard-cards {
+                margin-bottom: 20px;
+            }
+        }
+
+    </style>
+
 </head>
+
 <body>
+
+    <!-- ==========================================
+         HEADER
+    ========================================== -->
+
     <header class="header">
+
         <div class="header-content">
+
             <div class="logo-section">
-                <img src="images/logo.png" alt="Sicherheits-Audit Logo" class="logo">
+
+                <img
+                    src="images/logo.png"
+                    alt="Sicherheits-Audit Logo"
+                    class="logo"
+                >
+
                 <div class="title-section">
-                    <h1>Arbeitssicherheits-Audit</h1>
-                    <p class="subtitle">Massnahmenplan</p>
+
+                    <h1>
+                        Arbeitssicherheits-Audit
+                    </h1>
+
+                    <p class="subtitle">
+                        Massnahmenplan
+                    </p>
+
                 </div>
+
             </div>
+
             <nav class="nav">
-                <a href="index.html" class="nav-link">Checkliste</a>
-                <a href="massnahmenplan.html" class="nav-link active">Massnahmenplan</a>
-                <a href="fotos.html" class="nav-link">Fotos</a>
-                <a href="impressum.html" class="nav-link">Impressum</a>
+
+                <a
+                    href="index.html"
+                    class="nav-link"
+                >
+                    Checkliste
+                </a>
+
+                <a
+                    href="massnahmenplan.html"
+                    class="nav-link active"
+                >
+                    Massnahmenplan
+                </a>
+
+                <a
+                    href="fotos.html"
+                    class="nav-link"
+                >
+                    Fotos
+                </a>
+
+                <a
+                    href="impressum.html"
+                    class="nav-link"
+                >
+                    Impressum
+                </a>
+
             </nav>
+
         </div>
+
     </header>
 
+    <!-- ==========================================
+         MAIN CONTENT
+    ========================================== -->
+
     <main class="main-content">
-        <!-- Summary Cards -->
+
+        <!-- ==========================================
+             DASHBOARD
+        ========================================== -->
+
         <section class="dashboard-cards">
+
             <div class="stat-card">
+
                 <div class="stat-icon warning">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+                    !
                 </div>
+
                 <div class="stat-content">
-                    <span class="stat-value" id="stat-offen">0</span>
-                    <span class="stat-label">Offen</span>
+
+                    <span
+                        class="stat-value"
+                        id="stat-offen"
+                    >
+                        0
+                    </span>
+
+                    <span class="stat-label">
+                        Offen
+                    </span>
+
                 </div>
+
             </div>
+
             <div class="stat-card">
+
                 <div class="stat-icon na">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                    ✓
                 </div>
+
                 <div class="stat-content">
-                    <span class="stat-value" id="stat-bearbeitung">0</span>
-                    <span class="stat-label">In Bearbeitung</span>
+
+                    <span
+                        class="stat-value"
+                        id="stat-bearbeitung"
+                    >
+                        0
+                    </span>
+
+                    <span class="stat-label">
+                        In Bearbeitung
+                    </span>
+
                 </div>
+
             </div>
+
             <div class="stat-card">
+
                 <div class="stat-icon ok">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    ✓
                 </div>
+
                 <div class="stat-content">
-                    <span class="stat-value" id="stat-erledigt">0</span>
-                    <span class="stat-label">Erledigt</span>
+
+                    <span
+                        class="stat-value"
+                        id="stat-erledigt"
+                    >
+                        0
+                    </span>
+
+                    <span class="stat-label">
+                        Erledigt
+                    </span>
+
                 </div>
+
             </div>
+
         </section>
 
-        <!-- Add Measure Button -->
+        <!-- ==========================================
+             MASSNAHMEN
+        ========================================== -->
+
         <section class="card">
+
             <div class="card-header">
+
                 <h2 class="card-title">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>
                     Massnahmen
                 </h2>
-                <button class="btn-primary" onclick="openAddMeasureModal()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg>
+
+                <button
+                    class="btn-primary"
+                    onclick="openAddMeasureModal()"
+                >
                     Neue Massnahme
                 </button>
+
             </div>
+
+            <!-- ==========================================
+                 TABELLE
+            ========================================== -->
 
             <div class="table-container">
+
                 <table id="measures-table">
+
                     <thead>
+
                         <tr>
+
                             <th>Nr.</th>
+
                             <th>Beschreibung</th>
+
                             <th>Prioritaet</th>
+
                             <th>Verantwortlich</th>
+
                             <th>Fällig bis</th>
+
                             <th>Status</th>
+
                             <th>Aktionen</th>
+
                         </tr>
+
                     </thead>
+
                     <tbody id="measures-body">
-                        <!-- Filled by JavaScript -->
+                        <!-- Dynamisch -->
                     </tbody>
+
                 </table>
+
             </div>
 
-            <div id="no-measures" class="no-data" style="display: none; text-align: center; padding: 3rem; color: var(--muted);">
-                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 1rem;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                <h3 style="margin-bottom: 0.5rem;">Keine Mängel erfasst</h3>
-                <p>Führen Sie zuerst das Audit durch oder fügen Sie manuell Massnahmen hinzu.</p>
+            <!-- ==========================================
+                 LEER
+            ========================================== -->
+
+            <div
+                id="no-measures"
+                class="no-data"
+                style="display:none;"
+            >
+
+                <h3>
+                    Keine Mängel erfasst
+                </h3>
+
+                <p>
+                    Führen Sie zuerst das Audit durch
+                    oder fügen Sie manuell Maßnahmen hinzu.
+                </p>
+
             </div>
+
         </section>
 
-        <!-- Action Bar -->
+        <!-- ==========================================
+             BUTTONS
+        ========================================== -->
+
         <section class="action-bar">
+
             <div class="action-left">
-                <a href="index.html" class="btn-secondary">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+
+                <a
+                    href="index.html"
+                    class="btn-secondary"
+                >
                     Zurück zur Checkliste
                 </a>
+
             </div>
 
-        <div class="action-right">
+            <div class="action-right">
 
-    <button class="btn-secondary" onclick="printAudit()">
-        Drucken
-    </button>
+                <button
+                    class="btn-secondary"
+                    onclick="printAudit()"
+                >
+                    Drucken
+                </button>
 
-          <button class="btn-primary" onclick="generateAndSharePDF()">
-        PDF Export
-    </button>
+                <button
+                    class="btn-primary"
+                    onclick="exportMeasuresPDF()"
+                >
+                    PDF Export
+                </button>
 
-</div>
+            </div>
+
         </section>
+
     </main>
 
-    <!-- Add/Edit Measure Modal -->
-    <div id="measure-modal" class="modal-overlay" style="display: none;">
+    <!-- ==========================================
+         MODAL
+    ========================================== -->
+
+    <div
+        id="measure-modal"
+        class="modal-overlay"
+        style="display:none;"
+    >
+
         <div class="modal">
+
             <div class="modal-header">
-                <h3 id="modal-title">Neue Massnahme</h3>
-                <button class="modal-close" onclick="closeMeasureModal()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>
+
+                <h3 id="modal-title">
+                    Neue Massnahme
+                </h3>
+
+                <button
+                    class="modal-close"
+                    onclick="closeMeasureModal()"
+                >
+                    X
                 </button>
-            </div>
-            <div class="modal-body">
-                <form id="measure-form">
-                    <input type="hidden" id="measure-id">
-                    <div class="form-group">
-                        <label for="measure-description">Beschreibung *</label>
-                        <textarea id="measure-description" rows="3" required placeholder="Beschreiben Sie die Massnahme..."></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="measure-priority">Prioritaet</label>
-                        <select id="measure-priority">
-                            <option value="hoch">Hoch</option>
-                            <option value="mittel" selected>Mittel</option>
-                            <option value="niedrig">Niedrig</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="measure-responsible">Verantwortlich</label>
-                        <input type="text" id="measure-responsible" placeholder="Name der verantwortlichen Person">
-                    </div>
-                    <div class="form-group">
-                        <label for="measure-due">Faellig bis</label>
-                        <input type="date" id="measure-due">
-                    </div>
-                    <div class="form-group">
-                        <label for="measure-status">Status</label>
-                        <select id="measure-status">
-                            <option value="offen">Offen</option>
-                            <option value="in-bearbeitung">In Bearbeitung</option>
-                            <option value="erledigt">Erledigt</option>
-                        </select>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-secondary" onclick="closeMeasureModal()">Abbrechen</button>
-                <button class="btn-primary" onclick="saveMeasure()">Speichern</button>
 
             </div>
+
+            <div class="modal-body">
+
+                <form id="measure-form">
+
+                    <input
+                        type="hidden"
+                        id="measure-id"
+                    >
+
+                    <div class="form-group">
+
+                        <label for="measure-description">
+                            Beschreibung
+                        </label>
+
+                        <textarea
+                            id="measure-description"
+                            rows="3"
+                            required
+                        ></textarea>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="measure-priority">
+                            Prioritaet
+                        </label>
+
+                        <select id="measure-priority">
+
+                            <option value="hoch">
+                                Hoch
+                            </option>
+
+                            <option
+                                value="mittel"
+                                selected
+                            >
+                                Mittel
+                            </option>
+
+                            <option value="niedrig">
+                                Niedrig
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="measure-responsible">
+                            Verantwortlich
+                        </label>
+
+                        <input
+                            type="text"
+                            id="measure-responsible"
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="measure-due">
+                            Faellig bis
+                        </label>
+
+                        <input
+                            type="date"
+                            id="measure-due"
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="measure-status">
+                            Status
+                        </label>
+
+                        <select id="measure-status">
+
+                            <option value="offen">
+                                Offen
+                            </option>
+
+                            <option value="in-bearbeitung">
+                                In Bearbeitung
+                            </option>
+
+                            <option value="erledigt">
+                                Erledigt
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    class="btn-secondary"
+                    onclick="closeMeasureModal()"
+                >
+                    Abbrechen
+                </button>
+
+                <button
+                    class="btn-primary"
+                    onclick="saveMeasure()"
+                >
+                    Speichern
+                </button>
+
+            </div>
+
         </div>
+
     </div>
 
+    <!-- ==========================================
+         FOOTER
+    ========================================== -->
+
     <footer class="footer">
-        <p>Arbeitssicherheits-Audit Tool - Version 1.0</p>
-        <div class="footer-links">
-            <a href="datenschutz.html">Datenschutz</a>
-            <a href="impressum.html">Impressum</a>
-        </div>
+
+        <p>
+            Arbeitssicherheits-Audit Tool
+        </p>
+
     </footer>
 
+    <!-- ==========================================
+         SCRIPTS
+    ========================================== -->
+
     <script src="js/audit-data.js"></script>
+
     <script src="js/massnahmenplan.js"></script>
-<script src="js/app.js"></script> 
 
-<script>
+    <script src="js/app.js"></script>
 
-    // ==========================================
-    // Druckfunktion fuer Tauri/Desktop
-    // ==========================================
+    <!-- ==========================================
+         DRUCK + PDF
+    ========================================== -->
 
-    function printAudit() {
+    <script>
 
-        // Vor dem Drucken alle Textfelder automatisch an Inhalt anpassen
-        document.querySelectorAll("textarea").forEach((textarea) => {
+        // ==========================================
+        // DRUCK DIN A4
+        // ==========================================
 
-            textarea.style.height = "auto";
+        function printAudit() {
 
-            textarea.style.height =
-                textarea.scrollHeight + "px";
-        });
+            document.querySelectorAll("textarea")
+                .forEach((textarea) => {
 
-        // Kleine Verzögerung damit das Layout korrekt berechnet wird
-        setTimeout(() => {
+                    textarea.style.height = "auto";
 
-            window.print();
+                    textarea.style.height =
+                        textarea.scrollHeight + "px";
+                });
 
-        }, 150);
-    }
+            setTimeout(() => {
 
-    // ==========================================
-    // ALTER CHECKLISTEN PDF EXPORT
-    // ==========================================
+                window.print();
 
-    async function exportPDF() {
+            }, 200);
+        }
 
-        try {
+        // ==========================================
+        // PDF EXPORT DIN A4
+        // ==========================================
 
-            const { jsPDF } = window.jspdf;
+        async function generateAndSharePDF() {
 
-            const doc = new jsPDF({
-                orientation: "portrait",
-                unit: "mm",
-                format: "a4"
-            });
+            try {
 
-            let y = 20;
+                const { jsPDF } =
+                    window.jspdf;
 
-            doc.setFontSize(18);
+                const doc =
+                    new jsPDF({
+                        orientation: "portrait",
+                        unit: "mm",
+                        format: "a4"
+                    });
 
-            doc.text(
-                "Arbeitssicherheits-Audit",
-                20,
-                y
-            );
+                const pageWidth = 210;
 
-            y += 12;
+                const pageHeight = 297;
 
-            const firma =
-                document.getElementById("firma")?.value || "-";
+                const marginLeft = 15;
 
-            const standort =
-                document.getElementById("standort")?.value || "-";
+                const marginRight = 15;
 
-            const pruefer =
-                document.getElementById("pruefer")?.value || "-";
+                let y = 20;
 
-            const datum =
-                document.getElementById("datum")?.value || "-";
+                // HEADER
 
-            doc.setFontSize(11);
+                doc.setFontSize(18);
 
-            doc.text(`Firma: ${firma}`, 20, y);
-            y += 8;
+                doc.text(
+                    "Massnahmenplan - Arbeitssicherheits-Audit",
+                    marginLeft,
+                    y
+                );
 
-            doc.text(`Standort: ${standort}`, 20, y);
-            y += 8;
+                y += 12;
 
-            doc.text(`Pruefer: ${pruefer}`, 20, y);
-            y += 8;
+                doc.setFontSize(11);
 
-            doc.text(`Datum: ${datum}`, 20, y);
-            y += 15;
+                doc.text(
+                    "Exportdatum: " +
+                    new Date().toLocaleDateString("de-DE"),
+                    marginLeft,
+                    y
+                );
 
-            doc.setFontSize(14);
+                y += 15;
 
-            doc.text("Checkliste", 20, y);
+                // TABELLENKOPF
 
-            y += 10;
+                doc.setFontSize(11);
 
-            const checklistItems =
-                document.querySelectorAll(".checklist-item");
+                doc.text("Nr.", 15, y);
 
-            checklistItems.forEach((item, index) => {
+                doc.text("Beschreibung", 30, y);
 
-                const title =
-                    item.querySelector(".item-title")?.innerText ||
-                    `Pruefpunkt ${index + 1}`;
+                doc.text("Priorität", 120, y);
 
-                const itemId =
-                    item.getAttribute("data-item-id");
+                doc.text("Status", 150, y);
 
-                let status = "offen";
-
-                const selectedBtn =
-                    item.querySelector(".rating-btn.selected");
-
-                if (selectedBtn) {
-
-                    if (
-                        selectedBtn.classList.contains("ok")
-                    ) {
-                        status = "ok";
-                    }
-
-                    else if (
-                        selectedBtn.classList.contains("mangel")
-                    ) {
-                        status = "mangel";
-                    }
-
-                    else if (
-                        selectedBtn.classList.contains("na")
-                    ) {
-                        status = "na";
-                    }
-                }
-
-                const kommentar =
-                    item.querySelector("textarea")?.value || "";
-
-                let statusText = "";
-
-                switch (status) {
-
-                    case "ok":
-                        statusText = "OK";
-                        break;
-
-                    case "mangel":
-                        statusText = "Mangel";
-                        break;
-
-                    case "na":
-                        statusText = "Nicht zutreffend";
-                        break;
-
-                    default:
-                        statusText = "Offen";
-                }
-
-                const line =
-                    `${index + 1}. ${title} [${statusText}]`;
-
-                const splitText =
-                    doc.splitTextToSize(line, 170);
-
-                let estimatedHeight =
-                    (splitText.length * 7) + 10;
-
-                if (kommentar.trim() !== "") {
-                    estimatedHeight += 18;
-                }
-
-                if (
-                    status === "mangel" &&
-                    typeof getMeasureText === "function"
-                ) {
-                    estimatedHeight += 18;
-                }
-
-                if (y + estimatedHeight > 270) {
-
-                    doc.addPage();
-
-                    y = 20;
-                }
-
-                doc.text(splitText, 20, y);
-
-                y += splitText.length * 7;
-
-                // Kommentar
-                if (kommentar.trim() !== "") {
-
-                    const commentText =
-                        doc.splitTextToSize(
-                            "Kommentar: " + kommentar,
-                            160
-                        );
-
-                    doc.setFontSize(10);
-
-                    doc.text(commentText, 28, y);
-
-                    y += commentText.length * 6;
-
-                    doc.setFontSize(11);
-                }
-
-                // Maßnahme
-                if (
-                    status === "mangel" &&
-                    typeof getMeasureText === "function"
-                ) {
-
-                    const measureText =
-                        doc.splitTextToSize(
-                            "Maßnahme: " +
-                            getMeasureText(itemId),
-                            160
-                        );
-
-                    doc.setFontSize(10);
-
-                    doc.text(measureText, 28, y);
-
-                    y += measureText.length * 6;
-
-                    doc.setFontSize(11);
-                }
+                doc.text("Fällig", 175, y);
 
                 y += 5;
 
-                if (y > 270) {
-
-                    doc.addPage();
-
-                    y = 20;
-                }
-            });
-
-            // Download
-            doc.save(
-                "arbeitssicherheits-audit.pdf"
-            );
-
-        } catch (err) {
-
-            console.error(
-                "PDF Fehler:",
-                err
-            );
-
-            alert(
-                "PDF Export fehlgeschlagen. Druckdialog wird geöffnet."
-            );
-
-            window.print();
-        }
-    }
-
-    // ==========================================
-    // MASSNAHMENPLAN PDF EXPORT
-    // ==========================================
-
-    async function generateAndSharePDF() {
-
-        try {
-
-            const { jsPDF } = window.jspdf;
-
-            const doc = new jsPDF({
-                orientation: "portrait",
-                unit: "mm",
-                format: "a4"
-            });
-
-            let y = 15;
-
-            // ==========================================
-            // HEADER
-            // ==========================================
-
-            doc.setFontSize(18);
-
-            doc.text(
-                "Massnahmenplan - Arbeitssicherheits-Audit",
-                10,
-                y
-            );
-
-            y += 12;
-
-            const exportDate =
-                new Date().toLocaleDateString("de-DE");
-
-            doc.setFontSize(11);
-
-            doc.text(
-                `Exportdatum: ${exportDate}`,
-                10,
-                y
-            );
-
-            y += 12;
-
-            // ==========================================
-            // MASSNAHMEN TABELLE
-            // ==========================================
-
-            const rows =
-                document.querySelectorAll(
-                    "#measures-body tr"
-                );
-
-            if (rows.length === 0) {
-
-                doc.text(
-                    "Keine Maßnahmen vorhanden.",
-                    10,
+                doc.line(
+                    marginLeft,
+                    y,
+                    pageWidth - marginRight,
                     y
                 );
+
+                y += 8;
+
+                // ZEILEN
+
+                const rows =
+                    document.querySelectorAll(
+                        "#measures-body tr"
+                    );
+
+                if (rows.length === 0) {
+
+                    doc.text(
+                        "Keine Maßnahmen vorhanden.",
+                        marginLeft,
+                        y
+                    );
+
+                    doc.save(
+                        "massnahmenplan.pdf"
+                    );
+
+                    return;
+                }
+
+                rows.forEach((row) => {
+
+                    const cells =
+                        row.querySelectorAll("td");
+
+                    if (cells.length < 6)
+                        return;
+
+                    const nr =
+                        cells[0].innerText.trim();
+
+                    const beschreibung =
+                        cells[1].innerText.trim();
+
+                    const prioritaet =
+                        cells[2].innerText.trim();
+
+                    const verantwortlich =
+                        cells[3].innerText.trim();
+
+                    const faellig =
+                        cells[4].innerText.trim();
+
+                    const status =
+                        cells[5].innerText.trim();
+
+                    // Zeilenumbruch
+
+                    const descLines =
+                        doc.splitTextToSize(
+                            beschreibung,
+                            80
+                        );
+
+                    const respLines =
+                        doc.splitTextToSize(
+                            "Verantwortlich: " +
+                            (verantwortlich || "-"),
+                            80
+                        );
+
+                    const rowHeight =
+                        (descLines.length * 5) +
+                        (respLines.length * 4) +
+                        10;
+
+                    // Seitenumbruch
+
+                    if (y + rowHeight > 280) {
+
+                        doc.addPage();
+
+                        y = 20;
+                    }
+
+                    // Ausgabe
+
+                    doc.setFontSize(10);
+
+                    doc.text(nr, 15, y);
+
+                    doc.text(
+                        descLines,
+                        30,
+                        y
+                    );
+
+                    doc.text(
+                        prioritaet,
+                        120,
+                        y
+                    );
+
+                    doc.text(
+                        status,
+                        150,
+                        y
+                    );
+
+                    doc.text(
+                        faellig || "-",
+                        175,
+                        y
+                    );
+
+                    y +=
+                        descLines.length * 5 + 2;
+
+                    // Verantwortlich
+
+                    doc.setFontSize(9);
+
+                    doc.text(
+                        respLines,
+                        30,
+                        y
+                    );
+
+                    y +=
+                        respLines.length * 4 + 4;
+
+                    // Linie
+
+                    doc.setDrawColor(220);
+
+                    doc.line(
+                        marginLeft,
+                        y,
+                        pageWidth - marginRight,
+                        y
+                    );
+
+                    y += 6;
+                });
+
+                // PDF speichern
 
                 doc.save(
                     "massnahmenplan.pdf"
                 );
 
-                return;
+            } catch (err) {
+
+                console.error(err);
+
+                alert(
+                    "PDF Export fehlgeschlagen"
+                );
             }
-
-            // Tabellenkopf
-            doc.setFontSize(12);
-
-            doc.text("Nr.", 10, y);
-
-            doc.text(
-                "Beschreibung",
-                25,
-                y
-            );
-
-            doc.text(
-                "Priorität",
-                110,
-                y
-            );
-
-            doc.text(
-                "Status",
-                145,
-                y
-            );
-
-            doc.text(
-                "Fällig",
-                175,
-                y
-            );
-
-            y += 6;
-
-            doc.line(10, y, 195, y);
-
-            y += 8;
-
-            // ==========================================
-            // TABELLENZEILEN
-            // ==========================================
-
-            rows.forEach((row) => {
-
-                const cells =
-                    row.querySelectorAll("td");
-
-                if (cells.length < 6) {
-                    return;
-                }
-
-                const nr =
-                    cells[0].innerText.trim();
-
-                const beschreibung =
-                    cells[1].innerText.trim();
-
-                const prioritaet =
-                    cells[2].innerText.trim();
-
-                const verantwortlich =
-                    cells[3].innerText.trim();
-
-                const faellig =
-                    cells[4].innerText.trim();
-
-                const status =
-                    cells[5].innerText.trim();
-
-                // Beschreibung umbrechen
-                const descLines =
-                    doc.splitTextToSize(
-                        beschreibung,
-                        75
-                    );
-
-                const rowHeight =
-                    Math.max(
-                        descLines.length * 6,
-                        10
-                    );
-
-                // Seitenumbruch
-                if (y + rowHeight > 270) {
-
-                    doc.addPage();
-
-                    y = 20;
-                }
-
-                doc.setFontSize(10);
-
-                doc.text(nr, 10, y);
-
-                doc.text(
-                    descLines,
-                    25,
-                    y
-                );
-
-                doc.text(
-                    prioritaet,
-                    110,
-                    y
-                );
-
-                doc.text(
-                    status,
-                    145,
-                    y
-                );
-
-                doc.text(
-                    faellig || "-",
-                    175,
-                    y
-                );
-
-                y += rowHeight + 4;
-
-                // Verantwortlich extra Zeile
-                doc.setFontSize(9);
-
-                doc.text(
-                    `Verantwortlich: ${verantwortlich || "-"}`,
-                    25,
-                    y
-                );
-
-                y += 6;
-
-                // Trennlinie
-                doc.setDrawColor(220);
-
-                doc.line(10, y, 195, y);
-
-                y += 6;
-            });
-
-            // ==========================================
-            // PDF SPEICHERN
-            // ==========================================
-
-            doc.save(
-                "massnahmenplan.pdf"
-            );
-
-        } catch (err) {
-
-            console.error(
-                "PDF Fehler:",
-                err
-            );
-
-            alert(
-                "PDF Export fehlgeschlagen"
-            );
         }
-    }
 
-    // ==========================================
-    // OPTIONALER PRINT EXPORT
-    // ==========================================
+    </script>
+<script>
 
-    function exportMeasuresPDF() {
+function exportMeasuresPDF() {
 
-        alert(
-            "PDF Export gestartet"
-        );
+    alert("PDF Export gestartet");
 
-        window.print();
-    }
+    window.print();
 
-</script>  
+}
+
+</script>
+<div class="print-footer"></div>
 </body>
+
 </html>
+
