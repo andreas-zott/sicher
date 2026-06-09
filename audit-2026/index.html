@@ -315,6 +315,12 @@
         <button class="btn-primary" onclick="exportMeasuresPDF()">
             PDF Export
         </button>
+
+<button class="btn-primary"
+                    onclick="shareAuditPDF()">
+                iPad Teilen
+            </button>
+
     </div>
 </section>
             
@@ -335,6 +341,481 @@
     <script src="js/app.js"></script>
 
     <script>
+async function shareAuditPDF() {
+
+    try {
+
+        const { jsPDF } = window.jspdf;
+
+        const doc = new jsPDF({
+            orientation: "portrait",
+            unit: "mm",
+            format: "a4"
+        });
+
+        const pageWidth = 210;
+        const pageHeight = 297;
+
+        const margin = 18;
+        const maxWidth = pageWidth - (margin * 2);
+
+        let y = 20;
+
+        // =========================
+        // HEADER
+        // =========================
+
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(20);
+
+        doc.text(
+            "Arbeitssicherheits-Audit",
+            margin,
+            y
+        );
+
+        y += 14;
+
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(11);
+
+        const firma =
+            document.getElementById("firma").value || "-";
+
+        const standort =
+            document.getElementById("standort").value || "-";
+
+        const pruefer =
+            document.getElementById("pruefer").value || "-";
+
+        const datum =
+            document.getElementById("datum").value || "-";
+
+        const infoLines = [
+            `Firma: ${firma}`,
+            `Standort: ${standort}`,
+            `Prüfer: ${pruefer}`,
+            `Datum: ${datum}`
+        ];
+
+        infoLines.forEach(line => {
+
+            doc.text(line, margin, y);
+
+            y += 7;
+        });
+
+        y += 10;
+
+        // =========================
+        // CHECKLISTE
+        // =========================
+
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(15);
+
+        doc.text("Prüfpunkte", margin, y);
+
+        y += 10;
+
+        const checklistItems =
+            document.querySelectorAll(".checklist-item");
+
+        checklistItems.forEach((item, index) => {
+
+            const title =
+                item.querySelector(".item-title")
+                    ?.innerText ||
+                `Prüfpunkt ${index + 1}`;
+
+            const itemId =
+                item.getAttribute("data-item-id");
+
+            let status = "Offen";
+
+            const selectedBtn =
+                item.querySelector(".rating-btn.selected");
+
+            if (selectedBtn) {
+
+                if (
+                    selectedBtn.classList.contains("ok")
+                ) {
+                    status = "OK";
+                }
+
+                if (
+                    selectedBtn.classList.contains("mangel")
+                ) {
+                    status = "Mangel";
+                }
+
+                if (
+                    selectedBtn.classList.contains("na")
+                ) {
+                    status = "Nicht zutreffend";
+                }
+            }
+
+            const kommentar =
+                item.querySelector("textarea")
+                    ?.value || "";
+
+            let measureText = "";
+
+            if (
+                status === "Mangel" &&
+                typeof getMeasureText === "function"
+            ) {
+
+                measureText =
+                    getMeasureText(itemId);
+            }
+
+            // =========================
+            // TEXT UMBRUCH
+            // =========================
+
+            const titleLines =
+                doc.splitTextToSize(
+                    `${index + 1}. ${title} (${status})`,
+                    maxWidth
+                );
+
+            const kommentarLines =
+                kommentar
+                    ? doc.splitTextToSize(
+                        `Kommentar: ${kommentar}`,
+                        maxWidth - 5
+                    )
+                    : [];
+
+            const measureLines =
+                measureText
+                    ? doc.splitTextToSize(
+                        `Maßnahme: ${measureText}`,
+                        maxWidth - 5
+                    )
+                    : [];
+
+            // =========================
+            // HÖHE BERECHNEN
+            // =========================
+
+            let blockHeight =
+                (titleLines.length * 6) +
+                (kommentarLines.length * 5) +
+                (measureLines.length * 5) +
+                12;
+
+            // =========================
+            // SEITENUMBRUCH
+            // =========================
+
+            if (
+                y + blockHeight >
+                pageHeight - 25
+            ) {
+
+                doc.addPage();
+
+                y = 20;
+            }
+
+            // =========================
+            // TITEL
+            // =========================
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(11);
+
+            doc.text(
+                titleLines,
+                margin,
+                y
+            );
+
+            y += titleLines.length * 6;
+
+            // =========================
+            // KOMMENTAR
+            // =========================
+
+            if (kommentarLines.length > 0) {
+
+                doc.setFont("helvetica", "normal");
+                doc.setFontSize(10);
+
+                doc.text(
+                    kommentarLines,
+                    margin + 5,
+                    y
+                );
+
+                y +=
+                    (kommentarLines.length * 5) + 3;
+            }
+
+            // =========================
+            // MASSNAHME
+            // =========================
+
+            if (measureLines.length > 0) {
+
+                doc.setFont("helvetica", "italic");
+                doc.setFontSize(10);
+
+                doc.text(
+                    measureLines,
+                    margin + 5,
+                    y
+                );
+
+                y +=
+                    (measureLines.length * 5) + 3;
+            }
+
+            // Linie
+
+            doc.setDrawColor(220);
+
+            doc.line(
+                margin,
+                y,
+                pageWidth - margin,
+                y
+            );
+
+            y += 8;
+        });
+
+        // =========================
+        // UNTERSCHRIFTEN EXTRA SEITE
+        // =========================
+
+        doc.addPage();
+
+        y = 30;
+
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(16);
+
+        doc.text(
+            "Unterschriften",
+            margin,
+            y
+        );
+
+        y += 25;
+
+        // Prüfer
+
+        doc.setFontSize(12);
+
+        doc.text(
+            "Prüfer",
+            margin,
+            y
+        );
+
+        y += 5;
+
+        doc.rect(
+            margin,
+            y,
+            75,
+            35
+        );
+
+        const prueferCanvas =
+            document.getElementById(
+                "signature-pruefer"
+            );
+
+        if (prueferCanvas) {
+
+            const img =
+                prueferCanvas.toDataURL(
+                    "image/png"
+                );
+
+            doc.addImage(
+                img,
+                "PNG",
+                margin + 2,
+                y + 2,
+                71,
+                31
+            );
+        }
+
+        // Verantwortlicher
+
+        const x2 = 115;
+
+        doc.text(
+            "Verantwortlicher",
+            x2,
+            y - 5
+        );
+
+        doc.rect(
+            x2,
+            y,
+            75,
+            35
+        );
+
+        const verCanvas =
+            document.getElementById(
+                "signature-verantwortlicher"
+            );
+
+        if (verCanvas) {
+
+            const img2 =
+                verCanvas.toDataURL(
+                    "image/png"
+                );
+
+            doc.addImage(
+                img2,
+                "PNG",
+                x2 + 2,
+                y + 2,
+                71,
+                31
+            );
+        }
+
+        // =========================
+        // SEITENNUMMERN
+        // =========================
+
+        const pageCount =
+            doc.internal.getNumberOfPages();
+
+        for (
+            let i = 1;
+            i <= pageCount;
+            i++
+        ) {
+
+            doc.setPage(i);
+
+            doc.setFontSize(9);
+
+            doc.text(
+                `Seite ${i} von ${pageCount}`,
+                170,
+                290
+            );
+        }
+
+        // =========================
+        // PDF
+        // =========================
+
+        const pdfBlob =
+            doc.output("blob");
+
+        const fileName =
+            `audit_${Date.now()}.pdf`;
+
+        const file =
+            new File(
+                [pdfBlob],
+                fileName,
+                {
+                    type:
+                        "application/pdf"
+                }
+            );
+
+        // =========================
+        // iPAD SHARE
+        // =========================
+
+        if (
+            navigator.canShare &&
+            navigator.canShare({
+                files: [file]
+            })
+        ) {
+
+            await navigator.share({
+
+                title:
+                    "Arbeitssicherheits-Audit",
+
+                text:
+                    "Audit PDF im Anhang",
+
+                files: [file]
+
+            });
+
+        } else {
+
+            // FALLBACK DOWNLOAD
+
+            const url =
+                URL.createObjectURL(
+                    pdfBlob
+                );
+
+            const a =
+                document.createElement("a");
+
+            a.href = url;
+
+            a.download = fileName;
+
+            document.body.appendChild(a);
+
+            a.click();
+
+            document.body.removeChild(a);
+
+            URL.revokeObjectURL(url);
+        }
+
+        // =========================
+        // MAIL APP ÖFFNEN
+        // =========================
+
+        const subject =
+            encodeURIComponent(
+                "Arbeitssicherheits-Audit"
+            );
+
+    const markt =
+    `${firma} - ${standort}`;
+
+const body =
+    encodeURIComponent(
+`Sehr geehrte Damen und Herren,
+
+im Rahmen der turnusmäßigen Arbeitssicherheitsbegehung übersende ich Ihnen anbei das Begehungsprotokoll des Marktes ${markt} zur sachlichen Prüfung.
+
+Bitte prüfen Sie die dokumentierten Feststellungen und veranlassen Sie die Umsetzung der erforderlichen Maßnahmen.
+
+Mit freundlichen Grüßen
+Fachkraft für Arbeitssicherheit (SiFa)`
+    );
+
+        window.location.href =
+            `mailto:?subject=${subject}&body=${body}`;
+
+    } catch (err) {
+
+        console.error(err);
+
+        alert(
+            "PDF Export fehlgeschlagen"
+        );
+    }
+}
 
         // ==========================================
         // Druckfunktion fuer Tauri/Desktop
@@ -367,6 +848,7 @@
                     unit: "mm",
                     format: "a4"
                 });
+
 
                 let y = 20;
 
