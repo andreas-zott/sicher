@@ -90,7 +90,7 @@
 
         <button class="btn-primary"
                 id="pdfSpeichern"
-                onclick="speichernAlsPDF()">
+                onclick="exportMeasuresPDF()">
             PDF Export
         </button>
 
@@ -561,6 +561,71 @@ function handleFile(event) {
 
     event.target.value = "";
 }
+function exportMeasuresPDF() {
+
+    alert("PDF Export gestartet");
+
+    window.print();
+
+}
+
+// Speichert die IDs der aktuell geöffneten Kategorien
+let openCategories = new Set();
+
+function renderChecklist() {
+    const container = document.getElementById('checklist-container');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    AUDIT_CATEGORIES.forEach(category => {
+        const filteredItems = filterItems(category.items);
+        if (filteredItems.length === 0 && currentFilter !== 'all') return;
+        
+        // Prüfen, ob diese Kategorie offen sein soll
+        const isOpen = openCategories.has(category.id);
+        
+        const categoryEl = document.createElement('div');
+        categoryEl.className = 'category-section';
+        categoryEl.innerHTML = `
+            <div class="category-header" onclick="toggleCategory('${category.id}')">
+                <span class="category-title">
+                    <!-- Icon-Drehung angepasst an den Zustand -->
+                    <svg xmlns="http://w3.org" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: ${isOpen ? 'rotate(90deg)' : 'rotate(0deg)'}; transition: transform 0.2s;"><path d="m9 18 6-6-6-6"/></svg>
+                    ${category.name}
+                </span>
+                <span class="category-badge">${filteredItems.length} / ${category.items.length} Prüfpunkte</span>
+            </div>
+            <!-- Klasse "collapsed" wird nur hinzugefügt, wenn sie NICHT offen ist -->
+            <div class="category-content ${isOpen ? '' : 'collapsed'}" id="category-${category.id}">
+                ${renderCategoryItems(filteredItems)}
+            </div>
+        `;
+        container.appendChild(categoryEl);
+    });
+}
+
+function toggleCategory(categoryId) {
+    const content = document.getElementById(`category-${categoryId}`);
+    const header = content.previousElementSibling;
+    const icon = header.querySelector('svg');
+    
+    content.classList.toggle('collapsed');
+    
+    const isCollapsed = content.classList.contains('collapsed');
+    
+    // Zustand im Set speichern oder löschen
+    if (isCollapsed) {
+        openCategories.delete(categoryId);
+        icon.style.transform = 'rotate(0deg)';
+    } else {
+        openCategories.add(categoryId);
+        icon.style.transform = 'rotate(90deg)';
+    }
+}
+
+
+
 </script>
 </body>
 </html>
