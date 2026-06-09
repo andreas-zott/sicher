@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fotos - Arbeitssicherheits-Audit</title>
+
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="css/styles.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        .photo-card img {
+            width: 120px !important;
+            height: 90px !important;
+            object-fit: cover !important;
+            border-radius: 8px !important;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="header">
+    <div class="header-content">
+        <div class="logo-section">
+            <img src="images/logo.png" class="logo" alt="Logo">
+            <div class="title-section">
+                <h1>Arbeitssicherheits-Audit</h1>
+                <p class="subtitle">Fotodokumentation</p>
+            </div>
+        </div>
+
+        <nav class="nav">
+            <a href="index.html" class="nav-link">Checkliste</a>
+            <a href="massnahmenplan.html" class="nav-link">Massnahmenplan</a>
+            <a href="fotos.html" class="nav-link active">Fotos</a>
+            <a href="impressum.html" class="nav-link">Impressum</a>
+        </nav>
+    </div>
+</header>
+
+<main class="main-content">
+
+    <!-- UPLOAD -->
+    <section class="card">
+        <h2 class="card-title">Fotos hochladen</h2>
+
+        <div class="upload-area" id="upload-area">
+            <input type="file" id="file-input" accept="image/*" multiple style="display:none;">
+            <p>Klicken oder Dateien hierher ziehen</p>
+        </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section class="card">
+        <div class="card-header">
+            <h2 class="card-title">Hochgeladene Fotos</h2>
+            <span id="photo-count">0 Fotos</span>
+        </div>
+
+        <div id="photo-gallery" class="photo-grid"></div>
+
+        <div id="no-photos" style="text-align:center; padding:2rem;">
+            Keine Fotos vorhanden
+        </div>
+    </section>
+
+    <!-- ACTION BAR -->
+    <section class="action-bar">
+        <button class="btn-secondary" onclick="clearAllPhotos()">Alle löschen</button>
+        <button class="btn-primary" onclick="exportMeasuresPDF()">PDF Export</button>
+        <button class="btn-primary" onclick="pdfTeileniPad()">iPad Teilen</button>
+    </section>
+
+</main>
+
+<!-- MODAL -->
+<div id="photo-modal" class="modal-overlay" style="display:none;">
+    <div class="modal">
+
+        <div class="modal-header">
+            <h3>Foto bearbeiten</h3>
+            <button onclick="closePhotoModal()">✕</button>
+        </div>
+
+        <div class="modal-body">
+            <img id="modal-photo" style="width:100%; border-radius:8px; margin-bottom:10px;">
+
+            <input type="hidden" id="photo-id">
+
+            <input id="photo-title" placeholder="Titel" style="width:100%; margin-bottom:10px;">
+
+            <select id="photo-item" style="width:100%; margin-bottom:10px;">
+                <option value="">Kein Prüfpunkt</option>
+            </select>
+
+            <textarea id="photo-notes" placeholder="Notizen" style="width:100%;"></textarea>
+        </div>
+
+        <div class="modal-footer">
+            <button onclick="closePhotoModal()">Abbrechen</button>
+            <button onclick="savePhotoDetails()">Speichern</button>
+        </div>
+
+    </div>
+</div>
+
+<footer class="footer">
+    <p>Arbeitssicherheits-Audit Tool</p>
+</footer>
+
+<script src="js/audit-data.js"></script>
+<script src="js/fotos.js"></script>
+
+<script>
+/* =========================
+   IMAGE LOADER
+========================= */
+function loadImage(src) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+            resolve(canvas.toDataURL("image/jpeg", 0.9));
+        };
+        img.onerror = reject;
+        img.src = src;
+    });
+}
+
+/* =========================
+   PDF EXPORT 4 GRID (A4)
+========================= */
+async function exportMeasuresPDF() {
+
+    const { jsPDF } = window.jspdf;
+    const gallery = document.getElementById("photo-gallery");
+
+    if (!gallery || gallery.querySelectorAll("img").length === 0) {
+        alert("Keine Fotos vorhanden.");
+        return;
+    }
+
+    const pdf = new jsPDF("p", "mm", "a4");
+
+    const margin = 10;
+    const imgW = 85;
+    const imgH = 70;
+
+    const xPos = [margin, margin + imgW + 10];
+    const yPos = [margin + 20, margin + 20 + imgH + 15];
+
+    let index = 0;
+
+    // HEADER
+    pdf.setFontSize(16);
+    pdf.text("Arbeitssicherheits-Audit", margin, 12);
+
+    pdf.setFontSize(10);
+    pdf.text("Fotodokumentation - " + new Date().toLocaleDateString("de-DE"), margin, 18);
+
+    for (let card of gallery.children) {
+
+        const img = card.querySelector("img");
+        if (!img) continue;
+
+        const titleEl = card.querySelector("h4, p");
+        const title = titleEl ? titleEl.innerText : "";
+
+        const imgData = await loadImage(img.src);
+
+        const pos = index % 4;
+
+        if (pos === 0 && index !== 0) {
+            pdf.addPage();
+        }
+
+        const col = pos % 2;
+        const row = Math.floor(pos / 2);
+
+        const x = xPos[col];
+        const y = yPos[row];
+
+        pdf.addImage(imgData, "JPEG", x, y, imgW, imgH);
+
+        if (title) {
+            pdf.setFontSize(8);
+            pdf.text(title.substring(0, 40), x, y + imgH + 4);
+        }
+
+        index++;
+    }
+
+    pdf.save("audit-fotos.pdf");
+}
+
+/* =========================
+   iPAD SHARE
+========================= */
+async function pdfTeileniPad() {
+
+    const { jsPDF } = window.jspdf;
+    const gallery = document.getElementById("photo-gallery");
+
+    const pdf = new jsPDF("p", "mm", "a4");
+
+    const margin = 10;
+    const imgW = 85;
+    const imgH = 70;
+
+    const xPos = [margin, margin + imgW + 10];
+    const yPos = [margin + 20, margin + 20 + imgH + 15];
+
+    let index = 0;
+
+    pdf.setFontSize(16);
+    pdf.text("Audit Fotos", margin, 12);
+
+    for (let card of gallery.children) {
+
+        const img = card.querySelector("img");
+        if (!img) continue;
+
+        const imgData = await loadImage(img.src);
+
+        const pos = index % 4;
+
+        if (pos === 0 && index !== 0) {
+            pdf.addPage();
+        }
+
+        const col = pos % 2;
+        const row = Math.floor(pos / 2);
+
+        const x = xPos[col];
+        const y = yPos[row];
+
+        pdf.addImage(imgData, "JPEG", x, y, imgW, imgH);
+
+        index++;
+    }
+
+    const blob = pdf.output("blob");
+    const file = new File([blob], "audit.pdf", { type: "application/pdf" });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+            files: [file],
+            title: "Audit PDF"
+        });
+    } else {
+        pdf.save("audit.pdf");
+    }
+}
+
+/* =========================
+   PLACEHOLDER (dein bestehendes JS bleibt)
+========================= */
+function clearAllPhotos() {}
+function closePhotoModal() {}
+function savePhotoDetails() {}
+
+</script>
+
+</body>
+</html>
