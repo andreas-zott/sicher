@@ -7,6 +7,101 @@
     <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" href="css/styles.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style id="tauri-print-fix">
+@media print {
+
+    body * {
+        visibility: hidden !important;
+    }
+
+    #print-container,
+    #print-container * {
+        visibility: visible !important;
+    }
+
+    #print-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white;
+        padding: 10mm;
+    }
+
+    #print-header {
+        margin-bottom: 10mm;
+        border-bottom: 1px solid #999;
+        padding-bottom: 5mm;
+    }
+
+    #print-header h1 {
+        font-size: 20pt;
+        margin: 0 0 3mm 0;
+    }
+
+    #print-header p {
+        margin: 0;
+        font-size: 10pt;
+    }
+
+    #print-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10mm;
+    }
+
+    .print-photo-card {
+        border: 1px solid #ccc;
+        padding: 4mm;
+        break-inside: avoid;
+        page-break-inside: avoid;
+        min-height: 125mm;
+    }
+
+    .print-photo-card img {
+        width: 100%;
+        height: 85mm;
+        object-fit: contain;
+        display: block;
+        margin-bottom: 4mm;
+    }
+
+    .print-title {
+        font-size: 11pt;
+        font-weight: bold;
+        margin-bottom: 2mm;
+    }
+
+    .print-item {
+        font-size: 9pt;
+        margin-bottom: 2mm;
+    }
+
+    .print-notes {
+        font-size: 9pt;
+        white-space: pre-wrap;
+    }
+
+    .page-break {
+        break-after: page;
+        page-break-after: always;
+    }
+
+    .header,
+    .nav,
+    .upload-area,
+    .action-bar,
+    .footer,
+    .modal-overlay,
+    .photo-actions,
+    button,
+    #no-photos,
+    .card:first-child {
+        display: none !important;
+    }
+}
+
+</style>
     <style>
 .photo-card img {
     width: 100%;
@@ -15,6 +110,94 @@
     border-radius: 12px;
 }
     </style>
+<style id="custom-print-layout">
+@media print {
+
+    body * {
+        visibility: hidden !important;
+    }
+
+    .print-area,
+    .print-area * {
+        visibility: visible !important;
+    }
+
+    .print-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        padding: 10mm;
+        background: white;
+    }
+
+    .print-header {
+        display: block !important;
+        margin-bottom: 10mm;
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 5mm;
+    }
+
+    .print-header h1 {
+        font-size: 20pt;
+        margin-bottom: 4mm;
+    }
+
+    .print-header p {
+        font-size: 10pt;
+    }
+
+    .photo-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10mm !important;
+    }
+
+    .photo-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        border: 1px solid #ddd;
+        padding: 5mm;
+        height: 120mm;
+        overflow: hidden;
+    }
+
+    .photo-card img {
+        width: 100% !important;
+        height: 95mm !important;
+        object-fit: contain !important;
+    }
+
+    .photo-info {
+        margin-top: 4mm;
+        font-size: 9pt;
+    }
+
+    .upload-area,
+    .action-bar,
+    .footer,
+    .nav,
+    .modal-overlay,
+    #no-photos,
+    .card:first-child,
+    .photo-actions,
+    button {
+        display: none !important;
+    }
+
+    .card {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .main-content {
+        padding: 0 !important;
+    }
+}
+</style>
+
 </head>
 <body>
     <header class="header">
@@ -36,6 +219,11 @@
     </header>
 
     <main class="main-content">
+<div class="print-area">
+    <div class="print-header">
+        <h1>Arbeitssicherheits-Audit</h1>
+        <p>Fotodokumentation</p>
+    </div>
         <!-- Upload Section -->
         <section class="card">
             <h2 class="card-title">
@@ -103,7 +291,8 @@
     </div>
 
 </section>
-    </main>
+    </div>
+</main>
 
     <!-- Photo Detail Modal -->
     <div id="photo-modal" class="modal-overlay" style="display: none;">
@@ -563,7 +752,7 @@ function handleFile(event) {
 }
 function exportMeasuresPDF() {
 
-    speichernAlsPDF();
+    window.print();
 
 }
 
@@ -623,6 +812,144 @@ function toggleCategory(categoryId) {
 }
 
 
+</script>
+<script>
+
+function buildPrintLayout() {
+
+    let old =
+        document.getElementById(
+            "print-container"
+        );
+
+    if (old) {
+        old.remove();
+    }
+
+    const container =
+        document.createElement("div");
+
+    container.id =
+        "print-container";
+
+    const header =
+        document.createElement("div");
+
+    header.id =
+        "print-header";
+
+    header.innerHTML = `
+        <h1>Arbeitssicherheits-Audit</h1>
+        <p>Fotodokumentation</p>
+    `;
+
+    container.appendChild(header);
+
+    const grid =
+        document.createElement("div");
+
+    grid.id =
+        "print-grid";
+
+    const fotos =
+        photosState.photos || [];
+
+    fotos.forEach((foto, index) => {
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "print-photo-card";
+
+        // Bild
+        const img =
+            document.createElement("img");
+
+        img.src =
+            foto.dataUrl || "";
+
+        // Titel
+        const title =
+            document.createElement("div");
+
+        title.className =
+            "print-title";
+
+        title.textContent =
+            foto.title ||
+            "Foto";
+
+        // Prüfpunkt
+        const item =
+            document.createElement("div");
+
+        item.className =
+            "print-item";
+
+        item.textContent =
+            foto.item ||
+            foto.itemText ||
+            "";
+
+        // Kommentar
+        const notes =
+            document.createElement("div");
+
+        notes.className =
+            "print-notes";
+
+        notes.textContent =
+            foto.notes || "";
+
+        card.appendChild(img);
+        card.appendChild(title);
+
+        if (
+            item.textContent.trim() !== ""
+        ) {
+            card.appendChild(item);
+        }
+
+        if (
+            notes.textContent.trim() !== ""
+        ) {
+            card.appendChild(notes);
+        }
+
+        grid.appendChild(card);
+
+        // Nach 4 Bildern Seitenumbruch
+        if ((index + 1) % 4 === 0) {
+
+            const br =
+                document.createElement("div");
+
+            br.className =
+                "page-break";
+
+            grid.appendChild(br);
+        }
+    });
+
+    container.appendChild(grid);
+
+    document.body.appendChild(
+        container
+    );
+}
+
+window.addEventListener(
+    "beforeprint",
+    buildPrintLayout
+);
+
+function exportMeasuresPDF() {
+
+    buildPrintLayout();
+
+    window.print();
+}
 
 </script>
 </body>
