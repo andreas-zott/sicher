@@ -195,31 +195,112 @@
 
     <main class="main-content">
 
-        <section class="card company-info">
-            <h2 class="card-title">Betriebsinformationen</h2>
+       <section class="card company-info">
 
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="firma">Firma / Betrieb</label>
-                    <input type="text" id="firma" placeholder="Name des Unternehmens">
-                </div>
+    <h2 class="card-title">
+        Betriebsinformationen
+    </h2>
 
-                <div class="form-group">
-                    <label for="standort">Standort / Bereich</label>
-                    <input type="text" id="standort" placeholder="Adresse oder Bereich">
-                </div>
+    <div class="form-grid">
 
-                <div class="form-group">
-                    <label for="pruefer">Prüfer</label>
-                    <input type="text" id="pruefer" placeholder="Name des Pruefers">
-                </div>
+        <div class="form-group">
 
-                <div class="form-group">
-                    <label for="datum">Datum</label>
-                    <input type="date" id="datum">
-                </div>
-            </div>
-        </section>
+            <label for="firma">
+                Firma / Betrieb
+            </label>
+
+            <input type="text"
+                   id="firma"
+                   name="firma"
+                   placeholder="Name des Unternehmens">
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="standort">
+                Standort / Bereich
+            </label>
+
+            <input type="text"
+                   id="standort"
+                   name="standort"
+                   placeholder="Adresse oder Bereich">
+
+        </div>
+ <div class="form-group">
+
+            <label for="verantwortlicher">
+                Verantwortlicher
+            </label>
+
+            <input type="text"
+                   id="verantwortlicher"
+                   name="verantwortlicher"
+                   placeholder="Name des Verantwortlichen">
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="pruefer">
+                Prüfer
+            </label>
+
+            <input type="text"
+                   id="pruefer"
+                   name="pruefer"
+                   placeholder="Name des Prüfers">
+
+        </div>
+
+ <div class="form-group">
+
+            <label for="teilnehmer">
+               Teilnehmer
+            </label>
+
+            <input type="text"
+                   id="teilnehmer"
+                   name="teilnehmer"
+                   placeholder="Teilnehmer">
+
+        </div>
+
+    <div class="form-group">
+
+            <label for="teilnehmer">
+               Teilnehmer
+            </label>
+
+            <input type="text"
+                   id="teilnehmer"
+                   name="teilnehmer"
+                   placeholder="Teilnehmer">
+
+        </div>  
+  
+
+<div class="form-group empty-field">
+</div>
+
+<div class="form-group">
+        <div class="form-group">
+
+            <label for="datum">
+                Datum
+            </label>
+
+            <input type="date"
+                   id="datum"
+                   name="datum">
+
+        </div>
+
+    </div>
+
+</section>
+
 
         <section class="dashboard-cards">
             <div class="stat-card">
@@ -302,12 +383,37 @@
         </button>
             </div>
 
-
 <section class="action-bar">
     
+    <div class="action-right">
+        <!-- Button zum Exportieren der JSON-Datei -->
+        <button type="button" class="btn-secondary" onclick="saveAuditJSON()">
+            JSON Speichern
+        </button>
+
+        <!-- Button zum Auslösen des Datei-Auswählers -->
+        <button type="button" class="btn-secondary" onclick="loadAuditJSON()">
+            JSON Laden
+        </button>
+
+        <!-- WICHTIG: Unsichtbares Feld für das System-Dateifenster -->
+        <input type="file" 
+               id="jsonFileInput" 
+               style="display: none;" 
+               accept=".json" 
+               onchange="handleJSONFile(event)">
     </div>
 
-    <div class="action-right">
+</section>
+
+
+<input 
+    type="file"
+    id="jsonFileInput"
+    accept=".json"
+    style="display:none"
+    onchange="handleJSONFile(event)"
+>
         <button class="btn-secondary" onclick="printAudit()">
             Drucken
         </button>
@@ -1061,6 +1167,226 @@ function toggleCategory(categoryId) {
     }
 }
 
+
+</script>
+
+<script>
+
+// ==========================================
+// JSON EXPORT / IMPORT
+// ==========================================
+
+function collectAuditData() {
+
+    const auditData = {
+        firma: document.getElementById("firma")?.value || "",
+        standort: document.getElementById("standort")?.value || "",
+        pruefer: document.getElementById("pruefer")?.value || "",
+        datum: document.getElementById("datum")?.value || "",
+        checklist: [],
+        exportedAt: new Date().toISOString()
+    };
+
+    document.querySelectorAll(".checklist-item").forEach(item => {
+
+        const itemId =
+            item.getAttribute("data-item-id");
+
+        let status = "";
+
+        const selectedBtn =
+            item.querySelector(".rating-btn.selected");
+
+        if (selectedBtn) {
+
+            if (selectedBtn.classList.contains("ok")) {
+                status = "ok";
+            }
+
+            if (selectedBtn.classList.contains("mangel")) {
+                status = "mangel";
+            }
+
+            if (selectedBtn.classList.contains("na")) {
+                status = "na";
+            }
+        }
+
+        const kommentar =
+            item.querySelector("textarea")?.value || "";
+
+        auditData.checklist.push({
+            itemId,
+            status,
+            kommentar
+        });
+    });
+
+    return auditData;
+}
+
+// ==========================================
+// JSON SPEICHERN
+// ==========================================
+
+// ==========================================
+// JSON EXPORT / IMPORT
+// ==========================================
+
+function collectAuditData() {
+
+    const auditData = {
+        firma: document.getElementById("firma")?.value || "",
+        standort: document.getElementById("standort")?.value || "",
+        verantwortlicher: document.getElementById("verantwortlicher")?.value || "", // NEU
+        pruefer: document.getElementById("pruefer")?.value || "",
+        datum: document.getElementById("datum")?.value || "",
+        teilnehmer1: document.getElementsByName("teilnehmer")[0]?.value || "", // NEU (Erstes Teilnehmer-Feld)
+        teilnehmer2: document.getElementsByName("teilnehmer")[1]?.value || "", // NEU (Zweites Teilnehmer-Feld)
+        checklist: [],
+        exportedAt: new Date().toISOString()
+    };
+
+    document.querySelectorAll(".checklist-item").forEach(item => {
+
+        const itemId = item.getAttribute("data-item-id");
+        let status = "";
+        const selectedBtn = item.querySelector(".rating-btn.selected");
+
+        if (selectedBtn) {
+            if (selectedBtn.classList.contains("ok")) status = "ok";
+            if (selectedBtn.classList.contains("mangel")) status = "mangel";
+            if (selectedBtn.classList.contains("na")) status = "na";
+        }
+
+        const kommentar = item.querySelector("textarea")?.value || "";
+
+        auditData.checklist.push({
+            itemId,
+            status,
+            kommentar
+        });
+    });
+
+    return auditData;
+}
+
+// ==========================================
+// JSON SPEICHERN
+// ==========================================
+
+function saveAuditJSON() {
+
+    try {
+        const auditData = collectAuditData();
+        const jsonString = JSON.stringify(auditData, null, 2);
+
+        const blob = new Blob([jsonString], { type: "application/json" });
+
+        const firma = document.getElementById("firma")?.value || "audit";
+        const date = new Date().toISOString().split("T")[0];
+        const fileName = `${firma.replace(/[^a-z0-9]/gi, "_")}_${date}.json`;
+
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        alert("JSON erfolgreich gespeichert");
+
+    } catch (err) {
+        console.error(err);
+        alert("Fehler beim Speichern");
+    }
+}
+
+// ==========================================
+// JSON LADEN
+// ==========================================
+
+function loadAuditJSON() {
+    document.getElementById("jsonFileInput").click();
+}
+
+function handleJSONFile(event) {
+
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const data = JSON.parse(e.target.result);
+            applyAuditData(data);
+            alert("JSON erfolgreich geladen");
+        } catch (err) {
+            console.error(err);
+            alert("Ungültige JSON Datei");
+        }
+    };
+
+    reader.readAsText(file);
+}
+
+// ==========================================
+// DATEN WIEDERHERSTELLEN
+// ==========================================
+
+function applyAuditData(data) {
+
+    // Betriebsinformationen wiederherstellen
+    if (document.getElementById("firma")) document.getElementById("firma").value = data.firma || "";
+    if (document.getElementById("standort")) document.getElementById("standort").value = data.standort || "";
+    if (document.getElementById("verantwortlicher")) document.getElementById("verantwortlicher").value = data.verantwortlicher || ""; // NEU
+    if (document.getElementById("pruefer")) document.getElementById("pruefer").value = data.pruefer || "";
+    if (document.getElementById("datum")) document.getElementById("datum").value = data.datum || "";
+
+    // Teilnehmer-Felder wiederherstellen (NEU)
+    const teilnehmerInputs = document.getElementsByName("teilnehmer");
+    if (teilnehmerInputs[0]) teilnehmerInputs[0].value = data.teilnehmer1 || "";
+    if (teilnehmerInputs[1]) teilnehmerInputs[1].value = data.teilnehmer2 || "";
+
+    // Checkliste wiederherstellen
+    if (Array.isArray(data.checklist)) {
+
+        data.checklist.forEach(entry => {
+
+            const item = document.querySelector(`.checklist-item[data-item-id="${entry.itemId}"]`);
+            if (!item) return;
+
+            // Buttons zurücksetzen
+            item.querySelectorAll(".rating-btn").forEach(btn => {
+                btn.classList.remove("selected");
+            });
+
+            // Status wieder setzen
+            if (entry.status) {
+                const targetBtn = item.querySelector(`.rating-btn.${entry.status}`);
+                if (targetBtn) {
+                    targetBtn.classList.add("selected");
+                    targetBtn.click();
+                }
+            }
+
+            // Kommentar wiederherstellen
+            const textarea = item.querySelector("textarea");
+            if (textarea) {
+                textarea.value = entry.kommentar || "";
+                textarea.dispatchEvent(new Event("input"));
+            }
+        });
+    }
+
+    // Statistik aktualisieren
+    if (typeof updateStats === "function") {
+        updateStats();
+    }
+}
 
 </script>
   <div class="print-footer"></div>
