@@ -383,19 +383,29 @@
         </button>
             </div>
 
-
 <section class="action-bar">
     
+    <div class="action-right">
+        <!-- Button zum Exportieren der JSON-Datei -->
+        <button type="button" class="btn-secondary" onclick="saveAuditJSON()">
+            JSON Speichern
+        </button>
+
+        <!-- Button zum Auslösen des Datei-Auswählers -->
+        <button type="button" class="btn-secondary" onclick="loadAuditJSON()">
+            JSON Laden
+        </button>
+
+        <!-- WICHTIG: Unsichtbares Feld für das System-Dateifenster -->
+        <input type="file" 
+               id="jsonFileInput" 
+               style="display: none;" 
+               accept=".json" 
+               onchange="handleJSONFile(event)">
     </div>
 
-    <div class="action-right">
-<button class="btn-secondary" onclick="saveAuditJSON()">
-    JSON Speichern
-</button>
+</section>
 
-<button class="btn-secondary" onclick="loadAuditJSON()">
-    JSON Laden
-</button>
 
 <input 
     type="file"
@@ -1219,57 +1229,78 @@ function collectAuditData() {
 // JSON SPEICHERN
 // ==========================================
 
+// ==========================================
+// JSON EXPORT / IMPORT
+// ==========================================
+
+function collectAuditData() {
+
+    const auditData = {
+        firma: document.getElementById("firma")?.value || "",
+        standort: document.getElementById("standort")?.value || "",
+        verantwortlicher: document.getElementById("verantwortlicher")?.value || "", // NEU
+        pruefer: document.getElementById("pruefer")?.value || "",
+        datum: document.getElementById("datum")?.value || "",
+        teilnehmer1: document.getElementsByName("teilnehmer")[0]?.value || "", // NEU (Erstes Teilnehmer-Feld)
+        teilnehmer2: document.getElementsByName("teilnehmer")[1]?.value || "", // NEU (Zweites Teilnehmer-Feld)
+        checklist: [],
+        exportedAt: new Date().toISOString()
+    };
+
+    document.querySelectorAll(".checklist-item").forEach(item => {
+
+        const itemId = item.getAttribute("data-item-id");
+        let status = "";
+        const selectedBtn = item.querySelector(".rating-btn.selected");
+
+        if (selectedBtn) {
+            if (selectedBtn.classList.contains("ok")) status = "ok";
+            if (selectedBtn.classList.contains("mangel")) status = "mangel";
+            if (selectedBtn.classList.contains("na")) status = "na";
+        }
+
+        const kommentar = item.querySelector("textarea")?.value || "";
+
+        auditData.checklist.push({
+            itemId,
+            status,
+            kommentar
+        });
+    });
+
+    return auditData;
+}
+
+// ==========================================
+// JSON SPEICHERN
+// ==========================================
+
 function saveAuditJSON() {
 
     try {
+        const auditData = collectAuditData();
+        const jsonString = JSON.stringify(auditData, null, 2);
 
-        const auditData =
-            collectAuditData();
+        const blob = new Blob([jsonString], { type: "application/json" });
 
-        const jsonString =
-            JSON.stringify(auditData, null, 2);
+        const firma = document.getElementById("firma")?.value || "audit";
+        const date = new Date().toISOString().split("T")[0];
+        const fileName = `${firma.replace(/[^a-z0-9]/gi, "_")}_${date}.json`;
 
-        const blob = new Blob(
-            [jsonString],
-            {
-                type: "application/json"
-            }
-        );
-
-        const firma =
-            document.getElementById("firma")?.value || "audit";
-
-        const date =
-            new Date()
-                .toISOString()
-                .split("T")[0];
-
-        const fileName =
-            `${firma.replace(/[^a-z0-9]/gi, "_")}_${date}.json`;
-
-        const url =
-            URL.createObjectURL(blob);
-
-        const a =
-            document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
 
         a.href = url;
         a.download = fileName;
-
         document.body.appendChild(a);
-
         a.click();
-
         document.body.removeChild(a);
-
         URL.revokeObjectURL(url);
 
         alert("JSON erfolgreich gespeichert");
 
     } catch (err) {
-
         console.error(err);
-
         alert("Fehler beim Speichern");
     }
 }
@@ -1279,37 +1310,22 @@ function saveAuditJSON() {
 // ==========================================
 
 function loadAuditJSON() {
-
-    document
-        .getElementById("jsonFileInput")
-        .click();
+    document.getElementById("jsonFileInput").click();
 }
 
 function handleJSONFile(event) {
 
-    const file =
-        event.target.files[0];
-
+    const file = event.target.files[0];
     if (!file) return;
 
-    const reader =
-        new FileReader();
-
+    const reader = new FileReader();
     reader.onload = function(e) {
-
         try {
-
-            const data =
-                JSON.parse(e.target.result);
-
+            const data = JSON.parse(e.target.result);
             applyAuditData(data);
-
             alert("JSON erfolgreich geladen");
-
         } catch (err) {
-
             console.error(err);
-
             alert("Ungültige JSON Datei");
         }
     };
@@ -1323,64 +1339,45 @@ function handleJSONFile(event) {
 
 function applyAuditData(data) {
 
-    document.getElementById("firma").value =
-        data.firma || "";
+    // Betriebsinformationen wiederherstellen
+    if (document.getElementById("firma")) document.getElementById("firma").value = data.firma || "";
+    if (document.getElementById("standort")) document.getElementById("standort").value = data.standort || "";
+    if (document.getElementById("verantwortlicher")) document.getElementById("verantwortlicher").value = data.verantwortlicher || ""; // NEU
+    if (document.getElementById("pruefer")) document.getElementById("pruefer").value = data.pruefer || "";
+    if (document.getElementById("datum")) document.getElementById("datum").value = data.datum || "";
 
-    document.getElementById("standort").value =
-        data.standort || "";
+    // Teilnehmer-Felder wiederherstellen (NEU)
+    const teilnehmerInputs = document.getElementsByName("teilnehmer");
+    if (teilnehmerInputs[0]) teilnehmerInputs[0].value = data.teilnehmer1 || "";
+    if (teilnehmerInputs[1]) teilnehmerInputs[1].value = data.teilnehmer2 || "";
 
-    document.getElementById("pruefer").value =
-        data.pruefer || "";
-
-    document.getElementById("datum").value =
-        data.datum || "";
-
+    // Checkliste wiederherstellen
     if (Array.isArray(data.checklist)) {
 
         data.checklist.forEach(entry => {
 
-            const item =
-                document.querySelector(
-                    `.checklist-item[data-item-id="${entry.itemId}"]`
-                );
-
+            const item = document.querySelector(`.checklist-item[data-item-id="${entry.itemId}"]`);
             if (!item) return;
 
             // Buttons zurücksetzen
-            item.querySelectorAll(".rating-btn")
-                .forEach(btn => {
-                    btn.classList.remove("selected");
-                });
+            item.querySelectorAll(".rating-btn").forEach(btn => {
+                btn.classList.remove("selected");
+            });
 
             // Status wieder setzen
             if (entry.status) {
-
-                const targetBtn =
-                    item.querySelector(
-                        `.rating-btn.${entry.status}`
-                    );
-
+                const targetBtn = item.querySelector(`.rating-btn.${entry.status}`);
                 if (targetBtn) {
-
                     targetBtn.classList.add("selected");
-
-                    // Klick auslösen falls App Logik nutzt
                     targetBtn.click();
                 }
             }
 
             // Kommentar wiederherstellen
-            const textarea =
-                item.querySelector("textarea");
-
+            const textarea = item.querySelector("textarea");
             if (textarea) {
-
-                textarea.value =
-                    entry.kommentar || "";
-
-                textarea.dispatchEvent(
-                    new Event("input")
-                );
+                textarea.value = entry.kommentar || "";
+                textarea.dispatchEvent(new Event("input"));
             }
         });
     }
