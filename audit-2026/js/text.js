@@ -165,6 +165,18 @@ const MEASURES_TEXT = {
     },
 
 
+Praktikanten: {
+        "10.1": "Führen Sie eine Unterweisung für Praktikanten und Schüleraushilfen vor Beginn der Beschäftigung gemäß § 12 ArbSchG durch und dokumentieren Sie diese schriftlich.",
+
+        "10.2": "Dokumentieren Sie alle durchgeführten Unterweisungen rechtskonform und archivieren Sie die Nachweise gemä § 6 ArbSchG",
+
+        "10.3": "Vergewissern Sie sich, dass unterwiesene Personen die vermittelten Inhalte verstanden haben, etwa durch Rückfragen oder Lernerfolgskontrollen (§ 12 ArbSchG).",
+
+      
+
+        "10.4": "Unterweisen."
+    },
+
     Arbeitsmedizin: {
         "11.1": "Arbeitsmedizinische Vorsorge ist gemäß ArbMedVV anzubieten.",
 
