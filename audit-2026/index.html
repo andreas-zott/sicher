@@ -188,7 +188,7 @@
 
             <nav class="nav">
                 <a href="index.html" class="nav-link active">Checkliste</a>
-                <a href="massnahmenplan.html" class="nav-link">Massnahmenplan</a>
+                <a href="Massnahmenplan.html" class="nav-link">Massnahmenplan</a>
                 <a href="fotos.html" class="nav-link">Fotos</a>
                 <a href="impressum.html" class="nav-link">Impressum</a>
             </nav>
@@ -263,8 +263,8 @@
             </label>
 
             <input type="text"
-                   id="teilnehmer"
-                   name="teilnehmer"
+                   id="teilnehmer1"
+                   name="teilnehmer1"
                    placeholder="Teilnehmer">
 
         </div>
@@ -276,8 +276,8 @@
             </label>
 
             <input type="text"
-                   id="teilnehmer"
-                   name="teilnehmer"
+                   id="teilnehmer2"
+                   name="teilnehmer2"
                    placeholder="Teilnehmer">
 
         </div>  
@@ -1247,8 +1247,8 @@ function collectAuditData() {
         verantwortlicher: document.getElementById("verantwortlicher")?.value || "", // NEU
         pruefer: document.getElementById("pruefer")?.value || "",
         datum: document.getElementById("datum")?.value || "",
-        teilnehmer1: document.getElementsByName("teilnehmer")[0]?.value || "", // NEU (Erstes Teilnehmer-Feld)
-        teilnehmer2: document.getElementsByName("teilnehmer")[1]?.value || "", // NEU (Zweites Teilnehmer-Feld)
+        teilnehmer1: document.getElementById("teilnehmer1")?.value || "", // NEU (Erstes Teilnehmer-Feld)
+        teilnehmer2: document.getElementById("teilnehmer2")?.value || "", // NEU (Zweites Teilnehmer-Feld)
         checklist: [],
         exportedAt: new Date().toISOString()
     };
@@ -1353,9 +1353,8 @@ function applyAuditData(data) {
     if (document.getElementById("datum")) document.getElementById("datum").value = data.datum || "";
 
     // Teilnehmer-Felder wiederherstellen (NEU)
-    const teilnehmerInputs = document.getElementsByName("teilnehmer");
-    if (teilnehmerInputs[0]) teilnehmerInputs[0].value = data.teilnehmer1 || "";
-    if (teilnehmerInputs[1]) teilnehmerInputs[1].value = data.teilnehmer2 || "";
+    if (document.getElementById("teilnehmer1")) document.getElementById("teilnehmer1").value = data.teilnehmer1 || "";
+    if (document.getElementById("teilnehmer2")) document.getElementById("teilnehmer2").value = data.teilnehmer2 || "";
 
     // Checkliste wiederherstellen
     if (Array.isArray(data.checklist)) {
@@ -1396,5 +1395,261 @@ function applyAuditData(data) {
 
 </script>
   <div class="print-footer"></div>
+
+<script>
+// ===== Erweiterte JSON-Speicherung / Laden / Reset =====
+
+function collectAuditData() {
+    const teilnehmerInputs = document.getElementsByName("teilnehmer");
+
+    // auditState (aus app.js) ist die zentrale Datenquelle inkl. Mängel/Maßnahmen.
+    const state = (typeof auditState !== "undefined" && auditState) ? auditState : {};
+    const ratings = state.ratings || {};
+    const comments = state.comments || {};
+    const measures = Array.isArray(state.measures) ? state.measures : [];
+
+    const auditData = {
+        firma: document.getElementById("firma")?.value || "",
+        standort: document.getElementById("standort")?.value || "",
+        verantwortlicher: document.getElementById("verantwortlicher")?.value || "",
+        pruefer: document.getElementById("pruefer")?.value || "",
+        datum: document.getElementById("datum")?.value || "",
+        teilnehmer: Array.from(teilnehmerInputs).map(i => i.value || ""),
+        checklist: [],
+        // WICHTIG: Bewertungen, Kommentare und die komplette Maßnahmen-/Mängelliste
+        // werden mitgespeichert, damit sie beim Laden wiederhergestellt werden können.
+        ratings: ratings,
+        comments: comments,
+        measures: measures,
+        signatures: {
+            pruefer: document.getElementById("signature-pruefer")?.toDataURL("image/png") || "",
+            verantwortlicher: document.getElementById("signature-verantwortlicher")?.toDataURL("image/png") || ""
+        },
+        exportedAt: new Date().toISOString()
+    };
+
+    document.querySelectorAll(".checklist-item").forEach(item => {
+        const itemId = item.getAttribute("data-item-id");
+        let status = ratings[itemId] || "";
+        const selectedBtn = item.querySelector(".rating-btn.selected");
+
+        if (selectedBtn) {
+            if (selectedBtn.classList.contains("ok")) status = "ok";
+            if (selectedBtn.classList.contains("mangel")) status = "mangel";
+            if (selectedBtn.classList.contains("na")) status = "na";
+        }
+
+        auditData.checklist.push({
+            itemId,
+            status,
+            kommentar: item.querySelector("textarea")?.value || comments[itemId] || ""
+        });
+    });
+
+    return auditData;
+}
+
+function applyAuditData(data) {
+    const setVal = (id,val) => {
+      const el=document.getElementById(id);
+      if(el) el.value=val || "";
+    };
+
+    setVal("firma", data.firma);
+    setVal("standort", data.standort);
+    setVal("verantwortlicher", data.verantwortlicher);
+    setVal("pruefer", data.pruefer);
+    setVal("datum", data.datum);
+
+    const teilnehmerInputs = document.getElementsByName("teilnehmer");
+    if (Array.isArray(data.teilnehmer)) {
+        data.teilnehmer.forEach((v,i)=>{
+            if (teilnehmerInputs[i]) teilnehmerInputs[i].value = v || "";
+        });
+    } else {
+        if (teilnehmerInputs[0]) teilnehmerInputs[0].value = data.teilnehmer1 || "";
+        if (teilnehmerInputs[1]) teilnehmerInputs[1].value = data.teilnehmer2 || "";
+    }
+
+    // ===== Bewertungen, Kommentare und Mängel/Maßnahmen in den auditState laden =====
+    if (typeof auditState !== "undefined" && auditState) {
+
+        // Ratings + Kommentare wiederherstellen.
+        // Neues Format (ratings/comments) bevorzugen, sonst aus checklist ableiten.
+        if (data.ratings && typeof data.ratings === "object") {
+            auditState.ratings = { ...data.ratings };
+            auditState.comments = { ...(data.comments || {}) };
+        } else if (Array.isArray(data.checklist)) {
+            auditState.ratings = {};
+            auditState.comments = {};
+            data.checklist.forEach(entry => {
+                if (entry.status) auditState.ratings[entry.itemId] = entry.status;
+                if (entry.kommentar) auditState.comments[entry.itemId] = entry.kommentar;
+            });
+        }
+
+        // Maßnahmen/Mängel wiederherstellen.
+        if (Array.isArray(data.measures) && data.measures.length > 0) {
+            // Gespeicherte Maßnahmen (inkl. Verantwortlicher, Fälligkeit, Priorität, Status) übernehmen.
+            auditState.measures = data.measures.map(m => ({ ...m }));
+        } else {
+            // Fallback: für jeden Mangel eine Standard-Maßnahme erzeugen.
+            auditState.measures = [];
+            Object.keys(auditState.ratings || {}).forEach(itemId => {
+                if (auditState.ratings[itemId] === "mangel") {
+                    auditState.measures.push({
+                        id: Date.now().toString() + Math.random().toString(36).slice(2, 8),
+                        itemId: itemId,
+                        description: (typeof getMeasureText === "function") ? getMeasureText(itemId) : "",
+                        priority: "mittel",
+                        responsible: "",
+                        dueDate: "",
+                        status: "offen",
+                        comment: (auditState.comments && auditState.comments[itemId]) || ""
+                    });
+                }
+            });
+        }
+
+        // Betriebsinformationen und Unterschriften im State ablegen.
+        auditState.companyInfo = {
+            ...(auditState.companyInfo || {}),
+            firma: data.firma || "",
+            standort: data.standort || "",
+            pruefer: data.pruefer || "",
+            datum: data.datum || ""
+        };
+        if (data.signatures) {
+            auditState.signatures = { ...(auditState.signatures || {}), ...data.signatures };
+        }
+
+        // In localStorage speichern, damit der Maßnahmenplan die Mängel/Maßnahmen sieht.
+        localStorage.setItem("auditState", JSON.stringify(auditState));
+
+        // Checkliste komplett neu aufbauen, damit Bewertungen + Kommentare sichtbar sind.
+        if (typeof renderChecklist === "function") renderChecklist();
+        if (typeof updateStatistics === "function") updateStatistics();
+    } else {
+        // Fallback ohne auditState: nur die DOM-Buttons setzen.
+        document.querySelectorAll(".checklist-item .rating-btn").forEach(btn => btn.classList.remove("selected"));
+
+        if (Array.isArray(data.checklist)) {
+            data.checklist.forEach(entry => {
+                const item = document.querySelector(`.checklist-item[data-item-id="${entry.itemId}"]`);
+                if (!item) return;
+
+                const targetBtn = entry.status ? item.querySelector(`.rating-btn.${entry.status}`) : null;
+                if (targetBtn) targetBtn.click();
+
+                const textarea = item.querySelector("textarea");
+                if (textarea) {
+                    textarea.value = entry.kommentar || "";
+                    textarea.dispatchEvent(new Event("input"));
+                }
+            });
+        }
+    }
+
+    const restoreSignature = (canvasId, imgData) => {
+        if (!imgData) return;
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        const img = new Image();
+        img.onload = () => {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.drawImage(img,0,0,canvas.width,canvas.height);
+        };
+        img.src = imgData;
+    };
+
+    if (data.signatures) {
+        restoreSignature("signature-pruefer", data.signatures.pruefer);
+        restoreSignature("signature-verantwortlicher", data.signatures.verantwortlicher);
+    }
+
+    if (typeof updateStats === "function") updateStats();
+}
+
+function resetAudit() {
+
+    if (!confirm("Möchten Sie wirklich alle Eingaben zurücksetzen?")) {
+        return;
+    }
+
+    // Kompletter Audit-State zurücksetzen
+    auditState = {
+        companyInfo: {
+            firma: "",
+            standort: "",
+            pruefer: "",
+            datum: ""
+        },
+        ratings: {},
+        comments: {},
+        measures: [],
+        photos: [],
+        signatures: {
+            pruefer: null,
+            verantwortlicher: null
+        }
+    };
+
+    // Formularfelder löschen
+    [
+        "firma",
+        "standort",
+        "verantwortlicher",
+        "pruefer",
+        "datum",
+        "teilnehmer1",
+        "teilnehmer2"
+    ].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = "";
+    });
+
+    // alte Teilnehmerfelder (falls vorhanden)
+    document.querySelectorAll('[name="teilnehmer"]').forEach(el => {
+        el.value = "";
+    });
+
+    // Unterschriften löschen
+    ["pruefer", "verantwortlicher"].forEach(type => {
+
+        if (signatureCanvases[type]) {
+
+            const { canvas, ctx } = signatureCanvases[type];
+
+            ctx.clearRect(
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+        }
+    });
+
+    // LocalStorage komplett löschen
+    localStorage.removeItem("auditState");
+
+    // Checkliste neu aufbauen
+    renderChecklist();
+
+    // Statistik neu berechnen
+    updateStatistics();
+
+    // Dashboard sicherheitshalber auf 0 setzen
+    document.getElementById("stat-ok").textContent = "0";
+    document.getElementById("stat-mangel").textContent = "0";
+    document.getElementById("stat-na").textContent = "0";
+    document.getElementById("stat-total").textContent = "0";
+
+    showToast(
+        "Audit vollständig zurückgesetzt",
+        "success"
+    );
+}</script>
+
 </body>
 </html>
