@@ -1967,6 +1967,9 @@ Der gemeinsame Rundgang machte deutlich, dass bei der Umsetzung der Arbeitssiche
 <button class="btn btn-danger" onclick="formularZuruecksetzen()">
                 🗑️ Zurücksetzen
             </button>
+<button class="btn btn-primary" onclick="tauriPrint()">
+                🖨️ PDF Drucken
+            </button>
 <button class="btn btn-primary" onclick="manuellSpeichern()">
         💾 Speichern
     </button>
@@ -1992,8 +1995,12 @@ function weiterZuFotos() {
   // URL mit Übergabeparametern bauen
   const url = `foto.html?marktnummer=${encodeURIComponent(marktnummer)}&name=${encodeURIComponent(name)}&sifa=${encodeURIComponent(sifa)}`;
 
-  // Seite in neuem Tab öffnen
-  window.open(url, '_blank');
+  // Tauri-kompatible Navigation
+  if (window.__TAURI__ || navigator.userAgent.includes('Tauri')) {
+    window.location.href = url;
+  } else {
+    window.open(url, '_blank');
+  }
 }
 </script>
 <div id="auswertung-container">
@@ -2035,7 +2042,7 @@ function weiterZuFotos() {
     </span>
 
     <div style="font-size:11px; color:#999; margin-top:8px;">
-        Stand: Mai 2026
+        Stand: Juni 2026
     </div>
 </footer>
 <script>
@@ -2620,6 +2627,48 @@ if (freitext) {
       pdf.setTextColor(100);
       pdf.text(`Seite ${i} von ${totalPages}`, pageWidth / 2, pageHeight - 8, { align: 'center' });
   }  
+
+    // ===== SIGNATURSEITE =====
+    const savedSignature = localStorage.getItem("signatureImage");
+
+    if (savedSignature) {
+      pdf.addPage();
+
+      addMiniHeader();
+      currentY = 30;
+
+      pdf.setFontSize(18);
+      pdf.setTextColor(0);
+      pdf.text('Digitale Unterschrift', pageWidth / 2, currentY, { align: 'center' });
+
+      currentY += 15;
+
+      pdf.setFontSize(12);
+      pdf.text(`Markt: ${markt}`, margin, currentY);
+      currentY += 10;
+
+      pdf.text(`SiFa: ${sifa}`, margin, currentY);
+      currentY += 10;
+
+      pdf.text(`Datum: ${formattedDate}`, margin, currentY);
+      currentY += 15;
+
+      pdf.setDrawColor(180);
+      pdf.roundedRect(margin, currentY, 170, 80, 3, 3);
+
+      try {
+        pdf.addImage(savedSignature, 'PNG', margin + 5, currentY + 5, 160, 60);
+      } catch (e) {
+        console.error('Signatur konnte nicht eingefügt werden:', e);
+      }
+
+      currentY += 95;
+
+      pdf.setFontSize(10);
+      pdf.setTextColor(100);
+      pdf.text('Digital erfasste Signatur', pageWidth / 2, currentY, { align: 'center' });
+    }
+
   // Seitenzahlen hinzufügen
   addPageNumbers();  
   // Generate blob and share/download
@@ -3331,7 +3380,11 @@ pdf.text(wirksamkeitText, margin + 5, currentY);
     // PDF öffnen (zum Drucken oder Speichern)
     const pdfBlob = pdf.output('blob');
     const pdfUrl = URL.createObjectURL(pdfBlob);
-    window.open(pdfUrl, '_blank');    
+    if (window.__TAURI__ || navigator.userAgent.includes('Tauri')) {
+      window.location.href = pdfUrl;
+    } else {
+      window.open(pdfUrl, '_blank');
+    }    
     document.getElementById('pdf-loading')?.remove();    
   } catch (error) {
     console.error('PDF generation error:', error);
@@ -3842,42 +3895,62 @@ for (let i = 0; i < 3; i++) {
 }
 }
 function exportiereMassnahmen() {
-  const maßnahmenTabelleBody = document.getElementById('maßnahmen-tabelle');
-  const maßnahmenTabelle = []; 
-  const rows = maßnahmenTabelleBody.querySelectorAll('tr');
-  rows.forEach((row) => {
-    const cells = row.querySelectorAll('td');
-    if (cells.length >= 3) {
+
+  const maßnahmenTabelleBody =
+    document.getElementById('maßnahmen-tabelle');
+
+  const maßnahmenTabelle = [];
+
+  maßnahmenTabelleBody
+    .querySelectorAll('tr')
+    .forEach(row => {
+
+      const cells = row.querySelectorAll('td');
+
+      if (cells.length < 3) return;
+
       const nr = cells[0].textContent.trim();
       const frage = cells[1].textContent.trim();
       const beschreibung = cells[2].textContent.trim();
- 
+
       if (frage || beschreibung) {
+
         maßnahmenTabelle.push({
           nr: parseInt(nr) || maßnahmenTabelle.length + 1,
-          frage: frage,
-          beschreibung: beschreibung
+          frage,
+          beschreibung
         });
+
       }
-    }
-  });
-  const datum = document.getElementById('datum')?.textContent || '';
-  const markt = document.getElementById('markt')?.value || '';
- const marktleitung = document.getElementById('Marktleitung')?.value || '';
-  const name = document.getElementById('name')?.value || '';
-  const sifa = document.getElementById('sifa')?.value || '';
+
+    });
+
   const daten = {
-    datum,
-    markt,
-marktleitung,
-    name,
-    sifa,
-    maßnahmen: maßnahmenTabelle
+    datum:
+      document.getElementById('datum')?.textContent || '',
+
+    markt:
+      document.getElementById('markt')?.value || '',
+
+    marktleitung:
+      document.getElementById('Marktleitung')?.value || '',
+
+    name:
+      document.getElementById('name')?.value || '',
+
+    sifa:
+      document.getElementById('sifa')?.value || '',
+
+    maßnahmen:
+      maßnahmenTabelle
   };
-  const newWindow = window.open('massnahmen-sifa.html', 'maßnahmen');
-  setTimeout(() => {
-    newWindow.postMessage(daten, "*");
-  }, 1000);
+
+  localStorage.setItem(
+    'massnahmenDaten',
+    JSON.stringify(daten)
+  );
+
+  window.location.href = 'massnahmen-sifa.html';
 }
 window.addEventListener("resize", resizeCanvas);
 window.addEventListener("load", () => {
@@ -4222,6 +4295,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
   window.addEventListener('beforeprint', syncFreitext);
 });
+</script>
+<script>
+function tauriPrint() {
+
+    // Druckdialog öffnen
+    window.print();
+
+    // Nach dem Schließen der Druckvorschau
+    // automatisch Fokus zurück zur App
+    window.onafterprint = () => {
+
+        setTimeout(() => {
+
+            // Fokus zurückholen
+            window.focus();
+
+        }, 300);
+    };
+}
 </script>
 
 </body>
