@@ -1201,17 +1201,22 @@ Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung d
 <td><label class="radio-wrap"><input name="9.0 Leergut-06" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;"> 	Ist die Lagerfläche sauber und rutschfrei?</td>
+<td style="text-align: left;">Ist die Lagerfläche sauber und rutschfrei?</td>
 <td><label class="radio-wrap"><input name="9.0 Leergut-07" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="9.0 Leergut-07" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="9.0 Leergut-07" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
+</tr>
+<tr>
+<td style="text-align: left;">Beträgt die lichte Breite des Wartungsganges zwischen Rollbahn und Wand durchgehend mindestens 0,60 m (an Engstellen kurzzeitig 0,50 m)?</td>
+<td><label class="radio-wrap"><input name="9.0 Leergut-08" type="radio" value="ja"/><span>Ja</span></label></td>
+<td><label class="radio-wrap"><input name="9.0 Leergut-08" type="radio" value="nein"/><span>Nein</span></label></td>
+<td><label class="radio-wrap"><input name="9.0 Leergut-08" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
 <td class="category-header" colspan="4" style="text-align: left;">
 10.0 Sozialräume
 </td>
 </tr>
-
 <tr>
 <td style="text-align: left;">
 Hängen im Sozialbereich die aktuellen aushangpflichtigen Gesetze, 
@@ -2832,6 +2837,9 @@ function generateMeasure(question) {
   // Remove trailing question mark
   if (measure.endsWith("?")) {
     measure = measure.slice(0, -1);
+  }
+if (measure.includes("Beträgt die lichte Breite des Wartungsganges zwischen Rollbahn und Wand durchgehend mindestens 0,60 m")) {
+    return "Einzug- und Quetschstellen der Rollbahn zur Wand hin technisch absichern (z. B. durch festen Seitenschutz/Verkleidung), den Betrieb der Bahn bei Wartung zwingend stoppen oder, falls betrieblich machbar, den Bereich zeitweise sperren.";
   }
 if (measure.includes("Sind provisorische Installationen vermieden")) {
     return "Provisorische elektrische Installationen vermeiden. Elektrische Anlagen und Betriebsmittel ausschließlich fachgerecht und dauerhaft installieren bzw. instand setzen lassen.";
