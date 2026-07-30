@@ -1,0 +1,945 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Audit Kundenaufzug – Notbefreiung &amp; Notrufkette</title>
+<style>
+  :root {
+    color-scheme: light;
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.145 0 0);
+    --card: oklch(1 0 0);
+    --primary: oklch(0.42 0.06 220);
+    --primary-foreground: oklch(0.985 0 0);
+    --secondary: oklch(0.97 0 0);
+    --secondary-foreground: oklch(0.205 0 0);
+    --muted: oklch(0.97 0 0);
+    --muted-foreground: oklch(0.5 0 0);
+    --accent: oklch(0.95 0.02 220);
+    --accent-foreground: oklch(0.42 0.06 220);
+    --destructive: oklch(0.577 0.245 27.325);
+    --ok: oklch(0.62 0.13 155);
+    --ok-foreground: oklch(0.985 0 0);
+    --warn: oklch(0.75 0.15 75);
+    --warn-foreground: oklch(0.21 0.03 75);
+    --border: oklch(0.922 0 0);
+    --ring: oklch(0.708 0 0);
+    --radius: 0.625rem;
+  }
+
+  * { box-sizing: border-box; }
+  html { background: var(--background); }
+  body {
+    margin: 0;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-size: 15px;
+  }
+
+  .wrap {
+    max-width: 56rem;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  h1 { font-size: 1.5rem; font-weight: 700; line-height: 1.2; margin: 0; }
+  h2 { font-size: 1.125rem; font-weight: 600; margin: 0; }
+  h3 { font-size: 1rem; font-weight: 600; margin: 0; color: var(--primary); }
+  p { margin: 0; }
+
+  .muted { color: var(--muted-foreground); }
+  .leading { line-height: 1.65; }
+
+  header .head { display: flex; align-items: flex-start; gap: 0.75rem; }
+  .logo {
+    flex: 0 0 auto; height: 2.75rem; width: 2.75rem; border-radius: 0.5rem;
+    background: var(--primary); color: var(--primary-foreground);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo svg { height: 1.5rem; width: 1.5rem; }
+
+  .toolbar { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 0.4rem 0.8rem; font-size: 0.875rem; font-weight: 500;
+    cursor: pointer; background: var(--card); color: var(--foreground);
+    transition: background .15s, opacity .15s;
+  }
+  .btn:hover { opacity: 0.9; }
+  .btn svg { height: 1rem; width: 1rem; }
+  .btn-primary { background: var(--primary); color: var(--primary-foreground); border-color: var(--primary); }
+  .btn-secondary { background: var(--secondary); color: var(--secondary-foreground); }
+  .btn-ghost { background: transparent; border-color: transparent; }
+  .btn-ghost:hover { background: var(--muted); }
+
+  section.card, .card-box {
+    border: 1px solid var(--border); border-radius: 0.75rem;
+    background: var(--card); padding: 1.25rem;
+  }
+
+  .grid2 { display: grid; gap: 0.75rem; }
+  @media (min-width: 640px) { .grid2 { grid-template-columns: 1fr 1fr; } }
+
+  label.field { display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.875rem; }
+  label.field span { font-weight: 500; }
+  input, textarea, select {
+    font: inherit; color: var(--foreground); background: var(--card);
+    border: 1px solid var(--border); border-radius: 0.4rem; padding: 0.4rem 0.6rem;
+  }
+  input:focus, textarea:focus, select:focus { outline: 2px solid var(--ring); outline-offset: 1px; }
+  textarea { resize: vertical; }
+
+  .stack { display: flex; flex-direction: column; gap: 0.75rem; }
+
+  .warnbox {
+    display: flex; gap: 0.75rem; padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid color-mix(in oklch, var(--warn) 40%, transparent);
+    background: color-mix(in oklch, var(--warn) 12%, transparent);
+  }
+  .warnbox svg { height: 1.25rem; width: 1.25rem; flex: 0 0 auto; color: var(--warn); margin-top: 2px; }
+
+  details.disclosure { border: 1px solid var(--border); border-radius: 0.5rem; background: var(--card); }
+  details.disclosure > summary {
+    list-style: none; cursor: pointer; display: flex; align-items: center;
+    justify-content: space-between; gap: 0.5rem; padding: 0.75rem 1rem;
+    font-size: 0.875rem; font-weight: 600;
+  }
+  details.disclosure > summary::-webkit-details-marker { display: none; }
+  details.disclosure > summary .chev { transition: transform .2s; color: var(--muted-foreground); height: 1rem; width: 1rem; }
+  details.disclosure[open] > summary .chev { transform: rotate(180deg); }
+  .disclosure-body { border-top: 1px solid var(--border); padding: 0.75rem 1rem; }
+
+  .ref-row { display: grid; gap: 0.25rem; margin-bottom: 0.75rem; }
+  @media (min-width: 640px) { .ref-row { grid-template-columns: minmax(0,32%) 1fr; gap: 1rem; } }
+
+  /* Sticky evaluation */
+  .sticky {
+    position: sticky; top: 0; z-index: 10;
+    border-bottom: 1px solid var(--border);
+    background: color-mix(in oklch, var(--background) 95%, transparent);
+    backdrop-filter: blur(6px);
+    margin: 0 -1rem; padding: 1rem;
+  }
+  .progress-track { height: 0.625rem; width: 100%; border-radius: 999px; background: var(--secondary); overflow: hidden; }
+  .progress-bar { height: 100%; background: var(--primary); border-radius: 999px; transition: width .2s; }
+
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-top: 1rem; }
+  @media (min-width: 640px) { .stats { grid-template-columns: repeat(6, 1fr); } }
+  .stat { border: 1px solid var(--border); border-radius: 0.5rem; background: var(--card); padding: 0.75rem; text-align: center; }
+  .stat .num { font-size: 1.5rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .stat .lbl { font-size: 0.75rem; color: var(--muted-foreground); margin-top: 0.25rem; }
+  .t-ok { color: var(--ok); } .t-warn { color: var(--warn); } .t-bad { color: var(--destructive); } .t-muted { color: var(--muted-foreground); }
+
+  /* Questions */
+  .q { display: flex; flex-direction: column; gap: 0.75rem; border-bottom: 1px solid var(--border); padding: 1rem 0; }
+  .q:last-child { border-bottom: none; }
+  .q-top { display: flex; flex-direction: column; gap: 0.75rem; }
+  @media (min-width: 640px) { .q-top { flex-direction: row; align-items: flex-start; justify-content: space-between; } }
+  .q-text { display: flex; gap: 0.75rem; }
+  .badge-id {
+    height: 1.5rem; width: 1.5rem; flex: 0 0 auto; border-radius: 999px;
+    background: var(--secondary); color: var(--secondary-foreground);
+    font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; justify-content: center; margin-top: 2px;
+  }
+
+  .toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 0.4rem; overflow: hidden; }
+  .toggle button {
+    min-width: 3.5rem; padding: 0.4rem 0.75rem; font-size: 0.875rem; font-weight: 500;
+    background: var(--card); color: var(--muted-foreground); border: none; cursor: pointer;
+    border-left: 1px solid var(--border);
+  }
+  .toggle button:first-child { border-left: none; }
+  .toggle button:hover { background: var(--muted); }
+  .toggle button.active-ja { background: var(--ok); color: var(--ok-foreground); }
+  .toggle button.active-teilweise { background: var(--warn); color: var(--warn-foreground); }
+  .toggle button.active-nein { background: var(--destructive); color: #fff; }
+  .toggle button.active-nz { background: var(--muted-foreground); color: var(--background); }
+
+  .measure {
+    margin-left: 2.25rem; display: flex; flex-direction: column; gap: 0.5rem;
+    border: 1px solid color-mix(in oklch, var(--warn) 40%, transparent);
+    background: color-mix(in oklch, var(--warn) 12%, transparent);
+    border-radius: 0.4rem; padding: 0.75rem;
+  }
+  .measure .row { display: flex; align-items: center; gap: 0.5rem; }
+  .measure label { font-size: 0.75rem; font-weight: 500; }
+  .note-inline { margin-left: 2.25rem; }
+  .note-inline input { width: 100%; }
+  .measure textarea { width: 100%; }
+
+  .suggest {
+    display: flex; flex-direction: column; gap: 0.4rem;
+    border: 1px solid color-mix(in oklch, var(--primary) 30%, transparent);
+    background: color-mix(in oklch, var(--primary) 8%, transparent);
+    border-radius: 0.4rem; padding: 0.625rem 0.75rem;
+  }
+  .suggest .suggest-head { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
+  .suggest .suggest-head svg { height: 0.95rem; width: 0.95rem; color: var(--primary); flex: 0 0 auto; }
+  .suggest .suggest-title { font-size: 0.75rem; font-weight: 600; color: var(--primary); }
+  .suggest .suggest-text { font-size: 0.8125rem; line-height: 1.5; }
+  .suggest .regel { font-size: 0.75rem; color: var(--muted-foreground); }
+  .suggest .regel strong { color: var(--foreground); font-weight: 600; }
+  .btn-adopt {
+    align-self: flex-start; margin-top: 0.15rem;
+    padding: 0.3rem 0.6rem; font-size: 0.75rem;
+  }
+
+  .chip { border-radius: 0.25rem; padding: 0.1rem 0.5rem; font-size: 0.75rem; font-weight: 500; }
+  .chip-nein { background: var(--destructive); color: #fff; }
+  .chip-teilweise { background: var(--warn); color: var(--warn-foreground); }
+  .chip-border { border: 1px solid var(--border); }
+
+  .item { display: flex; flex-direction: column; gap: 0.25rem; border: 1px solid var(--border); border-radius: 0.5rem; background: var(--card); padding: 1rem; }
+  .empty { border: 1px dashed var(--border); border-radius: 0.5rem; background: var(--card); padding: 1.5rem; text-align: center; font-size: 0.875rem; color: var(--muted-foreground); }
+
+  .mrow { display: grid; gap: 0.5rem; border: 1px solid var(--border); border-radius: 0.5rem; background: var(--card); padding: 1rem; }
+  @media (min-width: 640px) { .mrow { grid-template-columns: 1fr 1.4fr; } }
+
+  footer { border-top: 1px solid var(--border); padding-top: 1rem; font-size: 0.75rem; line-height: 1.6; color: var(--muted-foreground); }
+
+  .small { font-size: 0.875rem; }
+  .text-primary { color: var(--primary); }
+  .fw-500 { font-weight: 500; } .fw-600 { font-weight: 600; }
+
+  @media print {
+    .no-print { display: none !important; }
+    .sticky { position: static; backdrop-filter: none; }
+    details { display: block !important; }
+    details > *:not(summary) { display: block !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="head">
+      <span class="logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6"/><path d="M9 16h6"/></svg>
+      </span>
+      <div>
+        <h1 id="titel"></h1>
+        <p class="muted small" id="untertitel" style="margin-top:0.25rem;"></p>
+      </div>
+    </div>
+
+    <div class="toolbar no-print">
+      <button class="btn btn-primary" id="btn-export">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Stand speichern (JSON)
+      </button>
+      <button class="btn btn-secondary" id="btn-import">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Stand laden
+      </button>
+      <button class="btn btn-secondary" id="btn-print">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Drucken / PDF
+      </button>
+      <button class="btn btn-primary" id="btn-share">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+        PDF teilen (iPad)
+      </button>
+      <button class="btn btn-ghost" id="btn-reset">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+        Zurücksetzen
+      </button>
+      <input type="file" id="file-input" accept="application/json,.json" hidden />
+    </div>
+  </header>
+
+  <section class="card">
+    <h2 style="margin-bottom:1rem;">Objektdaten</h2>
+    <div class="grid2" id="objektdaten"></div>
+  </section>
+
+  <section class="stack">
+    <h2>Anlass und Problemstellung</h2>
+    <div class="stack" id="problemstellung"></div>
+    <div class="warnbox">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <p class="small leading"><span class="fw-600">Kurzbewertung: </span><span id="kurzbewertung"></span></p>
+    </div>
+  </section>
+
+  <div class="stack" id="referenz"></div>
+
+  <section class="sticky">
+    <h2 style="margin-bottom:0.75rem;">Live-Auswertung</h2>
+    <div class="stack">
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;" class="small">
+          <span class="fw-500">Fortschritt</span>
+          <span class="muted" id="progress-label" style="font-variant-numeric:tabular-nums;"></span>
+        </div>
+        <div class="progress-track" style="margin-top:0.5rem;">
+          <div class="progress-bar" id="progress-bar" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="stats" id="stats"></div>
+    </div>
+  </section>
+
+  <section class="stack">
+    <h2>Prüf-Checkliste</h2>
+    <div class="stack" id="checkliste"></div>
+  </section>
+
+  <section class="stack">
+    <h2>Automatisch abgeleitete Maßnahmen aus dem Audit</h2>
+    <p class="small muted">Alle mit <span class="fw-500 t-bad">Nein</span> oder <span class="fw-500 t-warn">Teilweise</span> bewerteten Fragen werden hier automatisch als offene Punkte gesammelt und nach Priorität sortiert.</p>
+    <div id="offene-punkte"></div>
+  </section>
+
+  <section class="stack">
+    <h2>Aus dem Vorfall abgeleitete Maßnahmen (Vorschläge)</h2>
+    <div class="stack" id="massnahmen"></div>
+  </section>
+
+  <footer>
+    Die genannten Zeitangaben und Pflichten stammen aus BetrSichV (Anhang 1 Nr. 2) und TRBS 3121. Für eine rechtssichere, gerichtsfeste Bewertung sollten die Originaltexte herangezogen und die zuständige Arbeitsschutzbehörde / Berufsgenossenschaft sowie eine ZÜS eingebunden werden. Dieses Dokument dient der strukturierten Aufarbeitung und ersetzt keine Rechtsberatung.
+  </footer>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+/* ---------- Daten ---------- */
+const meta = {
+  titel: "Audit Kundenaufzug – Notbefreiung & Notrufkette",
+  untertitel: "Aufarbeitung Betriebssicherheit Aufzugsanlage im Einzelhandel",
+  felder: [
+    { key: "objekt", label: "Objekt / Standort" },
+    { key: "betreiber", label: "Betreiber" },
+    { key: "anlage", label: "Aufzugsanlage / Anlagennr." },
+    { key: "auditor", label: "Auditor" },
+    { key: "datum", label: "Datum des Audits" },
+  ],
+};
+
+const problemstellung = [
+  "In einem Einzelhandelsgebäude befindet sich ein Kundenaufzug. Bei einem Störfall wurden eingeschlossene Kunden erst nach 55 Minuten befreit. Eine Meldung des Notrufs an das Marktpersonal erfolgte nicht. Die mit der Notbefreiung beauftragte Firma traf erst am Einsatzort ein, nachdem die eingeschlossenen Personen selbst die Feuerwehr gerufen hatten und der Feuerwehreinsatz bereits abgeschlossen war.",
+  "Ziel dieses Audits ist die systematische Aufarbeitung des Vorfalls, die Bewertung anhand der geltenden Regelwerke sowie die Ableitung von Korrektur- und Vorbeugemaßnahmen (CAPA).",
+];
+
+const kurzbewertung = "Der geschilderte Sachverhalt (keine Meldung an das Marktpersonal, Befreiung erst nach 55 Minuten, verspätetes Eintreffen der beauftragten Firma) deutet mit hoher Wahrscheinlichkeit auf einen Verstoß gegen die Betriebssicherheitsverordnung (BetrSichV) i. V. m. TRBS 3121 hin. Die zentrale Vorgabe – Eintreffen des Hilfeleistenden bzw. Befreiung innerhalb von 30 Minuten – wurde deutlich überschritten; die Rettungskette hat faktisch versagt.";
+
+const regelwerke = [
+  { name: "Betriebssicherheitsverordnung (BetrSichV)", relevanz: "Grundpflichten (§ 4), Gefährdungsbeurteilung (§ 5), Maßnahmen bei Störungen (§ 12), besondere Vorschriften für Aufzugsanlagen (Anhang 1 Nr. 2)." },
+  { name: "BetrSichV Anhang 1 Nr. 2.3", relevanz: "Eingeschlossene Personen müssen jederzeit und in möglichst kurzer Zeit befreit werden können; Zweiwege-Kommunikationssystem zu einer ständig besetzten Stelle ist erforderlich." },
+  { name: "TRBS 3121 „Betrieb von Aufzugsanlagen“", relevanz: "Zentrales Konkretisierungsdokument: Notbefreiung, Notdienst, ständig besetzte Stelle, 30-Minuten-Regel, beauftragte Person, Notfallplan / Notbefreiungsanleitung." },
+  { name: "DGUV Vorschrift 1 / DGUV Regelwerk", relevanz: "Organisationspflichten, Unterweisung und Beauftragung von Personen." },
+  { name: "DIN EN 81-28 (Fernnotruf)", relevanz: "Technische Anforderungen an das Notrufsystem: Zweiwege-Sprechverbindung, Funktion bei Stromausfall, Bestätigung/Filterung des Notrufs." },
+  { name: "DIN EN 81-20 / EN 81-50", relevanz: "Bau- und Sicherheitsanforderungen an (neue) Aufzugsanlagen." },
+  { name: "ProdSG / Aufzugsrichtlinie 2014/33/EU", relevanz: "In-Verkehr-Bringen und Beschaffenheit der Anlage." },
+  { name: "ASR (Technische Regeln für Arbeitsstätten)", relevanz: "Relevant, soweit Beschäftigte betroffen sind (bei reinem Kundenaufzug nachrangig)." },
+];
+
+const kernfragen = [
+  { frage: "Ab wann wird ein Aufzugswärter benötigt?", antwort: "Der klassische „Aufzugswärter“ ist entfallen; die TRBS 3121 spricht von der „beauftragten Person“ zur Notbefreiung. Eine ständig anwesende Person ist nicht zwingend erforderlich, sofern ein funktionierendes Zweiwege-Notrufsystem zu einer ständig besetzten Stelle existiert UND die Notbefreiung jederzeit innerhalb von 30 Minuten sichergestellt ist." },
+  { frage: "Reicht der Notruf über die Sprechanlage zu einer beauftragten Firma?", antwort: "Grundsätzlich ja – aber nur, wenn diese Stelle ständig besetzt ist, den Notruf entgegennimmt und bestätigt, den Notfallplan besitzt und die 30-Minuten-Frist eingehalten wird. Der rein technische Notruf allein genügt nicht." },
+  { frage: "Muss das Marktpersonal informiert werden, wenn Personen feststecken?", antwort: "Keine gesetzliche Pflicht, dass der Notruf technisch beim Marktpersonal aufläuft. Der Betreiber muss die Notbefreiung aber organisatorisch sicherstellen; in der Praxis wird das Personal als erreichbare Stelle im Notfallplan eingebunden. Wird es gar nicht informiert und versagt die externe Firma, ist die Betreiberorganisation lückenhaft." },
+  { frage: "Bewertung des konkreten Vorfalls", antwort: "Befreiung erst nach 55 Minuten, verspätetes Eintreffen der Firma, Feuerwehr durch die Eingeschlossenen selbst gerufen: Überschreitung der 30-Minuten-Vorgabe, Ausfall der Rettungskette, fehlende Alarmierung des Objektpersonals. Ursächlich vermutlich Mängel in Gefährdungsbeurteilung, Notfallplan und Notdienstvertrag." },
+];
+
+const sektionen = [
+  { id: "A", titel: "A. Dokumenten- und Organisationsprüfung", fragen: [
+    { id: "1", text: "Gefährdungsbeurteilung nach § 5 BetrSichV vorhanden, aktuell und unterschrieben?" },
+    { id: "2", text: "Prüffristen durch ZÜS (Zugelassene Überwachungsstelle) festgelegt und eingehalten?" },
+    { id: "3", text: "Aktueller Notfallplan / Notbefreiungsanleitung vorhanden und beim Notdienst hinterlegt?" },
+    { id: "4", text: "Vertrag mit der beauftragten Firma: ständige Besetzung und 30-Minuten-Reaktionszeit vertraglich zugesichert?" },
+    { id: "5", text: "Prüfbücher, Wartungsnachweise und Instandhaltungshistorie vollständig?" },
+  ]},
+  { id: "B", titel: "B. Technische Prüfung", fragen: [
+    { id: "6", text: "Funktionstest Zweiwege-Notruf (Sprechverbindung in beide Richtungen) erfolgreich?" },
+    { id: "7", text: "Notruf funktioniert bei Stromausfall (Notstrom / Akku)?" },
+    { id: "8", text: "Notruf läuft nachweislich bei einer ständig besetzten Stelle auf (nicht Mailbox / Ansage)?" },
+    { id: "9", text: "Notbeleuchtung im Fahrkorb funktionsfähig?" },
+    { id: "10", text: "Zugang zu Maschinenraum / Notbefreiungseinrichtung geregelt (Schlüssel, Berechtigte)?" },
+  ]},
+  { id: "C", titel: "C. Prozess- und Rettungskette", fragen: [
+    { id: "11", text: "Alarmierungskette dokumentiert (Notdienst → Objektpersonal → ggf. Feuerwehr)?" },
+    { id: "12", text: "Reaktionszeit-Nachweis: Protokolle vergangener Notrufe / Befreiungen mit Zeitstempel vorhanden?" },
+    { id: "13", text: "Intern beauftragte, unterwiesene Personen als Redundanz zum externen Dienst benannt?" },
+    { id: "14", text: "Rolle und Aufgaben des Marktpersonals im Notfall definiert und geschult?" },
+    { id: "15", text: "Regelmäßige Notfallübungen dokumentiert?" },
+  ]},
+  { id: "D", titel: "D. Aufarbeitung des konkreten Vorfalls", fragen: [
+    { id: "16", text: "Vollständige Ereignisdokumentation vorhanden (Zeitschiene: Notruf, Reaktion, Eintreffen, Befreiung)?" },
+    { id: "17", text: "Ursache geklärt, warum keine Meldung an das Marktpersonal erfolgte?" },
+    { id: "18", text: "Root-Cause-Analyse zur Überschreitung der 30-Minuten-Frist durchgeführt?" },
+    { id: "19", text: "Vorfall dem Betreiber und ggf. Aufsichtsbehörde / Berufsgenossenschaft gemeldet?" },
+    { id: "20", text: "Korrektur- und Vorbeugemaßnahmen (CAPA) mit Verantwortlichen und Fristen definiert?" },
+  ]},
+  { id: "E", titel: "E. Verantwortlichkeiten & Organisation", fragen: [
+    { id: "21", text: "Ist der rechtliche Betreiber der Aufzugsanlage eindeutig benannt?" },
+    { id: "22", text: "Ist eine beauftragte Person zur Notbefreiung benannt und die Qualifikation nachgewiesen?" },
+    { id: "23", text: "Ist die Zuständigkeit für die Notbefreiung (intern / extern / kombiniert) klar geregelt?" },
+  ]},
+  { id: "F", titel: "F. Notrufsystem (technisch)", fragen: [
+    { id: "24", text: "Erfüllt der Notruf DIN EN 81-28 (Zweiwege, Stromausfallsicherheit, Notrufbestätigung)?" },
+    { id: "25", text: "Ist die Stelle, bei der der Notruf aufläuft, rund um die Uhr besetzt?" },
+    { id: "26", text: "Ist der letzte dokumentierte Notruf-Test vorhanden und aktuell?" },
+  ]},
+  { id: "G", titel: "G. Reaktionszeit & Befreiung", fragen: [
+    { id: "27", text: "Ist die 30-Minuten-Frist vertraglich und praktisch sichergestellt?" },
+    { id: "28", text: "Liegen dokumentierte durchschnittliche und maximale Reaktionszeiten vor?" },
+    { id: "29", text: "Ist eine Notbefreiungsanleitung vor Ort und beim Notdienst vorhanden?" },
+  ]},
+  { id: "H", titel: "H. Einbindung des Marktpersonals", fragen: [
+    { id: "30", text: "Wird das Personal im Notfall informiert und ist der Weg definiert (wie / durch wen)?" },
+    { id: "31", text: "Ist das Personal für Erstmaßnahmen (Beruhigung, Zugang, Feuerwehr-Einweisung) geschult?" },
+    { id: "32", text: "Existiert eine Redundanz, falls der externe Dienst ausfällt?" },
+  ]},
+  { id: "I", titel: "I. Dokumentation & Nachweise", fragen: [
+    { id: "33", text: "Liegt eine aktuelle Gefährdungsbeurteilung vor?" },
+    { id: "34", text: "Sind ZÜS-Prüfungen fristgerecht durchgeführt?" },
+    { id: "35", text: "Existiert ein Notfall- / Alarmplan und wird er regelmäßig geübt?" },
+  ]},
+  { id: "J", titel: "J. Zum konkreten Vorfall", fragen: [
+    { id: "36", text: "Ist geklärt, warum die beauftragte Firma erst nach Abschluss des Feuerwehreinsatzes eintraf?" },
+    { id: "37", text: "Ist geklärt, warum die eingeschlossenen Personen selbst die Feuerwehr rufen mussten?" },
+    { id: "38", text: "Wurden Sofort- und Dauermaßnahmen nach dem Vorfall eingeleitet und dokumentiert?" },
+  ]},
+];
+
+const massnahmen = [
+  { nr: 1, feststellung: "Notruf wurde nicht an das Marktpersonal gemeldet", massnahme: "Alarmierungskette neu definieren; Notruf zusätzlich auf eine ständig besetzte Stelle (Markt- / Info-Leitstelle) aufschalten und im Notfallplan verankern.", prio: "Hoch" },
+  { nr: 2, feststellung: "Befreiung erst nach 55 Minuten – 30-Minuten-Vorgabe überschritten", massnahme: "Vertrag mit Notdienst mit garantierter Reaktions- / Befreiungszeit ≤ 30 Min inkl. Nachweis- und Pönaleregelung; interne beauftragte Personen als Redundanz benennen und unterweisen.", prio: "Hoch" },
+  { nr: 3, feststellung: "Beauftragte Firma zu spät – ständige Besetzung fraglich", massnahme: "Nachweis der ständig besetzten Notrufannahme einfordern; regelmäßige Testanrufe mit Protokoll; ggf. Neuausschreibung des Notdienstes.", prio: "Hoch" },
+  { nr: 4, feststellung: "Eingeschlossene mussten selbst die Feuerwehr rufen", massnahme: "Eskalationsstufe im Notfallplan: automatische Feuerwehr-Alarmierung bei Nichtbefreiung nach definierter Zeit; Aushang mit Verhaltenshinweisen im Fahrkorb.", prio: "Hoch" },
+  { nr: 5, feststellung: "Keine lückenlose Ereignisdokumentation", massnahme: "Störungs- und Ereignisprotokoll mit Zeitstempeln (Notruf, Reaktion, Eintreffen, Befreiung) einführen.", prio: "Mittel" },
+  { nr: 6, feststellung: "Funktion des Zweiwege-Notrufs / Stromausfallsicherheit nicht belegt", massnahme: "Monatlicher Funktionstest des Notrufs inkl. Stromausfallszenario nach DIN EN 81-28, dokumentiert.", prio: "Mittel" },
+  { nr: 7, feststellung: "Gefährdungsbeurteilung ggf. nicht aktuell", massnahme: "Gefährdungsbeurteilung nach § 5 BetrSichV anlassbezogen aktualisieren und Wirksamkeit der Maßnahmen bewerten.", prio: "Hoch" },
+  { nr: 8, feststellung: "Marktpersonal nicht auf Notfall vorbereitet", massnahme: "Personal schulen (Beruhigung Eingeschlossener, Zugang, Einweisung der Rettungskräfte); Verantwortliche je Schicht benennen.", prio: "Mittel" },
+  { nr: 9, feststellung: "Meldepflichten nach Vorfall unklar", massnahme: "Prüfen und dokumentieren, ob Meldung an Betreiber, Aufsichtsbehörde und Berufsgenossenschaft erforderlich war.", prio: "Mittel" },
+];
+
+/* Automatisch abgeleitete Maßnahmen mit Regelwerksbezug je Frage */
+const empfehlungen = {
+  "1":  { prio: "Hoch",    regel: "BetrSichV § 5; TRBS 1111",                          massnahme: "Gefährdungsbeurteilung nach § 5 BetrSichV erstellen bzw. aktualisieren, datieren und durch den Betreiber freigeben lassen." },
+  "2":  { prio: "Hoch",    regel: "BetrSichV § 16 u. Anhang 2 Abschn. 2; TRBS 1201",   massnahme: "Prüffristen durch eine ZÜS festlegen lassen und wiederkehrende Prüfungen fristgerecht beauftragen und dokumentieren." },
+  "3":  { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.3; BetrSichV Anhang 1 Nr. 2.3",     massnahme: "Aktuelle Notbefreiungsanleitung / Notfallplan erstellen und nachweislich beim Notdienst hinterlegen." },
+  "4":  { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.2/4.3",                             massnahme: "Notdienstvertrag mit ständig besetzter Notrufannahme und garantierter Befreiung ≤ 30 Min inkl. Nachweis- und Pönaleregelung schließen bzw. nachverhandeln." },
+  "5":  { prio: "Mittel",  regel: "BetrSichV § 14 Abs. 7; TRBS 1201",                  massnahme: "Prüfbuch, Wartungsnachweise und Instandhaltungshistorie vollständig führen und aufbewahren." },
+  "6":  { prio: "Hoch",    regel: "DIN EN 81-28; BetrSichV Anhang 1 Nr. 2.3",         massnahme: "Zweiwege-Sprechverbindung instand setzen und Funktion nach DIN EN 81-28 testen und protokollieren." },
+  "7":  { prio: "Hoch",    regel: "DIN EN 81-28 Abschn. 4",                            massnahme: "Notrufsystem mit Notstromversorgung (Akku) ausrüsten und die Funktion bei Stromausfall regelmäßig prüfen." },
+  "8":  { prio: "Hoch",    regel: "BetrSichV Anhang 1 Nr. 2.3; TRBS 3121 Nr. 4.3; DIN EN 81-28", massnahme: "Aufschaltung des Notrufs auf eine rund um die Uhr besetzte Stelle sicherstellen (keine Mailbox / Bandansage)." },
+  "9":  { prio: "Mittel",  regel: "DIN EN 81-20 Abschn. 5.4.10; BetrSichV § 4",        massnahme: "Notbeleuchtung im Fahrkorb instand setzen und in die wiederkehrende Prüfung aufnehmen." },
+  "10": { prio: "Mittel",  regel: "TRBS 3121 Nr. 4.3; DGUV Vorschrift 1",             massnahme: "Zugang zu Maschinenraum / Notbefreiungseinrichtung regeln: Schlüsselverwaltung und berechtigte, unterwiesene Personen festlegen." },
+  "11": { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.3",                                 massnahme: "Alarmierungskette (Notdienst → Objektpersonal → Feuerwehr) schriftlich festlegen und im Notfallplan verankern." },
+  "12": { prio: "Mittel",  regel: "BetrSichV § 4 Abs. 3; TRBS 3121",                   massnahme: "Notruf- und Befreiungsereignisse mit Zeitstempeln lückenlos protokollieren." },
+  "13": { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.2; DGUV Vorschrift 1 § 13",         massnahme: "Interne, unterwiesene Personen als Redundanz zur Notbefreiung benennen und schriftlich beauftragen." },
+  "14": { prio: "Mittel",  regel: "DGUV Vorschrift 1 §§ 4, 12",                        massnahme: "Rolle und Aufgaben des Marktpersonals im Notfall definieren und das Personal darin schulen." },
+  "15": { prio: "Mittel",  regel: "TRBS 3121 Nr. 4.3; DGUV Vorschrift 1 § 4",          massnahme: "Regelmäßige Notfall- und Befreiungsübungen durchführen und dokumentieren." },
+  "16": { prio: "Mittel",  regel: "BetrSichV § 4; TRBS 3121",                          massnahme: "Vollständige Ereignisdokumentation mit Zeitschiene (Notruf, Reaktion, Eintreffen, Befreiung) nacherstellen." },
+  "17": { prio: "Hoch",    regel: "BetrSichV § 5; TRBS 3121",                          massnahme: "Ursachenanalyse durchführen, warum keine Meldung an das Marktpersonal erfolgte, und Abstellmaßnahmen festlegen." },
+  "18": { prio: "Hoch",    regel: "BetrSichV § 4 Abs. 2",                              massnahme: "Root-Cause-Analyse zur Überschreitung der 30-Minuten-Frist durchführen und Korrekturmaßnahmen ableiten." },
+  "19": { prio: "Hoch",    regel: "BetrSichV § 19; DGUV Vorschrift 1",                 massnahme: "Vorfall dem Betreiber und ggf. der Aufsichtsbehörde / Berufsgenossenschaft melden und die Meldung dokumentieren." },
+  "20": { prio: "Hoch",    regel: "BetrSichV § 4 Abs. 2 Nr. 3",                        massnahme: "Korrektur- und Vorbeugemaßnahmen (CAPA) mit Verantwortlichen und Fristen festlegen und Wirksamkeit prüfen." },
+  "21": { prio: "Hoch",    regel: "BetrSichV § 2 Abs. 3; TRBS 3121",                   massnahme: "Rechtlichen Betreiber der Aufzugsanlage eindeutig benennen und dokumentieren." },
+  "22": { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.2; DGUV Vorschrift 1 § 13",         massnahme: "Beauftragte Person zur Notbefreiung benennen und deren Qualifikation / Unterweisung nachweisen." },
+  "23": { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.2",                                 massnahme: "Zuständigkeit für die Notbefreiung (intern / extern / kombiniert) eindeutig regeln und dokumentieren." },
+  "24": { prio: "Hoch",    regel: "DIN EN 81-28",                                      massnahme: "Notrufsystem an DIN EN 81-28 anpassen (Zweiwege-Verbindung, Stromausfallsicherheit, Notrufbestätigung)." },
+  "25": { prio: "Hoch",    regel: "BetrSichV Anhang 1 Nr. 2.3; TRBS 3121 Nr. 4.3",     massnahme: "Sicherstellen, dass die Notruf-Empfangsstelle rund um die Uhr besetzt ist, und Nachweis einfordern." },
+  "26": { prio: "Mittel",  regel: "DIN EN 81-28; TRBS 3121",                           massnahme: "Aktuellen Notruf-Funktionstest durchführen und in regelmäßigen Intervallen protokollieren." },
+  "27": { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.3",                                 massnahme: "30-Minuten-Frist vertraglich und praktisch sicherstellen, inkl. Nachweis- und Pönaleregelung." },
+  "28": { prio: "Mittel",  regel: "TRBS 3121; BetrSichV § 4",                          massnahme: "Durchschnittliche und maximale Reaktionszeiten erfassen und regelmäßig auswerten." },
+  "29": { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.3",                                 massnahme: "Notbefreiungsanleitung sowohl vor Ort als auch beim Notdienst bereitstellen." },
+  "30": { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.3; DGUV Vorschrift 1",             massnahme: "Informationsweg zum Personal im Notfall festlegen (wie / durch wen) und im Notfallplan verankern." },
+  "31": { prio: "Mittel",  regel: "DGUV Vorschrift 1 § 4",                             massnahme: "Personal für Erstmaßnahmen (Beruhigung, Zugang, Einweisung der Feuerwehr) schulen." },
+  "32": { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.2",                                 massnahme: "Redundanz für den Ausfall des externen Dienstes einrichten (interne beauftragte Personen)." },
+  "33": { prio: "Hoch",    regel: "BetrSichV § 5; TRBS 1111",                          massnahme: "Aktuelle Gefährdungsbeurteilung erstellen bzw. vorlegen." },
+  "34": { prio: "Hoch",    regel: "BetrSichV § 16 u. Anhang 2 Abschn. 2",             massnahme: "ZÜS-Prüfungen fristgerecht durchführen und Prüfbescheinigungen aufbewahren." },
+  "35": { prio: "Mittel",  regel: "TRBS 3121 Nr. 4.3; DGUV Vorschrift 1 § 4",          massnahme: "Notfall- / Alarmplan erstellen und regelmäßig üben und dokumentieren." },
+  "36": { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.3",                                 massnahme: "Klären und dokumentieren, warum die beauftragte Firma verspätet eintraf; Vertrag und Prozess entsprechend anpassen." },
+  "37": { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.3; BetrSichV Anhang 1 Nr. 2.3",     massnahme: "Klären, warum die Eingeschlossenen selbst die Feuerwehr rufen mussten, und eine automatische Eskalationsstufe einführen." },
+  "38": { prio: "Hoch",    regel: "BetrSichV § 4 Abs. 2",                              massnahme: "Sofort- und Dauermaßnahmen nach dem Vorfall einleiten und dokumentieren (CAPA)." },
+};
+
+const alleFragen = sektionen.flatMap(s => s.fragen);
+const gesamtFragen = alleFragen.length;
+const PRIO_ORDER = { Hoch: 0, Mittel: 1, Niedrig: 2 };
+const ANSWER_LABELS = { ja: "Ja", teilweise: "Teilw.", nein: "Nein", nz: "n. z." };
+
+/* ---------- Zustand ---------- */
+let metaValues = {};
+let answers = {}; // { [id]: { value, prio, note } }
+
+/* ---------- Helfer ---------- */
+function el(tag, attrs = {}, ...children) {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === "class") n.className = v;
+    else if (k === "html") n.innerHTML = v;
+    else if (k.startsWith("on") && typeof v === "function") n.addEventListener(k.slice(2), v);
+    else if (v !== undefined && v !== null) n.setAttribute(k, v);
+  }
+  for (const c of children) {
+    if (c == null) continue;
+    n.appendChild(typeof c === "string" ? document.createTextNode(c) : c);
+  }
+  return n;
+}
+const CHEV = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+
+/* ---------- Statische Inhalte rendern ---------- */
+document.getElementById("titel").textContent = meta.titel;
+document.getElementById("untertitel").textContent = meta.untertitel;
+document.getElementById("kurzbewertung").textContent = kurzbewertung;
+
+const objektEl = document.getElementById("objektdaten");
+meta.felder.forEach(f => {
+  const input = el("input", { value: metaValues[f.key] ?? "", "data-key": f.key });
+  input.addEventListener("input", e => { metaValues[f.key] = e.target.value; });
+  objektEl.appendChild(el("label", { class: "field" }, el("span", {}, f.label), input));
+});
+
+const problemEl = document.getElementById("problemstellung");
+problemstellung.forEach(p => problemEl.appendChild(el("p", { class: "small leading muted" }, p)));
+
+const refEl = document.getElementById("referenz");
+const d1 = el("details", { class: "disclosure" },
+  el("summary", { html: "Einschlägige Regelwerke und Verordnungen" + CHEV }));
+const d1body = el("div", { class: "disclosure-body" });
+regelwerke.forEach(r => {
+  d1body.appendChild(el("div", { class: "ref-row" },
+    el("span", { class: "small fw-500" }, r.name),
+    el("span", { class: "small leading muted" }, r.relevanz)));
+});
+d1.appendChild(d1body);
+const d2 = el("details", { class: "disclosure" },
+  el("summary", { html: "Antworten auf die Kernfragen" + CHEV }));
+const d2body = el("div", { class: "disclosure-body" });
+kernfragen.forEach(k => {
+  d2body.appendChild(el("div", { class: "stack", style: "margin-bottom:1rem;" },
+    el("span", { class: "small fw-600" }, k.frage),
+    el("span", { class: "small leading muted" }, k.antwort)));
+});
+d2.appendChild(d2body);
+refEl.appendChild(d1);
+refEl.appendChild(d2);
+
+const massnEl = document.getElementById("massnahmen");
+massnahmen.forEach(m => {
+  const chipClass = m.prio === "Hoch" ? "chip-nein" : "chip-teilweise";
+  const left = el("div", { class: "stack" },
+    el("div", { style: "display:flex;align-items:center;gap:0.5rem;" },
+      el("span", { class: "small fw-600 muted" }, "#" + m.nr),
+      el("span", { class: "chip " + chipClass }, m.prio)),
+    el("p", { class: "small fw-500" }, m.feststellung));
+  const right = el("p", { class: "small muted" }, m.massnahme);
+  massnEl.appendChild(el("div", { class: "mrow" }, left, right));
+});
+
+/* ---------- Checkliste rendern ---------- */
+const checkEl = document.getElementById("checkliste");
+sektionen.forEach(s => {
+  const box = el("div", { class: "card-box" }, el("h3", { style: "margin-bottom:0.5rem;" }, s.titel));
+  const list = el("div");
+  s.fragen.forEach(f => list.appendChild(renderQuestion(f)));
+  box.appendChild(list);
+  checkEl.appendChild(box);
+});
+
+function renderQuestion(frage) {
+  const state = answers[frage.id] ?? {};
+  const container = el("div", { class: "q", "data-qid": frage.id });
+
+  // Toggle
+  const toggle = el("div", { class: "toggle", role: "radiogroup", "aria-label": "Bewertung" });
+  ["ja", "teilweise", "nein", "nz"].forEach(v => {
+    const active = state.value === v;
+    const b = el("button", { type: "button", role: "radio", "aria-checked": active ? "true" : "false" }, ANSWER_LABELS[v]);
+    if (active) b.classList.add("active-" + v);
+    b.addEventListener("click", () => {
+      const cur = answers[frage.id] ?? {};
+      const next = { ...cur, value: v };
+      // Bei „Nein“/„Teilweise“ automatisch empfohlene Priorität vorbelegen
+      if ((v === "nein" || v === "teilweise") && !next.prio && empfehlungen[frage.id]) {
+        next.prio = empfehlungen[frage.id].prio;
+      }
+      answers[frage.id] = next;
+      rerenderQuestion(frage.id);
+      updateEvaluation();
+    });
+    toggle.appendChild(b);
+  });
+
+  const top = el("div", { class: "q-top" },
+    el("div", { class: "q-text" },
+      el("span", { class: "badge-id" }, frage.id),
+      el("p", { class: "small leading" }, frage.text)),
+    el("div", { style: "flex:0 0 auto;" }, toggle));
+  container.appendChild(top);
+
+  const needsMeasure = state.value === "nein" || state.value === "teilweise";
+  if (needsMeasure) {
+    const sel = el("select");
+    ["", "Hoch", "Mittel", "Niedrig"].forEach(opt => {
+      const o = el("option", { value: opt }, opt === "" ? "— wählen —" : opt);
+      if ((state.prio ?? "") === opt) o.selected = true;
+      sel.appendChild(o);
+    });
+    sel.addEventListener("change", e => {
+      const cur = answers[frage.id] ?? {};
+      answers[frage.id] = { ...cur, prio: e.target.value || undefined };
+      updateEvaluation();
+    });
+    const ta = el("textarea", { rows: "2", placeholder: "Bemerkung / Nachweis (Dokument, Foto, Protokoll) und abzuleitende Maßnahme…" });
+    ta.value = state.note ?? "";
+    ta.addEventListener("input", e => {
+      const cur = answers[frage.id] ?? {};
+      answers[frage.id] = { ...cur, note: e.target.value };
+      updateOffenePunkte();
+    });
+
+    const measureBox = el("div", { class: "measure" });
+
+    // Automatisch abgeleitete Maßnahme mit Regelwerksbezug
+    const emp = empfehlungen[frage.id];
+    if (emp) {
+      const adoptBtn = el("button", { type: "button", class: "btn btn-primary btn-adopt no-print" }, "In Bemerkung übernehmen");
+      adoptBtn.addEventListener("click", () => {
+        ta.value = emp.massnahme;
+        const cur = answers[frage.id] ?? {};
+        answers[frage.id] = { ...cur, note: emp.massnahme };
+        updateOffenePunkte();
+      });
+      measureBox.appendChild(el("div", { class: "suggest" },
+        el("div", { class: "suggest-head" },
+          el("span", { html: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>' }),
+          el("span", { class: "suggest-title" }, "Empfohlene Maßnahme")),
+        el("p", { class: "suggest-text" }, emp.massnahme),
+        el("p", { class: "regel" }, el("strong", {}, "Regelwerk: "), emp.regel),
+        adoptBtn));
+    }
+
+    measureBox.appendChild(el("div", { class: "row" }, el("label", {}, "Priorität für Maßnahmenplan:"), sel));
+    measureBox.appendChild(ta);
+    container.appendChild(measureBox);
+  } else {
+    const inp = el("input", { placeholder: "Bemerkung / Nachweis (optional)…" });
+    inp.value = state.note ?? "";
+    inp.addEventListener("input", e => {
+      const cur = answers[frage.id] ?? {};
+      answers[frage.id] = { ...cur, note: e.target.value };
+    });
+    container.appendChild(el("div", { class: "note-inline" }, inp));
+  }
+  return container;
+}
+
+function rerenderQuestion(id) {
+  const old = checkEl.querySelector('.q[data-qid="' + id + '"]');
+  if (!old) return;
+  const frage = alleFragen.find(f => f.id === id);
+  const fresh = renderQuestion(frage);
+  old.replaceWith(fresh);
+}
+
+/* ---------- Auswertung ---------- */
+function computeStats() {
+  let ja = 0, teilweise = 0, nein = 0, nz = 0, answered = 0;
+  for (const f of alleFragen) {
+    const v = answers[f.id]?.value;
+    if (!v) continue;
+    answered++;
+    if (v === "ja") ja++;
+    else if (v === "teilweise") teilweise++;
+    else if (v === "nein") nein++;
+    else if (v === "nz") nz++;
+  }
+  return { total: gesamtFragen, answered, ja, teilweise, nein, nz, offen: nein + teilweise };
+}
+
+const statsEl = document.getElementById("stats");
+function updateEvaluation() {
+  const s = computeStats();
+  const progress = s.total ? Math.round((s.answered / s.total) * 100) : 0;
+  document.getElementById("progress-bar").style.width = progress + "%";
+  document.getElementById("progress-label").textContent = s.answered + " / " + s.total + " beantwortet (" + progress + "%)";
+
+  const bewertet = s.answered - s.nz;
+  const konform = bewertet > 0 ? Math.round((s.ja / bewertet) * 100) : 0;
+  const konformTone = konform >= 80 ? "t-ok" : konform >= 50 ? "t-warn" : "t-bad";
+
+  const cards = [
+    { label: "Ja", value: s.ja, tone: "t-ok" },
+    { label: "Teilweise", value: s.teilweise, tone: "t-warn" },
+    { label: "Nein", value: s.nein, tone: "t-bad" },
+    { label: "n. z.", value: s.nz, tone: "t-muted" },
+    { label: "Konformität", value: konform + "%", tone: konformTone },
+    { label: "Offene Punkte", value: s.offen, tone: s.offen === 0 ? "t-ok" : "t-bad" },
+  ];
+  statsEl.innerHTML = "";
+  cards.forEach(c => statsEl.appendChild(el("div", { class: "stat" },
+    el("div", { class: "num " + c.tone }, String(c.value)),
+    el("div", { class: "lbl" }, c.label))));
+
+  updateOffenePunkte();
+}
+
+const offenEl = document.getElementById("offene-punkte");
+function updateOffenePunkte() {
+  const punkte = alleFragen
+    .filter(f => { const v = answers[f.id]?.value; return v === "nein" || v === "teilweise"; })
+    .map(f => ({ id: f.id, text: f.text, value: answers[f.id]?.value, prio: answers[f.id]?.prio, note: answers[f.id]?.note }))
+    .sort((a, b) => (PRIO_ORDER[a.prio ?? "Niedrig"] ?? 3) - (PRIO_ORDER[b.prio ?? "Niedrig"] ?? 3));
+
+  offenEl.innerHTML = "";
+  if (punkte.length === 0) {
+    offenEl.appendChild(el("div", { class: "empty" }, "Noch keine offenen Punkte. Bewerten Sie Fragen mit „Nein“ oder „Teilweise“, um hier automatisch Maßnahmen zu erzeugen."));
+    return;
+  }
+  const ul = el("div", { class: "stack" });
+  punkte.forEach(p => {
+    const head = el("div", { style: "display:flex;align-items:center;gap:0.5rem;" },
+      el("span", { class: "badge-id" }, p.id),
+      el("span", { class: "chip " + (p.value === "nein" ? "chip-nein" : "chip-teilweise") }, p.value === "nein" ? "Nein" : "Teilweise"));
+    if (p.prio) head.appendChild(el("span", { class: "chip chip-border" }, "Prio: " + p.prio));
+    const item = el("div", { class: "item" }, head, el("p", { class: "small" }, p.text));
+    const emp = empfehlungen[p.id];
+    if (emp) {
+      item.appendChild(el("p", { class: "small" }, el("span", { class: "fw-600 text-primary" }, "Empfohlene Maßnahme: "), emp.massnahme));
+      item.appendChild(el("p", { class: "small muted" }, el("span", { class: "fw-500" }, "Regelwerk: "), emp.regel));
+    }
+    if (p.note) item.appendChild(el("p", { class: "small muted" }, "Bemerkung: " + p.note));
+    ul.appendChild(item);
+  });
+  offenEl.appendChild(ul);
+}
+
+/* ---------- Toolbar-Aktionen ---------- */
+document.getElementById("btn-export").addEventListener("click", () => {
+  const payload = {
+    dokument: meta.titel,
+    exportiertAm: new Date().toISOString(),
+    objektdaten: metaValues,
+    antworten: answers,
+    auswertung: computeStats(),
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "audit-kundenaufzug-" + new Date().toISOString().slice(0, 10) + ".json";
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+const fileInput = document.getElementById("file-input");
+document.getElementById("btn-import").addEventListener("click", () => fileInput.click());
+fileInput.addEventListener("change", e => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const data = JSON.parse(String(reader.result));
+      if (data.objektdaten) metaValues = data.objektdaten;
+      if (data.antworten) answers = data.antworten;
+      rerenderAll();
+    } catch {
+      alert("Die Datei konnte nicht gelesen werden. Bitte eine gültige Audit-JSON-Datei wählen.");
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = "";
+});
+
+document.getElementById("btn-print").addEventListener("click", () => window.print());
+
+/* ---------- PDF erzeugen & teilen (iPad-kompatibel) ---------- */
+function showOverlay(text) {
+  const div = el("div", { id: "pdf-loading", class: "no-print" });
+  div.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:9999;";
+  div.appendChild(el("div", { style: "background:#fff;color:#111;padding:1.5rem 2.5rem;border-radius:0.75rem;text-align:center;font-family:system-ui,sans-serif;" },
+    el("div", { style: "font-size:1.05rem;font-weight:700;margin-bottom:0.4rem;" }, text),
+    el("div", { style: "font-size:0.85rem;color:#666;" }, "Bitte warten…")));
+  document.body.appendChild(div);
+}
+function hideOverlay() { document.getElementById("pdf-loading")?.remove(); }
+
+function buildAuditPDF() {
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+  const pageWidth = 210, pageHeight = 297, margin = 15;
+  const contentWidth = pageWidth - 2 * margin;
+  const today = new Date().toLocaleDateString("de-DE");
+  const objekt = metaValues.objekt || "Unbekannt";
+  let y = margin;
+
+  function miniHeader() {
+    pdf.setFontSize(8); pdf.setTextColor(120);
+    pdf.text("Audit Kundenaufzug – Notbefreiung & Notrufkette", margin, 8);
+    pdf.text(today, pageWidth - margin, 8, { align: "right" });
+    pdf.setDrawColor(200); pdf.line(margin, 10, pageWidth - margin, 10);
+  }
+  function ensure(h) {
+    if (y + h > pageHeight - 15) { pdf.addPage(); miniHeader(); y = 18; }
+  }
+  function heading(txt) {
+    ensure(12); pdf.setFontSize(12); pdf.setFont(undefined, "bold"); pdf.setTextColor(30, 60, 90);
+    pdf.text(txt, margin, y); y += 5;
+    pdf.setDrawColor(30, 60, 90); pdf.setLineWidth(0.4); pdf.line(margin, y, pageWidth - margin, y); y += 5;
+    pdf.setFont(undefined, "normal"); pdf.setTextColor(0);
+  }
+  function para(txt, size = 9, indent = 0, color = 40) {
+    pdf.setFontSize(size); pdf.setTextColor(color);
+    const lines = pdf.splitTextToSize(txt, contentWidth - indent);
+    for (const ln of lines) { ensure(size * 0.5); pdf.text(ln, margin + indent, y); y += size * 0.5; }
+  }
+
+  // Titel
+  pdf.setFontSize(18); pdf.setTextColor(33, 37, 41);
+  pdf.text("Audit Kundenaufzug", margin, y + 6);
+  pdf.setFontSize(11); pdf.setTextColor(183, 28, 28);
+  pdf.text(today, pageWidth - margin, y + 6, { align: "right" });
+  pdf.setDrawColor(30, 60, 90); pdf.setLineWidth(0.8); pdf.line(margin, y + 10, pageWidth - margin, y + 10);
+  y += 18;
+  pdf.setFontSize(10); pdf.setTextColor(90);
+  pdf.text("Notbefreiung & Notrufkette – Betriebssicherheit Aufzugsanlage", margin, y); y += 8;
+
+  // Objektdaten
+  heading("Objektdaten");
+  meta.felder.forEach(f => { para((f.label + ": ") + (metaValues[f.key] || "-"), 10, 0, 0); });
+  y += 3;
+
+  // Auswertung
+  const s = computeStats();
+  const bewertet = s.answered - s.nz;
+  const konform = bewertet > 0 ? Math.round((s.ja / bewertet) * 100) : 0;
+  heading("Auswertung");
+  para("Beantwortet: " + s.answered + " / " + s.total + "    Konformitaet: " + konform + "%", 10, 0, 0);
+  para("Ja: " + s.ja + "   Teilweise: " + s.teilweise + "   Nein: " + s.nein + "   n. z.: " + s.nz + "   Offene Punkte: " + s.offen, 10, 0, 0);
+  y += 3;
+
+  // Checkliste
+  heading("Pruef-Checkliste");
+  sektionen.forEach(sec => {
+    ensure(8); pdf.setFontSize(10); pdf.setFont(undefined, "bold"); pdf.setTextColor(30, 60, 90);
+    const secLines = pdf.splitTextToSize(sec.titel, contentWidth);
+    secLines.forEach(ln => { ensure(5); pdf.text(ln, margin, y); y += 5; });
+    pdf.setFont(undefined, "normal"); pdf.setTextColor(0);
+    sec.fragen.forEach(f => {
+      const a = answers[f.id] || {};
+      const label = a.value ? (ANSWER_LABELS[a.value] || a.value) : "offen";
+      para(f.id + ". " + f.text, 9, 0, 40);
+      let meta2 = "   Bewertung: " + label;
+      if (a.prio) meta2 += "   |   Prioritaet: " + a.prio;
+      para(meta2, 9, 2, a.value === "nein" ? 183 : a.value === "teilweise" ? 150 : 90);
+      if (a.note) para("   Bemerkung: " + a.note, 9, 2, 90);
+      y += 1.5;
+    });
+    y += 2;
+  });
+
+  // Abgeleitete Maßnahmen
+  const punkte = alleFragen
+    .filter(f => { const v = answers[f.id]?.value; return v === "nein" || v === "teilweise"; })
+    .map(f => ({ id: f.id, text: f.text, value: answers[f.id]?.value, prio: answers[f.id]?.prio, note: answers[f.id]?.note }))
+    .sort((a, b) => (PRIO_ORDER[a.prio ?? "Niedrig"] ?? 3) - (PRIO_ORDER[b.prio ?? "Niedrig"] ?? 3));
+
+  pdf.addPage(); miniHeader(); y = 18;
+  heading("Automatisch abgeleitete Massnahmen");
+  if (punkte.length === 0) {
+    para("Keine offenen Punkte. Es wurden keine Fragen mit \u201eNein\u201c oder \u201eTeilweise\u201c bewertet.", 10, 0, 90);
+  } else {
+    punkte.forEach((p, i) => {
+      const emp = empfehlungen[p.id];
+      ensure(10);
+      pdf.setFontSize(10); pdf.setFont(undefined, "bold"); pdf.setTextColor(0);
+      const badge = (i + 1) + ". [" + (p.value === "nein" ? "Nein" : "Teilweise") + (p.prio ? " / Prio " + p.prio : "") + "]";
+      para(badge, 10, 0, 0);
+      pdf.setFont(undefined, "normal");
+      para("Frage " + p.id + ": " + p.text, 9, 2, 40);
+      if (emp) {
+        para("Empfohlene Massnahme: " + emp.massnahme, 9, 2, 0);
+        para("Regelwerk: " + emp.regel, 9, 2, 90);
+      }
+      if (p.note) para("Bemerkung: " + p.note, 9, 2, 90);
+      y += 3;
+    });
+  }
+
+  // Seitenzahlen
+  const totalPages = pdf.internal.getNumberOfPages();
+  for (let i = 1; i <= totalPages; i++) {
+    pdf.setPage(i); pdf.setFontSize(8); pdf.setTextColor(120);
+    pdf.text("Seite " + i + " von " + totalPages, pageWidth / 2, pageHeight - 8, { align: "center" });
+  }
+  return pdf;
+}
+
+async function generateAndSharePDF() {
+  if (!window.jspdf || !window.jspdf.jsPDF) {
+    alert("Die PDF-Bibliothek konnte nicht geladen werden. Bitte pruefen Sie Ihre Internetverbindung und versuchen Sie es erneut.");
+    return;
+  }
+  showOverlay("PDF wird erstellt…");
+  try {
+    const pdf = buildAuditPDF();
+    const objekt = (metaValues.objekt || "Aufzug").replace(/[^\w\-]+/g, "_");
+    const filename = "Audit-Kundenaufzug-" + objekt + "-" + new Date().toISOString().slice(0, 10) + ".pdf";
+    const blob = pdf.output("blob");
+    const file = new File([blob], filename, { type: "application/pdf" });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      hideOverlay();
+      await navigator.share({
+        title: "Audit Kundenaufzug – Notbefreiung & Notrufkette",
+        text: "Anbei das Audit-Protokoll zur Aufzugsanlage (" + (metaValues.objekt || "-") + ") mit den automatisch abgeleiteten Massnahmen und Regelwerksbezuegen.",
+        files: [file],
+      });
+    } else {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = filename; a.click();
+      URL.revokeObjectURL(url);
+      hideOverlay();
+      alert("Das Teilen wird von diesem Browser nicht unterstuetzt. Das PDF wurde stattdessen heruntergeladen.");
+    }
+  } catch (err) {
+    console.error("[v0] PDF-Fehler:", err);
+    if (err && err.name === "AbortError") { hideOverlay(); return; } // Nutzer hat das Teilen abgebrochen
+    hideOverlay();
+    alert("Fehler bei der PDF-Erstellung: " + (err?.message || err));
+  } finally {
+    hideOverlay();
+  }
+}
+
+document.getElementById("btn-share").addEventListener("click", generateAndSharePDF);
+
+document.getElementById("btn-reset").addEventListener("click", () => {
+  if (confirm("Alle Eingaben zurücksetzen? Diese Aktion kann nicht rückgängig gemacht werden.")) {
+    answers = {};
+    metaValues = {};
+    rerenderAll();
+  }
+});
+
+function rerenderAll() {
+  // Objektdaten-Felder aktualisieren
+  objektEl.querySelectorAll("input[data-key]").forEach(inp => {
+    inp.value = metaValues[inp.getAttribute("data-key")] ?? "";
+  });
+  // Fragen neu rendern
+  alleFragen.forEach(f => rerenderQuestion(f.id));
+  updateEvaluation();
+}
+
+/* ---------- Start ---------- */
+updateEvaluation();
+</script>
+</body>
+</html>
