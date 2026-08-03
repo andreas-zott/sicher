@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Audit Kundenaufzug – Notbefreiung &amp; Notrufkette</title>
+<title>Kundenaufzug – Notbefreiung &amp; Notrufkette</title>
 <style>
   :root {
     color-scheme: light;
@@ -294,7 +294,7 @@
   </section>
 
   <section class="stack">
-    <h2>Automatisch abgeleitete Maßnahmen aus dem Audit</h2>
+    <h2>Automatisch abgeleitete Maßnahmen</h2>
     <p class="small muted">Alle mit <span class="fw-500 t-bad">Nein</span> oder <span class="fw-500 t-warn">Teilweise</span> bewerteten Fragen werden hier automatisch als offene Punkte gesammelt und nach Priorität sortiert.</p>
     <div id="offene-punkte"></div>
   </section>
@@ -314,20 +314,20 @@
 <script>
 /* ---------- Daten ---------- */
 const meta = {
-  titel: "Audit Kundenaufzug – Notbefreiung & Notrufkette",
+  titel: "Kundenaufzug – Notbefreiung & Notrufkette",
   untertitel: "Aufarbeitung Betriebssicherheit Aufzugsanlage im Einzelhandel",
   felder: [
     { key: "objekt", label: "Objekt / Standort" },
     { key: "betreiber", label: "Betreiber" },
     { key: "anlage", label: "Aufzugsanlage / Anlagennr." },
-    { key: "auditor", label: "Auditor" },
-    { key: "datum", label: "Datum des Audits" },
+    { key: "Sifa", label: "Sifa" },
+    { key: "datum", label: "Datum" },
   ],
 };
 
 const problemstellung = [
   "In einem Einzelhandelsgebäude befindet sich ein Kundenaufzug. Bei einem Störfall wurden eingeschlossene Kunden erst nach 55 Minuten befreit. Eine Meldung des Notrufs an das Marktpersonal erfolgte nicht. Die mit der Notbefreiung beauftragte Firma traf erst am Einsatzort ein, nachdem die eingeschlossenen Personen selbst die Feuerwehr gerufen hatten und der Feuerwehreinsatz bereits abgeschlossen war.",
-  "Ziel dieses Audits ist die systematische Aufarbeitung des Vorfalls, die Bewertung anhand der geltenden Regelwerke sowie die Ableitung von Korrektur- und Vorbeugemaßnahmen (CAPA).",
+  "Ziel ist die systematische Aufarbeitung des Vorfalls, die Bewertung anhand der geltenden Regelwerke sowie die Ableitung von Korrektur- und Vorbeugemaßnahmen (CAPA).",
 ];
 
 const kurzbewertung = "Der geschilderte Sachverhalt (keine Meldung an das Marktpersonal, Befreiung erst nach 55 Minuten, verspätetes Eintreffen der beauftragten Firma) deutet mit hoher Wahrscheinlichkeit auf einen Verstoß gegen die Betriebssicherheitsverordnung (BetrSichV) i. V. m. TRBS 3121 hin. Die zentrale Vorgabe – Eintreffen des Hilfeleistenden bzw. Befreiung innerhalb von 30 Minuten – wurde deutlich überschritten; die Rettungskette hat faktisch versagt.";
@@ -731,7 +731,7 @@ document.getElementById("btn-export").addEventListener("click", () => {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "audit-kundenaufzug-" + new Date().toISOString().slice(0, 10) + ".json";
+  a.download = "kundenaufzug-" + new Date().toISOString().slice(0, 10) + ".json";
   a.click();
   URL.revokeObjectURL(url);
 });
@@ -749,7 +749,7 @@ fileInput.addEventListener("change", e => {
       if (data.antworten) answers = data.antworten;
       rerenderAll();
     } catch {
-      alert("Die Datei konnte nicht gelesen werden. Bitte eine gültige Audit-JSON-Datei wählen.");
+      alert("Die Datei konnte nicht gelesen werden. Bitte eine gültige JSON-Datei wählen.");
     }
   };
   reader.readAsText(file);
@@ -780,7 +780,7 @@ function buildAuditPDF() {
 
   function miniHeader() {
     pdf.setFontSize(8); pdf.setTextColor(120);
-    pdf.text("Audit Kundenaufzug – Notbefreiung & Notrufkette", margin, 8);
+    pdf.text("Kundenaufzug – Notbefreiung & Notrufkette", margin, 8);
     pdf.text(today, pageWidth - margin, 8, { align: "right" });
     pdf.setDrawColor(200); pdf.line(margin, 10, pageWidth - margin, 10);
   }
@@ -801,7 +801,7 @@ function buildAuditPDF() {
 
   // Titel
   pdf.setFontSize(18); pdf.setTextColor(33, 37, 41);
-  pdf.text("Audit Kundenaufzug", margin, y + 6);
+  pdf.text("Kundenaufzug", margin, y + 6);
   pdf.setFontSize(11); pdf.setTextColor(183, 28, 28);
   pdf.text(today, pageWidth - margin, y + 6, { align: "right" });
   pdf.setDrawColor(30, 60, 90); pdf.setLineWidth(0.8); pdf.line(margin, y + 10, pageWidth - margin, y + 10);
@@ -889,15 +889,15 @@ async function generateAndSharePDF() {
   try {
     const pdf = buildAuditPDF();
     const objekt = (metaValues.objekt || "Aufzug").replace(/[^\w\-]+/g, "_");
-    const filename = "Audit-Kundenaufzug-" + objekt + "-" + new Date().toISOString().slice(0, 10) + ".pdf";
+    const filename = "Kundenaufzug-" + objekt + "-" + new Date().toISOString().slice(0, 10) + ".pdf";
     const blob = pdf.output("blob");
     const file = new File([blob], filename, { type: "application/pdf" });
 
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       hideOverlay();
       await navigator.share({
-        title: "Audit Kundenaufzug – Notbefreiung & Notrufkette",
-        text: "Anbei das Audit-Protokoll zur Aufzugsanlage (" + (metaValues.objekt || "-") + ") mit den automatisch abgeleiteten Massnahmen und Regelwerksbezuegen.",
+        title: "Kundenaufzug – Notbefreiung & Notrufkette",
+        text: "Anbei das Protokoll zur Aufzugsanlage (" + (metaValues.objekt || "-") + ") mit den automatisch abgeleiteten Massnahmen und Regelwerksbezuegen.",
         files: [file],
       });
     } else {
