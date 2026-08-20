@@ -5,12 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Arbeitssicherheit Foto Formular</title>
 <link href="favicon.ico" rel="icon" type="image/x-icon"/>
-<link href="zott.json" rel="manifest"/>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/exif-js@2.3.0/exif.js">
-
-</script>
+<link href="manifest.json" rel="manifest"/>
+  <link href="bootstrap.min.css" rel="stylesheet" />
+  <script src="jspdf.umd.min.js"></script>
+  <script src="exif.js"></script>
   <style>
     body {
       background-color: #f5f7fa;
@@ -212,6 +210,7 @@
 
   <button type="button" id="pdfSpeichern" class="btn btn-success w-100" onclick="speichernAlsPDF()">💾 Als PDF speichern</button>
   <button type="button" id="pdfTeilen" class="btn btn-danger w-100 mt-2" onclick="pdfTeileniPad()">📤 PDF teilen (iPad)</button>
+  <button type="button" id="zuruecksetzen" class="btn btn-outline-secondary w-100 mt-2" onclick="formularKomplettZuruecksetzen()">🗑️ Formular zurücksetzen</button>
 </form>
 
 <footer class="text-center">
@@ -222,12 +221,124 @@
           <a href="datenschutz.html" style="color: #4f46e5; text-decoration: none; font-size: 13px;">Datenschutz</a>
           <a href="index.html" style="color: #4f46e5; text-decoration: none; font-size: 13px;">Startseite</a>
       </div>
+      <div id="app-version" style="font-size: 11px; color: #999;"></div>
   </div>
 </footer>
+
+<script>
+// Zentrale Versionsangabe – identisch zu index.html, damit auf
+// iPad und Windows-Rechner schnell erkennbar ist, ob beide denselben
+// Stand geladen haben.
+const APP_VERSION = "2.2.0";
+const APP_VERSION_DATUM = "20.08.2026";
+document.getElementById('app-version').textContent = `Version ${APP_VERSION} · Stand: ${APP_VERSION_DATUM}`;
+
+// Service Worker registrieren, falls die Seite direkt (z. B. über den
+// Homescreen-Shortcut "Foto-Formular") geöffnet wird, ohne vorher
+// index.html besucht zu haben.
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log("✅ Service Worker registriert"))
+      .catch(err => console.error("❌ Service Worker Fehler:", err));
+  });
+}
+</script>
 </div>
 
 <script>
   let bilder = [];
+
+  // --- IndexedDB: automatische Zwischenspeicherung der Foto-Sitzung ---
+  // Grund: bisher lebten Fotos nur im Arbeitsspeicher der Seite (Variable
+  // "bilder"). Bei einem versehentlichen Neuladen der Seite - z. B. weil
+  // iOS Safari den Tab bei Speicherdruck durch viele Fotos automatisch
+  // neu lädt - gingen alle bereits aufgenommenen Fotos verloren.
+  // IndexedDB speichert deutlich mehr Daten als localStorage (dessen
+  // Limit von ca. 5-10 MB bei mehreren hochauflösenden Fotos schnell
+  // erreicht wäre) und läuft auf iPad wie Windows 11 gleichermaßen.
+  const DB_NAME = 'arbeitssicherheit-fotos';
+  const DB_VERSION = 1;
+  const STORE_NAME = 'sitzung';
+  const SITZUNG_ID = 'aktuell';
+  let dbPromise = null;
+
+  function openDatenbank() {
+    if (dbPromise) return dbPromise;
+    dbPromise = new Promise((resolve, reject) => {
+      const request = indexedDB.open(DB_NAME, DB_VERSION);
+      request.onupgradeneeded = () => {
+        const db = request.result;
+        if (!db.objectStoreNames.contains(STORE_NAME)) {
+          db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+        }
+      };
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    return dbPromise;
+  }
+
+  let speichernTimeout = null;
+  function sitzungSpeichern() {
+    // Kurze Verzögerung (Debounce), damit nicht bei jedem einzelnen
+    // Tastendruck im Kommentarfeld sofort geschrieben wird.
+    clearTimeout(speichernTimeout);
+    speichernTimeout = setTimeout(async () => {
+      try {
+        const db = await openDatenbank();
+        const daten = {
+          id: SITZUNG_ID,
+          datum: document.getElementById('datum')?.value || '',
+          marktnummer: document.getElementById('marktnummer')?.value || '',
+          name: document.getElementById('name')?.value || '',
+          sifa: document.getElementById('sifa')?.value || '',
+          bilder: bilder,
+          gespeichertAm: new Date().toISOString()
+        };
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        tx.objectStore(STORE_NAME).put(daten);
+      } catch (e) {
+        console.error('Zwischenspeichern fehlgeschlagen:', e);
+      }
+    }, 400);
+  }
+
+  async function sitzungLaden() {
+    try {
+      const db = await openDatenbank();
+      return await new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_NAME, 'readonly');
+        const request = tx.objectStore(STORE_NAME).get(SITZUNG_ID);
+        request.onsuccess = () => resolve(request.result || null);
+        request.onerror = () => reject(request.error);
+      });
+    } catch (e) {
+      console.error('Laden der Sitzung fehlgeschlagen:', e);
+      return null;
+    }
+  }
+
+  async function sitzungLoeschen() {
+    try {
+      const db = await openDatenbank();
+      const tx = db.transaction(STORE_NAME, 'readwrite');
+      tx.objectStore(STORE_NAME).delete(SITZUNG_ID);
+    } catch (e) {
+      console.error('Löschen der Sitzung fehlgeschlagen:', e);
+    }
+  }
+
+  function formularKomplettZuruecksetzen() {
+    if (!confirm('Möchten Sie wirklich alle Fotos und Eingaben zurücksetzen?')) return;
+    bilder = [];
+    renderVorschau();
+    document.getElementById('marktnummer').value = '';
+    document.getElementById('name').value = '';
+    document.getElementById('sifa').value = '';
+    document.getElementById('datum').value = new Date().toISOString().split('T')[0];
+    sitzungLoeschen();
+  }
 
   function getRotatedImageDataURL(src, rotation, callback) {
     const img = new Image();
@@ -277,6 +388,7 @@
       rotateLeft.onclick = () => {
         bildObj.rotation = ((bildObj.rotation || 0) - 90 + 360) % 360;
         renderVorschau();
+        sitzungSpeichern();
       };
 
       const rotateRight = document.createElement("button");
@@ -285,6 +397,7 @@
       rotateRight.onclick = () => {
         bildObj.rotation = ((bildObj.rotation || 0) + 90) % 360;
         renderVorschau();
+        sitzungSpeichern();
       };
 
       const rotateContainer = document.createElement("div");
@@ -295,7 +408,7 @@
       const kommentar = document.createElement("textarea");
       kommentar.value = bildObj.kommentar || "";
       kommentar.placeholder = "Kommentar hier eingeben...";
-      kommentar.oninput = (e) => bildObj.kommentar = e.target.value;
+      kommentar.oninput = (e) => { bildObj.kommentar = e.target.value; sitzungSpeichern(); };
 
       const deleteBtn = document.createElement("button");
       deleteBtn.textContent = "✖";
@@ -304,6 +417,7 @@
         if (confirm("Möchten Sie dieses Foto wirklich löschen?")) {
           bilder.splice(index, 1);
           renderVorschau();
+          sitzungSpeichern();
         }
       };
 
@@ -430,6 +544,10 @@ Fachkraft für Arbeitssicherheit (SiFa: ${sifa})`,
         files: [file]
       });
 
+      // Erfolgreich geteilt/übermittelt - zwischengespeicherte Sitzung
+      // kann verworfen werden.
+      sitzungLoeschen();
+
     } catch (e) {
       const doc = await createPDF();
       const blob = doc.output("blob");
@@ -481,6 +599,7 @@ Fachkraft für Arbeitssicherheit (SiFa: ${sifa})`,
         img.onload = function () {
           bilder.push({ src: e.target.result, kommentar: "", rotation: 0 });
           renderVorschau();
+          sitzungSpeichern();
         };
         img.src = e.target.result;
       };
@@ -499,6 +618,10 @@ Fachkraft für Arbeitssicherheit (SiFa: ${sifa})`,
   document.getElementById("jahr1").textContent = new Date().getFullYear();
   document.getElementById("jahr2").textContent = new Date().getFullYear();
 
+  ["datum", "marktnummer", "name", "sifa"].forEach(id => {
+    document.getElementById(id).addEventListener("input", sitzungSpeichern);
+  });
+
   const aktuellesJahr = new Date().getFullYear();
   const titel = document.getElementById('titel');
   titel.textContent = titel.textContent.replace(/\d{4}/, aktuellesJahr);
@@ -508,7 +631,7 @@ Fachkraft für Arbeitssicherheit (SiFa: ${sifa})`,
     return urlParams.get(name) || '';
   }
 
-  window.addEventListener('DOMContentLoaded', () => {
+  window.addEventListener('DOMContentLoaded', async () => {
     const marktnummer = getQueryParam('marktnummer');
     const name = getQueryParam('name');
     const sifa = getQueryParam('sifa');
@@ -516,6 +639,29 @@ Fachkraft für Arbeitssicherheit (SiFa: ${sifa})`,
     if (marktnummer) document.getElementById('marktnummer').value = marktnummer;
     if (name) document.getElementById('name').value = name;
     if (sifa) document.getElementById('sifa').value = sifa;
+
+    // Prüfen, ob eine unterbrochene Sitzung mit bereits aufgenommenen
+    // Fotos vorliegt (z. B. nach einem versehentlichen Neuladen der Seite).
+    const gespeichert = await sitzungLaden();
+    if (gespeichert && Array.isArray(gespeichert.bilder) && gespeichert.bilder.length > 0) {
+      const zeitpunkt = gespeichert.gespeichertAm
+        ? new Date(gespeichert.gespeichertAm).toLocaleString('de-DE')
+        : 'unbekannt';
+      const fortsetzen = confirm(
+        `Es wurde eine unterbrochene Sitzung mit ${gespeichert.bilder.length} Foto(s) gefunden ` +
+        `(zwischengespeichert am ${zeitpunkt}).\n\nMöchten Sie diese fortsetzen?`
+      );
+      if (fortsetzen) {
+        bilder = gespeichert.bilder;
+        if (gespeichert.datum) document.getElementById('datum').value = gespeichert.datum;
+        if (gespeichert.marktnummer) document.getElementById('marktnummer').value = gespeichert.marktnummer;
+        if (gespeichert.name) document.getElementById('name').value = gespeichert.name;
+        if (gespeichert.sifa) document.getElementById('sifa').value = gespeichert.sifa;
+        renderVorschau();
+      } else {
+        sitzungLoeschen();
+      }
+    }
   });
 </script>
 </body>
