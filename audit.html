@@ -748,8 +748,8 @@ table, tr, td {
     }
 }
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="html2pdf.bundle.min.js"></script>
+<script src="jspdf.umd.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -945,6 +945,10 @@ Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung d
                     'Entspricht das getragene Schuhwerk aller im Bereich tätigen Personen den Anforderungen der Gefährdungsbeurteilung (fest, im Zehenbereich geschlossen, flach und rutschhemmend)?',
                     'Beachten die Mitarbeitenden die Betriebsanweisung für Flurförderfahrzeuge insbes. PSA-Pflicht, Traglasten, Verbot der Personenmitnahme?',
                     'Wurden die Automatiktüren, Schnelllauftore und Rolltore gemäß den geltenden Regelwerken geprüft und befinden sich diese in einem ordnungsgemäßen Zustand?',
+
+'Sind die Schnelllauftore gemäß den Herstellervorgaben und gesetzlichen Fristen geprüft sowie technisch einwandfrei?',
+
+'Sind die Rolltore aktuell geprüft und funktionieren alle Schutzeinrichtungen (z. B. Absturzsicherung, Einzugsschutz) einwandfrei?',
                    
 'Ist die Aufzugsanlage geprüft und in einem ordnungsgemäßen Zustand (ohne sichtbare Beschädigungen und mit funktionsfähigen Schutzeinrichtungen)?',
                     'Ist die Leergutrücknahme in einem ordnungsgemäßen Zustand (Schutzeinrichtungen intakt, Einzugsstellen gesichert, keine Glasscherben)?',
@@ -1109,6 +1113,7 @@ id: 'leergut',
                     'Entspricht die Zuleitung der VDE-Norm?',
   'Sind alle Maschinen geprüft und dokumentiert?',
                     'Sind Schutzeinrichtungen vorhanden und funktionsfähig?',
+'Ist die Brotschneidemaschine aktuell geprüft und inklusive aller Schutzeinrichtungen in einwandfreiem Zustand?',
                     'Sind Betriebsanweisungen ausgehaengt?',
                     'Ist der Backhandschuh für die Backstation in einem ordnungsgemäßen Zustand (kein Verschleiß) und besitzt eine lange Stulpe?',
                     'Sind alle Heißgeräte (z. B. Heißtheken, Fritteusen) in technisch einwandfreiem Zustand?'
@@ -1339,6 +1344,9 @@ id: 'dokumentation',
 if (measure.includes("Sind die Annahmegeräte unbeschädigt und funktionsfähig")) {
     return "Beschädigte oder defekte Annahmegeräte unverzüglich instand setzen oder außer Betrieb nehmen.";
 }
+if (measure.includes("	Ist die Brotschneidemaschine aktuell geprüft und inklusive aller Schutzeinrichtungen in einwandfreiem Zustand")) {
+    return "Gerät sofort sperren (Netzstecker ziehen), mit einem Warnhinweis („Defekt – Nicht benutzen“) kennzeichnen und eine DGUV V3 Prüfung bzw. Instandsetzung durch eine Elektrofachkraft veranlassen.";
+}
 if (measure.includes("Ist die Brotschneidemaschine aktuell geprüft und inklusive aller Schutzeinrichtungen in einwandfreiem Zustand")) {
     return "Gerät sofort sperren (Netzstecker ziehen), mit einem Warnhinweis („Defekt – Nicht benutzen“) kennzeichnen und eine DGUV V3 Prüfung bzw. Instandsetzung durch eine Elektrofachkraft veranlassen.";
 }
@@ -1378,6 +1386,15 @@ if (measure.includes("Werden Stapelhöhen eingehalten")) {
 if (measure.includes("Sind Unterweisungen dokumentiert")) {
     return "Unterweisungen unverzüglich durchführen und dokumentieren. Fehlende Nachweise ergänzen und Ablage der Unterweisungsdokumente sicherstellen.";
 }
+
+if (measure.includes("Sind die Schnelllauftore gemäß den Herstellervorgaben und gesetzlichen Fristen geprüft sowie technisch einwandfrei")) {
+    return "Prüfung und ggf. erforderliche Instandsetzung des Schnelllauftors unverzüglich über einen Sachkundigen / den Hersteller veranlassen. Bis zur Mängelfreiheit ist der Torbereich mit besonderer Vorsicht zu nutzen.";
+}
+
+if (measure.includes("Sind die Rolltore aktuell geprüft und funktionieren")) {
+    return "Sachkundigenprüfung sowie erforderliche Wartung des Rolltors kurzfristig veranlassen und den ordnungsgemäßen Zustand im Prüfbuch dokumentieren.";
+}
+
 
 if (measure.includes("Ist die Lagerfläche sauber und rutschfrei")) {
     return "Lagerfläche reinigen und Rutschgefahren beseitigen.";
