@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Arbeitssicherheits-Audit</title>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<link href="all.min.css" rel="stylesheet"/>
 <link href="favicon.ico" rel="icon" type="image/x-icon"/>
 <link href="audit.json" rel="manifest"/>
 <style>
@@ -758,7 +758,7 @@ table, tr, td {
         <h1>Arbeitssicherheits-Audit Tool</h1>
         <p>Checkliste und Maßnahmenplan</p>
     </div>
-     <div class="logo-text">...</div>
+
 </header>    
     <div class="dashboard">
             <div class="card open">
@@ -810,7 +810,6 @@ Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung d
   
     <div class="action-bar sticky-action-bar">
 
- </button>
             <button class="btn btn-danger" onclick="resetAll()">
                 🗑️ Zurücksetzen
             </button>       
@@ -836,7 +835,6 @@ Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung d
             <button class="btn btn-primary" onclick="exportPdf()">
                 🖨️ Drucken
             </button>
-           </button>
     <button class="btn btn-primary" onclick="saveToStorage()">
         💾 Speichern
     </button>
@@ -2339,124 +2337,12 @@ data.dateiname = `${markt}_${deutschesDatum}_${sifa}.json`;
             localStorage.removeItem('auditData');
             showToast('Alle Daten zurückgesetzt!', 'success');        }
         
-        // PDF Export
-        function exportPdf() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            const data = getFormData();
-            let y = 20;            
-            // Header
-            doc.setFontSize(18);
-            doc.setFont('helvetica', 'bold');
-            doc.text('Arbeitssicherheits-Audit', 105, y, { align: 'center' });
-            y += 15;            
-            // Form Data
-            doc.setFontSize(11);
-            doc.setFont('helvetica', 'normal');
-            doc.text(`Markt: ${data.markt || '-'}`, 20, y);
-            doc.text(`Datum: ${data.datum || '-'}`, 120, y);
-            y += 7;
-            doc.text(`Teilnehmer: ${data.teilnehmer || '-'}`, 20, y);
-            y += 7;
-            doc.text(`Marktleitung: ${data.marktleitung || '-'}`, 20, y);
-            doc.text(`SiFa: ${data.sifa || '-'}`, 120, y);
-            y += 12;            
-            // Summary
-            const measureValues = Object.values(measures);
-            const open = measureValues.filter(m => m.status === 'offen').length;
-            const progress = measureValues.filter(m => m.status === 'bearbeitung').length;
-            const done = measureValues.filter(m => m.status === 'erledigt').length;            
-            doc.setFillColor(240, 240, 240);
-            doc.rect(20, y, 170, 12, 'F');
-            doc.setFont('helvetica', 'bold');
-            doc.text('Zusammenfassung:', 25, y + 8);
-            doc.setFont('helvetica', 'normal');
-            doc.text(`Offen: ${open}  |  In Bearbeitung: ${progress}  |  Erledigt: ${done}  |  Gesamt: ${measureValues.length}`, 70, y + 8);
-            y += 20;            
-            // Checklist Results
-            doc.setFontSize(14);
-            doc.setFont('helvetica', 'bold');
-            doc.text('Checkliste Ergebnisse', 20, y);
-            y += 8;            
-            doc.setFontSize(10);
-            doc.setFont('helvetica', 'normal');            
-            categories.forEach(cat => {
-                if (y > 270) {
-                    doc.addPage();
-                    y = 20;
-                }                
-                doc.setFont('helvetica', 'bold');
-                doc.text(cat.name, 20, y);
-                y += 5;
-                doc.setFont('helvetica', 'normal');                
-                cat.questions.forEach((q, idx) => {
-                    const qId = `${cat.id}-${idx}`;
-                    const answer = answers[qId] || '-';
-                    const answerText = answer === 'ja' ? 'Ja' : answer === 'nein' ? 'NEIN' : answer === 'nv' ? 'N.V.' : '-';                    
-                    if (y > 280) {
-                        doc.addPage();
-                        y = 20;
-                    }                    
-                    doc.text(`  - ${q.substring(0, 60)}${q.length > 60 ? '...' : ''}: ${answerText}`, 20, y);
-                    y += 5;
-                });
-                y += 3;
-            });            
-            // Measures
-            if (measureValues.length > 0) {
-                if (y > 240) {
-                    doc.addPage();
-                    y = 20;
-                }                
-                doc.setFontSize(14);
-                doc.setFont('helvetica', 'bold');
-                doc.text('Maßnahmenplan', 20, y);
-                y += 10;                
-                doc.setFontSize(9);
-                measureValues.forEach((m, idx) => {
-                    if (y > 270) {
-                        doc.addPage();
-                        y = 20;
-                    }                    
-                    doc.setFont('helvetica', 'bold');
-                    doc.text(`${idx + 1}. ${m.question.substring(0, 50)}${m.question.length > 50 ? '...' : ''}`, 20, y);
-                    y += 5;
-                    doc.setFont('helvetica', 'normal');
-                    doc.text(`   Massnahme: ${m.measure || '-'}`, 20, y);
-                    y += 4;
-                    doc.text(`   Verantwortlich: ${m.responsible || '-'}  |  Frist: ${m.deadline || '-'}  |  Status: ${m.status}`, 20, y);
-                    y += 7;
-                });
-            }            
-            // Signatures
-            if (signatures.sigPrüfer || signatures.sigMarktleitung) {
-                if (y > 220) {
-                    doc.addPage();
-                    y = 20;
-                }                
-                doc.setFontSize(12);
-                doc.setFont('helvetica', 'bold');
-                doc.text('Unterschriften', 20, y);
-                y += 10;                
-                if (signatures.sigPrüfer) {
-                    doc.text('Prüfer:', 20, y);
-                    y += 5;
-                    try {
-                        doc.addImage(signatures.sigPrüfer, 'PNG', 20, y, 60, 25);
-                    } catch (e) {}
-                    y += 30;
-                }                
-                if (signatures.sigMarktleitung) {
-                    doc.text('Marktleitung:', 20, y);
-                    y += 5;
-                    try {
-                        doc.addImage(signatures.sigMarktleitung, 'PNG', 20, y, 60, 25);
-                    } catch (e) {}
-                }
-            }            
-            doc.save(`audit-${data.markt || 'bericht'}-${data.datum || 'datum'}.pdf`);
-            showToast('PDF exportiert!', 'success');
-        }        
+        // (Ungenutzte doppelte exportPdf()-Definition entfernt – siehe generateAndSharePDF() und die aktive exportPdf() unten, die window.print() nutzt)
+        // Textarea automatisch an Inhalt anpassen (wird beim Tippen der Maßnahme aufgerufen)
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = textarea.scrollHeight + 'px';
+        }
         // Toast Notification
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
@@ -2503,12 +2389,11 @@ function openMaßnahmenplan() {
         signatures: signatures
     };    
     // Daten in localStorage speichern für Fallback
-    localStorage.setItem('massnahmenplanData', JSON.stringify(massnahmenData));    
+    const jsonStr = JSON.stringify(massnahmenData);
+    localStorage.setItem('massnahmenplanData', jsonStr);
     // Daten als Base64 kodieren für URL-Übertragung
     try {
-            const jsonStr = JSON.stringify(massnahmenData);
-         localStorage.setItem('massnahmenplanData', jsonStr);
-        
+        const encodedData = btoa(encodeURIComponent(jsonStr));
         // Zur Maßnahmenplan-Seite navigieren
         window.open('Maßnahmenplan.html?data=' + encodedData, '_blank');
         showToast('Maßnahmenplan wird geöffnet...', 'success');
@@ -3087,7 +2972,17 @@ async function generateAndSharePDF() {
     }
 }
 function weiterZuFotos() {
-  window.open('foto.html', '_blank');
+  // Markt, SiFa und Teilnehmer aus dem Audit übernehmen und an foto.html übergeben,
+  // damit die Felder dort nicht erneut eingetragen werden müssen.
+  const markt = document.getElementById('markt').value || '';
+  const sifa = document.getElementById('sifa').value || '';
+  const teilnehmer = document.getElementById('teilnehmer').value || '';
+  const params = new URLSearchParams({
+    marktnummer: markt,
+    sifa: sifa,
+    name: teilnehmer
+  });
+  window.open('foto.html?' + params.toString(), '_blank');
 }
 </script>     
 
@@ -3120,7 +3015,6 @@ function weiterZuFotos() {
             <button class="btn btn-primary" onclick="exportPdf()">
                 🖨️ Drucken
             </button>
-           </button>
     <button class="btn btn-primary" onclick="saveToStorage()">
         💾 Speichern
     </button>
@@ -3165,7 +3059,6 @@ function weiterZuFotos() {
         <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 8px;">
             <a href="impressum.html" style="color: #D32F2F; text-decoration: none; font-size: 13px;">Impressum</a>
             <a href="datenschutz.html" style="color: #D32F2F; text-decoration: none; font-size: 13px;">Datenschutz</a>
-            <a href="welcome.html" style="color: #D32F2F; text-decoration: none; font-size: 13px;">Startseite</a>
         </div>
         © <span>2026</span> Andreas Zott – Alle Rechte vorbehalten<br>
         <span style="font-size: 11px;">(Sifa) Arbeitssicherheit <span>2026</span></span>
