@@ -635,8 +635,7 @@ input[type="text"], input[type="date"] {
 <p id="untertitel">Systematische Filialprüfung mit automatischer Maßnahmen-Ableitung und Wirksamkeitskontrolle (119 Prüfpunkte)</p>
 <div class="print-wrapper">
 <header>
-<div style="display: flex; justify-content: space-between; align-items: center;">
-<h1 id="titel" style="margin: 0;"></h1>
+<div style="display: flex; justify-content: flex-end; align-items: center;">
 <span id="datum" style="padding: 8px; font-size: 16px; font-weight: bold;"></span>
 </div>
 </header>
@@ -2298,23 +2297,35 @@ pdf.text(wirksamkeitText, margin + 5, currentY);
   }  
   // Seitenzahlen hinzufügen
   addPageNumbers();  
-  // Generate blob and share/download
   const blob = pdf.output('blob');
     const file = new File([blob], filename, { type: 'application/pdf' });
-    
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      await navigator.share({
-        title: 'Arbeitssicherheits-Audit',
-        text: `Sehr geehrte Damen und Herren,\n\nim Rahmen der turnusmäßigen Arbeitssicherheitsbegehung übersende ich Ihnen anbei das Begehungsprotokoll des Marktes  ${markt} zur sachlichen Prüfung.\n\
-Bitte prüfen Sie die dokumentierten Feststellungen und veranlassen Sie die Umsetzung der erforderlichen Maßnahmen..\n\nMit freundlichen Grüßen\nFachkraft für Arbeitssicherheit (SiFa).`,
-        files: [file],
-      });
-    } else {
+
+    function pdfHerunterladen() {
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
       link.download = filename;
       link.click();
       URL.revokeObjectURL(link.href);
+    }
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({
+          title: 'Arbeitssicherheits-Audit',
+          text: `Sehr geehrte Damen und Herren,\n\nim Rahmen der turnusmäßigen Arbeitssicherheitsbegehung übersende ich Ihnen anbei das Begehungsprotokoll des Marktes  ${markt} zur sachlichen Prüfung.\n\
+Bitte prüfen Sie die dokumentierten Feststellungen und veranlassen Sie die Umsetzung der erforderlichen Maßnahmen..\n\nMit freundlichen Grüßen\nFachkraft für Arbeitssicherheit (SiFa).`,
+          files: [file],
+        });
+      } catch (shareError) {
+        // AbortError = Nutzer hat das Teilen-Menü selbst geschlossen/abgebrochen - kein Fehler.
+        if (shareError && shareError.name !== 'AbortError') {
+          console.error('Teilen fehlgeschlagen, biete Download als Rückfalloption an:', shareError);
+          pdfHerunterladen();
+          alert('Das Teilen-Menü konnte nicht geöffnet werden. Das PDF wurde stattdessen heruntergeladen.');
+        }
+      }
+    } else {
+      pdfHerunterladen();
       alert('PDF wurde heruntergeladen.');
     }    
   } catch (error) {
@@ -3435,7 +3446,7 @@ canvas.addEventListener('touchend', stopDrawing);
 // Service Worker optional
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sicher/sw.js')
+    navigator.serviceWorker.register('service-worker.js')
       .then(() => console.log("✅ Service Worker registriert"))
       .catch(err => console.error("❌ Service Worker Fehler:", err));
   });
