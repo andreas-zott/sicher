@@ -67,27 +67,46 @@
                 box-shadow: none !important;
             }
 
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                page-break-inside: auto;
-            }
-
-            tr {
+            .info-bar {
+                border: 1px solid #ccc !important;
                 page-break-inside: avoid;
-                page-break-after: auto;
+                break-inside: avoid;
             }
 
-            th,
-            td {
-                border: 1px solid #ccc;
-                padding: 6px;
-                vertical-align: top;
-                word-break: break-word;
+            .info-bar-grid {
+                display: flex !important;
+                flex-wrap: wrap;
             }
 
-            td {
-                white-space: pre-wrap;
+            .info-field {
+                flex: 1 1 30%;
+            }
+
+            .info-value {
+                white-space: normal;
+            }
+
+            .measures-list {
+                display: block;
+            }
+
+            .measure-card {
+                border: 1px solid #ccc !important;
+                box-shadow: none !important;
+                page-break-inside: avoid;
+                break-inside: avoid;
+                margin-bottom: 10px;
+            }
+
+            .measure-tile {
+                display: flex !important;
+                flex-direction: row !important;
+                flex-wrap: wrap;
+                background: none !important;
+            }
+
+            .tile-actions {
+                display: none !important;
             }
 
             .dashboard-cards {
@@ -166,6 +185,48 @@
         </div>
 
     </header>
+
+    <!-- ==========================================
+         BETRIEBSINFORMATIONEN (aus der Checkliste uebernommen)
+    ========================================== -->
+
+    <section class="card info-bar" id="company-info-bar">
+
+        <div class="info-bar-grid">
+
+            <div class="info-field">
+                <span class="info-label">Firma</span>
+                <span class="info-value" id="info-firma">-</span>
+            </div>
+
+            <div class="info-field">
+                <span class="info-label">Standort</span>
+                <span class="info-value" id="info-standort">-</span>
+            </div>
+
+            <div class="info-field">
+                <span class="info-label">Verantwortlicher</span>
+                <span class="info-value" id="info-verantwortlicher">-</span>
+            </div>
+
+            <div class="info-field">
+                <span class="info-label">Pruefer</span>
+                <span class="info-value" id="info-pruefer">-</span>
+            </div>
+
+            <div class="info-field">
+                <span class="info-label">Teilnehmer</span>
+                <span class="info-value" id="info-teilnehmer">-</span>
+            </div>
+
+            <div class="info-field">
+                <span class="info-label">Datum</span>
+                <span class="info-value" id="info-datum">-</span>
+            </div>
+
+        </div>
+
+    </section>
 
     <!-- ==========================================
          MAIN CONTENT
@@ -272,40 +333,14 @@
             </div>
 
             <!-- ==========================================
-                 TABELLE
+                 MASSNAHMEN-KARTEN
             ========================================== -->
 
             <div class="table-container">
 
-                <table id="measures-table">
-
-                    <thead>
-
-                        <tr>
-
-                            <th>Nr.</th>
-
-                            <th>Beschreibung</th>
-
-                            <th>Prioritaet</th>
-
-                            <th>Verantwortlich</th>
-
-                            <th>Fällig bis</th>
-
-                            <th>Status</th>
-
-                            <th>Aktionen</th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody id="measures-body">
-                        <!-- Dynamisch -->
-                    </tbody>
-
-                </table>
+                <div id="measures-container" class="measures-list">
+                    <!-- Dynamisch -->
+                </div>
 
             </div>
 
@@ -574,247 +609,8 @@
             }, 200);
         }
 
-        // ==========================================
-        // PDF EXPORT DIN A4
-        // ==========================================
-
-        async function generateAndSharePDF() {
-
-            try {
-
-                const { jsPDF } =
-                    window.jspdf;
-
-                const doc =
-                    new jsPDF({
-                        orientation: "portrait",
-                        unit: "mm",
-                        format: "a4"
-                    });
-
-                const pageWidth = 210;
-
-                const pageHeight = 297;
-
-                const marginLeft = 15;
-
-                const marginRight = 15;
-
-                let y = 20;
-
-                // HEADER
-
-                doc.setFontSize(18);
-
-                doc.text(
-                    "Massnahmenplan - Arbeitssicherheits-Audit",
-                    marginLeft,
-                    y
-                );
-
-                y += 12;
-
-                doc.setFontSize(11);
-
-                doc.text(
-                    "Exportdatum: " +
-                    new Date().toLocaleDateString("de-DE"),
-                    marginLeft,
-                    y
-                );
-
-                y += 15;
-
-                // TABELLENKOPF
-
-                doc.setFontSize(11);
-
-                doc.text("Nr.", 15, y);
-
-                doc.text("Beschreibung", 30, y);
-
-                doc.text("Priorität", 120, y);
-
-                doc.text("Status", 150, y);
-
-                doc.text("Fällig", 175, y);
-
-                y += 5;
-
-                doc.line(
-                    marginLeft,
-                    y,
-                    pageWidth - marginRight,
-                    y
-                );
-
-                y += 8;
-
-                // ZEILEN
-
-                const rows =
-                    document.querySelectorAll(
-                        "#measures-body tr"
-                    );
-
-                if (rows.length === 0) {
-
-                    doc.text(
-                        "Keine Maßnahmen vorhanden.",
-                        marginLeft,
-                        y
-                    );
-
-                    doc.save(
-                        "massnahmenplan.pdf"
-                    );
-
-                    return;
-                }
-
-                rows.forEach((row) => {
-
-                    const cells =
-                        row.querySelectorAll("td");
-
-                    if (cells.length < 6)
-                        return;
-
-                    const nr =
-                        cells[0].innerText.trim();
-
-                    const beschreibung =
-                        cells[1].innerText.trim();
-
-                    const prioritaet =
-                        cells[2].innerText.trim();
-
-                    const verantwortlich =
-                        cells[3].innerText.trim();
-
-                    const faellig =
-                        cells[4].innerText.trim();
-
-                    const status =
-                        cells[5].innerText.trim();
-
-                    // Zeilenumbruch
-
-                    const descLines =
-                        doc.splitTextToSize(
-                            beschreibung,
-                            80
-                        );
-
-                    const respLines =
-                        doc.splitTextToSize(
-                            "Verantwortlich: " +
-                            (verantwortlich || "-"),
-                            80
-                        );
-
-                    const rowHeight =
-                        (descLines.length * 5) +
-                        (respLines.length * 4) +
-                        10;
-
-                    // Seitenumbruch
-
-                    if (y + rowHeight > 280) {
-
-                        doc.addPage();
-
-                        y = 20;
-                    }
-
-                    // Ausgabe
-
-                    doc.setFontSize(10);
-
-                    doc.text(nr, 15, y);
-
-                    doc.text(
-                        descLines,
-                        30,
-                        y
-                    );
-
-                    doc.text(
-                        prioritaet,
-                        120,
-                        y
-                    );
-
-                    doc.text(
-                        status,
-                        150,
-                        y
-                    );
-
-                    doc.text(
-                        faellig || "-",
-                        175,
-                        y
-                    );
-
-                    y +=
-                        descLines.length * 5 + 2;
-
-                    // Verantwortlich
-
-                    doc.setFontSize(9);
-
-                    doc.text(
-                        respLines,
-                        30,
-                        y
-                    );
-
-                    y +=
-                        respLines.length * 4 + 4;
-
-                    // Linie
-
-                    doc.setDrawColor(220);
-
-                    doc.line(
-                        marginLeft,
-                        y,
-                        pageWidth - marginRight,
-                        y
-                    );
-
-                    y += 6;
-                });
-
-                // PDF speichern
-
-                doc.save(
-                    "massnahmenplan.pdf"
-                );
-
-            } catch (err) {
-
-                console.error(err);
-
-                alert(
-                    "PDF Export fehlgeschlagen"
-                );
-            }
-        }
-
     </script>
-<script>
 
-function exportMeasuresPDF() {
-
-    alert("PDF Export gestartet");
-
-    window.print();
-
-}
-
-</script>
 <div class="print-footer"></div>
 </body>
 
