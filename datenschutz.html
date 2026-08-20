@@ -182,7 +182,7 @@
         Namensangaben etc.) werden ausschließlich lokal auf dem jeweiligen Endgerät
         gespeichert. Eine automatische Übermittlung dieser Prüfdaten an Server des
         Entwicklers oder an Dritte erfolgt nicht. Zur technischen Darstellung der
-        Anwendung eingebundene externe Ressourcen werden hiervon unabhängig unter
+        Anwendung eingebundene Bibliotheken werden hiervon unabhängig unter
         Ziffer 4 gesondert erläutert.
     </div>
 
@@ -191,27 +191,24 @@
         der lokalen Systemumgebung des verwendeten Geräts.
     </p>
 
-    <h2>4. Eingebundene externe Inhalte (CDN-Ressourcen)</h2>
+    <h2>4. Eingebundene externe Inhalte (Schriftarten und Skript-Bibliotheken)</h2>
 
     <p>
-        Zur Darstellung und Funktion der Anwendung werden beim Aufruf einzelner Seiten
-        technisch notwendige Schriftarten und Skript-Bibliotheken von externen
-        Content-Delivery-Netzwerken (CDN) Dritter nachgeladen, zum Beispiel:
+        Die zur Darstellung und Funktion benötigten Skript-Bibliotheken
+        (u. a. Font Awesome, jsPDF, html2pdf.js, Bootstrap, exif-js) werden
+        ab dieser Version lokal zusammen mit der Anwendung ausgeliefert
+        (Ordner „sicher“) und beim Aufruf der Seiten <strong>nicht</strong>
+        mehr live von externen Content-Delivery-Netzwerken (CDN) Dritter
+        nachgeladen. Ebenso wird keine externe Schriftart (Google Fonts)
+        mehr eingebunden; stattdessen nutzt die Anwendung die auf dem
+        jeweiligen Gerät bereits vorhandene Systemschriftart.
     </p>
 
-    <ul>
-        <li>Google Fonts (fonts.googleapis.com, fonts.gstatic.com)</li>
-        <li>cdnjs.cloudflare.com (u. a. Font Awesome, html2pdf.js)</li>
-        <li>cdn.jsdelivr.net (u. a. Bootstrap, exif-js)</li>
-    </ul>
-
     <p>
-        Beim Laden dieser Ressourcen wird technisch bedingt die IP-Adresse des
-        aufrufenden Geräts an den jeweiligen Anbieter übermittelt. Eine darüberhinausgehende
-        Verarbeitung von Prüfdaten, Fotos oder personenbezogenen Angaben aus der Anwendung
-        durch diese Anbieter findet nicht statt. Auf Art, Umfang und Zweck der
-        Datenverarbeitung durch die jeweiligen Drittanbieter hat der Entwickler der
-        Anwendung keinen Einfluss; es gelten die Datenschutzhinweise der jeweiligen Anbieter.
+        Dadurch wird beim regulären Betrieb der Anwendung keine IP-Adresse
+        des aufrufenden Geräts mehr an externe Anbieter übermittelt. Sollte
+        in einer künftigen Version dennoch wieder eine externe Ressource
+        eingebunden werden, wird dieser Abschnitt entsprechend aktualisiert.
     </p>
 
     <h2>5. Lokale Zwischenspeicherung im Browser (localStorage)</h2>
@@ -311,9 +308,8 @@
 
     <ul>
         <li>keine Cloud-Synchronisation</li>
-        <li>keine Hintergrundübertragung von Prüf-, Foto- oder Personaldaten an externe Systeme
-            (ausgenommen die technisch notwendige Einbindung externer Schrift- und
-            Skript-Ressourcen gemäß Ziffer 4)</li>
+        <li>keine Hintergrundübertragung von Prüf-, Foto- oder Personaldaten an externe Systeme</li>
+        <li>keine externen CDN-Anfragen im laufenden Betrieb (Bibliotheken werden lokal mit der App ausgeliefert, siehe Ziffer 4)</li>
         <li>kein Nutzertracking</li>
         <li>keine Analyse des Nutzungsverhaltens</li>
         <li>keine automatische Profilbildung</li>
