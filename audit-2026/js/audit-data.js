@@ -120,7 +120,8 @@ const AUDIT_CATEGORIES = [
             { id: "9.5", text: "Wird die PSA zur Verfügung gestellt und getragen?" },
             { id: "9.6", text: "Werden Abfälle und Bruchmaterial ordnungsgemäß entsorgt?" },
             { id: "9.7", text: "Werden Stapelhöhen eingehalten?" },
-            { id: "9.8", text: "Ist die Lagerfläche sauber und rutschfrei?" }
+            { id: "9.8", text: "Ist die Lagerfläche sauber und rutschfrei?" },
+            { id: "9.9", text: "Beträgt die lichte Breite des Wartungsganges zwischen Rollbahn und Wand durchgehend mindestens 0,60 m (an Engstellen kurzzeitig 0,50 m)?" }
         ]
     },
     {
@@ -156,7 +157,8 @@ const AUDIT_CATEGORIES = [
             { id: "12.6", text: "Sind Schutzeinrichtungen vorhanden und funktionsfähig?" },
             { id: "12.7", text: "Sind Betriebsanweisungen ausgehaengt?" },
             { id: "12.8", text: "Ist der Backhandschuh für die Backstation in einem ordnungsgemäßen Zustand (kein Verschleiß) und besitzt eine lange Stulpe?" },
-            { id: "12.9", text: "Sind alle Heißgeräte (z. B. Heißtheken, Fritteusen) in technisch einwandfreiem Zustand?" }
+            { id: "12.9", text: "Sind alle Heißgeräte (z. B. Heißtheken, Fritteusen) in technisch einwandfreiem Zustand?" },
+            { id: "12.10", text: "Ist die Brotschneidemaschine aktuell geprüft und inklusive aller Schutzeinrichtungen in einwandfreiem Zustand?" }
         ]
     },
     {
@@ -205,7 +207,8 @@ const AUDIT_CATEGORIES = [
             { id: "16.1", text: "Liegt eine aktuelle Liste sowie Prüfberichte prüfungsbedürftiger Einrichtungen vor?" },
             { id: "16.2", text: "Sind Maßnahmen getroffen, die den Anreiz zu Raubüberfällen vermindern (z. B. Türspion, feststehender Knauf)?" },
             { id: "16.3", text: "Ist die Tür während des Umgangs mit Zahlungsmitteln verschlossen?" },
-            { id: "16.4", text: "Werden neue Mitarbeiter vor Aufnahme der Tätigkeit zum Thema Arbeitssicherheit und Brandschutz unterwiesen?" }
+            { id: "16.4", text: "Werden neue Mitarbeiter vor Aufnahme der Tätigkeit zum Thema Arbeitssicherheit und Brandschutz unterwiesen?" },
+            { id: "16.5", text: "Ist der Fußboden im Büro des Marktleiters frei von Schäden, Verschmutzungen und Stolperstellen?" }
         ]
     },
     {
@@ -261,7 +264,8 @@ const AUDIT_CATEGORIES = [
             { id: "20.13", text: "Wird Alleinarbeit vermieden?" },
             { id: "20.14", text: "Ist die Betreuung nach einem Überfall organisiert?" },
             { id: "20.15", text: "Werden Schulungen für den Umgang mit gewalttätigen Situationen ermöglicht?" },
-            { id: "20.16", text: "Beziehen Sie Mitarbeiteranregungen in die Entscheidungsprozesse mit ein?" }
+            { id: "20.16", text: "Beziehen Sie Mitarbeiteranregungen in die Entscheidungsprozesse mit ein?" },
+            { id: "20.17", text: "Wurden Weiterbildungsmöglichkeiten geschaffen bzw. angeboten?" }
         ]
     }
 ];

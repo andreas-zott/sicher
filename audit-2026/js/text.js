@@ -161,7 +161,9 @@ const MEASURES_TEXT = {
 
         "9.7": "Maximale Stapelhöhen sind einzuhalten.",
 
-        "9.8": "Lagerflächen sind sauber und rutschfrei zu halten."
+        "9.8": "Lagerflächen sind sauber und rutschfrei zu halten.",
+
+        "9.9": "Einzug- und Quetschstellen der Rollbahn zur Wand hin technisch absichern (z. B. durch festen Seitenschutz/Verkleidung), den Betrieb der Bahn bei Wartung zwingend stoppen oder, falls betrieblich machbar, den Bereich zeitweise sperren."
     },
 
 
@@ -170,11 +172,7 @@ Praktikanten: {
 
         "10.2": "Dokumentieren Sie alle durchgeführten Unterweisungen rechtskonform und archivieren Sie die Nachweise gemä § 6 ArbSchG",
 
-        "10.3": "Vergewissern Sie sich, dass unterwiesene Personen die vermittelten Inhalte verstanden haben, etwa durch Rückfragen oder Lernerfolgskontrollen (§ 12 ArbSchG).",
-
-      
-
-        "10.4": "Unterweisen."
+        "10.3": "Vergewissern Sie sich, dass unterwiesene Personen die vermittelten Inhalte verstanden haben, etwa durch Rückfragen oder Lernerfolgskontrollen (§ 12 ArbSchG)."
     },
 
     Arbeitsmedizin: {
@@ -209,7 +207,9 @@ Praktikanten: {
 
         "12.8": "Backhandschuhe sind regelmäßig auf Verschleiß zu prüfen.",
 
-        "12.9": "Heißgeräte sind regelmäßig technisch zu warten."
+        "12.9": "Heißgeräte sind regelmäßig technisch zu warten.",
+
+        "12.10": "Gerät sofort sperren (Netzstecker ziehen), mit einem Warnhinweis 'Defekt – Nicht benutzen' kennzeichnen und eine DGUV V3 Prüfung bzw. Instandsetzung durch eine Elektrofachkraft veranlassen."
     },
 
      Serviceabteilung: {
@@ -269,7 +269,9 @@ Praktikanten: {
 
         "16.3": "Während des Umgangs mit Zahlungsmitteln ist die Bürotür verschlossen zu halten.",
 
-        "16.4": "Neue Beschäftigte sind vor Tätigkeitsaufnahme zu Arbeitssicherheit, Brandschutz und betrieblichen Gefährdungen zu unterweisen."
+        "16.4": "Neue Beschäftigte sind vor Tätigkeitsaufnahme zu Arbeitssicherheit, Brandschutz und betrieblichen Gefährdungen zu unterweisen.",
+
+        "16.5": "Stellen Sie sicher, dass sich der Fußboden im Büro des Marktleiters in einem ordnungsgemäßen Zustand befindet, frei von Beschädigungen, Stolperstellen und Verschmutzungen ist, um die Sicherheit gemäß ArbStättV und ASR A1.5 zu gewährleisten."
     },
 
    "Barrierefreies WC": {
@@ -343,7 +345,9 @@ Praktikanten: {
 
         "20.15": "Schulungen zum Umgang mit aggressiven oder gewalttätigen Situationen sind anzubieten.",
 
-        "20.16": "Mitarbeiteranregungen sind aktiv in Entscheidungs- und Verbesserungsprozesse einzubeziehen."
+        "20.16": "Mitarbeiteranregungen sind aktiv in Entscheidungs- und Verbesserungsprozesse einzubeziehen.",
+
+        "20.17": "Schaffen Sie innerbetriebliche oder externe Weiterbildungsangebote und fördern Sie Qualifizierungen gemäß § 82 BetrVG sowie § 3 ArbSchG."
     },
 
 

@@ -8,9 +8,43 @@ let editingMeasureId = null;
 // ===== Initialization =====
 document.addEventListener('DOMContentLoaded', () => {
     loadMeasures();
+    renderCompanyInfo();
     renderMeasures();
     updateMeasureStats();
 });
+
+// ===== Render Company Info (Betriebsinformationen aus der Checkliste) =====
+function renderCompanyInfo() {
+    const saved = localStorage.getItem('auditState');
+    let companyInfo = {};
+
+    if (saved) {
+        try {
+            const data = JSON.parse(saved);
+            companyInfo = data.companyInfo || {};
+        } catch (e) {
+            console.error('Failed to load company info:', e);
+        }
+    }
+
+    const teilnehmer = [companyInfo.teilnehmer1, companyInfo.teilnehmer2].filter(Boolean).join(', ');
+
+    const fields = {
+        'info-firma': companyInfo.firma,
+        'info-standort': companyInfo.standort,
+        'info-verantwortlicher': companyInfo.verantwortlicher,
+        'info-pruefer': companyInfo.pruefer,
+        'info-teilnehmer': teilnehmer,
+        'info-datum': companyInfo.datum ? formatDate(companyInfo.datum) : ''
+    };
+
+    Object.keys(fields).forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.textContent = fields[id] || '-';
+        }
+    });
+}
 
 // ===== Load Measures =====
 function loadMeasures() {
@@ -44,44 +78,72 @@ function saveMeasuresToStorage() {
 
 // ===== Render Measures =====
 function renderMeasures() {
-    const tbody = document.getElementById('measures-body');
+    const container = document.getElementById('measures-container');
     const noMeasures = document.getElementById('no-measures');
-    const table = document.getElementById('measures-table');
-    
-    if (!tbody) return;
-    
+
+    if (!container) return;
+
     if (measuresState.measures.length === 0) {
-        table.style.display = 'none';
+        container.style.display = 'none';
         noMeasures.style.display = 'block';
         return;
     }
-    
-    table.style.display = 'table';
+
+    container.style.display = 'flex';
     noMeasures.style.display = 'none';
-    
-    tbody.innerHTML = measuresState.measures.map((measure, index) => `
-        <tr>
-            <td>${index + 1}</td>
-            <td>
-                <strong>${measure.itemId ? `[${measure.itemId}] ` : ''}${measure.description}</strong>
-                ${measure.comment ? `<br><small style="color: var(--muted);">${measure.comment}</small>` : ''}
-            </td>
-            <td><span class="priority-badge ${measure.priority}">${capitalize(measure.priority)}</span></td>
-            <td>${measure.responsible || '-'}</td>
-            <td>${measure.dueDate ? formatDate(measure.dueDate) : '-'}</td>
-            <td><span class="status-badge ${measure.status}">${formatStatus(measure.status)}</span></td>
-            <td>
-                <div style="display: flex; gap: 0.5rem;">
-                    <button class="btn-secondary btn-small" onclick="editMeasure('${measure.id}')">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
-                    </button>
-                    <button class="btn-secondary btn-small btn-danger" onclick="deleteMeasure('${measure.id}')">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                    </button>
+
+    container.innerHTML = measuresState.measures.map((measure, index) => {
+        // Frage aus AUDIT_CATEGORIES nachschlagen (findItemById kommt aus app.js)
+        const item = measure.itemId && typeof findItemById === 'function' ? findItemById(measure.itemId) : null;
+        const questionText = item
+            ? `${measure.itemId ? `[${measure.itemId}] ` : ''}${item.text}`
+            : null;
+
+        return `
+        <div class="measure-card">
+            <div class="measure-question">
+                <span class="measure-number">${index + 1}.</span>
+                ${questionText
+                    ? `<span class="measure-question-text">${questionText}</span>`
+                    : `<span class="measure-question-text measure-question-manual">Manuell erfasste Massnahme</span>`}
+            </div>
+            <div class="measure-answer">
+                <span class="measure-answer-label">Massnahme</span>
+                <p class="measure-answer-text">${measure.description}</p>
+                ${measure.comment ? `<p class="measure-comment">Kommentar: ${measure.comment}</p>` : ''}
+            </div>
+            <div class="measure-tile">
+                <div class="tile-field">
+                    <span class="tile-label">Prioritaet</span>
+                    <span class="priority-badge ${measure.priority}">${capitalize(measure.priority)}</span>
                 </div>
-            </td>
-        </tr>
-    `).join('');
+                <div class="tile-field">
+                    <span class="tile-label">Verantwortlich</span>
+                    <span class="tile-value">${measure.responsible || '-'}</span>
+                </div>
+                <div class="tile-field">
+                    <span class="tile-label">Faellig bis</span>
+                    <span class="tile-value">${measure.dueDate ? formatDate(measure.dueDate) : '-'}</span>
+                </div>
+                <div class="tile-field">
+                    <span class="tile-label">Status</span>
+                    <span class="status-badge ${measure.status}">${formatStatus(measure.status)}</span>
+                </div>
+                <div class="tile-field tile-actions">
+                    <span class="tile-label">Aktionen</span>
+                    <div class="actions-row">
+                        <button class="btn-secondary btn-small" onclick="editMeasure('${measure.id}')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+                        </button>
+                        <button class="btn-secondary btn-small btn-danger" onclick="deleteMeasure('${measure.id}')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    }).join('');
 }
 
 // ===== Update Statistics =====
@@ -173,7 +235,7 @@ function deleteMeasure(id) {
 }
 
 // ===== PDF Export =====
-// ===== PDF Export Tauri Optimiert =====
+// ===== PDF Export Tauri Optimiert (Kartenlayout, analog zur Bildschirmansicht) =====
 async function exportMeasuresPDF() {
 
     try {
@@ -188,13 +250,10 @@ async function exportMeasuresPDF() {
 
         const pageWidth = 210;
         const pageHeight = 297;
+        const margin = 14;
+        const contentWidth = pageWidth - margin * 2;
 
-        const marginLeft = 12;
-        const marginRight = 12;
-        const marginTop = 15;
-        const marginBottom = 15;
-
-        let y = marginTop;
+        let y = 18;
 
         function drawHeader() {
 
@@ -202,12 +261,7 @@ async function exportMeasuresPDF() {
             doc.setFont(undefined, "bold");
             doc.setTextColor(179, 0, 0);
 
-            doc.text(
-                "Massnahmenplan",
-                pageWidth / 2,
-                y,
-                { align: "center" }
-            );
+            doc.text("Massnahmenplan", pageWidth / 2, y, { align: "center" });
 
             y += 8;
 
@@ -222,29 +276,32 @@ async function exportMeasuresPDF() {
                 { align: "center" }
             );
 
-            y += 12;
+            y += 10;
 
-            drawTableHeader();
-        }
+            // Betriebsinformationen aus der Checkliste
+            const saved = localStorage.getItem('auditState');
+            let companyInfo = {};
+            if (saved) {
+                try {
+                    companyInfo = JSON.parse(saved).companyInfo || {};
+                } catch (e) {}
+            }
+            const teilnehmer = [companyInfo.teilnehmer1, companyInfo.teilnehmer2].filter(Boolean).join(', ');
 
-        function drawTableHeader() {
-
-            doc.setFillColor(235, 235, 235);
-            doc.rect(10, y - 5, 190, 8, "F");
+            const infoLine1 = `Firma: ${companyInfo.firma || '-'}    Standort: ${companyInfo.standort || '-'}    Datum: ${companyInfo.datum ? formatDate(companyInfo.datum) : '-'}`;
+            const infoLine2 = `Verantwortlicher: ${companyInfo.verantwortlicher || '-'}    Pruefer: ${companyInfo.pruefer || '-'}    Teilnehmer: ${teilnehmer || '-'}`;
 
             doc.setFontSize(9);
-            doc.setFont(undefined, "bold");
-            doc.setTextColor(0);
+            doc.setTextColor(60);
+            doc.text(infoLine1, margin, y);
+            y += 5;
+            doc.text(infoLine2, margin, y);
+            y += 5;
 
-            doc.text("Nr.", 12, y);
-            doc.text("Beschreibung", 22, y);
-            doc.text("Priorität", 120, y);
-            doc.text("Status", 145, y);
-            doc.text("Fällig", 175, y);
+            doc.setDrawColor(220);
+            doc.line(margin, y, pageWidth - margin, y);
 
             y += 8;
-
-            doc.setFont(undefined, "normal");
         }
 
         drawHeader();
@@ -252,168 +309,141 @@ async function exportMeasuresPDF() {
         if (measuresState.measures.length === 0) {
 
             doc.setFontSize(11);
-            doc.text(
-                "Keine Maßnahmen vorhanden.",
-                marginLeft,
-                y + 10
-            );
+            doc.setTextColor(0);
+            doc.text("Keine Massnahmen vorhanden.", margin, y);
 
         } else {
 
+            const padding = 6;
+            const innerWidth = contentWidth - padding * 2;
+            const colWidth = innerWidth / 4;
+            const colX = [0, 1, 2, 3].map(i => margin + padding + i * colWidth);
+
             measuresState.measures.forEach((measure, index) => {
 
-                const descLines =
-                    doc.splitTextToSize(
-                        measure.description || "",
-                        90
-                    );
-
-                const commentLines =
-                    measure.comment
-                        ? doc.splitTextToSize(
-                              "Kommentar: " + measure.comment,
-                              90
-                          )
-                        : [];
-
-                const rowHeight =
-                    (descLines.length * 5) +
-                    (commentLines.length * 4) +
-                    8;
-
-                if (
-                    y + rowHeight >
-                    pageHeight - marginBottom
-                ) {
-
-                    doc.addPage();
-
-                    y = marginTop;
-
-                    drawTableHeader();
-                }
-
-                doc.setFontSize(8);
-
-                doc.text(
-                    String(index + 1),
-                    12,
-                    y
-                );
-
-                let textY = y;
+                const item = measure.itemId && typeof findItemById === 'function' ? findItemById(measure.itemId) : null;
+                const questionText = item
+                    ? `${index + 1}. ${measure.itemId ? `[${measure.itemId}] ` : ''}${item.text}`
+                    : `${index + 1}. Manuell erfasste Massnahme`;
 
                 doc.setFont(undefined, "bold");
-
-                descLines.forEach(line => {
-
-                    doc.text(
-                        line,
-                        22,
-                        textY
-                    );
-
-                    textY += 5;
-                });
+                doc.setFontSize(10);
+                const questionLines = doc.splitTextToSize(questionText, innerWidth);
 
                 doc.setFont(undefined, "normal");
+                doc.setFontSize(9);
+                const answerLines = doc.splitTextToSize(measure.description || "-", innerWidth);
 
-                if (commentLines.length > 0) {
+                const commentLines = measure.comment
+                    ? doc.splitTextToSize("Kommentar: " + measure.comment, innerWidth)
+                    : [];
 
-                    doc.setTextColor(90);
+                const questionH = questionLines.length * 5;
+                const answerH = answerLines.length * 4.3;
+                const commentH = commentLines.length ? commentLines.length * 4 + 2 : 0;
+                const tileH = 11;
+                const cardHeight = padding + questionH + 1 + 4.5 + answerH + commentH + 6 + tileH + padding;
 
-                    commentLines.forEach(line => {
-
-                        doc.text(
-                            line,
-                            22,
-                            textY
-                        );
-
-                        textY += 4;
-                    });
-
-                    doc.setTextColor(0);
+                // Seitenumbruch
+                if (y + cardHeight > pageHeight - 22) {
+                    doc.addPage();
+                    y = 18;
                 }
 
-                doc.text(
-                    capitalize(measure.priority),
-                    120,
-                    y
-                );
+                // Kartenrahmen
+                doc.setDrawColor(226, 232, 240);
+                doc.setLineWidth(0.3);
+                doc.roundedRect(margin, y, contentWidth, cardHeight, 2, 2, "S");
 
-                doc.text(
-                    formatStatus(measure.status),
-                    145,
-                    y
-                );
+                let cy = y + padding + 3.5;
 
-                doc.text(
-                    measure.dueDate
-                        ? formatDate(measure.dueDate)
-                        : "-",
-                    175,
-                    y
-                );
+                // Frage
+                doc.setFont(undefined, "bold");
+                doc.setFontSize(10);
+                doc.setTextColor(30, 41, 59);
+                doc.text(questionLines, margin + padding, cy);
+                cy += questionH + 1;
 
-                y += rowHeight;
+                // Trennlinie
+                doc.setDrawColor(241, 245, 249);
+                doc.line(margin + padding, cy, margin + contentWidth - padding, cy);
+                cy += 4.5;
 
-                doc.setDrawColor(220);
+                // Massnahme-Label + Text
+                doc.setFont(undefined, "bold");
+                doc.setFontSize(7.5);
+                doc.setTextColor(146, 64, 14);
+                doc.text("MASSNAHME", margin + padding, cy);
+                cy += 4.3;
 
-                doc.line(
-                    10,
-                    y - 3,
-                    200,
-                    y - 3
-                );
+                doc.setFont(undefined, "normal");
+                doc.setFontSize(9);
+                doc.setTextColor(51, 65, 85);
+                doc.text(answerLines, margin + padding, cy);
+                cy += answerH;
+
+                if (commentLines.length) {
+                    doc.setFontSize(8);
+                    doc.setTextColor(100, 116, 139);
+                    doc.text(commentLines, margin + padding, cy);
+                    cy += commentH;
+                }
+                cy += 6;
+
+                // Prioritaet | Verantwortlich | Faellig bis | Status
+                const labels = ["PRIORITAET", "VERANTWORTLICH", "FAELLIG BIS", "STATUS"];
+                doc.setFont(undefined, "bold");
+                doc.setFontSize(7);
+                doc.setTextColor(100, 116, 139);
+                labels.forEach((label, i) => doc.text(label, colX[i], cy));
+                cy += 4.3;
+
+                doc.setFont(undefined, "normal");
+                doc.setFontSize(9);
+                doc.setTextColor(30, 41, 59);
+                doc.text(capitalize(measure.priority), colX[0], cy);
+                doc.text(measure.responsible || "-", colX[1], cy);
+                doc.text(measure.dueDate ? formatDate(measure.dueDate) : "-", colX[2], cy);
+
+                const statusColor = measure.status === "offen"
+                    ? [220, 38, 38]
+                    : measure.status === "in-bearbeitung"
+                        ? [217, 119, 6]
+                        : [22, 163, 74];
+                doc.setFont(undefined, "bold");
+                doc.setTextColor(...statusColor);
+                doc.text(formatStatus(measure.status), colX[3], cy);
+                doc.setTextColor(0);
+
+                y += cardHeight + 5;
             });
         }
 
-        const totalPages =
-            doc.getNumberOfPages();
+        const totalPages = doc.getNumberOfPages();
 
-        for (
-            let i = 1;
-            i <= totalPages;
-            i++
-        ) {
-
+        for (let i = 1; i <= totalPages; i++) {
             doc.setPage(i);
-
             doc.setFontSize(8);
             doc.setTextColor(120);
-
             doc.text(
                 `Seite ${i} von ${totalPages}`,
-                pageWidth - 10,
-                pageHeight - 5,
+                pageWidth - margin,
+                pageHeight - 8,
                 { align: "right" }
             );
         }
 
         doc.save(
-            `Massnahmenplan_${
-                new Date()
-                    .toISOString()
-                    .split("T")[0]
-            }.pdf`
+            `Massnahmenplan_${new Date().toISOString().split("T")[0]}.pdf`
         );
 
-        showToast(
-            "PDF erfolgreich exportiert",
-            "success"
-        );
+        showToast("PDF erfolgreich exportiert", "success");
 
     } catch (error) {
 
-        console.error(
-            "PDF Export Fehler:",
-            error
-        );
+        console.error("PDF Export Fehler:", error);
 
-        alert(
-            "PDF Export fehlgeschlagen."
-        );
+        alert("PDF Export fehlgeschlagen.");
     }
 }
 // ===== Helper Functions =====

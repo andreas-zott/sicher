@@ -5,7 +5,10 @@ let auditState = {
     companyInfo: {
         firma: '',
         standort: '',
+        verantwortlicher: '',
         pruefer: '',
+        teilnehmer1: '',
+        teilnehmer2: '',
         datum: new Date().toISOString().split('T')[0]
     },
     ratings: {},
@@ -27,8 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initializeApp() {
-    // Set today's date
-    document.getElementById('datum').value = auditState.companyInfo.datum;
+    // Set today's date (Feld existiert nur auf der Checkliste-Seite)
+    const datumInput = document.getElementById('datum');
+    if (datumInput) {
+        datumInput.value = auditState.companyInfo.datum;
+    }
     
     // Render checklist
     renderChecklist();
@@ -306,7 +312,7 @@ function clearSignature(type) {
 // ===== Event Listeners =====
 function setupEventListeners() {
     // Company info inputs
-    ['firma', 'standort', 'pruefer', 'datum'].forEach(field => {
+    ['firma', 'standort', 'verantwortlicher', 'pruefer', 'teilnehmer1', 'teilnehmer2', 'datum'].forEach(field => {
         const input = document.getElementById(field);
         if (input) {
             input.addEventListener('change', (e) => {
@@ -398,7 +404,10 @@ function resetAudit() {
         companyInfo: {
             firma: '',
             standort: '',
+            verantwortlicher: '',
             pruefer: '',
+            teilnehmer1: '',
+            teilnehmer2: '',
             datum: new Date().toISOString().split('T')[0]
         },
         ratings: {},
@@ -412,7 +421,7 @@ function resetAudit() {
     };
     
     // Clear form fields
-    ['firma', 'standort', 'pruefer'].forEach(field => {
+    ['firma', 'standort', 'verantwortlicher', 'pruefer', 'teilnehmer1', 'teilnehmer2'].forEach(field => {
         const input = document.getElementById(field);
         if (input) input.value = '';
     });
@@ -451,7 +460,11 @@ function exportPDF() {
     y += lineHeight;
     doc.text(`Standort: ${auditState.companyInfo.standort || '-'}`, 20, y);
     y += lineHeight;
+    doc.text(`Verantwortlicher: ${auditState.companyInfo.verantwortlicher || '-'}`, 20, y);
+    y += lineHeight;
     doc.text(`Pruefer: ${auditState.companyInfo.pruefer || '-'}`, 20, y);
+    y += lineHeight;
+    doc.text(`Teilnehmer: ${[auditState.companyInfo.teilnehmer1, auditState.companyInfo.teilnehmer2].filter(Boolean).join(', ') || '-'}`, 20, y);
     y += lineHeight;
     doc.text(`Datum: ${auditState.companyInfo.datum || '-'}`, 20, y);
     y += 15;
@@ -497,6 +510,10 @@ function exportPDF() {
             const lines = doc.splitTextToSize(`${item.id}: ${item.text}`, maxWidth);
             
             lines.forEach((line, i) => {
+                if (y > pageHeight) {
+                    doc.addPage();
+                    y = 20;
+                }
                 doc.text(line, 20, y);
                 if (i === 0) {
                     doc.text(`[${ratingText}]`, 170, y);
@@ -510,6 +527,10 @@ function exportPDF() {
                 doc.setTextColor(100, 100, 100);
                 const commentLines = doc.splitTextToSize(`Anmerkung: ${auditState.comments[item.id]}`, maxWidth - 10);
                 commentLines.forEach(line => {
+                    if (y > pageHeight) {
+                        doc.addPage();
+                        y = 20;
+                    }
                     doc.text(line, 25, y);
                     y += lineHeight - 3;
                 });
