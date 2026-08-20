@@ -49,7 +49,6 @@
       color: white;
     }
 
-    /* Frage-Spalte kursiv und kleiner */
     td:nth-child(2) {
       font-style: italic;
       font-size: 0.9em;
@@ -88,77 +87,142 @@
       display: flex;
       gap: 10px;
       z-index: 9999;
-      pointer-events: auto;
       backdrop-filter: blur(4px);
       background: rgba(0, 0, 0, 0.05);
       padding: 4px 8px;
       border-radius: 6px;
     }
 
-    .nav-buttons button {
-      padding: 6px 10px;
-      font-size: 14px;
-      opacity: 0.6;
-      background: #444;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
     }
 
-    .nav-buttons button:hover {
-      opacity: 1;
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+      color: #555;
+      background-color: #e9ecef;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 25px;
     }
 
     @media (max-width: 800px) {
-      th, td {
-        font-size: 12px;
-        padding: 10px;
-      }
+      th, td { font-size: 12px; padding: 10px; }
+      button { font-size: 16px; padding: 10px 20px; }
+      .container { width: 100%; padding: 15px; border-radius: 0; }
+    }
 
-      button {
-        font-size: 16px;
-        padding: 10px 20px;
-      }
+    /* === PRÄZISE DRUCKEINSTELLUNGEN GEGEN ÜBERLAUF UND LOCALHOST === */
+    @page {
+      size: A4 portrait;
+      margin: 0 !important; /* Entfernt den Browser-Footer (localhost) restlos */
     }
 
     @media print {
-      .btn-group,
-      .nav-buttons,
-      footer {
+      body {
+        background: transparent !important;
+        color: #000 !important;
+        margin: 0 !important;
+        /* Definiert die exakte A4-Breite minus Ränder */
+        width: 210mm !important;
+        max-width: 210mm !important;
+        /* Simuliert die Seitenränder im Dokumentkörper selbst */
+        padding: 20mm 15mm 20mm 15mm !important;
+        box-sizing: border-box !important;
+      }
+
+      .container {
+        background: transparent !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+
+      .btn-group, .nav-buttons, .btn-back, button, footer, [id*="footer"] {
         display: none !important;
       }
 
-      body {
-        margin: 20mm;
+      h1 {
+        font-size: 20pt !important;
+        margin-top: 0 !important;
+        text-align: left !important;
       }
-      
+
+      .info {
+        border: 1px solid #bbb !important;
+        box-shadow: none !important;
+        margin-bottom: 20px !important;
+        padding: 15px !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+      }
+
+      /* Tabellen-Bändigung für exakte A4-Passform */
       table {
-        font-size: 10pt;
+        width: 100% !important;
+        max-width: 100% !important;
+        table-layout: fixed !important; /* Erzwingt Einhaltung der Spaltenbreiten */
+        font-size: 10pt !important;
+        border-collapse: collapse !important;
+        box-shadow: none !important;
+        page-break-inside: auto !important;
       }
-      
+
+      tr {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
       th, td {
-        padding: 8px;
+        padding: 8px !important;
+        border: 1px solid #666 !important;
+        word-wrap: break-word !important; /* Bricht zu lange Wörter in Zellen um */
+        overflow-wrap: break-word !important;
+        white-space: normal !important;
       }
-    }  
 
-.info, table, tr, td, th {
-  page-break-inside: avoid !important;
-  break-inside: avoid !important;
-}
+      /* Fixierte Spaltenbreiten beim Drucken */
+      th:nth-child(1), td:nth-child(1) { width: 10mm !important; }
+      th:nth-child(2), td:nth-child(2) { width: 60mm !important; color: #333 !important; font-style: italic !important; }
+      th:nth-child(3), td:nth-child(3) { width: 110mm !important; }
 
-thead {display: table-header-group;}
-tfoot {display: table-footer-group;}
+      th {
+        background-color: #f2f2f2 !important;
+        color: #000 !important;
+        font-weight: bold !important;
+      }
 
+      thead { display: table-header-group !important; }
+      tfoot { display: table-footer-group !important; }
+    }
 </style>
 <meta content="Auswertung von Arbeitssicherheitsmaßnahmen – Checkliste und PDF-Export." name="description"/></head>
 <body>
+<div class="container">
+
+    <a href="index.html" class="btn-back">
+        <span>&larr;</span> Zurück
+    </a>
 <h1>🛠️ Maßnahmen-Auswertung</h1>
 <section aria-label="Metadaten" class="info" id="meta-info"></section>
 <div class="btn-group">
 <button onclick="druckMitFooterAusblenden()">📄 Drucken / PDF</button>
 <button onclick="pdfTeilen()">📄 PDF generieren &amp; teilen 📤</button>
 <button onclick="teilen()">🧾 Text teilen (iPad)</button>
+
 </div>
 <table id="maßnahmen-tabelle">
 <caption style="display:none;">Liste der Maßnahmen</caption>
@@ -175,39 +239,47 @@ tfoot {display: table-footer-group;}
 <script>
     let aktuelleDaten = null;
 
-    window.addEventListener('message', (event) => {
-      const data = event.data;
-      if (!data) return;
+    // Meldet dem öffnenden Fenster (liste.html), dass diese Seite fertig
+    // geladen ist und jetzt Nachrichten empfangen kann. Verhindert, dass
+    // liste.html die Maßnahmen-Daten zu früh sendet und sie verloren gehen.
+    if (window.opener) {
+      window.opener.postMessage('massnahmen-bereit', '*');
+    }
 
+    function zeigeMassnahmen(data) {
+      if (!data || typeof data !== 'object') return;
       aktuelleDaten = data;
 
       let datum = '—';
-if (data.datum) {
-  if (/^\d{2}\.\d{2}\.\d{4}$/.test(data.datum)) {
-    datum = data.datum; // already German format
-  } else {
-    const d = new Date(data.datum);
-    if (!isNaN(d)) {
-      datum = d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
-    } else {
-      datum = data.datum;
-    }
-  }
-}
+      if (data.datum) {
+        if (/^\d{2}\.\d{2}\.\d{4}$/.test(data.datum)) {
+          datum = data.datum;
+        } else {
+          const d = new Date(data.datum);
+          if (!isNaN(d)) {
+            datum = d.toLocaleDateString('de-DE', {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric'
+            });
+          }
+        }
+      }
 
       document.getElementById('meta-info').innerHTML = `
- <p><strong>📅 Datum:</strong> ${datum}</p>
-  <p><strong>🏬 Marktnummer:</strong> ${data.markt || '—'}</p>
-  <p><strong>👤 Marktleitung:</strong> ${data.marktleitung || '—'}</p>
-  <p><strong>👤 Teilnehmer:</strong> ${data.name || '—'}</p>
-  <p><strong>🛡️ SiFa:</strong> ${data.sifa || '—'}</p>
+        <p><strong>📅 Datum:</strong> ${datum}</p>
+        <p><strong>🏬 Marktnummer:</strong> ${data.markt || '—'}</p>
+        <p><strong>👤 Marktleitung:</strong> ${data.marktleitung || '—'}</p>
+        <p><strong>👤 Teilnehmer:</strong> ${data.name || '—'}</p>
+        <p><strong>🛡️ SiFa:</strong> ${data.sifa || '—'}</p>
       `;
 
       const tbody = document.querySelector('#maßnahmen-tabelle tbody');
       tbody.innerHTML = '';
 
       if (!Array.isArray(data.maßnahmen) || data.maßnahmen.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="3" style="text-align: center;">🎉 Keine Maßnahmen erforderlich!</td></tr>`;
+        tbody.innerHTML =
+          '<tr><td colspan="3" style="text-align:center;">🎉 Keine Maßnahmen erforderlich!</td></tr>';
       } else {
         data.maßnahmen.forEach((m, i) => {
           const row = document.createElement('tr');
@@ -219,13 +291,38 @@ if (data.datum) {
           tbody.appendChild(row);
         });
       }
+    }
+
+    // Primärer Übertragungsweg: liste.html sendet die Daten per postMessage
+    // direkt an dieses Fenster (siehe exportiereMassnahmen() in liste.html).
+    window.addEventListener('message', (event) => {
+      if (event.data && event.data !== 'massnahmen-bereit') {
+        zeigeMassnahmen(event.data);
+      }
     });
 
-    function druckMitFooterAusblenden() {
-      const footer = document.querySelector("footer");
-      if (footer) footer.style.display = "none";
-      window.print();
-      if (footer) footer.style.display = "";
+    // Rückfalloption für ältere Aufrufe/andere Seiten, die noch über
+    // localStorage übergeben.
+    document.addEventListener('DOMContentLoaded', () => {
+      if (aktuelleDaten) return; // per postMessage schon erhalten
+      try {
+        const data = JSON.parse(localStorage.getItem('massnahmenDaten') || 'null');
+        if (data) zeigeMassnahmen(data);
+      } catch (e) {
+        console.error('Fehler beim Laden aus localStorage:', e);
+      }
+    });
+
+   function druckMitFooterAusblenden() {
+  // Sucht und versteckt alle potenziellen Footer-Elemente im DOM vor dem Drucken
+  const footerElemente = document.querySelectorAll('footer, [id*="footer"], .nav-buttons');
+  footerElemente.forEach(el => el.style.display = 'none');
+
+ // nativer Druckaufruf (Tauri öffnet hier den System-Dialog)
+  window.print();
+
+  // Blendet die Elemente nach dem Drucken für die App-Ansicht wieder ein
+  footerElemente.forEach(el => el.style.display = '');
     }
 
     async function teilen() {
@@ -302,14 +399,47 @@ if (data.datum) {
     margin-top: 40px;
     text-align: center;
 ">
-<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
-<div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 8px;">
-<a href="impressum.html" style="color: #4f46e5; text-decoration: none; font-size: 13px;">Impressum</a>
-<a href="datenschutz.html" style="color: #4f46e5; text-decoration: none; font-size: 13px;">Datenschutz</a>
-<a href="welcome.html" style="color: #4f46e5; text-decoration: none; font-size: 13px;">Startseite</a>
-</div>
-<p style="margin: 0; font-size: 12px; color: #6b7280;"></p>
-</div>
-</footer>
+<hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+
+ 
+   <footer style="text-align: center; font-size: 12px; color: #6b7280;">
+
+    <!-- Kleine Buttons -->
+    <div style="
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 10px;
+    ">
+
+        <a href="impressum.html" style="background: rgb(243, 244, 246); color: rgb(211, 47, 47); text-decoration: none; font-size: 11px; padding: 4px 10px; border-radius: 14px; border: 1px solid rgb(229, 231, 235); transition: 0.2s;" onmouseover="this.style.background='#D32F2F';this.style.color='#fff';" onmouseout="this.style.background='#f3f4f6';this.style.color='#D32F2F';">
+            Impressum
+        </a>
+
+        <a href="datenschutz.html" style="
+            background: #f3f4f6;
+            color: #D32F2F;
+            text-decoration: none;
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 14px;
+            border: 1px solid #e5e7eb;
+            transition: all 0.2s ease;
+        " onmouseover="this.style.background='#D32F2F';this.style.color='#fff';" onmouseout="this.style.background='#f3f4f6';this.style.color='#D32F2F';">
+            Datenschutz
+        </a>
+
+    </div>
+
+    © <span>2026</span> Andreas Zott – Alle Rechte vorbehalten<br>
+
+    <span style="font-size: 11px;">
+        (Sifa) Arbeitssicherheit <span>2026</span>
+    </span>
+
+    <div style="font-size:11px; color:#999; margin-top:8px;">
+        Stand: Mai 2026
+    </div>
+
 </body>
 </html>
