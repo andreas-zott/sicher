@@ -130,48 +130,100 @@
     .card.done .card-value { color: #22c55e; }
     .card.total .card-value { color: #3b82f6; }
     
-    /* Measures Table */
-    .measures-table {
-        width: 100%;
-        border-collapse: collapse;
+    /* Measures - Kartenlayout: Frage oben, Massnahme darunter, dann Verantwortlich/Frist/Status nebeneinander */
+    .measures-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
     }
-    
-    .measures-table th {
-        background: #fef3c7;
-        padding: 12px 14px;
-        text-align: left;
-        font-weight: 600;
-        font-size: 0.85rem;
-        color: #92400e;
-        border-bottom: 2px solid #fcd34d;
+
+    .measure-card {
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 18px 20px;
+        background: #fff;
+        transition: box-shadow 0.2s;
     }
-    
-    .measures-table td {
-        padding: 10px 14px;
+
+    .measure-card:hover {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .measure-question {
+        display: flex;
+        gap: 10px;
+        align-items: baseline;
+        margin-bottom: 14px;
+        padding-bottom: 12px;
         border-bottom: 1px solid #f1f5f9;
-        vertical-align: top;
     }
-    
-    .measures-table tr:hover {
-        background: #fafafa;
+
+    .measure-number {
+        flex-shrink: 0;
+        font-weight: 700;
+        color: #92400e;
     }
-    
-    .measures-table input,
-    .measures-table select {
+
+    .measure-question-text {
+        font-weight: 600;
+        color: #1e293b;
+        line-height: 1.5;
+    }
+
+    .measure-field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .measure-field label {
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+    }
+
+    .measure-field-full {
+        margin-bottom: 14px;
+    }
+
+    .measure-field input,
+    .measure-field select,
+    .measure-field textarea {
         width: 100%;
-        padding: 8px 10px;
+        padding: 10px 12px;
         border: 1px solid #e2e8f0;
-        border-radius: 6px;
-        font-size: 0.9rem;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        font-family: inherit;
+        box-sizing: border-box;
     }
-    
-    .measures-table textarea {
-        width: 100%;
-        padding: 8px 10px;
-        border: 1px solid #e2e8f0;
-        border-radius: 6px;
-        font-size: 0.9rem;
+
+    .measure-field textarea {
+        min-height: 90px;
         resize: vertical;
+        line-height: 1.5;
+    }
+
+    .measure-field input:focus,
+    .measure-field select:focus,
+    .measure-field textarea:focus {
+        outline: none;
+        border-color: #b30000;
+        box-shadow: 0 0 0 3px rgba(179, 0, 0, 0.1);
+    }
+
+    .measure-row-inline {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 14px;
+    }
+
+    @media (max-width: 640px) {
+        .measure-row-inline {
+            grid-template-columns: 1fr;
+        }
     }
     
     .status-select {
@@ -631,46 +683,47 @@
             return;
         }
         
-        let html = `<table class="measures-table">
-            <thead>
-                <tr>
-                    <th style="width: 5%;">Nr.</th>
-                    <th style="width: 25%;">Prüfpunkt</th>
-                    <th style="width: 30%;">Massnahme</th>
-                    <th style="width: 15%;">Verantwortlich</th>
-                    <th style="width: 10%;">Frist</th>
-                    <th style="width: 15%;">Status</th>
-                </tr>
-            </thead>
-            <tbody>`;
+        let html = '<div class="measures-list">';
         
         measureKeys.forEach((qId, index) => {
             const m = auditData.measures[qId];
             const statusClass = m.status === 'offen' ? 'open' : m.status === 'bearbeitung' ? 'progress' : 'done';
             
-            html += `<tr>
-                <td style="font-weight: 600; text-align: center;">${index + 1}</td>
-                <td>${m.question || '-'}</td>
-                <td>
-                    <textarea 
+            html += `<div class="measure-card">
+                <div class="measure-question">
+                    <span class="measure-number">${index + 1}.</span>
+                    <span class="measure-question-text">${m.question || '-'}</span>
+                </div>
+                <div class="measure-field measure-field-full">
+                    <label>Massnahme</label>
+                    <textarea
                         placeholder="Massnahme eingeben"
                         onchange="updateMeasure('${qId}', 'measure', this.value)"
                         rows="3"
                     >${m.measure || ''}</textarea>
-                </td>
-                <td><input type="text" value="${m.responsible || ''}" placeholder="Name" onchange="updateMeasure('${qId}', 'responsible', this.value)"></td>
-                <td><input type="date" value="${m.deadline || ''}" onchange="updateMeasure('${qId}', 'deadline', this.value)"></td>
-                <td>
-                    <select class="status-select ${statusClass}" onchange="updateMeasure('${qId}', 'status', this.value); this.className='status-select ' + (this.value === 'offen' ? 'open' : this.value === 'bearbeitung' ? 'progress' : 'done')">
-                        <option value="offen" ${m.status === 'offen' ? 'selected' : ''}>Offen</option>
-                        <option value="bearbeitung" ${m.status === 'bearbeitung' ? 'selected' : ''}>In Bearbeitung</option>
-                        <option value="erledigt" ${m.status === 'erledigt' ? 'selected' : ''}>Erledigt</option>
-                    </select>
-                </td>
-            </tr>`;
+                </div>
+                <div class="measure-row-inline">
+                    <div class="measure-field">
+                        <label>Verantwortlich</label>
+                        <input type="text" value="${m.responsible || ''}" placeholder="Name" onchange="updateMeasure('${qId}', 'responsible', this.value)">
+                    </div>
+                    <div class="measure-field">
+                        <label>Frist</label>
+                        <input type="date" value="${m.deadline || ''}" onchange="updateMeasure('${qId}', 'deadline', this.value)">
+                    </div>
+                    <div class="measure-field">
+                        <label>Status</label>
+                        <select class="status-select ${statusClass}" onchange="updateMeasure('${qId}', 'status', this.value); this.className='status-select ' + (this.value === 'offen' ? 'open' : this.value === 'bearbeitung' ? 'progress' : 'done')">
+                            <option value="offen" ${m.status === 'offen' ? 'selected' : ''}>Offen</option>
+                            <option value="bearbeitung" ${m.status === 'bearbeitung' ? 'selected' : ''}>In Bearbeitung</option>
+                            <option value="erledigt" ${m.status === 'erledigt' ? 'selected' : ''}>Erledigt</option>
+                        </select>
+                    </div>
+                </div>
+            </div>`;
         });
         
-        html += '</tbody></table>';
+        html += '</div>';
         container.innerHTML = html;
     }
     
