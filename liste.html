@@ -4,17 +4,16 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Arbeitssicherheits-Audit</title>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<link href="all.min.css" rel="stylesheet"/>
 <link href="favicon.ico" rel="icon" type="image/x-icon"/>
 <link href="manifest.json" rel="manifest"/>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 .handlungsanweisung-box {
     border: 2px solid #C62828; 
     padding: 18px;
     border-radius: 10px;
     background-color: #fff8f8;
-    font-family: 'Inter', Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
     margin: 18px 0;
 }
 .handlungsanweisung-box h2 {
@@ -208,7 +207,7 @@ input[type="radio"][value="nicht_vorhanden"]:checked {
   width: 100%;
   max-width: 600px;
   margin: auto;
-  font-family: 'Inter', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
   box-sizing: border-box;
 }
 button {
@@ -299,7 +298,7 @@ button.btn-gray {
   break-before: page;
 }
 body {
-  font-family: 'Inter', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
   background-color: #f4f4f4;
   padding: 20px;
 }
@@ -1677,6 +1676,15 @@ in angemessenen Zeitabständen geprüft?
 </button>
 </div>
 <script>
+// Zentrale Versionsangabe der App. Bei jeder inhaltlichen/funktionalen
+// Änderung hier hochzählen (Semantic Versioning: MAJOR.MINOR.PATCH)
+// und das Datum aktualisieren. Wird unten im Footer angezeigt und
+// erlaubt so den schnellen Abgleich, ob iPad und Windows-Rechner
+// denselben Stand geladen haben.
+const APP_VERSION = "2.2.0";
+const APP_VERSION_DATUM = "20.08.2026";
+</script>
+<script>
 function weiterZuFotos() {
   const marktnummer = document.getElementById('markt')?.value || '';
   const name = document.getElementById('name')?.value || '';
@@ -1735,14 +1743,19 @@ function weiterZuFotos() {
     <div style="font-size:11px; color:#999; margin-top:8px;">
         Stand: Juli 2026
     </div>
+    <div id="app-version" style="font-size:11px; color:#999; margin-top:4px;"></div>
 </footer>
+
+<script>
+document.getElementById('app-version').textContent = `Version ${APP_VERSION} · Stand: ${APP_VERSION_DATUM}`;
+</script>
 
 <script>
   const year = new Date().getFullYear();
   document.getElementById('year').textContent = year;
   document.getElementById('year-small').textContent = year;
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="jspdf.umd.min.js"></script>
 <script>
 // PDF generation with jsPDF - renders each category on a separate A4 page
 // Uses direct jsPDF text rendering for better iPad compatibility
@@ -3452,59 +3465,13 @@ if ('serviceWorker' in navigator) {
   });
 }
 function manuellSpeichern() {
-  const formData = {
-    markt: document.getElementById('markt')?.value || '',
-    teilnehmer: document.getElementById('teilnehmer')?.value || '',
-marktleitung: document.getElementById('Marktleitung')?.value || '',
-    sifa: document.getElementById('sifa')?.value || '',
-    datum: document.getElementById('datum')?.textContent || '',
-    antworten: {},
-    checkboxes: {
-      mangel: document.getElementById('mangel')?.checked || false,
-      massnahmen: document.getElementById('massnahmen')?.checked || false,
-      nachkontrolle: document.getElementById('nachkontrolle')?.checked || false,
-      mitarbeiter: document.getElementById('mitarbeiter')?.checked || false
-    },
-    unterschrift: canvas.toDataURL()
-  };
-  const radios = document.querySelectorAll('#fragenTabelle input[type="radio"]:checked');
-  radios.forEach(radio => {
-    formData.antworten[radio.name] = radio.value;
-  });
-  localStorage.setItem('arbeitssicherheit_formular', JSON.stringify(formData));
+  // Nutzt denselben Mechanismus wie die automatische Speicherung
+  // (speichereFormular, siehe unten) sowie die separate
+  // Unterschriften-Speicherung, damit "Speichern" wirklich denselben
+  // Stand sichert, der auch beim nächsten Öffnen wieder geladen wird.
+  speichereFormular();
+  saveSignature();
   alert('✅ Formular wurde gespeichert!');
-}
-function ladeFormular() {
-  const gespeichert = localStorage.getItem('arbeitssicherheit_formular');
-  if (!gespeichert) return;
-  try {
-    const formData = JSON.parse(gespeichert);
-    
-    if (formData.markt) document.getElementById('markt').value = formData.markt;
-    if (formData.name) document.getElementById('name').value = formData.name;
-    if (formData.sifa) document.getElementById('sifa').value = formData.sifa;
-    Object.keys(formData.antworten).forEach(name => {
-      const value = formData.antworten[name];
-      const radio = document.querySelector(`input[name="${name}"][value="${value}"]`);
-      if (radio) radio.checked = true;
-    });
-    if (formData.checkboxes) {
-      if (formData.checkboxes.mangel) document.getElementById('mangel').checked = true;
-      if (formData.checkboxes.massnahmen) document.getElementById('massnahmen').checked = true;
-      if (formData.checkboxes.nachkontrolle) document.getElementById('nachkontrolle').checked = true;
-      if (formData.checkboxes.mitarbeiter) document.getElementById('mitarbeiter').checked = true;
-    }
-    if (formData.unterschrift) {
-      const img = new Image();
-      img.onload = () => {
-        ctx.drawImage(img, 0, 0, canvas.offsetWidth, canvas.offsetHeight);
-      };
-      img.src = formData.unterschrift;
-    }
-    neinFragenInMaßnahmen();
-  } catch (e) {
-    console.error('Fehler beim Laden:', e);
-  }
 }
 function formularZuruecksetzen() {
   if (!confirm('Möchten Sie wirklich alle Eingaben zurücksetzen?')) return;  
@@ -3523,7 +3490,11 @@ function formularZuruecksetzen() {
   });  
   clearSignature();
   neinFragenInMaßnahmen();
-  localStorage.removeItem('arbeitssicherheit_formular');  
+  // Zurückgesetzten (leeren) Stand aktiv speichern, statt nur die
+  // Anzeige zu leeren - sonst würde der vorherige Stand beim nächsten
+  // Laden der Seite wieder erscheinen.
+  speichereFormular();
+  localStorage.removeItem('arbeitssicherheit_formular'); // Aufräumen eines veralteten Schlüssels früherer Versionen
   alert('✅ Formular wurde zurückgesetzt!');
 }
 // Set title
