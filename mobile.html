@@ -1,26 +1,10 @@
 <!DOCTYPE html>
-<!--
-  Arbeitssicherheits-Audit – mobile.html
-  Revision: v1.1 – 20.08.2026
-  Änderungen gegenüber vorheriger Version:
-   - Doppelten schließenden head-Tag entfernt
-   - Fehlenden schließenden div-Tag für .container ergänzt
-   - Footer-Jahr (© / "Sifa Arbeitssicherheit") erhält IDs "year"/"year-small",
-     damit das zugehörige Skript nicht mehr ins Leere lief (Laufzeitfehler behoben)
-   - manuellSpeichern() und formularZuruecksetzen() nutzen jetzt denselben
-     localStorage-Schlüssel ("formSicherheit2025") wie die automatische
-     Speicherung/Ladefunktion; zuvor speicherte "Manuell speichern" in einen
-     Schlüssel, der beim Laden nie gelesen wurde, und "Zurücksetzen" leerte
-     den falschen Schlüssel, sodass zurückgesetzte Daten nach einem Neuladen
-     wieder auftauchten
-   - Doppelte, nie ausgeführte ladeFormular()-Funktion entfernt (toter Code)
--->
 <html lang="de">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Arbeitssicherheits-Audit</title>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<link href="all.min.css" rel="stylesheet"/>
 <link href="favicon.ico" rel="icon" type="image/x-icon"/>
 <link href="mobile.json" rel="manifest"/>
 <style>
@@ -1038,106 +1022,118 @@ body {
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-1" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Wurden die Automatiktüren, Schnelllauftore und Rolltore gemäß den geltenden Regelwerken geprüft und befinden sich diese in einem ordnungsgemäßen Zustand?</td>
+<td style="text-align: left;">Wurden die Automatiktüren gemäß den geltenden Regelwerken geprüft und befinden sich diese in einem ordnungsgemäßen Zustand?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-2" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-2" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-2" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist die Aufzugsanlage geprüft und in einem ordnungsgemäßen Zustand (ohne sichtbare Beschädigungen und mit funktionsfähigen Schutzeinrichtungen)?</td>
+<td style="text-align: left;">Sind die Schnelllauftore gemäß den Herstellervorgaben und gesetzlichen Fristen geprüft sowie technisch einwandfrei?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-3" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-3" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-3" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Werden für Tätigkeiten in der Höhe (z. B. in Lager oder Verkaufsraum) geeignete und geprüfte Aufstiegshilfen (z. B. Trittstufen, Rolltritte/Elefantenfüße) in ausreichender Zahl bereitgestellt und bestimmungsgemäß benutzt?</td>
+<td style="text-align: left;">Sind die Rolltore aktuell geprüft und funktionieren alle Schutzeinrichtungen (z. B. Absturzsicherung, Einzugsschutz) einwandfrei?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-4" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-4" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-4" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind die Leitern geprüft gemäß DGUV Information 208-016 Leitern und Tritte?</td>
+<td style="text-align: left;">Ist die Aufzugsanlage geprüft und in einem ordnungsgemäßen Zustand (ohne sichtbare Beschädigungen und mit funktionsfähigen Schutzeinrichtungen)?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-5" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-5" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-5" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Werden aus dem Ordersatz geeignete Sicherheitsmesser verwendet?</td>
+<td style="text-align: left;">Werden für Tätigkeiten in der Höhe (z. B. in Lager oder Verkaufsraum) geeignete und geprüfte Aufstiegshilfen (z. B. Trittstufen, Rolltritte/Elefantenfüße) in ausreichender Zahl bereitgestellt und bestimmungsgemäß benutzt?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-6" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-6" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-6" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist der Gabelhubwagen in einem ordnungsgemäßen Zustand ohne sichtbare Beschädigungen?</td>
+<td style="text-align: left;">Sind die Leitern geprüft gemäß DGUV Information 208-016 Leitern und Tritte?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-7" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-7" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-7" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist der elektrische Hubwagen geprüft und in einem ordnungsgemäßen Zustand (keine sichtbaren Beschädigungen, funktionsfähige Schutzeinrichtungen)?</td>
+<td style="text-align: left;">Werden aus dem Ordersatz geeignete Sicherheitsmesser verwendet?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-8" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-8" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-8" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind die Verkehrswege so beschaffen, dass kein Unfallrisiko durch Stolpern, Ausrutschen oder Umknicken besteht?</td>
+<td style="text-align: left;">Ist der Gabelhubwagen in einem ordnungsgemäßen Zustand ohne sichtbare Beschädigungen?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-9" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-9" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-9" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind die Treppen unbeschädigt und frei von Gegenständen?</td>
+<td style="text-align: left;">Ist der elektrische Hubwagen geprüft und in einem ordnungsgemäßen Zustand (keine sichtbaren Beschädigungen, funktionsfähige Schutzeinrichtungen)?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-10" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-10" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-10" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind Betriebsanweisungen gut zugänglich und werden Sicherheitsanweisungen eingehalten?</td>
+<td style="text-align: left;">Sind die Verkehrswege so beschaffen, dass kein Unfallrisiko durch Stolpern, Ausrutschen oder Umknicken besteht?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-11" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-11" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-11" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist die Beleuchtung in den Verkaufs- und Lagerbereichen gemäß ASR A3.4 ausreichend dimensioniert (mind. 300 Lux im Verkaufsraum), voll funktionsfähig und so beschaffen, dass Gefahrenhinweise auf Produkten sowie Leckagen in den Regalen jederzeit zweifelsfrei erkennbar sind?</td>
+<td style="text-align: left;">Sind die Treppen unbeschädigt und frei von Gegenständen?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-12" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-12" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-12" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind von der Decke geführte Leitungen und Steckverbindungen durch geeignete mechanische Zugentlastungen (z. B. Stahlseile, Ketten oder spezielle Klemmvorrichtungen) so gesichert, dass keine Zugkräfte auf die elektrischen Kontaktstellen wirken?</td>
+<td style="text-align: left;">Sind Betriebsanweisungen gut zugänglich und werden Sicherheitsanweisungen eingehalten?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-13" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-13" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-13" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind zur Zeit der Begehung keine sichtbaren Beschädigungen an Schaltern und Steckdosen vorhanden?</td>
+<td style="text-align: left;">Ist die Beleuchtung in den Verkaufs- und Lagerbereichen gemäß ASR A3.4 ausreichend dimensioniert (mind. 300 Lux im Verkaufsraum), voll funktionsfähig und so beschaffen, dass Gefahrenhinweise auf Produkten sowie Leckagen in den Regalen jederzeit zweifelsfrei erkennbar sind?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-14" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-14" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-14" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Elektrische Steckverbindungen liegen nicht ungeschützt auf dem Boden, insbesondere in Bereichen (z. B. unter Kühl- oder Tiefkühltruhen)?</td>
+<td style="text-align: left;">Sind von der Decke geführte Leitungen und Steckverbindungen durch geeignete mechanische Zugentlastungen (z. B. Stahlseile, Ketten oder spezielle Klemmvorrichtungen) so gesichert, dass keine Zugkräfte auf die elektrischen Kontaktstellen wirken?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-15" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-15" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-15" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Sind provisorische Installationen vermieden?</td>
+<td style="text-align: left;">Sind zur Zeit der Begehung keine sichtbaren Beschädigungen an Schaltern und Steckdosen vorhanden?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-16" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-16" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-16" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Erfüllen die Standorte der Erste-Hilfe-Koffer die Anforderungen an Sichtbarkeit, Erreichbarkeit und Norm-Kennzeichnung gemäß DGUV?</td>
+<td style="text-align: left;">Elektrische Steckverbindungen liegen nicht ungeschützt auf dem Boden, insbesondere in Bereichen (z. B. unter Kühl- oder Tiefkühltruhen)?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-17" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-17" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-17" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
-<td style="text-align: left;">Ist das Erste-Hilfe-Material an allen Standorten in vollständigem Zustand und ist das Verfallsdatum der sterilen Inhalte noch nicht überschritten?</td>
+<td style="text-align: left;">Sind provisorische Installationen vermieden?</td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-18" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-18" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-18" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
+</tr>
+<tr>
+<td style="text-align: left;">Erfüllen die Standorte der Erste-Hilfe-Koffer die Anforderungen an Sichtbarkeit, Erreichbarkeit und Norm-Kennzeichnung gemäß DGUV?</td>
+<td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-19" type="radio" value="ja"/><span>Ja</span></label></td>
+<td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-19" type="radio" value="nein"/><span>Nein</span></label></td>
+<td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-19" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist das Erste-Hilfe-Material an allen Standorten in vollständigem Zustand und ist das Verfallsdatum der sterilen Inhalte noch nicht überschritten?</td>
+<td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-20" type="radio" value="ja"/><span>Ja</span></label></td>
+<td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-20" type="radio" value="nein"/><span>Nein</span></label></td>
+<td><label class="radio-wrap"><input name="1.0 Gesamtmarkt-20" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr><td class="category-header" colspan="4" style="text-align: left;">2.0 Brandschutz</td></tr>
 <tr>
@@ -1266,6 +1262,12 @@ body {
 <td><label class="radio-wrap"><input name="4.0 Backstation-5" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="4.0 Backstation-5" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="4.0 Backstation-5" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
+</tr>
+<tr>
+<td style="text-align: left;">Ist die Brotschneidemaschine aktuell geprüft und inklusive aller Schutzeinrichtungen in einwandfreiem Zustand?</td>
+<td><label class="radio-wrap"><input name="4.0 Backstation-6" type="radio" value="ja"/><span>Ja</span></label></td>
+<td><label class="radio-wrap"><input name="4.0 Backstation-6" type="radio" value="nein"/><span>Nein</span></label></td>
+<td><label class="radio-wrap"><input name="4.0 Backstation-6" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr><td class="category-header" colspan="4" style="text-align: left;">4.0 Serviceabteilung</td></tr>
 <tr>
@@ -1514,6 +1516,12 @@ body {
 <td><label class="radio-wrap"><input name="9.0 Leergut-07" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
 <tr>
+<td style="text-align: left;">Beträgt die lichte Breite des Wartungsganges zwischen Rollbahn und Wand durchgehend mindestens 0,60 m (an Engstellen kurzzeitig 0,50 m)?</td>
+<td><label class="radio-wrap"><input name="9.0 Leergut-08" type="radio" value="ja"/><span>Ja</span></label></td>
+<td><label class="radio-wrap"><input name="9.0 Leergut-08" type="radio" value="nein"/><span>Nein</span></label></td>
+<td><label class="radio-wrap"><input name="9.0 Leergut-08" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
+</tr>
+<tr>
 <td class="category-header" colspan="4" style="text-align: left;">
 10.0 Sozialräume
 </td>
@@ -1674,11 +1682,12 @@ in angemessenen Zeitabständen geprüft?
 <td><label class="radio-wrap"><input name="14.0 Gefahrstoffe-1" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="14.0 Gefahrstoffe-1" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
+<tr>
 <td style="text-align: left;">Ist die in den Betriebsanweisungen geforderte Persönliche Schutzausrüstung in unmittelbarer Nähe und einsatzbereit vorhanden?</td>
 <td><label class="radio-wrap"><input name="14.0 Gefahrstoffe-2" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="14.0 Gefahrstoffe-2" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="14.0 Gefahrstoffe-2" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
-
+</tr>
 <tr>
 <td style="text-align: left;">Sind Sicherheitsdatenblätter verfügbar?</td>
 <td><label class="radio-wrap"><input name="14.0 Gefahrstoffe-3" type="radio" value="ja"/><span>Ja</span></label></td>
@@ -2054,7 +2063,7 @@ function weiterZuFotos() {
     </span>
 
     <div style="font-size:11px; color:#999; margin-top:8px;">
-        Stand: 20.08.2026 (Rev. v1.1)
+        Stand: 20.08.2026 (Rev. v1.2)
     </div>
 </footer>
 <script>
@@ -3481,8 +3490,20 @@ if (measure.includes("Entspricht das getragene Schuhwerk aller im Bereich tätig
 if (measure.includes("Beachten die Mitarbeitenden die Betriebsanweisung für Flurförderfahrzeuge insbesondere PSA-Pflicht, Traglasten, Verbot der Personenmitnahme")) {
   measure = "Unterweisen Sie die Mitarbeitenden erneut zur ordnungsgemäßen Nutzung des Flurförderfahrzeugs und weisen Sie ausdrücklich auf die verpflichtende Verwendung der vorgeschriebenen Persönlichen Schutzausrüstung (PSA) gemäß DGUV Vorschrift 68 und BetrSichV hin. Führen Sie regelmäßige Kontrollen durch und dokumentieren Sie die Einhaltung.";
 }
-if (measure.includes("Automatiktüren") || measure.includes("Rolltoren") || measure.includes("Schnelllauftoren")) {
-  measure = "Fachgerechte Prüfung der betroffenen Türen/Tore nach ASR A1.7 umgehend veranlassen. Betrieb bis zur Prüfung ggf. einschränken. Festgestellte Mängel zügig beheben und Dokumentation aktualisieren.";
+if (measure.includes("Automatiktüren")) {
+  measure = "Fachgerechte Prüfung der betroffenen Automatiktüren nach ASR A1.7 umgehend veranlassen. Betrieb bis zur Prüfung ggf. einschränken. Festgestellte Mängel zügig beheben und Dokumentation aktualisieren.";
+}
+if (measure.includes("Sind die Schnelllauftore gemäß den Herstellervorgaben und gesetzlichen Fristen geprüft sowie technisch einwandfrei")) {
+  measure = "Prüfung und ggf. erforderliche Instandsetzung des Schnelllauftors unverzüglich über einen Sachkundigen / den Hersteller veranlassen. Bis zur Mängelfreiheit ist der Torbereich mit besonderer Vorsicht zu nutzen..";
+}
+if (measure.includes("Sind die Rolltore aktuell geprüft und funktionieren alle Schutzeinrichtungen (z. B. Absturzsicherung, Einzugsschutz) einwandfre")) {
+  measure = "Sachkundigenprüfung sowie erforderliche Wartung des Rolltors kurzfristig veranlassen und den ordnungsgemäßen Zustand im Prüfbuch dokumentieren.";
+}
+if (measure.includes("Ist die Brotschneidemaschine aktuell geprüft und inklusive aller Schutzeinrichtungen in einwandfreiem Zustand") || measure.includes("Brotschneidemaschine")) {
+  measure = "Gerät sofort sperren (Netzstecker ziehen), mit einem Warnhinweis („Defekt – Nicht benutzen“) kennzeichnen und eine DGUV V3 Prüfung bzw. Instandsetzung durch eine Elektrofachkraft veranlassen.";
+}
+if (measure.includes("Beträgt die lichte Breite des Wartungsganges zwischen Rollbahn und Wand durchgehend mindestens 0,60 m")) {
+    return "Einzug- und Quetschstellen der Rollbahn zur Wand hin technisch absichern (z. B. durch festen Seitenschutz/Verkleidung), den Betrieb der Bahn bei Wartung zwingend stoppen oder, falls betrieblich machbar, den Bereich zeitweise sperren.";
 }
 if (measure.includes("Aufzugsanlage")) {
   measure = "Veranlassen Sie gemäß § 4 BetrSichV regelmäßige Prüfungen der Aufzugsanlage, um deren ordnungsgemäßen und sicheren Zustand sicherzustellen.";
