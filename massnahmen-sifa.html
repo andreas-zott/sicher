@@ -5,7 +5,7 @@
 <meta charset="utf-8"/>
 <title>Maßnahmen-Auswertung</title>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="html2pdf.bundle.min.js"></script>
 <style>
     body {
       font-family: Arial, sans-serif;
@@ -440,6 +440,22 @@
     <div style="font-size:11px; color:#999; margin-top:8px;">
         Stand: Mai 2026
     </div>
+    <div id="app-version" style="font-size:11px; color:#999; margin-top:4px;"></div>
+
+<script>
+// Zentrale Versionsangabe – identisch zu index.html/foto.html
+const APP_VERSION = "2.2.0";
+const APP_VERSION_DATUM = "20.08.2026";
+document.getElementById('app-version').textContent = `Version ${APP_VERSION} · Stand: ${APP_VERSION_DATUM}`;
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log("✅ Service Worker registriert"))
+      .catch(err => console.error("❌ Service Worker Fehler:", err));
+  });
+}
+</script>
 
 </body>
 </html>
