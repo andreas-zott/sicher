@@ -1,4 +1,20 @@
 <!DOCTYPE html>
+<!--
+  Arbeitssicherheits-Audit – mobile.html
+  Revision: v1.1 – 20.08.2026
+  Änderungen gegenüber vorheriger Version:
+   - Doppelten schließenden head-Tag entfernt
+   - Fehlenden schließenden div-Tag für .container ergänzt
+   - Footer-Jahr (© / "Sifa Arbeitssicherheit") erhält IDs "year"/"year-small",
+     damit das zugehörige Skript nicht mehr ins Leere lief (Laufzeitfehler behoben)
+   - manuellSpeichern() und formularZuruecksetzen() nutzen jetzt denselben
+     localStorage-Schlüssel ("formSicherheit2025") wie die automatische
+     Speicherung/Ladefunktion; zuvor speicherte "Manuell speichern" in einen
+     Schlüssel, der beim Laden nie gelesen wurde, und "Zurücksetzen" leerte
+     den falschen Schlüssel, sodass zurückgesetzte Daten nach einem Neuladen
+     wieder auftauchten
+   - Doppelte, nie ausgeführte ladeFormular()-Funktion entfernt (toter Code)
+-->
 <html lang="de">
 <head>
 <meta charset="utf-8"/>
@@ -917,7 +933,6 @@ body {
   margin-left: 100px;
 }
 </style>
-</head>
 </head>
 <body>
 <div class="container">
@@ -2032,14 +2047,14 @@ function weiterZuFotos() {
 
     </div>
 
-    © <span>2026</span> Andreas Zott – Alle Rechte vorbehalten<br>
+    © <span id="year">2026</span> Andreas Zott – Alle Rechte vorbehalten<br>
 
     <span style="font-size: 11px;">
-        (Sifa) Arbeitssicherheit <span>2026</span>
+        (Sifa) Arbeitssicherheit <span id="year-small">2026</span>
     </span>
 
     <div style="font-size:11px; color:#999; margin-top:8px;">
-        Stand: Juni 2026
+        Stand: 20.08.2026 (Rev. v1.1)
     </div>
 </footer>
 <script>
@@ -3988,59 +4003,11 @@ if ('serviceWorker' in navigator) {
   });
 }
 function manuellSpeichern() {
-  const formData = {
-    markt: document.getElementById('markt')?.value || '',
-    teilnehmer: document.getElementById('teilnehmer')?.value || '',
-marktleitung: document.getElementById('Marktleitung')?.value || '',
-    sifa: document.getElementById('sifa')?.value || '',
-    datum: document.getElementById('datum')?.textContent || '',
-    antworten: {},
-    checkboxes: {
-      mangel: document.getElementById('mangel')?.checked || false,
-      massnahmen: document.getElementById('massnahmen')?.checked || false,
-      nachkontrolle: document.getElementById('nachkontrolle')?.checked || false,
-      mitarbeiter: document.getElementById('mitarbeiter')?.checked || false
-    },
-    unterschrift: canvas.toDataURL()
-  };
-  const radios = document.querySelectorAll('#fragenTabelle input[type="radio"]:checked');
-  radios.forEach(radio => {
-    formData.antworten[radio.name] = radio.value;
-  });
-  localStorage.setItem('arbeitssicherheit_formular', JSON.stringify(formData));
+  // Nutzt dieselbe Speicherlogik/denselben Schlüssel wie das automatische
+  // Speichern (speichereFormular / 'formSicherheit2025'), damit manuell
+  // gespeicherte Daten beim nächsten Laden auch tatsächlich wiederhergestellt werden.
+  speichereFormular();
   alert('✅ Formular wurde gespeichert!');
-}
-function ladeFormular() {
-  const gespeichert = localStorage.getItem('arbeitssicherheit_formular');
-  if (!gespeichert) return;
-  try {
-    const formData = JSON.parse(gespeichert);
-    
-    if (formData.markt) document.getElementById('markt').value = formData.markt;
-    if (formData.name) document.getElementById('name').value = formData.name;
-    if (formData.sifa) document.getElementById('sifa').value = formData.sifa;
-    Object.keys(formData.antworten).forEach(name => {
-      const value = formData.antworten[name];
-      const radio = document.querySelector(`input[name="${name}"][value="${value}"]`);
-      if (radio) radio.checked = true;
-    });
-    if (formData.checkboxes) {
-      if (formData.checkboxes.mangel) document.getElementById('mangel').checked = true;
-      if (formData.checkboxes.massnahmen) document.getElementById('massnahmen').checked = true;
-      if (formData.checkboxes.nachkontrolle) document.getElementById('nachkontrolle').checked = true;
-      if (formData.checkboxes.mitarbeiter) document.getElementById('mitarbeiter').checked = true;
-    }
-    if (formData.unterschrift) {
-      const img = new Image();
-      img.onload = () => {
-        ctx.drawImage(img, 0, 0, canvas.offsetWidth, canvas.offsetHeight);
-      };
-      img.src = formData.unterschrift;
-    }
-    neinFragenInMaßnahmen();
-  } catch (e) {
-    console.error('Fehler beim Laden:', e);
-  }
 }
 function formularZuruecksetzen() {
   if (!confirm('Möchten Sie wirklich alle Eingaben zurücksetzen?')) return;  
@@ -4059,7 +4026,7 @@ function formularZuruecksetzen() {
   });  
   clearSignature();
   neinFragenInMaßnahmen();
-  localStorage.removeItem('arbeitssicherheit_formular');  
+  localStorage.removeItem('formSicherheit2025');
   alert('✅ Formular wurde zurückgesetzt!');
 }
 // Set title
@@ -4312,6 +4279,6 @@ function tauriPrint() {
     };
 }
 </script>
-
+</div>
 </body>
 </html>
