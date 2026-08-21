@@ -106,7 +106,10 @@ function showToast(message, type = 'success') {
 // ===== Vorgefertigter Mail-Text beim PDF-Versand =====
 // Traegt automatisch Markt (aus "Firma / Markt") und den Namen des Pruefers ein.
 // Wird von allen drei PDF-Varianten (Checkliste, Massnahmen, Gesamtbericht) genutzt.
-const SHARE_EMAIL_TITLE = 'Arbeitssicherheits-Audit';
+function buildShareEmailSubject() {
+    const markt = state.companyInfo.firma || '-';
+    return `Arbeitssicherheitsbegehung Markt ${markt}`;
+}
 
 function buildShareEmailText() {
     const markt = state.companyInfo.firma || '-';
@@ -286,7 +289,7 @@ function buildChecklistPdf() {
 async function shareChecklistPdf() {
     const doc = buildChecklistPdf();
     const filename = checklistPdfFilename();
-    await sharePdfDoc(doc, filename, SHARE_EMAIL_TITLE, buildShareEmailText());
+    await sharePdfDoc(doc, filename, buildShareEmailSubject(), buildShareEmailText());
 }
 
 // ===== Betriebsdaten: Formular (index.html) =====
