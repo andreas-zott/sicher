@@ -103,6 +103,181 @@ function showToast(message, type = 'success') {
     setTimeout(() => toast.remove(), 2600);
 }
 
+// ===== PDF teilen (iPad-Teilen-Menü, inkl. AirPrint) mit Download-Fallback =====
+// Gemeinsam genutzt von der Checkliste (app.js) und den Maßnahmen (massnahmen.js).
+async function sharePdfDoc(doc, filename, shareTitle, shareText) {
+    try {
+        const blob = doc.output('blob');
+
+        if (navigator.canShare && typeof File !== 'undefined') {
+            const file = new File([blob], filename, { type: 'application/pdf' });
+            if (navigator.canShare({ files: [file] })) {
+                try {
+                    await navigator.share({ files: [file], title: shareTitle, text: shareText });
+                    showToast('PDF geteilt');
+                    return;
+                } catch (err) {
+                    if (err && err.name === 'AbortError') return; // Nutzer hat abgebrochen
+                    console.error('Teilen fehlgeschlagen, falle auf Download zurück:', err);
+                }
+            }
+        }
+
+        // Fallback: direkter Download (Desktop-Browser ohne Teilen-Funktion)
+        doc.save(filename);
+        showToast('PDF heruntergeladen');
+    } catch (err) {
+        console.error('PDF-Erzeugung fehlgeschlagen:', err);
+        showToast('PDF konnte nicht erzeugt werden', 'error');
+    }
+}
+
+// ===== Checkliste als PDF-Karten-Text rendern (kompakt, fuer bis zu ~160 Fragen) =====
+// Wird sowohl fuer den eigenstaendigen Checklisten-Export als auch optional
+// fuer den kombinierten Bericht auf der Maßnahmen-Seite genutzt.
+function renderChecklistPdfSection(doc, yStart, margin, contentWidth, pageHeight) {
+    let y = yStart;
+    const ratingLabel = { ok: 'OK', mangel: 'MANGEL', na: 'N.V.' };
+    const ratingColor = { ok: [47, 158, 100], mangel: [204, 7, 30], na: [124, 135, 144] };
+    const textX = margin + 20;
+    const textWidth = contentWidth - 20;
+
+    AUDIT_CATEGORIES.forEach(category => {
+        if (y + 12 > pageHeight - 18) {
+            doc.addPage();
+            y = 18;
+        }
+
+        doc.setFont(undefined, 'bold');
+        doc.setFontSize(11);
+        doc.setTextColor(28, 34, 38);
+        doc.text(category.name, margin, y);
+        y += 3;
+        doc.setDrawColor(220);
+        doc.line(margin, y, margin + contentWidth, y);
+        y += 5.5;
+
+        category.items.forEach(item => {
+            const rating = state.ratings[item.id] || '';
+            const comment = state.comments[item.id] || '';
+
+            doc.setFont(undefined, 'normal');
+            doc.setFontSize(8.5);
+            const lines = doc.splitTextToSize(`${item.id}  ${item.text}`, textWidth);
+            const commentLines = (rating === 'mangel' && comment)
+                ? doc.splitTextToSize('→ ' + comment, textWidth - 4)
+                : [];
+
+            // Seitenumbruch pruefen, bevor die Frage (inkl. Rating-Badge) beginnt
+            if (y + 4.2 > pageHeight - 16) {
+                doc.addPage();
+                y = 18;
+            }
+
+            const badgeY = y - 3.2;
+            const color = ratingColor[rating] || [190, 195, 200];
+            doc.setFillColor(color[0], color[1], color[2]);
+            doc.roundedRect(margin, badgeY, 16, 4.4, 1, 1, 'F');
+            doc.setFont(undefined, 'bold');
+            doc.setFontSize(6.2);
+            doc.setTextColor(255, 255, 255);
+            doc.text(rating ? ratingLabel[rating] : '–', margin + 8, y - 0.2, { align: 'center' });
+
+            doc.setFont(undefined, 'normal');
+            doc.setFontSize(8.5);
+            doc.setTextColor(30, 41, 59);
+
+            lines.forEach((line, i) => {
+                if (i > 0 && y + 4.2 > pageHeight - 16) {
+                    doc.addPage();
+                    y = 18;
+                }
+                doc.text(line, textX, y);
+                y += 4.2;
+            });
+
+            if (commentLines.length) {
+                doc.setFontSize(8);
+                doc.setTextColor(150, 60, 55);
+                commentLines.forEach(line => {
+                    if (y + 3.8 > pageHeight - 16) {
+                        doc.addPage();
+                        y = 18;
+                    }
+                    doc.text(line, textX, y);
+                    y += 3.8;
+                });
+                doc.setTextColor(30, 41, 59);
+            }
+
+            y += 2.4;
+        });
+
+        y += 4;
+    });
+
+    return y;
+}
+
+function checklistPdfHeaderLines() {
+    const ci = state.companyInfo;
+    const teilnehmer = ci.teilnehmer || '-';
+    return [
+        `Firma/Markt: ${ci.firma || '-'}    Standort: ${ci.standort || '-'}    Datum: ${ci.datum ? formatDate(ci.datum) : '-'}`,
+        `Prüfer: ${ci.pruefername || '-'}    Marktleitung: ${ci.marktleitung || '-'}    Teilnehmer: ${teilnehmer}`
+    ];
+}
+
+function checklistPdfFilename() {
+    const firma = (state.companyInfo.firma || 'markt').replace(/[^a-z0-9äöüß]+/gi, '-');
+    const datum = state.companyInfo.datum || new Date().toISOString().split('T')[0];
+    return `Checkliste_${firma}_${datum}.pdf`;
+}
+
+function buildChecklistPdf() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const pageWidth = 210, pageHeight = 297, margin = 14;
+    const contentWidth = pageWidth - margin * 2;
+    let y = 18;
+
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(18);
+    doc.setTextColor(28, 34, 38);
+    doc.text('ASiC Handel – Checkliste', pageWidth / 2, y, { align: 'center' });
+    y += 9;
+
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(9.5);
+    doc.setTextColor(90, 100, 108);
+    checklistPdfHeaderLines().forEach(line => {
+        doc.text(line, pageWidth / 2, y, { align: 'center' });
+        y += 5;
+    });
+    y += 1;
+    doc.setDrawColor(220);
+    doc.line(margin, y, pageWidth - margin, y);
+    y += 8;
+
+    y = renderChecklistPdfSection(doc, y, margin, contentWidth, pageHeight);
+
+    const totalPages = doc.getNumberOfPages();
+    for (let i = 1; i <= totalPages; i++) {
+        doc.setPage(i);
+        doc.setFontSize(8);
+        doc.setTextColor(140);
+        doc.text(`${i}/${totalPages}`, pageWidth - margin, pageHeight - 8, { align: 'right' });
+    }
+
+    return doc;
+}
+
+async function shareChecklistPdf() {
+    const doc = buildChecklistPdf();
+    const filename = checklistPdfFilename();
+    await sharePdfDoc(doc, filename, 'Checkliste', `Checkliste ${state.companyInfo.firma || ''} ${state.companyInfo.datum ? formatDate(state.companyInfo.datum) : ''}`.trim());
+}
+
 // ===== Betriebsdaten: Formular (index.html) =====
 function initCompanyForm() {
     const fields = ['firma', 'standort', 'datum', 'pruefername', 'marktleitung', 'teilnehmer'];
@@ -146,19 +321,17 @@ function renderCompanyInfoStrip() {
 // die bei Aktivierung komplett als N.V. markiert und gesperrt wird.
 const OPTIONAL_CATEGORIES = {
     'kundenaufzug': 'Kein Kundenaufzug im Markt vorhanden',
-    'lastenaufzug': 'Kein Lastenaufzug im Markt vorhanden',
     'barrierefreies-wc': 'Kein barrierefreies WC im Markt vorhanden',
     'praktikanten': 'Keine Praktikanten/Schüleraushilfen im Markt beschäftigt',
     'co2-kuehleinrichtungen': 'Keine CO2-Kühleinrichtungen im Markt vorhanden'
 };
 
 // ===== Checkliste rendern (index.html) =====
-function renderChecklist() {
-    const container = document.getElementById('checklist-container');
-    if (!container) return;
-
-    container.innerHTML = AUDIT_CATEGORIES.map(category => {
-        const isOpen = openCategoryId === category.id;
+// buildChecklistHtml() erzeugt das HTML separat, damit es auch fuer den
+// Druck-Container auf der Maßnahmen-Seite wiederverwendet werden kann.
+function buildChecklistHtml(forceOpenAll) {
+    return AUDIT_CATEGORIES.map(category => {
+        const isOpen = forceOpenAll || openCategoryId === category.id;
         const toggleLabel = OPTIONAL_CATEGORIES[category.id];
         const locked = !!toggleLabel && !!state.notApplicable[category.id];
         const answered = category.items.filter(i => state.ratings[i.id]).length;
@@ -186,7 +359,12 @@ function renderChecklist() {
             </div>
         </section>`;
     }).join('');
+}
 
+function renderChecklist() {
+    const container = document.getElementById('checklist-container');
+    if (!container) return;
+    container.innerHTML = buildChecklistHtml(false);
     updateStats();
 }
 
@@ -396,4 +574,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const btnReset = document.getElementById('btn-reset');
     if (btnReset) btnReset.addEventListener('click', resetAll);
+
+    const btnPrint = document.getElementById('btn-print-checklist');
+    if (btnPrint) btnPrint.addEventListener('click', () => window.print());
+
+    const btnShareChecklist = document.getElementById('btn-share-checklist-pdf');
+    if (btnShareChecklist) btnShareChecklist.addEventListener('click', shareChecklistPdf);
 });

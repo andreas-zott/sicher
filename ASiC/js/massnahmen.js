@@ -142,7 +142,7 @@ function restoreSignatures() {
 }
 
 // ===== PDF erzeugen (Kartenlayout, inkl. Betriebsdaten + Unterschriften) =====
-function buildPdf() {
+function buildPdf(includeChecklist) {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
     const pageWidth = 210, pageHeight = 297, margin = 14;
@@ -153,7 +153,7 @@ function buildPdf() {
     doc.setFont(undefined, 'bold');
     doc.setFontSize(18);
     doc.setTextColor(28, 34, 38);
-    doc.text('ASiC Handel – Maßnahmen', pageWidth / 2, y, { align: 'center' });
+    doc.text(includeChecklist ? 'ASiC Handel – Gesamtbericht' : 'ASiC Handel – Maßnahmen', pageWidth / 2, y, { align: 'center' });
     y += 9;
 
     doc.setFont(undefined, 'normal');
@@ -170,6 +170,18 @@ function buildPdf() {
     doc.setDrawColor(220);
     doc.line(margin, y, pageWidth - margin, y);
     y += 8;
+
+    // Checkliste (nur bei aktivierter Option "Komplette Checkliste einschließen")
+    if (includeChecklist) {
+        y = renderChecklistPdfSection(doc, y, margin, contentWidth, pageHeight);
+        doc.addPage();
+        y = 18;
+        doc.setFont(undefined, 'bold');
+        doc.setFontSize(14);
+        doc.setTextColor(28, 34, 38);
+        doc.text('Maßnahmen', margin, y);
+        y += 9;
+    }
 
     // Maßnahmen-Karten
     if (state.measures.length === 0) {
@@ -297,8 +309,7 @@ function buildPdf() {
         doc.setPage(i);
         doc.setFontSize(8);
         doc.setTextColor(140);
-        doc.text(`Seite ${i} von ${totalPages}`, pageWidth - margin, pageHeight - 8, { align: 'right' });
-        doc.text(`ASiC Handel Rev. ${APP_REVISION} · © 2026 Andreas Zott`, margin, pageHeight - 8);
+        doc.text(`${i}/${totalPages}`, pageWidth - margin, pageHeight - 8, { align: 'right' });
     }
 
     return doc;
@@ -312,36 +323,11 @@ function pdfFilename() {
 
 // ===== Teilen (iPad-Teilen-Menü) mit Download-Fallback =====
 async function sharePdf() {
-    try {
-        const doc = buildPdf();
-        const filename = pdfFilename();
-        const blob = doc.output('blob');
-
-        if (navigator.canShare && typeof File !== 'undefined') {
-            const file = new File([blob], filename, { type: 'application/pdf' });
-            if (navigator.canShare({ files: [file] })) {
-                try {
-                    await navigator.share({
-                        files: [file],
-                        title: 'Maßnahmenplan',
-                        text: `Maßnahmenplan ${state.companyInfo.firma || ''} ${state.companyInfo.datum ? formatDate(state.companyInfo.datum) : ''}`.trim()
-                    });
-                    showToast('PDF geteilt');
-                    return;
-                } catch (err) {
-                    if (err && err.name === 'AbortError') return; // Nutzer hat abgebrochen
-                    console.error('Teilen fehlgeschlagen, falle auf Download zurück:', err);
-                }
-            }
-        }
-
-        // Fallback: direkter Download (Desktop-Browser ohne Teilen-Funktion)
-        doc.save(filename);
-        showToast('PDF heruntergeladen');
-    } catch (err) {
-        console.error('PDF-Erzeugung fehlgeschlagen:', err);
-        showToast('PDF konnte nicht erzeugt werden', 'error');
-    }
+    const includeChecklist = document.getElementById('include-checklist')?.checked || false;
+    const doc = buildPdf(includeChecklist);
+    const filename = includeChecklist ? checklistPdfFilename().replace('Checkliste_', 'Gesamtbericht_') : pdfFilename();
+    const title = includeChecklist ? 'Gesamtbericht' : 'Maßnahmenplan';
+    await sharePdfDoc(doc, filename, title, `${title} ${state.companyInfo.firma || ''} ${state.companyInfo.datum ? formatDate(state.companyInfo.datum) : ''}`.trim());
 }
 
 // ===== Initialisierung =====
@@ -385,7 +371,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const btnPrint = document.getElementById('btn-print');
-    if (btnPrint) btnPrint.addEventListener('click', () => window.print());
+    if (btnPrint) btnPrint.addEventListener('click', () => {
+        const includeChecklist = document.getElementById('include-checklist')?.checked || false;
+        const printContainer = document.getElementById('print-checklist-container');
+        if (printContainer) {
+            printContainer.innerHTML = includeChecklist ? buildChecklistHtml(true) : '';
+        }
+        // Kurz warten, bis der Druck-Container tatsaechlich befuellt/layoutet ist
+        setTimeout(() => window.print(), 50);
+    });
+
+    // Druck-Container nach dem Drucken wieder leeren (spart DOM/Speicher)
+    window.addEventListener('afterprint', () => {
+        const printContainer = document.getElementById('print-checklist-container');
+        if (printContainer) printContainer.innerHTML = '';
+    });
 
     const btnShare = document.getElementById('btn-share-pdf');
     if (btnShare) btnShare.addEventListener('click', sharePdf);
