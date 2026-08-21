@@ -1,361 +1,871 @@
-// ===== Vordefinierte Maßnahmen-Texte je Prüfpunkt =====
-// Wird als globale Variable bereitgestellt, damit klassische Scripts
-// (app.js) ohne Modul-Import darauf zugreifen können.
-
-// ===== Vordefinierte Maßnahmen-Texte je Prüfpunkt =====
+// ===== Vordefinierte Maßnahmen-Texte je Prüfpunkt, in drei Sprachstilen =====
+// einfach    = Alltagssprache ohne Paragraphen, fuer Mitarbeitende ohne Fachhintergrund
+// bghw       = Terminologie/Rahmen angelehnt an BGHW- und DGUV-Regel-Veroeffentlichungen des Handels
+// rechtlich  = mit expliziten Paragraphen/Normen (ArbSchG, ArbStaettV, ASR, DGUV Vorschrift etc.)
 
 const MEASURES_TEXT = {
 
-    Gesamtmarkt: {
-        "1.1": "Gemäß Gefährdungsbeurteilung und DGUV Vorschrift 1 ist sicherzustellen, dass alle Beschäftigten geeignetes, festes, geschlossenes und rutschhemmendes Schuhwerk tragen. Die Einhaltung ist regelmäßig zu kontrollieren.",
-
-        "1.2": "Beschäftigte sind regelmäßig anhand der Betriebsanweisung zum sicheren Umgang mit Flurförderfahrzeugen zu unterweisen. PSA-Pflicht, Traglastbegrenzungen und das Verbot der Personenmitnahme sind konsequent einzuhalten.",
-
-        "1.3": "Automatiktüren, Schnelllauftore und Rolltore sind gemäß ASR A1.7 sowie BetrSichV regelmäßig durch befähigte Personen zu prüfen. Mängel sind unverzüglich zu beseitigen.",
-
-        "1.4": "Aufzugsanlagen sind gemäß BetrSichV wiederkehrend durch zugelassene Überwachungsstellen zu prüfen und in sicherem Zustand zu halten.",
-
-        "1.5": "Die Leergutrücknahme ist regelmäßig auf Beschädigungen, Glasscherben und funktionierende Schutzeinrichtungen zu kontrollieren.",
-
-        "1.6": "Geeignete und geprüfte Aufstiegshilfen sind bereitzustellen. Die Nutzung hat gemäß DGUV Information 208-016 zu erfolgen.",
-
-        "1.7": "Leitern und Tritte sind regelmäßig durch befähigte Personen zu prüfen. Beschädigte Leitern sind sofort auszusondern.",
-
-        "1.8": "Es dürfen ausschließlich geeignete Sicherheitsmesser aus dem freigegebenen Ordersatz verwendet werden.",
-
-        "1.9": "Verkehrswege sind gemäß ASR A1.5 frei von Stolper-, Rutsch- und Sturzgefahren zu halten.",
-
-        "1.10": "Treppen sind frei von Gegenständen zu halten und regelmäßig auf Schäden zu kontrollieren.",
-
-        "1.11": "Betriebsanweisungen sind aktuell, zugänglich und für Beschäftigte verständlich bereitzustellen.",
-
-        "1.12": "Die Beleuchtung ist gemäß ASR A3.4 sicherzustellen. Gefahrenstellen und Leckagen müssen jederzeit eindeutig erkennbar sein."
+    "Gesamtmarkt": {
+        "1.1": {
+            einfach: 'Achten Sie darauf, dass alle Mitarbeitenden festes, vorne geschlossenes und rutschfestes Schuhwerk tragen.',
+            bghw: 'Setzen Sie die BGHW-Empfehlungen zum sicheren Schuhwerk um: festes, im Zehenbereich geschlossenes und rutschhemmendes Schuhwerk gemäß betrieblicher Gefährdungsbeurteilung.',
+            rechtlich: 'Gemäß Gefährdungsbeurteilung und DGUV Vorschrift 1 ist sicherzustellen, dass alle Beschäftigten geeignetes, festes, geschlossenes und rutschhemmendes Schuhwerk tragen. Die Einhaltung ist regelmäßig zu kontrollieren.'
+        },
+        "1.2": {
+            einfach: 'Weisen Sie Ihre Mitarbeitenden regelmäßig ein, wie sie Hubwagen & Co. sicher benutzen: Schutzausrüstung tragen, Lasten nicht überladen, niemanden mitfahren lassen.',
+            bghw: 'Führen Sie regelmäßige Unterweisungen zum sicheren Umgang mit Flurförderfahrzeugen gemäß den BGHW-Vorgaben durch, inkl. PSA-Pflicht, zulässiger Traglasten und Verbot der Personenmitnahme.',
+            rechtlich: 'Beschäftigte sind regelmäßig anhand der Betriebsanweisung zum sicheren Umgang mit Flurförderfahrzeugen zu unterweisen. PSA-Pflicht, Traglastbegrenzungen und das Verbot der Personenmitnahme sind konsequent einzuhalten.'
+        },
+        "1.3": {
+            einfach: 'Lassen Sie die Automatiktüren umgehend prüfen. Schränken Sie den Betrieb bis dahin bei Bedarf ein und beheben Sie festgestellte Mängel zügig.',
+            bghw: 'Veranlassen Sie die Prüfung der Automatiktüren gemäß den BGHW-Vorgaben und ASR A1.7 umgehend über einen Sachkundigen, schränken Sie den Betrieb bis dahin bei Bedarf ein und dokumentieren Sie die Mängelbeseitigung.',
+            rechtlich: 'Fachgerechte Prüfung der betroffenen Automatiktüren nach ASR A1.7 umgehend veranlassen. Betrieb bis zur Prüfung ggf. einschränken. Festgestellte Mängel zügig beheben und Dokumentation aktualisieren.'
+        },
+        "1.4": {
+            einfach: 'Lassen Sie den Aufzug regelmäßig von einem Fachbetrieb prüfen und halten Sie ihn in einwandfreiem Zustand.',
+            bghw: 'Beauftragen Sie eine zugelassene Überwachungsstelle mit der wiederkehrenden Prüfung der Aufzugsanlage entsprechend den BGHW-Hinweisen zu technischen Arbeitsmitteln.',
+            rechtlich: 'Aufzugsanlagen sind gemäß BetrSichV wiederkehrend durch zugelassene Überwachungsstellen zu prüfen und in sicherem Zustand zu halten.'
+        },
+        "1.6": {
+            einfach: 'Stellen Sie genug sichere Trittstufen oder Rolltritte bereit und sorgen Sie dafür, dass sie auch genutzt werden.',
+            bghw: 'Stellen Sie geprüfte Aufstiegshilfen in ausreichender Anzahl gemäß den BGHW-Empfehlungen bereit und stellen Sie deren bestimmungsgemäße Nutzung sicher.',
+            rechtlich: 'Geeignete und geprüfte Aufstiegshilfen sind bereitzustellen. Die Nutzung hat gemäß DGUV Information 208-016 zu erfolgen.'
+        },
+        "1.7": {
+            einfach: 'Lassen Sie Leitern und Tritte regelmäßig prüfen und sortieren Sie beschädigte sofort aus.',
+            bghw: 'Prüfen Sie Leitern und Tritte gemäß DGUV Information 208-016 in den von der BGHW empfohlenen Intervallen durch eine befähigte Person.',
+            rechtlich: 'Leitern und Tritte sind regelmäßig durch befähigte Personen zu prüfen. Beschädigte Leitern sind sofort auszusondern.'
+        },
+        "1.8": {
+            einfach: 'Nutzen Sie nur die freigegebenen Sicherheitsmesser aus dem Ordersatz.',
+            bghw: 'Stellen Sie sicher, dass ausschließlich die im BGHW-Ordersatz freigegebenen Sicherheitsmesser verwendet werden.',
+            rechtlich: 'Es dürfen ausschließlich geeignete Sicherheitsmesser aus dem freigegebenen Ordersatz verwendet werden.'
+        },
+        "1.9": {
+            einfach: 'Halten Sie Gänge und Wege frei von Stolperfallen, damit niemand ausrutscht oder stürzt.',
+            bghw: 'Gestalten Sie die Verkehrswege gemäß den BGHW-Hinweisen zu innerbetrieblichem Verkehr frei von Stolper-, Rutsch- und Sturzgefahren.',
+            rechtlich: 'Verkehrswege sind gemäß ASR A1.5 frei von Stolper-, Rutsch- und Sturzgefahren zu halten.'
+        },
+        "1.10": {
+            einfach: 'Halten Sie Treppen frei von Gegenständen und beheben Sie Schäden zügig.',
+            bghw: 'Kontrollieren Sie Treppen regelmäßig auf Schäden und halten Sie sie entsprechend den BGHW-Vorgaben frei von Gegenständen.',
+            rechtlich: 'Treppen sind frei von Gegenständen zu halten und regelmäßig auf Schäden zu kontrollieren.'
+        },
+        "1.11": {
+            einfach: 'Hängen Sie Betriebsanweisungen gut sichtbar auf und achten Sie darauf, dass sie auch befolgt werden.',
+            bghw: 'Machen Sie Betriebsanweisungen gemäß den BGHW-Vorgaben jederzeit zugänglich und kontrollieren Sie die Einhaltung der Sicherheitsanweisungen.',
+            rechtlich: 'Betriebsanweisungen sind aktuell, zugänglich und für Beschäftigte verständlich bereitzustellen.'
+        },
+        "1.12": {
+            einfach: 'Sorgen Sie für ausreichend helles Licht in Verkauf und Lager, damit Gefahrenhinweise und Flüssigkeiten im Regal gut zu erkennen sind.',
+            bghw: 'Stellen Sie die Beleuchtung in Verkaufs- und Lagerbereichen entsprechend den BGHW-Beleuchtungsempfehlungen (mind. 300 Lux) sicher, damit Gefahrenhinweise und Leckagen zuverlässig erkennbar sind.',
+            rechtlich: 'Die Beleuchtung ist gemäß ASR A3.4 sicherzustellen (mind. 300 Lux im Verkaufsraum). Gefahrenstellen und Leckagen müssen jederzeit eindeutig erkennbar sein.'
+        },
+        "1.13": {
+            einfach: 'Lassen Sie das Schnelllauftor umgehend vom Hersteller oder einem Fachmann prüfen und reparieren. Nutzen Sie den Torbereich bis dahin besonders vorsichtig.',
+            bghw: 'Veranlassen Sie die Prüfung und ggf. Instandsetzung des Schnelllauftors gemäß den BGHW-Vorgaben unverzüglich über einen Sachkundigen bzw. den Hersteller; der Torbereich ist bis zur Mängelfreiheit mit besonderer Vorsicht zu nutzen.',
+            rechtlich: 'Prüfung und ggf. erforderliche Instandsetzung des Schnelllauftors unverzüglich über einen Sachkundigen / den Hersteller veranlassen. Bis zur Mängelfreiheit ist der Torbereich mit besonderer Vorsicht zu nutzen.'
+        },
+        "1.14": {
+            einfach: 'Lassen Sie das Rolltor zeitnah von einem Fachmann prüfen und warten und halten Sie den Zustand schriftlich fest.',
+            bghw: 'Veranlassen Sie die Sachkundigenprüfung sowie die erforderliche Wartung des Rolltors gemäß den BGHW-Vorgaben kurzfristig und dokumentieren Sie den Zustand im Prüfbuch.',
+            rechtlich: 'Sachkundigenprüfung sowie erforderliche Wartung des Rolltors kurzfristig veranlassen und den ordnungsgemäßen Zustand im Prüfbuch dokumentieren.'
+        }
     },
 
-    Brandschutz: {
-        "2.1": "Feuerlöscheinrichtungen sind gemäß ASR A2.2 regelmäßig durch sachkundige Personen zu prüfen.",
-
-        "2.2": "Feuerlöscher und Wandhydranten sind jederzeit frei zugänglich zu halten.",
-
-        "2.3": "Prüfsiegel der Wandhydranten sind regelmäßig auf Unversehrtheit zu kontrollieren.",
-
-        "2.4": "Brandschutztüren dürfen nicht verstellt oder blockiert werden.",
-
-        "2.5": "Türhaltevorrichtungen und Schließfolgeregler sind regelmäßig auf Funktion zu prüfen.",
-
-        "2.6": "Beschädigte Brandschutztüren sind unverzüglich instand zu setzen.",
-
-        "2.7": "Ein aktueller Flucht- und Rettungsplan ist gut sichtbar auszuhängen.",
-
-        "2.8": "Die Sicherheits- und Notbeleuchtung ist regelmäßig zu prüfen.",
-
-        "2.9": "Flucht- und Rettungswege sind jederzeit vollständig freizuhalten.",
-
-        "2.10": "Notausgänge müssen jederzeit ohne Hilfsmittel leicht zu öffnen sein.",
-
-        "2.11": "Notausgänge müssen in sichere Bereiche führen.",
-
-        "2.12": "Die Brandmeldeanlage ist regelmäßig zu warten und auf Funktion zu prüfen.",
-
-        "2.13": "Die Einfüllöffnung des Presscontainers ist nach Betriebsschluss mechanisch zu sichern.",
-
-        "2.14": "Technik- und Heizräume sind frei von brennbaren Materialien zu halten.",
-
-        "2.15": "Technik- und Heizräume dürfen nicht als Lagerfläche genutzt werden."
+    "Brandschutz": {
+        "2.1": {
+            einfach: 'Lassen Sie die Feuerlöscher regelmäßig prüfen und halten Sie die Fristen ein.',
+            bghw: 'Veranlassen Sie die jährliche Prüfung der Feuerlöscheinrichtungen durch eine sachkundige Person gemäß BGHW-Brandschutzvorgaben.',
+            rechtlich: 'Feuerlöscheinrichtungen sind gemäß ASR A2.2 regelmäßig durch sachkundige Personen zu prüfen.'
+        },
+        "2.2": {
+            einfach: 'Stellen Sie nichts vor die Feuerlöscher und Wandhydranten.',
+            bghw: 'Halten Sie Feuerlöscher und Wandhydranten gemäß den BGHW-Brandschutzhinweisen jederzeit frei zugänglich.',
+            rechtlich: 'Feuerlöscher und Wandhydranten sind jederzeit frei zugänglich zu halten.'
+        },
+        "2.3": {
+            einfach: 'Kontrollieren Sie regelmäßig, ob die Plomben an den Wandhydranten unversehrt sind.',
+            bghw: 'Kontrollieren Sie die Prüfsiegel der Wandhydranten im Rahmen der BGHW-Brandschutzbegehung regelmäßig auf Unversehrtheit.',
+            rechtlich: 'Prüfsiegel der Wandhydranten sind regelmäßig auf Unversehrtheit zu kontrollieren.'
+        },
+        "2.4": {
+            einfach: 'Stellen Sie nichts vor Brandschutztüren und blockieren Sie sie nicht.',
+            bghw: 'Halten Sie Brandschutztüren gemäß BGHW-Vorgaben frei von Zustellungen, damit die Schließfunktion jederzeit gewährleistet ist.',
+            rechtlich: 'Brandschutztüren dürfen nicht verstellt oder blockiert werden.'
+        },
+        "2.5": {
+            einfach: 'Lassen Sie die Halterungen und den Schließmechanismus der Feuerschutztüren regelmäßig prüfen.',
+            bghw: 'Prüfen Sie Türhaltevorrichtungen und Schließfolgeregler der Feuerschutzabschlüsse regelmäßig auf Funktion gemäß den BGHW-Prüfempfehlungen.',
+            rechtlich: 'Türhaltevorrichtungen und Schließfolgeregler sind regelmäßig auf Funktion zu prüfen.'
+        },
+        "2.6": {
+            einfach: 'Beheben Sie Schäden an Brandschutztüren sofort.',
+            bghw: 'Setzen Sie beschädigte Brandschutztüren gemäß BGHW-Vorgaben unverzüglich instand, um deren Schutzfunktion sicherzustellen.',
+            rechtlich: 'Beschädigte Brandschutztüren sind unverzüglich instand zu setzen.'
+        },
+        "2.7": {
+            einfach: 'Hängen Sie einen aktuellen Flucht- und Rettungsplan gut sichtbar auf.',
+            bghw: 'Erstellen und veröffentlichen Sie einen aktuellen Flucht- und Rettungsplan gemäß den BGHW-Vorgaben zur Brandschutzorganisation.',
+            rechtlich: 'Ein aktueller Flucht- und Rettungsplan ist gut sichtbar auszuhängen.'
+        },
+        "2.8": {
+            einfach: 'Prüfen Sie regelmäßig, ob die Notbeleuchtung noch funktioniert.',
+            bghw: 'Prüfen Sie die Sicherheits- und Notbeleuchtung gemäß BGHW-Vorgaben in regelmäßigen Intervallen auf Funktion.',
+            rechtlich: 'Die Sicherheits- und Notbeleuchtung ist regelmäßig zu prüfen.'
+        },
+        "2.9": {
+            einfach: 'Halten Sie Fluchtwege und Notausgänge komplett frei – innen wie außen.',
+            bghw: 'Halten Sie Flucht- und Rettungswege sowie Notausgänge gemäß den BGHW-Brandschutzvorgaben in voller Breite und dauerhaft frei, auch im Außenbereich.',
+            rechtlich: 'Flucht- und Rettungswege sowie Notausgänge sind gemäß ASR A2.3 in ihrer gesamten Breite ständig freizuhalten, auch im Außenbereich.'
+        },
+        "2.10": {
+            einfach: 'Sorgen Sie dafür, dass sich Notausgänge jederzeit ohne Schlüssel oder Werkzeug leicht öffnen lassen.',
+            bghw: 'Stellen Sie gemäß BGHW-Vorgaben sicher, dass sich alle Notausgänge und -ausstiege jederzeit ohne Hilfsmittel von innen leicht öffnen lassen.',
+            rechtlich: 'Notausgänge müssen gemäß ASR A2.3 jederzeit ohne fremde Hilfsmittel von innen leicht zu öffnen sein; die Funktionsfähigkeit der Beschläge ist sicherzustellen.'
+        },
+        "2.11": {
+            einfach: 'Prüfen Sie, ob die Notausgänge tatsächlich ins Freie bzw. an einen sicheren Ort führen.',
+            bghw: 'Überprüfen Sie im Rahmen der BGHW-Brandschutzbegehung, dass alle Notausgänge in tatsächlich sichere Bereiche führen.',
+            rechtlich: 'Notausgänge müssen in sichere Bereiche führen.'
+        },
+        "2.12": {
+            einfach: 'Lassen Sie die Brandmeldeanlage regelmäßig warten und testen.',
+            bghw: 'Lassen Sie die Brandmeldeanlage gemäß BGHW-Wartungsvorgaben regelmäßig warten und auf Funktion prüfen.',
+            rechtlich: 'Die Brandmeldeanlage ist regelmäßig zu warten und auf Funktion zu prüfen.'
+        },
+        "2.13": {
+            einfach: 'Verschließen Sie die Einfüllöffnung des Presscontainers nach Ladenschluss.',
+            bghw: 'Sichern Sie die Einfüllöffnung des Presscontainers gemäß BGHW-Vorgaben nach Betriebsschluss mechanisch gegen unbefugte Nutzung.',
+            rechtlich: 'Die Einfüllöffnung des Presscontainers ist nach Betriebsschluss mechanisch zu sichern und gegen unbefugte Nutzung zu schützen.'
+        },
+        "2.14": {
+            einfach: 'Lagern Sie keine Kartons oder brennbaren Materialien in Technik- und Heizräumen.',
+            bghw: 'Halten Sie Technik- und Heizräume gemäß BGHW-Brandschutzvorgaben frei von brennbaren Materialien.',
+            rechtlich: 'Technik- und Heizräume sind gemäß den brandschutzrechtlichen Vorgaben (§ 4 ArbSchG, DGUV Vorschrift 1) frei von brennbaren Materialien zu halten.'
+        },
+        "2.15": {
+            einfach: 'Nutzen Sie Technik- und Heizräume nicht als Lagerfläche.',
+            bghw: 'Nutzen Sie Technik- und Heizräume gemäß den BGHW-Vorgaben ausschließlich zweckgebunden und nicht als Lagerfläche.',
+            rechtlich: 'Technik- und Heizräume sind ausschließlich zweckgebunden zu nutzen; eine Zweckentfremdung als Lagerfläche ist zu unterbinden.'
+        }
     },
 
-    Sozialräume: {
-        "3.1": "Aushangpflichtige Gesetze und Vorschriften sind aktuell und gut sichtbar auszuhängen.",
-
-        "3.2": "Hitzeentwickelnde Geräte sind ausschließlich auf nicht brennbaren Unterlagen zu betreiben.",
-
-        "3.3": "Ortsveränderliche elektrische Betriebsmittel sind regelmäßig gemäß DGUV Vorschrift 3 zu prüfen.",
-
-        "3.4": "Pausenräume sind frei von betrieblichem Lagergut zu halten."
+    "Sozialräume": {
+        "3.1": {
+            einfach: 'Hängen Sie die vorgeschriebenen Gesetze und die Brandschutzordnung im Sozialraum aus.',
+            bghw: 'Hängen Sie die aushangpflichtigen Gesetze, Unfallverhütungsvorschriften und die Brandschutzordnung Teil A gemäß BGHW-Vorgaben im Sozialbereich aus.',
+            rechtlich: 'Die aushangpflichtigen Gesetze, Unfallverhütungsvorschriften sowie die Brandschutzordnung Teil A sind im Sozialbereich gut sichtbar auszuhängen (§ 3 ArbSchG, DGUV Vorschrift 1).'
+        },
+        "3.2": {
+            einfach: 'Stellen Sie Kaffeemaschine und andere heiße Geräte auf eine feuerfeste Unterlage.',
+            bghw: 'Stellen Sie hitzeentwickelnde Geräte wie die Kaffeemaschine gemäß BGHW-Brandschutzhinweisen auf eine nicht brennbare Unterlage.',
+            rechtlich: 'Kaffeemaschine und andere hitzeentwickelnde Geräte sind auf einer nicht brennbaren Unterlage abzustellen.'
+        },
+        "3.3": {
+            einfach: 'Lassen Sie Kabel, Steckdosen und Geräte regelmäßig auf Sicherheit prüfen.',
+            bghw: 'Prüfen Sie ortsveränderliche elektrische Betriebsmittel gemäß DGUV Vorschrift 3 in den von der BGHW empfohlenen Intervallen.',
+            rechtlich: 'Ortsveränderliche elektrische Betriebsmittel sind gemäß DGUV Vorschrift 3 in angemessenen Zeitabständen zu prüfen.'
+        },
+        "3.4": {
+            einfach: 'Halten Sie den Pausenraum frei von Lagergut, damit er wirklich der Erholung dient.',
+            bghw: 'Stellen Sie gemäß BGHW-Empfehlungen sicher, dass der Pausenraum primär der Erholung dient und nicht als Lagerfläche zweckentfremdet wird.',
+            rechtlich: 'Der Pausenraum ist gemäß ArbStättV primär zu Erholungszwecken vorzuhalten und von betrieblichem Lagergut freizuhalten.'
+        }
     },
 
     "Erste Hilfe": {
-        "4.1": "Erste-Hilfe-Koffer sind sichtbar gekennzeichnet und leicht erreichbar bereitzuhalten.",
-
-        "4.2": "Erste-Hilfe-Materialien sind regelmäßig auf Vollständigkeit und Haltbarkeit zu prüfen.",
-
-        "4.3": "Erste-Hilfe-Leistungen sind gemäß DGUV Vorschrift 1 vollständig zu dokumentieren.",
-
-        "4.4": "Die erforderliche Anzahl an Ersthelfern ist während der gesamten Betriebszeit sicherzustellen.",
-
-        "4.5": "Notrufnummern sind gut sichtbar auszuhängen.",
-
-        "4.6": "Erste-Hilfe-Anweisungen sind aktuell bereitzustellen."
+        "4.1": {
+            einfach: 'Sorgen Sie dafür, dass Erste-Hilfe-Koffer gut sichtbar, leicht erreichbar und richtig gekennzeichnet sind.',
+            bghw: 'Positionieren und kennzeichnen Sie Erste-Hilfe-Material gemäß den BGHW-Vorgaben und DGUV Information 204-022 normgerecht und gut sichtbar.',
+            rechtlich: 'Die Standorte der Erste-Hilfe-Koffer müssen den Anforderungen an Sichtbarkeit, Erreichbarkeit und Norm-Kennzeichnung gemäß DGUV Information 204-022 entsprechen.'
+        },
+        "4.2": {
+            einfach: 'Kontrollieren Sie regelmäßig, ob das Verbandsmaterial vollständig und nicht abgelaufen ist.',
+            bghw: 'Kontrollieren Sie das Erste-Hilfe-Material gemäß BGHW-Vorgaben regelmäßig auf Vollständigkeit und Verfallsdaten.',
+            rechtlich: 'Das Erste-Hilfe-Material ist an allen Standorten in vollständigem Zustand vorzuhalten; die Verfallsdaten steriler Inhalte sind zu überwachen.'
+        },
+        "4.3": {
+            einfach: 'Dokumentieren Sie jede Erste-Hilfe-Leistung sorgfältig.',
+            bghw: 'Führen Sie das Verbandbuch gemäß DGUV Information 204-020 und den BGHW-Vorgaben ordnungsgemäß.',
+            rechtlich: 'Die Dokumentation von Erste-Hilfe-Leistungen ist gemäß DGUV Information 204-020 ordnungsgemäß zu führen.'
+        },
+        "4.4": {
+            einfach: 'Stellen Sie sicher, dass während der ganzen Öffnungszeit genug ausgebildete Ersthelfer da sind.',
+            bghw: 'Stellen Sie die nach DGUV Vorschrift 1 und BGHW-Empfehlung erforderliche Anzahl ausgebildeter Ersthelfer während der gesamten Öffnungszeit sicher.',
+            rechtlich: 'Während der gesamten Öffnungszeit ist die nach DGUV Vorschrift 1 erforderliche Anzahl ausgebildeter Ersthelfer anwesend zu halten.'
+        },
+        "4.5": {
+            einfach: 'Hängen Sie die Notrufnummer gut sichtbar aus.',
+            bghw: 'Hängen Sie die Notrufnummer gemäß BGHW-Vorgaben gut sichtbar an zentraler Stelle aus.',
+            rechtlich: 'Eine Notrufnummer ist gut sichtbar auszuhängen (§ 10 ArbSchG).'
+        },
+        "4.6": {
+            einfach: 'Hängen Sie Anweisungen zur Ersten Hilfe gut sichtbar auf.',
+            bghw: 'Hängen Sie Erste-Hilfe-Anweisungen gemäß DGUV Information 204-022 und BGHW-Vorgaben aus.',
+            rechtlich: 'Erste-Hilfe-Anweisungen sind gemäß § 10 ArbSchG bereitzustellen und auszuhängen.'
+        }
     },
 
     "Elektrische Sicherheit": {
-        "5.1": "Beschädigte Schalter und Steckdosen sind unverzüglich instand zu setzen.",
-
-        "5.2": "Leitungen und Steckverbindungen sind fachgerecht zugentlastet zu befestigen.",
-
-        "5.3": "Steckdosen und Kabel sind regelmäßig auf Schäden zu prüfen.",
-
-        "5.4": "Elektrische Steckverbindungen dürfen nicht ungeschützt auf dem Boden liegen.",
-
-        "5.5": "Provisorische Elektroinstallationen sind unverzüglich fachgerecht zu beseitigen."
+        "5.1": {
+            einfach: 'Beheben Sie beschädigte Schalter und Steckdosen sofort.',
+            bghw: 'Kontrollieren Sie Schalter und Steckdosen gemäß DGUV Vorschrift 3 und BGHW-Vorgaben regelmäßig auf Beschädigungen und veranlassen Sie ggf. eine Instandsetzung.',
+            rechtlich: 'Schäden an Schaltern und Steckdosen sind unverzüglich durch eine Elektrofachkraft zu beseitigen (DGUV Vorschrift 3).'
+        },
+        "5.2": {
+            einfach: 'Sichern Sie Kabel, die von der Decke hängen, so, dass niemand daran ziehen kann.',
+            bghw: 'Sichern Sie von der Decke geführte Leitungen gemäß BGHW-Vorgaben mit geeigneten Zugentlastungen, damit keine Zugkräfte auf die Kontaktstellen wirken.',
+            rechtlich: 'Von der Decke geführte Leitungen und Steckverbindungen sind durch geeignete mechanische Zugentlastungen so zu sichern, dass keine Zugkräfte auf die elektrischen Kontaktstellen wirken (DGUV Vorschrift 3).'
+        },
+        "5.3": {
+            einfach: 'Prüfen Sie Steckdosen und Kabel regelmäßig auf Schäden.',
+            bghw: 'Kontrollieren Sie Steckdosen und Kabel gemäß DGUV Vorschrift 3 in den von der BGHW empfohlenen Intervallen.',
+            rechtlich: 'Steckdosen und Kabel sind regelmäßig auf ihren ordnungsgemäßen Zustand zu prüfen (DGUV Vorschrift 3).'
+        },
+        "5.4": {
+            einfach: 'Lassen Sie Kabelverbindungen nicht offen auf dem Boden liegen, z. B. unter Kühltruhen.',
+            bghw: 'Vermeiden Sie ungeschützt auf dem Boden liegende Steckverbindungen gemäß BGHW-Vorgaben, insbesondere unter Kühl- und Tiefkühltruhen.',
+            rechtlich: 'Elektrische Steckverbindungen dürfen nicht ungeschützt auf dem Boden liegen, insbesondere nicht in feuchtigkeitsgefährdeten Bereichen wie unter Kühl- oder Tiefkühltruhen.'
+        },
+        "5.5": {
+            einfach: 'Vermeiden Sie provisorische Verkabelungen – lassen Sie alles fest installieren.',
+            bghw: 'Vermeiden Sie provisorische elektrische Installationen gemäß den BGHW-Vorgaben und lassen Sie dauerhafte Lösungen durch eine Elektrofachkraft einrichten.',
+            rechtlich: 'Provisorische elektrische Installationen sind zu vermeiden und durch fachgerechte, dauerhafte Installationen zu ersetzen (DGUV Vorschrift 3).'
+        }
     },
 
     "CO2 Kühleinrichtungen": {
-        "6.1": "Beschäftigte sind regelmäßig über Gefahren durch CO2-Kühlanlagen zu unterweisen.",
-
-        "6.2": "Notentriegelungen sind regelmäßig auf Funktion zu prüfen.",
-
-        "6.3": "Sensoren dürfen nicht verstellt oder verdeckt werden.",
-
-        "6.4": "Die Beleuchtung ist funktionsfähig zu halten.",
-
-        "6.5": "Sicherheitsvorrichtungen sind regelmäßig auf Funktion zu prüfen."
+        "6.1": {
+            einfach: 'Weisen Sie alle, die sich in der Nähe von Kühlanlagen aufhalten, in die Gefahren ein.',
+            bghw: 'Unterweisen Sie Beschäftigte im Bereich von CO2-Kühlanlagen gemäß BGHW-Vorgaben und DGUV Regel 110-008 zu den spezifischen Gefahren.',
+            rechtlich: 'Personen, die sich im Bereich von CO2-Kühlanlagen oder Kühlhäusern aufhalten, sind gemäß § 12 ArbSchG und DGUV Regel 110-008 zu unterweisen.'
+        },
+        "6.2": {
+            einfach: 'Prüfen Sie, ob sich die Notentriegelung leicht öffnen lässt.',
+            bghw: 'Prüfen Sie die Notentriegelung an CO2-Kühlanlagen gemäß den BGHW-Prüfvorgaben regelmäßig auf Funktion.',
+            rechtlich: 'Die Notentriegelung ist regelmäßig auf Vorhandensein und Funktionsfähigkeit zu prüfen.'
+        },
+        "6.3": {
+            einfach: 'Stellen Sie keine Kisten oder Waren vor die Gas-Sensoren.',
+            bghw: 'Halten Sie CO2-Sensoren gemäß BGHW-Vorgaben frei von Verstellungen, damit die Warnfunktion jederzeit gewährleistet ist.',
+            rechtlich: 'Sensoren dürfen nicht durch Material oder Gegenstände verstellt werden, um die Funktionsfähigkeit der Gaswarnanlage sicherzustellen.'
+        },
+        "6.4": {
+            einfach: 'Prüfen Sie, ob die Beleuchtung im Kühlbereich einwandfrei funktioniert.',
+            bghw: 'Kontrollieren Sie die Beleuchtung im Kühlbereich gemäß BGHW-Vorgaben regelmäßig auf einwandfreie Funktion.',
+            rechtlich: 'Die Beleuchtung im Kühlbereich ist regelmäßig auf Funktionsfähigkeit zu prüfen (ASR A3.4).'
+        },
+        "6.5": {
+            einfach: 'Kontrollieren Sie Alarmleuchten, Kennzeichnungen und Türen der Kühlanlage regelmäßig.',
+            bghw: 'Kontrollieren Sie alle Sicherheitsvorrichtungen (Alarmleuchten, Kennzeichnungen, Kühlhaustüren) gemäß BGHW-Vorgaben auf Funktionsfähigkeit.',
+            rechtlich: 'Sämtliche Sicherheitsvorrichtungen (Alarmleuchten, Kennzeichnungen, Kühlhaustüren) sind auf Funktionsfähigkeit zu prüfen (DGUV Regel 110-008).'
+        }
     },
 
-    Kühlhaus: {
-        "7.1": "Beleuchtungen in Kühlhäusern sind mit geeigneten Schutzkappen zu versehen.",
-
-        "7.2": "Die Notentriegelung ist regelmäßig zu prüfen.",
-
-        "7.3": "Kühlhaustüren sind gemäß ISO 7010 als Rettungsweg zu kennzeichnen.",
-
-        "7.4": "Die Beleuchtung ist funktionsfähig zu halten.",
-
-        "7.5": "Vorhandene Notrufsysteme sind regelmäßig auf Funktion zu prüfen."
+    "Kühlhaus": {
+        "7.1": {
+            einfach: 'Prüfen Sie, ob an allen Lampen im Kühlhaus die Schutzkappe montiert ist.',
+            bghw: 'Stellen Sie gemäß BGHW-Vorgaben sicher, dass an sämtlichen Leuchten im Kühlhaus die Schutzkappe montiert ist.',
+            rechtlich: 'An allen Leuchten im Kühlhaus ist die Schutzkappe (Überwurfkappe) montiert zu halten (DGUV Vorschrift 3).'
+        },
+        "7.2": {
+            einfach: 'Prüfen Sie, ob sich die Notentriegelung im Kühlhaus leicht öffnen lässt.',
+            bghw: 'Prüfen Sie die Notentriegelung im Kühlhaus gemäß den BGHW-Prüfvorgaben regelmäßig auf Funktion.',
+            rechtlich: 'Die Notentriegelung im Kühlhaus ist regelmäßig auf Vorhandensein und Funktionsfähigkeit zu prüfen.'
+        },
+        "7.3": {
+            einfach: 'Kennzeichnen Sie die Innenseite der Kühlhaustüren mit dem Rettungswegschild.',
+            bghw: 'Kennzeichnen Sie Kühlhaustüren von innen gemäß ISO 7010 und BGHW-Vorgaben mit dem Rettungswegschild.',
+            rechtlich: 'Kühlhaustüren sind von innen mit dem Rettungswegschild gemäß ISO 7010 zu kennzeichnen.'
+        },
+        "7.4": {
+            einfach: 'Prüfen Sie, ob die Beleuchtung im Kühlhaus einwandfrei funktioniert.',
+            bghw: 'Kontrollieren Sie die Beleuchtung im Kühlhaus gemäß BGHW-Vorgaben regelmäßig auf einwandfreie Funktion.',
+            rechtlich: 'Die Beleuchtung im Kühlhaus ist regelmäßig auf Funktionsfähigkeit zu prüfen (ASR A3.4).'
+        },
+        "7.5": {
+            einfach: 'Prüfen Sie, ob die Notruf-Funktion im Kühlhaus (falls vorhanden) funktioniert und unbeschädigt ist.',
+            bghw: 'Prüfen Sie eine vorhandene Notruf-Funktion im Kühlhaus gemäß BGHW-Vorgaben regelmäßig auf Funktionsfähigkeit.',
+            rechtlich: 'Die Notruf-Funktion im Kühlhaus ist, sofern vorhanden, regelmäßig auf Funktionsfähigkeit und Unversehrtheit zu prüfen.'
+        }
     },
 
     "Lager und Regale": {
-        "8.1": "Elektrische Hubwagen sind regelmäßig gemäß BetrSichV zu prüfen.",
-
-        "8.2": "Gabelhubwagen sind regelmäßig auf Beschädigungen zu kontrollieren.",
-
-        "8.3": "Schwerlastregale sind regelmäßig durch befähigte Personen zu prüfen.",
-
-        "8.4": "Anfahrschutz ist an gefährdeten Stellen vorzuhalten.",
-
-        "8.5": "Traglastangaben sind gut sichtbar anzubringen.",
-
-        "8.6": "Absturzsicherungen an Rampen sind bereitzustellen.",
-
-        "8.7": "Absturzsicherungen sind regelmäßig auf Schäden zu prüfen.",
-
-        "8.8": "Müll- und Papierpressen sind regelmäßig zu prüfen.",
-
-        "8.9": "Müll- und Papierpressen sind in sicherem Zustand zu halten.",
-
-        "8.10": "Verkehrswege im Lager sind sicher und frei begehbar zu halten."
+        "8.1": {
+            einfach: 'Lassen Sie den elektrischen Hubwagen regelmäßig prüfen und beheben Sie Schäden sofort.',
+            bghw: 'Lassen Sie den elektrischen Hubwagen gemäß DGUV Vorschrift 68 und BGHW-Vorgaben regelmäßig prüfen.',
+            rechtlich: 'Der elektrische Hubwagen ist gemäß DGUV Vorschrift 68 wiederkehrend zu prüfen; Schutzeinrichtungen müssen funktionsfähig sein.'
+        },
+        "8.2": {
+            einfach: 'Kontrollieren Sie den Gabelhubwagen regelmäßig auf Schäden.',
+            bghw: 'Kontrollieren Sie den Gabelhubwagen gemäß BGHW-Vorgaben regelmäßig auf Beschädigungen.',
+            rechtlich: 'Der Gabelhubwagen ist regelmäßig auf seinen ordnungsgemäßen Zustand zu prüfen.'
+        },
+        "8.3": {
+            einfach: 'Lassen Sie die Schwerlastregale regelmäßig von einem Fachmann prüfen.',
+            bghw: 'Lassen Sie Schwerlastregale gemäß DGUV Regel 108-007 und BGHW-Vorgaben regelmäßig durch eine befähigte Person prüfen.',
+            rechtlich: 'Schwerlastregale sind gemäß DGUV Regel 108-007 regelmäßig durch eine befähigte Person zu prüfen.'
+        },
+        "8.4": {
+            einfach: 'Bringen Sie an den Regalen einen Anfahrschutz an.',
+            bghw: 'Rüsten Sie Regale gemäß den BGHW-Vorgaben mit einem geeigneten Anfahrschutz aus.',
+            rechtlich: 'Regale sind mit einem geeigneten Anfahrschutz gemäß DGUV Regel 108-007 auszurüsten.'
+        },
+        "8.5": {
+            einfach: 'Bringen Sie an den Schwerlastregalen ein Schild mit der maximalen Traglast an.',
+            bghw: 'Kennzeichnen Sie Schwerlastregale gemäß BGHW-Vorgaben deutlich mit der zulässigen Traglast.',
+            rechtlich: 'Die zulässige Traglast ist an Schwerlastregalen gemäß DGUV Regel 108-007 dauerhaft und gut sichtbar anzubringen.'
+        },
+        "8.6": {
+            einfach: 'Bringen Sie an der Rampe eine Absturzsicherung an.',
+            bghw: 'Rüsten Sie die Rampe gemäß BGHW-Vorgaben mit einer Absturzsicherung aus.',
+            rechtlich: 'An der Rampe ist eine Absturzsicherung gemäß ASR A2.1 anzubringen.'
+        },
+        "8.7": {
+            einfach: 'Kontrollieren Sie, ob die Absturzsicherung unbeschädigt und richtig gekennzeichnet ist.',
+            bghw: 'Kontrollieren Sie die Absturzsicherung gemäß BGHW-Vorgaben regelmäßig auf Beschädigungen und Kennzeichnung.',
+            rechtlich: 'Die Absturzsicherung ist regelmäßig auf ihren ordnungsgemäßen Zustand und ihre Kennzeichnung zu prüfen (ASR A2.1).'
+        },
+        "8.8": {
+            einfach: 'Lassen Sie die Müll-/Papierpresse regelmäßig prüfen.',
+            bghw: 'Lassen Sie die Müll-/Papierpresse gemäß BGHW-Vorgaben und DGUV Vorschrift 3 regelmäßig prüfen.',
+            rechtlich: 'Die Müll-/Papierpresse ist gemäß BetrSichV wiederkehrend zu prüfen.'
+        },
+        "8.9": {
+            einfach: 'Kontrollieren Sie die Presse auf Schäden, funktionierende Schutzeinrichtungen und festen Stand.',
+            bghw: 'Kontrollieren Sie die Müll-/Papierpresse gemäß BGHW-Vorgaben auf Beschädigungen, intakte Schutzeinrichtungen und festen Stand.',
+            rechtlich: 'Die Müll-/Papierpresse muss frei von Beschädigungen sein, über intakte Schutzeinrichtungen verfügen und sicher/standfest aufgestellt sein.'
+        },
+        "8.10": {
+            einfach: 'Halten Sie die Wege im Lager frei von Stolperfallen.',
+            bghw: 'Gestalten Sie die Verkehrswege im Lager gemäß den BGHW-Hinweisen zu innerbetrieblichem Verkehr frei von Stolper-, Rutsch- und Sturzgefahren.',
+            rechtlich: 'Verkehrswege im Lager sind gemäß ASR A1.5 frei von Stolper-, Rutsch- und Sturzgefahren zu halten.'
+        }
     },
 
-    Leergut: {
-        "9.1": "Leergutannahmegeräte sind regelmäßig auf Beschädigungen und Funktion zu prüfen.",
-
-        "9.2": "Rollbahnen dürfen aus Sicherheitsgründen nicht betreten werden.",
-
-        "9.3": "Beschädigte Paletten und Kisten sind unverzüglich auszusortieren.",
-
-        "9.4": "Lasten sind ergonomisch und sicher zu transportieren.",
-
-        "9.5": "Persönliche Schutzausrüstung ist bereitzustellen und zu tragen.",
-
-        "9.6": "Bruchmaterialien und Abfälle sind ordnungsgemäß zu entsorgen.",
-
-        "9.7": "Maximale Stapelhöhen sind einzuhalten.",
-
-        "9.8": "Lagerflächen sind sauber und rutschfrei zu halten.",
-
-        "9.9": "Einzug- und Quetschstellen der Rollbahn zur Wand hin technisch absichern (z. B. durch festen Seitenschutz/Verkleidung), den Betrieb der Bahn bei Wartung zwingend stoppen oder, falls betrieblich machbar, den Bereich zeitweise sperren."
+    "Leergut": {
+        "9.1": {
+            einfach: 'Kontrollieren Sie die Annahmegeräte der Leergutrücknahme regelmäßig und beheben oder ersetzen Sie beschädigte Geräte sofort – achten Sie besonders auf Glasscherben und intakte Schutzvorrichtungen.',
+            bghw: 'Kontrollieren und warten Sie die Annahmegeräte der Leergutrücknahme gemäß den BGHW-Prüfempfehlungen regelmäßig; setzen Sie beschädigte oder defekte Geräte unverzüglich instand oder außer Betrieb und beseitigen Sie Glasbruch umgehend.',
+            rechtlich: 'Die Annahmegeräte der Leergutrücknahme sind regelmäßig auf Beschädigungen, Glasscherben und funktionierende Schutzeinrichtungen zu kontrollieren; defekte Geräte sind unverzüglich instand zu setzen oder außer Betrieb zu nehmen.'
+        },
+        "9.2": {
+            einfach: 'Weisen Sie Ihre Mitarbeitenden an, die Rollbahnen nicht zu betreten.',
+            bghw: 'Weisen Sie Beschäftigte gemäß BGHW-Vorgaben an, Rollbahnen nicht zu betreten, und kontrollieren Sie die Einhaltung.',
+            rechtlich: 'Rollbahnen dürfen nicht betreten werden; die Einhaltung ist im Rahmen der Unterweisung sicherzustellen (§ 12 ArbSchG).'
+        },
+        "9.3": {
+            einfach: 'Sortieren Sie beschädigte Paletten und Kisten konsequent aus.',
+            bghw: 'Sortieren Sie beschädigte Paletten und Kisten gemäß BGHW-Vorgaben konsequent aus, bevor sie erneut verwendet werden.',
+            rechtlich: 'Beschädigte Paletten und Kisten sind konsequent auszusortieren und der weiteren Nutzung zu entziehen.'
+        },
+        "9.4": {
+            einfach: 'Zeigen Sie den Mitarbeitenden, wie sie Lasten sicher heben und tragen.',
+            bghw: 'Unterweisen Sie Beschäftigte gemäß DGUV Information 208-033 und BGHW-Vorgaben zum sicheren Aufnehmen und Transportieren von Lasten.',
+            rechtlich: 'Lasten sind gemäß Lastenhandhabungsverordnung sicher aufzunehmen und zu transportieren.'
+        },
+        "9.5": {
+            einfach: 'Stellen Sie die nötige Schutzausrüstung bereit und sorgen Sie dafür, dass sie getragen wird.',
+            bghw: 'Stellen Sie die im Leergutbereich erforderliche PSA gemäß BGHW-Vorgaben bereit und kontrollieren Sie deren Tragen.',
+            rechtlich: 'Die erforderliche persönliche Schutzausrüstung ist gemäß PSA-Benutzungsverordnung zur Verfügung zu stellen und zu tragen.'
+        },
+        "9.6": {
+            einfach: 'Entsorgen Sie Glasbruch und Abfälle im Leergutbereich sofort und ordnungsgemäß.',
+            bghw: 'Entsorgen Sie Abfälle und Bruchmaterial gemäß BGHW-Vorgaben unverzüglich und ordnungsgemäß.',
+            rechtlich: 'Abfälle und Bruchmaterial sind unverzüglich und ordnungsgemäß zu entsorgen.'
+        },
+        "9.7": {
+            einfach: 'Stapeln Sie Leergut nicht höher, als es sicher ist.',
+            bghw: 'Halten Sie die von der BGHW empfohlenen maximalen Stapelhöhen im Leergutbereich ein.',
+            rechtlich: 'Die zulässigen Stapelhöhen sind gemäß Gefährdungsbeurteilung einzuhalten.'
+        },
+        "9.8": {
+            einfach: 'Halten Sie die Lagerfläche sauber und rutschfrei.',
+            bghw: 'Halten Sie die Lagerfläche gemäß BGHW-Vorgaben sauber und rutschfrei.',
+            rechtlich: 'Die Lagerfläche ist sauber und rutschfrei zu halten (ASR A1.5).'
+        },
+        "9.9": {
+            einfach: 'Sorgen Sie dafür, dass zwischen Rollbahn und Wand mindestens 60 cm Platz zum Durchgehen bleibt (an engen Stellen kurz auch 50 cm).',
+            bghw: 'Halten Sie die lichte Breite des Wartungsganges zwischen Rollbahn und Wand gemäß BGHW-Vorgaben durchgehend bei mindestens 0,60 m (Engstellen kurzzeitig 0,50 m).',
+            rechtlich: 'Die lichte Breite des Wartungsganges zwischen Rollbahn und Wand muss gemäß ASR A1.8 durchgehend mindestens 0,60 m betragen (an Engstellen kurzzeitig 0,50 m zulässig).'
+        }
     },
 
-
-Praktikanten: {
-        "10.1": "Führen Sie eine Unterweisung für Praktikanten und Schüleraushilfen vor Beginn der Beschäftigung gemäß § 12 ArbSchG durch und dokumentieren Sie diese schriftlich.",
-
-        "10.2": "Dokumentieren Sie alle durchgeführten Unterweisungen rechtskonform und archivieren Sie die Nachweise gemä § 6 ArbSchG",
-
-        "10.3": "Vergewissern Sie sich, dass unterwiesene Personen die vermittelten Inhalte verstanden haben, etwa durch Rückfragen oder Lernerfolgskontrollen (§ 12 ArbSchG)."
+    "Praktikanten": {
+        "10.1": {
+            einfach: 'Weisen Sie neue Praktikanten und Schüleraushilfen vor dem ersten Arbeitstag in die Sicherheitsregeln ein.',
+            bghw: 'Führen Sie die Unterweisung von Praktikanten und Schüleraushilfen gemäß den BGHW-Vorgaben zur Jugend- und Praktikantenbetreuung durch.',
+            rechtlich: 'Praktikanten und Schüleraushilfen sind vor Aufnahme der Tätigkeit gemäß § 12 ArbSchG zu unterweisen.'
+        },
+        "10.2": {
+            einfach: 'Halten Sie schriftlich fest, wer wann unterwiesen wurde.',
+            bghw: 'Dokumentieren Sie alle durchgeführten Unterweisungen gemäß den BGHW-Vorgaben rechtssicher und archivieren Sie die Nachweise.',
+            rechtlich: 'Dokumentieren Sie alle durchgeführten Unterweisungen rechtskonform und archivieren Sie die Nachweise gemäß § 6 ArbSchG.'
+        },
+        "10.3": {
+            einfach: 'Fragen Sie nach der Unterweisung nach, ob wirklich alles verstanden wurde.',
+            bghw: 'Prüfen Sie das Verständnis der Unterweisungsinhalte gemäß BGHW-Empfehlung z. B. durch gezielte Rückfragen.',
+            rechtlich: 'Vergewissern Sie sich, dass unterwiesene Personen die vermittelten Inhalte verstanden haben, etwa durch Rückfragen oder Lernerfolgskontrollen (§ 12 ArbSchG).'
+        }
     },
 
-    Arbeitsmedizin: {
-        "11.1": "Arbeitsmedizinische Vorsorge ist gemäß ArbMedVV anzubieten.",
-
-        "11.2": "Eine regelmäßige arbeitsmedizinische Betreuung ist sicherzustellen.",
-
-        "11.3": "Arbeitsmedizinische Beratungen sind zu dokumentieren.",
-
-        "11.4": "Geeignete Maßnahmen zum Hautschutz sind umzusetzen.",
-
-        "11.5": "Empfehlungen des Betriebsarztes sind umzusetzen und nachzuverfolgen.",
-
-        "11.6": "Sanitärräume und Pausenräume sind hygienisch sauber zu halten."
+    "Arbeitsmedizin": {
+        "11.1": {
+            einfach: 'Bieten Sie Ihren Mitarbeitenden die vorgeschriebenen Gesundheitschecks beim Betriebsarzt an.',
+            bghw: 'Bieten Sie arbeitsmedizinische Vorsorge gemäß ArbMedVV und den BGHW-Vorsorgekonzepten an.',
+            rechtlich: 'Arbeitsmedizinische Vorsorge ist gemäß ArbMedVV anzubieten bzw. zu veranlassen.'
+        },
+        "11.2": {
+            einfach: 'Planen Sie regelmäßige Besuche oder Sprechstunden des Betriebsarztes ein.',
+            bghw: 'Planen und dokumentieren Sie die arbeitsmedizinische Betreuung (Begehung/Sprechstunde) gemäß den BGHW-Betreuungsvorgaben für das laufende Kalenderjahr.',
+            rechtlich: 'Die arbeitsmedizinische Betreuung (Begehung oder Sprechstunde) ist gemäß DGUV Vorschrift 2 für das laufende Kalenderjahr zu planen und zu dokumentieren.'
+        },
+        "11.3": {
+            einfach: 'Lassen Sie sich vom Betriebsarzt zu Gesundheitsfragen beraten, wenn Bedarf besteht.',
+            bghw: 'Nehmen Sie arbeitsmedizinische Beratungsangebote gemäß BGHW-Vorgaben für Beschäftigte und Führungskräfte in Anspruch.',
+            rechtlich: 'Arbeitsmedizinische Beratungen für Beschäftigte oder Führungskräfte sind gemäß DGUV Vorschrift 2 zu ermöglichen.'
+        },
+        "11.4": {
+            einfach: 'Sorgen Sie mit Hautschutzplan und -produkten dafür, dass die Haut geschützt ist.',
+            bghw: 'Setzen Sie Maßnahmen zur Vermeidung von Hauterkrankungen gemäß dem BGHW-Hautschutzkonzept konsequent um.',
+            rechtlich: 'Maßnahmen zur Vermeidung von Hauterkrankungen sind gemäß TRGS 401 zu treffen.'
+        },
+        "11.5": {
+            einfach: 'Setzen Sie die Empfehlungen des Betriebsarztes um und halten Sie sie schriftlich fest.',
+            bghw: 'Dokumentieren und setzen Sie Berichte und Empfehlungen des Betriebsarztes gemäß den BGHW-Vorgaben konsequent um.',
+            rechtlich: 'Berichte und Empfehlungen des Betriebsarztes sind zu dokumentieren und im Rahmen der Gefährdungsbeurteilung umzusetzen (§ 3 ArbMedVV).'
+        },
+        "11.6": {
+            einfach: 'Halten Sie Toiletten und Pausenräume sauber, funktionsfähig und gut ausgestattet.',
+            bghw: 'Halten Sie sanitäre Anlagen und Pausenräume gemäß den BGHW-Hygienevorgaben sauber, funktionsfähig und ausreichend mit Hygieneartikeln bestückt.',
+            rechtlich: 'Sanitäre Anlagen und Pausenräume sind gemäß ArbStättV sauber, funktionsfähig und ausreichend mit Hygieneartikeln auszustatten.'
+        }
     },
 
-
-      Backstation: {
-        "12.1": "Arbeitsgeräte der Backstation sind regelmäßig auf sicheren Zustand zu prüfen.",
-
-        "12.2": "Handwaschbecken sind hygienisch sauber und funktionsfähig zu halten.",
-
-        "12.3": "Elektroleitungen dürfen keine Stolperstellen verursachen.",
-
-        "12.4": "Elektrische Anschlüsse müssen den geltenden VDE-Bestimmungen entsprechen.",
-
-        "12.5": "Maschinenprüfungen sind regelmäßig durchzuführen und zu dokumentieren.",
-
-        "12.6": "Schutzeinrichtungen müssen vorhanden und funktionsfähig sein.",
-
-        "12.7": "Betriebsanweisungen sind gut sichtbar auszuhängen.",
-
-        "12.8": "Backhandschuhe sind regelmäßig auf Verschleiß zu prüfen.",
-
-        "12.9": "Heißgeräte sind regelmäßig technisch zu warten.",
-
-        "12.10": "Gerät sofort sperren (Netzstecker ziehen), mit einem Warnhinweis 'Defekt – Nicht benutzen' kennzeichnen und eine DGUV V3 Prüfung bzw. Instandsetzung durch eine Elektrofachkraft veranlassen."
+    "Backstation": {
+        "12.1": {
+            einfach: 'Kontrollieren Sie Backofen, Backbleche und Brotschneidemaschine regelmäßig auf ihren Zustand.',
+            bghw: 'Kontrollieren Sie die Arbeitsgeräte der Backstation gemäß den BGHW-Vorgaben regelmäßig auf ihren ordnungsgemäßen Zustand.',
+            rechtlich: 'Die Arbeitsgeräte an der Backstation (Backofen, Backbleche, Brotschneidemaschine) sind regelmäßig auf ihren ordnungsgemäßen Zustand zu prüfen (DGUV Vorschrift 3).'
+        },
+        "12.2": {
+            einfach: 'Beheben Sie ein beschädigtes Handwaschbecken zeitnah.',
+            bghw: 'Halten Sie das freistehende Handwaschbecken gemäß BGHW-Hygienevorgaben unbeschädigt und funktionsfähig.',
+            rechtlich: 'Das freistehende Handwaschbecken ist unbeschädigt und funktionsfähig zu halten (ArbStättV).'
+        },
+        "12.3": {
+            einfach: 'Verlegen Sie Kabel so, dass niemand darüber stolpert, und lassen Sie beschädigte reparieren.',
+            bghw: 'Verlegen Sie Elektroleitungen an der Backstation gemäß BGHW-Vorgaben stolperfrei und lassen Sie Schäden umgehend beheben.',
+            rechtlich: 'Elektroleitungen sind stolperfrei zu verlegen und auf Unversehrtheit zu prüfen (DGUV Vorschrift 3, ASR A1.5).'
+        },
+        "12.4": {
+            einfach: 'Lassen Sie prüfen, ob die Stromzuleitung den geltenden Normen entspricht.',
+            bghw: 'Lassen Sie die Zuleitung gemäß VDE-Norm und BGHW-Vorgaben durch eine Elektrofachkraft prüfen.',
+            rechtlich: 'Die Zuleitung ist auf Konformität mit der einschlägigen VDE-Norm zu prüfen.'
+        },
+        "12.5": {
+            einfach: 'Lassen Sie alle Maschinen prüfen und halten Sie die Ergebnisse schriftlich fest.',
+            bghw: 'Lassen Sie alle Maschinen gemäß DGUV Vorschrift 3 und BGHW-Vorgaben prüfen und dokumentieren Sie die Ergebnisse.',
+            rechtlich: 'Alle Maschinen sind gemäß BetrSichV zu prüfen; die Prüfungen sind zu dokumentieren.'
+        },
+        "12.6": {
+            einfach: 'Kontrollieren Sie, ob alle Schutzvorrichtungen an den Maschinen vorhanden und funktionsfähig sind.',
+            bghw: 'Kontrollieren Sie Schutzeinrichtungen an Backstationsmaschinen gemäß BGHW-Vorgaben regelmäßig auf Vorhandensein und Funktion.',
+            rechtlich: 'Schutzeinrichtungen müssen vorhanden und funktionsfähig sein (BetrSichV).'
+        },
+        "12.7": {
+            einfach: 'Hängen Sie die Betriebsanweisungen für die Backstation gut sichtbar auf.',
+            bghw: 'Hängen Sie Betriebsanweisungen für die Backstation gemäß BGHW-Vorgaben gut sichtbar aus.',
+            rechtlich: 'Betriebsanweisungen sind gemäß § 14 GefStoffV bzw. § 4 BetrSichV gut sichtbar auszuhängen.'
+        },
+        "12.8": {
+            einfach: 'Prüfen Sie den Backhandschuh auf Verschleiß und tauschen Sie ihn bei Bedarf aus.',
+            bghw: 'Kontrollieren Sie den Backhandschuh gemäß BGHW-Vorgaben regelmäßig auf Verschleiß und ausreichende Stulpenlänge.',
+            rechtlich: 'Backhandschuhe sind regelmäßig auf Verschleiß und ausreichende Schutzlänge (Stulpe) zu prüfen (PSA-Benutzungsverordnung).'
+        },
+        "12.9": {
+            einfach: 'Warten Sie Heißtheken und Fritteusen regelmäßig.',
+            bghw: 'Warten Sie Heißgeräte (Heißtheken, Fritteusen) gemäß BGHW-Vorgaben regelmäßig und lassen Sie sie technisch prüfen.',
+            rechtlich: 'Heißgeräte sind regelmäßig technisch zu warten und auf einwandfreien Zustand zu prüfen (DGUV Vorschrift 3).'
+        },
+        "12.10": {
+            einfach: 'Wenn die Brotschneidemaschine defekt ist: sofort ausstecken, ein Warnschild dranhängen und einen Elektriker rufen.',
+            bghw: 'Nehmen Sie eine defekte Brotschneidemaschine gemäß BGHW-Vorgaben unverzüglich außer Betrieb, kennzeichnen Sie sie deutlich und veranlassen Sie eine DGUV V3-Prüfung durch eine Elektrofachkraft.',
+            rechtlich: 'Gerät sofort sperren (Netzstecker ziehen), mit einem Warnhinweis \'Defekt – Nicht benutzen\' kennzeichnen und eine DGUV V3 Prüfung bzw. Instandsetzung durch eine Elektrofachkraft veranlassen.'
+        }
     },
 
-     Serviceabteilung: {
-        "13.1": "Ein aktueller Hautschutzplan ist gut sichtbar auszuhängen.",
-
-        "13.2": "Geeignete Hautschutz- und Hautpflegeprodukte sind bereitzustellen.",
-
-        "13.3": "Arbeitsgeräte sind regelmäßig auf sicheren Zustand zu prüfen.",
-
-        "13.4": "Aufklappbare Thekenscheiben müssen sicher offen stehen bleiben.",
-
-        "13.5": "Glasflächen sind in Augenhöhe zu kennzeichnen.",
-
-        "13.6": "Schneidbretter und Messer sind hygienisch zu reinigen.",
-
-        "13.7": "Geeignete Schneidbretter mit Messereinschub sind zu verwenden.",
-
-        "13.8": "Messerhalter sind bereitzustellen und zu verwenden.",
-
-        "13.9": "Convenience-Geräte sind regelmäßig zu prüfen.",
-
-        "13.10": "Die Beleuchtung im Servicebereich ist ausreichend sicherzustellen."
+    "Serviceabteilung": {
+        "13.1": {
+            einfach: 'Hängen Sie an den Waschplätzen einen aktuellen Hautschutzplan auf.',
+            bghw: 'Hängen Sie einen auf die Gefährdungsbeurteilung abgestimmten Hautschutzplan gemäß BGHW-Vorgaben an den Waschplätzen aus.',
+            rechtlich: 'Ein aktueller, auf die Gefährdungsbeurteilung abgestimmter Hautschutzplan ist gemäß TRGS 401 an den Waschplätzen gut sichtbar auszuhängen.'
+        },
+        "13.2": {
+            einfach: 'Stellen Sie Hautschutz- und Pflegecreme bereit.',
+            bghw: 'Stellen Sie Hautschutz- und Hautpflegeprodukte gemäß dem BGHW-Hautschutzkonzept bereit.',
+            rechtlich: 'Hautschutz- und Hautpflegeprodukte sind gemäß TRGS 401 zur Verfügung zu stellen.'
+        },
+        "13.3": {
+            einfach: 'Kontrollieren Sie die Geräte im Servicebereich regelmäßig auf ihren Zustand.',
+            bghw: 'Kontrollieren Sie die Arbeitsgeräte im Servicebereich gemäß BGHW-Vorgaben regelmäßig auf ihren ordnungsgemäßen Zustand.',
+            rechtlich: 'Die Arbeitsgeräte im Servicebereich sind regelmäßig auf ihren ordnungsgemäßen Zustand zu prüfen (DGUV Vorschrift 3).'
+        },
+        "13.4": {
+            einfach: 'Prüfen Sie, ob aufgeklappte Thekenscheiben von selbst oben bleiben.',
+            bghw: 'Prüfen Sie gemäß BGHW-Vorgaben, dass aufklappbare Thekenscheiben in geöffneter Stellung sicher und selbstständig stehen bleiben.',
+            rechtlich: 'Aufklappbare Thekenscheiben müssen in der oberen Stellung sicher und selbstständig verharren (Betriebssicherheit).'
+        },
+        "13.5": {
+            einfach: 'Kleben Sie Markierungen in Augenhöhe an Glastüren und Glaswände.',
+            bghw: 'Kennzeichnen Sie Glastüren und Glaswände gemäß BGHW-Vorgaben in Augenhöhe, um Anstoßunfälle zu vermeiden.',
+            rechtlich: 'Glastüren und Glaswände sind gemäß ASR A1.7 in Augenhöhe deutlich zu kennzeichnen.'
+        },
+        "13.6": {
+            einfach: 'Reinigen Sie Schneidbretter und Messer regelmäßig und nutzen Sie die Farbcodierung für unterschiedliche Lebensmittel.',
+            bghw: 'Reinigen Sie Schneidbretter und Messer regelmäßig und halten Sie das Farbcodierungssystem gemäß BGHW-Hygienevorgaben ein.',
+            rechtlich: 'Schneidbretter und Messer sind regelmäßig zu reinigen und entsprechend dem lebensmittelrechtlich vorgeschriebenen Farbcodierungssystem zu verwenden.'
+        },
+        "13.7": {
+            einfach: 'Verwenden Sie Schneidbretter mit einem sicheren Einschub fürs Messer.',
+            bghw: 'Verwenden Sie Schneidbretter mit Messereinschub gemäß den BGHW-Empfehlungen zur Schnittverletzungsprävention.',
+            rechtlich: 'Es sind Schneidbretter mit Messereinschub gemäß Gefährdungsbeurteilung zu verwenden.'
+        },
+        "13.8": {
+            einfach: 'Bewahren Sie Messer in einem Messerhalter auf, nicht lose.',
+            bghw: 'Nutzen Sie Messerhalter gemäß den BGHW-Empfehlungen zur sicheren Aufbewahrung von Schneidwerkzeugen.',
+            rechtlich: 'Zur sicheren Aufbewahrung von Messern sind Messerhalter zu verwenden (Gefährdungsbeurteilung).'
+        },
+        "13.9": {
+            einfach: 'Kontrollieren Sie die Geräte im Convenience-Bereich regelmäßig.',
+            bghw: 'Kontrollieren Sie Convenience-Geräte gemäß BGHW-Vorgaben regelmäßig auf ihren ordnungsgemäßen Zustand.',
+            rechtlich: 'Convenience-Geräte sind regelmäßig auf ihren ordnungsgemäßen Zustand zu prüfen (DGUV Vorschrift 3).'
+        },
+        "13.10": {
+            einfach: 'Sorgen Sie für ausreichend Licht im Servicebereich.',
+            bghw: 'Stellen Sie die Beleuchtung im Servicebereich gemäß den BGHW-Beleuchtungsempfehlungen sicher.',
+            rechtlich: 'Die Beleuchtung im Servicebereich ist gemäß ASR A3.4 ausreichend sicherzustellen.'
+        }
     },
 
-
-    Kassenzone: {
-        "14.1": "Der Fußraum ist frei von Gegenständen zu halten.",
-
-        "14.2": "Der Bodenbelag ist regelmäßig auf Schäden zu prüfen.",
-
-        "14.3": "Heizgeräte dürfen nicht durch brennbare Materialien verstellt werden.",
-
-        "14.4": "Kassenstühle sind regelmäßig auf sicheren Zustand zu prüfen.",
-
-        "14.5": "Transportbänder sind regelmäßig zu warten.",
-
-        "14.6": "Einkaufskörbe sind ordnungsgemäß zu lagern."
-
+    "Kassenzone": {
+        "14.1": {
+            einfach: 'Räumen Sie den Fußraum an der Kasse frei von Gegenständen.',
+            bghw: 'Halten Sie den Fußraum an der Kasse gemäß BGHW-Vorgaben frei von Gegenständen.',
+            rechtlich: 'Der Fußraum im Kassenbereich ist frei von Gegenständen zu halten (ASR A1.5).'
+        },
+        "14.2": {
+            einfach: 'Beheben Sie Schäden am Boden im Kassenbereich zügig.',
+            bghw: 'Kontrollieren Sie den Fußboden im Kassenbereich gemäß BGHW-Vorgaben regelmäßig auf Schäden.',
+            rechtlich: 'Der Fußboden im Kassenbereich ist frei von Beschädigungen zu halten (ArbStättV).'
+        },
+        "14.3": {
+            einfach: 'Stellen Sie nichts Brennbares an die eingebauten Heizgeräte im Kassenraum.',
+            bghw: 'Halten Sie die eingebauten Heizgeräte im Kassenraum gemäß BGHW-Brandschutzvorgaben frei von brennbarem Material.',
+            rechtlich: 'Serienmäßig eingebaute Heizgeräte im Kassenraum sind frei von brennbarem Material zu halten (Brandschutz).'
+        },
+        "14.4": {
+            einfach: 'Prüfen Sie, ob die Kassenstühle noch richtig funktionieren, und tauschen Sie defekte aus.',
+            bghw: 'Kontrollieren Sie Kassenstühle gemäß BGHW-Ergonomievorgaben regelmäßig auf Funktionsfähigkeit.',
+            rechtlich: 'Kassenstühle sind in funktionsfähigem Zustand vorzuhalten (ArbStättV, Ergonomie).'
+        },
+        "14.5": {
+            einfach: 'Prüfen Sie das Kassenband auf Schäden und größere Lücken.',
+            bghw: 'Kontrollieren Sie das Transportband gemäß BGHW-Vorgaben regelmäßig auf Beschädigungen und Lücken über 5 mm.',
+            rechtlich: 'Das Transportband ist unbeschädigt zu halten; Lücken von über 5 mm sind zu vermeiden (DGUV Vorschrift 3, Verletzungsgefahr).'
+        },
+        "14.6": {
+            einfach: 'Räumen Sie Einkaufskörbe ordentlich in den Ständer, damit niemand darüber stolpert.',
+            bghw: 'Lagern Sie Einkaufskörbe gemäß BGHW-Vorgaben ordnungsgemäß im vorgesehenen Ständer, ohne den Verkehrsweg zu blockieren.',
+            rechtlich: 'Einkaufskörbe sind ordnungsgemäß im vorgesehenen Ständer abzulegen; ein Hineinragen in den Verkehrsweg ist zu vermeiden (ASR A1.5).'
+        }
     },
 
-     Gefahrstoffe: {
-        "15.1": "Gefahrstoffe sind gemäß TRGS 510 unter Einhaltung der Zusammenlagerungsverbote sicher zu lagern. Gefährliche Wechselwirkungen zwischen Stoffgruppen sind auszuschließen.",
-
-        "15.2": "Geeignete persönliche Schutzausrüstung ist entsprechend Gefährdungsbeurteilung und Sicherheitsdatenblatt bereitzustellen und zu verwenden.",
-
-        "15.3": "Die in den Betriebsanweisungen geforderte PSA ist jederzeit vollständig und einsatzbereit bereitzuhalten.",
-
-        "15.4": "Aktuelle Sicherheitsdatenblätter müssen in deutscher Sprache verfügbar und für Beschäftigte jederzeit zugänglich sein.",
-
-        "15.5": "Beschäftigte sind vor Aufnahme der Tätigkeit und danach regelmäßig gemäß GefStoffV zu unterweisen."
+    "Gefahrstoffe": {
+        "15.1": {
+            einfach: 'Lagern Sie Gefahrstoffe so, dass sich unterschiedliche Stoffe nicht gefährlich vermischen können.',
+            bghw: 'Beachten Sie die Zusammenlagerungsverbote nach TRGS 510 gemäß den BGHW-Gefahrstoffvorgaben konsequent.',
+            rechtlich: 'Gefahrstoffe sind unter strikter Beachtung der Zusammenlagerungsverbote nach TRGS 510 (Abschnitt 7 und Anlage 2) zu lagern, sodass gefährliche Wechselwirkungen ausgeschlossen sind.'
+        },
+        "15.2": {
+            einfach: 'Stellen Sie Schutzbrille und Handschuhe für den Umgang mit Gefahrstoffen bereit.',
+            bghw: 'Stellen Sie die für Gefahrstoffarbeiten passende PSA gemäß BGHW-Vorgaben und TRGS 400 bereit.',
+            rechtlich: 'Die passende persönliche Schutzausrüstung (z. B. Schutzbrille, Handschuhe) ist gemäß TRGS 400 für Tätigkeiten mit Gefahrstoffen bereitzustellen.'
+        },
+        "15.3": {
+            einfach: 'Halten Sie die vorgeschriebene Schutzausrüstung griffbereit in der Nähe.',
+            bghw: 'Halten Sie die in Betriebsanweisungen geforderte PSA gemäß BGHW-Vorgaben unmittelbar griffbereit vor.',
+            rechtlich: 'Die in den Betriebsanweisungen geforderte persönliche Schutzausrüstung ist in unmittelbarer Nähe und einsatzbereit vorzuhalten.'
+        },
+        "15.4": {
+            einfach: 'Halten Sie die Sicherheitsdatenblätter für alle Gefahrstoffe griffbereit.',
+            bghw: 'Halten Sie Sicherheitsdatenblätter gemäß BGHW-Vorgaben und REACH-Verordnung jederzeit verfügbar.',
+            rechtlich: 'Sicherheitsdatenblätter sind gemäß Art. 31 REACH-Verordnung jederzeit verfügbar zu halten.'
+        },
+        "15.5": {
+            einfach: 'Weisen Sie Mitarbeitende regelmäßig im sicheren Umgang mit Gefahrstoffen ein.',
+            bghw: 'Unterweisen Sie Mitarbeitende gemäß TRGS 555 und BGHW-Vorgaben regelmäßig zum sicheren Umgang mit Gefahrstoffen.',
+            rechtlich: 'Mitarbeiter sind gemäß § 14 GefStoffV regelmäßig zum Umgang mit Gefahrstoffen zu unterweisen.'
+        }
     },
 
-    Marktleiterbüro: {
-        "16.1": "Aktuelle Listen und Prüfberichte prüfpflichtiger Anlagen und Einrichtungen sind vollständig vorzuhalten und regelmäßig zu aktualisieren.",
-
-        "16.2": "Geeignete organisatorische und technische Maßnahmen zur Reduzierung des Überfallrisikos sind umzusetzen.",
-
-        "16.3": "Während des Umgangs mit Zahlungsmitteln ist die Bürotür verschlossen zu halten.",
-
-        "16.4": "Neue Beschäftigte sind vor Tätigkeitsaufnahme zu Arbeitssicherheit, Brandschutz und betrieblichen Gefährdungen zu unterweisen.",
-
-        "16.5": "Stellen Sie sicher, dass sich der Fußboden im Büro des Marktleiters in einem ordnungsgemäßen Zustand befindet, frei von Beschädigungen, Stolperstellen und Verschmutzungen ist, um die Sicherheit gemäß ArbStättV und ASR A1.5 zu gewährleisten."
+    "Marktleiterbüro": {
+        "16.1": {
+            einfach: 'Führen Sie eine aktuelle Liste aller Anlagen, die regelmäßig geprüft werden müssen, und heften Sie die Prüfberichte dazu ab.',
+            bghw: 'Führen und pflegen Sie ein Prüfverzeichnis prüfpflichtiger Anlagen und Einrichtungen gemäß den Vorgaben der BGHW und legen Sie die zugehörigen Prüfberichte vollständig und aktuell vor.',
+            rechtlich: 'Aktuelle Listen und Prüfberichte prüfpflichtiger Anlagen und Einrichtungen sind gemäß § 3 BetrSichV i. V. m. § 4 ArbSchG vollständig vorzuhalten und regelmäßig zu aktualisieren.'
+        },
+        "16.2": {
+            einfach: 'Sorgen Sie dafür, dass möglichst wenig Bargeld sichtbar und griffbereit im Büro liegt, damit ein Überfall weniger attraktiv wird.',
+            bghw: 'Setzen Sie die von der BGHW empfohlenen organisatorischen und baulichen Maßnahmen zur Überfallprävention um (z. B. Bargeldreduzierung, Zeitschlosstresore, Sichtschutz).',
+            rechtlich: 'Geeignete organisatorische und technische Maßnahmen zur Reduzierung des Überfallrisikos sind gemäß Gefährdungsbeurteilung nach § 5 ArbSchG umzusetzen.'
+        },
+        "16.3": {
+            einfach: 'Schließen Sie die Bürotür ab, wenn Sie mit Bargeld oder anderen Zahlungsmitteln hantieren.',
+            bghw: 'Halten Sie die Tür während sämtlicher Kassiervorgänge und der Bargeldbearbeitung gemäß den BGHW-Sicherheitsempfehlungen konsequent verschlossen.',
+            rechtlich: 'Während des Umgangs mit Zahlungsmitteln ist die Bürotür im Rahmen der Gefährdungsbeurteilung nach § 5 ArbSchG verschlossen zu halten.'
+        },
+        "16.4": {
+            einfach: 'Führen Sie mit neuen Mitarbeitenden vor dem ersten Arbeitstag eine Einweisung zu Arbeitssicherheit und Brandschutz durch.',
+            bghw: 'Unterweisen Sie neue Beschäftigte vor Tätigkeitsaufnahme gemäß den BGHW-Vorgaben zu Arbeitssicherheit, Brandschutz und betrieblichen Gefährdungen.',
+            rechtlich: 'Neue Beschäftigte sind vor Tätigkeitsaufnahme zu Arbeitssicherheit, Brandschutz und betrieblichen Gefährdungen gemäß § 12 ArbSchG zu unterweisen.'
+        },
+        "16.5": {
+            einfach: 'Achten Sie darauf, dass der Boden im Büro sauber, unbeschädigt und frei von Stolperfallen ist.',
+            bghw: 'Beseitigen Sie Boden-Mängel im Büro umgehend gemäß den BGHW-Hinweisen zu innerbetrieblichen Verkehrswegen.',
+            rechtlich: 'Der Fußboden im Büro des Marktleiters ist gemäß ArbStättV i. V. m. ASR A1.5 frei von Schäden, Verschmutzungen und Stolperstellen zu halten.'
+        }
     },
 
-   "Barrierefreies WC": {
-        "17.1": "Die Notrufschnur muss gemäß DIN 18040 bis maximal 10 cm über dem Fußboden erreichbar sein.",
-
-        "17.2": "Der Alarm ist an eine ständig besetzte oder überwachte Stelle weiterzuleiten.",
-
-        "17.3": "Notrufeinrichtungen sind regelmäßig auf Funktion zu prüfen und zu dokumentieren.",
-
-        "17.4": "Beschäftigte sind regelmäßig zum Verhalten bei Notrufen zu unterweisen.",
-
-        "17.5": "Die Tür muss im Notfall jederzeit von außen entriegelt werden können."
+    "Barrierefreies WC": {
+        "17.1": {
+            einfach: 'Prüfen Sie, ob die Notrufschnur bis maximal 10 cm über dem Boden hängt, damit man sie auch liegend erreicht.',
+            bghw: 'Stellen Sie gemäß DIN 18040 und BGHW-Vorgaben sicher, dass die Notrufschnur maximal 10 cm über dem Fußboden herabhängt.',
+            rechtlich: 'Die Notrufschnur muss gemäß DIN 18040-1 bis maximal 10 cm über dem Fußboden herabhängen, um nach einem Sturz erreichbar zu sein.'
+        },
+        "17.2": {
+            einfach: 'Sorgen Sie dafür, dass ein Alarm sofort bei einer besetzten Stelle ankommt.',
+            bghw: 'Leiten Sie den Alarm gemäß BGHW-Vorgaben an eine ständig besetzte Stelle (z. B. Empfang, Leitwarte) weiter.',
+            rechtlich: 'Der Alarm ist gemäß DIN 18040-1 an eine ständig besetzte Stelle weiterzuleiten.'
+        },
+        "17.3": {
+            einfach: 'Testen Sie die Notrufschnüre regelmäßig, mindestens einmal im Monat.',
+            bghw: 'Prüfen Sie Zugschnüre und Signalgeber gemäß DIN VDE 0834 und BGHW-Vorgaben mindestens monatlich auf Funktion.',
+            rechtlich: 'Prüfen Sie die Zugschnüre und Signalgeber gemäß DIN VDE 0834 regelmäßig, mindestens jedoch monatlich, auf ihre einwandfreie Funktion und dokumentieren Sie die Ergebnisse nachvollziehbar.'
+        },
+        "17.4": {
+            einfach: 'Erklären Sie den Mitarbeitenden, was bei einem Alarm zu tun ist.',
+            bghw: 'Unterweisen Sie Beschäftigte gemäß BGHW-Vorgaben zum richtigen Verhalten bei einem Notrufalarm.',
+            rechtlich: 'Beschäftigte sind gemäß § 12 ArbSchG über das Verhalten bei einem Alarm zu unterweisen.'
+        },
+        "17.5": {
+            einfach: 'Prüfen Sie, ob sich die WC-Tür im Notfall auch von außen öffnen lässt.',
+            bghw: 'Stellen Sie sicher, dass die Tür gemäß DIN 18040-1 und BGHW-Vorgaben im Notfall von außen entriegelt werden kann.',
+            rechtlich: 'Es ist sicherzustellen, dass die Tür im Notfall gemäß DIN 18040-1 von außen entriegelt werden kann.'
+        }
     },
 
-
-       Notfallmanagement: {
-        "18.1": "Ein aktueller Notfall- und Alarmplan ist bereitzustellen und den Beschäftigten bekannt zu machen.",
-
-        "18.2": "Beschäftigte sind regelmäßig zum Verhalten bei Brand, Unfall und Evakuierung zu unterweisen.",
-
-        "18.3": "Zuständigkeiten und Verantwortlichkeiten im Notfall sind eindeutig festzulegen.",
-
-        "18.4": "Alarmierungswege und Meldeketten sind verbindlich festzulegen und regelmäßig zu testen."
+    "Notfallmanagement": {
+        "18.1": {
+            einfach: 'Erstellen Sie einen Notfallplan für Ihren Betrieb.',
+            bghw: 'Erstellen Sie einen Notfallplan gemäß den BGHW-Vorgaben zur betrieblichen Notfallorganisation.',
+            rechtlich: 'Ein Notfallplan ist gemäß § 10 ArbSchG zu erstellen und vorzuhalten.'
+        },
+        "18.2": {
+            einfach: 'Sorgen Sie dafür, dass alle wissen, was bei Brand, Unfall oder Evakuierung zu tun ist.',
+            bghw: 'Vermitteln Sie das Verhalten bei Brand, Unfall und Evakuierung gemäß den BGHW-Schulungsvorgaben.',
+            rechtlich: 'Das Verhalten bei Brand, Unfall und Evakuierung ist gemäß § 10 ArbSchG regelmäßig zu vermitteln und zu üben.'
+        },
+        "18.3": {
+            einfach: 'Legen Sie klar fest, wer im Notfall welche Aufgabe hat.',
+            bghw: 'Regeln Sie die Zuständigkeiten im Notfall gemäß den BGHW-Vorgaben zur Notfallorganisation eindeutig.',
+            rechtlich: 'Zuständigkeiten im Notfall sind gemäß § 10 ArbSchG eindeutig zu regeln und zu dokumentieren.'
+        },
+        "18.4": {
+            einfach: 'Legen Sie fest, wie im Ernstfall Alarm ausgelöst wird.',
+            bghw: 'Regeln Sie die Alarmierung gemäß den BGHW-Vorgaben zur betrieblichen Notfallorganisation.',
+            rechtlich: 'Die Alarmierung ist gemäß § 10 ArbSchG verbindlich zu regeln.'
+        }
     },
 
-     Dokumentation: {
-        "19.1": "Dokumentationen über Erste-Hilfe-Leistungen sind vollständig, vertraulich und entsprechend der gesetzlichen Aufbewahrungsfristen aufzubewahren.",
-
-        "19.2": "Ein Sicherheitsbeauftragter ist gemäß DGUV Vorschrift 1 schriftlich zu bestellen.",
-
-        "19.3": "Während der gesamten Ladenöffnungszeit ist mindestens ein ausgebildeter Brandschutzhelfer anwesend zu halten.",
-
-        "19.4": "Unterweisungen zum Umgang mit Zahlungsmitteln sind mindestens halbjährlich durchzuführen und zu dokumentieren.",
-
-        "19.5": "Alle Unterweisungen sind nachvollziehbar und rechtssicher zu dokumentieren.",
-
-        "19.6": "Änderungen betrieblicher Abläufe oder neuer Sicherheitstechniken sind zeitnah in Unterweisungen zu integrieren.",
-
-        "19.7": "Die Gefährdungsbeurteilung ist regelmäßig zu überprüfen und bei Änderungen unverzüglich anzupassen."
+    "Dokumentation": {
+        "19.1": {
+            einfach: 'Dokumentieren und archivieren Sie jede Erste-Hilfe-Leistung.',
+            bghw: 'Führen und archivieren Sie die Dokumentation von Erste-Hilfe-Leistungen gemäß DGUV Information 204-020 und BGHW-Vorgaben.',
+            rechtlich: 'Die Dokumentation von Erste-Hilfe-Leistungen ist gemäß DGUV Information 204-020 ordnungsgemäß zu führen und aufzubewahren.'
+        },
+        "19.2": {
+            einfach: 'Bestellen Sie einen ausgebildeten Sicherheitsbeauftragten.',
+            bghw: 'Bestellen Sie einen gemäß § 22 SGB VII und BGHW-Vorgaben ausgebildeten Sicherheitsbeauftragten.',
+            rechtlich: 'Ein Sicherheitsbeauftragter ist gemäß § 22 SGB VII auszubilden und schriftlich zu bestellen.'
+        },
+        "19.3": {
+            einfach: 'Sorgen Sie dafür, dass immer mindestens ein ausgebildeter Brandschutzhelfer im Laden ist.',
+            bghw: 'Stellen Sie gemäß DGUV Information 205-023 und BGHW-Vorgaben die ständige Anwesenheit eines Brandschutzhelfers während der Öffnungszeiten sicher.',
+            rechtlich: 'Während der gesamten Ladenöffnungszeit ist mindestens ein Mitarbeiter mit der Qualifikation als Brandschutzhelfer gemäß DGUV Information 205-023 anwesend zu halten.'
+        },
+        "19.4": {
+            einfach: 'Führen Sie mindestens alle 6 Monate eine Schulung zum sicheren Umgang mit Bargeld durch.',
+            bghw: 'Führen Sie die Unterweisung zum Umgang mit Zahlungsmitteln gemäß BGHW-Vorgaben mindestens halbjährlich durch.',
+            rechtlich: 'Die Unterweisung zum Umgang mit Zahlungsmitteln ist gemäß § 12 ArbSchG mindestens alle 6 Monate zu wiederholen.'
+        },
+        "19.5": {
+            einfach: 'Halten Sie alle Unterweisungen schriftlich fest.',
+            bghw: 'Dokumentieren Sie alle Unterweisungen gemäß den BGHW-Vorgaben nachvollziehbar und vollständig.',
+            rechtlich: 'Unterweisungen sind gemäß § 12 ArbSchG lückenlos zu dokumentieren.'
+        },
+        "19.6": {
+            einfach: 'Beziehen Sie neue Abläufe oder Sicherheitstechniken in die nächste Schulung mit ein.',
+            bghw: 'Berücksichtigen Sie aktuelle betriebliche Änderungen und neue Sicherheitstechniken gemäß BGHW-Vorgaben in jeder Unterweisung.',
+            rechtlich: 'Aktuelle Änderungen in den betrieblichen Abläufen oder neue Sicherheitstechniken sind bei der Unterweisung gemäß § 12 ArbSchG zu berücksichtigen.'
+        },
+        "19.7": {
+            einfach: 'Erstellen und aktualisieren Sie die Gefährdungsbeurteilung für Ihren Markt.',
+            bghw: 'Erstellen und aktualisieren Sie die Gefährdungsbeurteilung gemäß den BGHW-Handlungshilfen regelmäßig.',
+            rechtlich: 'Die Gefährdungsbeurteilung (GBO) ist gemäß § 5 ArbSchG zu erstellen und auf dem aktuellen Stand zu halten.'
+        }
     },
 
-
-  "Psychische Belastung": {
-        "20.1": "Mitarbeiterwünsche sind im Rahmen der Arbeitszeitgestaltung angemessen zu berücksichtigen.",
-
-        "20.2": "Die gesetzlichen Pausenregelungen sind einzuhalten und organisatorisch sicherzustellen.",
-
-        "20.3": "Überstunden sind auf das notwendige Maß zu begrenzen.",
-
-        "20.4": "Regelmäßige Teambesprechungen zur Verbesserung der Kommunikation sind durchzuführen.",
-
-        "20.5": "Neue Beschäftigte sind strukturiert einzuarbeiten und fachlich zu begleiten.",
-
-        "20.6": "Unterweisungen zu Brand- und Arbeitsschutz sind regelmäßig durchzuführen und zu dokumentieren.",
-
-        "20.7": "Ein schwarzes Brett oder vergleichbares Informationsmedium ist bereitzustellen.",
-
-        "20.8": "Betriebliche Entscheidungen sind nachvollziehbar und transparent zu kommunizieren.",
-
-        "20.9": "Positive Leistungen und sicherheitsgerechtes Verhalten sind anzuerkennen.",
-
-        "20.10": "Konstruktive Kritik ist sachlich und wertschätzend zu vermitteln.",
-
-        "20.11": "Informationen und Ansprechpartner zur Suchtprävention sind bereitzustellen.",
-
-        "20.12": "Ein betriebliches Eingliederungsmanagement gemäß §167 SGB IX ist umzusetzen.",
-
-        "20.13": "Alleinarbeit ist im Rahmen der Gefährdungsbeurteilung möglichst zu vermeiden.",
-
-        "20.14": "Maßnahmen zur Betreuung von Beschäftigten nach Überfall- oder Gewaltvorfällen sind organisatorisch sicherzustellen.",
-
-        "20.15": "Schulungen zum Umgang mit aggressiven oder gewalttätigen Situationen sind anzubieten.",
-
-        "20.16": "Mitarbeiteranregungen sind aktiv in Entscheidungs- und Verbesserungsprozesse einzubeziehen.",
-
-        "20.17": "Schaffen Sie innerbetriebliche oder externe Weiterbildungsangebote und fördern Sie Qualifizierungen gemäß § 82 BetrVG sowie § 3 ArbSchG."
+    "Psychische Belastung": {
+        "20.1": {
+            einfach: 'Berücksichtigen Sie Wünsche der Mitarbeitenden bei der Dienstplanung, wo es geht.',
+            bghw: 'Berücksichtigen Sie Beschäftigtenwünsche gemäß den BGHW-Empfehlungen zur psychischen Gefährdungsbeurteilung bei der Arbeitsplanung.',
+            rechtlich: 'Wünsche der Beschäftigten sind im Rahmen der Arbeitsplanung angemessen zu berücksichtigen (§ 5 ArbSchG, psychische Belastung).'
+        },
+        "20.2": {
+            einfach: 'Sorgen Sie dafür, dass Pausen wirklich eingehalten werden.',
+            bghw: 'Setzen Sie die Pausenregelung gemäß ArbZG und BGHW-Empfehlungen konsequent um.',
+            rechtlich: 'Die Pausenregelung ist gemäß § 4 ArbZG konsequent umzusetzen.'
+        },
+        "20.3": {
+            einfach: 'Vermeiden Sie unnötige Überstunden.',
+            bghw: 'Begrenzen Sie Überstunden gemäß den BGHW-Empfehlungen zur Vermeidung psychischer Belastung.',
+            rechtlich: 'Überstunden sind im Rahmen der Gefährdungsbeurteilung psychischer Belastung möglichst gering zu halten (§ 5 ArbSchG).'
+        },
+        "20.4": {
+            einfach: 'Führen Sie regelmäßige Teambesprechungen durch.',
+            bghw: 'Führen Sie regelmäßige Teambesprechungen gemäß den BGHW-Empfehlungen zur Mitarbeiterkommunikation durch.',
+            rechtlich: 'Regelmäßige Teambesprechungen sind im Rahmen der betrieblichen Organisation durchzuführen (§ 3 ArbSchG).'
+        },
+        "20.5": {
+            einfach: 'Sorgen Sie für eine gute Einarbeitung neuer Mitarbeitender.',
+            bghw: 'Stellen Sie eine strukturierte Einarbeitung gemäß den BGHW-Empfehlungen für neue Mitarbeitende sicher.',
+            rechtlich: 'Neue Mitarbeiter sind gemäß § 12 ArbSchG strukturiert einzuarbeiten.'
+        },
+        "20.6": {
+            einfach: 'Führen Sie eine Unterweisung zu Brand- und Arbeitsschutz durch.',
+            bghw: 'Führen Sie die Unterweisung zu Brand- und Arbeitsschutz gemäß BGHW-Vorgaben regelmäßig durch.',
+            rechtlich: 'Eine Unterweisung zum Thema Brand- und Arbeitsschutz ist gemäß § 12 ArbSchG durchzuführen.'
+        },
+        "20.7": {
+            einfach: 'Richten Sie ein schwarzes Brett im Sozialraum oder Kassenbüro ein.',
+            bghw: 'Richten Sie gemäß BGHW-Kommunikationsempfehlungen ein schwarzes Brett im Sozialraum oder Kassenbüro ein.',
+            rechtlich: 'Ein Aushang (schwarzes Brett) ist im Sozialraum oder Kassenbüro zur innerbetrieblichen Information vorzuhalten.'
+        },
+        "20.8": {
+            einfach: 'Erklären Sie Entscheidungen offen und nachvollziehbar.',
+            bghw: 'Kommunizieren Sie Entscheidungen gemäß den BGHW-Empfehlungen zu psychischer Gesundheit transparent.',
+            rechtlich: 'Betriebliche Entscheidungen sind den Beschäftigten im Rahmen der Fürsorgepflicht transparent zu erläutern.'
+        },
+        "20.9": {
+            einfach: 'Loben Sie gute Leistungen.',
+            bghw: 'Geben Sie gemäß den BGHW-Empfehlungen zur Mitarbeitermotivation regelmäßig positives Feedback bei guter Leistung.',
+            rechtlich: 'Positive Rückmeldungen bei guter Leistung sind Teil einer angemessenen Führungskultur (§ 3 ArbSchG, psychische Belastung).'
+        },
+        "20.10": {
+            einfach: 'Üben Sie Kritik sachlich und fair.',
+            bghw: 'Üben Sie konstruktive Kritik gemäß den BGHW-Führungsempfehlungen sachlich und wertschätzend.',
+            rechtlich: 'Führen Sie Kritikgespräche sachlich und lösungsorientiert, unter Wahrung der Würde der betroffenen Person (§ 75 BetrVG, § 4 ArbSchG).'
+        },
+        "20.11": {
+            einfach: 'Hängen Sie Infos zur Suchtprävention aus.',
+            bghw: 'Hängen Sie Informationen zur Suchtprävention gemäß den BGHW-Präventionsempfehlungen gut sichtbar aus.',
+            rechtlich: 'Stellen Sie einen gut sichtbaren Aushang mit Informationen zur Suchtprävention bereit und verweisen Sie auf innerbetriebliche Hilfsangebote (§ 3 ArbSchG, BEM-Leitlinien).'
+        },
+        "20.12": {
+            einfach: 'Bieten Sie erkrankten Mitarbeitenden Unterstützung bei der Rückkehr an den Arbeitsplatz.',
+            bghw: 'Implementieren Sie ein betriebliches Eingliederungsmanagement gemäß § 167 SGB IX und den BGHW-Empfehlungen.',
+            rechtlich: 'Ein betriebliches Eingliederungsmanagement gemäß § 167 SGB IX ist umzusetzen.'
+        },
+        "20.13": {
+            einfach: 'Vermeiden Sie, dass Mitarbeitende allein arbeiten, wo es sich vermeiden lässt.',
+            bghw: 'Vermeiden Sie Alleinarbeit gemäß den BGHW-Empfehlungen zur Gefährdungsbeurteilung, insbesondere bei erhöhtem Überfallrisiko.',
+            rechtlich: 'Alleinarbeit ist im Rahmen der Gefährdungsbeurteilung möglichst zu vermeiden.'
+        },
+        "20.14": {
+            einfach: 'Sorgen Sie für Unterstützung, falls jemand einen Überfall erlebt hat.',
+            bghw: 'Organisieren Sie die Betreuung nach einem Überfall gemäß den BGHW-Nachsorgeempfehlungen.',
+            rechtlich: 'Maßnahmen zur Betreuung von Beschäftigten nach Überfall- oder Gewaltvorfällen sind organisatorisch sicherzustellen.'
+        },
+        "20.15": {
+            einfach: 'Bieten Sie Schulungen an, wie man in gefährlichen Situationen reagiert.',
+            bghw: 'Bieten Sie Schulungen zum Umgang mit aggressiven oder gewalttätigen Situationen gemäß den BGHW-Präventionsprogrammen an.',
+            rechtlich: 'Schulungen zum Umgang mit aggressiven oder gewalttätigen Situationen sind anzubieten.'
+        },
+        "20.16": {
+            einfach: 'Hören Sie auf Vorschläge Ihrer Mitarbeitenden und beziehen Sie sie ein.',
+            bghw: 'Beziehen Sie Mitarbeiteranregungen gemäß den BGHW-Empfehlungen aktiv in betriebliche Entscheidungen ein.',
+            rechtlich: 'Mitarbeiteranregungen sind aktiv in Entscheidungs- und Verbesserungsprozesse einzubeziehen.'
+        },
+        "20.17": {
+            einfach: 'Bieten Sie Ihren Mitarbeitenden Weiterbildungen an.',
+            bghw: 'Schaffen Sie Weiterbildungsangebote gemäß den BGHW-Qualifizierungsempfehlungen.',
+            rechtlich: 'Schaffen Sie innerbetriebliche oder externe Weiterbildungsangebote und fördern Sie Qualifizierungen gemäß § 82 BetrVG sowie § 3 ArbSchG.'
+        }
     },
 
+    "Kundenaufzug": {
+        "21.1": {
+            einfach: 'Beheben Sie äußere Schäden an Kabine, Türen, Boden oder Beleuchtung des Kundenaufzugs umgehend und lassen Sie eine fehlende oder unleserliche Tragfähigkeitsangabe erneuern.',
+            bghw: 'Veranlassen Sie die Instandsetzung äußerer Schäden am Kundenaufzug gemäß den BGHW-Vorgaben umgehend und stellen Sie eine gut lesbare Tragfähigkeitsangabe sicher.',
+            rechtlich: 'Äußere Schäden an Kabine, Türen, Boden oder Beleuchtung des Kundenaufzugs sind unverzüglich zu beseitigen; die zulässige Tragfähigkeit ist gemäß BetrSichV deutlich sichtbar anzugeben.'
+        },
+        "21.2": {
+            einfach: 'Lassen Sie defekte Aufzugstüren, Lichtschranken oder Türsensoren sofort reparieren und halten Sie die Zugänge frei von Stolperstellen.',
+            bghw: 'Veranlassen Sie die Instandsetzung von Aufzugstüren, Lichtschranken und Türsensoren gemäß BGHW-Vorgaben unverzüglich und beseitigen Sie Stolperstellen im Zugangsbereich.',
+            rechtlich: 'Defekte Aufzugstüren, Lichtschranken oder Türsensoren sind unverzüglich instand zu setzen; die Zugänge sind gemäß ASR A1.5 frei von Stolperstellen zu halten.'
+        },
+        "21.3": {
+            einfach: 'Lassen Sie defekte Bedientasten, die Notruftaste oder die Etagenanzeige umgehend reparieren und sorgen Sie für verständliche Beschriftung.',
+            bghw: 'Veranlassen Sie die Instandsetzung von Bedientasten, Notruftaste und Etagenanzeige gemäß BGHW-Vorgaben und stellen Sie eine verständliche Beschriftung sicher.',
+            rechtlich: 'Bedientasten, Notruftaste sowie Etagen- bzw. Fahrtrichtungsanzeige sind funktionsfähig zu halten und verständlich zu beschriften.'
+        },
+        "21.4": {
+            einfach: 'Lassen Sie die Notrufeinrichtung reparieren und schulen Sie das Personal, wie es sich bei eingeschlossenen Kunden verhält.',
+            bghw: 'Veranlassen Sie die Instandsetzung der Notrufeinrichtung gemäß BGHW-Vorgaben und unterweisen Sie das Personal zum Verhalten bei eingeschlossenen Personen.',
+            rechtlich: 'Eine funktionsfähige Notrufeinrichtung ist sicherzustellen; das Personal ist gemäß § 12 ArbSchG zum Verhalten bei eingeschlossenen Personen zu unterweisen. Eine eigenständige Befreiung durch Personal ist zu unterlassen.'
+        },
+        "21.5": {
+            einfach: 'Holen Sie die fällige Aufzugsprüfung nach, beheben Sie offene Mängel aus dem letzten Prüfbericht und legen Sie die Prüfbescheinigung vor.',
+            bghw: 'Veranlassen Sie die fristgerechte wiederkehrende Prüfung gemäß BGHW-Vorgaben, arbeiten Sie festgestellte Mängel vollständig ab und halten Sie die Prüfbescheinigung bereit.',
+            rechtlich: 'Die wiederkehrende Prüfung des Aufzugs ist gemäß BetrSichV fristgerecht durchzuführen; festgestellte Mängel sind vollständig abzuarbeiten und die Prüfbescheinigung ist vorzuhalten.'
+        },
+        "21.6": {
+            einfach: 'Räumen Sie Waren und Lagergut vor den Aufzugstüren weg und sorgen Sie für einen ebenen, gut beleuchteten Bereich.',
+            bghw: 'Halten Sie die Bereiche vor den Aufzugstüren gemäß BGHW-Vorgaben frei von Waren und Lagergut und sorgen Sie für ausreichende Beleuchtung.',
+            rechtlich: 'Die Bereiche vor den Aufzugstüren sind freizuhalten, eben zu gestalten und gemäß ASR A3.4 ausreichend zu beleuchten.'
+        },
+        "21.7": {
+            einfach: 'Prüfen Sie, ob der Aufzug für Kunden inkl. Einkaufswagen und mobilitätseingeschränkte Personen geeignet ist, und bringen Sie verständliche Hinweise bei Störungen an.',
+            bghw: 'Stellen Sie die Eignung des Aufzugs für den Kundenverkehr (Einkaufswagen, Barrierefreiheit) gemäß BGHW-Vorgaben sicher und bringen Sie verständliche Störungshinweise an.',
+            rechtlich: 'Die Eignung des Aufzugs für die vorgesehene Kundennutzung, einschließlich Einkaufswagen und mobilitätseingeschränkter Personen, ist sicherzustellen; Hinweise bei Störungen sind verständlich anzubringen.'
+        },
+        "21.8": {
+            einfach: 'Legen Sie schriftlich fest, wer im Notfall für die Befreiung eingeschlossener Personen zuständig ist, hinterlegen Sie eine Notbefreiungsanleitung vor Ort und beim Notdienst, schulen Sie das Personal in Erstmaßnahmen (Beruhigung, Zugang, Feuerwehr-Einweisung) und sorgen Sie für einen Ersatz-Notdienst, falls der reguläre ausfällt.',
+            bghw: 'Regeln und dokumentieren Sie die Zuständigkeit für die Notbefreiung sowie die Alarmierungskette gemäß den BGHW-Vorgaben, hinterlegen Sie die Notbefreiungsanleitung vor Ort und beim Notdienst, schulen Sie das Personal in Erstmaßnahmen und stellen Sie eine redundante Notdienst-Absicherung sicher.',
+            rechtlich: 'Die Zuständigkeit für die Notbefreiung (intern/extern/kombiniert) sowie die Alarmierungskette (Notdienst → Objektpersonal → ggf. Feuerwehr) sind schriftlich zu regeln und zu dokumentieren; eine Notbefreiungsanleitung ist vor Ort und beim Notdienst vorzuhalten. Das Personal ist gemäß § 12 ArbSchG in Erstmaßnahmen zu schulen; eine Redundanz für den Ausfall des externen Dienstes ist sicherzustellen.'
+        }
+    },
 
-    default: "Geeignete Maßnahmen zur Mängelbeseitigung festlegen und dokumentieren."
+    default: {
+        einfach: 'Legen Sie geeignete Maßnahmen fest, um den Mangel zu beheben, und dokumentieren Sie diese.',
+        bghw: 'Legen Sie geeignete Maßnahmen zur Mängelbeseitigung gemäß den BGHW-Vorgaben fest und dokumentieren Sie diese nachvollziehbar.',
+        rechtlich: 'Geeignete Maßnahmen zur Mängelbeseitigung sind gemäß § 3 ArbSchG festzulegen und zu dokumentieren.'
+    }
 };
 
-
-// Flache Zuordnung: Prüfpunkt-ID -> Maßnahmen-Text (über alle Kategorien hinweg).
+// Flache Zuordnung: Pruefpunkt-ID -> {einfach, bghw, rechtlich} (ueber alle Kategorien hinweg).
 const MEASURES_BY_ID = (() => {
     const map = {};
     Object.keys(MEASURES_TEXT).forEach(key => {
@@ -368,7 +878,21 @@ const MEASURES_BY_ID = (() => {
     return map;
 })();
 
-// Helfer: liefert den vordefinierten Maßnahmen-Text zu einer Prüfpunkt-ID.
-function getMeasureText(itemId) {
-    return MEASURES_BY_ID[itemId] || MEASURES_TEXT.default;
+// Aktuell gewaehlter Sprachstil (wird von der App per Umschalter gesetzt und in localStorage gemerkt).
+let MEASURE_STYLE = localStorage.getItem('measureStyle') || 'rechtlich';
+
+function setMeasureStyle(style) {
+    if (['einfach', 'bghw', 'rechtlich'].indexOf(style) === -1) return;
+    MEASURE_STYLE = style;
+    localStorage.setItem('measureStyle', style);
+}
+
+// Helfer: liefert den vordefinierten Massnahmen-Text zu einer Pruefpunkt-ID im aktuell gewaehlten Stil.
+// style kann optional explizit angegeben werden, sonst wird MEASURE_STYLE verwendet.
+function getMeasureText(itemId, style) {
+    const s = style || MEASURE_STYLE;
+    const entry = MEASURES_BY_ID[itemId];
+    if (entry && entry[s]) return entry[s];
+    if (entry && entry.rechtlich) return entry.rechtlich;
+    return MEASURES_TEXT.default[s] || MEASURES_TEXT.default.rechtlich;
 }

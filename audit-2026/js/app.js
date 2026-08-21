@@ -1,602 +1,970 @@
-// ===== App State =====
+// ==========================================================================
+// BEGEHUNGSLISTE — Gemeinsame App-Logik (State, Checkliste, Betriebsdaten)
+// Wird auf index.html UND massnahmen.html geladen — alle DOM-Zugriffe sind
+// deshalb per Null-Check abgesichert, damit keine Seite die andere stoert.
+// ==========================================================================
 
+const STORAGE_KEY = 'begehungState';
 
-let auditState = {
-    companyInfo: {
-        firma: '',
-        standort: '',
-        verantwortlicher: '',
-        pruefer: '',
-        teilnehmer1: '',
-        teilnehmer2: '',
-        datum: new Date().toISOString().split('T')[0]
-    },
-    ratings: {},
-    comments: {},
-    measures: [],
-    photos: [],
-    signatures: {
-        pruefer: null,
-        verantwortlicher: null
-    }
-};
+// Revisionsstand der App/Checkliste (in Fusszeile und PDF sichtbar,
+// bei inhaltlichen Aenderungen an Fragenkatalog/Massnahmen hochzaehlen)
+const APP_REVISION = '2.0';
+const APP_REVISION_DATE = '2026-08-21';
 
-let signatureCanvases = {};
-let currentFilter = 'all';
+function renderFooterMeta() {
+    const el = document.getElementById('footer-version');
+    if (el) el.textContent = `Rev. ${APP_REVISION} · Stand ${formatDate(APP_REVISION_DATE)}`;
 
-// ===== Initialization =====
-document.addEventListener('DOMContentLoaded', () => {
-    initializeApp();
-});
-
-function initializeApp() {
-    // Set today's date (Feld existiert nur auf der Checkliste-Seite)
-    const datumInput = document.getElementById('datum');
-    if (datumInput) {
-        datumInput.value = auditState.companyInfo.datum;
-    }
-    
-    // Render checklist
-    renderChecklist();
-    
-    // Initialize signature canvases
-    initSignatureCanvases();
-    
-    // Setup event listeners
-    setupEventListeners();
-    
-    // Load saved data
-    loadAuditData();
-    
-    // Update stats
-    updateStatistics();
+    const copyright = document.getElementById('footer-copyright');
+    if (copyright) copyright.innerHTML = '© 2026 Andreas Zott – Alle Rechte vorbehalten<br>(Sifa) Arbeitssicherheit 2026';
 }
 
-// ===== Checklist Rendering =====
-function renderChecklist() {
-    const container = document.getElementById('checklist-container');
-    if (!container) return;
-    
-    container.innerHTML = '';
-    
-    AUDIT_CATEGORIES.forEach(category => {
-        // Auf den Filter angewandte Liste der Prüfpunkte
-        const filteredItems = filterItems(category.items);
-
-        // Bei aktivem Filter Kategorien ohne Treffer ausblenden
-        if (filteredItems.length === 0 && currentFilter !== 'all') return;
-        
-        const categoryEl = document.createElement('div');
-        categoryEl.className = 'category-section';
-        categoryEl.innerHTML = `
-            <div class="category-header" onclick="toggleCategory('${category.id}')">
-                <span class="category-title">
-                    <!-- Icon startet ohne Drehung (style="transform: rotate(0deg);") -->
-                    <svg xmlns="http://w3.org" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(0deg); transition: transform 0.2s;"><path d="m9 18 6-6-6-6"/></svg>
-                    ${category.name}
-                </span>
-                <span class="category-badge">${filteredItems.length} / ${category.items.length} Pruefpunkte</span>
-            </div>
-            <!-- Klasse "collapsed" hier direkt standardmäßig hinzugefügt -->
-            <div class="category-content collapsed" id="category-${category.id}">
-                ${renderCategoryItems(filteredItems)}
-            </div>
-        `;
-        container.appendChild(categoryEl);
-    });
-}
-
-function renderCategoryItems(items) {
-    return items.map(item => {
-        const rating = auditState.ratings[item.id] || '';
-        const comment = auditState.comments[item.id] || '';
-        const isMangel = rating === 'mangel';
-        const measureText = isMangel ? getMeasureText(item.id) : '';
-        
-        return `
-            <div class="checklist-item ${isMangel ? 'mangel' : ''}" data-item-id="${item.id}">
-                <div class="item-content">
-                    <span class="item-number">${item.id}</span>
-                    <span class="item-text item-title">${item.text}</span>
-                    ${isMangel ? `
-                        <textarea 
-                            class="comment-input" 
-                            placeholder="Beschreibung des Mangels..."
-                            onchange="updateComment('${item.id}', this.value)"
-                        >${comment}</textarea>
-                        <div class="measure-suggestion">
-                            <span class="measure-label">Empfohlene Maßnahme</span>
-                            <p class="measure-text">${measureText}</p>
-                        </div>
-                    ` : ''}
-                </div>
-                <div class="item-actions">
-                    <button class="rating-btn ${rating === 'ok' ? 'selected ok' : ''}" onclick="setRating('${item.id}', 'ok')">
-                        OK
-                    </button>
-                    <button class="rating-btn ${rating === 'mangel' ? 'selected mangel' : ''}" onclick="setRating('${item.id}', 'mangel')">
-                        Mangel
-                    </button>
-                    <button class="rating-btn ${rating === 'na' ? 'selected na' : ''}" onclick="setRating('${item.id}', 'na')">
-                        N/A
-                    </button>
-                </div>
-            </div>
-        `;
-    }).join('');
-}
-
-function filterItems(items) {
-    switch (currentFilter) {
-        case 'all':
-            return items;
-        case 'offen':
-            return items.filter(item => !auditState.ratings[item.id]);
-        case 'ok':
-        case 'mangel':
-        case 'na':
-            return items.filter(item => auditState.ratings[item.id] === currentFilter);
-        default:
-            return items;
-    }
-}
-
-// ===== Rating Functions =====
-function setRating(itemId, rating) {
-    auditState.ratings[itemId] = rating;
-    
-    // If rating changed from mangel, clear comment and remove auto-measure
-    if (rating !== 'mangel') {
-        delete auditState.comments[itemId];
-        auditState.measures = auditState.measures.filter(m => m.itemId !== itemId);
-    }
-    
-    // Auto-create measure for mangel
-    if (rating === 'mangel') {
-        const existingMeasure = auditState.measures.find(m => m.itemId === itemId);
-        if (!existingMeasure) {
-            const item = findItemById(itemId);
-            if (item) {
-                auditState.measures.push({
-                    id: Date.now().toString(),
-                    itemId: itemId,
-                    description: getMeasureText(itemId),
-                    priority: 'mittel',
-                    responsible: '',
-                    dueDate: '',
-                    status: 'offen'
-                });
-            }
-        }
-    }
-    
-    renderChecklist();
-    updateStatistics();
-    autoSave();
-}
-
-function updateComment(itemId, comment) {
-    auditState.comments[itemId] = comment;
-    
-    // Update measure description if exists
-    const measure = auditState.measures.find(m => m.itemId === itemId);
-    if (measure && comment) {
-        measure.comment = comment;
-    }
-    
-    autoSave();
-}
-
-function findItemById(itemId) {
-    for (const category of AUDIT_CATEGORIES) {
-        const item = category.items.find(i => i.id === itemId);
-        if (item) return item;
-    }
-    return null;
-}
-
-// ===== Category Toggle =====
-function toggleCategory(categoryId) {
-    const content = document.getElementById(`category-${categoryId}`);
-    const header = content.previousElementSibling;
-    const icon = header.querySelector('svg');
-    
-    content.classList.toggle('collapsed');
-    icon.style.transform = content.classList.contains('collapsed') ? 'rotate(0deg)' : 'rotate(90deg)';
-}
-
-// ===== Filter Functions =====
-function setFilter(filter) {
-    currentFilter = filter;
-    
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.filter === filter);
-    });
-    
-    renderChecklist();
-}
-
-// ===== Statistics =====
-function updateStatistics() {
-    let ok = 0, mangel = 0, na = 0, total = 0;
-    
-    Object.values(auditState.ratings).forEach(rating => {
-        total++;
-        if (rating === 'ok') ok++;
-        else if (rating === 'mangel') mangel++;
-        else if (rating === 'na') na++;
-    });
-    
-    document.getElementById('stat-ok').textContent = ok;
-    document.getElementById('stat-mangel').textContent = mangel;
-    document.getElementById('stat-na').textContent = na;
-    document.getElementById('stat-total').textContent = total;
-}
-
-// ===== Signature Canvas =====
-function initSignatureCanvases() {
-    ['pruefer', 'verantwortlicher'].forEach(type => {
-        const canvas = document.getElementById(`signature-${type}`);
-        if (!canvas) return;
-        
-        const ctx = canvas.getContext('2d');
-        signatureCanvases[type] = { canvas, ctx, drawing: false };
-        
-        // Set canvas size
-        canvas.width = canvas.offsetWidth;
-        canvas.height = canvas.offsetHeight;
-        
-        // Mouse events
-        canvas.addEventListener('mousedown', (e) => startDrawing(e, type));
-        canvas.addEventListener('mousemove', (e) => draw(e, type));
-        canvas.addEventListener('mouseup', () => stopDrawing(type));
-        canvas.addEventListener('mouseout', () => stopDrawing(type));
-        
-        // Touch events
-        canvas.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            startDrawing(e.touches[0], type);
-        });
-        canvas.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-            draw(e.touches[0], type);
-        });
-        canvas.addEventListener('touchend', () => stopDrawing(type));
-    });
-}
-
-function startDrawing(e, type) {
-    const { canvas, ctx } = signatureCanvases[type];
-    signatureCanvases[type].drawing = true;
-    
-    ctx.beginPath();
-    ctx.moveTo(
-        e.clientX - canvas.getBoundingClientRect().left,
-        e.clientY - canvas.getBoundingClientRect().top
-    );
-}
-
-function draw(e, type) {
-    if (!signatureCanvases[type].drawing) return;
-    
-    const { canvas, ctx } = signatureCanvases[type];
-    ctx.lineWidth = 2;
-    ctx.lineCap = 'round';
-    ctx.strokeStyle = '#1f2937';
-    
-    ctx.lineTo(
-        e.clientX - canvas.getBoundingClientRect().left,
-        e.clientY - canvas.getBoundingClientRect().top
-    );
-    ctx.stroke();
-}
-
-function stopDrawing(type) {
-    signatureCanvases[type].drawing = false;
-    saveSignature(type);
-}
-
-function saveSignature(type) {
-    const { canvas } = signatureCanvases[type];
-    auditState.signatures[type] = canvas.toDataURL();
-    autoSave();
-}
-
-function clearSignature(type) {
-    const { canvas, ctx } = signatureCanvases[type];
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    auditState.signatures[type] = null;
-    autoSave();
-}
-
-// ===== Event Listeners =====
-function setupEventListeners() {
-    // Company info inputs
-    ['firma', 'standort', 'verantwortlicher', 'pruefer', 'teilnehmer1', 'teilnehmer2', 'datum'].forEach(field => {
-        const input = document.getElementById(field);
-        if (input) {
-            input.addEventListener('change', (e) => {
-                auditState.companyInfo[field] = e.target.value;
-                autoSave();
-            });
-        }
-    });
-    
-    // Filter buttons
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.addEventListener('click', () => setFilter(btn.dataset.filter));
-    });
-}
-
-// ===== Save/Load =====
-function autoSave() {
-    localStorage.setItem('auditState', JSON.stringify(auditState));
-}
-
-function saveAudit() {
-    autoSave();
-    
-    // Try Tauri save if available
-    if (window.__TAURI__) {
-        window.__TAURI__.invoke('save_audit_data', { data: JSON.stringify(auditState) })
-            .then(path => showToast(`Gespeichert: ${path}`, 'success'))
-            .catch(err => showToast(`Fehler: ${err}`, 'error'));
-    } else {
-        showToast('Audit lokal gespeichert', 'success');
-    }
-}
-
-function loadAuditData() {
-    // Try localStorage first
-    const saved = localStorage.getItem('auditState');
-    if (saved) {
-        try {
-            const data = JSON.parse(saved);
-            auditState = { ...auditState, ...data };
-            
-            // Update form fields
-            Object.keys(auditState.companyInfo).forEach(field => {
-                const input = document.getElementById(field);
-                if (input) {
-                    input.value = auditState.companyInfo[field];
-                }
-            });
-            
-            // Restore signatures
-            Object.keys(auditState.signatures).forEach(type => {
-                if (auditState.signatures[type] && signatureCanvases[type]) {
-                    const img = new Image();
-                    img.onload = () => {
-                        signatureCanvases[type].ctx.drawImage(img, 0, 0);
-                    };
-                    img.src = auditState.signatures[type];
-                }
-            });
-
-            // Re-render with loaded ratings
-            renderChecklist();
-            updateStatistics();
-        } catch (e) {
-            console.error('Failed to load saved data:', e);
-        }
-    }
-    
-    // Try Tauri load if available
-    if (window.__TAURI__) {
-        window.__TAURI__.invoke('load_audit_data')
-            .then(data => {
-                if (data && data !== '{}') {
-                    const tauriData = JSON.parse(data);
-                    auditState = { ...auditState, ...tauriData };
-                    renderChecklist();
-                    updateStatistics();
-                }
-            })
-            .catch(err => console.error('Tauri load error:', err));
-    }
-}
-
-// ===== Reset =====
-function resetAudit() {
-    if (!confirm('Möchten Sie wirklich alle Eingaben zurücksetzen?')) return;
-    
-    auditState = {
+function defaultState() {
+    return {
         companyInfo: {
             firma: '',
             standort: '',
-            verantwortlicher: '',
-            pruefer: '',
-            teilnehmer1: '',
-            teilnehmer2: '',
-            datum: new Date().toISOString().split('T')[0]
+            datum: new Date().toISOString().split('T')[0],
+            pruefername: '',
+            marktleitung: '',
+            teilnehmer: ''
         },
         ratings: {},
         comments: {},
         measures: [],
-        photos: [],
         signatures: {
             pruefer: null,
-            verantwortlicher: null
-        }
+            marktleitung: null
+        },
+        notApplicable: {}
     };
-    
-    // Clear form fields
-    ['firma', 'standort', 'verantwortlicher', 'pruefer', 'teilnehmer1', 'teilnehmer2'].forEach(field => {
-        const input = document.getElementById(field);
-        if (input) input.value = '';
-    });
-    document.getElementById('datum').value = auditState.companyInfo.datum;
-    
-    // Clear signatures
-    ['pruefer', 'verantwortlicher'].forEach(type => {
-        clearSignature(type);
-    });
-    
-    localStorage.removeItem('auditState');
-    renderChecklist();
-    updateStatistics();
-    showToast('Audit zurueckgesetzt', 'success');
 }
 
-// ===== PDF Export =====
-function exportPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    
-    let y = 20;
-    const lineHeight = 7;
-    const pageHeight = 280;
-    
-    // Header
-    doc.setFontSize(18);
-    doc.setTextColor(179, 0, 0);
-    doc.text('Arbeitssicherheits-Audit', 105, y, { align: 'center' });
-    y += 15;
-    
-    // Company info
-    doc.setFontSize(11);
-    doc.setTextColor(0, 0, 0);
-    doc.text(`Firma: ${auditState.companyInfo.firma || '-'}`, 20, y);
-    y += lineHeight;
-    doc.text(`Standort: ${auditState.companyInfo.standort || '-'}`, 20, y);
-    y += lineHeight;
-    doc.text(`Verantwortlicher: ${auditState.companyInfo.verantwortlicher || '-'}`, 20, y);
-    y += lineHeight;
-    doc.text(`Pruefer: ${auditState.companyInfo.pruefer || '-'}`, 20, y);
-    y += lineHeight;
-    doc.text(`Teilnehmer: ${[auditState.companyInfo.teilnehmer1, auditState.companyInfo.teilnehmer2].filter(Boolean).join(', ') || '-'}`, 20, y);
-    y += lineHeight;
-    doc.text(`Datum: ${auditState.companyInfo.datum || '-'}`, 20, y);
-    y += 15;
-    
-    // Statistics
-    const stats = getStatistics();
-    doc.setFontSize(12);
-    doc.setFont(undefined, 'bold');
-    doc.text('Zusammenfassung', 20, y);
-    y += lineHeight;
-    doc.setFont(undefined, 'normal');
-    doc.setFontSize(10);
-    doc.text(`In Ordnung: ${stats.ok} | Maengel: ${stats.mangel} | N/A: ${stats.na} | Gesamt: ${stats.total}`, 20, y);
-    y += 15;
-    
-    // Checklist
-    AUDIT_CATEGORIES.forEach(category => {
-        if (y > pageHeight) {
-            doc.addPage();
-            y = 20;
-        }
-        
-        doc.setFontSize(12);
-        doc.setFont(undefined, 'bold');
-        doc.setTextColor(179, 0, 0);
-        doc.text(category.name, 20, y);
-        y += lineHeight;
-        doc.setFont(undefined, 'normal');
-        doc.setTextColor(0, 0, 0);
-        doc.setFontSize(9);
-        
-        category.items.forEach(item => {
-            if (y > pageHeight) {
-                doc.addPage();
-                y = 20;
-            }
-            
-            const rating = auditState.ratings[item.id] || '-';
-            const ratingText = rating === 'ok' ? 'OK' : rating === 'mangel' ? 'MANGEL' : rating === 'na' ? 'N/A' : '-';
-            
-            // Wrap long text
-            const maxWidth = 140;
-            const lines = doc.splitTextToSize(`${item.id}: ${item.text}`, maxWidth);
-            
-            lines.forEach((line, i) => {
-                if (y > pageHeight) {
-                    doc.addPage();
-                    y = 20;
-                }
-                doc.text(line, 20, y);
-                if (i === 0) {
-                    doc.text(`[${ratingText}]`, 170, y);
-                }
-                y += lineHeight - 2;
-            });
-            
-            // Add comment if mangel
-            if (rating === 'mangel' && auditState.comments[item.id]) {
-                doc.setFontSize(8);
-                doc.setTextColor(100, 100, 100);
-                const commentLines = doc.splitTextToSize(`Anmerkung: ${auditState.comments[item.id]}`, maxWidth - 10);
-                commentLines.forEach(line => {
-                    if (y > pageHeight) {
-                        doc.addPage();
-                        y = 20;
-                    }
-                    doc.text(line, 25, y);
-                    y += lineHeight - 3;
-                });
-                doc.setFontSize(9);
-                doc.setTextColor(0, 0, 0);
-            }
+let state = defaultState();
+let openCategoryId = null;
 
-            // Add recommended measure if mangel
-            if (rating === 'mangel') {
-                doc.setFontSize(8);
-                doc.setTextColor(179, 0, 0);
-                const measureLines = doc.splitTextToSize(`Maßnahme: ${getMeasureText(item.id)}`, maxWidth - 10);
-                measureLines.forEach(line => {
-                    if (y > pageHeight) {
-                        doc.addPage();
-                        y = 20;
-                    }
-                    doc.text(line, 25, y);
-                    y += lineHeight - 3;
-                });
-                doc.setFontSize(9);
-                doc.setTextColor(0, 0, 0);
-            }
-            
-            y += 2;
-        });
-        
-        y += 5;
-    });
-    
-    // Save PDF
-    const filename = `Audit_${auditState.companyInfo.firma || 'Export'}_${auditState.companyInfo.datum || new Date().toISOString().split('T')[0]}.pdf`;
-    doc.save(filename);
-    showToast('PDF exportiert', 'success');
+// ===== State laden/speichern =====
+function loadState() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) return;
+    try {
+        const data = JSON.parse(saved);
+        state = {
+            companyInfo: { ...defaultState().companyInfo, ...(data.companyInfo || {}) },
+            ratings: data.ratings || {},
+            comments: data.comments || {},
+            measures: data.measures || [],
+            signatures: { ...defaultState().signatures, ...(data.signatures || {}) },
+            notApplicable: data.notApplicable || {}
+        };
+    } catch (e) {
+        console.error('ASiC Handel: Zustand konnte nicht geladen werden:', e);
+    }
 }
 
-function getStatistics() {
-    let ok = 0, mangel = 0, na = 0, total = 0;
-    
-    Object.values(auditState.ratings).forEach(rating => {
-        total++;
-        if (rating === 'ok') ok++;
-        else if (rating === 'mangel') mangel++;
-        else if (rating === 'na') na++;
-    });
-    
-    return { ok, mangel, na, total };
+function saveState() {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        return true;
+    } catch (e) {
+        console.error('ASiC Handel: Zustand konnte nicht gespeichert werden:', e);
+        return false;
+    }
 }
 
-// ===== Toast Notifications =====
+// ===== Hilfsfunktionen =====
+function findItemById(itemId) {
+    for (const category of AUDIT_CATEGORIES) {
+        const item = category.items.find(i => i.id === itemId);
+        if (item) return { item, category };
+    }
+    return null;
+}
+
+// getMeasureText(itemId, style) und setMeasureStyle(style) werden von js/text.js bereitgestellt.
+
+function formatDate(dateStr) {
+    if (!dateStr) return '-';
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    return d.toLocaleDateString('de-DE');
+}
+
+function totalItemCount() {
+    return AUDIT_CATEGORIES.reduce((sum, c) => sum + c.items.length, 0);
+}
+
 function showToast(message, type = 'success') {
+    document.querySelectorAll('.toast').forEach(t => t.remove());
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
-    toast.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            ${type === 'success' 
-                ? '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>'
-                : '<circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/>'
-            }
-        </svg>
-        ${message}
-    `;
+    toast.textContent = message;
     document.body.appendChild(toast);
-    
-    setTimeout(() => {
-        toast.style.animation = 'slideIn 0.3s ease reverse';
-        setTimeout(() => toast.remove(), 300);
-    }, 3000);
+    setTimeout(() => toast.remove(), 2600);
 }
+
+// ===== Vorgefertigter Mail-Text beim PDF-Versand =====
+// Traegt automatisch Markt (aus "Firma / Markt") und den Namen des Pruefers ein.
+// Wird von allen drei PDF-Varianten (Checkliste, Massnahmen, Gesamtbericht) genutzt.
+function buildShareEmailSubject() {
+    const markt = state.companyInfo.firma || '-';
+    return `Arbeitssicherheitsbegehung Markt ${markt}`;
+}
+
+function buildShareEmailText() {
+    const markt = state.companyInfo.firma || '-';
+    const pruefer = state.companyInfo.pruefername ? state.companyInfo.pruefername + '\n' : '';
+    return `Sehr geehrte Damen und Herren,\n\nim Rahmen der turnusmäßigen Arbeitssicherheitsbegehung übersende ich Ihnen anbei das Begehungsprotokoll des Marktes ${markt} zur sachlichen Prüfung.\n\nBitte prüfen Sie die dokumentierten Feststellungen und veranlassen Sie die Umsetzung der erforderlichen Maßnahmen.\n\nMit freundlichen Grüßen\n${pruefer}Fachkraft für Arbeitssicherheit (SiFa)`;
+}
+
+// Zuverlaessige Alternative zu navigator.share() fuer Betreff/Text:
+// iOS uebernimmt title/text beim Teilen an die Mail-App oft nicht zuverlaessig.
+// mailto: oeffnet eine neue Mail mit korrekt befuelltem Betreff/Text - kann aber
+// aus einer Web-App heraus keinen Anhang setzen.
+function openPrefilledMail() {
+    const subject = encodeURIComponent(buildShareEmailSubject());
+    const body = encodeURIComponent(buildShareEmailText());
+    window.location.href = `mailto:?subject=${subject}&body=${body}`;
+}
+
+// ===== Aufklappbares Menü (generisch, fuer Export- UND Datei-Menü nutzbar) =====
+function initDropdownMenu(toggleId, panelId) {
+    const toggle = document.getElementById(toggleId);
+    const panel = document.getElementById(panelId);
+    if (!toggle || !panel) return;
+
+    function closeMenu() {
+        panel.classList.remove('open');
+        document.removeEventListener('click', onOutsideClick);
+    }
+
+    function onOutsideClick(e) {
+        if (!panel.contains(e.target) && e.target !== toggle) closeMenu();
+    }
+
+    toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const willOpen = !panel.classList.contains('open');
+        panel.classList.toggle('open', willOpen);
+        if (willOpen) {
+            document.addEventListener('click', onOutsideClick);
+        } else {
+            document.removeEventListener('click', onOutsideClick);
+        }
+    });
+
+    // Menü nach Auswahl eines Punktes automatisch wieder schliessen
+    panel.querySelectorAll('.menu-item').forEach(item => {
+        item.addEventListener('click', closeMenu);
+    });
+}
+
+// ===== Export-Menü: Modus-Auswahl (Checkliste / Maßnahmen / Beide) + Aktionen =====
+// Auf beiden Seiten identisch nutzbar - Vorauswahl richtet sich danach, auf
+// welcher Seite man sich gerade befindet (erkennbar an den vorhandenen Elementen).
+let exportMode = document.getElementById('measures-container') ? 'massnahmen' : 'checkliste';
+
+function initExportMenu() {
+    initDropdownMenu('export-menu-toggle', 'export-menu-panel');
+
+    const panel = document.getElementById('export-menu-panel');
+    if (!panel) return;
+
+    const modeButtons = panel.querySelectorAll('.mode-btn');
+
+    function updateModeButtons() {
+        modeButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.mode === exportMode));
+    }
+
+    modeButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            exportMode = btn.dataset.mode;
+            updateModeButtons();
+        });
+    });
+    updateModeButtons();
+
+    const btnPrint = panel.querySelector('[data-action="print"]');
+    if (btnPrint) btnPrint.addEventListener('click', () => printReport(exportMode));
+
+    const btnShare = panel.querySelector('[data-action="share"]');
+    if (btnShare) btnShare.addEventListener('click', () => shareReportPdf(exportMode));
+
+    const btnMail = panel.querySelector('[data-action="mail"]');
+    if (btnMail) btnMail.addEventListener('click', openPrefilledMail);
+}
+
+// ===== PDF teilen (iPad-Teilen-Menü, inkl. AirPrint) mit Download-Fallback =====
+// Gemeinsam genutzt von der Checkliste (app.js) und den Maßnahmen (massnahmen.js).
+// Bewaehrter Trick (aus dem Schwesterprojekt): navigator.share() mit der PDF-Datei
+// oeffnet z. B. Mail bereits mit Anhang; unmittelbar danach zusaetzlich per mailto:
+// den vollstaendigen Betreff/Text nachreichen - Mail uebernimmt das in denselben,
+// bereits offenen Entwurf und behaelt dabei den Anhang. Nur der Betreff wird von
+// Mail auf iOS dabei meist nicht mehr uebernommen (bekannte Einschraenkung).
+async function sharePdfDoc(doc, filename, shareTitle) {
+    try {
+        const blob = doc.output('blob');
+
+        if (navigator.canShare && typeof File !== 'undefined') {
+            const file = new File([blob], filename, { type: 'application/pdf' });
+            if (navigator.canShare({ files: [file] })) {
+                try {
+                    await navigator.share({ files: [file], title: shareTitle, text: 'PDF im Anhang' });
+                    showToast('PDF geteilt');
+                    openPrefilledMail();
+                    return;
+                } catch (err) {
+                    if (err && err.name === 'AbortError') return; // Nutzer hat abgebrochen
+                    console.error('Teilen fehlgeschlagen, falle auf Download zurück:', err);
+                }
+            }
+        }
+
+        // Fallback: direkter Download (Desktop-Browser ohne Teilen-Funktion)
+        doc.save(filename);
+        showToast('PDF heruntergeladen');
+    } catch (err) {
+        console.error('PDF-Erzeugung fehlgeschlagen:', err);
+        showToast('PDF konnte nicht erzeugt werden', 'error');
+    }
+}
+
+// ===== Checkliste als PDF-Karten-Text rendern (kompakt, fuer bis zu ~160 Fragen) =====
+// Wird sowohl fuer den eigenstaendigen Checklisten-Export als auch optional
+// fuer den kombinierten Bericht auf der Maßnahmen-Seite genutzt.
+function renderChecklistPdfSection(doc, yStart, margin, contentWidth, pageHeight) {
+    let y = yStart;
+    const ratingLabel = { ok: 'OK', mangel: 'MANGEL', na: 'N.V.' };
+    const ratingColor = { ok: [47, 158, 100], mangel: [204, 7, 30], na: [124, 135, 144] };
+    const textX = margin + 20;
+    const textWidth = contentWidth - 20;
+
+    AUDIT_CATEGORIES.forEach(category => {
+        if (y + 12 > pageHeight - 18) {
+            doc.addPage();
+            y = 18;
+        }
+
+        doc.setFont(undefined, 'bold');
+        doc.setFontSize(11);
+        doc.setTextColor(28, 34, 38);
+        doc.text(category.name, margin, y);
+        y += 3;
+        doc.setDrawColor(220);
+        doc.line(margin, y, margin + contentWidth, y);
+        y += 5.5;
+
+        category.items.forEach(item => {
+            const rating = state.ratings[item.id] || '';
+            const comment = state.comments[item.id] || '';
+
+            doc.setFont(undefined, 'normal');
+            doc.setFontSize(8.5);
+            const lines = doc.splitTextToSize(`${item.id}  ${item.text}`, textWidth);
+            const commentLines = (rating === 'mangel' && comment)
+                ? doc.splitTextToSize('→ ' + comment, textWidth - 4)
+                : [];
+
+            // Seitenumbruch pruefen, bevor die Frage (inkl. Rating-Badge) beginnt
+            if (y + 4.2 > pageHeight - 16) {
+                doc.addPage();
+                y = 18;
+            }
+
+            const badgeY = y - 3.2;
+            const color = ratingColor[rating] || [190, 195, 200];
+            doc.setFillColor(color[0], color[1], color[2]);
+            doc.roundedRect(margin, badgeY, 16, 4.4, 1, 1, 'F');
+            doc.setFont(undefined, 'bold');
+            doc.setFontSize(6.2);
+            doc.setTextColor(255, 255, 255);
+            doc.text(rating ? ratingLabel[rating] : '–', margin + 8, y - 0.2, { align: 'center' });
+
+            doc.setFont(undefined, 'normal');
+            doc.setFontSize(8.5);
+            doc.setTextColor(30, 41, 59);
+
+            lines.forEach((line, i) => {
+                if (i > 0 && y + 4.2 > pageHeight - 16) {
+                    doc.addPage();
+                    y = 18;
+                }
+                doc.text(line, textX, y);
+                y += 4.2;
+            });
+
+            if (commentLines.length) {
+                doc.setFontSize(8);
+                doc.setTextColor(150, 60, 55);
+                commentLines.forEach(line => {
+                    if (y + 3.8 > pageHeight - 16) {
+                        doc.addPage();
+                        y = 18;
+                    }
+                    doc.text(line, textX, y);
+                    y += 3.8;
+                });
+                doc.setTextColor(30, 41, 59);
+            }
+
+            y += 2.4;
+        });
+
+        y += 4;
+    });
+
+    return y;
+}
+
+function checklistPdfHeaderLines() {
+    const ci = state.companyInfo;
+    const teilnehmer = ci.teilnehmer || '-';
+    return [
+        `Firma/Markt: ${ci.firma || '-'}    Standort: ${ci.standort || '-'}    Datum: ${ci.datum ? formatDate(ci.datum) : '-'}`,
+        `Prüfer: ${ci.pruefername || '-'}    Marktleitung: ${ci.marktleitung || '-'}    Teilnehmer: ${teilnehmer}`
+    ];
+}
+
+function checklistPdfFilename() {
+    const firma = (state.companyInfo.firma || 'markt').replace(/[^a-z0-9äöüß]+/gi, '-');
+    const datum = state.companyInfo.datum || new Date().toISOString().split('T')[0];
+    return `Checkliste_${firma}_${datum}.pdf`;
+}
+
+function buildChecklistPdf() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const pageWidth = 210, pageHeight = 297, margin = 14;
+    const contentWidth = pageWidth - margin * 2;
+    let y = 18;
+
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(18);
+    doc.setTextColor(28, 34, 38);
+    doc.text('ASiC Handel – Checkliste', pageWidth / 2, y, { align: 'center' });
+    y += 9;
+
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(9.5);
+    doc.setTextColor(90, 100, 108);
+    checklistPdfHeaderLines().forEach(line => {
+        doc.text(line, pageWidth / 2, y, { align: 'center' });
+        y += 5;
+    });
+    y += 1;
+    doc.setDrawColor(220);
+    doc.line(margin, y, pageWidth - margin, y);
+    y += 8;
+
+    y = renderChecklistPdfSection(doc, y, margin, contentWidth, pageHeight);
+
+    const totalPages = doc.getNumberOfPages();
+    for (let i = 1; i <= totalPages; i++) {
+        doc.setPage(i);
+        doc.setFontSize(8);
+        doc.setTextColor(140);
+        doc.text(`${i}/${totalPages}`, pageWidth - margin, pageHeight - 8, { align: 'right' });
+    }
+
+    return doc;
+}
+
+async function shareChecklistPdf() {
+    const doc = buildChecklistPdf();
+    const filename = checklistPdfFilename();
+    await sharePdfDoc(doc, filename, buildShareEmailSubject());
+}
+
+// ===== Maßnahmen-PDF (mit optionaler Checkliste voran) =====
+// Uebernommen aus massnahmen.js, damit auch die Checkliste-Seite Maßnahmen exportieren kann.
+function pdfFilename() {
+    const firma = (state.companyInfo.firma || 'begehung').replace(/[^a-z0-9äöüß]+/gi, '-');
+    const datum = state.companyInfo.datum || new Date().toISOString().split('T')[0];
+    return `Massnahmenplan_${firma}_${datum}.pdf`;
+}
+
+function buildPdf(includeChecklist) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const pageWidth = 210, pageHeight = 297, margin = 14;
+    const contentWidth = pageWidth - margin * 2;
+    let y = 18;
+
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(18);
+    doc.setTextColor(28, 34, 38);
+    doc.text(includeChecklist ? 'ASiC Handel – Gesamtbericht' : 'ASiC Handel – Maßnahmen', pageWidth / 2, y, { align: 'center' });
+    y += 9;
+
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(9.5);
+    doc.setTextColor(90, 100, 108);
+    checklistPdfHeaderLines().forEach(line => {
+        doc.text(line, pageWidth / 2, y, { align: 'center' });
+        y += 5;
+    });
+    y += 1;
+    doc.setDrawColor(220);
+    doc.line(margin, y, pageWidth - margin, y);
+    y += 8;
+
+    if (includeChecklist) {
+        y = renderChecklistPdfSection(doc, y, margin, contentWidth, pageHeight);
+        doc.addPage();
+        y = 18;
+        doc.setFont(undefined, 'bold');
+        doc.setFontSize(14);
+        doc.setTextColor(28, 34, 38);
+        doc.text('Maßnahmen', margin, y);
+        y += 9;
+    }
+
+    if (state.measures.length === 0) {
+        doc.setFontSize(11);
+        doc.setTextColor(0);
+        doc.text('Keine Mängel erfasst.', margin, y);
+        y += 10;
+    } else {
+        const padding = 6;
+        const innerWidth = contentWidth - padding * 2;
+        const colWidth = innerWidth / 3;
+        const colX = [0, 1, 2].map(i => margin + padding + i * colWidth);
+
+        state.measures.forEach((measure, index) => {
+            const found = findItemById(measure.itemId);
+            const questionText = found ? `${index + 1}. [${measure.itemId}] ${found.item.text}` : `${index + 1}. Manuell erfasste Maßnahme`;
+
+            doc.setFont(undefined, 'bold');
+            doc.setFontSize(10);
+            const questionLines = doc.splitTextToSize(questionText, innerWidth);
+
+            doc.setFont(undefined, 'normal');
+            doc.setFontSize(9);
+            const answerLines = doc.splitTextToSize(measure.description || '-', innerWidth);
+
+            const questionH = questionLines.length * 5;
+            const answerH = answerLines.length * 4.3;
+            const tileH = 11;
+            const cardHeight = padding + questionH + 1 + 4.5 + answerH + 6 + tileH + padding;
+
+            if (y + cardHeight > pageHeight - 24) {
+                doc.addPage();
+                y = 18;
+            }
+
+            doc.setDrawColor(226, 232, 240);
+            doc.setLineWidth(0.3);
+            doc.roundedRect(margin, y, contentWidth, cardHeight, 2, 2, 'S');
+
+            let cy = y + padding + 3.5;
+            doc.setFont(undefined, 'bold');
+            doc.setFontSize(10);
+            doc.setTextColor(30, 41, 59);
+            doc.text(questionLines, margin + padding, cy);
+            cy += questionH + 1;
+
+            doc.setDrawColor(241, 245, 249);
+            doc.line(margin + padding, cy, margin + contentWidth - padding, cy);
+            cy += 4.5;
+
+            doc.setFont(undefined, 'bold');
+            doc.setFontSize(7.5);
+            doc.setTextColor(200, 130, 20);
+            doc.text('MASSNAHME', margin + padding, cy);
+            cy += 4.3;
+
+            doc.setFont(undefined, 'normal');
+            doc.setFontSize(9);
+            doc.setTextColor(51, 65, 85);
+            doc.text(answerLines, margin + padding, cy);
+            cy += answerH + 6;
+
+            const labels = ['VERANTWORTLICH', 'FRIST', 'STATUS'];
+            doc.setFont(undefined, 'bold');
+            doc.setFontSize(7);
+            doc.setTextColor(100, 116, 139);
+            labels.forEach((label, i) => doc.text(label, colX[i], cy));
+            cy += 4.3;
+
+            doc.setFont(undefined, 'normal');
+            doc.setFontSize(9);
+            doc.setTextColor(30, 41, 59);
+            doc.text(measure.responsible || '-', colX[0], cy);
+            doc.text(measure.dueDate ? formatDate(measure.dueDate) : '-', colX[1], cy);
+
+            const statusLabel = measure.status === 'offen' ? 'Offen' : measure.status === 'bearbeitung' ? 'In Bearbeitung' : 'Erledigt';
+            const statusColor = measure.status === 'offen' ? [214, 69, 63] : measure.status === 'bearbeitung' ? [201, 127, 26] : [47, 158, 100];
+            doc.setFont(undefined, 'bold');
+            doc.setTextColor(...statusColor);
+            doc.text(statusLabel, colX[2], cy);
+            doc.setTextColor(0);
+
+            y += cardHeight + 5;
+        });
+    }
+
+    if (y + 55 > pageHeight - 20) {
+        doc.addPage();
+        y = 18;
+    } else {
+        y += 6;
+    }
+
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(11);
+    doc.setTextColor(28, 34, 38);
+    doc.text('Unterschriften', margin, y);
+    y += 8;
+
+    const sigWidth = (contentWidth - 10) / 2;
+    const sigHeight = 28;
+
+    [
+        { key: 'pruefer', label: 'Prüfer', name: state.companyInfo.pruefername },
+        { key: 'marktleitung', label: 'Marktleitung', name: state.companyInfo.marktleitung }
+    ].forEach((sig, i) => {
+        const x = margin + i * (sigWidth + 10);
+        doc.setDrawColor(220);
+        doc.rect(x, y, sigWidth, sigHeight, 'S');
+        if (state.signatures[sig.key]) {
+            try {
+                doc.addImage(state.signatures[sig.key], 'PNG', x + 2, y + 2, sigWidth - 4, sigHeight - 4);
+            } catch (e) { /* ignore */ }
+        }
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(8.5);
+        doc.setTextColor(90, 100, 108);
+        doc.text(`${sig.label}: ${sig.name || '-'}`, x, y + sigHeight + 5);
+    });
+
+    const totalPages = doc.getNumberOfPages();
+    for (let i = 1; i <= totalPages; i++) {
+        doc.setPage(i);
+        doc.setFontSize(8);
+        doc.setTextColor(140);
+        doc.text(`${i}/${totalPages}`, pageWidth - margin, pageHeight - 8, { align: 'right' });
+    }
+
+    return doc;
+}
+
+// ===== Maßnahmen als HTML fuer den Druck (statische Unterschrift-Bilder statt Canvas) =====
+function buildMeasuresPrintHtml() {
+    let html = '<div class="section-title">Maßnahmen</div>';
+
+    if (state.measures.length === 0) {
+        html += '<p class="no-measures card" style="padding:1.5rem;">Keine Mängel erfasst.</p>';
+    } else {
+        html += '<div class="measures-list">' + state.measures.map((measure, index) => {
+            const found = measure.itemId ? findItemById(measure.itemId) : null;
+            const questionText = found ? `[${measure.itemId}] ${found.item.text}` : 'Manuell erfasste Maßnahme';
+            const statusLabel = measure.status === 'offen' ? 'Offen' : measure.status === 'bearbeitung' ? 'In Bearbeitung' : 'Erledigt';
+            return `
+            <div class="measure-card card">
+                <div class="measure-question">
+                    <span class="measure-number">${index + 1}.</span>
+                    <span class="measure-question-text">${questionText}</span>
+                </div>
+                <div class="measure-answer">
+                    <span class="measure-answer-label">Maßnahme</span>
+                    <p class="measure-answer-text">${measure.description || ''}</p>
+                </div>
+                <div class="measure-tile">
+                    <div class="tile-field"><span class="label">Verantwortlich</span><span class="tile-value">${measure.responsible || '-'}</span></div>
+                    <div class="tile-field"><span class="label">Frist</span><span class="tile-value">${measure.dueDate ? formatDate(measure.dueDate) : '-'}</span></div>
+                    <div class="tile-field"><span class="label">Status</span><span class="status-badge ${measure.status}">${statusLabel}</span></div>
+                </div>
+            </div>`;
+        }).join('') + '</div>';
+    }
+
+    html += '<div class="section-title" style="margin-top:1.5rem;">Unterschriften</div>';
+    html += '<div class="signatures-grid">';
+    [
+        { key: 'pruefer', label: 'Prüfer', name: state.companyInfo.pruefername },
+        { key: 'marktleitung', label: 'Marktleitung', name: state.companyInfo.marktleitung }
+    ].forEach(sig => {
+        html += `
+        <div class="card signature-block">
+            <div class="field"><label>${sig.label}</label><div class="value">${sig.name || '-'}</div></div>
+            ${state.signatures[sig.key]
+                ? `<img src="${state.signatures[sig.key]}" alt="Unterschrift ${sig.label}" style="max-width:100%; border:1px solid var(--line); border-radius:8px; display:block;">`
+                : '<p style="color:var(--steel); font-size:0.85rem;">Keine Unterschrift vorhanden.</p>'}
+        </div>`;
+    });
+    html += '</div>';
+
+    return html;
+}
+
+// ===== Vereinheitlichter Export: Modus 'checkliste' | 'massnahmen' | 'beide' =====
+function reportFilename(mode) {
+    if (mode === 'checkliste') return checklistPdfFilename();
+    if (mode === 'massnahmen') return pdfFilename();
+    return checklistPdfFilename().replace('Checkliste_', 'Gesamtbericht_');
+}
+
+function buildReportPdf(mode) {
+    if (mode === 'checkliste') return buildChecklistPdf();
+    if (mode === 'massnahmen') return buildPdf(false);
+    return buildPdf(true);
+}
+
+async function shareReportPdf(mode) {
+    const doc = buildReportPdf(mode);
+    await sharePdfDoc(doc, reportFilename(mode), buildShareEmailSubject());
+}
+
+// Druckt je nach Modus die Checkliste, die Maßnahmen (inkl. Unterschriften) oder beides -
+// funktioniert unabhaengig davon, auf welcher der beiden Seiten man sich gerade befindet.
+function printReport(mode) {
+    const printChecklist = document.getElementById('print-checklist-container');
+    const printMeasures = document.getElementById('print-measures-container');
+    const liveChecklist = document.getElementById('checklist-container');
+    const liveMeasures = document.getElementById('measures-container');
+    const liveNoMeasures = document.getElementById('no-measures');
+    const liveSignatureBlocks = document.querySelectorAll('.signature-block');
+
+    const wantChecklist = mode === 'checkliste' || mode === 'beide';
+    const wantMeasures = mode === 'massnahmen' || mode === 'beide';
+
+    if (printChecklist) {
+        // Auf massnahmen.html: Checkliste fuer den Druck injizieren
+        printChecklist.innerHTML = wantChecklist ? buildChecklistHtml(true) : '';
+    } else if (liveChecklist) {
+        // Auf index.html: vorhandene Live-Ansicht ein-/ausblenden statt zu duplizieren
+        liveChecklist.style.display = wantChecklist ? '' : 'none';
+    }
+
+    if (liveMeasures) {
+        // Auf massnahmen.html: vorhandene Live-Ansicht ein-/ausblenden statt zu duplizieren
+        liveMeasures.style.display = wantMeasures ? '' : 'none';
+        if (liveNoMeasures) liveNoMeasures.style.display = wantMeasures ? '' : 'none';
+        liveSignatureBlocks.forEach(el => { el.style.display = wantMeasures ? '' : 'none'; });
+    } else if (printMeasures) {
+        // Auf index.html: Maßnahmen + Unterschriften fuer den Druck injizieren
+        printMeasures.innerHTML = wantMeasures ? buildMeasuresPrintHtml() : '';
+    }
+
+    setTimeout(() => window.print(), 50);
+}
+
+window.addEventListener('afterprint', () => {
+    const printChecklist = document.getElementById('print-checklist-container');
+    const printMeasures = document.getElementById('print-measures-container');
+    const liveChecklist = document.getElementById('checklist-container');
+    const liveMeasures = document.getElementById('measures-container');
+    const liveNoMeasures = document.getElementById('no-measures');
+
+    if (printChecklist) printChecklist.innerHTML = '';
+    if (printMeasures) printMeasures.innerHTML = '';
+    if (liveChecklist) liveChecklist.style.display = '';
+    if (liveMeasures) liveMeasures.style.display = '';
+    if (liveNoMeasures) liveNoMeasures.style.display = '';
+    document.querySelectorAll('.signature-block').forEach(el => { el.style.display = ''; });
+});
+
+// ===== Betriebsdaten: Formular (index.html) =====
+function initCompanyForm() {
+    const fields = ['firma', 'standort', 'datum', 'pruefername', 'marktleitung', 'teilnehmer'];
+    let anyField = false;
+
+    fields.forEach(field => {
+        const input = document.getElementById(field);
+        if (!input) return;
+        anyField = true;
+        input.value = state.companyInfo[field] || '';
+        input.addEventListener('change', () => {
+            state.companyInfo[field] = input.value;
+            saveState();
+        });
+    });
+
+    return anyField;
+}
+
+// ===== Betriebsdaten: Anzeige (massnahmen.html) =====
+function renderCompanyInfoStrip() {
+    const strip = document.getElementById('company-info-strip');
+    if (!strip) return;
+
+    const map = {
+        'info-firma': state.companyInfo.firma,
+        'info-standort': state.companyInfo.standort,
+        'info-datum': state.companyInfo.datum ? formatDate(state.companyInfo.datum) : '',
+        'info-pruefer': state.companyInfo.pruefername,
+        'info-marktleitung': state.companyInfo.marktleitung,
+        'info-teilnehmer': state.companyInfo.teilnehmer
+    };
+
+    Object.keys(map).forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = map[id] || '–';
+    });
+}
+
+// Kategorien mit "nicht in jedem Markt vorhanden"-Schalter: Ausstattung/Räumlichkeit,
+// die bei Aktivierung komplett als N.V. markiert und gesperrt wird.
+const OPTIONAL_CATEGORIES = {
+    'kundenaufzug': 'Kein Kundenaufzug im Markt vorhanden',
+    'barrierefreies-wc': 'Kein barrierefreies WC im Markt vorhanden',
+    'praktikanten': 'Keine Praktikanten/Schüleraushilfen im Markt beschäftigt',
+    'co2-kuehleinrichtungen': 'Keine CO2-Kühleinrichtungen im Markt vorhanden'
+};
+
+// ===== Checkliste rendern (index.html) =====
+// buildChecklistHtml() erzeugt das HTML separat, damit es auch fuer den
+// Druck-Container auf der Maßnahmen-Seite wiederverwendet werden kann.
+function buildChecklistHtml(forceOpenAll) {
+    return AUDIT_CATEGORIES.map(category => {
+        const isOpen = forceOpenAll || openCategoryId === category.id;
+        const toggleLabel = OPTIONAL_CATEGORIES[category.id];
+        const locked = !!toggleLabel && !!state.notApplicable[category.id];
+        const answered = category.items.filter(i => state.ratings[i.id]).length;
+        const complete = answered === category.items.length;
+
+        return `
+        <section class="category card ${isOpen ? 'open' : ''}" id="cat-${category.id}">
+            <div class="category-header" onclick="toggleCategory('${category.id}')">
+                <div class="category-header-left">
+                    <svg class="category-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                    <span class="category-name">${category.name}</span>
+                </div>
+                <span class="category-count ${complete ? 'complete' : ''}">${answered} / ${category.items.length}</span>
+            </div>
+            <div class="category-body">
+                ${toggleLabel ? `
+                <div class="category-toggle-row" onclick="event.stopPropagation()">
+                    <label class="toggle-switch">
+                        <input type="checkbox" ${locked ? 'checked' : ''} onchange="toggleNotApplicable('${category.id}', this.checked)">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span class="toggle-label">${toggleLabel} – alle Fragen automatisch als „N.V." markieren</span>
+                </div>` : ''}
+                ${category.items.map(item => renderItem(item, locked)).join('')}
+            </div>
+        </section>`;
+    }).join('');
+}
+
+function renderChecklist() {
+    const container = document.getElementById('checklist-container');
+    if (!container) return;
+    container.innerHTML = buildChecklistHtml(false);
+    updateStats();
+}
+
+function renderItem(item, locked) {
+    const rating = state.ratings[item.id] || '';
+    const comment = state.comments[item.id] || '';
+    const isMangel = rating === 'mangel';
+
+    return `
+    <div class="item ${isMangel ? 'is-mangel' : ''}" data-item-id="${item.id}">
+        <div class="item-row">
+            <div class="item-text"><span class="item-id">${item.id}</span>${item.text}</div>
+            <div class="item-actions">
+                <button class="rating-btn ok ${rating === 'ok' ? 'selected' : ''}" ${locked ? 'disabled' : ''} onclick="setRating('${item.id}', 'ok')" aria-label="In Ordnung">OK</button>
+                <button class="rating-btn mangel ${rating === 'mangel' ? 'selected' : ''}" ${locked ? 'disabled' : ''} onclick="setRating('${item.id}', 'mangel')" aria-label="Mangel">!</button>
+                <button class="rating-btn na ${rating === 'na' ? 'selected' : ''}" ${locked ? 'disabled' : ''} onclick="setRating('${item.id}', 'na')" aria-label="Nicht vorhanden">N.V.</button>
+            </div>
+        </div>
+        ${isMangel ? `
+        <div class="item-detail">
+            <label for="comment-${item.id}">Beschreibung des Mangels</label>
+            <textarea id="comment-${item.id}" placeholder="Was wurde festgestellt? (optional)" onchange="updateComment('${item.id}', this.value)">${comment}</textarea>
+            <div class="measure-preview">
+                <span class="label">Empfohlene Maßnahme</span>
+                ${getMeasureText(item.id)}
+            </div>
+        </div>` : ''}
+    </div>`;
+}
+
+function toggleCategory(categoryId) {
+    openCategoryId = openCategoryId === categoryId ? null : categoryId;
+    renderChecklist();
+}
+
+// ===== "Nicht vorhanden"-Schalter fuer optionale Kategorien =====
+function toggleNotApplicable(categoryId, checked) {
+    state.notApplicable[categoryId] = checked;
+    const category = AUDIT_CATEGORIES.find(c => c.id === categoryId);
+
+    if (checked && category) {
+        category.items.forEach(item => {
+            state.ratings[item.id] = 'na';
+            delete state.comments[item.id];
+            state.measures = state.measures.filter(m => m.itemId !== item.id);
+        });
+    }
+
+    saveState();
+    renderChecklist();
+}
+
+function setRating(itemId, rating) {
+    // Schutz: waehrend eine Kategorie per Schalter als "nicht vorhanden" markiert ist,
+    // bleiben ihre Fragen gesperrt auf N.V. (Buttons sind zusaetzlich disabled).
+    for (const categoryId in OPTIONAL_CATEGORIES) {
+        if (!state.notApplicable[categoryId]) continue;
+        const category = AUDIT_CATEGORIES.find(c => c.id === categoryId);
+        if (category && category.items.some(i => i.id === itemId)) return;
+    }
+
+    const current = state.ratings[itemId];
+    state.ratings[itemId] = current === rating ? '' : rating;
+    if (!state.ratings[itemId]) delete state.ratings[itemId];
+
+    if (state.ratings[itemId] !== 'mangel') {
+        delete state.comments[itemId];
+        state.measures = state.measures.filter(m => m.itemId !== itemId);
+    } else if (!state.measures.find(m => m.itemId === itemId)) {
+        state.measures.push({
+            id: Date.now().toString() + Math.random().toString(36).slice(2, 7),
+            itemId: itemId,
+            description: getMeasureText(itemId),
+            responsible: '',
+            dueDate: '',
+            status: 'offen'
+        });
+    }
+
+    renderChecklist();
+    saveState();
+}
+
+function updateComment(itemId, value) {
+    state.comments[itemId] = value;
+    saveState();
+}
+
+function updateStats() {
+    const total = totalItemCount();
+    const values = Object.values(state.ratings);
+    const ok = values.filter(v => v === 'ok').length;
+    const mangel = values.filter(v => v === 'mangel').length;
+    const na = values.filter(v => v === 'na').length;
+    const answered = ok + mangel + na;
+    const offen = total - answered;
+
+    const setText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    setText('stat-ok', ok);
+    setText('stat-mangel', mangel);
+    setText('stat-na', na);
+    setText('stat-offen', offen);
+    setText('progress-label', `${answered} / ${total} geprüft`);
+
+    const fill = document.getElementById('progress-fill');
+    if (fill) fill.style.width = total ? `${Math.round((answered / total) * 100)}%` : '0%';
+}
+
+// ===== JSON Export / Import =====
+function exportJson() {
+    const dataStr = JSON.stringify(state, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    const datum = state.companyInfo.datum || new Date().toISOString().split('T')[0];
+    const firma = (state.companyInfo.firma || 'begehung').replace(/[^a-z0-9äöüß]+/gi, '-');
+    a.download = `ASiC-Handel_${firma}_${datum}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('JSON exportiert');
+}
+
+function importJson(file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        try {
+            const data = JSON.parse(e.target.result);
+            state = {
+                companyInfo: { ...defaultState().companyInfo, ...(data.companyInfo || {}) },
+                ratings: data.ratings || {},
+                comments: data.comments || {},
+                measures: data.measures || [],
+                signatures: { ...defaultState().signatures, ...(data.signatures || {}) },
+                notApplicable: data.notApplicable || {}
+            };
+            saveState();
+            initCompanyForm();
+            renderChecklist();
+            renderCompanyInfoStrip();
+            if (typeof renderMeasures === 'function') renderMeasures();
+            if (typeof restoreSignatures === 'function') restoreSignatures();
+            showToast('JSON geladen');
+        } catch (err) {
+            console.error(err);
+            showToast('Datei konnte nicht gelesen werden', 'error');
+        }
+    };
+    reader.readAsText(file);
+}
+
+function resetAll() {
+    if (!confirm('Wirklich alle Eingaben zurücksetzen? Dies kann nicht rückgängig gemacht werden.')) return;
+    state = defaultState();
+    saveState();
+    initCompanyForm();
+    openCategoryId = null;
+    renderChecklist();
+    showToast('Zurückgesetzt');
+}
+
+// ===== Sprachstil-Umschalter (Einfach / BGHW-konform / Rechtlich) =====
+function initStyleSwitch() {
+    const switchEl = document.getElementById('style-switch');
+    if (!switchEl) return;
+
+    function updateActiveButton() {
+        switchEl.querySelectorAll('.style-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.style === MEASURE_STYLE);
+        });
+    }
+
+    switchEl.querySelectorAll('.style-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            setMeasureStyle(btn.dataset.style);
+            updateActiveButton();
+            renderChecklist(); // aktualisiert die Live-Vorschau bei offenen Mangel-Punkten
+        });
+    });
+
+    updateActiveButton();
+}
+
+// ===== Initialisierung =====
+document.addEventListener('DOMContentLoaded', () => {
+    loadState();
+    initCompanyForm();
+    initStyleSwitch();
+    renderChecklist();
+    renderCompanyInfoStrip();
+    renderFooterMeta();
+
+    const btnSave = document.getElementById('btn-save');
+    if (btnSave) btnSave.addEventListener('click', () => {
+        saveState();
+        showToast('Gespeichert');
+    });
+
+    const btnExport = document.getElementById('btn-json-export');
+    if (btnExport) btnExport.addEventListener('click', exportJson);
+
+    const importInput = document.getElementById('json-import-input');
+    if (importInput) importInput.addEventListener('change', (e) => {
+        if (e.target.files[0]) importJson(e.target.files[0]);
+        e.target.value = '';
+    });
+
+    const btnReset = document.getElementById('btn-reset');
+    if (btnReset) btnReset.addEventListener('click', resetAll);
+
+    // Aufklappbares Export-Menü (Checkliste/Maßnahmen/Beide, Drucken, PDF teilen, Mail) - beide Seiten
+    initExportMenu();
+
+    // Aufklappbares Datei-Menü (Speichern, JSON exportieren/laden, Zurücksetzen) - beide Seiten
+    initDropdownMenu('file-menu-toggle', 'file-menu-panel');
+});

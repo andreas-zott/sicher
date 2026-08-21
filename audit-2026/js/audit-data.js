@@ -5,16 +5,17 @@ const AUDIT_CATEGORIES = [
         items: [
             { id: "1.1", text: "Entspricht das getragene Schuhwerk aller im Bereich tätigen Personen den Anforderungen der Gefährdungsbeurteilung (fest, im Zehenbereich geschlossen, flach und rutschhemmend)?" },
             { id: "1.2", text: "Beachten die Mitarbeitenden die Betriebsanweisung für Flurförderfahrzeuge insbes. PSA-Pflicht, Traglasten, Verbot der Personenmitnahme?" },
-            { id: "1.3", text: "Wurden die Automatiktüren, Schnelllauftore und Rolltore gemäß den geltenden Regelwerken geprüft und befinden sich diese in einem ordnungsgemäßen Zustand?" },
+            { id: "1.3", text: "Wurden die Automatiktüren gemäß den geltenden Regelwerken geprüft und befinden sich diese in einem ordnungsgemäßen Zustand?" },
             { id: "1.4", text: "Ist die Aufzugsanlage geprüft und in einem ordnungsgemäßen Zustand (ohne sichtbare Beschädigungen und mit funktionsfähigen Schutzeinrichtungen)?" },
-            { id: "1.5", text: "Ist die Leergutrücknahme in einem ordnungsgemäßen Zustand (Schutzeinrichtungen intakt, Einzugsstellen gesichert, keine Glasscherben)?" },
             { id: "1.6", text: "Werden für Tätigkeiten in der Höhe (z. B. in Lager oder Verkaufsraum) geeignete und geprüfte Aufstiegshilfen (z. B. Trittstufen, Rolltritte/Elefantenfüße) in ausreichender Zahl bereitgestellt und bestimmungsgemäß benutzt?" },
             { id: "1.7", text: "Sind die Leitern geprüft gemäß DGUV Information 208-016 Leitern und Tritte?" },
             { id: "1.8", text: "Werden aus dem Ordersatz geeignete Sicherheitsmesser verwendet?" },
             { id: "1.9", text: "Sind die Verkehrswege so beschaffen, dass kein Unfallrisiko durch Stolpern, Ausrutschen oder Umknicken besteht?" },
             { id: "1.10", text: "Sind die Treppen unbeschädigt und frei von Gegenständen?" },
             { id: "1.11", text: "Sind Betriebsanweisungen gut zugänglich und werden Sicherheitsanweisungen eingehalten?" },
-            { id: "1.12", text: "Ist die Beleuchtung in den Verkaufs- und Lagerbereichen gemäß ASR A3.4 ausreichend dimensioniert (mind. 300 Lux im Verkaufsraum), voll funktionsfähig und so beschaffen, dass Gefahrenhinweise auf Produkten sowie Leckagen in den Regalen jederzeit zweifelsfrei erkennbar sind?" }
+            { id: "1.12", text: "Ist die Beleuchtung in den Verkaufs- und Lagerbereichen gemäß ASR A3.4 ausreichend dimensioniert (mind. 300 Lux im Verkaufsraum), voll funktionsfähig und so beschaffen, dass Gefahrenhinweise auf Produkten sowie Leckagen in den Regalen jederzeit zweifelsfrei erkennbar sind?" },
+            { id: "1.13", text: "Sind die Schnelllauftore gemäß den Herstellervorgaben und gesetzlichen Fristen geprüft sowie technisch einwandfrei?" },
+            { id: "1.14", text: "Sind die Rolltore aktuell geprüft und funktionieren alle Schutzeinrichtungen (z. B. Absturzsicherung, Einzugsschutz) einwandfrei?" }
         ]
     },
     {
@@ -113,7 +114,7 @@ const AUDIT_CATEGORIES = [
         id: "leergut",
         name: "Leergut",
         items: [
-            { id: "9.1", text: "Sind die Annahmegeräte unbeschädigt und funktionsfähig?" },
+            { id: "9.1", text: "Sind die Annahmegeräte der Leergutrücknahme unbeschädigt und funktionstüchtig – inklusive intakter Schutzeinrichtungen, gesicherter Einzugsstellen und ohne Glasscherben?" },
             { id: "9.2", text: "Werden Rollbahnen nicht betreten?" },
             { id: "9.3", text: "Sind beschädigte Paletten/Kisten aussortiert?" },
             { id: "9.4", text: "Werden Lasten sicher aufgenommen und transportiert?" },
@@ -266,6 +267,20 @@ const AUDIT_CATEGORIES = [
             { id: "20.15", text: "Werden Schulungen für den Umgang mit gewalttätigen Situationen ermöglicht?" },
             { id: "20.16", text: "Beziehen Sie Mitarbeiteranregungen in die Entscheidungsprozesse mit ein?" },
             { id: "20.17", text: "Wurden Weiterbildungsmöglichkeiten geschaffen bzw. angeboten?" }
+        ]
+    },
+    {
+        id: "kundenaufzug",
+        name: "Kundenaufzug",
+        items: [
+            { id: "21.1", text: "Ist der Kundenaufzug (Kabine, Türen, Boden, Beleuchtung, Tragfähigkeitsangabe) äußerlich unbeschädigt und in ordnungsgemäßem Zustand?" },
+            { id: "21.2", text: "Funktionieren die Aufzugstüren, Lichtschranke bzw. Türsensoren einwandfrei und sind die Zugänge frei von Stolperstellen?" },
+            { id: "21.3", text: "Sind Bedientasten, Notruftaste sowie Etagen- bzw. Fahrtrichtungsanzeige funktionsfähig und verständlich beschriftet?" },
+            { id: "21.4", text: "Ist eine funktionierende Notrufeinrichtung vorhanden und ist das Personal über das Verhalten bei eingeschlossenen Kunden unterwiesen?" },
+            { id: "21.5", text: "Liegt die aktuelle Prüfbescheinigung vor, ist die wiederkehrende Prüfung fristgerecht erfolgt und sind festgestellte Mängel abgearbeitet?" },
+            { id: "21.6", text: "Sind die Bereiche vor den Aufzugstüren frei von Waren und Lagergut, eben und ausreichend beleuchtet?" },
+            { id: "21.7", text: "Ist der Aufzug für den Kundenverkehr (inkl. Einkaufswagen und mobilitätseingeschränkte Personen) geeignet und sind Störungshinweise verständlich angebracht?" },
+            { id: "21.8", text: "Ist die Notbefreiung organisatorisch geregelt (Zuständigkeit intern/extern/kombiniert, dokumentierte Alarmierungskette Notdienst → Objektpersonal → ggf. Feuerwehr, Notbefreiungsanleitung vor Ort und beim Notdienst), ist das Personal für Erstmaßnahmen (Beruhigung, Zugang, Feuerwehr-Einweisung) geschult und besteht eine Redundanz bei Ausfall des externen Dienstes?" }
         ]
     }
 ];
