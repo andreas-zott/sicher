@@ -963,8 +963,84 @@ a {
 
 .action-bar-group {
     display: flex;
+    align-items: center;
     gap: 0.6rem;
     flex-wrap: wrap;
+}
+
+.btn-small {
+    height: 40px;
+    padding: 0 1rem;
+    font-size: 0.85rem;
+}
+
+/* ==========================================================================
+   Aufklappbares Menü (Drucken / PDF teilen / Mail vorbereiten)
+   ========================================================================== */
+.menu-dropdown {
+    position: relative;
+}
+
+.menu-dropdown-panel {
+    display: none;
+    flex-direction: column;
+    gap: 0.15rem;
+    position: absolute;
+    bottom: calc(100% + 0.6rem);
+    left: 0;
+    min-width: 210px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: var(--shadow-lg);
+    padding: 0.4rem;
+    z-index: 50;
+}
+
+.menu-dropdown-panel.open {
+    display: flex;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    width: 100%;
+    height: 44px;
+    padding: 0 0.9rem;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--ink-soft);
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    white-space: nowrap;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.menu-item:hover {
+    background: var(--paper);
+}
+
+.menu-toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 0.9rem;
+}
+
+.menu-toggle-row .toggle-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+}
+
+.menu-divider {
+    height: 1px;
+    background: var(--line);
+    margin: 0.3rem 0.4rem;
 }
 
 /* ==========================================================================
