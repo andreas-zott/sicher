@@ -473,6 +473,21 @@ a {
     border-bottom: 1px solid var(--line);
 }
 
+/* Zusaetzliche Optionszeile ueber der Action-Bar (z. B. "Komplette Checkliste einschliessen") */
+.pdf-option-row {
+    max-width: 1080px;
+    margin: 0 auto 1rem;
+    padding: 0 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+/* Nur beim Drucken befuellt/sichtbar (siehe @media print) */
+#print-checklist-container {
+    display: none;
+}
+
 .toggle-switch {
     position: relative;
     display: inline-block;
@@ -873,7 +888,7 @@ a {
     gap: 0.5rem;
     height: var(--tap);
     padding: 0 1.25rem;
-    border-radius: var(--radius-sm);
+    border-radius: 999px;
     font-size: 0.9rem;
     font-weight: 700;
     border: none;
@@ -1155,14 +1170,22 @@ a {
    Druck
    ========================================================================== */
 @media print {
-    .app-header, .action-bar, .category-chevron, .signature-actions {
+    /* Zwingend 0, damit der Browser keinen Platz fuer seine eigene
+       Kopf-/Fusszeile (Datum, Dateiname/URL) reserviert und diese verschwindet.
+       Der noetige Weissraum wird stattdessen ueber .page-Innenabstand erzeugt. */
+    @page {
+        margin: 0;
+        size: auto;
+    }
+
+    .app-header, .action-bar, .category-chevron, .signature-actions, .pdf-option-row, .category-toggle-row {
         display: none !important;
     }
     body {
         background: #fff;
     }
     .page {
-        padding: 0;
+        padding: 14mm 12mm;
         max-width: 100%;
     }
     .card {
@@ -1175,5 +1198,16 @@ a {
     .measure-card, .category {
         page-break-inside: avoid;
         break-inside: avoid;
+    }
+    #print-checklist-container {
+        display: block !important;
+    }
+    #print-checklist-container .category {
+        page-break-inside: avoid;
+        break-inside: avoid;
+        margin-bottom: 0.6rem;
+    }
+    #print-checklist-container:empty {
+        display: none !important;
     }
 }
