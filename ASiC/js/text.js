@@ -815,83 +815,83 @@ const MEASURES_TEXT = {
         }
     },
 
-    "Kundenaufzug": {
-        "21.1": {
-            einfach: 'Beheben Sie äußere Schäden an Kabine, Türen, Boden oder Beleuchtung des Kundenaufzugs umgehend und lassen Sie eine fehlende oder unleserliche Tragfähigkeitsangabe erneuern.',
-            bghw: 'Veranlassen Sie die Instandsetzung äußerer Schäden am Kundenaufzug gemäß den BGHW-Vorgaben umgehend und stellen Sie eine gut lesbare Tragfähigkeitsangabe sicher.',
-            rechtlich: 'Äußere Schäden an Kabine, Türen, Boden oder Beleuchtung des Kundenaufzugs sind unverzüglich zu beseitigen; die zulässige Tragfähigkeit ist gemäß BetrSichV deutlich sichtbar anzugeben.'
-        },
-        "21.2": {
-            einfach: 'Lassen Sie defekte Aufzugstüren, Lichtschranken oder Türsensoren sofort reparieren und halten Sie die Zugänge frei von Stolperstellen.',
-            bghw: 'Veranlassen Sie die Instandsetzung von Aufzugstüren, Lichtschranken und Türsensoren gemäß BGHW-Vorgaben unverzüglich und beseitigen Sie Stolperstellen im Zugangsbereich.',
-            rechtlich: 'Defekte Aufzugstüren, Lichtschranken oder Türsensoren sind unverzüglich instand zu setzen; die Zugänge sind gemäß ASR A1.5 frei von Stolperstellen zu halten.'
-        },
-        "21.3": {
-            einfach: 'Lassen Sie defekte Bedientasten, die Notruftaste oder die Etagenanzeige umgehend reparieren und sorgen Sie für verständliche Beschriftung.',
-            bghw: 'Veranlassen Sie die Instandsetzung von Bedientasten, Notruftaste und Etagenanzeige gemäß BGHW-Vorgaben und stellen Sie eine verständliche Beschriftung sicher.',
-            rechtlich: 'Bedientasten, Notruftaste sowie Etagen- bzw. Fahrtrichtungsanzeige sind funktionsfähig zu halten und verständlich zu beschriften.'
-        },
-        "21.4": {
-            einfach: 'Lassen Sie die Notrufeinrichtung reparieren und schulen Sie das Personal, wie es sich bei eingeschlossenen Kunden verhält.',
-            bghw: 'Veranlassen Sie die Instandsetzung der Notrufeinrichtung gemäß BGHW-Vorgaben und unterweisen Sie das Personal zum Verhalten bei eingeschlossenen Personen.',
-            rechtlich: 'Eine funktionsfähige Notrufeinrichtung ist sicherzustellen; das Personal ist gemäß § 12 ArbSchG zum Verhalten bei eingeschlossenen Personen zu unterweisen. Eine eigenständige Befreiung durch Personal ist zu unterlassen.'
-        },
-        "21.5": {
-            einfach: 'Holen Sie die fällige Aufzugsprüfung nach, beheben Sie offene Mängel aus dem letzten Prüfbericht und legen Sie die Prüfbescheinigung vor.',
-            bghw: 'Veranlassen Sie die fristgerechte wiederkehrende Prüfung gemäß BGHW-Vorgaben, arbeiten Sie festgestellte Mängel vollständig ab und halten Sie die Prüfbescheinigung bereit.',
-            rechtlich: 'Die wiederkehrende Prüfung des Aufzugs ist gemäß BetrSichV fristgerecht durchzuführen; festgestellte Mängel sind vollständig abzuarbeiten und die Prüfbescheinigung ist vorzuhalten.'
-        },
-        "21.6": {
-            einfach: 'Räumen Sie Waren und Lagergut vor den Aufzugstüren weg und sorgen Sie für einen ebenen, gut beleuchteten Bereich.',
-            bghw: 'Halten Sie die Bereiche vor den Aufzugstüren gemäß BGHW-Vorgaben frei von Waren und Lagergut und sorgen Sie für ausreichende Beleuchtung.',
-            rechtlich: 'Die Bereiche vor den Aufzugstüren sind freizuhalten, eben zu gestalten und gemäß ASR A3.4 ausreichend zu beleuchten.'
-        },
-        "21.7": {
-            einfach: 'Prüfen Sie, ob der Aufzug für Kunden inkl. Einkaufswagen und mobilitätseingeschränkte Personen geeignet ist, und bringen Sie verständliche Hinweise bei Störungen an.',
-            bghw: 'Stellen Sie die Eignung des Aufzugs für den Kundenverkehr (Einkaufswagen, Barrierefreiheit) gemäß BGHW-Vorgaben sicher und bringen Sie verständliche Störungshinweise an.',
-            rechtlich: 'Die Eignung des Aufzugs für die vorgesehene Kundennutzung, einschließlich Einkaufswagen und mobilitätseingeschränkter Personen, ist sicherzustellen; Hinweise bei Störungen sind verständlich anzubringen.'
-        },
-      "21.8": {
-        einfach: 'Legen Sie schriftlich fest, wer im Notfall für die Befreiung eingeschlossener Personen zuständig ist.',
-        bghw: 'Regeln und dokumentieren Sie die Zuständigkeit für die Notbefreiung gemäß den BGHW-Vorgaben.',
-        rechtlich: 'Die Zuständigkeit für die Notbefreiung ist eindeutig festzulegen und zu dokumentieren.'
+   "Kundenaufzug": {
+    "21.1": {
+        einfach: 'Lassen Sie sichtbare Schäden an Kabine, Türen, Boden oder Beleuchtung umgehend beheben und sorgen Sie für eine gut lesbare Tragfähigkeitsangabe.',
+        bghw: 'Veranlassen Sie die fachgerechte Instandsetzung festgestellter Schäden am Kundenaufzug und stellen Sie eine gut lesbare Tragfähigkeitsangabe sicher.',
+        rechtlich: 'Festgestellte sicherheitsrelevante Schäden am Kundenaufzug sind durch geeignete Instandhaltungsmaßnahmen zu beseitigen; die zulässige Tragfähigkeit muss erkennbar angegeben sein.'
+    },
+    "21.2": {
+        einfach: 'Lassen Sie defekte Aufzugstüren, Lichtschranken oder Türsensoren umgehend instand setzen und beseitigen Sie Stolperstellen im Zugangsbereich.',
+        bghw: 'Veranlassen Sie die Instandsetzung defekter Türen und Sicherheitseinrichtungen und halten Sie die Zugangsbereiche frei von Stolperstellen.',
+        rechtlich: 'Sicherheitsrelevante Mängel an Türen und Türsicherungen sind unverzüglich zu beseitigen; die Zugangsbereiche sind sicher begehbar zu halten.'
+    },
+    "21.3": {
+        einfach: 'Lassen Sie defekte Bedientasten, Notruftaste oder Etagenanzeige umgehend reparieren und sorgen Sie für eine verständliche Beschriftung.',
+        bghw: 'Veranlassen Sie die Instandsetzung defekter Bedienelemente und Anzeigen und stellen Sie eine eindeutige und verständliche Kennzeichnung sicher.',
+        rechtlich: 'Sicherheitsrelevante Bedienelemente und Anzeigen sind funktionsfähig zu halten und erforderliche Kennzeichnungen gut sichtbar anzubringen.'
+    },
+    "21.4": {
+        einfach: 'Lassen Sie eine defekte Notrufeinrichtung umgehend instand setzen und stellen Sie sicher, dass das zuständige Personal über das Verhalten bei eingeschlossenen Personen informiert ist.',
+        bghw: 'Veranlassen Sie die Instandsetzung der Notrufeinrichtung und stellen Sie sicher, dass das zuständige Personal über das Vorgehen bei eingeschlossenen Personen unterwiesen ist.',
+        rechtlich: 'Eine funktionsfähige Notrufeinrichtung ist sicherzustellen; die zuständigen Beschäftigten sind über das erforderliche Verhalten bei eingeschlossenen Personen zu unterweisen.'
+    },
+    "21.5": {
+        einfach: 'Veranlassen Sie die erforderliche Prüfung des Kundenaufzugs, halten Sie die Prüfunterlagen bereit und lassen Sie offene Mängel aus der letzten Prüfung beseitigen.',
+        bghw: 'Stellen Sie die fristgerechte Durchführung der erforderlichen Prüfungen sicher und veranlassen Sie die vollständige Beseitigung festgestellter Mängel.',
+        rechtlich: 'Die erforderlichen Prüfungen sind fristgerecht durchzuführen und festgestellte sicherheitsrelevante Mängel sind entsprechend den geltenden Anforderungen zu beseitigen.'
+    },
+    "21.6": {
+        einfach: 'Räumen Sie Waren und sonstige Hindernisse vor den Aufzugstüren weg und sorgen Sie für einen ebenen und ausreichend beleuchteten Zugangsbereich.',
+        bghw: 'Halten Sie die Bereiche vor den Aufzugstüren frei von Waren und sonstigen Hindernissen und stellen Sie eine ausreichende Beleuchtung sicher.',
+        rechtlich: 'Die Zugangsbereiche vor den Aufzugstüren sind freizuhalten und sicher sowie ausreichend beleuchtet zu gestalten.'
+    },
+    "21.7": {
+        einfach: 'Stellen Sie sicher, dass der Aufzug für den vorgesehenen Kundenverkehr geeignet ist und bringen Sie verständliche Hinweise für den Störungsfall an.',
+        bghw: 'Stellen Sie die sichere Nutzung des Aufzugs für den vorgesehenen Kundenverkehr sicher und sorgen Sie für verständliche Störungshinweise.',
+        rechtlich: 'Der Aufzug ist entsprechend seiner vorgesehenen Nutzung sicher zu betreiben; erforderliche Hinweise für den Störungsfall sind deutlich und verständlich anzubringen.'
+    },
+    "21.8": {
+        einfach: 'Legen Sie fest, wer bei eingeschlossenen Personen für die weitere Veranlassung zuständig ist, und informieren Sie die zuständigen Beschäftigten.',
+        bghw: 'Regeln und dokumentieren Sie die Zuständigkeit für das Vorgehen bei eingeschlossenen Personen und stellen Sie sicher, dass diese dem zuständigen Personal bekannt ist.',
+        rechtlich: 'Die Zuständigkeiten für das Vorgehen bei eingeschlossenen Personen sind eindeutig festzulegen und den zuständigen Beschäftigten bekannt zu machen.'
     },
     "21.9": {
-        einfach: 'Legen Sie eine klare Alarmierungs- und Eskalationskette für Aufzugsstörungen und eingeschlossene Personen fest und machen Sie diese den zuständigen Mitarbeitern bekannt.',
-        bghw: 'Regeln und dokumentieren Sie die Alarmierungs- und Eskalationskette für Aufzugsstörungen gemäß den BGHW-Vorgaben und stellen Sie deren Bekanntheit beim zuständigen Personal sicher.',
-        rechtlich: 'Die erforderlichen organisatorischen Maßnahmen für die Alarmierung und das weitere Vorgehen bei Aufzugsstörungen und eingeschlossenen Personen sind festzulegen und den zuständigen Beschäftigten bekannt zu machen.'
+        einfach: 'Legen Sie eine klare Alarmierungskette für Aufzugsstörungen und eingeschlossene Personen fest und machen Sie diese dem zuständigen Personal bekannt.',
+        bghw: 'Regeln und dokumentieren Sie die Alarmierungswege für Aufzugsstörungen und eingeschlossene Personen und stellen Sie deren Bekanntheit beim zuständigen Personal sicher.',
+        rechtlich: 'Die erforderlichen organisatorischen Maßnahmen für die Alarmierung bei Aufzugsstörungen und eingeschlossenen Personen sind festzulegen und den zuständigen Beschäftigten bekannt zu machen.'
     },
     "21.10": {
-        einfach: 'Halten Sie die Kontaktdaten des zuständigen Aufzugsnotdienstes aktuell und für das Objektpersonal jederzeit zugänglich.',
-        bghw: 'Stellen Sie gemäß BGHW-Vorgaben sicher, dass die aktuellen Kontaktdaten des zuständigen Aufzugsnotdienstes jederzeit verfügbar sind.',
+        einfach: 'Halten Sie die Kontaktdaten des zuständigen Aufzugsnotdienstes aktuell und für das zuständige Personal jederzeit zugänglich.',
+        bghw: 'Stellen Sie sicher, dass die aktuellen Kontaktdaten des zuständigen Aufzugsnotdienstes jederzeit verfügbar sind.',
         rechtlich: 'Die Kontaktdaten des zuständigen Aufzugsnotdienstes sind aktuell zu halten und für die zuständigen Beschäftigten zugänglich vorzuhalten.'
     },
     "21.11": {
-        einfach: 'Hinterlegen Sie eine aktuelle Notbefreiungsanleitung am erforderlichen Aufzugsstandort und stellen Sie sicher, dass sie dem zuständigen Notdienst vorliegt.',
-        bghw: 'Hinterlegen Sie die erforderliche Notbefreiungsanleitung gemäß BGHW-Vorgaben vor Ort und stellen Sie deren Verfügbarkeit beim zuständigen Notdienst sicher.',
-        rechtlich: 'Die für den sicheren Betrieb und die Notfallorganisation erforderlichen Unterlagen und Anweisungen sind aktuell zu halten und den jeweils zuständigen Personen zugänglich zu machen.'
+        einfach: 'Stellen Sie sicher, dass die erforderlichen Unterlagen und Anweisungen für das Vorgehen bei einer Aufzugsstörung verfügbar und aktuell sind.',
+        bghw: 'Stellen Sie die Verfügbarkeit und Aktualität der erforderlichen Unterlagen und Anweisungen für Aufzugsstörungen sicher.',
+        rechtlich: 'Erforderliche Anweisungen und Unterlagen für den sicheren Umgang mit Aufzugsstörungen sind aktuell zu halten und den zuständigen Personen zugänglich zu machen.'
     },
     "21.12": {
-        einfach: 'Legen Sie fest, wie das Objektpersonal im Notfall den Aufzugsnotdienst und gegebenenfalls die Feuerwehr zum betroffenen Aufzug einweist.',
-        bghw: 'Regeln und unterweisen Sie das zuständige Personal gemäß BGHW-Vorgaben hinsichtlich der Einweisung von Notdienst und Einsatzkräften.',
-        rechtlich: 'Das Vorgehen zur Einweisung von Aufzugsnotdienst und gegebenenfalls Einsatzkräften ist organisatorisch festzulegen und den zuständigen Beschäftigten bekannt zu machen.'
+        einfach: 'Legen Sie fest, wie das Objektpersonal den Aufzugsnotdienst oder gegebenenfalls Einsatzkräfte zum betroffenen Aufzug einweist.',
+        bghw: 'Regeln Sie das Vorgehen zur Einweisung des Aufzugsnotdienstes und gegebenenfalls weiterer Einsatzkräfte und informieren Sie das zuständige Personal.',
+        rechtlich: 'Das Vorgehen zur Einweisung des zuständigen Notdienstes und gegebenenfalls von Einsatzkräften ist organisatorisch festzulegen.'
     },
     "21.13": {
-        einfach: 'Unterweisen Sie das zuständige Personal in den erforderlichen Erstmaßnahmen bei eingeschlossenen Personen.',
-        bghw: 'Unterweisen Sie das zuständige Personal gemäß BGHW-Vorgaben in den erforderlichen Erstmaßnahmen bei eingeschlossenen Personen.',
-        rechtlich: 'Die Beschäftigten sind entsprechend ihrer Aufgaben und Verantwortlichkeiten über die erforderlichen Maßnahmen bei Aufzugsstörungen und eingeschlossenen Personen zu unterweisen.'
+        einfach: 'Unterweisen Sie das zuständige Personal in den erforderlichen Maßnahmen bei einer Aufzugsstörung oder eingeschlossenen Personen.',
+        bghw: 'Stellen Sie sicher, dass das zuständige Personal entsprechend den betrieblichen Anforderungen unterwiesen ist.',
+        rechtlich: 'Die zuständigen Beschäftigten sind entsprechend ihren Aufgaben und Verantwortlichkeiten über das erforderliche Verhalten bei Aufzugsstörungen zu unterweisen.'
     },
     "21.14": {
-        einfach: 'Stellen Sie sicher, dass eingeschlossene Kunden bis zum Eintreffen des zuständigen Fachpersonals angemessen betreut und beruhigt werden.',
-        bghw: 'Stellen Sie gemäß BGHW-Vorgaben eine angemessene Betreuung eingeschlossener Personen bis zum Eintreffen des zuständigen Fachpersonals sicher.',
-        rechtlich: 'Für eingeschlossene Personen sind geeignete organisatorische Maßnahmen zur Betreuung bis zum Eintreffen des zuständigen Fachpersonals sicherzustellen.'
+        einfach: 'Stellen Sie sicher, dass eingeschlossene Kunden bis zum Eintreffen des zuständigen Fachpersonals angemessen betreut und informiert werden.',
+        bghw: 'Stellen Sie eine angemessene Betreuung eingeschlossener Personen bis zum Eintreffen des zuständigen Fachpersonals sicher.',
+        rechtlich: 'Für eingeschlossene Personen sind geeignete organisatorische Maßnahmen bis zum Eintreffen des zuständigen Fachpersonals sicherzustellen.'
     },
     "21.15": {
-        einfach: 'Legen Sie eine Vertretungs- oder Ersatzregelung fest, falls der zuständige Aufzugsnotdienst nicht erreichbar oder nicht verfügbar ist.',
-        bghw: 'Stellen Sie gemäß BGHW-Vorgaben eine geeignete Ersatz- bzw. Vertretungsregelung für den Ausfall des zuständigen Aufzugsnotdienstes sicher.',
-        rechtlich: 'Für die Störungsbearbeitung ist eine geeignete organisatorische Regelung für den Fall der Nichterreichbarkeit oder Nichtverfügbarkeit des zuständigen Dienstleisters vorzusehen.'
-    }	
-    },
+        einfach: 'Legen Sie eine geeignete Vertretungs- oder Ersatzregelung fest, falls der zuständige Aufzugsnotdienst nicht erreichbar oder nicht verfügbar ist.',
+        bghw: 'Stellen Sie eine geeignete Vertretungs- oder Ersatzregelung für die Nichterreichbarkeit des zuständigen Aufzugsnotdienstes sicher.',
+        rechtlich: 'Für den Fall der Nichterreichbarkeit des zuständigen Dienstleisters sind geeignete organisatorische Maßnahmen festzulegen.'
+    }
+},
 "Lastenaufzug": {
     "22.1": {
         einfach: 'Lassen Sie sichtbare Schäden am Lastenaufzug, an Türen, Boden, Beleuchtung oder Bedienelementen umgehend beheben.',
