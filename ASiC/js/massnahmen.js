@@ -326,7 +326,7 @@ async function sharePdf() {
     const includeChecklist = document.getElementById('include-checklist')?.checked || false;
     const doc = buildPdf(includeChecklist);
     const filename = includeChecklist ? checklistPdfFilename().replace('Checkliste_', 'Gesamtbericht_') : pdfFilename();
-    await sharePdfDoc(doc, filename, buildShareEmailSubject(), buildShareEmailText());
+    await sharePdfDoc(doc, filename, buildShareEmailSubject());
 }
 
 // ===== Initialisierung =====

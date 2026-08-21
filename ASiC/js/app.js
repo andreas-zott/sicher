@@ -117,9 +117,57 @@ function buildShareEmailText() {
     return `Sehr geehrte Damen und Herren,\n\nim Rahmen der turnusmäßigen Arbeitssicherheitsbegehung übersende ich Ihnen anbei das Begehungsprotokoll des Marktes ${markt} zur sachlichen Prüfung.\n\nBitte prüfen Sie die dokumentierten Feststellungen und veranlassen Sie die Umsetzung der erforderlichen Maßnahmen.\n\nMit freundlichen Grüßen\n${pruefer}Fachkraft für Arbeitssicherheit (SiFa)`;
 }
 
+// Zuverlaessige Alternative zu navigator.share() fuer Betreff/Text:
+// iOS uebernimmt title/text beim Teilen an die Mail-App oft nicht zuverlaessig.
+// mailto: oeffnet eine neue Mail mit korrekt befuelltem Betreff/Text - kann aber
+// aus einer Web-App heraus keinen Anhang setzen.
+function openPrefilledMail() {
+    const subject = encodeURIComponent(buildShareEmailSubject());
+    const body = encodeURIComponent(buildShareEmailText());
+    window.location.href = `mailto:?subject=${subject}&body=${body}`;
+}
+
+// ===== Aufklappbares Export-Menü (Drucken / PDF teilen / Mail vorbereiten) =====
+// Gemeinsame ID auf beiden Seiten (index.html + massnahmen.html), daher hier zentral.
+function initExportMenu() {
+    const toggle = document.getElementById('export-menu-toggle');
+    const panel = document.getElementById('export-menu-panel');
+    if (!toggle || !panel) return;
+
+    function closeMenu() {
+        panel.classList.remove('open');
+        document.removeEventListener('click', onOutsideClick);
+    }
+
+    function onOutsideClick(e) {
+        if (!panel.contains(e.target) && e.target !== toggle) closeMenu();
+    }
+
+    toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const willOpen = !panel.classList.contains('open');
+        panel.classList.toggle('open', willOpen);
+        if (willOpen) {
+            document.addEventListener('click', onOutsideClick);
+        } else {
+            document.removeEventListener('click', onOutsideClick);
+        }
+    });
+
+    // Menü nach Auswahl eines Punktes automatisch wieder schliessen
+    panel.querySelectorAll('.menu-item').forEach(item => {
+        item.addEventListener('click', closeMenu);
+    });
+}
+
 // ===== PDF teilen (iPad-Teilen-Menü, inkl. AirPrint) mit Download-Fallback =====
 // Gemeinsam genutzt von der Checkliste (app.js) und den Maßnahmen (massnahmen.js).
-async function sharePdfDoc(doc, filename, shareTitle, shareText) {
+// Bewaehrter Trick (aus dem Schwesterprojekt): navigator.share() mit der PDF-Datei
+// oeffnet z. B. Mail bereits mit Anhang; unmittelbar danach zusaetzlich per mailto:
+// den vollstaendigen Betreff/Text nachreichen - Mail uebernimmt das in denselben,
+// bereits offenen Entwurf und behaelt dabei den Anhang. Nur der Betreff wird von
+// Mail auf iOS dabei meist nicht mehr uebernommen (bekannte Einschraenkung).
+async function sharePdfDoc(doc, filename, shareTitle) {
     try {
         const blob = doc.output('blob');
 
@@ -127,8 +175,9 @@ async function sharePdfDoc(doc, filename, shareTitle, shareText) {
             const file = new File([blob], filename, { type: 'application/pdf' });
             if (navigator.canShare({ files: [file] })) {
                 try {
-                    await navigator.share({ files: [file], title: shareTitle, text: shareText });
+                    await navigator.share({ files: [file], title: shareTitle, text: 'PDF im Anhang' });
                     showToast('PDF geteilt');
+                    openPrefilledMail();
                     return;
                 } catch (err) {
                     if (err && err.name === 'AbortError') return; // Nutzer hat abgebrochen
@@ -289,7 +338,7 @@ function buildChecklistPdf() {
 async function shareChecklistPdf() {
     const doc = buildChecklistPdf();
     const filename = checklistPdfFilename();
-    await sharePdfDoc(doc, filename, buildShareEmailSubject(), buildShareEmailText());
+    await sharePdfDoc(doc, filename, buildShareEmailSubject());
 }
 
 // ===== Betriebsdaten: Formular (index.html) =====
@@ -594,4 +643,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const btnShareChecklist = document.getElementById('btn-share-checklist-pdf');
     if (btnShareChecklist) btnShareChecklist.addEventListener('click', shareChecklistPdf);
+
+    // "Mail vorbereiten" gibt es auf beiden Seiten (index.html und massnahmen.html)
+    const btnPrepMail = document.getElementById('btn-prep-mail');
+    if (btnPrepMail) btnPrepMail.addEventListener('click', openPrefilledMail);
+
+    // Aufklappbares Menü (Drucken / PDF teilen / Mail vorbereiten) - beide Seiten
+    initExportMenu();
 });
