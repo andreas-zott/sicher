@@ -384,6 +384,7 @@ function renderCompanyInfoStrip() {
 // die bei Aktivierung komplett als N.V. markiert und gesperrt wird.
 const OPTIONAL_CATEGORIES = {
     'kundenaufzug': 'Kein Kundenaufzug im Markt vorhanden',
+    'lastenaufzug': 'Kein Lastenaufzug im Markt vorhanden',
     'barrierefreies-wc': 'Kein barrierefreies WC im Markt vorhanden',
     'praktikanten': 'Keine Praktikanten/Schüleraushilfen im Markt beschäftigt',
     'co2-kuehleinrichtungen': 'Keine CO2-Kühleinrichtungen im Markt vorhanden'
