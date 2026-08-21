@@ -273,14 +273,21 @@ const AUDIT_CATEGORIES = [
         id: "kundenaufzug",
         name: "Kundenaufzug",
         items: [
-            { id: "21.1", text: "Ist der Kundenaufzug (Kabine, Türen, Boden, Beleuchtung, Tragfähigkeitsangabe) äußerlich unbeschädigt und in ordnungsgemäßem Zustand?" },
-            { id: "21.2", text: "Funktionieren die Aufzugstüren, Lichtschranke bzw. Türsensoren einwandfrei und sind die Zugänge frei von Stolperstellen?" },
-            { id: "21.3", text: "Sind Bedientasten, Notruftaste sowie Etagen- bzw. Fahrtrichtungsanzeige funktionsfähig und verständlich beschriftet?" },
-            { id: "21.4", text: "Ist eine funktionierende Notrufeinrichtung vorhanden und ist das Personal über das Verhalten bei eingeschlossenen Kunden unterwiesen?" },
-            { id: "21.5", text: "Liegt die aktuelle Prüfbescheinigung vor, ist die wiederkehrende Prüfung fristgerecht erfolgt und sind festgestellte Mängel abgearbeitet?" },
-            { id: "21.6", text: "Sind die Bereiche vor den Aufzugstüren frei von Waren und Lagergut, eben und ausreichend beleuchtet?" },
-            { id: "21.7", text: "Ist der Aufzug für den Kundenverkehr (inkl. Einkaufswagen und mobilitätseingeschränkte Personen) geeignet und sind Störungshinweise verständlich angebracht?" },
-            { id: "21.8", text: "Ist die Notbefreiung organisatorisch geregelt (Zuständigkeit intern/extern/kombiniert, dokumentierte Alarmierungskette Notdienst → Objektpersonal → ggf. Feuerwehr, Notbefreiungsanleitung vor Ort und beim Notdienst), ist das Personal für Erstmaßnahmen (Beruhigung, Zugang, Feuerwehr-Einweisung) geschult und besteht eine Redundanz bei Ausfall des externen Dienstes?" }
-        ]
-    }
+        { id: "21.1", text: "Ist der Kundenaufzug (Kabine, Türen, Boden, Beleuchtung, Tragfähigkeitsangabe) äußerlich unbeschädigt und in ordnungsgemäßem Zustand?" },
+        { id: "21.2", text: "Funktionieren die Aufzugstüren, Lichtschranke bzw. Türsensoren einwandfrei und sind die Zugänge frei von Stolperstellen?" },
+        { id: "21.3", text: "Sind Bedientasten, Notruftaste sowie Etagen- bzw. Fahrtrichtungsanzeige funktionsfähig und verständlich beschriftet?" },
+        { id: "21.4", text: "Ist eine funktionierende Notrufeinrichtung vorhanden und ist das Personal über das Verhalten bei eingeschlossenen Kunden unterwiesen?" },
+        { id: "21.5", text: "Liegt die aktuelle Prüfbescheinigung vor, ist die wiederkehrende Prüfung fristgerecht erfolgt und sind festgestellte Mängel abgearbeitet?" },
+        { id: "21.6", text: "Sind die Bereiche vor den Aufzugstüren frei von Waren und Lagergut, eben und ausreichend beleuchtet?" },
+        { id: "21.7", text: "Ist der Aufzug für den Kundenverkehr (inkl. Einkaufswagen und mobilitätseingeschränkte Personen) geeignet und sind Störungshinweise verständlich angebracht?" },
+        { id: "21.8", text: "Ist die Notbefreiung von eingeschlossenen Personen organisatorisch geregelt und sind die Zuständigkeiten intern und extern eindeutig festgelegt?" },
+        { id: "21.9", text: "Ist eine dokumentierte Alarmierungs- und Eskalationskette für eine Aufzugsstörung bzw. eingeschlossene Personen vorhanden und bekannt?" },
+        { id: "21.10", text: "Sind die Kontaktdaten des zuständigen Aufzugsnotdienstes aktuell und für das Objektpersonal jederzeit verfügbar?" },
+        { id: "21.11", text: "Ist eine Notbefreiungsanleitung bzw. eine dokumentierte Vorgehensweise für den Störungsfall vor Ort verfügbar?" },
+        { id: "21.12", text: "Ist geregelt, wie das Objektpersonal im Notfall die Einsatzkräfte bzw. den Aufzugsnotdienst zum betroffenen Aufzug einweist?" },
+        { id: "21.13", text: "Ist das zuständige Personal für die erforderlichen Erstmaßnahmen bei eingeschlossenen Personen unterwiesen bzw. geschult?" },
+        { id: "21.14", text: "Ist sichergestellt, dass eingeschlossene Personen bis zum Eintreffen des zuständigen Fachpersonals angemessen betreut und beruhigt werden?" },
+        { id: "21.15", text: "Ist eine Vertretungs- bzw. Redundanzregelung vorhanden, falls der zuständige externe Aufzugsnotdienst nicht erreichbar oder nicht verfügbar ist?" }
+    ]
+}
 ];

@@ -851,11 +851,46 @@ const MEASURES_TEXT = {
             bghw: 'Stellen Sie die Eignung des Aufzugs für den Kundenverkehr (Einkaufswagen, Barrierefreiheit) gemäß BGHW-Vorgaben sicher und bringen Sie verständliche Störungshinweise an.',
             rechtlich: 'Die Eignung des Aufzugs für die vorgesehene Kundennutzung, einschließlich Einkaufswagen und mobilitätseingeschränkter Personen, ist sicherzustellen; Hinweise bei Störungen sind verständlich anzubringen.'
         },
-        "21.8": {
-            einfach: 'Legen Sie schriftlich fest, wer im Notfall für die Befreiung eingeschlossener Personen zuständig ist, hinterlegen Sie eine Notbefreiungsanleitung vor Ort und beim Notdienst, schulen Sie das Personal in Erstmaßnahmen (Beruhigung, Zugang, Feuerwehr-Einweisung) und sorgen Sie für einen Ersatz-Notdienst, falls der reguläre ausfällt.',
-            bghw: 'Regeln und dokumentieren Sie die Zuständigkeit für die Notbefreiung sowie die Alarmierungskette gemäß den BGHW-Vorgaben, hinterlegen Sie die Notbefreiungsanleitung vor Ort und beim Notdienst, schulen Sie das Personal in Erstmaßnahmen und stellen Sie eine redundante Notdienst-Absicherung sicher.',
-            rechtlich: 'Die Zuständigkeit für die Notbefreiung (intern/extern/kombiniert) sowie die Alarmierungskette (Notdienst → Objektpersonal → ggf. Feuerwehr) sind schriftlich zu regeln und zu dokumentieren; eine Notbefreiungsanleitung ist vor Ort und beim Notdienst vorzuhalten. Das Personal ist gemäß § 12 ArbSchG in Erstmaßnahmen zu schulen; eine Redundanz für den Ausfall des externen Dienstes ist sicherzustellen.'
-        }
+      "21.8": {
+        einfach: 'Legen Sie schriftlich fest, wer im Notfall für die Befreiung eingeschlossener Personen zuständig ist.',
+        bghw: 'Regeln und dokumentieren Sie die Zuständigkeit für die Notbefreiung gemäß den BGHW-Vorgaben.',
+        rechtlich: 'Die Zuständigkeit für die Notbefreiung ist eindeutig festzulegen und zu dokumentieren.'
+    },
+    "21.9": {
+        einfach: 'Legen Sie eine klare Alarmierungs- und Eskalationskette für Aufzugsstörungen und eingeschlossene Personen fest und machen Sie diese den zuständigen Mitarbeitern bekannt.',
+        bghw: 'Regeln und dokumentieren Sie die Alarmierungs- und Eskalationskette für Aufzugsstörungen gemäß den BGHW-Vorgaben und stellen Sie deren Bekanntheit beim zuständigen Personal sicher.',
+        rechtlich: 'Die erforderlichen organisatorischen Maßnahmen für die Alarmierung und das weitere Vorgehen bei Aufzugsstörungen und eingeschlossenen Personen sind festzulegen und den zuständigen Beschäftigten bekannt zu machen.'
+    },
+    "21.10": {
+        einfach: 'Halten Sie die Kontaktdaten des zuständigen Aufzugsnotdienstes aktuell und für das Objektpersonal jederzeit zugänglich.',
+        bghw: 'Stellen Sie gemäß BGHW-Vorgaben sicher, dass die aktuellen Kontaktdaten des zuständigen Aufzugsnotdienstes jederzeit verfügbar sind.',
+        rechtlich: 'Die Kontaktdaten des zuständigen Aufzugsnotdienstes sind aktuell zu halten und für die zuständigen Beschäftigten zugänglich vorzuhalten.'
+    },
+    "21.11": {
+        einfach: 'Hinterlegen Sie eine aktuelle Notbefreiungsanleitung am erforderlichen Aufzugsstandort und stellen Sie sicher, dass sie dem zuständigen Notdienst vorliegt.',
+        bghw: 'Hinterlegen Sie die erforderliche Notbefreiungsanleitung gemäß BGHW-Vorgaben vor Ort und stellen Sie deren Verfügbarkeit beim zuständigen Notdienst sicher.',
+        rechtlich: 'Die für den sicheren Betrieb und die Notfallorganisation erforderlichen Unterlagen und Anweisungen sind aktuell zu halten und den jeweils zuständigen Personen zugänglich zu machen.'
+    },
+    "21.12": {
+        einfach: 'Legen Sie fest, wie das Objektpersonal im Notfall den Aufzugsnotdienst und gegebenenfalls die Feuerwehr zum betroffenen Aufzug einweist.',
+        bghw: 'Regeln und unterweisen Sie das zuständige Personal gemäß BGHW-Vorgaben hinsichtlich der Einweisung von Notdienst und Einsatzkräften.',
+        rechtlich: 'Das Vorgehen zur Einweisung von Aufzugsnotdienst und gegebenenfalls Einsatzkräften ist organisatorisch festzulegen und den zuständigen Beschäftigten bekannt zu machen.'
+    },
+    "21.13": {
+        einfach: 'Unterweisen Sie das zuständige Personal in den erforderlichen Erstmaßnahmen bei eingeschlossenen Personen.',
+        bghw: 'Unterweisen Sie das zuständige Personal gemäß BGHW-Vorgaben in den erforderlichen Erstmaßnahmen bei eingeschlossenen Personen.',
+        rechtlich: 'Die Beschäftigten sind entsprechend ihrer Aufgaben und Verantwortlichkeiten über die erforderlichen Maßnahmen bei Aufzugsstörungen und eingeschlossenen Personen zu unterweisen.'
+    },
+    "21.14": {
+        einfach: 'Stellen Sie sicher, dass eingeschlossene Kunden bis zum Eintreffen des zuständigen Fachpersonals angemessen betreut und beruhigt werden.',
+        bghw: 'Stellen Sie gemäß BGHW-Vorgaben eine angemessene Betreuung eingeschlossener Personen bis zum Eintreffen des zuständigen Fachpersonals sicher.',
+        rechtlich: 'Für eingeschlossene Personen sind geeignete organisatorische Maßnahmen zur Betreuung bis zum Eintreffen des zuständigen Fachpersonals sicherzustellen.'
+    },
+    "21.15": {
+        einfach: 'Legen Sie eine Vertretungs- oder Ersatzregelung fest, falls der zuständige Aufzugsnotdienst nicht erreichbar oder nicht verfügbar ist.',
+        bghw: 'Stellen Sie gemäß BGHW-Vorgaben eine geeignete Ersatz- bzw. Vertretungsregelung für den Ausfall des zuständigen Aufzugsnotdienstes sicher.',
+        rechtlich: 'Für die Störungsbearbeitung ist eine geeignete organisatorische Regelung für den Fall der Nichterreichbarkeit oder Nichtverfügbarkeit des zuständigen Dienstleisters vorzusehen.'
+    }
     },
 
     default: {
