@@ -890,8 +890,55 @@ const MEASURES_TEXT = {
         einfach: 'Legen Sie eine Vertretungs- oder Ersatzregelung fest, falls der zuständige Aufzugsnotdienst nicht erreichbar oder nicht verfügbar ist.',
         bghw: 'Stellen Sie gemäß BGHW-Vorgaben eine geeignete Ersatz- bzw. Vertretungsregelung für den Ausfall des zuständigen Aufzugsnotdienstes sicher.',
         rechtlich: 'Für die Störungsbearbeitung ist eine geeignete organisatorische Regelung für den Fall der Nichterreichbarkeit oder Nichtverfügbarkeit des zuständigen Dienstleisters vorzusehen.'
-    }
+    }	
     },
+"Lastenaufzug": {
+    "22.1": {
+        einfach: 'Lassen Sie sichtbare Schäden am Lastenaufzug, an Türen, Boden, Beleuchtung oder Bedienelementen umgehend beheben.',
+        bghw: 'Veranlassen Sie die fachgerechte Instandsetzung festgestellter Schäden am Lastenaufzug und stellen Sie einen sicheren ordnungsgemäßen Zustand sicher.',
+        rechtlich: 'Festgestellte sicherheitsrelevante Schäden am Lastenaufzug sind durch geeignete Instandhaltungsmaßnahmen zu beseitigen.'
+    },
+    "22.2": {
+        einfach: 'Stellen Sie sicher, dass die zulässige Tragfähigkeit deutlich erkennbar ist und der Lastenaufzug nicht überlastet oder unsachgemäß beladen wird.',
+        bghw: 'Stellen Sie die Einhaltung der zulässigen Tragfähigkeit und eine sichere Beladung des Lastenaufzugs sicher.',
+        rechtlich: 'Die zulässige Tragfähigkeit ist einzuhalten und eine Überlastung des Lastenaufzugs ist zu verhindern.'
+    },
+    "22.3": {
+        einfach: 'Lassen Sie defekte Aufzugstüren oder Türsicherungen umgehend instand setzen und beseitigen Sie erkennbare Quetsch- oder Absturzgefahren.',
+        bghw: 'Veranlassen Sie die unverzügliche Instandsetzung defekter Türen und Sicherheitseinrichtungen und beseitigen Sie erkannte Quetsch- oder Absturzgefahren.',
+        rechtlich: 'Sicherheitsrelevante Mängel an Türen und Türsicherungen sind unverzüglich zu beseitigen; Quetsch- und Absturzgefahren sind zu verhindern.'
+    },
+    "22.4": {
+        einfach: 'Räumen Sie Waren, Paletten und sonstige Hindernisse aus dem Bereich vor den Aufzugstüren und halten Sie den Zugang frei.',
+        bghw: 'Halten Sie die Zugangsbereiche zum Lastenaufzug frei von Waren, Paletten und sonstigen Hindernissen.',
+        rechtlich: 'Verkehrs- und Zugangsbereiche vor dem Lastenaufzug sind freizuhalten und sicher begehbar zu halten.'
+    },
+    "22.5": {
+        einfach: 'Stellen Sie die bestimmungsgemäße Nutzung des Lastenaufzugs sicher und bringen Sie erforderliche Hinweise bzw. Verbote zur Personenbeförderung gut sichtbar an.',
+        bghw: 'Stellen Sie die bestimmungsgemäße Verwendung des Lastenaufzugs gemäß den betrieblichen Vorgaben sicher und sorgen Sie für eine eindeutige Kennzeichnung.',
+        rechtlich: 'Der Lastenaufzug ist entsprechend seiner vorgesehenen Verwendung zu betreiben; erforderliche Kennzeichnungen und Sicherheitshinweise sind deutlich sichtbar anzubringen.'
+    },
+    "22.6": {
+        einfach: 'Lassen Sie defekte Bedienelemente, Anzeigen oder Sicherheitseinrichtungen umgehend prüfen und instand setzen und sorgen Sie für eine eindeutige Kennzeichnung.',
+        bghw: 'Veranlassen Sie die Instandsetzung defekter Bedienelemente, Anzeigen und Sicherheitseinrichtungen und stellen Sie eine eindeutige Kennzeichnung sicher.',
+        rechtlich: 'Sicherheitsrelevante Bedienelemente, Anzeigen und Sicherheitseinrichtungen sind funktionsfähig zu halten und erforderliche Kennzeichnungen sind gut sichtbar anzubringen.'
+    },
+    "22.7": {
+        einfach: 'Veranlassen Sie die erforderliche Prüfung des Lastenaufzugs, halten Sie die Prüfunterlagen bereit und lassen Sie offene Mängel aus der letzten Prüfung beseitigen.',
+        bghw: 'Stellen Sie die fristgerechte Durchführung der erforderlichen Prüfungen sicher und veranlassen Sie die vollständige Beseitigung festgestellter Mängel.',
+        rechtlich: 'Die erforderlichen Prüfungen sind fristgerecht durchzuführen und festgestellte sicherheitsrelevante Mängel sind entsprechend den geltenden Anforderungen zu beseitigen.'
+    },
+    "22.8": {
+        einfach: 'Unterweisen Sie die Beschäftigten, die den Lastenaufzug bedienen oder beladen, in der sicheren Nutzung und Beladung.',
+        bghw: 'Stellen Sie sicher, dass die mit der Bedienung und Beladung beauftragten Beschäftigten entsprechend unterwiesen sind.',
+        rechtlich: 'Beschäftigte sind entsprechend ihren Aufgaben und Verantwortlichkeiten über die sichere Verwendung des Lastenaufzugs zu unterweisen.'
+    },
+    "22.9": {
+        einfach: 'Legen Sie fest, wie bei einer Störung oder einem Einschluss vorzugehen ist, und informieren Sie die zuständigen Beschäftigten über die Ansprechpartner.',
+        bghw: 'Regeln Sie das Vorgehen bei Störungen und stellen Sie sicher, dass die zuständigen Ansprechpartner dem Personal bekannt sind.',
+        rechtlich: 'Für Störungen sind geeignete organisatorische Maßnahmen festzulegen und den zuständigen Beschäftigten bekannt zu machen.'
+    }
+},
 
     default: {
         einfach: 'Legen Sie geeignete Maßnahmen fest, um den Mangel zu beheben, und dokumentieren Sie diese.',

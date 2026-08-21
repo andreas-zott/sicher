@@ -269,6 +269,7 @@ const AUDIT_CATEGORIES = [
             { id: "20.17", text: "Wurden Weiterbildungsmöglichkeiten geschaffen bzw. angeboten?" }
         ]
     },
+
     {
         id: "kundenaufzug",
         name: "Kundenaufzug",
@@ -289,5 +290,21 @@ const AUDIT_CATEGORIES = [
         { id: "21.14", text: "Ist sichergestellt, dass eingeschlossene Personen bis zum Eintreffen des zuständigen Fachpersonals angemessen betreut und beruhigt werden?" },
         { id: "21.15", text: "Ist eine Vertretungs- bzw. Redundanzregelung vorhanden, falls der zuständige externe Aufzugsnotdienst nicht erreichbar oder nicht verfügbar ist?" }
     ]
+},
+{
+    id: "lastenaufzug",
+    name: "Lastenaufzug",
+    items: [
+        { id: "22.1", text: "Ist der Lastenaufzug einschließlich Kabine, Türen, Boden, Beleuchtung und Bedienelementen äußerlich unbeschädigt und in ordnungsgemäßem Zustand?" },
+        { id: "22.2", text: "Ist die zulässige Tragfähigkeit deutlich angegeben und sind keine Anzeichen für eine Überlastung oder unsachgemäße Beladung erkennbar?" },
+        { id: "22.3", text: "Funktionieren die Aufzugstüren und vorhandenen Türsicherungen ordnungsgemäß und sind keine offensichtlichen Quetsch- oder Absturzgefahren vorhanden?" },
+        { id: "22.4", text: "Sind die Bereiche vor den Aufzugstüren frei von Waren, Paletten und sonstigen Hindernissen?" },
+        { id: "22.5", text: "Wird der Lastenaufzug bestimmungsgemäß verwendet und sind Hinweise bzw. Verbote zur Personenbeförderung, soweit erforderlich, vorhanden und gut sichtbar?" },
+        { id: "22.6", text: "Sind Bedienelemente, Anzeigen und vorhandene Sicherheitseinrichtungen funktionsfähig und eindeutig gekennzeichnet?" },
+        { id: "22.7", text: "Liegt die erforderliche aktuelle Prüfbescheinigung vor und sind festgestellte Mängel aus der letzten Prüfung abgearbeitet?" },
+        { id: "22.8", text: "Sind die zuständigen Beschäftigten für die sichere Bedienung und Beladung des Lastenaufzugs unterwiesen?" },
+        { id: "22.9", text: "Ist geregelt, wie bei einer Störung oder einem Einschluss vorzugehen ist und sind die zuständigen Ansprechpartner bekannt?" }
+    ]
 }
+
 ];
