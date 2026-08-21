@@ -326,8 +326,7 @@ async function sharePdf() {
     const includeChecklist = document.getElementById('include-checklist')?.checked || false;
     const doc = buildPdf(includeChecklist);
     const filename = includeChecklist ? checklistPdfFilename().replace('Checkliste_', 'Gesamtbericht_') : pdfFilename();
-    const title = includeChecklist ? 'Gesamtbericht' : 'Maßnahmenplan';
-    await sharePdfDoc(doc, filename, title, `${title} ${state.companyInfo.firma || ''} ${state.companyInfo.datum ? formatDate(state.companyInfo.datum) : ''}`.trim());
+    await sharePdfDoc(doc, filename, SHARE_EMAIL_TITLE, buildShareEmailText());
 }
 
 // ===== Initialisierung =====

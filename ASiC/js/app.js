@@ -103,6 +103,17 @@ function showToast(message, type = 'success') {
     setTimeout(() => toast.remove(), 2600);
 }
 
+// ===== Vorgefertigter Mail-Text beim PDF-Versand =====
+// Traegt automatisch Markt (aus "Firma / Markt") und den Namen des Pruefers ein.
+// Wird von allen drei PDF-Varianten (Checkliste, Massnahmen, Gesamtbericht) genutzt.
+const SHARE_EMAIL_TITLE = 'Arbeitssicherheits-Audit';
+
+function buildShareEmailText() {
+    const markt = state.companyInfo.firma || '-';
+    const pruefer = state.companyInfo.pruefername ? state.companyInfo.pruefername + '\n' : '';
+    return `Sehr geehrte Damen und Herren,\n\nim Rahmen der turnusmäßigen Arbeitssicherheitsbegehung übersende ich Ihnen anbei das Begehungsprotokoll des Marktes ${markt} zur sachlichen Prüfung.\n\nBitte prüfen Sie die dokumentierten Feststellungen und veranlassen Sie die Umsetzung der erforderlichen Maßnahmen.\n\nMit freundlichen Grüßen\n${pruefer}Fachkraft für Arbeitssicherheit (SiFa)`;
+}
+
 // ===== PDF teilen (iPad-Teilen-Menü, inkl. AirPrint) mit Download-Fallback =====
 // Gemeinsam genutzt von der Checkliste (app.js) und den Maßnahmen (massnahmen.js).
 async function sharePdfDoc(doc, filename, shareTitle, shareText) {
@@ -275,7 +286,7 @@ function buildChecklistPdf() {
 async function shareChecklistPdf() {
     const doc = buildChecklistPdf();
     const filename = checklistPdfFilename();
-    await sharePdfDoc(doc, filename, 'Checkliste', `Checkliste ${state.companyInfo.firma || ''} ${state.companyInfo.datum ? formatDate(state.companyInfo.datum) : ''}`.trim());
+    await sharePdfDoc(doc, filename, SHARE_EMAIL_TITLE, buildShareEmailText());
 }
 
 // ===== Betriebsdaten: Formular (index.html) =====
