@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#1c2226">
-<script src="../css/jspdf.umd.min.js"></script>
+<script src="css/jspdf.umd.min.js"></script>
 </head>
 <body>
 
@@ -29,7 +29,7 @@
                 <button class="style-btn" data-style="rechtlich">Rechtlich</button>
             </div>
             <nav class="app-nav">
-                <a href="index.html" class="active">Prüfkatalog</a>
+               <a href="index.html" class="active">Prüfkatalog</a>
                 <a href="massnahmen.html">Aktionsplan</a>
             </nav>
         </div>
@@ -88,6 +88,10 @@
     <!-- Kategorien -->
     <div id="checklist-container"></div>
 
+    <!-- Druckcontainer fuer Maßnahmen+Unterschriften, nur befuellt und sichtbar
+         wenn im Exportieren-Menü "Maßnahmen" oder "Beides" gedruckt wird -->
+    <div id="print-measures-container"></div>
+
 </main>
 
 <footer class="app-footer">
@@ -104,32 +108,43 @@
 <div class="action-bar">
     <div class="action-bar-inner">
         <div class="action-bar-group">
-            <button class="btn btn-secondary" id="btn-json-export">JSON exportieren</button>
-            <label class="btn btn-secondary" for="json-import-input" style="cursor:pointer;">
-                JSON laden
-                <input type="file" id="json-import-input" accept="application/json" style="display:none;">
-            </label>
-            <button class="btn btn-ghost" id="btn-reset">Zurücksetzen</button>
-        </div>
-        <div class="action-bar-group">
             <div class="menu-dropdown">
-                <button class="btn btn-secondary btn-small" id="export-menu-toggle">Exportieren ▾</button>
-                <div class="menu-dropdown-panel" id="export-menu-panel">
-                    <button class="menu-item" id="btn-print-checklist">🖨️ Drucken</button>
-                    <button class="menu-item" id="btn-share-checklist-pdf">📤 PDF teilen</button>
-                    <button class="menu-item" id="btn-prep-mail">✉️ Mail vorbereiten</button>
+                <button class="btn btn-secondary btn-small" id="file-menu-toggle">Datei ▾</button>
+                <div class="menu-dropdown-panel" id="file-menu-panel">
+                    <button class="menu-item" id="btn-save">💾 Speichern</button>
+                    <div class="menu-divider"></div>
+                    <button class="menu-item" id="btn-json-export">⬆️ JSON exportieren</button>
+                    <label class="menu-item" for="json-import-input" style="cursor:pointer;">
+                        ⬇️ JSON laden
+                        <input type="file" id="json-import-input" accept="application/json" style="display:none;">
+                    </label>
+                    <div class="menu-divider"></div>
+                    <button class="menu-item menu-item-danger" id="btn-reset">🗑️ Zurücksetzen</button>
                 </div>
             </div>
         </div>
         <div class="action-bar-group">
-            <button class="btn btn-secondary" id="btn-save">Speichern</button>
+            <div class="menu-dropdown">
+                <button class="btn btn-primary btn-small" id="export-menu-toggle">Exportieren ▾</button>
+                <div class="menu-dropdown-panel" id="export-menu-panel">
+                    <div class="menu-mode-row">
+                        <button class="mode-btn" data-mode="checkliste">Checkliste</button>
+                        <button class="mode-btn" data-mode="massnahmen">Maßnahmen</button>
+                        <button class="mode-btn" data-mode="beide">Beides</button>
+                    </div>
+                    <div class="menu-divider"></div>
+                    <button class="menu-item" data-action="print">🖨️ Drucken</button>
+                    <button class="menu-item" data-action="share">📤 PDF teilen</button>
+                    <button class="menu-item" data-action="mail">✉️ Mail vorbereiten</button>
+                </div>
+            </div>
             <a href="massnahmen.html" class="btn btn-primary">Weiter →</a>
         </div>
     </div>
 </div>
 
-<script src="../js/audit-data.js"></script>
-<script src="../js/text.js"></script>
-<script src="../js/app.js"></script>
+<script src="js/audit-data.js"></script>
+<script src="js/text.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>
