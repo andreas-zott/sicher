@@ -162,7 +162,9 @@ function initDropdownMenu(toggleId, panelId) {
 // ===== Export-Menü: Modus-Auswahl (Checkliste / Maßnahmen / Beide) + Aktionen =====
 // Auf beiden Seiten identisch nutzbar - Vorauswahl richtet sich danach, auf
 // welcher Seite man sich gerade befindet (erkennbar an den vorhandenen Elementen).
-let exportMode = document.getElementById('measures-container') ? 'massnahmen' : 'checkliste';
+let exportMode = document.getElementById('measures-container') ? 'massnahmen'
+    : document.getElementById('photo-grid') ? 'fotos'
+    : 'checkliste';
 
 function initExportMenu() {
     initDropdownMenu('export-menu-toggle', 'export-menu-panel');
@@ -327,7 +329,7 @@ function checklistPdfHeaderLines() {
 }
 
 // ===== Deckblatt (Titelseite mit Betriebsdaten), wird jedem PDF vorangestellt =====
-function drawCoverPage(doc, pageWidth, pageHeight, margin, documentTitle) {
+function drawCoverPage(doc, pageWidth, pageHeight, margin, documentTitle, documentSubtitle) {
     // Roter Kopfbalken mit Markenname
     doc.setFillColor(204, 7, 30);
     doc.rect(0, 0, pageWidth, 42, 'F');
@@ -344,7 +346,16 @@ function drawCoverPage(doc, pageWidth, pageHeight, margin, documentTitle) {
     doc.setFontSize(20);
     doc.setTextColor(28, 34, 38);
     doc.text(documentTitle, pageWidth / 2, y, { align: 'center' });
-    y += 22;
+    y += 8;
+    if (documentSubtitle) {
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(10.5);
+        doc.setTextColor(120, 130, 138);
+        doc.text(documentSubtitle, pageWidth / 2, y, { align: 'center' });
+        y += 14;
+    } else {
+        y += 14;
+    }
 
     // Betriebsdaten zentriert als Liste
     const ci = state.companyInfo;
@@ -453,6 +464,126 @@ function drawCoverStats(doc, y, pageWidth, boxX, boxWidth) {
     return y;
 }
 
+// Zeichnet bis zu 4 Fotos pro DIN-A4-Seite (2x2-Raster) inkl. Kommentarzeile in
+// ein bereits geoeffnetes jsPDF-Dokument, beginnend bei der uebergebenen
+// Y-Position. Foto-Blobs kommen aus IndexedDB, daher async. Legt bei Bedarf
+// automatisch neue Seiten an (max. 4 Fotos je Seite).
+async function renderFotosSection(doc, yStart, margin, contentWidth, pageHeight, photos) {
+    let y = yStart;
+
+    if (!photos || photos.length === 0) {
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(11);
+        doc.setTextColor(0);
+        doc.text('Keine Fotos erfasst.', margin, y);
+        return y + 10;
+    }
+
+    const gapX = 8;
+    const gapY = 10;
+    const cellWidth = (contentWidth - gapX) / 2;
+    const imageHeight = 62;
+    const commentHeight = 16;
+    const cellHeight = imageHeight + commentHeight + 6;
+    const pageStartY = y;
+
+    for (let i = 0; i < photos.length; i++) {
+        const posOnPage = i % 4;
+        const col = posOnPage % 2;
+        const row = Math.floor(posOnPage / 2);
+
+        if (posOnPage === 0 && i > 0) {
+            doc.addPage();
+            y = pageStartY;
+        }
+
+        const cellX = margin + col * (cellWidth + gapX);
+        const cellY = y + row * (cellHeight + gapY);
+        const photo = photos[i];
+
+        doc.setDrawColor(226, 232, 240);
+        doc.setLineWidth(0.3);
+        doc.roundedRect(cellX, cellY, cellWidth, cellHeight, 2, 2, 'S');
+
+        try {
+            const dataUrl = await blobToDataUrl(photo.blob);
+            const dims = await getImageDimensions(dataUrl);
+            const fit = fitImage(dims.width, dims.height, cellWidth - 4, imageHeight - 4);
+            const imgX = cellX + (cellWidth - fit.width) / 2;
+            const imgY = cellY + 2 + (imageHeight - 4 - fit.height) / 2;
+            doc.addImage(dataUrl, 'JPEG', imgX, imgY, fit.width, fit.height);
+        } catch (e) {
+            doc.setFont(undefined, 'normal');
+            doc.setFontSize(8);
+            doc.setTextColor(180);
+            doc.text('Bild konnte nicht geladen werden', cellX + 3, cellY + imageHeight / 2);
+        }
+
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(8.5);
+        doc.setTextColor(51, 65, 85);
+        const commentText = photo.comment && photo.comment.trim() ? photo.comment : '(kein Kommentar)';
+        const commentLines = doc.splitTextToSize(commentText, cellWidth - 6).slice(0, 3);
+        doc.text(commentLines, cellX + 3, cellY + imageHeight + 6);
+    }
+
+    // Y-Position ans Ende des zuletzt genutzten Rasters setzen (fuer evtl. nachfolgenden Inhalt)
+    const lastRow = Math.floor(((photos.length - 1) % 4) / 2);
+    return pageStartY + (lastRow + 1) * (cellHeight + gapY) + 4;
+}
+
+// Eigenstaendiger Foto-PDF-Export (Modus "fotos"): Deckblatt mit Bezug zur
+// Begehungsliste + alle Fotos im 2x2-Raster. Async, da Fotos aus IndexedDB
+// geladen werden.
+async function buildFotosPdf() {
+    if (typeof window.jspdf === 'undefined' || !window.jspdf.jsPDF) {
+        throw new Error('jsPDF-Bibliothek nicht geladen (window.jspdf fehlt). Bitte prüfen, ob "js/jspdf.umd.min.js" korrekt eingebunden ist, und die Seite neu laden.');
+    }
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const pageWidth = 210, pageHeight = 297, margin = 14;
+    const contentWidth = pageWidth - margin * 2;
+
+    drawCoverPage(doc, pageWidth, pageHeight, margin, 'Fotodokumentation', 'Begehungsprotokoll – Bildanhang');
+
+    let y = 18;
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(18);
+    doc.setTextColor(28, 34, 38);
+    doc.text('ASiC Handel – Fotodokumentation', pageWidth / 2, y, { align: 'center' });
+    y += 9;
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(9.5);
+    doc.setTextColor(90, 100, 108);
+    checklistPdfHeaderLines().forEach(line => {
+        doc.text(line, pageWidth / 2, y, { align: 'center' });
+        y += 5;
+    });
+    y += 1;
+    doc.setDrawColor(220);
+    doc.line(margin, y, pageWidth - margin, y);
+    y += 8;
+
+    const photos = await getAllPhotos();
+    await renderFotosSection(doc, y, margin, contentWidth, pageHeight, photos);
+
+    const totalPages = doc.getNumberOfPages();
+    for (let i = 2; i <= totalPages; i++) {
+        doc.setPage(i);
+        doc.setFontSize(8);
+        doc.setTextColor(140);
+        doc.text(`${i}/${totalPages}`, pageWidth - margin, pageHeight - 8, { align: 'right' });
+    }
+
+    return doc;
+}
+
+function fotosPdfFilename() {
+    const firma = (state.companyInfo.firma || 'markt').replace(/[^a-z0-9äöüß]+/gi, '-');
+    const datum = state.companyInfo.datum || new Date().toISOString().split('T')[0];
+    return `Fotodokumentation_${firma}_${datum}.pdf`;
+}
+
 function checklistPdfFilename() {
     const firma = (state.companyInfo.firma || 'markt').replace(/[^a-z0-9äöüß]+/gi, '-');
     const datum = state.companyInfo.datum || new Date().toISOString().split('T')[0];
@@ -523,7 +654,7 @@ function pdfFilename() {
     return `Massnahmenplan_${firma}_${datum}.pdf`;
 }
 
-function buildPdf(includeChecklist) {
+async function buildPdf(includeChecklist, includeFotos) {
     if (typeof window.jspdf === 'undefined' || !window.jspdf.jsPDF) {
         throw new Error('jsPDF-Bibliothek nicht geladen (window.jspdf fehlt). Bitte prüfen, ob "js/jspdf.umd.min.js" korrekt eingebunden ist, und die Seite neu laden.');
     }
@@ -532,7 +663,8 @@ function buildPdf(includeChecklist) {
     const pageWidth = 210, pageHeight = 297, margin = 14;
     const contentWidth = pageWidth - margin * 2;
 
-    drawCoverPage(doc, pageWidth, pageHeight, margin, includeChecklist ? 'Gesamtbericht' : 'Maßnahmen');
+    const coverTitle = includeChecklist ? 'Gesamtbericht' : 'Maßnahmen';
+    drawCoverPage(doc, pageWidth, pageHeight, margin, coverTitle);
 
     let y = 18;
 
@@ -683,6 +815,18 @@ function buildPdf(includeChecklist) {
         doc.text(`${sig.label}: ${sig.name || '-'}`, x, y + sigHeight + 5);
     });
 
+    if (includeFotos) {
+        doc.addPage();
+        y = 18;
+        doc.setFont(undefined, 'bold');
+        doc.setFontSize(14);
+        doc.setTextColor(28, 34, 38);
+        doc.text('Fotodokumentation', margin, y);
+        y += 9;
+        const photos = await getAllPhotos();
+        await renderFotosSection(doc, y, margin, contentWidth, pageHeight, photos);
+    }
+
     const totalPages = doc.getNumberOfPages();
     for (let i = 2; i <= totalPages; i++) {
         doc.setPage(i);
@@ -694,22 +838,24 @@ function buildPdf(includeChecklist) {
     return doc;
 }
 
-// ===== Vereinheitlichter Export: Modus 'checkliste' | 'massnahmen' | 'beide' =====
+// ===== Vereinheitlichter Export: Modus 'checkliste' | 'massnahmen' | 'fotos' | 'alle' =====
 function reportFilename(mode) {
     if (mode === 'checkliste') return checklistPdfFilename();
     if (mode === 'massnahmen') return pdfFilename();
+    if (mode === 'fotos') return fotosPdfFilename();
     return checklistPdfFilename().replace('Checkliste_', 'Gesamtbericht_');
 }
 
-function buildReportPdf(mode) {
+async function buildReportPdf(mode) {
     if (mode === 'checkliste') return buildChecklistPdf();
-    if (mode === 'massnahmen') return buildPdf(false);
-    return buildPdf(true);
+    if (mode === 'massnahmen') return buildPdf(false, false);
+    if (mode === 'fotos') return await buildFotosPdf();
+    return await buildPdf(true, true);
 }
 
 async function shareReportPdf(mode) {
     try {
-        const doc = buildReportPdf(mode);
+        const doc = await buildReportPdf(mode);
         await sharePdfDoc(doc, reportFilename(mode), buildShareEmailSubject());
     } catch (err) {
         console.error('Report-PDF konnte nicht erzeugt werden:', err);
@@ -717,16 +863,17 @@ async function shareReportPdf(mode) {
     }
 }
 
-// Druckt je nach Modus die Checkliste, die Maßnahmen (inkl. Unterschriften) oder beides -
-// funktioniert unabhaengig davon, auf welcher der beiden Seiten man sich gerade befindet.
-// Drucken: erzeugt dieselbe fertig paginierte PDF wie "PDF teilen" (mit korrektem
-// Zeilenumbruch, Seitenabstand, Deckblatt und Seitenzahlen) und oeffnet sie in einem neuen Tab.
-// Dort druckt man ueber den nativen PDF-Betrachter (auf dem iPad: Teilen-Symbol -> Drucken/AirPrint).
-// Dieser Weg umgeht zuverlaessig die Einschraenkungen von window.print() auf einer
-// HTML-Seite (Browser-eigene Kopf-/Fusszeile mit URL/Datum, unzuverlaessige Seitenumbrueche).
-function printReport(mode) {
+// Druckt je nach Modus die Checkliste, die Maßnahmen (inkl. Unterschriften), die Fotos
+// oder alles zusammen - funktioniert unabhaengig davon, auf welcher Seite man sich
+// gerade befindet. Drucken: erzeugt dieselbe fertig paginierte PDF wie "PDF teilen"
+// (mit korrektem Zeilenumbruch, Seitenabstand, Deckblatt und Seitenzahlen) und
+// oeffnet sie in einem neuen Tab. Dort druckt man ueber den nativen PDF-Betrachter
+// (auf dem iPad: Teilen-Symbol -> Drucken/AirPrint). Dieser Weg umgeht zuverlaessig
+// die Einschraenkungen von window.print() auf einer HTML-Seite (Browser-eigene
+// Kopf-/Fusszeile mit URL/Datum, unzuverlaessige Seitenumbrueche).
+async function printReport(mode) {
     try {
-        const doc = buildReportPdf(mode);
+        const doc = await buildReportPdf(mode);
         const blob = doc.output('blob');
         const url = URL.createObjectURL(blob);
         const win = window.open(url, '_blank');
@@ -996,6 +1143,15 @@ function resetAll() {
     initCompanyForm();
     openCategoryId = null;
     renderChecklist();
+
+    // Fotos gehoeren zur selben Begehung und sollten bei einem Reset ebenfalls
+    // verschwinden - sie liegen aber separat in IndexedDB, nicht im state.
+    if (typeof deleteAllPhotos === 'function') {
+        deleteAllPhotos().then(() => {
+            if (typeof loadAndRenderPhotos === 'function') loadAndRenderPhotos();
+        }).catch(err => console.error('Fotos konnten beim Zurücksetzen nicht gelöscht werden:', err));
+    }
+
     showToast('Zurückgesetzt');
 }
 
@@ -1048,9 +1204,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnReset = document.getElementById('btn-reset');
     if (btnReset) btnReset.addEventListener('click', resetAll);
 
-    // Aufklappbares Export-Menü (Checkliste/Maßnahmen/Beide, Drucken, PDF teilen, Mail) - beide Seiten
+    // Aufklappbares Export-Menü (Checkliste/Maßnahmen/Fotos/Alles, Drucken, PDF teilen, Mail) - alle Seiten
     initExportMenu();
 
-    // Aufklappbares Datei-Menü (Speichern, JSON exportieren/laden, Zurücksetzen) - beide Seiten
+    // Aufklappbares Datei-Menü (Speichern, JSON exportieren/laden, Zurücksetzen) - alle Seiten
     initDropdownMenu('file-menu-toggle', 'file-menu-panel');
 });
