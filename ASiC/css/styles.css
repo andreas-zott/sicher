@@ -483,11 +483,6 @@ a {
     gap: 0.75rem;
 }
 
-/* Nur beim Drucken befuellt/sichtbar (siehe @media print) */
-#print-checklist-container {
-    display: none;
-}
-
 .toggle-switch {
     position: relative;
     display: inline-block;
@@ -1108,6 +1103,9 @@ a {
     display: flex;
     align-items: center;
     gap: 0.6rem;
+    max-width: min(90vw, 420px);
+    white-space: normal;
+    line-height: 1.4;
     animation: toast-in 0.25s ease;
 }
 
@@ -1292,9 +1290,12 @@ a {
    Druck
    ========================================================================== */
 @media print {
-    /* Zwingend 0, damit der Browser keinen Platz fuer seine eigene
-       Kopf-/Fusszeile (Datum, Dateiname/URL) reserviert und diese verschwindet.
-       Der noetige Weissraum wird stattdessen ueber .page-Innenabstand erzeugt. */
+    /* Hinweis: Der "Drucken"-Menüpunkt nutzt inzwischen dieselbe PDF-Erzeugung wie
+       "PDF teilen" (siehe printReport() in app.js) und oeffnet die fertige PDF in
+       einem neuen Tab, statt window.print() auf dieser Seite auszuloesen - dort
+       sind Zeilenumbruch, Seitenabstand, Deckblatt und Seitenzahlen bereits sauber
+       geloest. Dieser Block dient nur noch als Fallback, falls jemand manuell mit
+       Tastenkuerzel (Strg/Cmd+P) druckt. */
     @page {
         margin: 0;
         size: auto;
@@ -1317,19 +1318,8 @@ a {
     .category-body {
         display: block !important;
     }
-    .measure-card, .category {
+    .measure-card, .category, .item {
         page-break-inside: avoid;
         break-inside: avoid;
-    }
-    #print-checklist-container {
-        display: block !important;
-    }
-    #print-checklist-container .category {
-        page-break-inside: avoid;
-        break-inside: avoid;
-        margin-bottom: 0.6rem;
-    }
-    #print-checklist-container:empty {
-        display: none !important;
     }
 }
