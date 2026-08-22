@@ -1136,6 +1136,88 @@ function importJson(file) {
     reader.readAsText(file);
 }
 
+// ===== Archiv: aktuelle Begehung sichern, spaeter erneut exportieren =====
+// Ein Archiv-Datensatz ist ein vollstaendiger Schnappschuss (Betriebsdaten,
+// Antworten, Kommentare, Massnahmen, Unterschriften, Statistik-Zahlen zum
+// Zeitpunkt der Archivierung) inklusive der zu diesem Zeitpunkt vorhandenen
+// Fotos. Archivieren loescht NICHT die aktuelle Begehung - beides bleibt
+// parallel bestehen, bis man separat "Zurücksetzen" nutzt.
+async function archiveCurrentAudit() {
+    if (!confirm('Aktuelle Begehung jetzt archivieren? Die laufende Begehung bleibt zusätzlich unverändert bestehen, bis Sie „Zurücksetzen“ nutzen.')) return;
+    try {
+        const photos = await getAllPhotos();
+        const record = {
+            id: 'audit_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8),
+            createdAt: Date.now(),
+            companyInfo: JSON.parse(JSON.stringify(state.companyInfo)),
+            ratings: JSON.parse(JSON.stringify(state.ratings)),
+            comments: JSON.parse(JSON.stringify(state.comments)),
+            measures: JSON.parse(JSON.stringify(state.measures)),
+            signatures: JSON.parse(JSON.stringify(state.signatures)),
+            notApplicable: JSON.parse(JSON.stringify(state.notApplicable || {})),
+            stats: computeStats(),
+            photos: photos
+        };
+        await saveArchivedAudit(record);
+        showToast('Begehung archiviert');
+    } catch (err) {
+        console.error('Archivieren fehlgeschlagen:', err);
+        showToast('Archivieren fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+    }
+}
+
+// Erzeugt eine PDF fuer einen ARCHIVIERTEN Datensatz, indem die bestehenden,
+// bereits ausfuehrlich getesteten PDF-Funktionen (die auf dem globalen "state"
+// und getAllPhotos() arbeiten) kurzzeitig auf den archivierten Schnappschuss
+// umgeleitet und danach wieder zurueckgesetzt werden. Bewusster Kompromiss:
+// spart eine komplette Parallel-Implementierung der PDF-Erzeugung, die exakt
+// dasselbe noch einmal tun muesste.
+async function buildArchivedReportPdf(record, mode) {
+    const originalState = state;
+    const originalGetAllPhotos = getAllPhotos;
+    state = {
+        companyInfo: record.companyInfo,
+        ratings: record.ratings,
+        comments: record.comments,
+        measures: record.measures,
+        signatures: record.signatures,
+        notApplicable: record.notApplicable || {}
+    };
+    getAllPhotos = async () => record.photos || [];
+    try {
+        return await buildReportPdf(mode);
+    } finally {
+        state = originalState;
+        getAllPhotos = originalGetAllPhotos;
+    }
+}
+
+// Wie buildArchivedReportPdf(), haelt die Umleitung aber zusaetzlich waehrend
+// des Teilens aktiv - sharePdfDoc() ruft bei Erfolg intern openPrefilledMail()
+// auf, das wiederum Betreff/Text aus state.companyInfo baut. Ohne die
+// Umleitung wuerde die Mail faelschlich Markt/Datum der AKTUELL laufenden
+// Begehung zeigen statt der archivierten.
+async function shareArchivedReportPdf(record, mode) {
+    const originalState = state;
+    const originalGetAllPhotos = getAllPhotos;
+    state = {
+        companyInfo: record.companyInfo,
+        ratings: record.ratings,
+        comments: record.comments,
+        measures: record.measures,
+        signatures: record.signatures,
+        notApplicable: record.notApplicable || {}
+    };
+    getAllPhotos = async () => record.photos || [];
+    try {
+        const doc = await buildReportPdf(mode);
+        await sharePdfDoc(doc, reportFilename(mode).replace(/^(Checkliste|Massnahmenplan|Gesamtbericht)_/, 'Archiv_'), buildShareEmailSubject());
+    } finally {
+        state = originalState;
+        getAllPhotos = originalGetAllPhotos;
+    }
+}
+
 function resetAll() {
     if (!confirm('Wirklich alle Eingaben zurücksetzen? Dies kann nicht rückgängig gemacht werden.')) return;
     state = defaultState();
@@ -1204,9 +1286,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnReset = document.getElementById('btn-reset');
     if (btnReset) btnReset.addEventListener('click', resetAll);
 
+    const btnArchive = document.getElementById('btn-archive');
+    if (btnArchive) btnArchive.addEventListener('click', archiveCurrentAudit);
+
     // Aufklappbares Export-Menü (Checkliste/Maßnahmen/Fotos/Alles, Drucken, PDF teilen, Mail) - alle Seiten
     initExportMenu();
 
     // Aufklappbares Datei-Menü (Speichern, JSON exportieren/laden, Zurücksetzen) - alle Seiten
     initDropdownMenu('file-menu-toggle', 'file-menu-panel');
 });
+
+// ===== Service Worker registrieren (fuer Offline-Start ohne Netzwerk) =====
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(err => {
+            // Fehlschlag ist unkritisch - App funktioniert auch ohne SW,
+            // dann eben nur nicht komplett offline startfaehig.
+            console.warn('Service Worker konnte nicht registriert werden:', err);
+        });
+    });
+}
