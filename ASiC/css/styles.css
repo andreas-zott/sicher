@@ -224,6 +224,77 @@ a {
 }
 
 /* ==========================================================================
+   Fotos
+   ========================================================================== */
+.photos-section-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.photos-section-title .btn-small {
+    text-transform: none;
+    letter-spacing: normal;
+    cursor: pointer;
+}
+
+.photo-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+@media (max-width: 640px) {
+    .photo-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.photo-tile {
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.photo-preview {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 10px;
+    background: var(--paper);
+    display: block;
+}
+
+.photo-comment {
+    width: 100%;
+    min-height: 52px;
+    padding: 0.6rem 0.75rem;
+    border: 1.5px solid var(--line);
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 0.88rem;
+    color: var(--ink);
+    resize: vertical;
+    background: var(--card);
+}
+
+.photo-comment:focus {
+    outline: none;
+    border-color: var(--brand-red);
+}
+
+.photo-tile-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-link.photo-delete {
+    color: var(--mangel);
+}
+
+/* ==========================================================================
    Sprachstil-Umschalter — als zweite Pille im dunklen Header, neben der Navigation
    ========================================================================== */
 .style-switch {
