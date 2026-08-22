@@ -7,7 +7,7 @@ self.addEventListener('install', event => {
         '/manifest.json',
         '/icon.png',
         '/favicon.ico',
-        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css'
+        '/css/all.min.css'
       ]);
     })
   );

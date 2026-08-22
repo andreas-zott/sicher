@@ -9,7 +9,7 @@ const STORAGE_KEY = 'begehungState';
 // Revisionsstand der App/Checkliste (in Fusszeile und PDF sichtbar,
 // bei inhaltlichen Aenderungen an Fragenkatalog/Massnahmen hochzaehlen)
 const APP_REVISION = '2.0';
-const APP_REVISION_DATE = '21-08-2026';
+const APP_REVISION_DATE = '2026-08-21';
 
 function renderFooterMeta() {
     const el = document.getElementById('footer-version');
@@ -100,7 +100,7 @@ function showToast(message, type = 'success') {
     toast.className = `toast ${type}`;
     toast.textContent = message;
     document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 2600);
+    setTimeout(() => toast.remove(), type === 'error' ? 6000 : 2600);
 }
 
 // ===== Vorgefertigter Mail-Text beim PDF-Versand =====
@@ -226,7 +226,7 @@ async function sharePdfDoc(doc, filename, shareTitle) {
         showToast('PDF heruntergeladen');
     } catch (err) {
         console.error('PDF-Erzeugung fehlgeschlagen:', err);
-        showToast('PDF konnte nicht erzeugt werden', 'error');
+        showToast('PDF-Fehler: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
     }
 }
 
@@ -326,6 +326,133 @@ function checklistPdfHeaderLines() {
     ];
 }
 
+// ===== Deckblatt (Titelseite mit Betriebsdaten), wird jedem PDF vorangestellt =====
+function drawCoverPage(doc, pageWidth, pageHeight, margin, documentTitle) {
+    // Roter Kopfbalken mit Markenname
+    doc.setFillColor(204, 7, 30);
+    doc.rect(0, 0, pageWidth, 42, 'F');
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(28);
+    doc.setTextColor(255, 255, 255);
+    doc.text('ASiC Handel', pageWidth / 2, 24, { align: 'center' });
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(11);
+    doc.text('Arbeitssicherheits-Check', pageWidth / 2, 33, { align: 'center' });
+
+    let y = 80;
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(20);
+    doc.setTextColor(28, 34, 38);
+    doc.text(documentTitle, pageWidth / 2, y, { align: 'center' });
+    y += 22;
+
+    // Betriebsdaten zentriert als Liste
+    const ci = state.companyInfo;
+    const rows = [
+        ['Firma / Markt', ci.firma || '-'],
+        ['Standort', ci.standort || '-'],
+        ['Datum', ci.datum ? formatDate(ci.datum) : '-'],
+        ['Prüfer', ci.pruefername || '-'],
+        ['Marktleitung', ci.marktleitung || '-'],
+        ['Teilnehmer', ci.teilnehmer || '-']
+    ];
+
+    const boxWidth = 120;
+    const boxX = (pageWidth - boxWidth) / 2;
+
+    rows.forEach(([label, value]) => {
+        doc.setFont(undefined, 'bold');
+        doc.setFontSize(8.5);
+        doc.setTextColor(140, 148, 155);
+        doc.text(label.toUpperCase(), boxX, y);
+        y += 5.5;
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(12.5);
+        doc.setTextColor(28, 34, 38);
+        const lines = doc.splitTextToSize(String(value), boxWidth);
+        doc.text(lines, boxX, y);
+        y += lines.length * 5.5 + 2;
+        doc.setDrawColor(225);
+        doc.setLineWidth(0.25);
+        doc.line(boxX, y, boxX + boxWidth, y);
+        y += 9;
+    });
+
+    // Statistik: Status der Begehung als horizontaler Segmentbalken + Legende
+    y = drawCoverStats(doc, y, pageWidth, boxX, boxWidth);
+
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(8.5);
+    doc.setTextColor(150);
+    const erstellt = new Date().toISOString().split('T')[0];
+    doc.text(`ASiC Handel Rev. ${APP_REVISION} · Erstellt am ${formatDate(erstellt)}`, pageWidth / 2, pageHeight - 15, { align: 'center' });
+
+    doc.addPage();
+}
+
+// Segmentbalken (OK/Mangel/N.V./Offen) + Legende mit Zahlen und Prozentwerten,
+// spiegelt dieselbe Berechnung wie die Fortschrittsanzeige auf der Checkliste-Seite.
+function drawCoverStats(doc, y, pageWidth, boxX, boxWidth) {
+    const { total, ok, mangel, na, offen, answered } = computeStats();
+    if (total === 0) return y;
+
+    y += 6;
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(9);
+    doc.setTextColor(80, 88, 95);
+    doc.text('STATUS DER BEGEHUNG', boxX, y);
+    doc.setFont(undefined, 'normal');
+    doc.text(`${answered} / ${total} geprüft`, boxX + boxWidth, y, { align: 'right' });
+    y += 5;
+
+    // Segmentbalken
+    const barHeight = 6;
+    const segments = [
+        { value: ok, color: [47, 158, 100] },      // Gruen - In Ordnung
+        { value: mangel, color: [214, 69, 63] },   // Rot - Mangel
+        { value: na, color: [124, 135, 144] },     // Grau - N.V.
+        { value: offen, color: [222, 226, 229] }   // Hellgrau - noch offen
+    ];
+    let segX = boxX;
+    segments.forEach(seg => {
+        const segWidth = (seg.value / total) * boxWidth;
+        if (segWidth > 0) {
+            doc.setFillColor(seg.color[0], seg.color[1], seg.color[2]);
+            doc.rect(segX, y, segWidth, barHeight, 'F');
+        }
+        segX += segWidth;
+    });
+    doc.setDrawColor(210);
+    doc.setLineWidth(0.25);
+    doc.rect(boxX, y, boxWidth, barHeight, 'S');
+    y += barHeight + 7;
+
+    // Legende: vier Spalten mit Farbpunkt, Label und Anzahl
+    const legend = [
+        { label: 'In Ordnung', value: ok, color: [47, 158, 100] },
+        { label: 'Mangel', value: mangel, color: [214, 69, 63] },
+        { label: 'N.V.', value: na, color: [124, 135, 144] },
+        { label: 'Offen', value: offen, color: [180, 186, 191] }
+    ];
+    const colWidth = boxWidth / legend.length;
+    legend.forEach((item, i) => {
+        const x = boxX + i * colWidth;
+        doc.setFillColor(item.color[0], item.color[1], item.color[2]);
+        doc.circle(x + 1.5, y - 1, 1.5, 'F');
+        doc.setFont(undefined, 'bold');
+        doc.setFontSize(11);
+        doc.setTextColor(28, 34, 38);
+        doc.text(String(item.value), x + 5, y);
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(7.5);
+        doc.setTextColor(120, 130, 138);
+        doc.text(item.label, x + 5, y + 4);
+    });
+    y += 12;
+
+    return y;
+}
+
 function checklistPdfFilename() {
     const firma = (state.companyInfo.firma || 'markt').replace(/[^a-z0-9äöüß]+/gi, '-');
     const datum = state.companyInfo.datum || new Date().toISOString().split('T')[0];
@@ -333,10 +460,16 @@ function checklistPdfFilename() {
 }
 
 function buildChecklistPdf() {
+    if (typeof window.jspdf === 'undefined' || !window.jspdf.jsPDF) {
+        throw new Error('jsPDF-Bibliothek nicht geladen (window.jspdf fehlt). Bitte prüfen, ob "js/jspdf.umd.min.js" korrekt eingebunden ist, und die Seite neu laden.');
+    }
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
     const pageWidth = 210, pageHeight = 297, margin = 14;
     const contentWidth = pageWidth - margin * 2;
+
+    drawCoverPage(doc, pageWidth, pageHeight, margin, 'Checkliste');
+
     let y = 18;
 
     doc.setFont(undefined, 'bold');
@@ -359,8 +492,9 @@ function buildChecklistPdf() {
 
     y = renderChecklistPdfSection(doc, y, margin, contentWidth, pageHeight);
 
+    // Seitenzahl auf allen Seiten AUSSER dem Deckblatt (Seite 1)
     const totalPages = doc.getNumberOfPages();
-    for (let i = 1; i <= totalPages; i++) {
+    for (let i = 2; i <= totalPages; i++) {
         doc.setPage(i);
         doc.setFontSize(8);
         doc.setTextColor(140);
@@ -371,9 +505,14 @@ function buildChecklistPdf() {
 }
 
 async function shareChecklistPdf() {
-    const doc = buildChecklistPdf();
-    const filename = checklistPdfFilename();
-    await sharePdfDoc(doc, filename, buildShareEmailSubject());
+    try {
+        const doc = buildChecklistPdf();
+        const filename = checklistPdfFilename();
+        await sharePdfDoc(doc, filename, buildShareEmailSubject());
+    } catch (err) {
+        console.error('Checkliste-PDF konnte nicht erzeugt werden:', err);
+        showToast('PDF-Fehler: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+    }
 }
 
 // ===== Maßnahmen-PDF (mit optionaler Checkliste voran) =====
@@ -385,10 +524,16 @@ function pdfFilename() {
 }
 
 function buildPdf(includeChecklist) {
+    if (typeof window.jspdf === 'undefined' || !window.jspdf.jsPDF) {
+        throw new Error('jsPDF-Bibliothek nicht geladen (window.jspdf fehlt). Bitte prüfen, ob "js/jspdf.umd.min.js" korrekt eingebunden ist, und die Seite neu laden.');
+    }
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
     const pageWidth = 210, pageHeight = 297, margin = 14;
     const contentWidth = pageWidth - margin * 2;
+
+    drawCoverPage(doc, pageWidth, pageHeight, margin, includeChecklist ? 'Gesamtbericht' : 'Maßnahmen');
+
     let y = 18;
 
     doc.setFont(undefined, 'bold');
@@ -539,7 +684,7 @@ function buildPdf(includeChecklist) {
     });
 
     const totalPages = doc.getNumberOfPages();
-    for (let i = 1; i <= totalPages; i++) {
+    for (let i = 2; i <= totalPages; i++) {
         doc.setPage(i);
         doc.setFontSize(8);
         doc.setTextColor(140);
@@ -547,55 +692,6 @@ function buildPdf(includeChecklist) {
     }
 
     return doc;
-}
-
-// ===== Maßnahmen als HTML fuer den Druck (statische Unterschrift-Bilder statt Canvas) =====
-function buildMeasuresPrintHtml() {
-    let html = '<div class="section-title">Maßnahmen</div>';
-
-    if (state.measures.length === 0) {
-        html += '<p class="no-measures card" style="padding:1.5rem;">Keine Mängel erfasst.</p>';
-    } else {
-        html += '<div class="measures-list">' + state.measures.map((measure, index) => {
-            const found = measure.itemId ? findItemById(measure.itemId) : null;
-            const questionText = found ? `[${measure.itemId}] ${found.item.text}` : 'Manuell erfasste Maßnahme';
-            const statusLabel = measure.status === 'offen' ? 'Offen' : measure.status === 'bearbeitung' ? 'In Bearbeitung' : 'Erledigt';
-            return `
-            <div class="measure-card card">
-                <div class="measure-question">
-                    <span class="measure-number">${index + 1}.</span>
-                    <span class="measure-question-text">${questionText}</span>
-                </div>
-                <div class="measure-answer">
-                    <span class="measure-answer-label">Maßnahme</span>
-                    <p class="measure-answer-text">${measure.description || ''}</p>
-                </div>
-                <div class="measure-tile">
-                    <div class="tile-field"><span class="label">Verantwortlich</span><span class="tile-value">${measure.responsible || '-'}</span></div>
-                    <div class="tile-field"><span class="label">Frist</span><span class="tile-value">${measure.dueDate ? formatDate(measure.dueDate) : '-'}</span></div>
-                    <div class="tile-field"><span class="label">Status</span><span class="status-badge ${measure.status}">${statusLabel}</span></div>
-                </div>
-            </div>`;
-        }).join('') + '</div>';
-    }
-
-    html += '<div class="section-title" style="margin-top:1.5rem;">Unterschriften</div>';
-    html += '<div class="signatures-grid">';
-    [
-        { key: 'pruefer', label: 'Prüfer', name: state.companyInfo.pruefername },
-        { key: 'marktleitung', label: 'Marktleitung', name: state.companyInfo.marktleitung }
-    ].forEach(sig => {
-        html += `
-        <div class="card signature-block">
-            <div class="field"><label>${sig.label}</label><div class="value">${sig.name || '-'}</div></div>
-            ${state.signatures[sig.key]
-                ? `<img src="${state.signatures[sig.key]}" alt="Unterschrift ${sig.label}" style="max-width:100%; border:1px solid var(--line); border-radius:8px; display:block;">`
-                : '<p style="color:var(--steel); font-size:0.85rem;">Keine Unterschrift vorhanden.</p>'}
-        </div>`;
-    });
-    html += '</div>';
-
-    return html;
 }
 
 // ===== Vereinheitlichter Export: Modus 'checkliste' | 'massnahmen' | 'beide' =====
@@ -612,58 +708,40 @@ function buildReportPdf(mode) {
 }
 
 async function shareReportPdf(mode) {
-    const doc = buildReportPdf(mode);
-    await sharePdfDoc(doc, reportFilename(mode), buildShareEmailSubject());
+    try {
+        const doc = buildReportPdf(mode);
+        await sharePdfDoc(doc, reportFilename(mode), buildShareEmailSubject());
+    } catch (err) {
+        console.error('Report-PDF konnte nicht erzeugt werden:', err);
+        showToast('PDF-Fehler: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+    }
 }
 
 // Druckt je nach Modus die Checkliste, die Maßnahmen (inkl. Unterschriften) oder beides -
 // funktioniert unabhaengig davon, auf welcher der beiden Seiten man sich gerade befindet.
+// Drucken: erzeugt dieselbe fertig paginierte PDF wie "PDF teilen" (mit korrektem
+// Zeilenumbruch, Seitenabstand, Deckblatt und Seitenzahlen) und oeffnet sie in einem neuen Tab.
+// Dort druckt man ueber den nativen PDF-Betrachter (auf dem iPad: Teilen-Symbol -> Drucken/AirPrint).
+// Dieser Weg umgeht zuverlaessig die Einschraenkungen von window.print() auf einer
+// HTML-Seite (Browser-eigene Kopf-/Fusszeile mit URL/Datum, unzuverlaessige Seitenumbrueche).
 function printReport(mode) {
-    const printChecklist = document.getElementById('print-checklist-container');
-    const printMeasures = document.getElementById('print-measures-container');
-    const liveChecklist = document.getElementById('checklist-container');
-    const liveMeasures = document.getElementById('measures-container');
-    const liveNoMeasures = document.getElementById('no-measures');
-    const liveSignatureBlocks = document.querySelectorAll('.signature-block');
-
-    const wantChecklist = mode === 'checkliste' || mode === 'beide';
-    const wantMeasures = mode === 'massnahmen' || mode === 'beide';
-
-    if (printChecklist) {
-        // Auf massnahmen.html: Checkliste fuer den Druck injizieren
-        printChecklist.innerHTML = wantChecklist ? buildChecklistHtml(true) : '';
-    } else if (liveChecklist) {
-        // Auf index.html: vorhandene Live-Ansicht ein-/ausblenden statt zu duplizieren
-        liveChecklist.style.display = wantChecklist ? '' : 'none';
+    try {
+        const doc = buildReportPdf(mode);
+        const blob = doc.output('blob');
+        const url = URL.createObjectURL(blob);
+        const win = window.open(url, '_blank');
+        if (win) {
+            showToast('PDF geöffnet – über das Teilen-Symbol drucken');
+        } else {
+            // Pop-up blockiert: PDF stattdessen herunterladen, manuell drucken
+            doc.save(reportFilename(mode));
+            showToast('Pop-up blockiert – PDF heruntergeladen');
+        }
+    } catch (err) {
+        console.error('Drucken fehlgeschlagen:', err);
+        showToast('PDF-Fehler: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
     }
-
-    if (liveMeasures) {
-        // Auf massnahmen.html: vorhandene Live-Ansicht ein-/ausblenden statt zu duplizieren
-        liveMeasures.style.display = wantMeasures ? '' : 'none';
-        if (liveNoMeasures) liveNoMeasures.style.display = wantMeasures ? '' : 'none';
-        liveSignatureBlocks.forEach(el => { el.style.display = wantMeasures ? '' : 'none'; });
-    } else if (printMeasures) {
-        // Auf index.html: Maßnahmen + Unterschriften fuer den Druck injizieren
-        printMeasures.innerHTML = wantMeasures ? buildMeasuresPrintHtml() : '';
-    }
-
-    setTimeout(() => window.print(), 50);
 }
-
-window.addEventListener('afterprint', () => {
-    const printChecklist = document.getElementById('print-checklist-container');
-    const printMeasures = document.getElementById('print-measures-container');
-    const liveChecklist = document.getElementById('checklist-container');
-    const liveMeasures = document.getElementById('measures-container');
-    const liveNoMeasures = document.getElementById('no-measures');
-
-    if (printChecklist) printChecklist.innerHTML = '';
-    if (printMeasures) printMeasures.innerHTML = '';
-    if (liveChecklist) liveChecklist.style.display = '';
-    if (liveMeasures) liveMeasures.style.display = '';
-    if (liveNoMeasures) liveNoMeasures.style.display = '';
-    document.querySelectorAll('.signature-block').forEach(el => { el.style.display = ''; });
-});
 
 // ===== Betriebsdaten: Formular (index.html) =====
 function initCompanyForm() {
@@ -708,6 +786,7 @@ function renderCompanyInfoStrip() {
 // die bei Aktivierung komplett als N.V. markiert und gesperrt wird.
 const OPTIONAL_CATEGORIES = {
     'kundenaufzug': 'Kein Kundenaufzug im Markt vorhanden',
+    'lastenaufzug': 'Kein Lastenaufzug im Markt vorhanden',
     'barrierefreies-wc': 'Kein barrierefreies WC im Markt vorhanden',
     'praktikanten': 'Keine Praktikanten/Schüleraushilfen im Markt beschäftigt',
     'co2-kuehleinrichtungen': 'Keine CO2-Kühleinrichtungen im Markt vorhanden'
@@ -840,7 +919,9 @@ function updateComment(itemId, value) {
     saveState();
 }
 
-function updateStats() {
+// Reine Berechnung, getrennt von der DOM-Aktualisierung - so kann sie auch
+// vom PDF-Deckblatt (drawCoverPage) genutzt werden.
+function computeStats() {
     const total = totalItemCount();
     const values = Object.values(state.ratings);
     const ok = values.filter(v => v === 'ok').length;
@@ -848,6 +929,11 @@ function updateStats() {
     const na = values.filter(v => v === 'na').length;
     const answered = ok + mangel + na;
     const offen = total - answered;
+    return { total, ok, mangel, na, offen, answered };
+}
+
+function updateStats() {
+    const { total, ok, mangel, na, offen, answered } = computeStats();
 
     const setText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
     setText('stat-ok', ok);
