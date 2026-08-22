@@ -8,68 +8,68 @@ const MEASURES_TEXT = {
     "Gesamtmarkt": {
         "1.1": {
             einfach: 'Achten Sie darauf, dass alle Mitarbeitenden festes, vorne geschlossenes und rutschfestes Schuhwerk tragen.',
-            bghw: 'Setzen Sie die BGHW-Empfehlungen zum sicheren Schuhwerk um: festes, im Zehenbereich geschlossenes und rutschhemmendes Schuhwerk gemäß betrieblicher Gefährdungsbeurteilung.',
+            bghw: 'Setzen Sie die Vorgaben zu sicherem Schuhwerk gemäß § 5 ArbSchG (Gefährdungsbeurteilung), DGUV Vorschrift 1 und dem BGHW-Regelwerk um: festes, im Zehenbereich geschlossenes und rutschhemmendes Schuhwerk.',
             rechtlich: 'Gemäß Gefährdungsbeurteilung und DGUV Vorschrift 1 ist sicherzustellen, dass alle Beschäftigten geeignetes, festes, geschlossenes und rutschhemmendes Schuhwerk tragen. Die Einhaltung ist regelmäßig zu kontrollieren.'
         },
         "1.2": {
             einfach: 'Weisen Sie Ihre Mitarbeitenden regelmäßig ein, wie sie Hubwagen & Co. sicher benutzen: Schutzausrüstung tragen, Lasten nicht überladen, niemanden mitfahren lassen.',
-            bghw: 'Führen Sie regelmäßige Unterweisungen zum sicheren Umgang mit Flurförderfahrzeugen gemäß den BGHW-Vorgaben durch, inkl. PSA-Pflicht, zulässiger Traglasten und Verbot der Personenmitnahme.',
+            bghw: 'Führen Sie regelmäßige Unterweisungen zum sicheren Umgang mit Flurförderfahrzeugen gemäß DGUV Vorschrift 68 und dem BGHW-Regelwerk durch, inkl. PSA-Pflicht, zulässiger Traglasten und Verbot der Personenmitnahme.',
             rechtlich: 'Beschäftigte sind regelmäßig anhand der Betriebsanweisung zum sicheren Umgang mit Flurförderfahrzeugen zu unterweisen. PSA-Pflicht, Traglastbegrenzungen und das Verbot der Personenmitnahme sind konsequent einzuhalten.'
         },
         "1.3": {
             einfach: 'Lassen Sie die Automatiktüren umgehend prüfen. Schränken Sie den Betrieb bis dahin bei Bedarf ein und beheben Sie festgestellte Mängel zügig.',
-            bghw: 'Veranlassen Sie die Prüfung der Automatiktüren gemäß den BGHW-Vorgaben und ASR A1.7 umgehend über einen Sachkundigen, schränken Sie den Betrieb bis dahin bei Bedarf ein und dokumentieren Sie die Mängelbeseitigung.',
+            bghw: 'Veranlassen Sie die Prüfung der Automatiktüren gemäß ASR A1.7 und dem BGHW-Regelwerk umgehend über einen Sachkundigen, schränken Sie den Betrieb bis dahin bei Bedarf ein und dokumentieren Sie die Mängelbeseitigung.',
             rechtlich: 'Fachgerechte Prüfung der betroffenen Automatiktüren nach ASR A1.7 umgehend veranlassen. Betrieb bis zur Prüfung ggf. einschränken. Festgestellte Mängel zügig beheben und Dokumentation aktualisieren.'
         },
         "1.4": {
             einfach: 'Lassen Sie den Aufzug regelmäßig von einem Fachbetrieb prüfen und halten Sie ihn in einwandfreiem Zustand.',
-            bghw: 'Beauftragen Sie eine zugelassene Überwachungsstelle mit der wiederkehrenden Prüfung der Aufzugsanlage entsprechend den BGHW-Hinweisen zu technischen Arbeitsmitteln.',
+            bghw: 'Beauftragen Sie eine zugelassene Überwachungsstelle mit der wiederkehrenden Prüfung der Aufzugsanlage gemäß BetrSichV und dem BGHW-Regelwerk.',
             rechtlich: 'Aufzugsanlagen sind gemäß BetrSichV wiederkehrend durch zugelassene Überwachungsstellen zu prüfen und in sicherem Zustand zu halten.'
         },
         "1.6": {
             einfach: 'Stellen Sie genug sichere Trittstufen oder Rolltritte bereit und sorgen Sie dafür, dass sie auch genutzt werden.',
-            bghw: 'Stellen Sie geprüfte Aufstiegshilfen in ausreichender Anzahl gemäß den BGHW-Empfehlungen bereit und stellen Sie deren bestimmungsgemäße Nutzung sicher.',
+            bghw: 'Stellen Sie geprüfte Aufstiegshilfen gemäß DGUV Information 208-016 und dem BGHW-Regelwerk in ausreichender Anzahl bereit und stellen Sie deren bestimmungsgemäße Nutzung sicher.',
             rechtlich: 'Geeignete und geprüfte Aufstiegshilfen sind bereitzustellen. Die Nutzung hat gemäß DGUV Information 208-016 zu erfolgen.'
         },
         "1.7": {
             einfach: 'Lassen Sie Leitern und Tritte regelmäßig prüfen und sortieren Sie beschädigte sofort aus.',
-            bghw: 'Prüfen Sie Leitern und Tritte gemäß DGUV Information 208-016 in den von der BGHW empfohlenen Intervallen durch eine befähigte Person.',
+            bghw: 'Prüfen Sie Leitern und Tritte gemäß DGUV Information 208-016 und dem BGHW-Regelwerk durch eine befähigte Person in angemessenen Intervallen.',
             rechtlich: 'Leitern und Tritte sind regelmäßig durch befähigte Personen zu prüfen. Beschädigte Leitern sind sofort auszusondern.'
         },
         "1.8": {
             einfach: 'Nutzen Sie nur die freigegebenen Sicherheitsmesser aus dem Ordersatz.',
-            bghw: 'Stellen Sie sicher, dass ausschließlich die im BGHW-Ordersatz freigegebenen Sicherheitsmesser verwendet werden.',
-            rechtlich: 'Es dürfen ausschließlich geeignete Sicherheitsmesser aus dem freigegebenen Ordersatz verwendet werden.'
+            bghw: 'Stellen Sie im Rahmen der Gefährdungsbeurteilung (§ 5 ArbSchG) und des BGHW-Regelwerks sicher, dass ausschließlich freigegebene Sicherheitsmesser verwendet werden.',
+            rechtlich: 'Es dürfen ausschließlich geeignete Sicherheitsmesser gemäß der Gefährdungsbeurteilung nach § 5 ArbSchG verwendet werden.'
         },
         "1.9": {
             einfach: 'Halten Sie Gänge und Wege frei von Stolperfallen, damit niemand ausrutscht oder stürzt.',
-            bghw: 'Gestalten Sie die Verkehrswege gemäß den BGHW-Hinweisen zu innerbetrieblichem Verkehr frei von Stolper-, Rutsch- und Sturzgefahren.',
+            bghw: 'Gestalten Sie die Verkehrswege gemäß ASR A1.5 und dem BGHW-Regelwerk frei von Stolper-, Rutsch- und Sturzgefahren.',
             rechtlich: 'Verkehrswege sind gemäß ASR A1.5 frei von Stolper-, Rutsch- und Sturzgefahren zu halten.'
         },
         "1.10": {
             einfach: 'Halten Sie Treppen frei von Gegenständen und beheben Sie Schäden zügig.',
-            bghw: 'Kontrollieren Sie Treppen regelmäßig auf Schäden und halten Sie sie entsprechend den BGHW-Vorgaben frei von Gegenständen.',
-            rechtlich: 'Treppen sind frei von Gegenständen zu halten und regelmäßig auf Schäden zu kontrollieren.'
+            bghw: 'Kontrollieren Sie Treppen regelmäßig auf Schäden und halten Sie sie gemäß ASR A1.5 und dem BGHW-Regelwerk frei von Gegenständen.',
+            rechtlich: 'Treppen sind gemäß ASR A1.5 frei von Gegenständen zu halten und regelmäßig auf Schäden zu kontrollieren.'
         },
         "1.11": {
             einfach: 'Hängen Sie Betriebsanweisungen gut sichtbar auf und achten Sie darauf, dass sie auch befolgt werden.',
-            bghw: 'Machen Sie Betriebsanweisungen gemäß den BGHW-Vorgaben jederzeit zugänglich und kontrollieren Sie die Einhaltung der Sicherheitsanweisungen.',
-            rechtlich: 'Betriebsanweisungen sind aktuell, zugänglich und für Beschäftigte verständlich bereitzustellen.'
+            bghw: 'Machen Sie Betriebsanweisungen gemäß § 14 GefStoffV bzw. § 4 BetrSichV und dem BGHW-Regelwerk jederzeit zugänglich und kontrollieren Sie die Einhaltung der Sicherheitsanweisungen.',
+            rechtlich: 'Betriebsanweisungen sind gemäß § 14 GefStoffV bzw. § 4 BetrSichV aktuell, zugänglich und für Beschäftigte verständlich bereitzustellen.'
         },
         "1.12": {
             einfach: 'Sorgen Sie für ausreichend helles Licht in Verkauf und Lager, damit Gefahrenhinweise und Flüssigkeiten im Regal gut zu erkennen sind.',
-            bghw: 'Stellen Sie die Beleuchtung in Verkaufs- und Lagerbereichen entsprechend den BGHW-Beleuchtungsempfehlungen (mind. 300 Lux) sicher, damit Gefahrenhinweise und Leckagen zuverlässig erkennbar sind.',
+            bghw: 'Stellen Sie die Beleuchtung in Verkaufs- und Lagerbereichen gemäß ASR A3.4 (mind. 300 Lux) und dem BGHW-Regelwerk sicher, damit Gefahrenhinweise und Leckagen zuverlässig erkennbar sind.',
             rechtlich: 'Die Beleuchtung ist gemäß ASR A3.4 sicherzustellen (mind. 300 Lux im Verkaufsraum). Gefahrenstellen und Leckagen müssen jederzeit eindeutig erkennbar sein.'
         },
         "1.13": {
             einfach: 'Lassen Sie das Schnelllauftor umgehend vom Hersteller oder einem Fachmann prüfen und reparieren. Nutzen Sie den Torbereich bis dahin besonders vorsichtig.',
-            bghw: 'Veranlassen Sie die Prüfung und ggf. Instandsetzung des Schnelllauftors gemäß den BGHW-Vorgaben unverzüglich über einen Sachkundigen bzw. den Hersteller; der Torbereich ist bis zur Mängelfreiheit mit besonderer Vorsicht zu nutzen.',
-            rechtlich: 'Prüfung und ggf. erforderliche Instandsetzung des Schnelllauftors unverzüglich über einen Sachkundigen / den Hersteller veranlassen. Bis zur Mängelfreiheit ist der Torbereich mit besonderer Vorsicht zu nutzen.'
+            bghw: 'Veranlassen Sie die Prüfung und ggf. Instandsetzung des Schnelllauftors gemäß § 14 BetrSichV und dem BGHW-Regelwerk unverzüglich über einen Sachkundigen bzw. den Hersteller; der Torbereich ist bis zur Mängelfreiheit mit besonderer Vorsicht zu nutzen.',
+            rechtlich: 'Prüfung und ggf. erforderliche Instandsetzung des Schnelllauftors sind gemäß § 14 BetrSichV unverzüglich über einen Sachkundigen bzw. den Hersteller zu veranlassen. Bis zur Mängelfreiheit ist der Torbereich mit besonderer Vorsicht zu nutzen.'
         },
         "1.14": {
             einfach: 'Lassen Sie das Rolltor zeitnah von einem Fachmann prüfen und warten und halten Sie den Zustand schriftlich fest.',
-            bghw: 'Veranlassen Sie die Sachkundigenprüfung sowie die erforderliche Wartung des Rolltors gemäß den BGHW-Vorgaben kurzfristig und dokumentieren Sie den Zustand im Prüfbuch.',
-            rechtlich: 'Sachkundigenprüfung sowie erforderliche Wartung des Rolltors kurzfristig veranlassen und den ordnungsgemäßen Zustand im Prüfbuch dokumentieren.'
+            bghw: 'Veranlassen Sie die Sachkundigenprüfung sowie die erforderliche Wartung des Rolltors gemäß § 14 BetrSichV und dem BGHW-Regelwerk kurzfristig und dokumentieren Sie den Zustand im Prüfbuch.',
+            rechtlich: 'Sachkundigenprüfung sowie erforderliche Wartung des Rolltors sind gemäß § 14 BetrSichV kurzfristig zu veranlassen; der ordnungsgemäße Zustand ist im Prüfbuch zu dokumentieren.'
         }
     },
 
@@ -818,77 +818,77 @@ const MEASURES_TEXT = {
     "Kundenaufzug": {
         "21.1": {
             einfach: 'Beheben Sie äußere Schäden an Kabine, Türen, Boden oder Beleuchtung des Kundenaufzugs umgehend und lassen Sie eine fehlende oder unleserliche Tragfähigkeitsangabe erneuern.',
-            bghw: 'Veranlassen Sie die Instandsetzung äußerer Schäden am Kundenaufzug gemäß den BGHW-Vorgaben umgehend und stellen Sie eine gut lesbare Tragfähigkeitsangabe sicher.',
+            bghw: 'Veranlassen Sie die Instandsetzung äußerer Schäden am Kundenaufzug gemäß TRBS 3121 und dem BGHW-Regelwerk umgehend und stellen Sie eine gut lesbare Tragfähigkeitsangabe sicher.',
             rechtlich: 'Äußere Schäden an Kabine, Türen, Boden oder Beleuchtung des Kundenaufzugs sind unverzüglich zu beseitigen; die zulässige Tragfähigkeit ist gemäß BetrSichV deutlich sichtbar anzugeben.'
         },
         "21.2": {
             einfach: 'Lassen Sie defekte Aufzugstüren, Lichtschranken oder Türsensoren sofort reparieren und halten Sie die Zugänge frei von Stolperstellen.',
-            bghw: 'Veranlassen Sie die Instandsetzung von Aufzugstüren, Lichtschranken und Türsensoren gemäß BGHW-Vorgaben unverzüglich und beseitigen Sie Stolperstellen im Zugangsbereich.',
+            bghw: 'Veranlassen Sie die Instandsetzung von Aufzugstüren, Lichtschranken und Türsensoren gemäß TRBS 3121 und dem BGHW-Regelwerk unverzüglich und beseitigen Sie Stolperstellen im Zugangsbereich.',
             rechtlich: 'Defekte Aufzugstüren, Lichtschranken oder Türsensoren sind unverzüglich instand zu setzen; die Zugänge sind gemäß ASR A1.5 frei von Stolperstellen zu halten.'
         },
         "21.3": {
             einfach: 'Lassen Sie defekte Bedientasten, die Notruftaste oder die Etagenanzeige umgehend reparieren und sorgen Sie für verständliche Beschriftung.',
-            bghw: 'Veranlassen Sie die Instandsetzung von Bedientasten, Notruftaste und Etagenanzeige gemäß BGHW-Vorgaben und stellen Sie eine verständliche Beschriftung sicher.',
+            bghw: 'Veranlassen Sie die Instandsetzung von Bedientasten, Notruftaste und Etagenanzeige gemäß TRBS 3121 und dem BGHW-Regelwerk und stellen Sie eine verständliche Beschriftung sicher.',
             rechtlich: 'Bedientasten, Notruftaste sowie Etagen- bzw. Fahrtrichtungsanzeige sind funktionsfähig zu halten und verständlich zu beschriften.'
         },
         "21.4": {
             einfach: 'Lassen Sie die Notrufeinrichtung reparieren und schulen Sie das Personal, wie es sich bei eingeschlossenen Kunden verhält.',
-            bghw: 'Veranlassen Sie die Instandsetzung der Notrufeinrichtung gemäß BGHW-Vorgaben und unterweisen Sie das Personal zum Verhalten bei eingeschlossenen Personen.',
+            bghw: 'Veranlassen Sie die Instandsetzung der Notrufeinrichtung gemäß TRBS 3121 und dem BGHW-Regelwerk und unterweisen Sie das Personal zum Verhalten bei eingeschlossenen Personen.',
             rechtlich: 'Eine funktionsfähige Notrufeinrichtung ist sicherzustellen; das Personal ist gemäß § 12 ArbSchG zum Verhalten bei eingeschlossenen Personen zu unterweisen. Eine eigenständige Befreiung durch Personal ist zu unterlassen.'
         },
         "21.5": {
             einfach: 'Holen Sie die fällige Aufzugsprüfung nach, beheben Sie offene Mängel aus dem letzten Prüfbericht und legen Sie die Prüfbescheinigung vor.',
-            bghw: 'Veranlassen Sie die fristgerechte wiederkehrende Prüfung gemäß BGHW-Vorgaben, arbeiten Sie festgestellte Mängel vollständig ab und halten Sie die Prüfbescheinigung bereit.',
-            rechtlich: 'Die wiederkehrende Prüfung des Aufzugs ist gemäß BetrSichV fristgerecht durchzuführen; festgestellte Mängel sind vollständig abzuarbeiten und die Prüfbescheinigung ist vorzuhalten.'
+            bghw: 'Veranlassen Sie die fristgerechte wiederkehrende Prüfung gemäß § 16 BetrSichV und dem BGHW-Regelwerk, arbeiten Sie festgestellte Mängel vollständig ab und halten Sie die Prüfbescheinigung bereit.',
+            rechtlich: 'Die wiederkehrende Prüfung des Aufzugs ist gemäß § 16 BetrSichV durch eine zugelassene Überwachungsstelle (ZÜS) fristgerecht durchzuführen; festgestellte Mängel sind vollständig abzuarbeiten und die Prüfbescheinigung ist vorzuhalten.'
         },
         "21.6": {
             einfach: 'Räumen Sie Waren und Lagergut vor den Aufzugstüren weg und sorgen Sie für einen ebenen, gut beleuchteten Bereich.',
-            bghw: 'Halten Sie die Bereiche vor den Aufzugstüren gemäß BGHW-Vorgaben frei von Waren und Lagergut und sorgen Sie für ausreichende Beleuchtung.',
+            bghw: 'Halten Sie die Bereiche vor den Aufzugstüren gemäß ASR A3.4 und dem BGHW-Regelwerk frei von Waren und Lagergut und sorgen Sie für ausreichende Beleuchtung.',
             rechtlich: 'Die Bereiche vor den Aufzugstüren sind freizuhalten, eben zu gestalten und gemäß ASR A3.4 ausreichend zu beleuchten.'
         },
         "21.7": {
             einfach: 'Prüfen Sie, ob der Aufzug für Kunden inkl. Einkaufswagen und mobilitätseingeschränkte Personen geeignet ist, und bringen Sie verständliche Hinweise bei Störungen an.',
-            bghw: 'Stellen Sie die Eignung des Aufzugs für den Kundenverkehr (Einkaufswagen, Barrierefreiheit) gemäß BGHW-Vorgaben sicher und bringen Sie verständliche Störungshinweise an.',
+            bghw: 'Stellen Sie die Eignung des Aufzugs für den Kundenverkehr (Einkaufswagen, Barrierefreiheit) gemäß TRBS 3121 und dem BGHW-Regelwerk sicher und bringen Sie verständliche Störungshinweise an.',
             rechtlich: 'Die Eignung des Aufzugs für die vorgesehene Kundennutzung, einschließlich Einkaufswagen und mobilitätseingeschränkter Personen, ist sicherzustellen; Hinweise bei Störungen sind verständlich anzubringen.'
         },
         "21.8": {
             einfach: 'Legen Sie schriftlich fest, wer im Notfall für die Befreiung eingeschlossener Personen zuständig ist, hinterlegen Sie eine Notbefreiungsanleitung vor Ort und beim Notdienst, schulen Sie das Personal in Erstmaßnahmen (Beruhigung, Zugang, Feuerwehr-Einweisung) und sorgen Sie für einen Ersatz-Notdienst, falls der reguläre ausfällt.',
-            bghw: 'Regeln und dokumentieren Sie die Zuständigkeit für die Notbefreiung sowie die Alarmierungskette gemäß den BGHW-Vorgaben, hinterlegen Sie die Notbefreiungsanleitung vor Ort und beim Notdienst, schulen Sie das Personal in Erstmaßnahmen und stellen Sie eine redundante Notdienst-Absicherung sicher.',
-            rechtlich: 'Die Zuständigkeit für die Notbefreiung (intern/extern/kombiniert) sowie die Alarmierungskette (Notdienst → Objektpersonal → ggf. Feuerwehr) sind schriftlich zu regeln und zu dokumentieren; eine Notbefreiungsanleitung ist vor Ort und beim Notdienst vorzuhalten. Das Personal ist gemäß § 12 ArbSchG in Erstmaßnahmen zu schulen; eine Redundanz für den Ausfall des externen Dienstes ist sicherzustellen.'
+            bghw: 'Regeln und dokumentieren Sie die Zuständigkeit für die Notbefreiung sowie die Alarmierungskette gemäß TRBS 3121 und dem BGHW-Regelwerk, hinterlegen Sie die Notbefreiungsanleitung vor Ort und beim Notdienst, schulen Sie das Personal in Erstmaßnahmen und stellen Sie eine redundante Notdienst-Absicherung sicher.',
+            rechtlich: 'Die Zuständigkeit für die Notbefreiung (intern/extern/kombiniert) sowie die Alarmierungskette (Notdienst → Objektpersonal → ggf. Feuerwehr) sind gemäß TRBS 3121 schriftlich zu regeln und zu dokumentieren; eine Notbefreiungsanleitung ist vor Ort und beim Notdienst vorzuhalten. Das Personal ist gemäß § 12 ArbSchG in Erstmaßnahmen zu schulen; eine Redundanz für den Ausfall des externen Dienstes ist sicherzustellen.'
         },
         "21.9": {
             einfach: 'Erstellen Sie eine schriftliche Alarmierungskette für Aufzugsstörungen und eingeschlossene Personen und machen Sie sie allen Beteiligten bekannt.',
-            bghw: 'Dokumentieren Sie die Alarmierungs- und Eskalationskette für Aufzugsstörungen gemäß BGHW-Vorgaben und stellen Sie deren Bekanntheit beim zuständigen Personal sicher.',
-            rechtlich: 'Eine dokumentierte Alarmierungs- und Eskalationskette für Aufzugsstörungen bzw. eingeschlossene Personen ist zu erstellen und dem zuständigen Personal bekannt zu machen.'
+            bghw: 'Dokumentieren Sie die Alarmierungs- und Eskalationskette für Aufzugsstörungen gemäß TRBS 3121 und dem BGHW-Regelwerk und stellen Sie deren Bekanntheit beim zuständigen Personal sicher.',
+            rechtlich: 'Eine dokumentierte Alarmierungs- und Eskalationskette für Aufzugsstörungen bzw. eingeschlossene Personen ist gemäß TRBS 3121 zu erstellen und dem zuständigen Personal bekannt zu machen.'
         },
         "21.10": {
             einfach: 'Halten Sie die Kontaktdaten des Aufzugsnotdienstes aktuell und sorgen Sie dafür, dass das Personal jederzeit darauf zugreifen kann.',
-            bghw: 'Stellen Sie die jederzeitige Verfügbarkeit aktueller Kontaktdaten des Aufzugsnotdienstes für das Objektpersonal gemäß BGHW-Vorgaben sicher.',
+            bghw: 'Stellen Sie die jederzeitige Verfügbarkeit aktueller Kontaktdaten des Aufzugsnotdienstes für das Objektpersonal gemäß TRBS 3121 und dem BGHW-Regelwerk sicher.',
             rechtlich: 'Die Kontaktdaten des zuständigen Aufzugsnotdienstes sind aktuell zu halten und dem Objektpersonal jederzeit zugänglich zu machen.'
         },
         "21.11": {
             einfach: 'Legen Sie eine Notbefreiungsanleitung bzw. eine schriftliche Vorgehensweise für den Störungsfall vor Ort bereit.',
-            bghw: 'Hinterlegen Sie eine Notbefreiungsanleitung bzw. dokumentierte Vorgehensweise für den Störungsfall gemäß BGHW-Vorgaben vor Ort.',
-            rechtlich: 'Eine Notbefreiungsanleitung bzw. dokumentierte Vorgehensweise für den Störungsfall ist vor Ort bereitzuhalten.'
+            bghw: 'Hinterlegen Sie eine Notbefreiungsanleitung bzw. dokumentierte Vorgehensweise für den Störungsfall gemäß TRBS 3121 und dem BGHW-Regelwerk vor Ort.',
+            rechtlich: 'Eine Notbefreiungsanleitung bzw. dokumentierte Vorgehensweise für den Störungsfall ist gemäß TRBS 3121 vor Ort bereitzuhalten.'
         },
         "21.12": {
             einfach: 'Legen Sie fest, wie das Personal im Notfall die Einsatzkräfte bzw. den Aufzugsnotdienst zum betroffenen Aufzug einweist.',
-            bghw: 'Regeln Sie die Einweisung der Einsatzkräfte bzw. des Aufzugsnotdienstes zum betroffenen Aufzug durch das Objektpersonal gemäß BGHW-Vorgaben.',
+            bghw: 'Regeln Sie die Einweisung der Einsatzkräfte bzw. des Aufzugsnotdienstes zum betroffenen Aufzug durch das Objektpersonal gemäß TRBS 3121 und dem BGHW-Regelwerk.',
             rechtlich: 'Es ist zu regeln, wie das Objektpersonal im Notfall die Einsatzkräfte bzw. den Aufzugsnotdienst zum betroffenen Aufzug einweist.'
         },
         "21.13": {
             einfach: 'Schulen Sie das zuständige Personal in den Erstmaßnahmen bei eingeschlossenen Personen.',
-            bghw: 'Unterweisen Sie das zuständige Personal in den erforderlichen Erstmaßnahmen bei eingeschlossenen Personen gemäß BGHW-Vorgaben.',
+            bghw: 'Unterweisen Sie das zuständige Personal in den erforderlichen Erstmaßnahmen bei eingeschlossenen Personen gemäß § 12 ArbSchG, TRBS 3121 und dem BGHW-Regelwerk.',
             rechtlich: 'Das zuständige Personal ist gemäß § 12 ArbSchG in den erforderlichen Erstmaßnahmen bei eingeschlossenen Personen zu unterweisen.'
         },
         "21.14": {
             einfach: 'Stellen Sie sicher, dass eingeschlossene Personen bis zum Eintreffen des Fachpersonals betreut und beruhigt werden.',
-            bghw: 'Stellen Sie eine angemessene Betreuung und Beruhigung eingeschlossener Personen bis zum Eintreffen des zuständigen Fachpersonals gemäß BGHW-Vorgaben sicher.',
+            bghw: 'Stellen Sie eine angemessene Betreuung und Beruhigung eingeschlossener Personen bis zum Eintreffen des zuständigen Fachpersonals gemäß TRBS 3121 und dem BGHW-Regelwerk sicher.',
             rechtlich: 'Es ist sicherzustellen, dass eingeschlossene Personen bis zum Eintreffen des zuständigen Fachpersonals angemessen betreut und beruhigt werden.'
         },
         "21.15": {
             einfach: 'Legen Sie eine Vertretungsregelung fest, falls der Aufzugsnotdienst einmal nicht erreichbar ist.',
-            bghw: 'Richten Sie eine Vertretungs- bzw. Redundanzregelung für den Ausfall des zuständigen Aufzugsnotdienstes gemäß BGHW-Vorgaben ein.',
+            bghw: 'Richten Sie eine Vertretungs- bzw. Redundanzregelung für den Ausfall des zuständigen Aufzugsnotdienstes gemäß TRBS 3121 und dem BGHW-Regelwerk ein.',
             rechtlich: 'Für den Fall der Nichterreichbarkeit des zuständigen Aufzugsnotdienstes ist eine Vertretungs- bzw. Redundanzregelung vorzuhalten.'
         }
     },
@@ -896,54 +896,54 @@ const MEASURES_TEXT = {
     "Lastenaufzug": {
         "22.1": {
             einfach: 'Beheben Sie äußere Schäden an Kabine, Türen, Boden, Beleuchtung oder Bedienelementen des Lastenaufzugs umgehend.',
-            bghw: 'Veranlassen Sie die Instandsetzung äußerer Schäden am Lastenaufzug gemäß BGHW-Vorgaben umgehend.',
+            bghw: 'Veranlassen Sie die Instandsetzung äußerer Schäden am Lastenaufzug gemäß TRBS 3121 und dem BGHW-Regelwerk umgehend.',
             rechtlich: 'Äußere Schäden an Kabine, Türen, Boden, Beleuchtung oder Bedienelementen des Lastenaufzugs sind unverzüglich zu beseitigen.'
         },
         "22.2": {
             einfach: 'Bringen Sie eine gut sichtbare Tragfähigkeitsangabe an und weisen Sie das Personal auf die zulässige Beladung hin.',
-            bghw: 'Stellen Sie eine deutlich sichtbare Tragfähigkeitsangabe sicher und unterweisen Sie das Personal zur zulässigen Beladung gemäß BGHW-Vorgaben.',
+            bghw: 'Stellen Sie eine deutlich sichtbare Tragfähigkeitsangabe sicher und unterweisen Sie das Personal zur zulässigen Beladung gemäß TRBS 3121 und dem BGHW-Regelwerk.',
             rechtlich: 'Die zulässige Tragfähigkeit ist gemäß BetrSichV deutlich sichtbar anzugeben; eine Überladung oder unsachgemäße Beladung ist zu unterbinden.'
         },
         "22.3": {
             einfach: 'Lassen Sie defekte Aufzugstüren oder Türsicherungen sofort reparieren und beseitigen Sie Quetsch- oder Absturzgefahren.',
-            bghw: 'Veranlassen Sie die Instandsetzung von Aufzugstüren und Türsicherungen gemäß BGHW-Vorgaben und beseitigen Sie erkannte Quetsch- oder Absturzgefahren.',
+            bghw: 'Veranlassen Sie die Instandsetzung von Aufzugstüren und Türsicherungen gemäß TRBS 3121 und dem BGHW-Regelwerk und beseitigen Sie erkannte Quetsch- oder Absturzgefahren.',
             rechtlich: 'Defekte Aufzugstüren oder Türsicherungen sind unverzüglich instand zu setzen; Quetsch- oder Absturzgefahren sind zu beseitigen.'
         },
         "22.4": {
             einfach: 'Räumen Sie Waren, Paletten und sonstige Hindernisse vor den Aufzugstüren weg.',
-            bghw: 'Halten Sie die Bereiche vor den Aufzugstüren gemäß BGHW-Vorgaben frei von Waren, Paletten und sonstigen Hindernissen.',
+            bghw: 'Halten Sie die Bereiche vor den Aufzugstüren gemäß ASR A1.8 und dem BGHW-Regelwerk frei von Waren, Paletten und sonstigen Hindernissen.',
             rechtlich: 'Die Bereiche vor den Aufzugstüren sind freizuhalten von Waren, Paletten und sonstigen Hindernissen.'
         },
         "22.5": {
             einfach: 'Weisen Sie, falls zutreffend, deutlich sichtbar darauf hin, dass der Lastenaufzug nicht zur Personenbeförderung genutzt werden darf, und sorgen Sie für bestimmungsgemäße Nutzung.',
-            bghw: 'Bringen Sie erforderliche Hinweise bzw. Verbote zur Personenbeförderung gemäß BGHW-Vorgaben gut sichtbar an und stellen Sie die bestimmungsgemäße Nutzung sicher.',
+            bghw: 'Bringen Sie erforderliche Hinweise bzw. Verbote zur Personenbeförderung gemäß TRBS 3121 und dem BGHW-Regelwerk gut sichtbar an und stellen Sie die bestimmungsgemäße Nutzung sicher.',
             rechtlich: 'Der Lastenaufzug ist bestimmungsgemäß zu verwenden; erforderliche Hinweise bzw. Verbote zur Personenbeförderung sind gut sichtbar anzubringen.'
         },
         "22.6": {
             einfach: 'Lassen Sie defekte Bedienelemente, Anzeigen oder Sicherheitseinrichtungen reparieren und sorgen Sie für eindeutige Kennzeichnung.',
-            bghw: 'Veranlassen Sie die Instandsetzung von Bedienelementen, Anzeigen und Sicherheitseinrichtungen gemäß BGHW-Vorgaben und stellen Sie eine eindeutige Kennzeichnung sicher.',
+            bghw: 'Veranlassen Sie die Instandsetzung von Bedienelementen, Anzeigen und Sicherheitseinrichtungen gemäß TRBS 3121 und dem BGHW-Regelwerk und stellen Sie eine eindeutige Kennzeichnung sicher.',
             rechtlich: 'Bedienelemente, Anzeigen und Sicherheitseinrichtungen sind funktionsfähig zu halten und eindeutig zu kennzeichnen.'
         },
         "22.7": {
             einfach: 'Holen Sie die fällige Prüfung nach und beheben Sie offene Mängel aus dem letzten Prüfbericht.',
-            bghw: 'Veranlassen Sie die fristgerechte Prüfung gemäß BGHW-Vorgaben und arbeiten Sie festgestellte Mängel vollständig ab.',
-            rechtlich: 'Die wiederkehrende Prüfung des Lastenaufzugs ist gemäß BetrSichV fristgerecht durchzuführen; festgestellte Mängel sind vollständig abzuarbeiten.'
+            bghw: 'Veranlassen Sie die fristgerechte Prüfung gemäß § 16 BetrSichV und dem BGHW-Regelwerk und arbeiten Sie festgestellte Mängel vollständig ab.',
+            rechtlich: 'Die wiederkehrende Prüfung des Lastenaufzugs ist gemäß § 16 BetrSichV durch eine zugelassene Überwachungsstelle (ZÜS) fristgerecht durchzuführen; festgestellte Mängel sind vollständig abzuarbeiten.'
         },
         "22.8": {
             einfach: 'Unterweisen Sie die zuständigen Beschäftigten in der sicheren Bedienung und Beladung des Lastenaufzugs.',
-            bghw: 'Unterweisen Sie die zuständigen Beschäftigten in der sicheren Bedienung und Beladung gemäß BGHW-Vorgaben.',
+            bghw: 'Unterweisen Sie die zuständigen Beschäftigten gemäß § 12 ArbSchG und dem BGHW-Regelwerk in der sicheren Bedienung und Beladung.',
             rechtlich: 'Die zuständigen Beschäftigten sind gemäß § 12 ArbSchG in der sicheren Bedienung und Beladung des Lastenaufzugs zu unterweisen.'
         },
         "22.9": {
             einfach: 'Legen Sie schriftlich fest, wie bei einer Störung oder einem Einschluss vorzugehen ist, und machen Sie die Ansprechpartner bekannt.',
-            bghw: 'Regeln Sie das Vorgehen bei Störung oder Einschluss gemäß BGHW-Vorgaben und benennen Sie die zuständigen Ansprechpartner.',
-            rechtlich: 'Das Vorgehen bei einer Störung oder einem Einschluss ist schriftlich zu regeln; die zuständigen Ansprechpartner sind bekannt zu machen.'
+            bghw: 'Regeln Sie das Vorgehen bei Störung oder Einschluss gemäß TRBS 3121 und dem BGHW-Regelwerk und benennen Sie die zuständigen Ansprechpartner.',
+            rechtlich: 'Das Vorgehen bei einer Störung oder einem Einschluss ist gemäß TRBS 3121 schriftlich zu regeln; die zuständigen Ansprechpartner sind bekannt zu machen.'
         }
     },
 
     default: {
         einfach: 'Legen Sie geeignete Maßnahmen fest, um den Mangel zu beheben, und dokumentieren Sie diese.',
-        bghw: 'Legen Sie geeignete Maßnahmen zur Mängelbeseitigung gemäß den BGHW-Vorgaben fest und dokumentieren Sie diese nachvollziehbar.',
+        bghw: 'Legen Sie geeignete Maßnahmen zur Mängelbeseitigung gemäß § 3 ArbSchG und dem BGHW-Regelwerk fest und dokumentieren Sie diese nachvollziehbar.',
         rechtlich: 'Geeignete Maßnahmen zur Mängelbeseitigung sind gemäß § 3 ArbSchG festzulegen und zu dokumentieren.'
     }
 };
