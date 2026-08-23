@@ -290,12 +290,32 @@
             unbemerkt gemischt ausgeliefert werden.
         </div>
 
-        <h3>PWA-Grundgerüst</h3>
+        <h3>PWA-Grundgerüst &amp; Installation als Desktop-App</h3>
         <div class="card doku-card">
             <ul>
                 <li><code>manifest.json</code> und Icons (<code>icon-192.png</code>, <code>icon-512.png</code>) vorhanden — ermöglicht „Zum Home-Bildschirm hinzufügen“ auf dem iPad</li>
                 <li>Zusammen mit dem aktiven Service Worker ist die App damit als vollwertige installierbare PWA nutzbar</li>
+                <li>Auf Firmenrechnern (Windows/Mac) über die <strong>über GitHub Pages gehostete Adresse</strong> (<code>https://andreas-zott.github.io/sicher/ASiC/index.html</code>) in <strong>Edge oder Chrome</strong> installierbar — Symbol in der Adressleiste bzw. Menü „Apps → Diese Website als App installieren“. Läuft danach in einem eigenen Fenster ohne Adressleiste, mit eigenem Desktop-/Startmenü-Symbol</li>
+                <li>Voraussetzung dafür ist eine per HTTPS ausgelieferte Adresse (GitHub Pages liefert das automatisch) — über eine reine <code>http://</code>-Adresse verweigern Browser die Installation</li>
+                <li><strong>Firefox unterstützt die Desktop-Installation nicht</strong> (von Mozilla bewusst entfernte Funktion) — dort bleibt die App ein normaler Browser-Tab</li>
             </ul>
+        </div>
+
+        <h3>Zugangs-Hürde</h3>
+        <div class="card doku-card">
+            <p>
+                <code>js/access-gate.js</code> zeigt eine Zugangscode-Abfrage, aber <strong>ausschließlich</strong> wenn die
+                App als installierte Anwendung läuft (erkannt über <code>display-mode: standalone</code> bzw.
+                <code>navigator.standalone</code> auf iOS) — beim normalen Aufruf in einem gewöhnlichen Browser-Tab
+                bleibt die Seite frei zugänglich. Nach einmaliger korrekter Eingabe wird das pro Gerät/Browser in
+                <code>localStorage</code> gemerkt.
+            </p>
+        </div>
+        <div class="doku-box">
+            <div class="doku-box-title">Kein echter Zugriffsschutz</div>
+            Da die App als reine statische Webseite ohne eigenen Server läuft, ist der Zugangscode im Quelltext für
+            jeden sichtbar, der „Seitenquelltext anzeigen“ nutzt. Diese Hürde verhindert nur zufälliges Entdecken
+            durch Unbeteiligte, keinen gezielten Zugriff.
         </div>
     </section>
 
