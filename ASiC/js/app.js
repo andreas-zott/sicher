@@ -1160,6 +1160,21 @@ async function archiveCurrentAudit() {
         };
         await saveArchivedAudit(record);
         showToast('Begehung archiviert');
+
+        // Optionaler automatischer NAS-Upload (nur wenn in den Einstellungen
+        // konfiguriert UND aktiviert). Eigener, getrennter Try/Catch-Block:
+        // ein Fehlschlag hier darf NICHT die bereits erfolgreich
+        // abgeschlossene lokale Archivierung als Fehler erscheinen lassen.
+        const webdavConfig = (typeof getWebDAVConfig === 'function') ? getWebDAVConfig() : null;
+        if (webdavConfig && webdavConfig.autoUpload) {
+            try {
+                await uploadArchivedAuditToWebDAV(record);
+                showToast('Zusätzlich auf NAS gesichert');
+            } catch (uploadErr) {
+                console.error('NAS-Upload fehlgeschlagen:', uploadErr);
+                showToast('Lokal archiviert, NAS-Upload fehlgeschlagen: ' + (uploadErr && uploadErr.message ? uploadErr.message : 'unbekannter Fehler'), 'error');
+            }
+        }
     } catch (err) {
         console.error('Archivieren fehlgeschlagen:', err);
         showToast('Archivieren fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');

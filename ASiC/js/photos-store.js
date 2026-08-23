@@ -17,6 +17,17 @@ function openPhotoDB() {
             reject(new Error('IndexedDB wird von diesem Browser nicht unterstützt.'));
             return;
         }
+        // Bekannter Safari/WebKit-Fehler: indexedDB.open() kann in manchen
+        // Situationen (privater Modus, App laenger im Hintergrund) einfach nie
+        // antworten - weder Erfolg noch Fehler. Ohne diese Zeitueberschreitung
+        // wuerde das komplett lautlos haengen bleiben, ohne jede Rueckmeldung.
+        let settled = false;
+        const timeoutId = setTimeout(() => {
+            if (settled) return;
+            settled = true;
+            reject(new Error('Zeitüberschreitung beim Öffnen der Foto-Datenbank. Bitte privaten Browser-Modus deaktivieren oder Safari einmal komplett schließen und neu öffnen.'));
+        }, 5000);
+
         const req = indexedDB.open(PHOTO_DB_NAME, PHOTO_DB_VERSION);
         req.onupgradeneeded = (e) => {
             const db = e.target.result;
@@ -25,8 +36,18 @@ function openPhotoDB() {
                 store.createIndex('createdAt', 'createdAt');
             }
         };
-        req.onsuccess = () => resolve(req.result);
-        req.onerror = () => reject(req.error || new Error('IndexedDB konnte nicht geöffnet werden.'));
+        req.onsuccess = () => {
+            if (settled) return;
+            settled = true;
+            clearTimeout(timeoutId);
+            resolve(req.result);
+        };
+        req.onerror = () => {
+            if (settled) return;
+            settled = true;
+            clearTimeout(timeoutId);
+            reject(req.error || new Error('IndexedDB konnte nicht geöffnet werden.'));
+        };
     });
 }
 
