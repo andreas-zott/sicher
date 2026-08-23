@@ -209,7 +209,7 @@
         <h1>ASiC Handel</h1>
         <p>Architektur, Funktionsumfang und Codeübersicht der App</p>
         <div class="doku-meta-grid">
-            <div class="doku-meta-item"><div class="doku-meta-label">Dokumentstand</div><div class="doku-meta-value">22.08.2026</div></div>
+            <div class="doku-meta-item"><div class="doku-meta-label">Dokumentstand</div><div class="doku-meta-value">23.08.2026</div></div>
             <div class="doku-meta-item"><div class="doku-meta-label">App-Revision</div><div class="doku-meta-value">2.0 (21.08.2026)</div></div>
             <div class="doku-meta-item"><div class="doku-meta-label">Zielgerät</div><div class="doku-meta-value">Firmen-iPad, Safari</div></div>
             <div class="doku-meta-item"><div class="doku-meta-label">Umfang</div><div class="doku-meta-value">22 Kategorien · 174 Prüfpunkte</div></div>
@@ -272,19 +272,21 @@
                 Ein Service Worker (<code>sw.js</code>) sorgt dafür, dass die App auch ohne Netzwerkverbindung
                 startet — z. B. bei schwachem WLAN im Markt. Er wird beim Laden jeder Seite automatisch über
                 <code>navigator.serviceWorker.register()</code> registriert (in <code>js/app.js</code>) und
-                cached beim ersten Aufruf alle 20 App-Dateien (HTML-Seiten, CSS, JavaScript, Icons, jsPDF).
+                cached beim ersten Aufruf alle 22 App-Dateien (HTML-Seiten, CSS, JavaScript, Icons, jsPDF).
             </p>
             <ul>
-                <li><strong>HTML-Seiten:</strong> zuerst wird das Netzwerk versucht (damit Änderungen sofort ankommen, wenn online), erst bei fehlendem Netz greift der Cache</li>
-                <li><strong>Statische Dateien</strong> (JS/CSS/Icons/jsPDF): kommen bevorzugt aus dem Cache (schneller, ändert sich selten), werden im Hintergrund aktualisiert</li>
+                <li><strong>Alle Dateien</strong> (HTML-Seiten wie auch JS/CSS/Icons/jsPDF): es wird immer zuerst das Netzwerk versucht, damit Änderungen sofort ankommen, sobald online — der Cache dient nur als Absicherung, falls kein Netz verfügbar ist</li>
                 <li>Beim <code>activate</code>-Ereignis werden alte Cache-Versionen automatisch bereinigt</li>
             </ul>
         </div>
         <div class="doku-box ok">
             <div class="doku-box-title">Wichtig bei jedem Update der App-Dateien</div>
-            Die Konstante <code>CACHE_NAME</code> in <code>sw.js</code> (aktuell <code>asic-handel-v2.0</code>)
+            Die Konstante <code>CACHE_NAME</code> in <code>sw.js</code> (aktuell <code>asic-handel-v2.4</code>)
             muss bei jeder inhaltlichen Änderung hochgezählt werden. Sonst liefert der Service Worker
-            weiterhin die alten, gecachten Dateien aus, obwohl neue hochgeladen wurden.
+            weiterhin die alten, gecachten Dateien aus, obwohl neue hochgeladen wurden. Bewusst wird
+            „Netzwerk zuerst“ auch für JS/CSS genutzt (nicht „Cache zuerst“) — das kostet minimal Ladezeit,
+            verhindert aber zuverlässig, dass bei einem vergessenen Versionszähler neue und alte Dateien
+            unbemerkt gemischt ausgeliefert werden.
         </div>
 
         <h3>PWA-Grundgerüst</h3>
@@ -312,9 +314,10 @@
                 <tr><td>datenschutz.html</td><td>Datenschutzerklärung</td></tr>
             </table>
             <p>
-                Alle vier Hauptseiten teilen sich dieselbe Navigation, denselben Header (rotes Branding,
-                Tagline „Sicher geprüft. Sicher gehandelt.“) und dieselbe Fußzeile (Revisionsnummer,
-                Copyright, Links zu Impressum/Datenschutz/dieser Dokumentation).
+                Alle vier Hauptseiten teilen sich denselben, identisch aufgebauten Header (rotes Branding,
+                Tagline „Sicher geprüft. Sicher gehandelt.“, reine Navigation ohne weitere Bedienelemente)
+                und dieselbe Fußzeile (Revisionsnummer, Copyright, Links zu Impressum/Datenschutz/Technischer
+                Dokumentation/Hilfe &amp; FAQ).
             </p>
         </div>
     </section>
@@ -356,7 +359,7 @@
                 <li><strong>BGHW</strong> — mit Bezug auf einschlägige ASR-Technische-Regeln, DGUV-Vorschriften/-Regeln/-Informationen und das BGHW-Regelwerk</li>
                 <li><strong>Rechtlich</strong> — mit präzisen Gesetzes-/Verordnungs-/Normverweisen (u.&nbsp;a. ArbSchG, ArbStättV, BetrSichV, GefStoffV, ArbMedVV, TRGS-Reihe, TRBS&nbsp;3121, diverse DIN-Normen)</li>
             </ul>
-            <p>Der Sprachstil ist über einen Umschalter im Header jederzeit wechselbar und wirkt sich sofort auf alle angezeigten und exportierten Maßnahmentexte aus.</p>
+            <p>Der Sprachstil ist über einen Umschalter unten in der Action-Bar (zwischen „Datei" und „Exportieren") jederzeit wechselbar und wirkt sich sofort auf alle angezeigten und exportierten Maßnahmentexte aus — so bleibt er beim Durchgehen der Checkliste immer griffbereit, ohne dass man nach oben scrollen muss.</p>
         </div>
 
         <h3>Aktionsplan (Maßnahmen-Seite)</h3>
@@ -461,10 +464,11 @@
             Die App läuft komplett isoliert pro Gerät/Browser, ein zweites iPad hätte einen eigenen,
             unabhängigen Datenbestand.
         </div>
-        <div class="doku-box">
-            <div class="doku-box-title">Synology-NAS-Anbindung besprochen, noch nicht umgesetzt</div>
-            WebDAV-Anbindung als möglicher nächster Schritt für ein externes Backup der archivierten
-            Begehungen vorgesehen.
+        <div class="doku-box ok">
+            <div class="doku-box-title">Synology-NAS-Anbindung — wird vorbereitet, kommt mit dem nächsten Update</div>
+            Eine WebDAV-Anbindung an eine Synology-NAS ist als externes Backup-Ziel für archivierte
+            Begehungen in Vorbereitung (Erreichbarkeit über Tailscale, unabhängig von der lokalen
+            IndexedDB-Speicherung). Sobald verfügbar, wird dieser Abschnitt entsprechend aktualisiert.
         </div>
     </section>
 
@@ -475,14 +479,16 @@
         <div class="card doku-card">
             <table class="doku-table">
                 <tr><th>Datei</th><th>Zeilen</th><th>Funktion</th></tr>
-                <tr><td>index.html</td><td>152</td><td>Prüfkatalog-Seite</td></tr>
-                <tr><td>massnahmen.html</td><td>153</td><td>Aktionsplan-Seite</td></tr>
-                <tr><td>fotos.html</td><td>123</td><td>Fotodokumentation-Seite</td></tr>
-                <tr><td>verlauf.html</td><td>63</td><td>Archiv-Seite</td></tr>
+                <tr><td>index.html</td><td>156</td><td>Prüfkatalog-Seite</td></tr>
+                <tr><td>massnahmen.html</td><td>155</td><td>Aktionsplan-Seite</td></tr>
+                <tr><td>fotos.html</td><td>125</td><td>Fotodokumentation-Seite</td></tr>
+                <tr><td>verlauf.html</td><td>65</td><td>Archiv-Seite</td></tr>
+                <tr><td>dokumentation.html</td><td>525</td><td>Technische Dokumentation (eigene Seite im App-Design)</td></tr>
+                <tr><td>hilfe.html</td><td>463</td><td>Hilfe &amp; FAQ (eigene Seite im App-Design)</td></tr>
                 <tr><td>impressum.html</td><td>106</td><td>Impressum</td></tr>
                 <tr><td>datenschutz.html</td><td>149</td><td>Datenschutzerklärung</td></tr>
-                <tr><td>css/styles.css</td><td>1.440+</td><td>Gesamtes Styling</td></tr>
-                <tr><td>js/app.js</td><td>1.300+</td><td>Kernlogik: State-Verwaltung, PDF-Erzeugung, Export-Menüs, Archivierung, Service-Worker-Registrierung</td></tr>
+                <tr><td>css/styles.css</td><td>1.446</td><td>Gesamtes Styling</td></tr>
+                <tr><td>js/app.js</td><td>1.308</td><td>Kernlogik: State-Verwaltung, PDF-Erzeugung, Export-Menüs, Archivierung, Service-Worker-Registrierung</td></tr>
                 <tr><td>js/audit-data.js</td><td>309</td><td>Fragenkatalog (22 Kategorien, 174 Fragen)</td></tr>
                 <tr><td>js/text.js</td><td>981</td><td>Maßnahmentexte (174 Fragen × 3 Sprachstile)</td></tr>
                 <tr><td>js/massnahmen.js</td><td>188</td><td>Logik der Aktionsplan-Seite, Unterschriften</td></tr>
@@ -490,10 +496,10 @@
                 <tr><td>js/fotos.js</td><td>111</td><td>Logik der Fotos-Seite</td></tr>
                 <tr><td>js/archive-store.js</td><td>91</td><td>IndexedDB-Speicherung des Archivs</td></tr>
                 <tr><td>js/verlauf.js</td><td>85</td><td>Logik der Verlauf-Seite</td></tr>
-                <tr><td>sw.js</td><td>~95</td><td>Service Worker (Offline-Fähigkeit)</td></tr>
+                <tr><td>sw.js</td><td>88</td><td>Service Worker (Offline-Fähigkeit)</td></tr>
                 <tr><td>js/jspdf.umd.min.js</td><td>398 (minifiziert)</td><td>Externe Bibliothek zur PDF-Erzeugung</td></tr>
             </table>
-            <p><strong>Gesamt (eigener Code, ohne jsPDF):</strong> ~5.500 Zeilen</p>
+            <p><strong>Gesamt (eigener Code, ohne jsPDF):</strong> ~6.500 Zeilen</p>
         </div>
     </section>
 
