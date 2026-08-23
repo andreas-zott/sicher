@@ -160,13 +160,6 @@ a {
     text-overflow: ellipsis;
 }
 
-.header-controls {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    flex-wrap: wrap;
-}
-
 .app-nav {
     display: flex;
     gap: 0.35rem;
@@ -344,7 +337,8 @@ a {
 .style-switch {
     display: flex;
     gap: 0.2rem;
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--paper);
+    border: 1px solid var(--line);
     border-radius: 999px;
     padding: 0.25rem;
     flex-shrink: 0;
@@ -356,7 +350,7 @@ a {
     border: none;
     border-radius: 999px;
     background: transparent;
-    color: var(--steel-light);
+    color: var(--ink-soft);
     font-size: 0.78rem;
     font-weight: 700;
     cursor: pointer;
@@ -366,7 +360,7 @@ a {
 }
 
 .style-btn:hover {
-    color: #fff;
+    color: var(--ink);
 }
 
 .style-btn.active {
@@ -377,6 +371,28 @@ a {
 /* ==========================================================================
    Betriebsdaten
    ========================================================================== */
+/* ==========================================================================
+   Sprachstil-Umschalter — eigene Leiste im Seiteninhalt (nur auf index.html),
+   bewusst NICHT im Header, damit der Header auf allen Seiten identisch bleibt
+   ========================================================================== */
+.style-switch-bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 0.7rem 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.style-switch-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+}
+
 .company-card {
     padding: 1.25rem 1.5rem;
     margin-bottom: 1.25rem;
@@ -1373,9 +1389,12 @@ a {
 
 @media (max-width: 560px) {
     .brand-subtitle { display: none; }
-    .header-controls {
-        width: 100%;
-        justify-content: space-between;
+    .style-switch-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .style-switch {
+        justify-content: center;
     }
     .style-btn {
         padding: 0 0.6rem;
