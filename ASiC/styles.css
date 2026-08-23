@@ -1,0 +1,1451 @@
+/* ==========================================================================
+   BEGEHUNGSLISTE — Designsystem
+   Konzept: "Industrie-Klemmbrett" — kuehles Betongrau, tiefes Graphit,
+   Warnsignal-Amber als einziger starker Akzent, ein schmaler Warnstreifen
+   als wiederkehrendes Signaturelement (Anspielung auf Absperrband).
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap');
+
+:root {
+    /* Farben */
+    --ink: #1c2226;
+    --ink-soft: #3a4550;
+    --steel: #64707a;
+    --steel-light: #a9b2ba;
+    --paper: #eef0ee;
+    --paper-raised: #f7f8f6;
+    --card: #ffffff;
+    --line: #dde1de;
+    --brand-red: #cc071e;
+    --brand-red-dark: #a30517;
+    --brand-red-tint: #fbeaec;
+    --ok: #2f9e64;
+    --ok-tint: #e5f5ec;
+    --mangel: #d6453f;
+    --mangel-tint: #fbeaea;
+    --na: #7c8790;
+    --na-tint: #eceeef;
+
+    /* Typografie */
+    --font-display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+    --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+
+    /* Layout */
+    --radius: 14px;
+    --radius-sm: 8px;
+    --shadow: 0 1px 2px rgba(28, 34, 38, 0.06), 0 4px 16px rgba(28, 34, 38, 0.06);
+    --shadow-lg: 0 8px 30px rgba(28, 34, 38, 0.12);
+    --tap: 48px;
+}
+
+* , *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    font-family: var(--font-body);
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.55;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+}
+
+button, input, select, textarea {
+    font-family: inherit;
+    font-size: 16px; /* verhindert Zoom bei Fokus auf iOS */
+}
+
+a {
+    color: var(--brand-red-dark);
+}
+
+/* Sichtbarer Fokusring (Tastatur/iPad mit externer Tastatur) */
+:focus-visible {
+    outline: 3px solid var(--brand-red);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ==========================================================================
+   Warnstreifen — das Signaturelement, sparsam eingesetzt
+   ========================================================================== */
+.hazard-strip {
+    height: 6px;
+    background: repeating-linear-gradient(
+        135deg,
+        var(--brand-red) 0px,
+        var(--brand-red) 14px,
+        var(--ink) 14px,
+        var(--ink) 28px
+    );
+}
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
+.app-header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: var(--ink);
+    color: #fff;
+}
+
+.app-header-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0.9rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.brand {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    min-width: 0;
+}
+
+.brand-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+}
+
+.brand-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    background: var(--brand-red);
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.brand-subtitle {
+    font-size: 0.8rem;
+    color: var(--steel-light);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.app-nav {
+    display: flex;
+    gap: 0.35rem;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    padding: 0.25rem;
+    flex-shrink: 0;
+}
+
+.app-nav a {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--steel-light);
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+}
+
+.app-nav a.active {
+    background: var(--brand-red-dark);
+    color: #fff;
+}
+
+.app-nav a:not(.active):hover {
+    color: #fff;
+}
+
+/* ==========================================================================
+   Layout
+   ========================================================================== */
+.page {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 1.5rem 1.25rem 7rem;
+}
+
+.card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--line);
+}
+
+.section-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--steel);
+    margin-bottom: 0.75rem;
+}
+
+/* ==========================================================================
+   Fotos
+   ========================================================================== */
+.photos-section-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.photos-section-title .btn-small {
+    text-transform: none;
+    letter-spacing: normal;
+    cursor: pointer;
+}
+
+.photo-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+@media (max-width: 640px) {
+    .photo-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.photo-tile {
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.photo-preview {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 10px;
+    background: var(--paper);
+    display: block;
+}
+
+.photo-comment {
+    width: 100%;
+    min-height: 52px;
+    padding: 0.6rem 0.75rem;
+    border: 1.5px solid var(--line);
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 0.88rem;
+    color: var(--ink);
+    resize: vertical;
+    background: var(--card);
+}
+
+.photo-comment:focus {
+    outline: none;
+    border-color: var(--brand-red);
+}
+
+.photo-tile-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-link.photo-delete {
+    color: var(--mangel);
+}
+
+/* ==========================================================================
+   Verlauf (archivierte Begehungen)
+   ========================================================================== */
+.archive-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.archive-item {
+    padding: 1.1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.archive-item-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.archive-item-firma {
+    font-weight: 700;
+    font-size: 1.02rem;
+    color: var(--ink);
+}
+
+.archive-item-meta {
+    font-size: 0.8rem;
+    color: var(--steel);
+    margin-top: 0.15rem;
+}
+
+.archive-item-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-top: 0.25rem;
+    border-top: 1px solid var(--line);
+}
+
+/* ==========================================================================
+   Sprachstil-Umschalter — als zweite Pille im dunklen Header, neben der Navigation
+   ========================================================================== */
+.style-switch {
+    display: flex;
+    gap: 0.2rem;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    padding: 0.25rem;
+    flex-shrink: 0;
+}
+
+.style-btn {
+    height: 34px;
+    padding: 0 0.85rem;
+    border: none;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--steel-light);
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.style-btn:hover {
+    color: #fff;
+}
+
+.style-btn.active {
+    background: var(--brand-red-dark);
+    color: #fff;
+}
+
+/* ==========================================================================
+   Betriebsdaten
+   ========================================================================== */
+.company-card {
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.company-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+}
+
+.field label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--steel);
+}
+
+.field input, .field select {
+    height: var(--tap);
+    padding: 0 0.85rem;
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--paper-raised);
+    color: var(--ink);
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.field input:focus, .field select:focus {
+    border-color: var(--brand-red);
+    background: #fff;
+    outline: none;
+}
+
+/* Read-only Betriebsdaten-Anzeige (Maßnahmen-Seite) */
+.info-strip {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1rem;
+    padding: 1.1rem 1.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.info-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    min-width: 0;
+}
+
+.info-field .label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--steel);
+}
+
+.info-field .value {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ink);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ==========================================================================
+   Fortschritt / Statistik
+   ========================================================================== */
+.progress-bar-card {
+    padding: 1.1rem 1.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.progress-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.85rem;
+}
+
+.progress-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    white-space: nowrap;
+}
+
+.progress-track {
+    flex: 1;
+    height: 10px;
+    background: var(--line);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--brand-red-dark), var(--brand-red));
+    border-radius: 999px;
+    transition: width 0.3s ease;
+}
+
+.stat-pills {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.stat-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.stat-pill.ok { background: var(--ok-tint); color: var(--ok); }
+.stat-pill.mangel { background: var(--mangel-tint); color: var(--mangel); }
+.stat-pill.na { background: var(--na-tint); color: var(--na); }
+.stat-pill.offen { background: var(--brand-red-tint); color: var(--brand-red-dark); }
+
+/* ==========================================================================
+   Kategorien / Checkliste
+   ========================================================================== */
+.category {
+    margin-bottom: 0.85rem;
+    overflow: hidden;
+}
+
+.category-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    background: var(--card);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.category-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
+}
+
+.category-chevron {
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+    color: var(--steel);
+}
+
+.category.open .category-chevron {
+    transform: rotate(90deg);
+}
+
+.category-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--ink);
+}
+
+.category-count {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--steel);
+    background: var(--paper);
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    flex-shrink: 0;
+}
+
+.category-count.complete {
+    background: var(--ok-tint);
+    color: var(--ok);
+}
+
+.category-body {
+    display: none;
+    border-top: 1px solid var(--line);
+}
+
+.category.open .category-body {
+    display: block;
+}
+
+/* ==========================================================================
+   "Kein Kundenaufzug vorhanden"-Schalter
+   ========================================================================== */
+.category-toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.9rem 1.25rem;
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+}
+
+/* Zusaetzliche Optionszeile ueber der Action-Bar (z. B. "Komplette Checkliste einschliessen") */
+.pdf-option-row {
+    max-width: 1080px;
+    margin: 0 auto 1rem;
+    padding: 0 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 42px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background: var(--line);
+    border-radius: 999px;
+    transition: background 0.15s;
+}
+
+.toggle-slider::before {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    left: 3px;
+    top: 3px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.15s;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-switch input:checked + .toggle-slider {
+    background: var(--brand-red-dark);
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+    transform: translateX(18px);
+}
+
+.toggle-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+}
+
+.rating-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.rating-btn:disabled:hover {
+    border-color: var(--line);
+}
+
+.item {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--line);
+}
+
+.item:last-child {
+    border-bottom: none;
+}
+
+.item-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.item-text {
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+    line-height: 1.5;
+}
+
+.item-id {
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--steel-light);
+    margin-right: 0.4rem;
+}
+
+.item-actions {
+    display: flex;
+    gap: 0.4rem;
+    flex-shrink: 0;
+}
+
+.rating-btn {
+    width: var(--tap);
+    height: var(--tap);
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--line);
+    background: var(--paper-raised);
+    color: var(--steel);
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.rating-btn:hover {
+    border-color: var(--steel-light);
+}
+
+.rating-btn.ok.selected {
+    background: var(--ok);
+    border-color: var(--ok);
+    color: #fff;
+}
+
+.rating-btn.mangel.selected {
+    background: var(--mangel);
+    border-color: var(--mangel);
+    color: #fff;
+}
+
+.rating-btn.na.selected {
+    background: var(--na);
+    border-color: var(--na);
+    color: #fff;
+}
+
+.item.is-mangel {
+    background: var(--mangel-tint);
+    margin: 0 -1.25rem;
+    padding: 1rem 1.25rem;
+}
+
+.item-detail {
+    margin-top: 0.85rem;
+}
+
+.item-detail label {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--mangel);
+    margin-bottom: 0.35rem;
+}
+
+.item-detail textarea {
+    width: 100%;
+    min-height: 64px;
+    padding: 0.7rem 0.85rem;
+    border: 1.5px solid #f0c7c5;
+    border-radius: var(--radius-sm);
+    background: #fff;
+    color: var(--ink);
+    resize: vertical;
+    line-height: 1.5;
+}
+
+.item-detail textarea:focus {
+    border-color: var(--mangel);
+    outline: none;
+}
+
+.measure-preview {
+    margin-top: 0.6rem;
+    padding: 0.65rem 0.85rem;
+    background: #fff;
+    border-left: 3px solid var(--brand-red);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+}
+
+.measure-preview .label {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--brand-red-dark);
+    margin-bottom: 0.25rem;
+}
+
+/* ==========================================================================
+   Maßnahmen-Karten (Maßnahmen-Seite)
+   ========================================================================== */
+.measures-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.measure-card {
+    padding: 1.25rem 1.5rem;
+}
+
+.measure-question {
+    display: flex;
+    gap: 0.6rem;
+    align-items: baseline;
+    padding-bottom: 0.75rem;
+    margin-bottom: 0.75rem;
+    border-bottom: 1px solid var(--line);
+}
+
+.measure-number {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--brand-red-dark);
+    flex-shrink: 0;
+}
+
+.measure-question-text {
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.5;
+}
+
+.measure-answer-label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--brand-red-dark);
+    margin-bottom: 0.35rem;
+}
+
+.measure-answer textarea {
+    width: 100%;
+    min-height: 72px;
+    padding: 0.7rem 0.85rem;
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--paper-raised);
+    color: var(--ink);
+    resize: vertical;
+    line-height: 1.5;
+    font-size: 0.9rem;
+}
+
+.measure-answer textarea:focus {
+    border-color: var(--brand-red);
+    background: #fff;
+    outline: none;
+}
+
+.measure-comment {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--steel);
+}
+
+.measure-tile {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    background: var(--paper);
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+.tile-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+}
+
+.tile-field .label {
+    font-size: 0.66rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--steel);
+}
+
+.tile-field input, .tile-field select {
+    height: 42px;
+    padding: 0 0.65rem;
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: #fff;
+    font-size: 0.85rem;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    width: fit-content;
+}
+
+.status-badge.offen { background: var(--brand-red-tint); color: var(--brand-red-dark); }
+.status-badge.bearbeitung { background: #fdeecb; color: #a05a06; }
+.status-badge.erledigt { background: var(--ok-tint); color: var(--ok); }
+
+.no-measures {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    color: var(--steel);
+}
+
+.no-measures h3 {
+    color: var(--ink-soft);
+    margin-bottom: 0.5rem;
+}
+
+/* ==========================================================================
+   Unterschriften
+   ========================================================================== */
+.signatures-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.signature-block {
+    padding: 1.25rem 1.5rem;
+}
+
+.signature-block .field {
+    margin-bottom: 0.9rem;
+}
+
+.signature-pad-wrap {
+    position: relative;
+    border: 1.5px dashed var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--paper-raised);
+    overflow: hidden;
+}
+
+.signature-pad-wrap canvas {
+    display: block;
+    width: 100%;
+    height: 160px;
+    touch-action: none;
+}
+
+.signature-baseline {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 28px;
+    border-bottom: 1.5px dotted var(--steel-light);
+    pointer-events: none;
+}
+
+.signature-hint {
+    position: absolute;
+    left: 12px;
+    bottom: 6px;
+    font-size: 0.7rem;
+    color: var(--steel-light);
+    pointer-events: none;
+}
+
+.signature-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.6rem;
+}
+
+.btn-link {
+    background: none;
+    border: none;
+    color: var(--steel);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0.4rem 0.6rem;
+}
+
+.btn-link:hover {
+    color: var(--mangel);
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: var(--tap);
+    padding: 0 1.25rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.15s, background 0.15s;
+    white-space: nowrap;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+.btn-primary {
+    background: var(--brand-red-dark);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: var(--brand-red);
+    color: #fff;
+}
+
+.btn-secondary {
+    background: var(--card);
+    color: var(--ink-soft);
+    border: 1.5px solid var(--line);
+}
+
+.btn-secondary:hover {
+    border-color: var(--steel-light);
+}
+
+.btn-ghost {
+    background: transparent;
+    color: var(--steel);
+}
+
+.btn-ghost:hover {
+    color: var(--ink);
+}
+
+.btn-danger {
+    background: transparent;
+    color: var(--mangel);
+}
+
+/* ==========================================================================
+   Action-Leiste (sticky, unten)
+   ========================================================================== */
+.action-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 30;
+    background: rgba(238, 240, 238, 0.92);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--line);
+    padding: 0.85rem 1.25rem calc(0.85rem + env(safe-area-inset-bottom));
+}
+
+.action-bar-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.action-bar-group {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.btn-small {
+    height: 40px;
+    padding: 0 1rem;
+    font-size: 0.85rem;
+}
+
+/* ==========================================================================
+   Aufklappbares Menü (Drucken / PDF teilen / Mail vorbereiten)
+   ========================================================================== */
+.menu-dropdown {
+    position: relative;
+}
+
+.menu-dropdown-panel {
+    display: none;
+    flex-direction: column;
+    gap: 0.15rem;
+    position: absolute;
+    bottom: calc(100% + 0.6rem);
+    left: 0;
+    min-width: 210px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: var(--shadow-lg);
+    padding: 0.4rem;
+    z-index: 50;
+}
+
+.menu-dropdown-panel.open {
+    display: flex;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    width: 100%;
+    height: 44px;
+    padding: 0 0.9rem;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--ink-soft);
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    white-space: nowrap;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.menu-item:hover {
+    background: var(--paper);
+}
+
+/* Export-Menü sitzt auf beiden Seiten nahe am rechten Bildschirmrand -
+   Panel oeffnet daher nach links (rechtsbuendig zum Button), damit es
+   nie ueber den Rand hinauslaeuft. */
+#export-menu-panel {
+    left: auto;
+    right: 0;
+}
+
+.menu-toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 0.9rem;
+}
+
+.menu-toggle-row .toggle-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+}
+
+.menu-divider {
+    height: 1px;
+    background: var(--line);
+    margin: 0.3rem 0.4rem;
+}
+
+.menu-mode-row {
+    display: flex;
+    gap: 0.3rem;
+    padding: 0.35rem;
+    background: var(--paper);
+    border-radius: 10px;
+    margin: 0.15rem;
+}
+
+.mode-btn {
+    flex: 1;
+    height: 34px;
+    padding: 0 0.5rem;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--steel);
+    font-size: 0.76rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.mode-btn.active {
+    background: var(--card);
+    color: var(--ink);
+    box-shadow: var(--shadow);
+}
+
+.menu-item-danger {
+    color: var(--mangel);
+}
+
+.menu-item-danger:hover {
+    background: var(--mangel-tint);
+}
+
+/* ==========================================================================
+   Toast
+   ========================================================================== */
+.toast {
+    position: fixed;
+    bottom: 6.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink);
+    color: #fff;
+    padding: 0.8rem 1.25rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.88rem;
+    font-weight: 600;
+    box-shadow: var(--shadow-lg);
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    max-width: min(90vw, 420px);
+    white-space: normal;
+    line-height: 1.4;
+    animation: toast-in 0.25s ease;
+}
+
+.toast.error {
+    background: var(--mangel);
+}
+
+@keyframes toast-in {
+    from { opacity: 0; transform: translate(-50%, 10px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* ==========================================================================
+   Footer (Impressum/Datenschutz/Copyright)
+   ========================================================================== */
+.app-footer {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 1.25rem 1.25rem 2rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    font-size: 0.8rem;
+    color: var(--steel);
+    border-top: 1px solid var(--line);
+}
+
+.app-footer-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.footer-copyright {
+    font-size: 0.72rem;
+    color: var(--steel-light);
+    line-height: 1.5;
+}
+
+.app-footer-links {
+    display: flex;
+    gap: 1.25rem;
+    flex-shrink: 0;
+}
+
+.app-footer a {
+    color: var(--steel);
+    text-decoration: none;
+}
+
+.app-footer a:hover {
+    color: var(--ink);
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+   Rechtstexte (Impressum/Datenschutz)
+   ========================================================================== */
+.legal-page {
+    max-width: 760px;
+}
+
+.legal-card {
+    padding: 2.25rem 2.5rem;
+}
+
+.legal-card h1 {
+    font-size: 1.6rem;
+    margin-bottom: 0.35rem;
+}
+
+.legal-card .legal-meta {
+    font-size: 0.8rem;
+    color: var(--steel);
+    margin-bottom: 1.5rem;
+}
+
+.legal-card h2 {
+    font-size: 1.05rem;
+    margin-top: 1.75rem;
+    margin-bottom: 0.6rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--line);
+}
+
+.legal-card h2:first-of-type {
+    margin-top: 0.5rem;
+}
+
+.legal-card p {
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+    margin-bottom: 0.85rem;
+}
+
+.legal-card ul {
+    margin: 0 0 0.85rem 1.25rem;
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+}
+
+.legal-card li {
+    margin-bottom: 0.35rem;
+}
+
+.legal-note {
+    background: var(--brand-red-tint);
+    border-left: 3px solid var(--brand-red);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 0.9rem 1.1rem;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    margin: 1rem 0 1.25rem;
+}
+
+.legal-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--steel);
+    text-decoration: none;
+}
+
+.legal-back:hover {
+    color: var(--ink);
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 860px) {
+    .company-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .info-strip {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .measure-tile {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .signatures-grid {
+        grid-template-columns: 1fr;
+    }
+    /* Header (nur auf index.html relevant, wo zusaetzlich zur Navigation
+       auch der Sprachstil-Umschalter im Header sitzt): beide Button-Gruppen
+       duerfen sich nicht mehr nebeneinander gegenseitig zerquetschen, daher
+       kontrolliert als eigene, zentrierte Zeilen untereinander anordnen -
+       statt dass einzelne Buttons unkontrolliert umbrechen. */
+    .header-controls {
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .app-nav, .style-switch {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 560px) {
+    .brand-subtitle { display: none; }
+    .style-btn {
+        padding: 0 0.6rem;
+        font-size: 0.72rem;
+    }
+    .company-grid, .info-strip {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .measure-tile {
+        grid-template-columns: 1fr;
+    }
+    .item-row {
+        flex-direction: column;
+    }
+    .item-actions {
+        align-self: stretch;
+    }
+    .rating-btn {
+        flex: 1;
+    }
+    .action-bar-inner {
+        justify-content: center;
+    }
+}
+
+/* ==========================================================================
+   Druck
+   ========================================================================== */
+@media print {
+    /* Hinweis: Der "Drucken"-Menüpunkt nutzt inzwischen dieselbe PDF-Erzeugung wie
+       "PDF teilen" (siehe printReport() in app.js) und oeffnet die fertige PDF in
+       einem neuen Tab, statt window.print() auf dieser Seite auszuloesen - dort
+       sind Zeilenumbruch, Seitenabstand, Deckblatt und Seitenzahlen bereits sauber
+       geloest. Dieser Block dient nur noch als Fallback, falls jemand manuell mit
+       Tastenkuerzel (Strg/Cmd+P) druckt. */
+    @page {
+        margin: 0;
+        size: auto;
+    }
+
+    .app-header, .action-bar, .category-chevron, .signature-actions, .pdf-option-row, .category-toggle-row {
+        display: none !important;
+    }
+    body {
+        background: #fff;
+    }
+    .page {
+        padding: 14mm 12mm;
+        max-width: 100%;
+    }
+    .card {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+    }
+    .category-body {
+        display: block !important;
+    }
+    .measure-card, .category, .item {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+}
