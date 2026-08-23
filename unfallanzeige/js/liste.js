@@ -19,15 +19,19 @@
 
   const SPALTEN = [
     { key: "marktnummer", label: "Markt-Nr.", get: (b) => b.marktnummer || "" },
+    { key: "marktAdresse", label: "Adresse Markt", get: (b) => (b.unternehmenAnschrift || "").replace(/\n/g, ", ") },
     { key: "personName", label: "Name", get: (b) => b.personName || "" },
-    { key: "adresse", label: "Adresse", get: (b) => [b.strasse, b.plz, b.ort].filter(Boolean).join(", "), sortKey: (b) => b.ort || "" },
-    { key: "koerperteile", label: "Körperteil", get: (b) => (b.koerperteile || []).map((k) => k.teil).join(", "), sortKey: (b) => (b.koerperteile || [])[0]?.teil || "" },
+    { key: "personAdresse", label: "Adresse Person", get: (b) => [b.strasse, b.plz, b.ort].filter(Boolean).join(", "), sortKey: (b) => b.ort || "" },
+    { key: "bereichMarkt", label: "Abteilung", get: (b) => BEREICH_LABEL[b.bereichMarkt] || "" },
+    { key: "unfallursache", label: "Unfallursache", get: (b) => formatUnfallursache(b.unfallursacheKategorie, b.unfallursacheDetail), sortKey: (b) => b.unfallursacheKategorie || "" },
+    { key: "arbeitsmittel", label: "Arbeitsmittel", get: (b) => formatArbeitsmittel(b.arbeitsmittel, b.arbeitsmittelSonstigesText) },
+    { key: "unfallDatum", label: "Unfalltag", get: (b) => formatUnfallDatum(b.unfallDatum) },
+    { key: "unfallUhrzeit", label: "Uhrzeit", get: (b) => b.unfallUhrzeit || "" },
+    { key: "krankheitsdauerTage", label: "Ausfalltage", get: (b) => b.krankheitsdauerTage || "", sortKey: (b) => Number(b.krankheitsdauerTage) || 0 },
+    { key: "alter", label: "Alter", get: (b) => { const a = ualAlterBerechnen(b.geburtsdatum, b.unfallDatum); return a == null ? "" : a; }, sortKey: (b) => ualAlterBerechnen(b.geburtsdatum, b.unfallDatum) ?? -1 },
+    { key: "auszubildende", label: "Azubi", get: (b) => b.auszubildende === "ja" ? "Ja" : b.auszubildende === "nein" ? "Nein" : "" },
     { key: "wegeunfall", label: "Wegeunfall", get: (b) => b.wegeunfall === "ja" ? "Ja" : b.wegeunfall === "nein" ? "Nein" : "" },
-    { key: "unfallursache", label: "Ursache", get: (b) => formatUnfallursache(b.unfallursacheKategorie, b.unfallursacheDetail), sortKey: (b) => b.unfallursacheKategorie || "" },
-    { key: "arbeitsmittel", label: "Arbeitsmittel/Gegenstand", get: (b) => formatArbeitsmittel(b.arbeitsmittel, b.arbeitsmittelSonstigesText) },
-    { key: "bereichMarkt", label: "Bereich", get: (b) => BEREICH_LABEL[b.bereichMarkt] || "" },
-    { key: "unfallDatum", label: "Unfallzeitpunkt", get: (b) => `${formatUnfallDatum(b.unfallDatum)}${b.unfallUhrzeit ? " " + b.unfallUhrzeit : ""}`, sortKey: (b) => (b.unfallDatum || "") + (b.unfallUhrzeit || "") },
-    { key: "krankheitsdauerTage", label: "Krank (Tage)", get: (b) => b.krankheitsdauerTage || "", sortKey: (b) => Number(b.krankheitsdauerTage) || 0 }
+    { key: "koerperteile", label: "Körperteil", get: (b) => (b.koerperteile || []).map((k) => k.teil).join(", "), sortKey: (b) => (b.koerperteile || [])[0]?.teil || "" }
   ];
 
   let alleBerichte = [];

@@ -33,6 +33,54 @@
     return map;
   }
 
+  const ALTERSGRUPPEN_REIHENFOLGE = ["unter 20", "20–29", "30–39", "40–49", "50–59", "60+"];
+
+  function kreuztabelle(berichte, zeilenReihenfolge, zeilenKeyFn, spaltenLabels, spaltenKeyFn) {
+    // Baut eine HTML-Tabelle: Zeilen x Spalten = Anzahl Treffer, inkl. Randsummen.
+    const matrix = new Map(); // "zeile||spalte" -> count
+    const spaltenSummen = new Map();
+    const zeilenSummen = new Map();
+    let gesamtTreffer = 0;
+    berichte.forEach((b) => {
+      const zeile = zeilenKeyFn(b);
+      const spalte = spaltenKeyFn(b);
+      if (zeile == null || spalte == null) return;
+      const key = zeile + "||" + spalte;
+      matrix.set(key, (matrix.get(key) || 0) + 1);
+      spaltenSummen.set(spalte, (spaltenSummen.get(spalte) || 0) + 1);
+      zeilenSummen.set(zeile, (zeilenSummen.get(zeile) || 0) + 1);
+      gesamtTreffer += 1;
+    });
+    if (!gesamtTreffer) return null;
+
+    const vorhandeneSpalten = spaltenLabels.filter((s) => spaltenSummen.has(s));
+    if (!vorhandeneSpalten.length) return null;
+
+    const kopf = vorhandeneSpalten.map((s) => `<th>${escapeHtml(s)}</th>`).join("");
+    const zeilenHtml = zeilenReihenfolge
+      .filter((z) => zeilenSummen.has(z))
+      .map((z) => {
+        const zellen = vorhandeneSpalten.map((s) => {
+          const n = matrix.get(z + "||" + s) || 0;
+          return `<td class="${n === 0 ? "crosstab-zero" : ""}">${n || "–"}</td>`;
+        }).join("");
+        return `<tr><td>${escapeHtml(z)}</td>${zellen}<td class="crosstab-total">${zeilenSummen.get(z)}</td></tr>`;
+      }).join("");
+    const summenZeile = vorhandeneSpalten.map((s) => `<th class="crosstab-total">${spaltenSummen.get(s)}</th>`).join("");
+
+    return `
+      <div class="table-scroll">
+        <table class="ua-table ua-crosstab">
+          <thead><tr><th>Altersgruppe</th>${kopf}<th class="crosstab-total">Gesamt</th></tr></thead>
+          <tbody>
+            ${zeilenHtml}
+            <tr><th>Gesamt</th>${summenZeile}<th class="crosstab-total">${gesamtTreffer}</th></tr>
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
   function uhrzeitBucket(uhrzeit) {
     if (!uhrzeit) return null;
     const stunde = parseInt(uhrzeit.split(":")[0], 10);
@@ -132,6 +180,30 @@
     const summeKrankheitstage = krankheitstageWerte.reduce((a, n) => a + n, 0);
     const schnittKrankheitstage = krankheitstageWerte.length ? (summeKrankheitstage / krankheitstageWerte.length).toFixed(1) : "–";
 
+    // Alter zum Unfallzeitpunkt
+    const alterProBericht = berichte.map((b) => ualAlterBerechnen(b.geburtsdatum, b.unfallDatum));
+    const alterWerte = alterProBericht.filter((a) => a != null);
+    const schnittAlter = alterWerte.length ? (alterWerte.reduce((a, n) => a + n, 0) / alterWerte.length).toFixed(1) : "–";
+    const altersgruppenMap = zaehle(berichte, (b) => ualAltersgruppe(ualAlterBerechnen(b.geburtsdatum, b.unfallDatum)));
+    const altersgruppenSorted = ALTERSGRUPPEN_REIHENFOLGE.filter((g) => altersgruppenMap.has(g)).map((g) => [g, altersgruppenMap.get(g)]);
+
+    // Azubi-Anteil
+    const azubiAnzahl = berichte.filter((b) => b.auszubildende === "ja").length;
+
+    // Kreuztabellen: Alter x Abteilung, Alter x Unfallursache
+    const abteilungSpalten = Object.values(BEREICH_LABEL);
+    const crosstabAlterAbteilung = kreuztabelle(
+      berichte, ALTERSGRUPPEN_REIHENFOLGE,
+      (b) => ualAltersgruppe(ualAlterBerechnen(b.geburtsdatum, b.unfallDatum)),
+      abteilungSpalten, (b) => BEREICH_LABEL[b.bereichMarkt] || null
+    );
+    const ursacheSpalten = UNFALLURSACHE_KATALOG.map((g) => g.kategorie);
+    const crosstabAlterUrsache = kreuztabelle(
+      berichte, ALTERSGRUPPEN_REIHENFOLGE,
+      (b) => ualAltersgruppe(ualAlterBerechnen(b.geburtsdatum, b.unfallDatum)),
+      ursacheSpalten, (b) => b.unfallursacheKategorie || null
+    );
+
     main.innerHTML = `
       <div class="kpi-row">
         <div class="kpi"><div class="kpi-value">${gesamt}</div><div class="kpi-label">Unfallanzeigen gesamt</div></div>
@@ -140,6 +212,26 @@
         <div class="kpi"><div class="kpi-value">${toedlich}</div><div class="kpi-label">tödliche Unfälle</div></div>
         <div class="kpi"><div class="kpi-value">${summeKrankheitstage}</div><div class="kpi-label">Krankheitstage gesamt</div></div>
         <div class="kpi"><div class="kpi-value">${schnittKrankheitstage}</div><div class="kpi-label">Ø Krankheitstage</div></div>
+        <div class="kpi"><div class="kpi-value">${schnittAlter}</div><div class="kpi-label">Ø Alter</div></div>
+        <div class="kpi"><div class="kpi-value">${azubiAnzahl}</div><div class="kpi-label">davon Azubis</div></div>
+      </div>
+
+      <div class="stat-card">
+        <h3>Altersverteilung</h3>
+        <div class="stat-sub">Alter der versicherten Person zum Unfallzeitpunkt (${alterWerte.length} von ${gesamt} berechenbar)</div>
+        ${altersgruppenSorted.length ? balkenListe(altersgruppenSorted) : '<div class="hint">Keine vollständigen Geburts-/Unfalldaten vorhanden.</div>'}
+      </div>
+
+      <div class="stat-card">
+        <h3>Welches Alter, wo verunfallt</h3>
+        <div class="stat-sub">Altersgruppe × Abteilung des Marktes</div>
+        ${crosstabAlterAbteilung || '<div class="hint">Noch nicht genug Daten (Alter + Abteilung) vorhanden.</div>'}
+      </div>
+
+      <div class="stat-card">
+        <h3>Welches Alter, wobei verunfallt</h3>
+        <div class="stat-sub">Altersgruppe × Unfallursache (Hauptkategorie)</div>
+        ${crosstabAlterUrsache || '<div class="hint">Noch nicht genug Daten (Alter + Unfallursache) vorhanden.</div>'}
       </div>
 
       <div class="stat-card">
