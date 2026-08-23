@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Unfallanzeige – Liste</title>
+<link rel="stylesheet" href="css/styles.css">
+<style>
+  .table-scroll { overflow-x: auto; background: var(--paper-card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+  table.ua-table { border-collapse: collapse; width: 100%; font-size: 0.82rem; white-space: nowrap; }
+  table.ua-table th, table.ua-table td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: left; }
+  table.ua-table th { background: #fbfaf6; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--ink-soft); position: sticky; top: 0; cursor: pointer; user-select: none; }
+  table.ua-table th:hover { color: var(--steel); }
+  table.ua-table tbody tr:hover { background: #fbfaf6; }
+  table.ua-table td.actions { white-space: nowrap; }
+  table.ua-table td.actions button { font-size: 0.72rem; padding: 4px 9px; }
+</style>
+</head>
+<body>
+<div class="app-shell" style="max-width: 1200px;">
+  <header class="app-header">
+    <div class="brand-row">
+      <div class="brand-title">Unfallanzeige</div>
+      <div class="brand-form-id">U 1000 · 05/2024</div>
+    </div>
+    <div class="brand-tagline">Unfallliste – tabellarische Übersicht</div>
+  </header>
+  <nav class="app-nav">
+    <a href="index.html">Formular</a>
+    <a href="liste.html" class="active">Liste</a>
+    <a href="verlauf.html">Archiv</a>
+    <a href="auswertung.html">Auswertung</a>
+  </nav>
+
+  <main>
+    <div class="field-row" style="margin-bottom:16px;">
+      <input type="text" id="suche" placeholder="Suche nach Marktnummer, Name, Ort, Bereich …">
+    </div>
+    <div id="tabelle-host"></div>
+  </main>
+</div>
+
+<script src="js/store.js"></script>
+<script src="js/koerperteile.js"></script>
+<script src="js/unfallursachen.js"></script>
+<script src="js/arbeitsmittel.js"></script>
+<script src="js/liste.js"></script>
+</body>
+</html>

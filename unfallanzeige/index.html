@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Unfallanzeige – Formular</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="app-shell">
+  <header class="app-header">
+    <div class="brand-row">
+      <div class="brand-title">Unfallanzeige</div>
+      <div class="brand-form-id">U 1000 · 05/2024</div>
+    </div>
+    <div class="brand-tagline">Formular gemäß § 193 SGB VII – nach Vordruck der BGHW</div>
+  </header>
+  <nav class="app-nav">
+    <a href="index.html" class="active">Formular</a>
+    <a href="liste.html">Liste</a>
+    <a href="verlauf.html">Archiv</a>
+    <a href="auswertung.html">Auswertung</a>
+  </nav>
+
+  <main>
+    <form id="ua-form">
+
+      <details class="section-card" open>
+        <summary><span class="field-num">1–3</span> Unternehmen &amp; Empfänger <span class="chev">▶</span></summary>
+        <div class="section-body">
+          <div class="field-grid">
+            <div class="field-row">
+              <label class="field-label"><span class="field-num">1</span> Name und Anschrift des Unternehmens</label>
+              <textarea name="unternehmenAnschrift" rows="2" placeholder="Firma, Straße, PLZ Ort"></textarea>
+            </div>
+            <div class="field-row">
+              <label class="field-label">Marktnummer <span class="hint internal-note">Zusatzfeld, intern</span></label>
+              <input type="text" name="marktnummer" placeholder="z. B. 4711">
+            </div>
+          </div>
+          <div class="field-row">
+            <label class="field-label"><span class="field-num">2</span> Unternehmensnummer (UV-Träger)</label>
+            <input type="text" name="unternehmensnummer" placeholder="z. B. aus dem Beitragsbescheid">
+          </div>
+
+          <div class="field-row">
+            <label class="field-label"><span class="field-num">3</span> Empfänger/-in <span class="hint internal-note">Für jeden Empfänger wird beim Export ein eigenes PDF erzeugt</span></label>
+            <div id="empfaenger-liste"></div>
+            <button type="button" class="btn ghost" id="btnEmpfaengerHinzufuegen" style="margin-top:8px;">+ Empfänger hinzufügen</button>
+          </div>
+        </div>
+      </details>
+
+
+      <details class="section-card" open>
+        <summary><span class="field-num">4–13</span> Versicherte Person <span class="chev">▶</span></summary>
+        <div class="section-body">
+          <div class="field-grid">
+            <div class="field-row">
+              <label class="field-label"><span class="field-num">4</span> Name, Vorname der versicherten Person</label>
+              <input type="text" name="personName">
+            </div>
+            <div class="field-row">
+              <label class="field-label"><span class="field-num">5</span> Geburtsdatum</label>
+              <input type="date" name="geburtsdatum">
+            </div>
+          </div>
+          <div class="field-grid three">
+            <div class="field-row">
+              <label class="field-label">Straße, Hausnummer</label>
+              <input type="text" name="strasse">
+            </div>
+            <div class="field-row">
+              <label class="field-label">Postleitzahl</label>
+              <input type="text" name="plz" inputmode="numeric">
+            </div>
+            <div class="field-row">
+              <label class="field-label"><span class="field-num">6</span> Ort</label>
+              <input type="text" name="ort">
+            </div>
+          </div>
+
+          <div class="field-row">
+            <label class="field-label"><span class="field-num">7</span> Geschlecht</label>
+            <div class="choice-row" data-choice-group="geschlecht">
+              <label class="choice-pill"><input type="radio" name="geschlecht" value="maennlich"> Männlich</label>
+              <label class="choice-pill"><input type="radio" name="geschlecht" value="weiblich"> Weiblich</label>
+              <label class="choice-pill"><input type="radio" name="geschlecht" value="divers"> Divers</label>
+              <label class="choice-pill"><input type="radio" name="geschlecht" value="keine"> Keine Angabe</label>
+            </div>
+          </div>
+
+          <div class="field-grid">
+            <div class="field-row">
+              <label class="field-label"><span class="field-num">8</span> Staatsangehörigkeit</label>
+              <input type="text" name="staatsangehoerigkeit">
+            </div>
+            <div class="field-row">
+              <label class="field-label"><span class="field-num">9</span> Leiharbeitnehmer/-in</label>
+              <div class="choice-row" data-choice-group="leiharbeitnehmer">
+                <label class="choice-pill"><input type="radio" name="leiharbeitnehmer" value="nein"> Nein</label>
+                <label class="choice-pill"><input type="radio" name="leiharbeitnehmer" value="ja"> Ja</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <label class="field-label"><span class="field-num">10</span> Auszubildende/-r</label>
+            <div class="choice-row" data-choice-group="auszubildende">
+              <label class="choice-pill"><input type="radio" name="auszubildende" value="nein"> Nein</label>
+              <label class="choice-pill"><input type="radio" name="auszubildende" value="ja"> Ja</label>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <label class="field-label"><span class="field-num">11</span> Die versicherte Person ist mit der Unternehmerin/dem Unternehmer …</label>
+            <div class="choice-row" data-choice-group="beziehung" style="margin-bottom:8px;">
+              <label class="choice-pill"><input type="checkbox" name="beziehungVerwandt" value="verwandt"> verwandt</label>
+              <label class="choice-pill"><input type="checkbox" name="beziehungVerheiratet" value="verheiratet"> verheiratet</label>
+              <label class="choice-pill"><input type="checkbox" name="beziehungLebenspartnerschaft" value="lebenspartnerschaft"> in eingetr. Lebenspartnerschaft</label>
+            </div>
+            <label class="field-label">und ist selbst</label>
+            <div class="choice-row" data-choice-group="rolle">
+              <label class="choice-pill"><input type="radio" name="rolle" value="gesellschafter"> Gesellschafter/-in</label>
+              <label class="choice-pill"><input type="radio" name="rolle" value="geschaeftsfuehrer"> Geschäftsführer/-in</label>
+              <label class="choice-pill"><input type="radio" name="rolle" value="unternehmer"> Unternehmer/-in</label>
+              <label class="choice-pill"><input type="radio" name="rolle" value="keine"> trifft nicht zu</label>
+            </div>
+          </div>
+
+          <div class="field-grid">
+            <div class="field-row">
+              <label class="field-label"><span class="field-num">12</span> Anspruch auf Entgeltfortzahlung besteht für … Wochen</label>
+              <input type="number" name="entgeltfortzahlungWochen" min="0" step="1">
+            </div>
+            <div class="field-row">
+              <label class="field-label"><span class="field-num">13</span> Krankenkasse (Name, PLZ, Ort)</label>
+              <input type="text" name="krankenkasse">
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="section-card" open>
+        <summary><span class="field-num">14–17</span> Unfallzeitpunkt &amp; -ort <span class="chev">▶</span></summary>
+        <div class="section-body">
+          <div class="field-row">
+            <label class="field-label"><span class="field-num">14</span> Tödlicher Unfall?</label>
+            <div class="choice-row" data-choice-group="toedlich">
+              <label class="choice-pill"><input type="radio" name="toedlich" value="nein"> Nein</label>
+              <label class="choice-pill"><input type="radio" name="toedlich" value="ja" data-danger="true"> Ja</label>
+            </div>
+          </div>
+
+          <div class="field-grid three">
+            <div class="field-row">
+              <label class="field-label"><span class="field-num">15</span> Unfalldatum</label>
+              <input type="date" name="unfallDatum">
+            </div>
+            <div class="field-row">
+              <label class="field-label">Uhrzeit</label>
+              <input type="time" name="unfallUhrzeit">
+            </div>
+            <div class="field-row">
+              <label class="field-label"><span class="field-num">17</span> Unfall im Homeoffice?</label>
+              <div class="choice-row" data-choice-group="homeoffice">
+                <label class="choice-pill"><input type="radio" name="homeoffice" value="nein"> Nein</label>
+                <label class="choice-pill"><input type="radio" name="homeoffice" value="ja"> Ja</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <label class="field-label"><span class="field-num">16</span> Unfallort (genaue Orts- und Straßenangabe mit PLZ)</label>
+            <input type="text" name="unfallort">
+          </div>
+
+          <div class="field-row">
+            <label class="field-label">Wegeunfall? <span class="hint internal-note">Zusatzfeld – nicht Teil des amtlichen Vordrucks, nur für eure interne Auswertung</span></label>
+            <div class="choice-row" data-choice-group="wegeunfall">
+              <label class="choice-pill"><input type="radio" name="wegeunfall" value="nein"> Nein (Betriebsunfall)</label>
+              <label class="choice-pill"><input type="radio" name="wegeunfall" value="ja"> Ja (Wegeunfall)</label>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="section-card" open>
+        <summary><span class="field-num">18</span> Unfallhergang <span class="chev">▶</span></summary>
+        <div class="section-body">
+          <div class="field-row">
+            <label class="field-label">Die Angaben beruhen auf der Schilderung</label>
+            <div class="choice-row" data-choice-group="schilderungQuelle">
+              <label class="choice-pill"><input type="radio" name="schilderungQuelle" value="versicherte"> der versicherten Person</label>
+              <label class="choice-pill"><input type="radio" name="schilderungQuelle" value="andere"> anderer Personen</label>
+            </div>
+          </div>
+          <div class="field-row">
+            <label class="field-label"><span class="field-num">18</span> Ausführliche Schilderung des Unfallhergangs (Verlauf, Betriebsteil, ggf. Maschinen/Anlagen/Gefahrstoffe)</label>
+            <textarea name="schilderung" rows="6" placeholder="Wo, wie, warum, unter welchen Umständen? Beteiligte Geräte/Maschinen/Fahrzeuge/Gefahrstoffe?"></textarea>
+          </div>
+        </div>
+      </details>
+
+      <details class="section-card" open>
+        <summary><span class="field-num">19–20</span> Verletzung <span class="chev">▶</span></summary>
+        <div class="section-body">
+          <div class="field-row">
+            <label class="field-label"><span class="field-num">19</span> Verletzte Körperteile</label>
+            <div id="koerperteil-katalog"></div>
+          </div>
+          <div class="field-row">
+            <label class="field-label"><span class="field-num">20</span> Art der Verletzung</label>
+            <input type="text" name="verletzungsart" placeholder="z. B. Prellung, Knochenbruch, Verstauchung, Verbrennung, Platzwunde, Schnittverletzung">
+          </div>
+          <div class="field-row">
+            <label class="field-label">Unfallursache <span class="hint internal-note">Zusatzfeld, intern – für die Auswertung</span></label>
+            <div id="unfallursache-katalog"></div>
+          </div>
+          <div class="field-row">
+            <label class="field-label">Unfallverursachendes Arbeitsmittel / Gegenstand <span class="hint internal-note">Zusatzfeld, intern – für die Auswertung</span></label>
+            <div id="arbeitsmittel-katalog"></div>
+            <div id="arbeitsmittelSonstigesWrap" style="display:none; margin-top:8px;">
+              <input type="text" id="arbeitsmittelSonstigesText" placeholder="Sonstiges: bitte angeben">
+            </div>
+          </div>
+          <div class="field-row">
+            <label class="field-label">War diese Person Augenzeugin/Augenzeuge des Unfalls?</label>
+            <div class="choice-row" data-choice-group="augenzeuge">
+              <label class="choice-pill"><input type="radio" name="augenzeuge" value="nein"> Nein</label>
+              <label class="choice-pill"><input type="radio" name="augenzeuge" value="ja"> Ja</label>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="section-card">
+        <summary><span class="field-num">21–22</span> Kenntnisnahme &amp; Erstbehandlung <span class="chev">▶</span></summary>
+        <div class="section-body">
+          <div class="field-row">
+            <label class="field-label"><span class="field-num">21</span> Wer hat von dem Unfall zuerst Kenntnis genommen? (Name, Anschrift)</label>
+            <input type="text" name="kenntnisPerson">
+          </div>
+          <div class="field-row">
+            <label class="field-label"><span class="field-num">22</span> Erstbehandlung: Name und Anschrift der Ärztin/des Arztes oder Krankenhauses</label>
+            <textarea name="erstbehandlung" rows="2"></textarea>
+          </div>
+        </div>
+      </details>
+
+      <details class="section-card">
+        <summary><span class="field-num">23–26</span> Tätigkeit &amp; Arbeitszeit <span class="chev">▶</span></summary>
+        <div class="section-body">
+          <div class="field-grid">
+            <div class="field-row">
+              <label class="field-label"><span class="field-num">23</span> Beginn Arbeitszeit</label>
+              <input type="time" name="arbeitszeitBeginn">
+            </div>
+            <div class="field-row">
+              <label class="field-label">Ende Arbeitszeit</label>
+              <input type="time" name="arbeitszeitEnde">
+            </div>
+          </div>
+          <div class="field-grid">
+            <div class="field-row">
+              <label class="field-label"><span class="field-num">24</span> Zum Unfallzeitpunkt beschäftigt/tätig als</label>
+              <input type="text" name="taetigkeit" placeholder="z. B. Einzelhandelskaufmann, Lagerist – konkrete Berufsbezeichnung">
+            </div>
+            <div class="field-row">
+              <label class="field-label"><span class="field-num">25</span> Seit wann bei dieser Tätigkeit?</label>
+              <input type="date" name="taetigSeit">
+            </div>
+          </div>
+          <div class="field-row">
+            <label class="field-label"><span class="field-num">26</span> In welchem Teil des Unternehmens ständig tätig?</label>
+            <input type="text" name="betriebsteil" placeholder="z. B. Büro, Lager, Verkaufstheke, Fabrikhof">
+          </div>
+          <div class="field-row">
+            <label class="field-label">Bereich des Marktes (Unfallort) <span class="hint internal-note">Zusatzfeld, intern – standardisiert für die Auswertung</span></label>
+            <div class="choice-row compact-grid" data-choice-group="bereichMarkt">
+              <label class="choice-pill"><input type="radio" name="bereichMarkt" value="kasse"> Kasse</label>
+              <label class="choice-pill"><input type="radio" name="bereichMarkt" value="verkaufsraum"> Verkaufsraum</label>
+              <label class="choice-pill"><input type="radio" name="bereichMarkt" value="lager"> Lager</label>
+              <label class="choice-pill"><input type="radio" name="bereichMarkt" value="kuehlraum"> Kühl-/Tiefkühlraum</label>
+              <label class="choice-pill"><input type="radio" name="bereichMarkt" value="backstube"> Backstube</label>
+              <label class="choice-pill"><input type="radio" name="bereichMarkt" value="theke"> Fleischerei/Theke</label>
+              <label class="choice-pill"><input type="radio" name="bereichMarkt" value="anlieferung"> Anlieferung/Rampe</label>
+              <label class="choice-pill"><input type="radio" name="bereichMarkt" value="parkplatz"> Parkplatz/Außenbereich</label>
+              <label class="choice-pill"><input type="radio" name="bereichMarkt" value="sozialraum"> Sozialraum</label>
+              <label class="choice-pill"><input type="radio" name="bereichMarkt" value="buero"> Büro</label>
+              <label class="choice-pill"><input type="radio" name="bereichMarkt" value="sonstiges"> Sonstiges</label>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="section-card">
+        <summary><span class="field-num">27–28</span> Arbeitsunterbrechung <span class="chev">▶</span></summary>
+        <div class="section-body">
+          <div class="field-row">
+            <label class="field-label"><span class="field-num">27</span> Hat die versicherte Person die Arbeit eingestellt?</label>
+            <div class="choice-row" data-choice-group="arbeitEingestellt">
+              <label class="choice-pill"><input type="radio" name="arbeitEingestellt" value="nein"> Nein</label>
+              <label class="choice-pill"><input type="radio" name="arbeitEingestellt" value="sofort"> Sofort</label>
+              <label class="choice-pill"><input type="radio" name="arbeitEingestellt" value="spaeter"> Später</label>
+            </div>
+            <div class="field-grid" id="arbeitEingestelltSpaeterFelder" style="margin-top:8px; display:none;">
+              <div class="field-row">
+                <label class="field-label">am (Tag.Monat)</label>
+                <input type="text" name="spaeterDatum" placeholder="TT.MM.">
+              </div>
+              <div class="field-row">
+                <label class="field-label">um (Uhrzeit)</label>
+                <input type="time" name="spaeterUhrzeit">
+              </div>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <label class="field-label"><span class="field-num">28</span> Hat die versicherte Person die Arbeit wieder aufgenommen?</label>
+            <div class="choice-row" data-choice-group="wiederAufgenommen">
+              <label class="choice-pill"><input type="radio" name="wiederAufgenommen" value="nein"> Nein</label>
+              <label class="choice-pill"><input type="radio" name="wiederAufgenommen" value="ja"> Ja</label>
+            </div>
+            <div class="field-grid" id="wiederAufgenommenFelder" style="margin-top:8px; display:none;">
+              <div class="field-row">
+                <label class="field-label">am</label>
+                <input type="date" name="wiederAufgenommenDatum">
+              </div>
+              <div class="field-row">
+                <label class="field-label">Beginn</label>
+                <input type="time" name="wiederBeginn">
+              </div>
+              <div class="field-row">
+                <label class="field-label">Ende</label>
+                <input type="time" name="wiederEnde">
+              </div>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <label class="field-label">Krankheitsdauer (Tage) <span class="hint internal-note">Zusatzfeld, intern – für die Auswertung</span></label>
+            <input type="number" name="krankheitsdauerTage" min="0" step="1" style="max-width:160px;">
+          </div>
+        </div>
+      </details>
+
+      <details class="section-card" open>
+        <summary><span class="field-num">29</span> Datum, Unterschrift, Rückfragen <span class="chev">▶</span></summary>
+        <div class="section-body">
+          <div class="field-grid">
+            <div class="field-row">
+              <label class="field-label">Datum</label>
+              <input type="date" name="meldedatum">
+            </div>
+            <div class="field-row">
+              <label class="field-label">Telefon-Nr. für Rückfragen</label>
+              <input type="tel" name="telefonRueckfragen">
+            </div>
+          </div>
+
+          <div class="field-row">
+            <label class="field-label">Unterschrift Unternehmer/-in (Bevollmächtigte/-r)</label>
+            <div class="signature-pad-wrap">
+              <canvas class="signature-pad" id="sigUnternehmer"></canvas>
+            </div>
+            <div class="signature-actions">
+              <button type="button" class="btn ghost" data-clear-sig="sigUnternehmer">Löschen</button>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <label class="field-label">Unterschrift Betriebsrat/Personalrat (falls vorhanden)</label>
+            <div class="signature-pad-wrap">
+              <canvas class="signature-pad" id="sigBetriebsrat"></canvas>
+            </div>
+            <div class="signature-actions">
+              <button type="button" class="btn ghost" data-clear-sig="sigBetriebsrat">Löschen</button>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <div class="action-bar">
+        <button type="button" class="btn" id="btnSpeichernExport">Speichern &amp; als PDF exportieren</button>
+        <button type="button" class="btn secondary" id="btnSpeichern">Nur speichern</button>
+        <button type="button" class="btn ghost" id="btnZuruecksetzen">Formular leeren</button>
+      </div>
+    </form>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script src="js/store.js"></script>
+<script src="js/koerperteile.js"></script>
+<script src="js/unfallursachen.js"></script>
+<script src="js/arbeitsmittel.js"></script>
+<script src="js/template-pdf.js"></script>
+<script src="js/pdf.js"></script>
+<script src="js/formular.js"></script>
+</body>
+</html>
