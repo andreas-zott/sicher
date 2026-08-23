@@ -1,7 +1,7 @@
 // Zentrale Revisionsnummer der Unfallanzeige-App.
 // WICHTIG: Bei jeder inhaltlichen Änderung (neue Felder, geänderte Logik, PDF-Anpassungen)
 // APP_REVISION hochzählen und APP_REVISION_DATUM auf das aktuelle Datum setzen.
-const APP_REVISION = "1.0";
+const APP_REVISION = "1.1";
 const APP_REVISION_DATUM = "23.08.2026";
 
 document.addEventListener("DOMContentLoaded", () => {

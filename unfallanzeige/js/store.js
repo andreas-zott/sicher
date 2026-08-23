@@ -82,3 +82,11 @@ async function ualLoescheBericht(id) {
 function ualNeueId() {
   return "ua_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8);
 }
+
+// Gemeinsames Namensschema für exportierte Dateien (PDF wie JSON): Name der Person + Unfalldatum,
+// damit Dateien beim Sichten/Weiterleiten sofort erkennbar sind.
+function ualBerichtDateiname(b, extension) {
+  const namensteil = (b.personName || "Person").replace(/[^a-zA-Z0-9]+/g, "_");
+  const datumsteil = (b.unfallDatum || "ohne_Datum").replace(/-/g, "");
+  return `Unfallanzeige_${namensteil}_${datumsteil}.${extension}`;
+}

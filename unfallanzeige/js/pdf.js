@@ -177,11 +177,11 @@ async function erzeugeEinzelnesPdf(b, empfaengerText) {
   return pdfDoc.save();
 }
 
-function ualDateiname(b, empfaengerBezeichnung) {
-  const namensteil = (b.personName || "Person").replace(/[^a-zA-Z0-9]+/g, "_");
-  const datumsteil = (b.unfallDatum || "").replace(/-/g, "");
-  const empfteil = empfaengerBezeichnung ? "_" + empfaengerBezeichnung.replace(/[^a-zA-Z0-9]+/g, "_") : "";
-  return `Unfallanzeige_${namensteil}_${datumsteil}${empfteil}.pdf`;
+function ualPdfDateiname(b, empfaengerBezeichnung) {
+  const basis = ualBerichtDateiname(b, "pdf");
+  if (!empfaengerBezeichnung) return basis;
+  const empfteil = "_" + empfaengerBezeichnung.replace(/[^a-zA-Z0-9]+/g, "_");
+  return basis.replace(/\.pdf$/, empfteil + ".pdf");
 }
 
 function ualDownloadBytes(pdfBytes, dateiname) {
@@ -204,7 +204,7 @@ async function erzeugeUnfallanzeigePdf(b) {
   for (let i = 0; i < liste.length; i++) {
     const empf = liste[i];
     const pdfBytes = await erzeugeEinzelnesPdf(b, empf.adresse);
-    ualDownloadBytes(pdfBytes, ualDateiname(b, empf.bezeichnung || `Empfaenger${i + 1}`));
+    ualDownloadBytes(pdfBytes, ualPdfDateiname(b, empf.bezeichnung || `Empfaenger${i + 1}`));
     // kleine Pause zwischen den Downloads, damit der Browser sie nicht als Popup-Flut blockiert
     if (i < liste.length - 1) await new Promise((r) => setTimeout(r, 400));
   }

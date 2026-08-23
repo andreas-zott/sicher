@@ -44,6 +44,7 @@
           <div style="display:flex; gap:6px; flex-wrap:wrap;">
             <button class="btn secondary" data-action="oeffnen" data-id="${b.id}">Öffnen</button>
             <button class="btn ghost" data-action="pdf" data-id="${b.id}">PDF</button>
+            <button class="btn ghost" data-action="json" data-id="${b.id}">JSON</button>
             <button class="btn danger" data-action="loeschen" data-id="${b.id}">Löschen</button>
           </div>
         `;
@@ -99,6 +100,11 @@
       }
       return;
     }
+    if (action === "json") {
+      const b = await ualGetBericht(id);
+      if (b) ualExportEinzelnenAlsJson(b);
+      return;
+    }
     if (action === "loeschen") {
       if (!confirm("Diese Unfallanzeige unwiderruflich löschen?")) return;
       await ualLoescheBericht(id);
@@ -108,4 +114,32 @@
   });
 
   ladeAlle();
+
+  // ---------- Backup: alle Daten exportieren / importieren ----------
+  document.getElementById("btnExportAlle").addEventListener("click", async () => {
+    try {
+      const anzahl = await ualExportAlleAlsJson();
+      toast(`${anzahl} Unfallanzeige${anzahl === 1 ? "" : "n"} exportiert.`);
+    } catch (e) {
+      console.error(e);
+      toast("Export fehlgeschlagen: " + e.message);
+    }
+  });
+
+  const importDatei = document.getElementById("importDatei");
+  document.getElementById("btnImportOeffnen").addEventListener("click", () => importDatei.click());
+  importDatei.addEventListener("change", async () => {
+    const file = importDatei.files[0];
+    importDatei.value = ""; // damit dieselbe Datei erneut ausgewählt werden kann
+    if (!file) return;
+    if (!confirm(`"${file.name}" importieren? Vorhandene Unfallanzeigen mit gleicher ID werden dabei überschrieben.`)) return;
+    try {
+      const ergebnis = await ualImportJsonDatei(file);
+      toast(`${ergebnis.importiert} importiert${ergebnis.uebersprungen ? `, ${ergebnis.uebersprungen} übersprungen` : ""}.`);
+      ladeAlle();
+    } catch (e) {
+      console.error(e);
+      toast("Import fehlgeschlagen: " + e.message);
+    }
+  });
 })();
