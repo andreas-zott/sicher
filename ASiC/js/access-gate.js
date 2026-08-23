@@ -13,6 +13,16 @@ const ACCESS_CODE = 'Sifa-Rewe-Dortmund';
 const ACCESS_STORAGE_KEY = 'asicHandelAccessGranted';
 
 (function () {
+    // Nur greifen, wenn die Seite als installierte App laeuft (eigenes
+    // Fenster ohne Browser-Oberflaeche) - beim normalen Aufruf in einem
+    // ganz gewoehnlichen Browser-Tab bleibt die Seite frei zugaenglich.
+    // display-mode:standalone erkennt das bei Edge/Chrome (Windows/Mac),
+    // navigator.standalone zusaetzlich bei "Zum Home-Bildschirm" auf iOS.
+    const isInstalledApp =
+        (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
+        window.navigator.standalone === true;
+    if (!isInstalledApp) return;
+
     if (localStorage.getItem(ACCESS_STORAGE_KEY) === 'true') return;
     document.documentElement.classList.add('access-locked');
 
