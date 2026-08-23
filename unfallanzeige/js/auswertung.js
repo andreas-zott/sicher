@@ -190,6 +190,16 @@
     // Azubi-Anteil
     const azubiAnzahl = berichte.filter((b) => b.auszubildende === "ja").length;
 
+    // Wochentag (bundesweite DGUV-Statistik zeigt hier einen Montags-Schwerpunkt – Vergleichswert)
+    const WOCHENTAG_REIHENFOLGE = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"];
+    const wochentagMap = zaehle(berichte, (b) => ualWochentag(b.unfallDatum));
+    const wochentagSorted = WOCHENTAG_REIHENFOLGE.filter((w) => wochentagMap.has(w)).map((w) => [w, wochentagMap.get(w)]);
+
+    // Betriebszugehörigkeit zum Unfallzeitpunkt (testet, ob neue Mitarbeitende häufiger betroffen sind)
+    const BETRIEBSZUGEHOERIGKEIT_REIHENFOLGE = ["unter 3 Monate", "3–12 Monate", "1–3 Jahre", "3–10 Jahre", "über 10 Jahre"];
+    const zugehoerigkeitMap = zaehle(berichte, (b) => ualBetriebszugehoerigkeitGruppe(ualBetriebszugehoerigkeitMonate(b.taetigSeit, b.unfallDatum)));
+    const zugehoerigkeitSorted = BETRIEBSZUGEHOERIGKEIT_REIHENFOLGE.filter((g) => zugehoerigkeitMap.has(g)).map((g) => [g, zugehoerigkeitMap.get(g)]);
+
     // Kreuztabellen: Alter x Abteilung, Alter x Unfallursache
     const abteilungSpalten = Object.values(BEREICH_LABEL);
     const crosstabAlterAbteilung = kreuztabelle(
@@ -280,6 +290,18 @@
         <h3>Wegeunfall vs. Betriebsunfall</h3>
         <div class="stat-sub">Basierend auf dem internen Zusatzfeld „Wegeunfall“</div>
         ${wegeSorted.length ? balkenListe(wegeSorted) : '<div class="hint">Keine Angaben vorhanden.</div>'}
+      </div>
+
+      <div class="stat-card">
+        <h3>Unfälle nach Wochentag</h3>
+        <div class="stat-sub">Bundesweit laut DGUV/Statista meist montags am höchsten – guter Vergleichswert für die eigenen Märkte</div>
+        ${wochentagSorted.length ? balkenListe(wochentagSorted) : '<div class="hint">Keine Unfalldaten erfasst.</div>'}
+      </div>
+
+      <div class="stat-card">
+        <h3>Unfälle nach Betriebszugehörigkeit</h3>
+        <div class="stat-sub">Zeitspanne zwischen Tätigkeitsbeginn (Feld 25) und Unfalldatum – zeigt, ob neue Mitarbeitende häufiger betroffen sind</div>
+        ${zugehoerigkeitSorted.length ? balkenListe(zugehoerigkeitSorted) : '<div class="hint">Keine vollständigen Daten (Tätigkeitsbeginn + Unfalldatum) vorhanden.</div>'}
       </div>
 
       <div class="stat-card">
