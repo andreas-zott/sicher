@@ -8,7 +8,7 @@
 // CACHE_NAME muss hochgezaehlt werden (z. B. an APP_REVISION aus app.js
 // angleichen), sonst liefert der Service Worker weiterhin die ALTEN
 // Dateien aus dem Cache aus, auch wenn neue hochgeladen wurden.
-const CACHE_NAME = 'asic-handel-v2.0';
+const CACHE_NAME = 'asic-handel-v2.1';
 
 // Alle Dateien, die die App zum Start ohne Netzwerk braucht.
 // Muss mit der tatsaechlichen Dateistruktur uebereinstimmen (siehe
@@ -19,6 +19,8 @@ const PRECACHE_URLS = [
     './massnahmen.html',
     './fotos.html',
     './verlauf.html',
+    './dokumentation.html',
+    './hilfe.html',
     './impressum.html',
     './datenschutz.html',
     './manifest.json',
@@ -61,36 +63,26 @@ self.addEventListener('fetch', event => {
     // POST-Anfragen) unveraendert durchreichen.
     if (event.request.method !== 'GET') return;
 
-    const isNavigation = event.request.mode === 'navigate';
-
-    if (isNavigation) {
-        // HTML-Seiten: zuerst versuchen aktuell aus dem Netz zu laden (damit
-        // Aenderungen sofort ankommen, wenn online), bei fehlendem Netz auf
-        // den Cache zurueckfallen.
-        event.respondWith(
-            fetch(event.request)
-                .then(response => {
-                    const copy = response.clone();
-                    caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
-                    return response;
-                })
-                .catch(() => caches.match(event.request).then(cached => cached || caches.match('./index.html')))
-        );
-        return;
-    }
-
-    // Statische Assets (JS/CSS/Icons/jsPDF): aus dem Cache bevorzugen
-    // (schneller, aendert sich selten), im Hintergrund trotzdem aktualisieren.
+    // Einheitlich fuer ALLE Dateien (HTML-Seiten wie auch JS/CSS/Icons):
+    // immer zuerst das Netzwerk versuchen, damit Aenderungen sofort
+    // ankommen sobald online, und den Cache nur als Absicherung fuer
+    // fehlendes Netz nutzen. Bewusst NICHT "Cache zuerst" fuer statische
+    // Dateien, obwohl das theoretisch schneller waere - waehrend die App
+    // noch haeufig weiterentwickelt wird, hat sich gezeigt, dass ein
+    // vergessenes Hochzaehlen von CACHE_NAME sonst dazu fuehrt, dass alte
+    // und neue Dateien unbemerkt gemischt ausgeliefert werden (z. B. neues
+    // HTML mit altem CSS) - das ist die zuverlaessigere Grundeinstellung.
     event.respondWith(
-        caches.match(event.request).then(cached => {
-            const fetchPromise = fetch(event.request)
-                .then(response => {
-                    const copy = response.clone();
-                    caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
-                    return response;
-                })
-                .catch(() => cached);
-            return cached || fetchPromise;
-        })
+        fetch(event.request)
+            .then(response => {
+                const copy = response.clone();
+                caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
+                return response;
+            })
+            .catch(() =>
+                caches.match(event.request).then(cached =>
+                    cached || (event.request.mode === 'navigate' ? caches.match('./index.html') : undefined)
+                )
+            )
     );
 });
