@@ -625,24 +625,31 @@ async function renderFotosSection(doc, yStart, margin, contentWidth, pageHeight,
     return pageStartY + (lastRow + 1) * (cellHeight + gapY) + 4;
 }
 
-// Fotos, die direkt an einzelnen Massnahmen haengen, als eigener Anhang -
-// gruppiert pro Massnahme (Frage-Bezug als Ueberschrift), jede Gruppe nutzt
-// intern dieselbe getestete 2x2-Raster-Logik wie renderFotosSection(). Wird
-// unabhaengig vom "includeFotos"-Schalter aufgerufen, sobald ueberhaupt
-// Massnahmen-Fotos vorhanden sind - das ist eine bewusst eigene Sache
-// gegenueber der allgemeinen Fotodokumentation.
+// Fotos, die direkt an einzelnen Massnahmen haengen, als eigener Anhang.
+// Bewusst EINE durchgehende Fotoliste (nicht pro Massnahme gruppiert),
+// damit tatsaechlich 4 Fotos pro Seite zusammenstehen, statt dass jede
+// Massnahme ihr eigenes, evtl. nur halb gefuelltes Raster beginnt. Als
+// Beschriftung dient die laufende Massnahmen-Nummer (1., 2., 3. ...) -
+// dieselbe Nummer, die auch auf der Massnahmen-Karte selbst steht, damit
+// sich Anhang und Karte leicht einander zuordnen lassen. Wird unabhaengig
+// vom "includeFotos"-Schalter aufgerufen, sobald ueberhaupt Massnahmen-
+// Fotos vorhanden sind - das ist eine bewusst eigene Sache gegenueber der
+// allgemeinen Fotodokumentation.
 async function renderMeasurePhotosAppendix(doc, margin, contentWidth, pageHeight, measures) {
-    const groups = [];
-    for (const measure of measures) {
+    const allPhotos = [];
+    for (let i = 0; i < measures.length; i++) {
+        const measure = measures[i];
         let photos;
         try {
             photos = await getPhotosForMeasure(measure.id);
         } catch (e) {
             photos = [];
         }
-        if (photos.length > 0) groups.push({ measure, photos });
+        photos.forEach((photo, idx) => {
+            allPhotos.push({ photo, nummer: i + 1, idxInMeasure: idx, totalInMeasure: photos.length });
+        });
     }
-    if (groups.length === 0) return false;
+    if (allPhotos.length === 0) return false;
 
     doc.addPage();
     let y = 18;
@@ -652,28 +659,13 @@ async function renderMeasurePhotosAppendix(doc, margin, contentWidth, pageHeight
     doc.text('Fotos zu den Maßnahmen', margin, y);
     y += 9;
 
-    for (const group of groups) {
-        // Genug Platz fuer Ueberschrift + mindestens eine Bildreihe sicherstellen,
-        // sonst neue Seite fuer diese Massnahmen-Gruppe beginnen.
-        if (y > pageHeight - 95) {
-            doc.addPage();
-            y = 18;
-        }
+    const captionFn = (photo, i) => {
+        const meta = allPhotos[i];
+        const zaehler = meta.totalInMeasure > 1 ? ` — Foto ${meta.idxInMeasure + 1}/${meta.totalInMeasure}` : '';
+        return `Maßnahme ${meta.nummer}${zaehler}`;
+    };
 
-        const found = findItemById(group.measure.itemId);
-        // ÄNDERUNG: `${found.item.text}` wurde entfernt
-        const label = found ? `[${group.measure.itemId}]` : 'Manuell erfasste Maßnahme';
-
-        doc.setFont(undefined, 'bold');
-        doc.setFontSize(10);
-        doc.setTextColor(30, 41, 59);
-        const labelLines = doc.splitTextToSize(label, contentWidth);
-        doc.text(labelLines, margin, y);
-        y += labelLines.length * 5 + 3;
-
-        y = await renderFotosSection(doc, y, margin, contentWidth, pageHeight, group.photos);
-        y += 6;
-    }
+    await renderFotosSection(doc, y, margin, contentWidth, pageHeight, allPhotos.map(e => e.photo), captionFn);
 
     return true;
 }
@@ -1068,7 +1060,11 @@ async function buildPdf(includeChecklist, includeFotos) {
 
         const padding = 6;
         const innerWidth = contentWidth - padding * 2;
-        const thumbSize = 22;
+        // 180px CSS-Vorschaubildgroesse (siehe .measure-photo-thumb in
+        // styles.css) in mm umgerechnet (96 CSS-px = 1 Zoll = 25.4mm),
+        // damit das gedruckte Vorschaubild optisch derselben Groesse
+        // entspricht wie in der App selbst.
+        const thumbSize = 180 * 25.4 / 96;
         const thumbGap = 3;
 
         const thumbsPerRow = Math.max(
@@ -1122,6 +1118,13 @@ async function buildPdf(includeChecklist, includeFotos) {
                         3
                     : 0;
 
+            // Kleine Nummern-Beschriftung ueber dem Fotoblock (ersetzt die
+            // bisherige "MASSNAHME"-Beschriftung unter dem Fotoblock) sowie
+            // ein Abstand danach vor dem Massnahmentext - beides nur, wenn
+            // ueberhaupt Fotos vorhanden sind.
+            const numberLabelH = photos.length > 0 ? 4.3 : 0;
+            const photoGapAfter = photos.length > 0 ? 4.5 : 0;
+
             doc.setFont(undefined, 'bold');
             doc.setFontSize(10);
 
@@ -1153,8 +1156,9 @@ async function buildPdf(includeChecklist, includeFotos) {
                 questionH +
                 1 +
                 4.5 +
+                numberLabelH +
                 photoBlockH +
-                4.5 +
+                photoGapAfter +
                 answerH +
                 6 +
                 statusH +
@@ -1228,6 +1232,24 @@ async function buildPdf(includeChecklist, includeFotos) {
             // belegt wurde. Am Bildschirm bleiben die Fotos trotz kleiner
             // Druckgröße beliebig zoombar, nur auf Papier wirken sie kleiner.
             if (photos.length > 0) {
+
+                // Kleine Nummern-Beschriftung direkt ueber dem Fotoblock
+                // (dieselbe laufende Nummer wie am Kartenanfang).
+                doc.setFont(undefined, 'bold');
+                doc.setFontSize(7.5);
+                doc.setTextColor(
+                    200,
+                    130,
+                    20
+                );
+
+                doc.text(
+                    'Nr. ' + (index + 1),
+                    margin + padding,
+                    cy
+                );
+
+                cy += 4.3;
 
                 for (
                     let p = 0;
@@ -1316,23 +1338,8 @@ async function buildPdf(includeChecklist, includeFotos) {
                 }
 
                 cy += photoBlockH;
+                cy += 4.5;
             }
-
-            doc.setFont(undefined, 'bold');
-            doc.setFontSize(7.5);
-            doc.setTextColor(
-                200,
-                130,
-                20
-            );
-
-            doc.text(
-                'MASSNAHME',
-                margin + padding,
-                cy
-            );
-
-            cy += 4.3;
 
             doc.setFont(undefined, 'normal');
             doc.setFontSize(9);
