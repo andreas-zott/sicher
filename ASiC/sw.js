@@ -8,7 +8,7 @@
 // CACHE_NAME muss hochgezaehlt werden (z. B. an APP_REVISION aus app.js
 // angleichen), sonst liefert der Service Worker weiterhin die ALTEN
 // Dateien aus dem Cache aus, auch wenn neue hochgeladen wurden.
-const CACHE_NAME = 'asic-handel-v2.12';
+const CACHE_NAME = 'asic-handel-v2.15';
 
 // Alle Dateien, die die App zum Start ohne Netzwerk braucht.
 // Muss mit der tatsaechlichen Dateistruktur uebereinstimmen (siehe
