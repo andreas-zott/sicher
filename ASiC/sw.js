@@ -3,11 +3,24 @@
 // ==========================================================================
 // Offline-Unterstützung für die ASiC-Handel-App.
 //
+// SERVICE-WORKER-VERSION: 1.1
+//
+// Bei einer neuen technischen Version:
+//   1. Alle precachten App-Dateien werden neu vom Server geladen.
+//   2. Alte ASiC-Handel-Caches werden gelöscht.
+//   3. Der neue Service Worker wird sofort aktiviert.
+//   4. Offene Tabs werden sofort übernommen.
+//
 // WICHTIG:
-// Bei Änderungen an App-Dateien CACHE_NAME erhöhen.
+// Dieser Service Worker löscht KEINE:
+//   - localStorage-Daten
+//   - IndexedDB-Daten
+//   - archivierten Begehungen
+//   - Fotos
+//   - WebDAV-/NAS-Daten
 // ==========================================================================
 
-const CACHE_NAME = 'asic-handel-v3.01';
+const CACHE_NAME = 'asic-handel-v1.1';
 
 
 // ==========================================================================
@@ -54,6 +67,11 @@ const PRECACHE_URLS = [
 // ==========================================================================
 // INSTALL
 // ==========================================================================
+//
+// Die Dateien werden mit "cache: reload" direkt vom Server angefordert.
+// Dadurch wird beim Wechsel auf eine neue Service-Worker-Version der
+// normale HTTP-Cache für diese Dateien umgangen.
+// ==========================================================================
 
 self.addEventListener('install', event => {
 
@@ -61,24 +79,70 @@ self.addEventListener('install', event => {
 
         caches.open(CACHE_NAME)
 
-            .then(cache => {
+            .then(async cache => {
 
                 console.log(
-                    '[SW] Installiere Cache:',
+                    '[SW] Installiere neuen Cache:',
                     CACHE_NAME
                 );
 
-                return cache.addAll(PRECACHE_URLS);
+                for (const url of PRECACHE_URLS) {
+
+                    try {
+
+                        const request = new Request(url, {
+                            cache: 'reload'
+                        });
+
+                        const response =
+                            await fetch(request);
+
+                        if (!response.ok) {
+
+                            throw new Error(
+                                `HTTP ${response.status}`
+                            );
+                        }
+
+                        await cache.put(
+                            request,
+                            response
+                        );
+
+                        console.log(
+                            '[SW] Neu geladen:',
+                            url
+                        );
+
+                    } catch (error) {
+
+                        console.error(
+                            '[SW] Fehler beim Laden:',
+                            url,
+                            error
+                        );
+
+                        // Installation abbrechen, wenn eine wichtige
+                        // Datei nicht geladen werden konnte.
+                        throw error;
+                    }
+                }
             })
 
             // Neue Version sofort installieren
-            .then(() => self.skipWaiting())
+            .then(() => {
+                return self.skipWaiting();
+            })
     );
 });
 
 
 // ==========================================================================
 // ACTIVATE
+// ==========================================================================
+//
+// Alle älteren ASiC-Handel-Caches werden gelöscht.
+// Andere Caches fremder Anwendungen bleiben unangetastet.
 // ==========================================================================
 
 self.addEventListener('activate', event => {
@@ -91,10 +155,12 @@ self.addEventListener('activate', event => {
 
                 return Promise.all(
 
-                    keys
-                        .filter(key => key !== CACHE_NAME)
+                    keys.map(key => {
 
-                        .map(key => {
+                        if (
+                            key.startsWith('asic-handel-') &&
+                            key !== CACHE_NAME
+                        ) {
 
                             console.log(
                                 '[SW] Lösche alten Cache:',
@@ -102,12 +168,17 @@ self.addEventListener('activate', event => {
                             );
 
                             return caches.delete(key);
-                        })
+                        }
+
+                        return Promise.resolve();
+                    })
                 );
             })
 
             // Neue Version sofort für alle offenen Tabs übernehmen
-            .then(() => self.clients.claim())
+            .then(() => {
+                return self.clients.claim();
+            })
     );
 });
 
@@ -122,8 +193,8 @@ self.addEventListener('activate', event => {
 // OFFLINE:
 //   Cache wird als Fallback verwendet.
 //
-// Dadurch werden Änderungen an HTML, CSS und JS online sofort geladen,
-// während die App bei fehlendem Internet weiterhin funktioniert.
+// Erfolgreiche Netzwerkantworten werden zusätzlich im aktuellen Cache
+// gespeichert. Dadurch bleiben neu geladene Dateien auch offline verfügbar.
 // ==========================================================================
 
 self.addEventListener('fetch', event => {
@@ -132,7 +203,6 @@ self.addEventListener('fetch', event => {
     if (event.request.method !== 'GET') {
         return;
     }
-
 
     event.respondWith(
 
@@ -150,7 +220,6 @@ self.addEventListener('fetch', event => {
                     const copy =
                         response.clone();
 
-
                     caches.open(CACHE_NAME)
                         .then(cache => {
 
@@ -160,24 +229,22 @@ self.addEventListener('fetch', event => {
                             );
 
                         })
-                        .catch(err => {
+                        .catch(error => {
 
                             console.warn(
                                 '[SW] Cache konnte nicht aktualisiert werden:',
-                                err
+                                error
                             );
 
                         });
                 }
 
-
                 return response;
             })
 
-
-            // --------------------------------------------------------------
+            // ==================================================================
             // KEIN NETZWERK
-            // --------------------------------------------------------------
+            // ==================================================================
 
             .catch(() => {
 
@@ -191,8 +258,7 @@ self.addEventListener('fetch', event => {
                         return cachedResponse;
                     }
 
-
-                    // Bei Navigation auf Startseite zurückfallen
+                    // Bei Navigation auf die Startseite zurückfallen
                     if (
                         event.request.mode ===
                         'navigate'
@@ -202,7 +268,6 @@ self.addEventListener('fetch', event => {
                             './index.html'
                         );
                     }
-
 
                     return undefined;
                 });
