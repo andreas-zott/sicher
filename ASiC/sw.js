@@ -3,7 +3,7 @@
 // ==========================================================================
 // Offline-Unterstützung für die ASiC-Handel-App.
 //
-// SERVICE-WORKER-VERSION: 1.1
+// SERVICE-WORKER-VERSION: 1.2
 //
 // Bei einer neuen technischen Version:
 //   1. Alle precachten App-Dateien werden neu vom Server geladen.
@@ -20,7 +20,7 @@
 //   - WebDAV-/NAS-Daten
 // ==========================================================================
 
-const CACHE_NAME = 'asic-handel-v1.1';
+const CACHE_NAME = 'asic-handel-v1.2';
 
 
 // ==========================================================================
