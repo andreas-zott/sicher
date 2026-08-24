@@ -1,158 +1,676 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Maßnahmen – ASiC Handel</title>
-<link rel="stylesheet" href="css/styles.css">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+<title>
+    Maßnahmen – ASiC Handel
+</title>
+
+<link
+    rel="stylesheet"
+    href="css/styles.css"
+>
+
 <script src="js/access-gate.js"></script>
-<link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-192.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#1c2226">
+
+<link
+    rel="manifest"
+    href="manifest.json"
+>
+
+<link
+    rel="apple-touch-icon"
+    href="icon-192.png"
+>
+
+<meta
+    name="apple-mobile-web-app-capable"
+    content="yes"
+>
+
+<meta
+    name="theme-color"
+    content="#1c2226"
+>
+
 <script src="js/jspdf.umd.min.js"></script>
+
 </head>
+
+
 <body>
 
+
+<!-- ====================================================================== -->
+<!-- HEADER                                                                 -->
+<!-- ====================================================================== -->
+
 <header class="app-header">
+
     <div class="hazard-strip"></div>
+
     <div class="app-header-inner">
+
         <div class="brand">
-            <span class="brand-title">ASiC Handel</span>
-            <span class="brand-tag">Märkte</span>
-            <span class="brand-subtitle">„Sicher geprüft. Sicher gehandelt.“</span>
+
+            <span class="brand-title">
+                ASiC Handel
+            </span>
+
+            <span class="brand-tag">
+                Märkte
+            </span>
+
+            <span class="brand-subtitle">
+                „Sicher geprüft. Sicher gehandelt.“
+            </span>
+
         </div>
+
+
         <nav class="app-nav">
-            <a href="index.html">Prüfkatalog</a>
-                <a href="massnahmen.html" class="active">Aktionsplan</a>
-                <a href="fotos.html">Fotos</a>
-                <a href="verlauf.html">Verlauf</a>
+
+            <a href="index.html">
+                Prüfkatalog
+            </a>
+
+            <a
+                href="massnahmen.html"
+                class="active"
+            >
+                Aktionsplan
+            </a>
+
+            <a href="fotos.html">
+                Fotos
+            </a>
+
+            <a href="verlauf.html">
+                Verlauf
+            </a>
+
         </nav>
+
     </div>
+
 </header>
+
+
+
+<!-- ====================================================================== -->
+<!-- HAUPTBEREICH                                                           -->
+<!-- ====================================================================== -->
 
 <main class="page">
 
-    <!-- Betriebsdaten (aus der Checkliste uebernommen) -->
-    <section class="card info-strip" id="company-info-strip">
+
+    <!-- ================================================================== -->
+    <!-- BETRIEBSDATEN                                                       -->
+    <!-- ================================================================== -->
+
+    <section
+        class="card info-strip"
+        id="company-info-strip"
+    >
+
         <div class="info-field">
-            <span class="label">Firma / Markt</span>
-            <span class="value" id="info-firma">–</span>
+
+            <span class="label">
+                Firma / Markt
+            </span>
+
+            <span
+                class="value"
+                id="info-firma"
+            >
+                –
+            </span>
+
         </div>
+
+
         <div class="info-field">
-            <span class="label">Standort</span>
-            <span class="value" id="info-standort">–</span>
+
+            <span class="label">
+                Standort
+            </span>
+
+            <span
+                class="value"
+                id="info-standort"
+            >
+                –
+            </span>
+
         </div>
+
+
         <div class="info-field">
-            <span class="label">Datum</span>
-            <span class="value" id="info-datum">–</span>
+
+            <span class="label">
+                Datum
+            </span>
+
+            <span
+                class="value"
+                id="info-datum"
+            >
+                –
+            </span>
+
         </div>
+
+
         <div class="info-field">
-            <span class="label">Prüfer</span>
-            <span class="value" id="info-pruefer">–</span>
+
+            <span class="label">
+                Prüfer
+            </span>
+
+            <span
+                class="value"
+                id="info-pruefer"
+            >
+                –
+            </span>
+
         </div>
+
+
         <div class="info-field">
-            <span class="label">Marktleitung</span>
-            <span class="value" id="info-marktleitung">–</span>
+
+            <span class="label">
+                Marktleitung
+            </span>
+
+            <span
+                class="value"
+                id="info-marktleitung"
+            >
+                –
+            </span>
+
         </div>
+
+
         <div class="info-field">
-            <span class="label">Teilnehmer</span>
-            <span class="value" id="info-teilnehmer">–</span>
+
+            <span class="label">
+                Teilnehmer
+            </span>
+
+            <span
+                class="value"
+                id="info-teilnehmer"
+            >
+                –
+            </span>
+
         </div>
+
     </section>
 
-    <!-- Maßnahmen -->
-    <div class="section-title" style="margin-bottom: 0.75rem;">Maßnahmen</div>
-    <div id="measures-container" class="measures-list"></div>
-    <div id="no-measures" class="no-measures card" style="display:none;">
-        <h3>Keine Mängel erfasst</h3>
-        <p>Alle Prüfpunkte der Begehung wurden mit „In Ordnung“ oder „N.V.“ bewertet.</p>
+
+
+    <!-- ================================================================== -->
+    <!-- MASSNAHMEN                                                          -->
+    <!-- ================================================================== -->
+
+    <div
+        class="section-title"
+        style="margin-bottom: 0.75rem;"
+    >
+        Maßnahmen
     </div>
 
-    <!-- Unterschriften -->
-    <div class="section-title" style="margin: 1.75rem 0 0.75rem;">Unterschriften</div>
+
+    <div
+        class="card"
+        style="
+            margin-bottom: 1rem;
+            padding: 0.75rem 1rem;
+        "
+    >
+
+        <p
+            style="
+                margin: 0 0 0.7rem 0;
+                font-size: 0.86rem;
+                color: var(--ink-soft);
+            "
+        >
+
+            Hier werden alle in der Checkliste als
+            <strong>„Mangel“</strong> bewerteten Prüfpunkte
+            als Maßnahmen geführt.
+
+            Zu jeder Maßnahme können ein
+            <strong>Verantwortlicher</strong>, ein
+            <strong>Bearbeitungsstatus</strong> sowie – sofern vorhanden –
+            <strong>zugehörige Fotos</strong> dokumentiert werden.
+
+        </p>
+
+
+        <div
+            style="
+                padding-top: 0.7rem;
+                border-top: 1px solid var(--line);
+                font-size: 0.86rem;
+                color: var(--ink-soft);
+            "
+        >
+
+            <strong>
+                Verantwortung:
+            </strong>
+
+            Die Gesamtverantwortung für die Durchführung der Prüfung
+            sowie für die Beseitigung festgestellter Mängel liegt bei
+            der Marktleitung.
+
+            Einzelne Maßnahmen können an fachlich zuständige Personen
+            zur Bearbeitung übertragen werden. Die Verantwortung für
+            die ordnungsgemäße Umsetzung sowie die Aufsichts- und
+            Kontrollpflicht verbleibt bei der Marktleitung.
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="measures-container"
+        class="measures-list"
+    ></div>
+
+
+    <div
+        id="no-measures"
+        class="no-measures card"
+        style="display:none;"
+    >
+
+        <h3>
+            Keine Mängel erfasst
+        </h3>
+
+        <p>
+            Alle Prüfpunkte der Begehung wurden mit
+            „In Ordnung“ oder „N.V.“ bewertet.
+        </p>
+
+    </div>
+
+
+
+    <!-- ================================================================== -->
+    <!-- UNTERSCHRIFTEN                                                      -->
+    <!-- ================================================================== -->
+
+    <div
+        class="section-title"
+        style="
+            margin: 1.75rem 0 0.75rem;
+        "
+    >
+        Unterschriften
+    </div>
+
+
     <div class="signatures-grid">
 
-        <section class="card signature-block">
-            <div class="field">
-                <label for="sig-pruefer-name">Prüfer</label>
-                <input type="text" id="sig-pruefer-name" placeholder="Name des Prüfers">
-            </div>
-            <div class="signature-pad-wrap">
-                <canvas id="sig-pruefer-canvas"></canvas>
-                <div class="signature-baseline"></div>
-                <span class="signature-hint">Mit dem Finger oder Stift unterschreiben</span>
-            </div>
-            <div class="signature-actions">
-                <button class="btn-link" id="clear-sig-pruefer">Löschen</button>
-            </div>
-        </section>
+
+        <!-- PRÜFER -->
 
         <section class="card signature-block">
+
             <div class="field">
-                <label for="sig-marktleitung-name">Marktleitung</label>
-                <input type="text" id="sig-marktleitung-name" placeholder="Name der Marktleitung">
+
+                <label
+                    for="sig-pruefer-name"
+                >
+                    Prüfer
+                </label>
+
+                <input
+                    type="text"
+                    id="sig-pruefer-name"
+                    placeholder="Name des Prüfers"
+                >
+
             </div>
+
+
             <div class="signature-pad-wrap">
-                <canvas id="sig-marktleitung-canvas"></canvas>
+
+                <canvas
+                    id="sig-pruefer-canvas"
+                ></canvas>
+
                 <div class="signature-baseline"></div>
-                <span class="signature-hint">Mit dem Finger oder Stift unterschreiben</span>
+
+                <span class="signature-hint">
+                    Mit dem Finger oder Stift unterschreiben
+                </span>
+
             </div>
+
+
             <div class="signature-actions">
-                <button class="btn-link" id="clear-sig-marktleitung">Löschen</button>
+
+                <button
+                    class="btn-link"
+                    id="clear-sig-pruefer"
+                    type="button"
+                >
+                    Löschen
+                </button>
+
             </div>
+
         </section>
+
+
+
+        <!-- MARKTLEITUNG -->
+
+        <section class="card signature-block">
+
+            <div class="field">
+
+                <label
+                    for="sig-marktleitung-name"
+                >
+                    Marktleitung
+                </label>
+
+                <input
+                    type="text"
+                    id="sig-marktleitung-name"
+                    placeholder="Name der Marktleitung"
+                >
+
+            </div>
+
+
+            <div class="signature-pad-wrap">
+
+                <canvas
+                    id="sig-marktleitung-canvas"
+                ></canvas>
+
+                <div class="signature-baseline"></div>
+
+                <span class="signature-hint">
+                    Mit dem Finger oder Stift unterschreiben
+                </span>
+
+            </div>
+
+
+            <div class="signature-actions">
+
+                <button
+                    class="btn-link"
+                    id="clear-sig-marktleitung"
+                    type="button"
+                >
+                    Löschen
+                </button>
+
+            </div>
+
+        </section>
+
 
     </div>
+
+
+
+    <!-- ================================================================== -->
+    <!-- FOTO-HINWEIS                                                        -->
+    <!-- ================================================================== -->
+
+    <div
+        class="card"
+        style="
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+        "
+    >
+
+        <p
+            style="
+                margin: 0;
+                font-size: 0.86rem;
+                color: var(--ink-soft);
+            "
+        >
+
+            <strong>Fotodokumentation:</strong>
+
+            Fotos, die einer Maßnahme zugeordnet wurden,
+            können in den Maßnahmen-PDFs als Vorschaubilder
+            und zusätzlich im Fotoanhang ausgegeben werden.
+
+        </p>
+
+    </div>
+
 
 </main>
 
+
+
+<!-- ====================================================================== -->
+<!-- FOOTER                                                                 -->
+<!-- ====================================================================== -->
+
 <footer class="app-footer">
+
     <div class="app-footer-meta">
+
         <span id="footer-version"></span>
-        <span class="footer-copyright" id="footer-copyright"></span>
+
+        <span
+            class="footer-copyright"
+            id="footer-copyright"
+        ></span>
+
     </div>
+
+
     <div class="app-footer-links">
-        <a href="impressum.html">Impressum</a>
-        <a href="datenschutz.html">Datenschutz</a>
-        <a href="dokumentation.html">Technische Dokumentation</a>
-        <a href="hilfe.html">Hilfe &amp; FAQ</a>
-        <a href="einstellungen.html">Einstellungen</a>
-        <a href="auswertung.html">Auswertung</a>
+
+        <a href="impressum.html">
+            Impressum
+        </a>
+
+        <a href="datenschutz.html">
+            Datenschutz
+        </a>
+
+        <a href="dokumentation.html">
+            Technische Dokumentation
+        </a>
+
+        <a href="hilfe.html">
+            Hilfe &amp; FAQ
+        </a>
+
+        <a href="einstellungen.html">
+            Einstellungen
+        </a>
+
+        <a href="auswertung.html">
+            Auswertung
+        </a>
+
     </div>
+
 </footer>
 
+
+
+<!-- ====================================================================== -->
+<!-- ACTION BAR                                                             -->
+<!-- ====================================================================== -->
+
 <div class="action-bar">
+
     <div class="action-bar-inner">
+
+
+        <!-- ZURÜCK -->
+
         <div class="action-bar-group">
-            <a href="index.html" class="btn btn-secondary btn-small">← Zurück</a>
+
+            <a
+                href="index.html"
+                class="btn btn-secondary btn-small"
+            >
+                ← Zurück
+            </a>
+
         </div>
+
+
+        <!-- EXPORT -->
+
         <div class="action-bar-group">
+
             <div class="menu-dropdown">
-                <button class="btn btn-primary btn-small" id="export-menu-toggle">Exportieren ▾</button>
-                <div class="menu-dropdown-panel" id="export-menu-panel">
+
+                <button
+                    class="btn btn-primary btn-small"
+                    id="export-menu-toggle"
+                    type="button"
+                >
+                    Exportieren ▾
+                </button>
+
+
+                <div
+                    class="menu-dropdown-panel"
+                    id="export-menu-panel"
+                >
+
                     <div class="menu-mode-row">
-                        <button class="mode-btn" data-mode="checkliste">Checkliste</button>
-                        <button class="mode-btn" data-mode="massnahmen">Maßnahmen</button>
-                        <button class="mode-btn" data-mode="fotos">Fotos</button>
-                        <button class="mode-btn" data-mode="alle">Alles</button>
+
+                        <button
+                            class="mode-btn"
+                            data-mode="checkliste"
+                            type="button"
+                        >
+                            Checkliste
+                        </button>
+
+
+                        <button
+                            class="mode-btn"
+                            data-mode="massnahmen"
+                            type="button"
+                        >
+                            Maßnahmen
+                        </button>
+
+
+                        <button
+                            class="mode-btn"
+                            data-mode="fotos"
+                            type="button"
+                        >
+                            Fotos
+                        </button>
+
+
+                        <button
+                            class="mode-btn"
+                            data-mode="alle"
+                            type="button"
+                        >
+                            Alles
+                        </button>
+
                     </div>
+
+
                     <div class="menu-divider"></div>
-                    <button class="menu-item" data-action="print">🖨️ Drucken</button>
-                    <button class="menu-item" data-action="share">📤 PDF teilen</button>
-                    <button class="menu-item" data-action="mail">✉️ Mail vorbereiten</button>
+
+
+                    <button
+                        class="menu-item"
+                        data-action="print"
+                        type="button"
+                    >
+                        🖨️ Drucken
+                    </button>
+
+
+                    <button
+                        class="menu-item"
+                        data-action="share"
+                        type="button"
+                    >
+                        📤 PDF teilen
+                    </button>
+
+
+                    <button
+                        class="menu-item"
+                        data-action="mail"
+                        type="button"
+                    >
+                        ✉️ Mail vorbereiten
+                    </button>
+
                 </div>
+
             </div>
-            <button class="btn btn-secondary btn-small" id="btn-save-measures">Speichern</button>
+
+
+            <button
+                class="btn btn-secondary btn-small"
+                id="btn-save-measures"
+                type="button"
+            >
+                Speichern
+            </button>
+
         </div>
+
     </div>
+
 </div>
 
+
+
+<!-- ====================================================================== -->
+<!-- JAVASCRIPT                                                             -->
+<!-- ====================================================================== -->
+
 <script src="js/audit-data.js"></script>
+
 <script src="js/text.js"></script>
+
 <script src="js/photos-store.js"></script>
+
 <script src="js/archive-store.js"></script>
+
 <script src="js/app.js"></script>
+
 <script src="js/massnahmen.js"></script>
+
+
 </body>
+
 </html>

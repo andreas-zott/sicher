@@ -1,69 +1,266 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Verlauf – ASiC Handel</title>
-<link rel="stylesheet" href="css/styles.css">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+<title>
+    Verlauf – ASiC Handel
+</title>
+
+<link
+    rel="stylesheet"
+    href="css/styles.css"
+>
+
 <script src="js/access-gate.js"></script>
-<link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-192.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#1c2226">
+
+<link
+    rel="manifest"
+    href="manifest.json"
+>
+
+<link
+    rel="apple-touch-icon"
+    href="icon-192.png"
+>
+
+<meta
+    name="apple-mobile-web-app-capable"
+    content="yes"
+>
+
+<meta
+    name="theme-color"
+    content="#1c2226"
+>
+
 <script src="js/jspdf.umd.min.js"></script>
+
 </head>
+
+
 <body>
 
+
+<!-- ====================================================================== -->
+<!-- HEADER                                                                 -->
+<!-- ====================================================================== -->
+
 <header class="app-header">
+
     <div class="hazard-strip"></div>
+
     <div class="app-header-inner">
+
+
         <div class="brand">
-            <span class="brand-title">ASiC Handel</span>
-            <span class="brand-tag">Märkte</span>
-            <span class="brand-subtitle">„Sicher geprüft. Sicher gehandelt.“</span>
+
+            <span class="brand-title">
+                ASiC Handel
+            </span>
+
+            <span class="brand-tag">
+                Märkte
+            </span>
+
+            <span class="brand-subtitle">
+                „Sicher geprüft. Sicher gehandelt.“
+            </span>
+
         </div>
+
+
         <nav class="app-nav">
-            <a href="index.html">Prüfkatalog</a>
-                <a href="massnahmen.html">Aktionsplan</a>
-                <a href="fotos.html">Fotos</a>
-                <a href="verlauf.html" class="active">Verlauf</a>
+
+            <a href="index.html">
+                Prüfkatalog
+            </a>
+
+            <a href="massnahmen.html">
+                Aktionsplan
+            </a>
+
+            <a href="fotos.html">
+                Fotos
+            </a>
+
+            <a
+                href="verlauf.html"
+                class="active"
+            >
+                Verlauf
+            </a>
+
         </nav>
+
     </div>
+
 </header>
+
+
+
+<!-- ====================================================================== -->
+<!-- HAUPTBEREICH                                                           -->
+<!-- ====================================================================== -->
 
 <main class="page">
 
-    <div class="section-title">Archivierte Begehungen</div>
 
-    <div id="archive-list" class="archive-list"></div>
-    <div id="no-archive" class="no-measures card" style="display:none;">
-        <h3>Noch keine Begehung archiviert</h3>
-        <p>Über „Datei ▾ → Begehung archivieren“ auf der Checkliste-Seite können Sie den aktuellen Stand hier sichern.</p>
+    <div class="section-title">
+        Archivierte Begehungen
+    </div>
+
+
+    <!-- ================================================================== -->
+    <!-- HINWEIS                                                            -->
+    <!-- ================================================================== -->
+
+    <div
+        class="card"
+        style="
+            margin-bottom: 1rem;
+            padding: 0.85rem 1rem;
+        "
+    >
+
+        <p
+            style="
+                margin: 0;
+                font-size: 0.88rem;
+                color: var(--ink-soft);
+            "
+        >
+
+            <strong>Archiv:</strong>
+            Beim Archivieren wird ein vollständiger Schnappschuss
+            der Begehung gespeichert. Dazu gehören Betriebsdaten,
+            Bewertungen, Kommentare, Maßnahmen, Unterschriften,
+            Statistikdaten und die zum Zeitpunkt der Archivierung
+            vorhandenen Fotos.
+
+        </p>
+
+    </div>
+
+
+
+    <!-- ================================================================== -->
+    <!-- ARCHIVLISTE                                                         -->
+    <!-- ================================================================== -->
+
+    <div
+        id="archive-list"
+        class="archive-list"
+    ></div>
+
+
+    <!-- ================================================================== -->
+    <!-- KEIN ARCHIV                                                         -->
+    <!-- ================================================================== -->
+
+    <div
+        id="no-archive"
+        class="no-measures card"
+        style="display:none;"
+    >
+
+        <h3>
+            Noch keine Begehung archiviert
+        </h3>
+
+        <p>
+            Über „Datei ▾ → Begehung archivieren“
+            auf der Prüfkatalog-Seite können Sie den aktuellen
+            Stand hier sichern.
+        </p>
+
+        <p>
+            Die archivierte Begehung kann später erneut geöffnet
+            bzw. als PDF exportiert werden.
+        </p>
+
     </div>
 
 </main>
 
+
+
+<!-- ====================================================================== -->
+<!-- FOOTER                                                                 -->
+<!-- ====================================================================== -->
+
 <footer class="app-footer">
+
     <div class="app-footer-meta">
+
         <span id="footer-version"></span>
-        <span class="footer-copyright" id="footer-copyright"></span>
+
+        <span
+            class="footer-copyright"
+            id="footer-copyright"
+        ></span>
+
     </div>
+
+
     <div class="app-footer-links">
-        <a href="impressum.html">Impressum</a>
-        <a href="datenschutz.html">Datenschutz</a>
-        <a href="dokumentation.html">Technische Dokumentation</a>
-        <a href="hilfe.html">Hilfe &amp; FAQ</a>
-        <a href="einstellungen.html">Einstellungen</a>
-        <a href="auswertung.html">Auswertung</a>
+
+        <a href="impressum.html">
+            Impressum
+        </a>
+
+        <a href="datenschutz.html">
+            Datenschutz
+        </a>
+
+        <a href="dokumentation.html">
+            Technische Dokumentation
+        </a>
+
+        <a href="hilfe.html">
+            Hilfe &amp; FAQ
+        </a>
+
+        <a href="einstellungen.html">
+            Einstellungen
+        </a>
+
+        <a href="auswertung.html">
+            Auswertung
+        </a>
+
     </div>
+
 </footer>
 
+
+
+<!-- ====================================================================== -->
+<!-- JAVASCRIPT                                                             -->
+<!-- ====================================================================== -->
+
 <script src="js/audit-data.js"></script>
+
 <script src="js/text.js"></script>
+
 <script src="js/photos-store.js"></script>
+
 <script src="js/archive-store.js"></script>
+
 <script src="js/webdav-store.js"></script>
+
 <script src="js/app.js"></script>
+
 <script src="js/verlauf.js"></script>
+
+
 </body>
+
 </html>
