@@ -2,376 +2,327 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Datenschutzerklärung – Arbeitssicherheit Desktop-App</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Datenschutz - Arbeitssicherheit 2025</title>
+    <link rel="icon" href="/sicher/favicon.ico" type="image/x-icon">
+    <link rel="manifest" href="/sicher/manifest.json">
+    <meta name="theme-color" content="#C62828">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-            background: #f4f6f8;
+        * {
+            box-sizing: border-box;
             margin: 0;
-            padding: 20px;
-            color: #333;
-            line-height: 1.7;
+            padding: 0;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 50%, #e0e7ff 100%);
+            color: #1e293b;
+            transition: all 0.3s ease;
+            line-height: 1.6;
+        }
+
+        body.dark {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            color: #e2e8f0;
         }
 
         .container {
-            max-width: 950px;
+            max-width: 800px;
             margin: 0 auto;
-            background: #fff;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            text-decoration: none;
+            color: #3b82f6;
+            font-weight: 500;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
+        }
+
+        body.dark .back-button {
+            background: rgba(30, 41, 59, 0.8);
+            color: #60a5fa;
+        }
+
+        .content {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
             padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        body.dark .content {
+            background: rgba(30, 41, 59, 0.7);
+            border-color: rgba(255, 255, 255, 0.1);
         }
 
         h1 {
-            color: #d9534f;
-            border-bottom: 3px solid #d9534f;
-            padding-bottom: 12px;
-            margin-top: 0;
-            font-size: 30px;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #3b82f6, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 30px;
         }
 
-        h2 {
-            margin-top: 40px;
-            color: #111;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 6px;
-            font-size: 22px;
+        h2, h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            color: #1e293b;
         }
 
-        p, li {
-            font-size: 15px;
-            color: #444;
+        body.dark h2, body.dark h3 {
+            color: #e2e8f0;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: #475569;
+        }
+
+        body.dark p {
+            color: #cbd5e1;
         }
 
         ul {
-            padding-left: 22px;
+            margin: 15px 0;
+            padding-left: 20px;
         }
 
-        .info-box {
-            background: #eef6ff;
-            border-left: 5px solid #0056b3;
-            padding: 18px;
-            border-radius: 6px;
-            margin: 25px 0;
+        li {
+            margin-bottom: 8px;
+            color: #475569;
         }
 
-        .highlight-box {
-            background: #fdf7f7;
-            border-left: 5px solid #d9534f;
-            padding: 18px;
-            border-radius: 6px;
-            margin: 25px 0;
+        body.dark li {
+            color: #cbd5e1;
         }
 
-        .footer {
-            margin-top: 50px;
-            font-size: 14px;
-            color: #777;
-            border-top: 1px solid #ddd;
-            padding-top: 20px;
-        }
-
-        strong {
-            color: #111;
-        }
-
-        a {
-            color: #0056b3;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        .btn-back {
-            display: inline-flex;
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            display: flex;
             align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body.dark .theme-toggle {
+            background: rgba(30, 41, 59, 0.8);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .content {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+
+        /* --- Einheitlicher App-Footer (auf allen Seiten identisch) --- */
+        .app-footer {
+            margin-top: 40px;
+            padding: 22px 16px calc(22px + env(safe-area-inset-bottom));
+            text-align: center;
+            font-size: 12px;
+            color: #6b7280;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        .app-footer .app-footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .app-footer .app-footer-links a {
+            color: #C62828;
             text-decoration: none;
-            color: #555;
-            background-color: #e9ecef;
-            padding: 10px 18px;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 25px;
-            transition: background-color 0.2s ease;
+            font-weight: 600;
+            font-size: 12px;
+            padding: 5px 12px;
+            border-radius: 14px;
+            background: rgba(198, 40, 40, 0.08);
+            transition: background 0.2s ease, color 0.2s ease;
         }
-
-        .btn-back:hover {
-            background-color: #d6d8db;
+        .app-footer .app-footer-links a:hover {
+            background: #C62828;
+            color: #fff;
         }
-
-        .btn-back span {
-            margin-right: 8px;
-            font-size: 16px;
+        .app-footer p {
+            margin: 2px 0;
+        }
+        .app-footer .app-footer-version {
+            margin-top: 8px;
+            font-size: 10.5px;
+            color: #9ca3af;
+        }
+        body.dark .app-footer {
+            border-top-color: rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+        }
+        body.dark .app-footer .app-footer-links a {
+            background: rgba(248, 113, 113, 0.15);
+            color: #f87171;
+        }
+        body.dark .app-footer .app-footer-links a:hover {
+            background: #f87171;
+            color: #1e293b;
+        }
+        body.dark .app-footer .app-footer-version {
+            color: #64748b;
         }
     </style>
 </head>
-
 <body>
+    <button class="theme-toggle" id="themeToggle" aria-label="Theme umschalten">🌙</button>
 
-<div class="container">
+    <div class="container">
+        <a href="index.html" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            Zurück zur Startseite
+        </a>
 
-    <a href="index.html" class="btn-back">
-        <span>&larr;</span> Zurück
-    </a>
+        <div class="content">
+            <h1>Datenschutzerklärung</h1>
+            <p><em>Stand: Oktober 2025</em></p>
 
-    <h1>Datenschutzerklärung</h1>
+            <h3>Allgemeine Hinweise</h3>
+            <p>Der Schutz Ihrer persönlichen Daten ist uns ein wichtiges Anliegen. Diese Website verarbeitet keinerlei personenbezogene Daten und speichert keine Eingaben, Unterschriften oder Fotos dauerhaft. Die Nutzung erfolgt vollständig lokal im Browser (Client-seitig), ohne Serververbindung oder Datenübertragung an Dritte.</p>
+            
+            <ul>
+                <li>Keine Serververbindung</li>
+                <li>Keine Speicherung von Daten</li>
+                <li>Keine Cookies oder Analyse-Tools</li>
+            </ul>
 
-    <div class="info-box">
-        <strong>Hinweis:</strong><br>
-        Diese Desktop-Anwendung dient der internen Durchführung und Dokumentation
-        von Arbeitssicherheitsprüfungen innerhalb von Unternehmen.
-        Sämtliche Daten werden lokal auf dem Endgerät verarbeitet.
+            <p>Diese Website informiert über das Thema Arbeitssicherheit und bietet Werkzeuge zur Eigenkontrolle. Sie ist ein rein privates, nicht-kommerzielles Projekt.</p>
+
+            <h3>Erhebung und Speicherung personenbezogener Daten</h3>
+            <p>Diese Website speichert keine personenbezogenen Daten. Alle eingegebenen Informationen (z. B. Checklisten, Unterschriften oder Fotos) werden ausschließlich lokal im Browser des Nutzers verarbeitet. Es erfolgt keine Übertragung oder Speicherung auf einem Server.</p>
+
+            <h3>Cookies</h3>
+            <p>Diese Website verwendet keine Cookies oder Tracking-Technologien.</p>
+
+            <h3>Eingebettete Inhalte und externe Dienste</h3>
+            <p>Es werden keine externen Dienste eingebunden (wie Google Fonts, YouTube, Analytics o. ä.). Alle Funktionen laufen lokal im Browser.</p>
+
+            <h3>Hosting</h3>
+            <p>Diese Website wird über <strong>GitHub Pages</strong> gehostet, einem Dienst der GitHub, Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA. GitHub speichert ggf. technische Informationen (wie IP-Adressen) beim Aufruf der Seite – auf diese Vorgänge haben wir keinen Einfluss. Weitere Informationen: <a href="https://docs.github.com/de/site-policy/privacy-policies/github-privacy-statement" target="_blank">GitHub Datenschutzerklärung</a>.</p>
+
+            <h3>Rechte der betroffenen Personen</h3>
+            <p>Ihnen stehen folgende Rechte gemäß DSGVO zu:</p>
+            <ul>
+                <li>Auskunft (Art. 15 DSGVO)</li>
+                <li>Berichtigung (Art. 16 DSGVO)</li>
+                <li>Löschung (Art. 17 DSGVO)</li>
+                <li>Einschränkung der Verarbeitung (Art. 18 DSGVO)</li>
+                <li>Datenübertragbarkeit (Art. 20 DSGVO)</li>
+                <li>Widerspruch gegen die Verarbeitung (Art. 21 DSGVO)</li>
+            </ul>
+            <p>Da keine personenbezogenen Daten verarbeitet werden, bestehen in der Praxis keine gespeicherten Informationen, auf die sich diese Rechte beziehen könnten.</p>
+            <p>Für Datenschutzanfragen können Sie sich an <a href="mailto:AndreasZott@me.com">AndreasZott@me.com</a> wenden.</p>
+
+            <h3>Änderungen dieser Datenschutzerklärung</h3>
+            <p>Diese Datenschutzerklärung kann angepasst werden, falls sich der Funktionsumfang der Website ändert oder neue gesetzliche Vorgaben gelten.</p>
+
+            <p>Die erzeugten PDFs werden nur lokal erstellt und können manuell gespeichert oder versendet werden. Für die Versendung sind Sie selbst verantwortlich.</p>
+
+            <h3>Verantwortlich gemäß DSGVO</h3>
+            <p>
+                Andreas Zott<br>
+                E-Mail:  <a href="mailto:AndreasZott@me.com">AndreasZott@me.com</a> 
+            </p>
+        </div>
     </div>
 
-    <h2>1. Verantwortlicher</h2>
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
 
-    <p>
-        Verantwortlicher im Sinne der Datenschutz-Grundverordnung (DSGVO)
-        für die Verarbeitung personenbezogener Daten ist das jeweilige Unternehmen
-        bzw. der Arbeitgeber, der die Anwendung seinen Mitarbeitern oder
-        beauftragten Personen zur Verfügung stellt.
-    </p>
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            body.classList.add('dark');
+            themeToggle.textContent = '☀️';
+        }
 
-    <p>
-        Entwickler der Anwendung:
-    </p>
+        themeToggle.addEventListener('click', function () {
+            body.classList.toggle('dark');
+            const isDark = body.classList.contains('dark');
+            themeToggle.textContent = isDark ? '☀️' : '🌙';
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+    </script>
+<footer class="app-footer">
+  <nav class="app-footer-links">
+    <a href="impressum.html">Impressum</a>
+    <a href="datenschutz.html">Datenschutz</a>
+    <a href="faq.html">FAQ</a>
+    <a href="technische-beschreibung.html">Technik</a>
+    <a href="index.html">Startseite</a>
+  </nav>
+  <p>© <span class="app-footer-jahr"></span> Andreas Zott – Alle Rechte vorbehalten</p>
+  <p class="app-footer-sub">(SiFa) Arbeitssicherheit</p>
+  <p class="app-footer-version">Version 1.0.2</p>
+</footer>
 
-    <p>
-        Andreas Zott<br>
-        Fontanestraße 33<br>
-        58513 Lüdenscheid<br>
-        Deutschland
-    </p>
-
-    <p>
-        E-Mail:
-        <a href="mailto:AndreasZott@me.com">AndreasZott@me.com</a>
-    </p>
-
-    <h2>2. Zweck der Datenverarbeitung</h2>
-
-    <p>
-        Die Anwendung dient der Durchführung, Dokumentation und Nachverfolgung
-        betrieblicher Arbeitssicherheitsprüfungen und interner Auditprozesse.
-    </p>
-
-    <p>
-        Im Rahmen der Nutzung können insbesondere folgende Daten verarbeitet werden:
-    </p>
-
-    <ul>
-        <li>Markt- oder Standortnummern</li>
-        <li>Name der Marktleitung</li>
-        <li>Name der zuständigen Fachkraft für Arbeitssicherheit (Sifa)</li>
-        <li>Prüfergebnisse und Checklistenstatus</li>
-        <li>Maßnahmenhinweise und Kommentare</li>
-        <li>Fotodokumentationen von Sicherheitsmängeln</li>
-        <li>optionale Standortinformationen innerhalb eines Betriebsgeländes</li>
-    </ul>
-
-    <h2>3. Art der Datenverarbeitung</h2>
-
-    <div class="highlight-box">
-        <strong>Lokale Datenverarbeitung:</strong><br>
-        Sämtliche im Rahmen der Prüftätigkeit erfassten Daten (Prüfergebnisse, Fotos,
-        Namensangaben etc.) werden ausschließlich lokal auf dem jeweiligen Endgerät
-        gespeichert. Eine automatische Übermittlung dieser Prüfdaten an Server des
-        Entwicklers oder an Dritte erfolgt nicht. Zur technischen Darstellung der
-        Anwendung eingebundene Bibliotheken werden hiervon unabhängig unter
-        Ziffer 4 gesondert erläutert.
-    </div>
-
-    <p>
-        Die Speicherung der Daten erfolgt ausschließlich innerhalb
-        der lokalen Systemumgebung des verwendeten Geräts.
-    </p>
-
-    <h2>4. Eingebundene externe Inhalte (Schriftarten und Skript-Bibliotheken)</h2>
-
-    <p>
-        Die zur Darstellung und Funktion benötigten Skript-Bibliotheken
-        (u. a. Font Awesome, jsPDF, html2pdf.js, Bootstrap, exif-js) werden
-        ab dieser Version lokal zusammen mit der Anwendung ausgeliefert
-        (Ordner „sicher“) und beim Aufruf der Seiten <strong>nicht</strong>
-        mehr live von externen Content-Delivery-Netzwerken (CDN) Dritter
-        nachgeladen. Ebenso wird keine externe Schriftart (Google Fonts)
-        mehr eingebunden; stattdessen nutzt die Anwendung die auf dem
-        jeweiligen Gerät bereits vorhandene Systemschriftart.
-    </p>
-
-    <p>
-        Dadurch wird beim regulären Betrieb der Anwendung keine IP-Adresse
-        des aufrufenden Geräts mehr an externe Anbieter übermittelt. Sollte
-        in einer künftigen Version dennoch wieder eine externe Ressource
-        eingebunden werden, wird dieser Abschnitt entsprechend aktualisiert.
-    </p>
-
-    <h2>5. Lokale Zwischenspeicherung im Browser (localStorage)</h2>
-
-    <p>
-        Zur Vermeidung von Datenverlust speichert die Anwendung Formulareingaben
-        (z. B. Prüfantworten, Markt- und Namensangaben, Unterschrift) zusätzlich
-        automatisch im lokalen Browserspeicher (localStorage) des verwendeten
-        Endgeräts zwischen. Diese Speicherung dient ausschließlich dazu, begonnene
-        Prüfungen bei einem versehentlichen Schließen der Seite fortsetzen zu können.
-    </p>
-
-    <p>
-        Diese lokale Speicherung ist für die Kernfunktion der Anwendung technisch
-        erforderlich (Art. 25 Abs. 2 Nr. 2 TDDDG) und erfolgt nicht zu Tracking-
-        oder Analysezwecken. Eine Übermittlung dieser lokal gespeicherten Daten an
-        den Entwickler oder Dritte findet nicht statt. Nutzer können diese Daten
-        jederzeit über die Zurücksetzen-Funktion der Anwendung oder über die
-        Browsereinstellungen (Websitedaten löschen) selbst entfernen.
-    </p>
-
-    <h2>6. PDF-Export und E-Mail-Versand</h2>
-
-    <p>
-        Die Anwendung ermöglicht den Export von Prüfberichten und Maßnahmenplänen
-        im PDF-Format.
-    </p>
-
-    <p>
-        Ein Versand dieser Dokumente erfolgt ausschließlich auf ausdrückliche
-        Veranlassung des Nutzers über den lokal eingerichteten E-Mail-Client
-        oder andere Freigabefunktionen des Betriebssystems.
-    </p>
-
-    <p>
-        Der Entwickler der Software hat keinen Zugriff auf exportierte
-        oder versendete Inhalte.
-    </p>
-
-    <h2>7. Rechtsgrundlagen der Verarbeitung</h2>
-
-    <p>
-        Die Verarbeitung personenbezogener Daten erfolgt auf Grundlage von:
-    </p>
-
-    <ul>
-        <li>
-            Art. 6 Abs. 1 lit. c DSGVO
-            (Erfüllung rechtlicher Verpflichtungen im Bereich Arbeitsschutz)
-        </li>
-
-        <li>
-            Art. 6 Abs. 1 lit. f DSGVO
-            (berechtigtes Interesse an der Organisation und Dokumentation
-            betrieblicher Sicherheitsprozesse)
-        </li>
-
-        <li>
-            § 26 BDSG
-            (Datenverarbeitung im Beschäftigungskontext)
-        </li>
-    </ul>
-
-    <h2>8. Empfänger personenbezogener Daten</h2>
-
-    <p>
-        Eine Übermittlung personenbezogener Daten an den Entwickler
-        der Software erfolgt nicht.
-    </p>
-
-    <p>
-        Empfänger exportierter Berichte sind ausschließlich diejenigen Personen
-        oder Stellen, an die der Nutzer die Dokumente selbstständig weiterleitet,
-        beispielsweise:
-    </p>
-
-    <ul>
-        <li>interne Fachkräfte für Arbeitssicherheit</li>
-        <li>Vorgesetzte</li>
-        <li>Unternehmensleitungen</li>
-        <li>externe Auditoren oder Prüfer</li>
-    </ul>
-
-    <h2>9. Speicherdauer</h2>
-
-    <p>
-        Die innerhalb der Anwendung gespeicherten Daten verbleiben grundsätzlich
-        auf dem jeweiligen Endgerät, bis sie durch den Nutzer oder
-        das verantwortliche Unternehmen gelöscht werden.
-    </p>
-
-    <p>
-        Die Festlegung konkreter Aufbewahrungsfristen obliegt dem jeweiligen Unternehmen.
-    </p>
-
-    <h2>10. Technische und organisatorische Maßnahmen</h2>
-
-    <ul>
-        <li>keine Cloud-Synchronisation</li>
-        <li>keine Hintergrundübertragung von Prüf-, Foto- oder Personaldaten an externe Systeme</li>
-        <li>keine externen CDN-Anfragen im laufenden Betrieb (Bibliotheken werden lokal mit der App ausgeliefert, siehe Ziffer 4)</li>
-        <li>kein Nutzertracking</li>
-        <li>keine Analyse des Nutzungsverhaltens</li>
-        <li>keine automatische Profilbildung</li>
-    </ul>
-
-    <p>
-        Der Schutz des Endgeräts sowie der Zugriffsschutz innerhalb der
-        Unternehmens-IT liegen im Verantwortungsbereich des jeweiligen Betreibers.
-    </p>
-
-    <h2>11. Keine Verhaltens- oder Leistungskontrolle</h2>
-
-    <p>
-        Die Anwendung ist ausschließlich zur Dokumentation betrieblicher
-        Arbeitssicherheitsprozesse bestimmt.
-    </p>
-
-    <p>
-        Sie ist nicht zur Verhaltens- oder Leistungskontrolle
-        von Beschäftigten vorgesehen.
-    </p>
-
-    <h2>12. Betroffenenrechte</h2>
-
-    <p>
-        Betroffene Personen haben im Rahmen der gesetzlichen Voraussetzungen
-        insbesondere folgende Rechte:
-    </p>
-
-    <ul>
-        <li>Recht auf Auskunft gemäß Art. 15 DSGVO</li>
-        <li>Recht auf Berichtigung gemäß Art. 16 DSGVO</li>
-        <li>Recht auf Löschung gemäß Art. 17 DSGVO</li>
-        <li>Recht auf Einschränkung der Verarbeitung gemäß Art. 18 DSGVO</li>
-        <li>Recht auf Datenübertragbarkeit gemäß Art. 20 DSGVO</li>
-        <li>Widerspruchsrecht gemäß Art. 21 DSGVO</li>
-    </ul>
-
-    <h2>13. Beschwerderecht</h2>
-
-    <p>
-        Betroffene Personen haben das Recht,
-        sich bei einer zuständigen Datenschutzaufsichtsbehörde
-        über die Verarbeitung personenbezogener Daten zu beschweren.
-    </p>
-
-    <h2>14. Änderungen dieser Datenschutzerklärung</h2>
-
-    <p>
-        Der Entwickler behält sich vor,
-        diese Datenschutzerklärung bei technischen oder rechtlichen Änderungen anzupassen.
-    </p>
-
-    <p>
-        Es gilt jeweils die aktuelle innerhalb der Anwendung veröffentlichte Version.
-    </p>
-
-    <div class="footer">
-        Stand: August 2026
-    </div>
-
-</div>
+<script>
+  document.querySelectorAll('.app-footer-jahr').forEach(el => el.textContent = new Date().getFullYear());
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sicher/service-worker.js')
+        .catch(err => console.warn('Service Worker konnte nicht registriert werden:', err));
+    });
+  }
+</script>
 
 </body>
 </html>

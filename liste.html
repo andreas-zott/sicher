@@ -4,16 +4,18 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Arbeitssicherheits-Audit</title>
-<link href="all.min.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
 <link href="favicon.ico" rel="icon" type="image/x-icon"/>
-<link href="manifest-liste.json" rel="manifest"/>
+<link href="manifest.json" rel="manifest"/>
+<meta content="#C62828" name="theme-color"/>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 .handlungsanweisung-box {
     border: 2px solid #C62828; 
     padding: 18px;
     border-radius: 10px;
     background-color: #fff8f8;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-family: 'Inter', Arial, sans-serif;
     margin: 18px 0;
 }
 .handlungsanweisung-box h2 {
@@ -118,6 +120,93 @@ input[type="radio"][value="nicht_vorhanden"]:checked {
   border: 2px solid #dc3545 !important;
   background-color: #fff8f8;
 }
+
+/* --- Maßnahmen-Tabelle im Karten-Look (wie in massnahmen-sifa.html) --- */
+.massnahmen-karten,
+.massnahmen-karten tbody {
+  display: block;
+  width: 100%;
+  background: transparent;
+  box-shadow: none;
+}
+.massnahmen-karten thead {
+  display: none;
+}
+.massnahmen-karten tr {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  border-left: 6px solid #C62828;
+  overflow: hidden;
+  margin-bottom: 14px;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+.massnahmen-karten tr.empty-row {
+  display: none !important;
+}
+.massnahmen-karten td {
+  border: none !important;
+}
+.massnahmen-karten td:nth-child(1) {
+  grid-column: 1;
+  grid-row: 1;
+  background: #fdeded !important;
+  color: #C62828 !important;
+  font-weight: 700 !important;
+  font-style: normal !important;
+  font-size: 12px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  margin: 12px 0 12px 12px;
+  padding: 0 !important;
+  text-align: center;
+}
+.massnahmen-karten td:nth-child(2) {
+  grid-column: 2;
+  grid-row: 1;
+  background: #fdeded !important;
+  font-weight: 700 !important;
+  font-style: normal !important;
+  font-size: 15px !important;
+  color: #A11F1F !important;
+  display: flex;
+  align-items: center;
+  padding: 12px 16px 12px 8px !important;
+  line-height: 1.4;
+}
+.massnahmen-karten td:nth-child(3) {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  background: white !important;
+  font-size: 14.5px !important;
+  font-style: normal !important;
+  color: #212529 !important;
+  line-height: 1.5;
+  padding: 14px 16px 16px 16px !important;
+}
+.massnahmen-karten td[contenteditable="true"]:focus {
+  outline: 2px solid #C62828;
+  outline-offset: -2px;
+}
+@media (max-width: 600px) {
+  .massnahmen-karten td:nth-child(2) {
+    font-size: 14px !important;
+  }
+}
+@media print {
+  .massnahmen-karten tr {
+    box-shadow: none;
+    border: 1px solid #ddd;
+    border-left: 6px solid #C62828;
+  }
+}
 @media print {
   button,
   .btn,
@@ -207,7 +296,7 @@ input[type="radio"][value="nicht_vorhanden"]:checked {
   width: 100%;
   max-width: 600px;
   margin: auto;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-family: 'Inter', Arial, sans-serif;
   box-sizing: border-box;
 }
 button {
@@ -253,15 +342,33 @@ label {
 button.custom-btn,
 button.btn-large,
 button.btn-medium {
-  font-size: 16px;
-  padding: 10px 20px;
-  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 10px 14px;
+  border-radius: 12px;
   border: none;
   cursor: pointer;
   margin: 10px auto;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   font-family: inherit;
-  box-sizing: border-box; 
+  box-sizing: border-box;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.15s ease;
+}
+button.custom-btn:hover,
+button.btn-large:hover,
+button.btn-medium:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+}
+button.custom-btn:active,
+button.btn-large:active,
+button.btn-medium:active {
+  transform: translateY(0) scale(0.97);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.18);
 }
 button.btn-large {
   width: 100%;
@@ -272,15 +379,19 @@ button.btn-medium {
   max-width: 280px;
 }
 button.btn-blue {
-  background-color: #B71C1C;
+  background: linear-gradient(145deg, #C62828, #A11F1F);
   color: white;
 }
 button.btn-green {
-  background-color: #388e3c;
+  background: linear-gradient(145deg, #43a047, #2e7d32);
   color: white;
 }
 button.btn-gray {
-  background-color: #6b6b6b;
+  background: linear-gradient(145deg, #6b7280, #4b5563);
+  color: white;
+}
+button.btn-red {
+  background: linear-gradient(145deg, #C62828, #A11F1F);
   color: white;
 }
 #signature-image {
@@ -298,7 +409,7 @@ button.btn-gray {
   break-before: page;
 }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-family: 'Inter', Arial, sans-serif;
   background-color: #f4f4f4;
   padding: 20px;
 }
@@ -320,55 +431,79 @@ table {
   color: #555;
   text-align: center;
 }
-.sticky-action-bar { 
-    display: none;
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: calc(100% - 40px);
-    max-width: 600px;  
-    z-index: 9999;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-    background: rgba(255, 255, 255, 0.96);
-     -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
-    padding: 12px;
-    border-radius: 18px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-    box-sizing: border-box;
-}
-.sticky-action-bar.show {
-    display: grid;
-}
+/* --- Schwebendes Aktions-Menü (ersetzt die frueher verstreuten Buttons) --- */
 .menu-dropdown {
-    position: relative;
+    position: fixed;
+    right: 20px;
+    bottom: calc(20px + env(safe-area-inset-bottom));
+    z-index: 9999;
 }
 .menu-dropdown summary {
     list-style: none;
     cursor: pointer;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #C62828, #A11F1F);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 21px;
+    box-shadow: 0 6px 18px rgba(198,40,40,0.4);
+    transition: transform 0.15s ease;
+}
+.menu-dropdown summary:active {
+    transform: scale(0.94);
 }
 .menu-dropdown summary::-webkit-details-marker {
     display: none;
 }
+.menu-dropdown[open] summary {
+    background: linear-gradient(145deg, #4b5563, #374151);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+}
 .menu-content {
     position: absolute;
     right: 0;
-    bottom: 55px; 
-    width: 280px;
+    bottom: 62px;
+    width: 230px;
+    max-width: calc(100vw - 40px);
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
     background: white;
-    padding: 14px;
+    padding: 12px;
     border-radius: 16px;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+    box-shadow: 0 14px 34px rgba(0,0,0,0.22);
 }
-.menu-content .btn {
+.menu-content button {
     width: 100%;
-    justify-content: flex-start;
+    justify-content: flex-start !important;
     box-sizing: border-box;
+    margin: 0 !important;
+    max-width: none !important;
+}
+.menu-titel {
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #6b7280;
+    padding: 2px 4px 4px;
+}
+.menu-backdrop {
+    display: none;
+}
+.menu-dropdown[open] .menu-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.15);
+    z-index: -1;
+}
+@media print {
+  .menu-dropdown { display: none !important; }
 }
 .table-header-row th:first-child {
   border-top-left-radius: 14px;
@@ -626,6 +761,45 @@ input[type="text"], input[type="date"] {
             margin-bottom: 25px;
             transition: background-color 0.2s ease;
         }
+
+/* --- Einheitlicher App-Footer (auf allen Seiten identisch) --- */
+.app-footer {
+    margin-top: 40px;
+    padding: 22px 16px calc(22px + env(safe-area-inset-bottom));
+    text-align: center;
+    font-size: 12px;
+    color: #6b7280;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+.app-footer .app-footer-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+.app-footer .app-footer-links a {
+    color: #C62828;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 14px;
+    background: rgba(198, 40, 40, 0.08);
+    transition: background 0.2s ease, color 0.2s ease;
+}
+.app-footer .app-footer-links a:hover {
+    background: #C62828;
+    color: #fff;
+}
+.app-footer p {
+    margin: 2px 0;
+}
+.app-footer .app-footer-version {
+    margin-top: 8px;
+    font-size: 10.5px;
+    color: #9ca3af;
+}
 </style>
 </head>
 <body>
@@ -634,7 +808,8 @@ input[type="text"], input[type="date"] {
 <p id="untertitel">Systematische Filialprüfung mit automatischer Maßnahmen-Ableitung und Wirksamkeitskontrolle (119 Prüfpunkte)</p>
 <div class="print-wrapper">
 <header>
-<div style="display: flex; justify-content: flex-end; align-items: center;">
+<div style="display: flex; justify-content: space-between; align-items: center;">
+<h1 id="titel" style="margin: 0;"></h1>
 <span id="datum" style="padding: 8px; font-size: 16px; font-weight: bold;"></span>
 </div>
 </header>
@@ -656,23 +831,11 @@ input[type="text"], input[type="date"] {
 <label for="sifa">SiFa:</label>
 <input id="sifa" style="width: 100%;" type="text"/>
 </div>
-</div> 
-<div style="display: flex; justify-content: center; align-items: center; gap: 16px; margin: 20px 0 40px 0;">
-  <button class="custom-btn"
-          onclick="weiterZuFotos()"
-          style="background-color: green; width: 200px; margin: 0;">
-    📸 Zur Foto-Seite
-  </button>
-  <button class="btn-medium btn-red"
-          onclick="formularZuruecksetzen()"
-          style="width: 200px; margin: 0;">
-    🧹 Zurücksetzen
-  </button>
-<button class="custom-btn" onclick="generateAndSharePDF()" 
-        style="background-color: green; width: 200px; margin: 0;">
-  📤 PDF teilen (iPad)
-</button>
 </div>
+<p style="text-align:center; font-size:13px; color:#6b7280; margin: 4px 0 30px;">
+  ℹ️ Alle Aktionen (Fotos, Speichern, PDF teilen, Zurücksetzen …) finden Sie jederzeit im
+  <strong>Menü&nbsp;☰</strong> unten rechts.
+</p>
 </div>
 <div class="container">
 <br/>
@@ -971,7 +1134,6 @@ Nach Abschluss der Maßnahmen erfolgt eine erneute Kontrolle zur Überprüfung d
 <td><label class="radio-wrap"><input name="4.0 Backstation-5" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="4.0 Backstation-5" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
-<tr>
 <td style="text-align: left;">Ist die Brotschneidemaschine aktuell geprüft und inklusive aller Schutzeinrichtungen in einwandfreiem Zustand?</td>
 <td><label class="radio-wrap"><input name="4.0 Backstation-6" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="4.0 Backstation-6" type="radio" value="nein"/><span>Nein</span></label></td>
@@ -1394,13 +1556,11 @@ in angemessenen Zeitabständen geprüft?
 <td><label class="radio-wrap"><input name="14.0 Gefahrstoffe-1" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="14.0 Gefahrstoffe-1" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
-<tr>
 <td style="text-align: left;">Ist die in den Betriebsanweisungen geforderte Persönliche Schutzausrüstung in unmittelbarer Nähe und einsatzbereit vorhanden?</td>
 <td><label class="radio-wrap"><input name="14.0 Gefahrstoffe-2" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="14.0 Gefahrstoffe-2" type="radio" value="nein"/><span>Nein</span></label></td>
 <td><label class="radio-wrap"><input name="14.0 Gefahrstoffe-2" type="radio" value="nicht_vorhanden"/><span>N/V</span></label></td>
 </tr>
-<tr>
 <td style="text-align: left;">Sind Sicherheitsdatenblätter verfügbar?</td>
 <td><label class="radio-wrap"><input name="14.0 Gefahrstoffe-3" type="radio" value="ja"/><span>Ja</span></label></td>
 <td><label class="radio-wrap"><input name="14.0 Gefahrstoffe-3" type="radio" value="nein"/><span>Nein</span></label></td>
@@ -1581,7 +1741,7 @@ in angemessenen Zeitabständen geprüft?
     Beschreibung der Maßnahmen zur Beseitigung von Defiziten
   </h2>
 <br/>
-<table>
+<table class="massnahmen-karten">
 <thead>
 <tr class="table-header-row">
 <th>Nr.</th>
@@ -1641,51 +1801,47 @@ in angemessenen Zeitabständen geprüft?
   display: block;
 "></canvas>
 </div>
-<button class="btn-large btn-gray" 
-        onclick="if(confirm('Möchtest du die Unterschrift wirklich löschen?')) { clearSignature(); }" 
-        style="display: block; width: 100%; max-width: 600px; margin: 10px auto;">
-  🗑️ Unterschrift löschen
-</button>
-<div style="display: flex; justify-content: center; gap: 20px; max-width: 600px; margin: 0 auto;">
-  <button class="btn-medium btn-gray" onclick="exportiereMassnahmen()" style="flex: 1; max-width: 280px;">
-    📝 Defizite exportieren
-  </button>
-
-  <button class="btn-medium btn-gray" onclick="prepareForPrint()" style="flex: 1; max-width: 280px;">
-    📄 Drucken / PDF
-  </button>
+<p style="text-align:center; font-size:13px; color:#6b7280; margin: 4px 0 40px;">
+  ℹ️ Speichern, Drucken, PDF teilen, Zurücksetzen und weitere Aktionen finden Sie im
+  <strong>Menü&nbsp;☰</strong> unten rechts.
+</p>
 </div>
 
-<div style="display: flex; justify-content: center; gap: 20px; max-width: 600px; margin: 0 auto 40px;">
-  <button class="btn-medium btn-green" onclick="manuellSpeichern()" style="flex: 1; max-width: 280px;">
-    💾 Speichern
-  </button>
+<!-- Schwebendes Aktions-Menü: buendelt alle Aktionen der Checkliste -->
+<details class="menu-dropdown" id="aktionsMenu">
+  <summary aria-label="Aktionsmenü öffnen">☰</summary>
+  <div class="menu-backdrop" onclick="document.getElementById('aktionsMenu').removeAttribute('open')"></div>
+  <div class="menu-content">
+    <div class="menu-titel">Aktionen</div>
+    <button class="btn-medium btn-green" onclick="manuellSpeichern(); schliesseMenu();">
+      💾 Speichern
+    </button>
+    <button class="btn-medium btn-blue" onclick="generateAndSharePDF(); schliesseMenu();">
+      📤 PDF teilen (iPad)
+    </button>
+    <button class="btn-medium btn-gray" onclick="prepareForPrint(); schliesseMenu();">
+      📄 Drucken / PDF
+    </button>
+    <button class="btn-medium btn-gray" onclick="exportiereMassnahmen(); schliesseMenu();">
+      📝 Defizite exportieren
+    </button>
+    <button class="btn-medium btn-blue" onclick="weiterZuFotos(); schliesseMenu();">
+      📸 Zur Foto-Seite
+    </button>
+    <button class="btn-medium btn-gray" onclick="if(confirm('Möchtest du die Unterschrift wirklich löschen?')) { clearSignature(); } schliesseMenu();">
+      🗑️ Unterschrift löschen
+    </button>
+    <button class="btn-medium btn-red" onclick="formularZuruecksetzen(); schliesseMenu();">
+      🧹 Zurücksetzen
+    </button>
+  </div>
+</details>
 
-  <button class="btn-medium btn-gray" onclick="formularZuruecksetzen()" style="flex: 1; max-width: 280px;">
-    🧹 Zurücksetzen
-  </button>
-</div>
-
-<button class="custom-btn"
-        onclick="generateAndSharePDF()"
-        style="background-color: #C62828; width: 100%; max-width: 600px; margin: 10px auto; display: block;">
-  📤 PDF teilen (iPad)
-</button>
-
-<button class="custom-btn"
-        onclick="weiterZuFotos()"
-        style="background-color: green; width: 100%; max-width: 600px; margin: 10px auto 40px; display: block;">
-  📸 Zur Foto-Seite
-</button>
-</div>
 <script>
-// Zentrale Versionsangabe der App. Bei jeder inhaltlichen/funktionalen
-// Änderung hier hochzählen (Semantic Versioning: MAJOR.MINOR.PATCH)
-// und das Datum aktualisieren. Wird unten im Footer angezeigt und
-// erlaubt so den schnellen Abgleich, ob iPad und Windows-Rechner
-// denselben Stand geladen haben.
-const APP_VERSION = "2.2.1";
-const APP_VERSION_DATUM = "20.08.2026";
+function schliesseMenu() {
+  const menu = document.getElementById('aktionsMenu');
+  if (menu) menu.removeAttribute('open');
+}
 </script>
 <script>
 function weiterZuFotos() {
@@ -1708,57 +1864,29 @@ function weiterZuFotos() {
 <div id="auswertung-container">
 <div id="auswertung"></div>
 </div>
- <footer style="text-align: center; font-size: 12px; color: #6b7280;">
-
-    <!-- Kleine Buttons -->
-    <div style="
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        margin-bottom: 10px;
-    ">
-
-        <a href="impressum.html" style="background: rgb(243, 244, 246); color: rgb(211, 47, 47); text-decoration: none; font-size: 11px; padding: 4px 10px; border-radius: 14px; border: 1px solid rgb(229, 231, 235); transition: 0.2s;" onmouseover="this.style.background='#D32F2F';this.style.color='#fff';" onmouseout="this.style.background='#f3f4f6';this.style.color='#D32F2F';">
-            Impressum
-        </a>
-
-        <a href="datenschutz.html" style="
-            background: #f3f4f6;
-            color: #D32F2F;
-            text-decoration: none;
-            font-size: 11px;
-            padding: 4px 10px;
-            border-radius: 14px;
-            border: 1px solid #e5e7eb;
-            transition: all 0.2s ease;
-        " onmouseover="this.style.background='#D32F2F';this.style.color='#fff';" onmouseout="this.style.background='#f3f4f6';this.style.color='#D32F2F';">
-            Datenschutz
-        </a>
-
-    </div>
-
-    © <span>2026</span> Andreas Zott – Alle Rechte vorbehalten<br>
-
-    <span style="font-size: 11px;">
-        (Sifa) Arbeitssicherheit <span>2026</span>
-    </span>
-
-    <div style="font-size:11px; color:#999; margin-top:8px;">
-        Stand: Juli 2026
-    </div>
-    <div id="app-version" style="font-size:11px; color:#999; margin-top:4px;"></div>
+<footer class="app-footer">
+  <nav class="app-footer-links">
+    <a href="impressum.html">Impressum</a>
+    <a href="datenschutz.html">Datenschutz</a>
+    <a href="faq.html">FAQ</a>
+    <a href="technische-beschreibung.html">Technik</a>
+    <a href="welcome.html">Startseite</a>
+  </nav>
+  <p>© <span class="app-footer-jahr"></span> Andreas Zott – Alle Rechte vorbehalten</p>
+  <p class="app-footer-sub">(SiFa) Arbeitssicherheit</p>
+  <p class="app-footer-version">Version 1.0.2</p>
 </footer>
 
 <script>
-document.getElementById('app-version').textContent = `Version ${APP_VERSION} · Stand: ${APP_VERSION_DATUM}`;
+  document.querySelectorAll('.app-footer-jahr').forEach(el => el.textContent = new Date().getFullYear());
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sicher/service-worker.js')
+        .catch(err => console.warn('Service Worker konnte nicht registriert werden:', err));
+    });
+  }
 </script>
-
-<script>
-  const year = new Date().getFullYear();
-  document.getElementById('year').textContent = year;
-  document.getElementById('year-small').textContent = year;
-</script>
-<script src="jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 // PDF generation with jsPDF - renders each category on a separate A4 page
 // Uses direct jsPDF text rendering for better iPad compatibility
@@ -2313,35 +2441,23 @@ pdf.text(wirksamkeitText, margin + 5, currentY);
   }  
   // Seitenzahlen hinzufügen
   addPageNumbers();  
+  // Generate blob and share/download
   const blob = pdf.output('blob');
     const file = new File([blob], filename, { type: 'application/pdf' });
-
-    function pdfHerunterladen() {
+    
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({
+        title: 'Arbeitssicherheits-Audit',
+        text: `Sehr geehrte Damen und Herren,\n\nim Rahmen der turnusmäßigen Arbeitssicherheitsbegehung übersende ich Ihnen anbei das Begehungsprotokoll des Marktes  ${markt} zur sachlichen Prüfung.\n\
+Bitte prüfen Sie die dokumentierten Feststellungen und veranlassen Sie die Umsetzung der erforderlichen Maßnahmen..\n\nMit freundlichen Grüßen\nFachkraft für Arbeitssicherheit (SiFa).`,
+        files: [file],
+      });
+    } else {
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
       link.download = filename;
       link.click();
       URL.revokeObjectURL(link.href);
-    }
-
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      try {
-        await navigator.share({
-          title: 'Arbeitssicherheits-Audit',
-          text: `Sehr geehrte Damen und Herren,\n\nim Rahmen der turnusmäßigen Arbeitssicherheitsbegehung übersende ich Ihnen anbei das Begehungsprotokoll des Marktes  ${markt} zur sachlichen Prüfung.\n\
-Bitte prüfen Sie die dokumentierten Feststellungen und veranlassen Sie die Umsetzung der erforderlichen Maßnahmen..\n\nMit freundlichen Grüßen\nFachkraft für Arbeitssicherheit (SiFa).`,
-          files: [file],
-        });
-      } catch (shareError) {
-        // AbortError = Nutzer hat das Teilen-Menü selbst geschlossen/abgebrochen - kein Fehler.
-        if (shareError && shareError.name !== 'AbortError') {
-          console.error('Teilen fehlgeschlagen, biete Download als Rückfalloption an:', shareError);
-          pdfHerunterladen();
-          alert('Das Teilen-Menü konnte nicht geöffnet werden. Das PDF wurde stattdessen heruntergeladen.');
-        }
-      }
-    } else {
-      pdfHerunterladen();
       alert('PDF wurde heruntergeladen.');
     }    
   } catch (error) {
@@ -2707,70 +2823,80 @@ pdf.text(wirksamkeitText, margin + 5, currentY);
       isFirstCategoryOnPage = false;
     });    
     // ===== MASSNAHMEN PAGE =====
-    const massnahmenRows = document.querySelectorAll('#maßnahmen-tabelle tbody tr');
-    const filledMassnahmen = Array.from(massnahmenRows).filter(row => {
+    const massnahmenRows = document.querySelectorAll('#maßnahmen-tabelle tr');
+    const mColWidths = [contentWidth * 0.08, contentWidth * 0.42, contentWidth * 0.50];
+    let massnahmenHasContent = false;
+    let massnahmenIndex = 0;
+
+    massnahmenRows.forEach((row) => {
       const cells = row.querySelectorAll('td');
-      return cells.length >= 3 && cells[0].textContent.trim() !== '';
-    });    
-    if (filledMassnahmen.length > 0) {
-      pdf.addPage();
-      addMiniHeader();
-      currentY = 18;      
-      pdf.setFontSize(16);
-      pdf.setTextColor(183, 28, 28);
-      pdf.text('Festgestellte Defizite und Maßnahmen', margin, currentY + 5);
-      currentY += 15;      
-      const mColWidths = [contentWidth * 0.35, contentWidth * 0.45, contentWidth * 0.2];      
-      pdf.setFillColor(183, 28, 28);
-      pdf.rect(margin, currentY, contentWidth, 8, 'F');
+      if (cells.length < 3) return;
+      const nr = cells[0].textContent.trim();
+      const frage = cells[1].textContent.trim();
+      const massnahme = cells[2].textContent.trim();
+      if (!frage || frage === '\u00A0' || frage.length <= 1) return;
+
+      if (!massnahmenHasContent) {
+        // Erste gefundene Zeile: Seite mit Überschrift und Tabellenkopf anlegen
+        pdf.addPage();
+        addMiniHeader();
+        currentY = 18;
+        pdf.setFontSize(16);
+        pdf.setTextColor(183, 28, 28);
+        pdf.text('Festgestellte Defizite und Maßnahmen', margin, currentY + 5);
+        currentY += 15;
+        pdf.setFillColor(183, 28, 28);
+        pdf.rect(margin, currentY, contentWidth, 8, 'F');
+        pdf.setFontSize(9);
+        pdf.setTextColor(255);
+        pdf.text('Nr.', margin + mColWidths[0]/2, currentY + 5.5, { align: 'center' });
+        pdf.text('Feststellung', margin + mColWidths[0] + 3, currentY + 5.5);
+        pdf.text('Maßnahme', margin + mColWidths[0] + mColWidths[1] + 3, currentY + 5.5);
+        currentY += 8;
+        massnahmenHasContent = true;
+      }
+
+      pdf.setFontSize(8);
+      const frageLines = pdf.splitTextToSize(frage, mColWidths[1] - 6);
+      const massnahmeLines = pdf.splitTextToSize(massnahme || '-', mColWidths[2] - 6);
+      const rowHeight = Math.max(10, Math.max(frageLines.length, massnahmeLines.length) * 3.5 + 4);
+
+      if (currentY + rowHeight > pageHeight - 20) {
+        pdf.addPage();
+        addMiniHeader();
+        currentY = 18;
+        pdf.setFillColor(183, 28, 28);
+        pdf.rect(margin, currentY, contentWidth, 8, 'F');
+        pdf.setFontSize(9);
+        pdf.setTextColor(255);
+        pdf.text('Nr.', margin + mColWidths[0]/2, currentY + 5.5, { align: 'center' });
+        pdf.text('Feststellung', margin + mColWidths[0] + 3, currentY + 5.5);
+        pdf.text('Maßnahme', margin + mColWidths[0] + mColWidths[1] + 3, currentY + 5.5);
+        currentY += 8;
+      }
+
+      if (massnahmenIndex % 2 === 1) {
+        pdf.setFillColor(248, 248, 248);
+        pdf.rect(margin, currentY, contentWidth, rowHeight, 'F');
+      }
+
+      pdf.setDrawColor(222, 226, 230);
+      pdf.rect(margin, currentY, mColWidths[0], rowHeight);
+      pdf.rect(margin + mColWidths[0], currentY, mColWidths[1], rowHeight);
+      pdf.rect(margin + mColWidths[0] + mColWidths[1], currentY, mColWidths[2], rowHeight);
+
+      pdf.setTextColor(0);
       pdf.setFontSize(9);
-      pdf.setTextColor(255);
-      pdf.text('Defizit', margin + 3, currentY + 5.5);
-      pdf.text('Maßnahme', margin + mColWidths[0] + 3, currentY + 5.5);
-      pdf.text('Termin', margin + mColWidths[0] + mColWidths[1] + 3, currentY + 5.5);
-      currentY += 8;      
-      filledMassnahmen.forEach((row, idx) => {
-        const cells = row.querySelectorAll('td');
-        const defizit = cells[0]?.textContent.trim() || '';
-        const massnahme = cells[1]?.textContent.trim() || '';
-        const termin = cells[2]?.querySelector('input')?.value || '';        
-        pdf.setFontSize(8);
-        const defizitLines = pdf.splitTextToSize(defizit, mColWidths[0] - 6);
-        const massnahmeLines = pdf.splitTextToSize(massnahme, mColWidths[1] - 6);
-        const maxLines = Math.max(defizitLines.length, massnahmeLines.length, 1);        const rowHeight = Math.max(8, maxLines * 3.5 + 4);
-        
-        if (currentY + rowHeight > pageHeight - 20) {
-          pdf.addPage();
-          addMiniHeader();
-          currentY = 18;          
-          pdf.setFillColor(183, 28, 28);
-          pdf.rect(margin, currentY, contentWidth, 8, 'F');
-          pdf.setFontSize(9);
-          pdf.setTextColor(255);
-          pdf.text('Defizit', margin + 3, currentY + 5.5);
-          pdf.text('Maßnahme', margin + mColWidths[0] + 3, currentY + 5.5);
-          pdf.text('Termin', margin + mColWidths[0] + mColWidths[1] + 3, currentY + 5.5);
-          currentY += 8;
-        }        
-        if (idx % 2 === 1) {
-          pdf.setFillColor(255, 243, 243);
-          pdf.rect(margin, currentY, contentWidth, rowHeight, 'F');
-        }        
-        pdf.setDrawColor(222, 226, 230);
-        pdf.rect(margin, currentY, mColWidths[0], rowHeight);
-        pdf.rect(margin + mColWidths[0], currentY, mColWidths[1], rowHeight);
-        pdf.rect(margin + mColWidths[0] + mColWidths[1], currentY, mColWidths[2], rowHeight);        
-        pdf.setTextColor(0);
-        pdf.setFontSize(8);
-        pdf.text(defizitLines, margin + 2, currentY + 3.5);
-        pdf.text(massnahmeLines, margin + mColWidths[0] + 2, currentY + 3.5);
-        if (termin) {
-          const formattedTermin = new Date(termin).toLocaleDateString('de-DE');
-          pdf.text(formattedTermin, margin + mColWidths[0] + mColWidths[1] + 2, currentY + rowHeight/2 + 1);
-        }        
-        currentY += rowHeight;
-      });
-    }    
+      pdf.setFont(undefined, 'bold');
+      pdf.text(nr, margin + mColWidths[0]/2, currentY + 5, { align: 'center' });
+      pdf.setFont(undefined, 'italic');
+      pdf.setFontSize(8);
+      pdf.text(frageLines, margin + mColWidths[0] + 3, currentY + 4);
+      pdf.setFont(undefined, 'normal');
+      pdf.text(massnahmeLines, margin + mColWidths[0] + mColWidths[1] + 3, currentY + 4);
+      currentY += rowHeight;
+      massnahmenIndex++;
+    });
     // ===== SIGNATURE PAGE =====
     pdf.addPage();
     addMiniHeader();
@@ -3462,19 +3588,65 @@ canvas.addEventListener('touchend', stopDrawing);
 // Service Worker optional
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('service-worker.js')
+    navigator.serviceWorker.register('/sicher/sw.js')
       .then(() => console.log("✅ Service Worker registriert"))
       .catch(err => console.error("❌ Service Worker Fehler:", err));
   });
 }
 function manuellSpeichern() {
-  // Nutzt denselben Mechanismus wie die automatische Speicherung
-  // (speichereFormular, siehe unten) sowie die separate
-  // Unterschriften-Speicherung, damit "Speichern" wirklich denselben
-  // Stand sichert, der auch beim nächsten Öffnen wieder geladen wird.
-  speichereFormular();
-  saveSignature();
+  const formData = {
+    markt: document.getElementById('markt')?.value || '',
+    teilnehmer: document.getElementById('teilnehmer')?.value || '',
+marktleitung: document.getElementById('Marktleitung')?.value || '',
+    sifa: document.getElementById('sifa')?.value || '',
+    datum: document.getElementById('datum')?.textContent || '',
+    antworten: {},
+    checkboxes: {
+      mangel: document.getElementById('mangel')?.checked || false,
+      massnahmen: document.getElementById('massnahmen')?.checked || false,
+      nachkontrolle: document.getElementById('nachkontrolle')?.checked || false,
+      mitarbeiter: document.getElementById('mitarbeiter')?.checked || false
+    },
+    unterschrift: canvas.toDataURL()
+  };
+  const radios = document.querySelectorAll('#fragenTabelle input[type="radio"]:checked');
+  radios.forEach(radio => {
+    formData.antworten[radio.name] = radio.value;
+  });
+  localStorage.setItem('arbeitssicherheit_formular', JSON.stringify(formData));
   alert('✅ Formular wurde gespeichert!');
+}
+function ladeFormular() {
+  const gespeichert = localStorage.getItem('arbeitssicherheit_formular');
+  if (!gespeichert) return;
+  try {
+    const formData = JSON.parse(gespeichert);
+    
+    if (formData.markt) document.getElementById('markt').value = formData.markt;
+    if (formData.name) document.getElementById('name').value = formData.name;
+    if (formData.sifa) document.getElementById('sifa').value = formData.sifa;
+    Object.keys(formData.antworten).forEach(name => {
+      const value = formData.antworten[name];
+      const radio = document.querySelector(`input[name="${name}"][value="${value}"]`);
+      if (radio) radio.checked = true;
+    });
+    if (formData.checkboxes) {
+      if (formData.checkboxes.mangel) document.getElementById('mangel').checked = true;
+      if (formData.checkboxes.massnahmen) document.getElementById('massnahmen').checked = true;
+      if (formData.checkboxes.nachkontrolle) document.getElementById('nachkontrolle').checked = true;
+      if (formData.checkboxes.mitarbeiter) document.getElementById('mitarbeiter').checked = true;
+    }
+    if (formData.unterschrift) {
+      const img = new Image();
+      img.onload = () => {
+        ctx.drawImage(img, 0, 0, canvas.offsetWidth, canvas.offsetHeight);
+      };
+      img.src = formData.unterschrift;
+    }
+    neinFragenInMaßnahmen();
+  } catch (e) {
+    console.error('Fehler beim Laden:', e);
+  }
 }
 function formularZuruecksetzen() {
   if (!confirm('Möchten Sie wirklich alle Eingaben zurücksetzen?')) return;  
@@ -3493,11 +3665,7 @@ function formularZuruecksetzen() {
   });  
   clearSignature();
   neinFragenInMaßnahmen();
-  // Zurückgesetzten (leeren) Stand aktiv speichern, statt nur die
-  // Anzeige zu leeren - sonst würde der vorherige Stand beim nächsten
-  // Laden der Seite wieder erscheinen.
-  speichereFormular();
-  localStorage.removeItem('arbeitssicherheit_formular'); // Aufräumen eines veralteten Schlüssels früherer Versionen
+  localStorage.removeItem('arbeitssicherheit_formular');  
   alert('✅ Formular wurde zurückgesetzt!');
 }
 // Set title
@@ -3594,7 +3762,6 @@ document.addEventListener("touchstart", function(e) {
   }
 }, { passive: false });
 </script>
-</div>
 </body>
 </html>
 

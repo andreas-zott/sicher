@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<title>FAQ – Arbeitssicherheit Checkliste</title>
+<link href="/sicher/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="/sicher/manifest.json" rel="manifest"/>
+<meta content="#C62828" name="theme-color"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<style>
+  :root {
+    --rot: #C62828;
+    --rot-dunkel: #A11F1F;
+    --rot-hell: #FDEDED;
+    --bg: #f5f7fa;
+    --card: #ffffff;
+    --text: #212529;
+    --muted: #6b7280;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+    padding: 1rem;
+  }
+  .container-box {
+    margin: 0 auto;
+  }
+  .container-box {
+    background: var(--card);
+    max-width: 820px;
+    width: 100%;
+    padding: 1.75rem 1.75rem 2rem;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+  .kopf {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 6px;
+    text-align: center;
+  }
+  .kopf .icon { font-size: 2rem; line-height: 1; }
+  h1 { margin: 0; font-size: 1.4rem; letter-spacing: -0.01em; }
+  .untertitel {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13.5px;
+    margin: 0 0 1.75rem;
+  }
+
+  .zurueck {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    color: var(--rot);
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 18px;
+  }
+  .zurueck:hover { text-decoration: underline; }
+
+  .suche {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid #dde1e6;
+    border-radius: 12px;
+    font-size: 14.5px;
+    font-family: inherit;
+    background: #fbfbfc;
+    margin-bottom: 1.5rem;
+  }
+  .suche:focus { outline: none; border-color: var(--rot); background: white; }
+
+  .kategorie-titel {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    margin: 26px 2px 10px;
+  }
+  .kategorie-titel:first-of-type { margin-top: 0; }
+
+  details.faq-item {
+    background: white;
+    border: 1px solid #ecebee;
+    border-radius: 14px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+  details.faq-item[open] {
+    border-color: var(--rot);
+    box-shadow: 0 3px 12px rgba(198,40,40,0.12);
+  }
+  details.faq-item summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 14px 44px 14px 16px;
+    font-weight: 600;
+    font-size: 14.5px;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+  }
+  details.faq-item summary::-webkit-details-marker { display: none; }
+  details.faq-item summary::after {
+    content: "+";
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--rot);
+    transition: transform 0.2s ease;
+  }
+  details.faq-item[open] summary::after {
+    content: "–";
+  }
+  details.faq-item .faq-antwort {
+    padding: 0 16px 16px 16px;
+    color: #374151;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  details.faq-item .faq-antwort p { margin: 0 0 10px; }
+  details.faq-item .faq-antwort p:last-child { margin-bottom: 0; }
+  details.faq-item .faq-antwort ul { margin: 0 0 10px; padding-left: 20px; }
+  details.faq-item .faq-antwort code {
+    background: var(--rot-hell);
+    color: var(--rot-dunkel);
+    padding: 1px 6px;
+    border-radius: 6px;
+    font-size: 12.5px;
+  }
+
+  .keine-treffer {
+    text-align: center;
+    color: var(--muted);
+    padding: 30px 10px;
+    font-size: 14px;
+    display: none;
+  }
+
+  .kontakt-box {
+    margin-top: 30px;
+    background: var(--rot-hell);
+    border-radius: 14px;
+    padding: 18px 20px;
+    text-align: center;
+    font-size: 13.5px;
+    color: var(--rot-dunkel);
+  }
+  .kontakt-box a { color: var(--rot-dunkel); font-weight: 700; }
+
+  /* --- Einheitlicher App-Footer --- */
+  .app-footer {
+    margin-top: 40px;
+    padding: 22px 16px calc(22px + env(safe-area-inset-bottom));
+    text-align: center;
+    font-size: 12px;
+    color: #6b7280;
+    border-top: 1px solid rgba(0,0,0,0.08);
+  }
+  .app-footer .app-footer-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .app-footer .app-footer-links a {
+    color: #C62828;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 14px;
+    background: rgba(198,40,40,0.08);
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .app-footer .app-footer-links a:hover { background: #C62828; color: #fff; }
+  .app-footer p { margin: 2px 0; }
+  .app-footer .app-footer-version { margin-top: 8px; font-size: 10.5px; color: #9ca3af; }
+
+  @media (max-width: 640px) {
+    .container-box { padding: 1.25rem 1rem 1.5rem; border-radius: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="container-box">
+
+  <a class="zurueck" href="welcome.html"><i class="fas fa-arrow-left"></i> Zur Startseite</a>
+
+  <div class="kopf">
+    <span class="icon">❓</span>
+    <h1>Häufig gestellte Fragen (FAQ)</h1>
+  </div>
+  <p class="untertitel">Antworten rund um Checkliste, Fotos, PDF-Export und Datenschutz</p>
+
+  <input class="suche" id="faqSuche" placeholder="🔍 Frage oder Stichwort eingeben …" type="search"/>
+
+  <div id="faqListe">
+
+    <div class="kategorie-titel">Allgemein</div>
+
+    <details class="faq-item">
+      <summary>Was ist diese App und wofür wird sie genutzt?</summary>
+      <div class="faq-antwort">
+        <p>Die App ist eine digitale Checkliste zur Arbeitssicherheits-Begehung. Sie führt systematisch durch die Prüfpunkte, leitet bei „Nein"-Antworten automatisch Maßnahmen ab und ermöglicht die Dokumentation per Foto, Unterschrift und PDF-Export.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Muss ich online sein, um die App zu nutzen?</summary>
+      <div class="faq-antwort">
+        <p>Nein. Nach dem ersten Aufruf funktioniert die App dank Service Worker auch offline bzw. bei schwacher Verbindung, z. B. im Lager oder Kühlhaus. Alle Berechnungen, PDF-Erstellungen und Foto-Bearbeitungen laufen lokal im Browser.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Werden meine Daten irgendwohin übertragen oder gespeichert?</summary>
+      <div class="faq-antwort">
+        <p>Nein. Es gibt keine Serververbindung und keine Cloud-Speicherung. Eingaben, Fotos und Unterschriften bleiben ausschließlich lokal in deinem Browser, bis du sie manuell als PDF exportierst oder teilst. Details dazu findest du in der <a href="datenschutz.html">Datenschutzerklärung</a>.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Auf welchen Geräten funktioniert die App?</summary>
+      <div class="faq-antwort">
+        <p>Die App ist für iPad und iPhone (Safari) optimiert, funktioniert grundsätzlich aber in jedem modernen Browser. Für die beste Erfahrung (Kamera, Teilen-Funktion, Offline-Nutzung) empfehlen wir Safari auf iPad/iPhone.</p>
+      </div>
+    </details>
+
+    <div class="kategorie-titel">Checkliste (liste.html)</div>
+
+    <details class="faq-item">
+      <summary>Was passiert, wenn ich eine Frage mit „Nein" beantworte?</summary>
+      <div class="faq-antwort">
+        <p>Bei „Nein" wird automatisch eine passende Maßnahme zur Behebung des Defizits erzeugt und im Bereich <em>„Beschreibung der Maßnahmen zur Beseitigung von Defiziten"</em> als Karte angezeigt. Den Maßnahmentext kannst du danach frei bearbeiten.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Wo finde ich Speichern, Drucken, PDF teilen und die anderen Aktionen?</summary>
+      <div class="faq-antwort">
+        <p>Alle Aktionen sind im schwebenden Menü-Button <strong>☰</strong> unten rechts gebündelt. Er ist während des gesamten Formulars erreichbar, egal wie weit du gescrollt hast.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Wie unterscheiden sich „Drucken / PDF" und „PDF teilen (iPad)"?</summary>
+      <div class="faq-antwort">
+        <p><strong>Drucken / PDF</strong> erstellt das PDF und öffnet es direkt zur Ansicht bzw. zum Speichern. <strong>PDF teilen (iPad)</strong> öffnet zusätzlich das native iOS-Teilen-Menü, worüber du das PDF direkt per Mail, AirDrop oder Messenger verschicken kannst.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Wie komme ich von der Checkliste zur Foto-Seite?</summary>
+      <div class="faq-antwort">
+        <p>Über <code>📸 Zur Foto-Seite</code> im Menü. Marktnummer, Name und SiFa müssen vorher ausgefüllt sein – diese Angaben werden automatisch an die Foto-Seite übergeben.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Was macht „Zurücksetzen"?</summary>
+      <div class="faq-antwort">
+        <p>Setzt alle Eingaben, Antworten, Maßnahmen und die Unterschrift auf der aktuellen Seite zurück. Da dies nicht rückgängig gemacht werden kann, erscheint vorher eine Sicherheitsabfrage.</p>
+      </div>
+    </details>
+
+    <div class="kategorie-titel">Fotos (foto.html)</div>
+
+    <details class="faq-item">
+      <summary>Wie füge ich Fotos hinzu?</summary>
+      <div class="faq-antwort">
+        <p>Über die beiden Kacheln <code>📷 Foto aufnehmen</code> (öffnet die Kamera) oder <code>🖼️ Aus Galerie wählen</code> (öffnet die Fotomediathek). Es können mehrere Fotos gleichzeitig ausgewählt werden.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Kann ich Fotos drehen oder kommentieren?</summary>
+      <div class="faq-antwort">
+        <p>Ja. Jedes Foto hat ⟲/⟳-Symbole zum Drehen sowie ein Textfeld darunter für einen Kommentar, der mit im PDF erscheint.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Wie viele Fotos passen auf eine PDF-Seite?</summary>
+      <div class="faq-antwort">
+        <p>Vier Fotos pro Seite (2×2-Raster), inklusive Kopfzeile mit Datum, Marktnummer, Name und SiFa auf jeder Seite.</p>
+      </div>
+    </details>
+
+    <div class="kategorie-titel">Maßnahmen-Auswertung</div>
+
+    <details class="faq-item">
+      <summary>Wie öffne ich die separate Maßnahmen-Auswertung?</summary>
+      <div class="faq-antwort">
+        <p>Über <code>📝 Defizite exportieren</code> im Menü der Checkliste. Es öffnet sich ein neues Fenster mit allen Maßnahmen in übersichtlichen Karten, die du dort separat drucken oder teilen kannst.</p>
+      </div>
+    </details>
+
+    <div class="kategorie-titel">Technisches &amp; Datenschutz</div>
+
+    <details class="faq-item">
+      <summary>Warum lädt die App auch ohne Internet?</summary>
+      <div class="faq-antwort">
+        <p>Ein sogenannter <em>Service Worker</em> speichert die App-Dateien beim ersten Besuch im Gerätecache. Details dazu findest du in der <a href="technische-beschreibung.html">technischen Beschreibung</a>.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Ich sehe eine alte Version trotz Update – was tun?</summary>
+      <div class="faq-antwort">
+        <p>Beim nächsten Laden mit Internetverbindung erkennt der Service Worker automatisch eine neue Versionsnummer und aktualisiert den Cache. Hilft das nicht, Safari-App vollständig schließen und neu öffnen, oder die Seite im Browser einmal „hart" neu laden.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Wer ist für die App und die Inhalte verantwortlich?</summary>
+      <div class="faq-antwort">
+        <p>Andreas Zott. Details dazu im <a href="impressum.html">Impressum</a>.</p>
+      </div>
+    </details>
+
+  </div>
+
+  <p class="keine-treffer" id="keineTreffer">Keine passenden Fragen gefunden.</p>
+
+  <div class="kontakt-box">
+    Deine Frage war nicht dabei? Schreib mir gerne an
+    <a href="mailto:AndreasZott@me.com">AndreasZott@me.com</a>
+  </div>
+
+</div>
+
+<footer class="app-footer">
+  <nav class="app-footer-links">
+    <a href="impressum.html">Impressum</a>
+    <a href="datenschutz.html">Datenschutz</a>
+    <a href="faq.html">FAQ</a>
+    <a href="technische-beschreibung.html">Technik</a>
+    <a href="welcome.html">Startseite</a>
+  </nav>
+  <p>© <span class="app-footer-jahr"></span> Andreas Zott – Alle Rechte vorbehalten</p>
+  <p class="app-footer-sub">(SiFa) Arbeitssicherheit</p>
+  <p class="app-footer-version">Version 1.0.2</p>
+</footer>
+
+<script>
+  document.querySelectorAll('.app-footer-jahr').forEach(el => el.textContent = new Date().getFullYear());
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sicher/service-worker.js')
+        .catch(err => console.warn('Service Worker konnte nicht registriert werden:', err));
+    });
+  }
+
+  // Einfache Live-Suche über Frage + Antworttext
+  const suche = document.getElementById('faqSuche');
+  const items = Array.from(document.querySelectorAll('.faq-item'));
+  const kategorien = Array.from(document.querySelectorAll('.kategorie-titel'));
+  const keineTreffer = document.getElementById('keineTreffer');
+
+  suche.addEventListener('input', () => {
+    const q = suche.value.trim().toLowerCase();
+    let sichtbareTreffer = 0;
+
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      const treffer = q === '' || text.includes(q);
+      item.style.display = treffer ? '' : 'none';
+      if (treffer) sichtbareTreffer++;
+      if (q !== '' && treffer) item.setAttribute('open', ''); 
+      if (q === '') item.removeAttribute('open');
+    });
+
+    // Kategorie-Überschriften nur zeigen, wenn mind. eine Frage darunter sichtbar ist
+    kategorien.forEach(kat => {
+      let el = kat.nextElementSibling;
+      let hatSichtbare = false;
+      while (el && !el.classList.contains('kategorie-titel')) {
+        if (el.classList.contains('faq-item') && el.style.display !== 'none') hatSichtbare = true;
+        el = el.nextElementSibling;
+      }
+      kat.style.display = hatSichtbare ? '' : 'none';
+    });
+
+    keineTreffer.style.display = sichtbareTreffer === 0 ? 'block' : 'none';
+  });
+</script>
+</body>
+</html>
