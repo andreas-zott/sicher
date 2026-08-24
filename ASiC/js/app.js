@@ -8,8 +8,8 @@ const STORAGE_KEY = 'begehungState';
 
 // Revisionsstand der App/Checkliste (in Fusszeile und PDF sichtbar,
 // bei inhaltlichen Aenderungen an Fragenkatalog/Massnahmen hochzaehlen)
-const APP_REVISION = '2.0';
-const APP_REVISION_DATE = '2026-08-21';
+const APP_REVISION = '2.1';
+const APP_REVISION_DATE = '2026-08-24';
 
 function renderFooterMeta() {
     const el = document.getElementById('footer-version');
@@ -522,6 +522,7 @@ async function renderFotosSection(doc, yStart, margin, contentWidth, pageHeight,
         doc.setFont(undefined, 'normal');
         doc.setFontSize(8.5);
         doc.setTextColor(51, 65, 85);
+
         // captionFn ermoeglicht abweichende Beschriftung (z. B. Massnahmen-Bezug
         // statt reinem Freitext-Kommentar) - ohne captionFn unveraendertes
         // Verhalten der allgemeinen Fotodokumentation.
@@ -564,30 +565,30 @@ async function renderMeasurePhotosAppendix(doc, margin, contentWidth, pageHeight
     doc.text('Fotos zu den Maßnahmen', margin, y);
     y += 9;
 
-  for (const group of groups) {
-    // Genug Platz fuer Ueberschrift + mindestens eine Bildreihe sicherstellen,
-    // sonst neue Seite fuer diese Massnahmen-Gruppe beginnen.
-    if (y > pageHeight - 95) {
-        doc.addPage();
-        y = 18;
+    for (const group of groups) {
+        // Genug Platz fuer Ueberschrift + mindestens eine Bildreihe sicherstellen,
+        // sonst neue Seite fuer diese Massnahmen-Gruppe beginnen.
+        if (y > pageHeight - 95) {
+            doc.addPage();
+            y = 18;
+        }
+
+        const found = findItemById(group.measure.itemId);
+        // ÄNDERUNG: `${found.item.text}` wurde entfernt
+        const label = found ? `[${group.measure.itemId}]` : 'Manuell erfasste Maßnahme';
+
+        doc.setFont(undefined, 'bold');
+        doc.setFontSize(10);
+        doc.setTextColor(30, 41, 59);
+        const labelLines = doc.splitTextToSize(label, contentWidth);
+        doc.text(labelLines, margin, y);
+        y += labelLines.length * 5 + 3;
+
+        y = await renderFotosSection(doc, y, margin, contentWidth, pageHeight, group.photos);
+        y += 6;
     }
 
-    const found = findItemById(group.measure.itemId);
-    // ÄNDERUNG: `${found.item.text}` wurde entfernt
-    const label = found ? `[${group.measure.itemId}]` : 'Manuell erfasste Maßnahme';
-    
-    doc.setFont(undefined, 'bold');
-    doc.setFontSize(10);
-    doc.setTextColor(30, 41, 59);
-    const labelLines = doc.splitTextToSize(label, contentWidth);
-    doc.text(labelLines, margin, y);
-    y += labelLines.length * 5 + 3;
-
-    y = await renderFotosSection(doc, y, margin, contentWidth, pageHeight, group.photos);
-    y += 6;
-}
-
-return true;
+    return true;
 }
 
 
@@ -598,54 +599,115 @@ async function buildFotosPdf() {
     if (typeof window.jspdf === 'undefined' || !window.jspdf.jsPDF) {
         throw new Error('jsPDF-Bibliothek nicht geladen (window.jspdf fehlt). Bitte prüfen, ob "js/jspdf.umd.min.js" korrekt eingebunden ist, und die Seite neu laden.');
     }
+
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    const pageWidth = 210, pageHeight = 297, margin = 14;
+    const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+    });
+
+    const pageWidth = 210;
+    const pageHeight = 297;
+    const margin = 14;
     const contentWidth = pageWidth - margin * 2;
 
-    drawCoverPage(doc, pageWidth, pageHeight, margin, 'Fotodokumentation', 'Begehungsprotokoll – Bildanhang');
+    drawCoverPage(
+        doc,
+        pageWidth,
+        pageHeight,
+        margin,
+        'Fotodokumentation',
+        'Begehungsprotokoll – Bildanhang'
+    );
 
     let y = 18;
+
     doc.setFont(undefined, 'bold');
     doc.setFontSize(18);
     doc.setTextColor(28, 34, 38);
-    doc.text('ASiC Handel – Fotodokumentation', pageWidth / 2, y, { align: 'center' });
+    doc.text(
+        'ASiC Handel – Fotodokumentation',
+        pageWidth / 2,
+        y,
+        { align: 'center' }
+    );
+
     y += 9;
+
     doc.setFont(undefined, 'normal');
     doc.setFontSize(9.5);
     doc.setTextColor(90, 100, 108);
+
     checklistPdfHeaderLines().forEach(line => {
-        doc.text(line, pageWidth / 2, y, { align: 'center' });
+        doc.text(
+            line,
+            pageWidth / 2,
+            y,
+            { align: 'center' }
+        );
         y += 5;
     });
+
     y += 1;
+
     doc.setDrawColor(220);
-    doc.line(margin, y, pageWidth - margin, y);
+    doc.line(
+        margin,
+        y,
+        pageWidth - margin,
+        y
+    );
+
     y += 8;
 
     const photos = await getUnlinkedPhotos();
-    await renderFotosSection(doc, y, margin, contentWidth, pageHeight, photos);
+
+    await renderFotosSection(
+        doc,
+        y,
+        margin,
+        contentWidth,
+        pageHeight,
+        photos
+    );
 
     const totalPages = doc.getNumberOfPages();
+
     for (let i = 2; i <= totalPages; i++) {
         doc.setPage(i);
         doc.setFontSize(8);
         doc.setTextColor(140);
-        doc.text(`${i}/${totalPages}`, pageWidth - margin, pageHeight - 8, { align: 'right' });
+        doc.text(
+            `${i}/${totalPages}`,
+            pageWidth - margin,
+            pageHeight - 8,
+            { align: 'right' }
+        );
     }
 
     return doc;
 }
 
 function fotosPdfFilename() {
-    const firma = (state.companyInfo.firma || 'markt').replace(/[^a-z0-9äöüß]+/gi, '-');
-    const datum = state.companyInfo.datum || new Date().toISOString().split('T')[0];
+    const firma = (state.companyInfo.firma || 'markt')
+        .replace(/[^a-z0-9äöüß]+/gi, '-');
+
+    const datum =
+        state.companyInfo.datum ||
+        new Date().toISOString().split('T')[0];
+
     return `Fotodokumentation_${firma}_${datum}.pdf`;
 }
 
 function checklistPdfFilename() {
-    const firma = (state.companyInfo.firma || 'markt').replace(/[^a-z0-9äöüß]+/gi, '-');
-    const datum = state.companyInfo.datum || new Date().toISOString().split('T')[0];
+    const firma = (state.companyInfo.firma || 'markt')
+        .replace(/[^a-z0-9äöüß]+/gi, '-');
+
+    const datum =
+        state.companyInfo.datum ||
+        new Date().toISOString().split('T')[0];
+
     return `Checkliste_${firma}_${datum}.pdf`;
 }
 
@@ -653,42 +715,89 @@ function buildChecklistPdf() {
     if (typeof window.jspdf === 'undefined' || !window.jspdf.jsPDF) {
         throw new Error('jsPDF-Bibliothek nicht geladen (window.jspdf fehlt). Bitte prüfen, ob "js/jspdf.umd.min.js" korrekt eingebunden ist, und die Seite neu laden.');
     }
+
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    const pageWidth = 210, pageHeight = 297, margin = 14;
+
+    const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+    });
+
+    const pageWidth = 210;
+    const pageHeight = 297;
+    const margin = 14;
     const contentWidth = pageWidth - margin * 2;
 
-    drawCoverPage(doc, pageWidth, pageHeight, margin, 'Checkliste');
+    drawCoverPage(
+        doc,
+        pageWidth,
+        pageHeight,
+        margin,
+        'Checkliste'
+    );
 
     let y = 18;
 
     doc.setFont(undefined, 'bold');
     doc.setFontSize(18);
     doc.setTextColor(28, 34, 38);
-    doc.text('ASiC Handel – Checkliste', pageWidth / 2, y, { align: 'center' });
+    doc.text(
+        'ASiC Handel – Checkliste',
+        pageWidth / 2,
+        y,
+        { align: 'center' }
+    );
+
     y += 9;
 
     doc.setFont(undefined, 'normal');
     doc.setFontSize(9.5);
     doc.setTextColor(90, 100, 108);
+
     checklistPdfHeaderLines().forEach(line => {
-        doc.text(line, pageWidth / 2, y, { align: 'center' });
+        doc.text(
+            line,
+            pageWidth / 2,
+            y,
+            { align: 'center' }
+        );
         y += 5;
     });
+
     y += 1;
+
     doc.setDrawColor(220);
-    doc.line(margin, y, pageWidth - margin, y);
+    doc.line(
+        margin,
+        y,
+        pageWidth - margin,
+        y
+    );
+
     y += 8;
 
-    y = renderChecklistPdfSection(doc, y, margin, contentWidth, pageHeight);
+    y = renderChecklistPdfSection(
+        doc,
+        y,
+        margin,
+        contentWidth,
+        pageHeight
+    );
 
     // Seitenzahl auf allen Seiten AUSSER dem Deckblatt (Seite 1)
     const totalPages = doc.getNumberOfPages();
+
     for (let i = 2; i <= totalPages; i++) {
         doc.setPage(i);
         doc.setFontSize(8);
         doc.setTextColor(140);
-        doc.text(`${i}/${totalPages}`, pageWidth - margin, pageHeight - 8, { align: 'right' });
+        doc.text(
+            `${i}/${totalPages}`,
+            pageWidth - margin,
+            pageHeight - 8,
+            { align: 'right' }
+        );
     }
 
     return doc;
@@ -698,18 +807,39 @@ async function shareChecklistPdf() {
     try {
         const doc = buildChecklistPdf();
         const filename = checklistPdfFilename();
-        await sharePdfDoc(doc, filename, buildShareEmailSubject());
+
+        await sharePdfDoc(
+            doc,
+            filename,
+            buildShareEmailSubject()
+        );
+
     } catch (err) {
-        console.error('Checkliste-PDF konnte nicht erzeugt werden:', err);
-        showToast('PDF-Fehler: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+        console.error(
+            'Checkliste-PDF konnte nicht erzeugt werden:',
+            err
+        );
+
+        showToast(
+            'PDF-Fehler: ' +
+            (err && err.message
+                ? err.message
+                : 'unbekannter Fehler'),
+            'error'
+        );
     }
 }
 
 // ===== Maßnahmen-PDF (mit optionaler Checkliste voran) =====
 // Uebernommen aus massnahmen.js, damit auch die Checkliste-Seite Maßnahmen exportieren kann.
 function pdfFilename() {
-    const firma = (state.companyInfo.firma || 'begehung').replace(/[^a-z0-9äöüß]+/gi, '-');
-    const datum = state.companyInfo.datum || new Date().toISOString().split('T')[0];
+    const firma = (state.companyInfo.firma || 'begehung')
+        .replace(/[^a-z0-9äöüß]+/gi, '-');
+
+    const datum =
+        state.companyInfo.datum ||
+        new Date().toISOString().split('T')[0];
+
     return `Massnahmenplan_${firma}_${datum}.pdf`;
 }
 
@@ -717,98 +847,270 @@ async function buildPdf(includeChecklist, includeFotos) {
     if (typeof window.jspdf === 'undefined' || !window.jspdf.jsPDF) {
         throw new Error('jsPDF-Bibliothek nicht geladen (window.jspdf fehlt). Bitte prüfen, ob "js/jspdf.umd.min.js" korrekt eingebunden ist, und die Seite neu laden.');
     }
+
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    const pageWidth = 210, pageHeight = 297, margin = 14;
+
+    const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+    });
+
+    const pageWidth = 210;
+    const pageHeight = 297;
+    const margin = 14;
     const contentWidth = pageWidth - margin * 2;
 
-    const coverTitle = includeChecklist ? 'Gesamtbericht' : 'Maßnahmen';
-    drawCoverPage(doc, pageWidth, pageHeight, margin, coverTitle);
+    const coverTitle =
+        includeChecklist
+            ? 'Gesamtbericht'
+            : 'Maßnahmen';
+
+    drawCoverPage(
+        doc,
+        pageWidth,
+        pageHeight,
+        margin,
+        coverTitle
+    );
 
     let y = 18;
 
     doc.setFont(undefined, 'bold');
     doc.setFontSize(18);
     doc.setTextColor(28, 34, 38);
-    doc.text(includeChecklist ? 'ASiC Handel – Gesamtbericht' : 'ASiC Handel – Maßnahmen', pageWidth / 2, y, { align: 'center' });
+
+    doc.text(
+        includeChecklist
+            ? 'ASiC Handel – Gesamtbericht'
+            : 'ASiC Handel – Maßnahmen',
+        pageWidth / 2,
+        y,
+        { align: 'center' }
+    );
+
     y += 9;
 
     doc.setFont(undefined, 'normal');
     doc.setFontSize(9.5);
     doc.setTextColor(90, 100, 108);
+
     checklistPdfHeaderLines().forEach(line => {
-        doc.text(line, pageWidth / 2, y, { align: 'center' });
+        doc.text(
+            line,
+            pageWidth / 2,
+            y,
+            { align: 'center' }
+        );
         y += 5;
     });
+
     y += 1;
+
     doc.setDrawColor(220);
-    doc.line(margin, y, pageWidth - margin, y);
+    doc.line(
+        margin,
+        y,
+        pageWidth - margin,
+        y
+    );
+
     y += 8;
 
     if (includeChecklist) {
-        y = renderChecklistPdfSection(doc, y, margin, contentWidth, pageHeight);
+        y = renderChecklistPdfSection(
+            doc,
+            y,
+            margin,
+            contentWidth,
+            pageHeight
+        );
+
         doc.addPage();
+
         y = 18;
+
         doc.setFont(undefined, 'bold');
         doc.setFontSize(14);
         doc.setTextColor(28, 34, 38);
-        doc.text('Maßnahmen', margin, y);
+        doc.text(
+            'Maßnahmen',
+            margin,
+            y
+        );
+
         y += 9;
     }
 
     if (state.measures.length === 0) {
+
         doc.setFontSize(11);
         doc.setTextColor(0);
-        doc.text('Keine Mängel erfasst.', margin, y);
+
+        doc.text(
+            'Keine Mängel erfasst.',
+            margin,
+            y
+        );
+
         y += 10;
+
     } else {
+
         const padding = 6;
         const innerWidth = contentWidth - padding * 2;
         const thumbSize = 22;
         const thumbGap = 3;
-        const thumbsPerRow = Math.max(1, Math.floor((innerWidth + thumbGap) / (thumbSize + thumbGap)));
 
-        for (let index = 0; index < state.measures.length; index++) {
-            const measure = state.measures[index];
-            const found = findItemById(measure.itemId);
-            const questionText = found ? `${index + 1}. [${measure.itemId}] ${found.item.text}` : `${index + 1}. Manuell erfasste Maßnahme`;
+        const thumbsPerRow = Math.max(
+            1,
+            Math.floor(
+                (innerWidth + thumbGap) /
+                (thumbSize + thumbGap)
+            )
+        );
+
+        for (
+            let index = 0;
+            index < state.measures.length;
+            index++
+        ) {
+
+            const measure =
+                state.measures[index];
+
+            const found =
+                findItemById(measure.itemId);
+
+            const questionText =
+                found
+                    ? `${index + 1}. [${measure.itemId}] ${found.item.text}`
+                    : `${index + 1}. Manuell erfasste Maßnahme`;
 
             let photos = [];
-            try { photos = await getPhotosForMeasure(measure.id); } catch (e) { photos = []; }
-            const photoRows = photos.length > 0 ? Math.ceil(photos.length / thumbsPerRow) : 0;
-            const photoBlockH = photoRows > 0 ? photoRows * (thumbSize + thumbGap) + 3 : 0;
+
+            try {
+                photos =
+                    await getPhotosForMeasure(
+                        measure.id
+                    );
+            } catch (e) {
+                photos = [];
+            }
+
+            const photoRows =
+                photos.length > 0
+                    ? Math.ceil(
+                        photos.length /
+                        thumbsPerRow
+                    )
+                    : 0;
+
+            const photoBlockH =
+                photoRows > 0
+                    ? photoRows *
+                        (thumbSize + thumbGap) +
+                        3
+                    : 0;
 
             doc.setFont(undefined, 'bold');
             doc.setFontSize(10);
-            const questionLines = doc.splitTextToSize(questionText, innerWidth);
+
+            const questionLines =
+                doc.splitTextToSize(
+                    questionText,
+                    innerWidth
+                );
 
             doc.setFont(undefined, 'normal');
             doc.setFontSize(9);
-            const answerLines = doc.splitTextToSize(measure.description || '-', innerWidth);
 
-            const questionH = questionLines.length * 5;
-            const answerH = answerLines.length * 4.3;
+            const answerLines =
+                doc.splitTextToSize(
+                    measure.description || '-',
+                    innerWidth
+                );
+
+            const questionH =
+                questionLines.length * 5;
+
+            const answerH =
+                answerLines.length * 4.3;
+
             const statusH = 11;
-            const cardHeight = padding + questionH + 1 + 4.5 + photoBlockH + 4.5 + answerH + 6 + statusH + padding;
 
-            if (y + cardHeight > pageHeight - 24) {
+            const cardHeight =
+                padding +
+                questionH +
+                1 +
+                4.5 +
+                photoBlockH +
+                4.5 +
+                answerH +
+                6 +
+                statusH +
+                padding;
+
+            if (
+                y + cardHeight >
+                pageHeight - 24
+            ) {
                 doc.addPage();
                 y = 18;
             }
 
-            doc.setDrawColor(226, 232, 240);
-            doc.setLineWidth(0.3);
-            doc.roundedRect(margin, y, contentWidth, cardHeight, 2, 2, 'S');
+            doc.setDrawColor(
+                226,
+                232,
+                240
+            );
 
-            let cy = y + padding + 3.5;
+            doc.setLineWidth(0.3);
+
+            doc.roundedRect(
+                margin,
+                y,
+                contentWidth,
+                cardHeight,
+                2,
+                2,
+                'S'
+            );
+
+            let cy =
+                y +
+                padding +
+                3.5;
+
             doc.setFont(undefined, 'bold');
             doc.setFontSize(10);
-            doc.setTextColor(30, 41, 59);
-            doc.text(questionLines, margin + padding, cy);
+            doc.setTextColor(
+                30,
+                41,
+                59
+            );
+
+            doc.text(
+                questionLines,
+                margin + padding,
+                cy
+            );
+
             cy += questionH + 1;
 
-            doc.setDrawColor(241, 245, 249);
-            doc.line(margin + padding, cy, margin + contentWidth - padding, cy);
+            doc.setDrawColor(
+                241,
+                245,
+                249
+            );
+
+            doc.line(
+                margin + padding,
+                cy,
+                margin + contentWidth - padding,
+                cy
+            );
+
             cy += 4.5;
 
             // Fotos zur Maßnahme direkt zwischen Frage und Maßnahmentext -
@@ -817,49 +1119,168 @@ async function buildPdf(includeChecklist, includeFotos) {
             // belegt wurde. Am Bildschirm bleiben die Fotos trotz kleiner
             // Druckgröße beliebig zoombar, nur auf Papier wirken sie kleiner.
             if (photos.length > 0) {
-                for (let p = 0; p < photos.length; p++) {
-                    const col = p % thumbsPerRow;
-                    const row = Math.floor(p / thumbsPerRow);
-                    const tx = margin + padding + col * (thumbSize + thumbGap);
-                    const ty = cy + row * (thumbSize + thumbGap);
-                    doc.setDrawColor(226, 232, 240);
-                    doc.roundedRect(tx, ty, thumbSize, thumbSize, 1.5, 1.5, 'S');
+
+                for (
+                    let p = 0;
+                    p < photos.length;
+                    p++
+                ) {
+
+                    const col =
+                        p % thumbsPerRow;
+
+                    const row =
+                        Math.floor(
+                            p / thumbsPerRow
+                        );
+
+                    const tx =
+                        margin +
+                        padding +
+                        col *
+                        (thumbSize + thumbGap);
+
+                    const ty =
+                        cy +
+                        row *
+                        (thumbSize + thumbGap);
+
+                    doc.setDrawColor(
+                        226,
+                        232,
+                        240
+                    );
+
+                    doc.roundedRect(
+                        tx,
+                        ty,
+                        thumbSize,
+                        thumbSize,
+                        1.5,
+                        1.5,
+                        'S'
+                    );
+
                     try {
-                        const dataUrl = await blobToDataUrl(photos[p].blob);
-                        const dims = await getImageDimensions(dataUrl);
-                        const fit = fitImage(dims.width, dims.height, thumbSize - 2, thumbSize - 2);
-                        const imgX = tx + (thumbSize - fit.width) / 2;
-                        const imgY = ty + (thumbSize - fit.height) / 2;
-                        doc.addImage(dataUrl, 'JPEG', imgX, imgY, fit.width, fit.height);
-                    } catch (e) { /* Bild konnte nicht geladen werden, Rahmen bleibt sichtbar */ }
+
+                        const dataUrl =
+                            await blobToDataUrl(
+                                photos[p].blob
+                            );
+
+                        const dims =
+                            await getImageDimensions(
+                                dataUrl
+                            );
+
+                        const fit =
+                            fitImage(
+                                dims.width,
+                                dims.height,
+                                thumbSize - 2,
+                                thumbSize - 2
+                            );
+
+                        const imgX =
+                            tx +
+                            (thumbSize - fit.width) /
+                            2;
+
+                        const imgY =
+                            ty +
+                            (thumbSize - fit.height) /
+                            2;
+
+                        doc.addImage(
+                            dataUrl,
+                            'JPEG',
+                            imgX,
+                            imgY,
+                            fit.width,
+                            fit.height
+                        );
+
+                    } catch (e) {
+                        // Bild konnte nicht geladen werden,
+                        // Rahmen bleibt sichtbar
+                    }
                 }
+
                 cy += photoBlockH;
             }
 
             doc.setFont(undefined, 'bold');
             doc.setFontSize(7.5);
-            doc.setTextColor(200, 130, 20);
-            doc.text('MASSNAHME', margin + padding, cy);
+            doc.setTextColor(
+                200,
+                130,
+                20
+            );
+
+            doc.text(
+                'MASSNAHME',
+                margin + padding,
+                cy
+            );
+
             cy += 4.3;
 
             doc.setFont(undefined, 'normal');
             doc.setFontSize(9);
-            doc.setTextColor(51, 65, 85);
-            doc.text(answerLines, margin + padding, cy);
+            doc.setTextColor(
+                51,
+                65,
+                85
+            );
+
+            doc.text(
+                answerLines,
+                margin + padding,
+                cy
+            );
+
             cy += answerH + 6;
 
             doc.setFont(undefined, 'bold');
             doc.setFontSize(7);
-            doc.setTextColor(100, 116, 139);
-            doc.text('STATUS', margin + padding, cy);
+            doc.setTextColor(
+                100,
+                116,
+                139
+            );
+
+            doc.text(
+                'STATUS',
+                margin + padding,
+                cy
+            );
+
             cy += 4.3;
 
-            const statusLabel = measure.status === 'offen' ? 'Offen' : measure.status === 'bearbeitung' ? 'In Bearbeitung' : 'Erledigt';
-            const statusColor = measure.status === 'offen' ? [214, 69, 63] : measure.status === 'bearbeitung' ? [201, 127, 26] : [47, 158, 100];
+            const statusLabel =
+                measure.status === 'offen'
+                    ? 'Offen'
+                    : measure.status === 'bearbeitung'
+                        ? 'In Bearbeitung'
+                        : 'Erledigt';
+
+            const statusColor =
+                measure.status === 'offen'
+                    ? [214, 69, 63]
+                    : measure.status === 'bearbeitung'
+                        ? [201, 127, 26]
+                        : [47, 158, 100];
+
             doc.setFont(undefined, 'bold');
             doc.setFontSize(9);
             doc.setTextColor(...statusColor);
-            doc.text(statusLabel, margin + padding, cy);
+
+            doc.text(
+                statusLabel,
+                margin + padding,
+                cy
+            );
+
             doc.setTextColor(0);
 
             y += cardHeight + 5;
@@ -876,52 +1297,141 @@ async function buildPdf(includeChecklist, includeFotos) {
     doc.setFont(undefined, 'bold');
     doc.setFontSize(11);
     doc.setTextColor(28, 34, 38);
-    doc.text('Unterschriften', margin, y);
+
+    doc.text(
+        'Unterschriften',
+        margin,
+        y
+    );
+
     y += 8;
 
-    const sigWidth = (contentWidth - 10) / 2;
+    const sigWidth =
+        (contentWidth - 10) / 2;
+
     const sigHeight = 28;
 
     [
-        { key: 'pruefer', label: 'Prüfer', name: state.companyInfo.pruefername },
-        { key: 'marktleitung', label: 'Marktleitung', name: state.companyInfo.marktleitung }
-    ].forEach((sig, i) => {
-        const x = margin + i * (sigWidth + 10);
-        doc.setDrawColor(220);
-        doc.rect(x, y, sigWidth, sigHeight, 'S');
-        if (state.signatures[sig.key]) {
-            try {
-                doc.addImage(state.signatures[sig.key], 'PNG', x + 2, y + 2, sigWidth - 4, sigHeight - 4);
-            } catch (e) { /* ignore */ }
+        {
+            key: 'pruefer',
+            label: 'Prüfer',
+            name: state.companyInfo.pruefername
+        },
+        {
+            key: 'marktleitung',
+            label: 'Marktleitung',
+            name: state.companyInfo.marktleitung
         }
+    ].forEach((sig, i) => {
+
+        const x =
+            margin +
+            i * (sigWidth + 10);
+
+        doc.setDrawColor(220);
+
+        doc.rect(
+            x,
+            y,
+            sigWidth,
+            sigHeight,
+            'S'
+        );
+
+        if (state.signatures[sig.key]) {
+
+            try {
+
+                doc.addImage(
+                    state.signatures[sig.key],
+                    'PNG',
+                    x + 2,
+                    y + 2,
+                    sigWidth - 4,
+                    sigHeight - 4
+                );
+
+            } catch (e) {
+                // ignore
+            }
+        }
+
         doc.setFont(undefined, 'normal');
         doc.setFontSize(8.5);
-        doc.setTextColor(90, 100, 108);
-        doc.text(`${sig.label}: ${sig.name || '-'}`, x, y + sigHeight + 5);
+        doc.setTextColor(
+            90,
+            100,
+            108
+        );
+
+        doc.text(
+            `${sig.label}: ${sig.name || '-'}`,
+            x,
+            y + sigHeight + 5
+        );
     });
 
     if (includeFotos) {
+
         doc.addPage();
+
         y = 18;
+
         doc.setFont(undefined, 'bold');
         doc.setFontSize(14);
-        doc.setTextColor(28, 34, 38);
-        doc.text('Fotodokumentation', margin, y);
+        doc.setTextColor(
+            28,
+            34,
+            38
+        );
+
+        doc.text(
+            'Fotodokumentation',
+            margin,
+            y
+        );
+
         y += 9;
-        const photos = await getUnlinkedPhotos();
-        await renderFotosSection(doc, y, margin, contentWidth, pageHeight, photos);
+
+        const photos =
+            await getUnlinkedPhotos();
+
+        await renderFotosSection(
+            doc,
+            y,
+            margin,
+            contentWidth,
+            pageHeight,
+            photos
+        );
     }
 
     // Fotos zu einzelnen Massnahmen als eigener Anhang - unabhaengig vom
     // "includeFotos"-Schalter, da das inhaltlich zum Massnahmenteil gehoert.
-    await renderMeasurePhotosAppendix(doc, margin, contentWidth, pageHeight, state.measures);
+    await renderMeasurePhotosAppendix(
+        doc,
+        margin,
+        contentWidth,
+        pageHeight,
+        state.measures
+    );
 
-    const totalPages = doc.getNumberOfPages();
+    const totalPages =
+        doc.getNumberOfPages();
+
     for (let i = 2; i <= totalPages; i++) {
+
         doc.setPage(i);
+
         doc.setFontSize(8);
         doc.setTextColor(140);
-        doc.text(`${i}/${totalPages}`, pageWidth - margin, pageHeight - 8, { align: 'right' });
+
+        doc.text(
+            `${i}/${totalPages}`,
+            pageWidth - margin,
+            pageHeight - 8,
+            { align: 'right' }
+        );
     }
 
     return doc;
@@ -932,23 +1442,58 @@ function reportFilename(mode) {
     if (mode === 'checkliste') return checklistPdfFilename();
     if (mode === 'massnahmen') return pdfFilename();
     if (mode === 'fotos') return fotosPdfFilename();
-    return checklistPdfFilename().replace('Checkliste_', 'Gesamtbericht_');
+
+    return checklistPdfFilename()
+        .replace(
+            'Checkliste_',
+            'Gesamtbericht_'
+        );
 }
 
 async function buildReportPdf(mode) {
-    if (mode === 'checkliste') return buildChecklistPdf();
-    if (mode === 'massnahmen') return buildPdf(false, false);
-    if (mode === 'fotos') return await buildFotosPdf();
+    if (mode === 'checkliste') {
+        return buildChecklistPdf();
+    }
+
+    if (mode === 'massnahmen') {
+        return buildPdf(false, false);
+    }
+
+    if (mode === 'fotos') {
+        return await buildFotosPdf();
+    }
+
     return await buildPdf(true, true);
 }
 
 async function shareReportPdf(mode) {
     try {
-        const doc = await buildReportPdf(mode);
-        await sharePdfDoc(doc, reportFilename(mode), buildShareEmailSubject());
+
+        const doc =
+            await buildReportPdf(mode);
+
+        await sharePdfDoc(
+            doc,
+            reportFilename(mode),
+            buildShareEmailSubject()
+        );
+
     } catch (err) {
-        console.error('Report-PDF konnte nicht erzeugt werden:', err);
-        showToast('PDF-Fehler: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+
+        console.error(
+            'Report-PDF konnte nicht erzeugt werden:',
+            err
+        );
+
+        showToast(
+            'PDF-Fehler: ' +
+            (
+                err && err.message
+                    ? err.message
+                    : 'unbekannter Fehler'
+            ),
+            'error'
+        );
     }
 }
 
@@ -962,37 +1507,90 @@ async function shareReportPdf(mode) {
 // Kopf-/Fusszeile mit URL/Datum, unzuverlaessige Seitenumbrueche).
 async function printReport(mode) {
     try {
-        const doc = await buildReportPdf(mode);
-        const blob = doc.output('blob');
-        const url = URL.createObjectURL(blob);
-        const win = window.open(url, '_blank');
+
+        const doc =
+            await buildReportPdf(mode);
+
+        const blob =
+            doc.output('blob');
+
+        const url =
+            URL.createObjectURL(blob);
+
+        const win =
+            window.open(url, '_blank');
+
         if (win) {
-            showToast('PDF geöffnet – über das Teilen-Symbol drucken');
+
+            showToast(
+                'PDF geöffnet – über das Teilen-Symbol drucken'
+            );
+
         } else {
+
             // Pop-up blockiert: PDF stattdessen herunterladen, manuell drucken
-            doc.save(reportFilename(mode));
-            showToast('Pop-up blockiert – PDF heruntergeladen');
+            doc.save(
+                reportFilename(mode)
+            );
+
+            showToast(
+                'Pop-up blockiert – PDF heruntergeladen'
+            );
         }
+
     } catch (err) {
-        console.error('Drucken fehlgeschlagen:', err);
-        showToast('PDF-Fehler: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+
+        console.error(
+            'Drucken fehlgeschlagen:',
+            err
+        );
+
+        showToast(
+            'PDF-Fehler: ' +
+            (
+                err && err.message
+                    ? err.message
+                    : 'unbekannter Fehler'
+            ),
+            'error'
+        );
     }
 }
 
 // ===== Betriebsdaten: Formular (index.html) =====
 function initCompanyForm() {
-    const fields = ['firma', 'standort', 'datum', 'pruefername', 'marktleitung', 'teilnehmer'];
+    const fields = [
+        'firma',
+        'standort',
+        'datum',
+        'pruefername',
+        'marktleitung',
+        'teilnehmer'
+    ];
+
     let anyField = false;
 
     fields.forEach(field => {
-        const input = document.getElementById(field);
+
+        const input =
+            document.getElementById(field);
+
         if (!input) return;
+
         anyField = true;
-        input.value = state.companyInfo[field] || '';
-        input.addEventListener('change', () => {
-            state.companyInfo[field] = input.value;
-            saveState();
-        });
+
+        input.value =
+            state.companyInfo[field] || '';
+
+        input.addEventListener(
+            'change',
+            () => {
+                state.companyInfo[field] =
+                    input.value;
+
+                saveState();
+            }
+        );
     });
 
     return anyField;
@@ -1000,32 +1598,64 @@ function initCompanyForm() {
 
 // ===== Betriebsdaten: Anzeige (massnahmen.html) =====
 function renderCompanyInfoStrip() {
-    const strip = document.getElementById('company-info-strip');
+    const strip =
+        document.getElementById(
+            'company-info-strip'
+        );
+
     if (!strip) return;
 
     const map = {
-        'info-firma': state.companyInfo.firma,
-        'info-standort': state.companyInfo.standort,
-        'info-datum': state.companyInfo.datum ? formatDate(state.companyInfo.datum) : '',
-        'info-pruefer': state.companyInfo.pruefername,
-        'info-marktleitung': state.companyInfo.marktleitung,
-        'info-teilnehmer': state.companyInfo.teilnehmer
+        'info-firma':
+            state.companyInfo.firma,
+
+        'info-standort':
+            state.companyInfo.standort,
+
+        'info-datum':
+            state.companyInfo.datum
+                ? formatDate(state.companyInfo.datum)
+                : '',
+
+        'info-pruefer':
+            state.companyInfo.pruefername,
+
+        'info-marktleitung':
+            state.companyInfo.marktleitung,
+
+        'info-teilnehmer':
+            state.companyInfo.teilnehmer
     };
 
     Object.keys(map).forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.textContent = map[id] || '–';
+
+        const el =
+            document.getElementById(id);
+
+        if (el) {
+            el.textContent =
+                map[id] || '–';
+        }
     });
 }
 
 // Kategorien mit "nicht in jedem Markt vorhanden"-Schalter: Ausstattung/Räumlichkeit,
 // die bei Aktivierung komplett als N.V. markiert und gesperrt wird.
 const OPTIONAL_CATEGORIES = {
-    'kundenaufzug': 'Kein Kundenaufzug im Markt vorhanden',
-    'lastenaufzug': 'Kein Lastenaufzug im Markt vorhanden',
-    'barrierefreies-wc': 'Kein barrierefreies WC im Markt vorhanden',
-    'praktikanten': 'Keine Praktikanten/Schüleraushilfen im Markt beschäftigt',
-    'co2-kuehleinrichtungen': 'Keine CO2-Kühleinrichtungen im Markt vorhanden'
+    'kundenaufzug':
+        'Kein Kundenaufzug im Markt vorhanden',
+
+    'lastenaufzug':
+        'Kein Lastenaufzug im Markt vorhanden',
+
+    'barrierefreies-wc':
+        'Kein barrierefreies WC im Markt vorhanden',
+
+    'praktikanten':
+        'Keine Praktikanten/Schüleraushilfen im Markt beschäftigt',
+
+    'co2-kuehleinrichtungen':
+        'Keine CO2-Kühleinrichtungen im Markt vorhanden'
 };
 
 // ===== Checkliste rendern (index.html) =====
@@ -1033,11 +1663,25 @@ const OPTIONAL_CATEGORIES = {
 // Druck-Container auf der Maßnahmen-Seite wiederverwendet werden kann.
 function buildChecklistHtml(forceOpenAll) {
     return AUDIT_CATEGORIES.map(category => {
-        const isOpen = forceOpenAll || openCategoryId === category.id;
-        const toggleLabel = OPTIONAL_CATEGORIES[category.id];
-        const locked = !!toggleLabel && !!state.notApplicable[category.id];
-        const answered = category.items.filter(i => state.ratings[i.id]).length;
-        const complete = answered === category.items.length;
+
+        const isOpen =
+            forceOpenAll ||
+            openCategoryId === category.id;
+
+        const toggleLabel =
+            OPTIONAL_CATEGORIES[category.id];
+
+        const locked =
+            !!toggleLabel &&
+            !!state.notApplicable[category.id];
+
+        const answered =
+            category.items.filter(
+                i => state.ratings[i.id]
+            ).length;
+
+        const complete =
+            answered === category.items.length;
 
         return `
         <section class="category card ${isOpen ? 'open' : ''}" id="cat-${category.id}">
@@ -1060,20 +1704,33 @@ function buildChecklistHtml(forceOpenAll) {
                 ${category.items.map(item => renderItem(item, locked)).join('')}
             </div>
         </section>`;
+
     }).join('');
 }
 
 function renderChecklist() {
-    const container = document.getElementById('checklist-container');
+    const container =
+        document.getElementById(
+            'checklist-container'
+        );
+
     if (!container) return;
-    container.innerHTML = buildChecklistHtml(false);
+
+    container.innerHTML =
+        buildChecklistHtml(false);
+
     updateStats();
 }
 
 function renderItem(item, locked) {
-    const rating = state.ratings[item.id] || '';
-    const comment = state.comments[item.id] || '';
-    const isMangel = rating === 'mangel';
+    const rating =
+        state.ratings[item.id] || '';
+
+    const comment =
+        state.comments[item.id] || '';
+
+    const isMangel =
+        rating === 'mangel';
 
     return `
     <div class="item ${isMangel ? 'is-mangel' : ''}" data-item-id="${item.id}">
@@ -1098,20 +1755,37 @@ function renderItem(item, locked) {
 }
 
 function toggleCategory(categoryId) {
-    openCategoryId = openCategoryId === categoryId ? null : categoryId;
+    openCategoryId =
+        openCategoryId === categoryId
+            ? null
+            : categoryId;
+
     renderChecklist();
 }
 
 // ===== "Nicht vorhanden"-Schalter fuer optionale Kategorien =====
 function toggleNotApplicable(categoryId, checked) {
-    state.notApplicable[categoryId] = checked;
-    const category = AUDIT_CATEGORIES.find(c => c.id === categoryId);
+    state.notApplicable[categoryId] =
+        checked;
+
+    const category =
+        AUDIT_CATEGORIES.find(
+            c => c.id === categoryId
+        );
 
     if (checked && category) {
+
         category.items.forEach(item => {
-            state.ratings[item.id] = 'na';
+
+            state.ratings[item.id] =
+                'na';
+
             delete state.comments[item.id];
-            state.measures = state.measures.filter(m => m.itemId !== item.id);
+
+            state.measures =
+                state.measures.filter(
+                    m => m.itemId !== item.id
+                );
         });
     }
 
@@ -1120,26 +1794,76 @@ function toggleNotApplicable(categoryId, checked) {
 }
 
 function setRating(itemId, rating) {
+
     // Schutz: waehrend eine Kategorie per Schalter als "nicht vorhanden" markiert ist,
     // bleiben ihre Fragen gesperrt auf N.V. (Buttons sind zusaetzlich disabled).
-    for (const categoryId in OPTIONAL_CATEGORIES) {
-        if (!state.notApplicable[categoryId]) continue;
-        const category = AUDIT_CATEGORIES.find(c => c.id === categoryId);
-        if (category && category.items.some(i => i.id === itemId)) return;
+    for (
+        const categoryId in OPTIONAL_CATEGORIES
+    ) {
+
+        if (
+            !state.notApplicable[categoryId]
+        ) {
+            continue;
+        }
+
+        const category =
+            AUDIT_CATEGORIES.find(
+                c => c.id === categoryId
+            );
+
+        if (
+            category &&
+            category.items.some(
+                i => i.id === itemId
+            )
+        ) {
+            return;
+        }
     }
 
-    const current = state.ratings[itemId];
-    state.ratings[itemId] = current === rating ? '' : rating;
-    if (!state.ratings[itemId]) delete state.ratings[itemId];
+    const current =
+        state.ratings[itemId];
 
-    if (state.ratings[itemId] !== 'mangel') {
+    state.ratings[itemId] =
+        current === rating
+            ? ''
+            : rating;
+
+    if (!state.ratings[itemId]) {
+        delete state.ratings[itemId];
+    }
+
+    if (
+        state.ratings[itemId] !==
+        'mangel'
+    ) {
+
         delete state.comments[itemId];
-        state.measures = state.measures.filter(m => m.itemId !== itemId);
-    } else if (!state.measures.find(m => m.itemId === itemId)) {
+
+        state.measures =
+            state.measures.filter(
+                m => m.itemId !== itemId
+            );
+
+    } else if (
+        !state.measures.find(
+            m => m.itemId === itemId
+        )
+    ) {
+
         state.measures.push({
-            id: Date.now().toString() + Math.random().toString(36).slice(2, 7),
+            id:
+                Date.now().toString() +
+                Math.random()
+                    .toString(36)
+                    .slice(2, 7),
+
             itemId: itemId,
-            description: getMeasureText(itemId),
+
+            description:
+                getMeasureText(itemId),
+
             responsible: '',
             dueDate: '',
             status: 'offen'
@@ -1151,77 +1875,226 @@ function setRating(itemId, rating) {
 }
 
 function updateComment(itemId, value) {
-    state.comments[itemId] = value;
+    state.comments[itemId] =
+        value;
+
     saveState();
 }
 
 // Reine Berechnung, getrennt von der DOM-Aktualisierung - so kann sie auch
 // vom PDF-Deckblatt (drawCoverPage) genutzt werden.
 function computeStats() {
-    const total = totalItemCount();
-    const values = Object.values(state.ratings);
-    const ok = values.filter(v => v === 'ok').length;
-    const mangel = values.filter(v => v === 'mangel').length;
-    const na = values.filter(v => v === 'na').length;
-    const answered = ok + mangel + na;
-    const offen = total - answered;
-    return { total, ok, mangel, na, offen, answered };
+    const total =
+        totalItemCount();
+
+    const values =
+        Object.values(
+            state.ratings
+        );
+
+    const ok =
+        values.filter(
+            v => v === 'ok'
+        ).length;
+
+    const mangel =
+        values.filter(
+            v => v === 'mangel'
+        ).length;
+
+    const na =
+        values.filter(
+            v => v === 'na'
+        ).length;
+
+    const answered =
+        ok + mangel + na;
+
+    const offen =
+        total - answered;
+
+    return {
+        total,
+        ok,
+        mangel,
+        na,
+        offen,
+        answered
+    };
 }
 
 function updateStats() {
-    const { total, ok, mangel, na, offen, answered } = computeStats();
+    const {
+        total,
+        ok,
+        mangel,
+        na,
+        offen,
+        answered
+    } = computeStats();
 
-    const setText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    const setText =
+        (id, val) => {
+
+            const el =
+                document.getElementById(id);
+
+            if (el) {
+                el.textContent = val;
+            }
+        };
+
     setText('stat-ok', ok);
     setText('stat-mangel', mangel);
     setText('stat-na', na);
     setText('stat-offen', offen);
-    setText('progress-label', `${answered} / ${total} geprüft`);
 
-    const fill = document.getElementById('progress-fill');
-    if (fill) fill.style.width = total ? `${Math.round((answered / total) * 100)}%` : '0%';
+    setText(
+        'progress-label',
+        `${answered} / ${total} geprüft`
+    );
+
+    const fill =
+        document.getElementById(
+            'progress-fill'
+        );
+
+    if (fill) {
+        fill.style.width =
+            total
+                ? `${Math.round(
+                    (answered / total) * 100
+                )}%`
+                : '0%';
+    }
 }
 
 // ===== JSON Export / Import =====
 function exportJson() {
-    const dataStr = JSON.stringify(state, null, 2);
-    const blob = new Blob([dataStr], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const dataStr =
+        JSON.stringify(
+            state,
+            null,
+            2
+        );
+
+    const blob =
+        new Blob(
+            [dataStr],
+            {
+                type:
+                    'application/json'
+            }
+        );
+
+    const url =
+        URL.createObjectURL(blob);
+
+    const a =
+        document.createElement('a');
+
     a.href = url;
-    const datum = state.companyInfo.datum || new Date().toISOString().split('T')[0];
-    const firma = (state.companyInfo.firma || 'begehung').replace(/[^a-z0-9äöüß]+/gi, '-');
-    a.download = `ASiC-Handel_${firma}_${datum}.json`;
+
+    const datum =
+        state.companyInfo.datum ||
+        new Date()
+            .toISOString()
+            .split('T')[0];
+
+    const firma =
+        (
+            state.companyInfo.firma ||
+            'begehung'
+        ).replace(
+            /[^a-z0-9äöüß]+/gi,
+            '-'
+        );
+
+    a.download =
+        `ASiC-Handel_${firma}_${datum}.json`;
+
     a.click();
+
     URL.revokeObjectURL(url);
-    showToast('JSON exportiert');
+
+    showToast(
+        'JSON exportiert'
+    );
 }
 
 function importJson(file) {
-    const reader = new FileReader();
+    const reader =
+        new FileReader();
+
     reader.onload = (e) => {
+
         try {
-            const data = JSON.parse(e.target.result);
+
+            const data =
+                JSON.parse(
+                    e.target.result
+                );
+
             state = {
-                companyInfo: { ...defaultState().companyInfo, ...(data.companyInfo || {}) },
-                ratings: data.ratings || {},
-                comments: data.comments || {},
-                measures: data.measures || [],
-                signatures: { ...defaultState().signatures, ...(data.signatures || {}) },
-                notApplicable: data.notApplicable || {}
+
+                companyInfo: {
+                    ...defaultState().companyInfo,
+                    ...(data.companyInfo || {})
+                },
+
+                ratings:
+                    data.ratings || {},
+
+                comments:
+                    data.comments || {},
+
+                measures:
+                    data.measures || [],
+
+                signatures: {
+                    ...defaultState().signatures,
+                    ...(data.signatures || {})
+                },
+
+                notApplicable:
+                    data.notApplicable || {}
             };
+
             saveState();
+
             initCompanyForm();
             renderChecklist();
             renderCompanyInfoStrip();
-            if (typeof renderMeasures === 'function') renderMeasures();
-            if (typeof restoreSignatures === 'function') restoreSignatures();
-            showToast('JSON geladen');
+
+            if (
+                typeof renderMeasures ===
+                'function'
+            ) {
+                renderMeasures();
+            }
+
+            if (
+                typeof restoreSignatures ===
+                'function'
+            ) {
+                restoreSignatures();
+            }
+
+            showToast(
+                'JSON geladen'
+            );
+
         } catch (err) {
+
             console.error(err);
-            showToast('Datei konnte nicht gelesen werden', 'error');
+
+            showToast(
+                'Datei konnte nicht gelesen werden',
+                'error'
+            );
         }
     };
+
     reader.readAsText(file);
 }
 
@@ -1233,40 +2106,141 @@ function importJson(file) {
 // parallel bestehen, bis man separat "Zurücksetzen" nutzt.
 async function archiveCurrentAudit() {
     if (!confirm('Aktuelle Begehung jetzt archivieren? Die laufende Begehung bleibt zusätzlich unverändert bestehen, bis Sie „Zurücksetzen“ nutzen.')) return;
-    try {
-        const photos = await getAllPhotos();
-        const record = {
-            id: 'audit_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8),
-            createdAt: Date.now(),
-            companyInfo: JSON.parse(JSON.stringify(state.companyInfo)),
-            ratings: JSON.parse(JSON.stringify(state.ratings)),
-            comments: JSON.parse(JSON.stringify(state.comments)),
-            measures: JSON.parse(JSON.stringify(state.measures)),
-            signatures: JSON.parse(JSON.stringify(state.signatures)),
-            notApplicable: JSON.parse(JSON.stringify(state.notApplicable || {})),
-            stats: computeStats(),
-            photos: photos
-        };
-        await saveArchivedAudit(record);
-        showToast('Begehung archiviert');
 
-        // Optionaler automatischer NAS-Upload (nur wenn in den Einstellungen
-        // konfiguriert UND aktiviert). Eigener, getrennter Try/Catch-Block:
-        // ein Fehlschlag hier darf NICHT die bereits erfolgreich
-        // abgeschlossene lokale Archivierung als Fehler erscheinen lassen.
-        const webdavConfig = (typeof getWebDAVConfig === 'function') ? getWebDAVConfig() : null;
-        if (webdavConfig && webdavConfig.autoUpload) {
+    try {
+
+        const photos =
+            await getAllPhotos();
+
+        const record = {
+
+            id:
+                'audit_' +
+                Date.now() +
+                '_' +
+                Math.random()
+                    .toString(36)
+                    .slice(2, 8),
+
+            createdAt:
+                Date.now(),
+
+            companyInfo:
+                JSON.parse(
+                    JSON.stringify(
+                        state.companyInfo
+                    )
+                ),
+
+            ratings:
+                JSON.parse(
+                    JSON.stringify(
+                        state.ratings
+                    )
+                ),
+
+            comments:
+                JSON.parse(
+                    JSON.stringify(
+                        state.comments
+                    )
+                ),
+
+            measures:
+                JSON.parse(
+                    JSON.stringify(
+                        state.measures
+                    )
+                ),
+
+            signatures:
+                JSON.parse(
+                    JSON.stringify(
+                        state.signatures
+                    )
+                ),
+
+            notApplicable:
+                JSON.parse(
+                    JSON.stringify(
+                        state.notApplicable || {}
+                    )
+                ),
+
+            stats:
+                computeStats(),
+
+            photos:
+                photos
+        };
+
+        await saveArchivedAudit(record);
+
+        showToast(
+            'Begehung archiviert'
+        );
+
+        // Optionaler automatischer NAS-Upload
+        const webdavConfig =
+            (
+                typeof getWebDAVConfig ===
+                'function'
+            )
+                ? getWebDAVConfig()
+                : null;
+
+        if (
+            webdavConfig &&
+            webdavConfig.autoUpload
+        ) {
+
             try {
-                await uploadArchivedAuditToWebDAV(record);
-                showToast('Zusätzlich auf NAS gesichert');
+
+                await uploadArchivedAuditToWebDAV(
+                    record
+                );
+
+                showToast(
+                    'Zusätzlich auf NAS gesichert'
+                );
+
             } catch (uploadErr) {
-                console.error('NAS-Upload fehlgeschlagen:', uploadErr);
-                showToast('Lokal archiviert, NAS-Upload fehlgeschlagen: ' + (uploadErr && uploadErr.message ? uploadErr.message : 'unbekannter Fehler'), 'error');
+
+                console.error(
+                    'NAS-Upload fehlgeschlagen:',
+                    uploadErr
+                );
+
+                showToast(
+                    'Lokal archiviert, NAS-Upload fehlgeschlagen: ' +
+                    (
+                        uploadErr &&
+                        uploadErr.message
+                            ? uploadErr.message
+                            : 'unbekannter Fehler'
+                    ),
+                    'error'
+                );
             }
         }
+
     } catch (err) {
-        console.error('Archivieren fehlgeschlagen:', err);
-        showToast('Archivieren fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+
+        console.error(
+            'Archivieren fehlgeschlagen:',
+            err
+        );
+
+        showToast(
+            'Archivieren fehlgeschlagen: ' +
+            (
+                err &&
+                err.message
+                    ? err.message
+                    : 'unbekannter Fehler'
+            ),
+            'error'
+        );
     }
 }
 
@@ -1277,22 +2251,50 @@ async function archiveCurrentAudit() {
 // spart eine komplette Parallel-Implementierung der PDF-Erzeugung, die exakt
 // dasselbe noch einmal tun muesste.
 async function buildArchivedReportPdf(record, mode) {
-    const originalState = state;
-    const originalGetAllPhotos = getAllPhotos;
+    const originalState =
+        state;
+
+    const originalGetAllPhotos =
+        getAllPhotos;
+
     state = {
-        companyInfo: record.companyInfo,
-        ratings: record.ratings,
-        comments: record.comments,
-        measures: record.measures,
-        signatures: record.signatures,
-        notApplicable: record.notApplicable || {}
+
+        companyInfo:
+            record.companyInfo,
+
+        ratings:
+            record.ratings,
+
+        comments:
+            record.comments,
+
+        measures:
+            record.measures,
+
+        signatures:
+            record.signatures,
+
+        notApplicable:
+            record.notApplicable || {}
     };
-    getAllPhotos = async () => record.photos || [];
+
+    getAllPhotos =
+        async () =>
+            record.photos || [];
+
     try {
-        return await buildReportPdf(mode);
+
+        return await buildReportPdf(
+            mode
+        );
+
     } finally {
-        state = originalState;
-        getAllPhotos = originalGetAllPhotos;
+
+        state =
+            originalState;
+
+        getAllPhotos =
+            originalGetAllPhotos;
     }
 }
 
@@ -1302,111 +2304,300 @@ async function buildArchivedReportPdf(record, mode) {
 // Umleitung wuerde die Mail faelschlich Markt/Datum der AKTUELL laufenden
 // Begehung zeigen statt der archivierten.
 async function shareArchivedReportPdf(record, mode) {
-    const originalState = state;
-    const originalGetAllPhotos = getAllPhotos;
+    const originalState =
+        state;
+
+    const originalGetAllPhotos =
+        getAllPhotos;
+
     state = {
-        companyInfo: record.companyInfo,
-        ratings: record.ratings,
-        comments: record.comments,
-        measures: record.measures,
-        signatures: record.signatures,
-        notApplicable: record.notApplicable || {}
+
+        companyInfo:
+            record.companyInfo,
+
+        ratings:
+            record.ratings,
+
+        comments:
+            record.comments,
+
+        measures:
+            record.measures,
+
+        signatures:
+            record.signatures,
+
+        notApplicable:
+            record.notApplicable || {}
     };
-    getAllPhotos = async () => record.photos || [];
+
+    getAllPhotos =
+        async () =>
+            record.photos || [];
+
     try {
-        const doc = await buildReportPdf(mode);
-        await sharePdfDoc(doc, reportFilename(mode).replace(/^(Checkliste|Massnahmenplan|Gesamtbericht)_/, 'Archiv_'), buildShareEmailSubject());
+
+        const doc =
+            await buildReportPdf(
+                mode
+            );
+
+        await sharePdfDoc(
+            doc,
+            reportFilename(mode)
+                .replace(
+                    /^(Checkliste|Massnahmenplan|Gesamtbericht)_/,
+                    'Archiv_'
+                ),
+            buildShareEmailSubject()
+        );
+
     } finally {
-        state = originalState;
-        getAllPhotos = originalGetAllPhotos;
+
+        state =
+            originalState;
+
+        getAllPhotos =
+            originalGetAllPhotos;
     }
 }
 
 function resetAll() {
     if (!confirm('Wirklich alle Eingaben zurücksetzen? Dies kann nicht rückgängig gemacht werden.')) return;
-    state = defaultState();
+
+    state =
+        defaultState();
+
     saveState();
+
     initCompanyForm();
-    openCategoryId = null;
+
+    openCategoryId =
+        null;
+
     renderChecklist();
 
     // Fotos gehoeren zur selben Begehung und sollten bei einem Reset ebenfalls
     // verschwinden - sie liegen aber separat in IndexedDB, nicht im state.
-    if (typeof deleteAllPhotos === 'function') {
-        deleteAllPhotos().then(() => {
-            if (typeof loadAndRenderPhotos === 'function') loadAndRenderPhotos();
-        }).catch(err => console.error('Fotos konnten beim Zurücksetzen nicht gelöscht werden:', err));
+    if (
+        typeof deleteAllPhotos ===
+        'function'
+    ) {
+
+        deleteAllPhotos()
+            .then(() => {
+
+                if (
+                    typeof loadAndRenderPhotos ===
+                    'function'
+                ) {
+                    loadAndRenderPhotos();
+                }
+
+            })
+            .catch(
+                err =>
+                    console.error(
+                        'Fotos konnten beim Zurücksetzen nicht gelöscht werden:',
+                        err
+                    )
+            );
     }
 
-    showToast('Zurückgesetzt');
+    showToast(
+        'Zurückgesetzt'
+    );
 }
 
 // ===== Sprachstil-Umschalter (Einfach / BGHW-konform / Rechtlich) =====
 function initStyleSwitch() {
-    const switchEl = document.getElementById('style-switch');
+    const switchEl =
+        document.getElementById(
+            'style-switch'
+        );
+
     if (!switchEl) return;
 
     function updateActiveButton() {
-        switchEl.querySelectorAll('.style-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.style === MEASURE_STYLE);
-        });
+
+        switchEl
+            .querySelectorAll(
+                '.style-btn'
+            )
+            .forEach(btn => {
+
+                btn.classList.toggle(
+                    'active',
+                    btn.dataset.style ===
+                    MEASURE_STYLE
+                );
+            });
     }
 
-    switchEl.querySelectorAll('.style-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            setMeasureStyle(btn.dataset.style);
-            updateActiveButton();
-            renderChecklist(); // aktualisiert die Live-Vorschau bei offenen Mangel-Punkten
+    switchEl
+        .querySelectorAll(
+            '.style-btn'
+        )
+        .forEach(btn => {
+
+            btn.addEventListener(
+                'click',
+                () => {
+
+                    setMeasureStyle(
+                        btn.dataset.style
+                    );
+
+                    updateActiveButton();
+
+                    renderChecklist();
+                }
+            );
         });
-    });
 
     updateActiveButton();
 }
 
 // ===== Initialisierung =====
-document.addEventListener('DOMContentLoaded', () => {
-    loadState();
-    initCompanyForm();
-    initStyleSwitch();
-    renderChecklist();
-    renderCompanyInfoStrip();
-    renderFooterMeta();
+document.addEventListener(
+    'DOMContentLoaded',
+    () => {
 
-    const btnSave = document.getElementById('btn-save');
-    if (btnSave) btnSave.addEventListener('click', () => {
-        saveState();
-        showToast('Gespeichert');
-    });
+        loadState();
 
-    const btnExport = document.getElementById('btn-json-export');
-    if (btnExport) btnExport.addEventListener('click', exportJson);
+        initCompanyForm();
 
-    const importInput = document.getElementById('json-import-input');
-    if (importInput) importInput.addEventListener('change', (e) => {
-        if (e.target.files[0]) importJson(e.target.files[0]);
-        e.target.value = '';
-    });
+        initStyleSwitch();
 
-    const btnReset = document.getElementById('btn-reset');
-    if (btnReset) btnReset.addEventListener('click', resetAll);
+        renderChecklist();
 
-    const btnArchive = document.getElementById('btn-archive');
-    if (btnArchive) btnArchive.addEventListener('click', archiveCurrentAudit);
+        renderCompanyInfoStrip();
 
-    // Aufklappbares Export-Menü (Checkliste/Maßnahmen/Fotos/Alles, Drucken, PDF teilen, Mail) - alle Seiten
-    initExportMenu();
+        renderFooterMeta();
 
-    // Aufklappbares Datei-Menü (Speichern, JSON exportieren/laden, Zurücksetzen) - alle Seiten
-    initDropdownMenu('file-menu-toggle', 'file-menu-panel');
-});
+        const btnSave =
+            document.getElementById(
+                'btn-save'
+            );
+
+        if (btnSave) {
+            btnSave.addEventListener(
+                'click',
+                () => {
+                    saveState();
+                    showToast(
+                        'Gespeichert'
+                    );
+                }
+            );
+        }
+
+        const btnExport =
+            document.getElementById(
+                'btn-json-export'
+            );
+
+        if (btnExport) {
+            btnExport.addEventListener(
+                'click',
+                exportJson
+            );
+        }
+
+        const importInput =
+            document.getElementById(
+                'json-import-input'
+            );
+
+        if (importInput) {
+
+            importInput.addEventListener(
+                'change',
+                (e) => {
+
+                    if (
+                        e.target.files[0]
+                    ) {
+                        importJson(
+                            e.target.files[0]
+                        );
+                    }
+
+                    e.target.value = '';
+                }
+            );
+        }
+
+        const btnReset =
+            document.getElementById(
+                'btn-reset'
+            );
+
+        if (btnReset) {
+            btnReset.addEventListener(
+                'click',
+                resetAll
+            );
+        }
+
+        const btnArchive =
+            document.getElementById(
+                'btn-archive'
+            );
+
+        if (btnArchive) {
+            btnArchive.addEventListener(
+                'click',
+                archiveCurrentAudit
+            );
+        }
+
+        // Aufklappbares Export-Menü
+        // (Checkliste/Maßnahmen/Fotos/Alles,
+        // Drucken, PDF teilen, Mail) - alle Seiten
+        initExportMenu();
+
+        // Aufklappbares Datei-Menü
+        // (Speichern, JSON exportieren/laden,
+        // Zurücksetzen) - alle Seiten
+        initDropdownMenu(
+            'file-menu-toggle',
+            'file-menu-panel'
+        );
+    }
+);
 
 // ===== Service Worker registrieren (fuer Offline-Start ohne Netzwerk) =====
 if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js').catch(err => {
-            // Fehlschlag ist unkritisch - App funktioniert auch ohne SW,
-            // dann eben nur nicht komplett offline startfaehig.
-            console.warn('Service Worker konnte nicht registriert werden:', err);
-        });
-    });
+
+    window.addEventListener(
+        'load',
+        () => {
+
+            navigator.serviceWorker
+                .register('./sw.js')
+
+                .then(
+                    registration => {
+
+                        console.log(
+                            '[SW] Registriert:',
+                            registration.scope
+                        );
+                    }
+                )
+
+                .catch(
+                    err => {
+
+                        // Fehlschlag ist unkritisch - App funktioniert auch ohne SW,
+                        // dann eben nur nicht komplett offline startfaehig.
+                        console.warn(
+                            'Service Worker konnte nicht registriert werden:',
+                            err
+                        );
+                    }
+                );
+        }
+    );
 }
