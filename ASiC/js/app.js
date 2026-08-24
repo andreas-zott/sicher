@@ -464,6 +464,93 @@ function drawCoverStats(doc, y, pageWidth, boxX, boxWidth) {
     return y;
 }
 
+// ===== Verantwortungsblock für Maßnahmen-PDFs ==============================
+// Wird ausschließlich im Maßnahmen-/Gesamtbericht verwendet.
+// Dadurch erscheint der Hinweis automatisch auch bei archivierten Reports,
+// weil diese ebenfalls über buildReportPdf() laufen.
+function renderResponsibilityPdfSection(doc, yStart, margin, contentWidth, pageHeight) {
+    let y = yStart;
+
+    const title = 'VERANTWORTUNG';
+
+    const text =
+        'Die Gesamtverantwortung für die Durchführung der Prüfung sowie ' +
+        'für die Beseitigung festgestellter Mängel liegt bei der Marktleitung. ' +
+        'Einzelne Maßnahmen können an fachlich zuständige Personen zur ' +
+        'Bearbeitung übertragen werden. Die Verantwortung für die ' +
+        'ordnungsgemäße Umsetzung sowie die Aufsichts- und Kontrollpflicht ' +
+        'verbleibt bei der Marktleitung.';
+
+    const innerWidth = contentWidth - 10;
+
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(8.5);
+
+    const lines =
+        doc.splitTextToSize(
+            text,
+            innerWidth
+        );
+
+    const boxPaddingTop = 6;
+    const boxPaddingBottom = 6;
+    const boxHeight =
+        boxPaddingTop +
+        4.5 +
+        2 +
+        (lines.length * 4.2) +
+        boxPaddingBottom;
+
+    // Wenn die Box nicht mehr sinnvoll auf die Seite passt,
+    // auf eine neue Seite wechseln.
+    if (
+        y + boxHeight >
+        pageHeight - 24
+    ) {
+        doc.addPage();
+        y = 18;
+    }
+
+    // Dezente Box
+    doc.setFillColor(248, 249, 250);
+    doc.setDrawColor(220, 225, 228);
+    doc.setLineWidth(0.3);
+
+    doc.roundedRect(
+        margin,
+        y,
+        contentWidth,
+        boxHeight,
+        2,
+        2,
+        'FD'
+    );
+
+    // Überschrift
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(8.5);
+    doc.setTextColor(150, 95, 20);
+
+    doc.text(
+        title,
+        margin + 5,
+        y + boxPaddingTop
+    );
+
+    // Text
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(8.5);
+    doc.setTextColor(51, 65, 85);
+
+    doc.text(
+        lines,
+        margin + 5,
+        y + boxPaddingTop + 7
+    );
+
+    return y + boxHeight + 8;
+}
+
 // Zeichnet bis zu 4 Fotos pro DIN-A4-Seite (2x2-Raster) inkl. Kommentarzeile in
 // ein bereits geoeffnetes jsPDF-Dokument, beginnend bei der uebergebenen
 // Y-Position. Foto-Blobs kommen aus IndexedDB, daher async. Legt bei Bedarf
@@ -941,6 +1028,28 @@ async function buildPdf(includeChecklist, includeFotos) {
 
         y += 9;
     }
+
+    // ======================================================================
+    // VERANTWORTUNG
+    // ======================================================================
+    //
+    // Dieser Hinweis gehört fachlich zum Maßnahmenbereich und wird deshalb
+    // sowohl beim reinen Maßnahmen-PDF als auch beim Gesamtbericht
+    // ausgegeben. Da archivierte Berichte ebenfalls buildPdf() verwenden,
+    // erscheint er auch dort automatisch.
+    //
+    y = renderResponsibilityPdfSection(
+        doc,
+        y,
+        margin,
+        contentWidth,
+        pageHeight
+    );
+
+
+    // ======================================================================
+    // MASSNAHMEN
+    // ======================================================================
 
     if (state.measures.length === 0) {
 
@@ -2049,7 +2158,7 @@ function importJson(file) {
                     data.comments || {},
 
                 measures:
-                    data.measures || [],
+                    data.measures || {},
 
                 signatures: {
                     ...defaultState().signatures,
