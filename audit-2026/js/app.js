@@ -100,7 +100,7 @@ function showToast(message, type = 'success') {
     toast.className = `toast ${type}`;
     toast.textContent = message;
     document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 2600);
+    setTimeout(() => toast.remove(), type === 'error' ? 6000 : 2600);
 }
 
 // ===== Vorgefertigter Mail-Text beim PDF-Versand =====
@@ -162,7 +162,9 @@ function initDropdownMenu(toggleId, panelId) {
 // ===== Export-Menü: Modus-Auswahl (Checkliste / Maßnahmen / Beide) + Aktionen =====
 // Auf beiden Seiten identisch nutzbar - Vorauswahl richtet sich danach, auf
 // welcher Seite man sich gerade befindet (erkennbar an den vorhandenen Elementen).
-let exportMode = document.getElementById('measures-container') ? 'massnahmen' : 'checkliste';
+let exportMode = document.getElementById('measures-container') ? 'massnahmen'
+    : document.getElementById('photo-grid') ? 'fotos'
+    : 'checkliste';
 
 function initExportMenu() {
     initDropdownMenu('export-menu-toggle', 'export-menu-panel');
@@ -226,7 +228,7 @@ async function sharePdfDoc(doc, filename, shareTitle) {
         showToast('PDF heruntergeladen');
     } catch (err) {
         console.error('PDF-Erzeugung fehlgeschlagen:', err);
-        showToast('PDF konnte nicht erzeugt werden', 'error');
+        showToast('PDF-Fehler: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
     }
 }
 
@@ -326,6 +328,321 @@ function checklistPdfHeaderLines() {
     ];
 }
 
+// ===== Deckblatt (Titelseite mit Betriebsdaten), wird jedem PDF vorangestellt =====
+function drawCoverPage(doc, pageWidth, pageHeight, margin, documentTitle, documentSubtitle) {
+    // Roter Kopfbalken mit Markenname
+    doc.setFillColor(204, 7, 30);
+    doc.rect(0, 0, pageWidth, 42, 'F');
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(28);
+    doc.setTextColor(255, 255, 255);
+    doc.text('ASiC Handel', pageWidth / 2, 24, { align: 'center' });
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(11);
+    doc.text('Arbeitssicherheits-Check', pageWidth / 2, 33, { align: 'center' });
+
+    let y = 80;
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(20);
+    doc.setTextColor(28, 34, 38);
+    doc.text(documentTitle, pageWidth / 2, y, { align: 'center' });
+    y += 8;
+    if (documentSubtitle) {
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(10.5);
+        doc.setTextColor(120, 130, 138);
+        doc.text(documentSubtitle, pageWidth / 2, y, { align: 'center' });
+        y += 14;
+    } else {
+        y += 14;
+    }
+
+    // Betriebsdaten zentriert als Liste
+    const ci = state.companyInfo;
+    const rows = [
+        ['Firma / Markt', ci.firma || '-'],
+        ['Standort', ci.standort || '-'],
+        ['Datum', ci.datum ? formatDate(ci.datum) : '-'],
+        ['Prüfer', ci.pruefername || '-'],
+        ['Marktleitung', ci.marktleitung || '-'],
+        ['Teilnehmer', ci.teilnehmer || '-']
+    ];
+
+    const boxWidth = 120;
+    const boxX = (pageWidth - boxWidth) / 2;
+
+    rows.forEach(([label, value]) => {
+        doc.setFont(undefined, 'bold');
+        doc.setFontSize(8.5);
+        doc.setTextColor(140, 148, 155);
+        doc.text(label.toUpperCase(), boxX, y);
+        y += 5.5;
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(12.5);
+        doc.setTextColor(28, 34, 38);
+        const lines = doc.splitTextToSize(String(value), boxWidth);
+        doc.text(lines, boxX, y);
+        y += lines.length * 5.5 + 2;
+        doc.setDrawColor(225);
+        doc.setLineWidth(0.25);
+        doc.line(boxX, y, boxX + boxWidth, y);
+        y += 9;
+    });
+
+    // Statistik: Status der Begehung als horizontaler Segmentbalken + Legende
+    y = drawCoverStats(doc, y, pageWidth, boxX, boxWidth);
+
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(8.5);
+    doc.setTextColor(150);
+    const erstellt = new Date().toISOString().split('T')[0];
+    doc.text(`ASiC Handel Rev. ${APP_REVISION} · Erstellt am ${formatDate(erstellt)}`, pageWidth / 2, pageHeight - 15, { align: 'center' });
+
+    doc.addPage();
+}
+
+// Segmentbalken (OK/Mangel/N.V./Offen) + Legende mit Zahlen und Prozentwerten,
+// spiegelt dieselbe Berechnung wie die Fortschrittsanzeige auf der Checkliste-Seite.
+function drawCoverStats(doc, y, pageWidth, boxX, boxWidth) {
+    const { total, ok, mangel, na, offen, answered } = computeStats();
+    if (total === 0) return y;
+
+    y += 6;
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(9);
+    doc.setTextColor(80, 88, 95);
+    doc.text('STATUS DER BEGEHUNG', boxX, y);
+    doc.setFont(undefined, 'normal');
+    doc.text(`${answered} / ${total} geprüft`, boxX + boxWidth, y, { align: 'right' });
+    y += 5;
+
+    // Segmentbalken
+    const barHeight = 6;
+    const segments = [
+        { value: ok, color: [47, 158, 100] },      // Gruen - In Ordnung
+        { value: mangel, color: [214, 69, 63] },   // Rot - Mangel
+        { value: na, color: [124, 135, 144] },     // Grau - N.V.
+        { value: offen, color: [222, 226, 229] }   // Hellgrau - noch offen
+    ];
+    let segX = boxX;
+    segments.forEach(seg => {
+        const segWidth = (seg.value / total) * boxWidth;
+        if (segWidth > 0) {
+            doc.setFillColor(seg.color[0], seg.color[1], seg.color[2]);
+            doc.rect(segX, y, segWidth, barHeight, 'F');
+        }
+        segX += segWidth;
+    });
+    doc.setDrawColor(210);
+    doc.setLineWidth(0.25);
+    doc.rect(boxX, y, boxWidth, barHeight, 'S');
+    y += barHeight + 7;
+
+    // Legende: vier Spalten mit Farbpunkt, Label und Anzahl
+    const legend = [
+        { label: 'In Ordnung', value: ok, color: [47, 158, 100] },
+        { label: 'Mangel', value: mangel, color: [214, 69, 63] },
+        { label: 'N.V.', value: na, color: [124, 135, 144] },
+        { label: 'Offen', value: offen, color: [180, 186, 191] }
+    ];
+    const colWidth = boxWidth / legend.length;
+    legend.forEach((item, i) => {
+        const x = boxX + i * colWidth;
+        doc.setFillColor(item.color[0], item.color[1], item.color[2]);
+        doc.circle(x + 1.5, y - 1, 1.5, 'F');
+        doc.setFont(undefined, 'bold');
+        doc.setFontSize(11);
+        doc.setTextColor(28, 34, 38);
+        doc.text(String(item.value), x + 5, y);
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(7.5);
+        doc.setTextColor(120, 130, 138);
+        doc.text(item.label, x + 5, y + 4);
+    });
+    y += 12;
+
+    return y;
+}
+
+// Zeichnet bis zu 4 Fotos pro DIN-A4-Seite (2x2-Raster) inkl. Kommentarzeile in
+// ein bereits geoeffnetes jsPDF-Dokument, beginnend bei der uebergebenen
+// Y-Position. Foto-Blobs kommen aus IndexedDB, daher async. Legt bei Bedarf
+// automatisch neue Seiten an (max. 4 Fotos je Seite).
+async function renderFotosSection(doc, yStart, margin, contentWidth, pageHeight, photos, captionFn) {
+    let y = yStart;
+
+    if (!photos || photos.length === 0) {
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(11);
+        doc.setTextColor(0);
+        doc.text('Keine Fotos erfasst.', margin, y);
+        return y + 10;
+    }
+
+    const gapX = 8;
+    const gapY = 10;
+    const cellWidth = (contentWidth - gapX) / 2;
+    const imageHeight = 62;
+    const commentHeight = 16;
+    const cellHeight = imageHeight + commentHeight + 6;
+    const pageStartY = y;
+
+    for (let i = 0; i < photos.length; i++) {
+        const posOnPage = i % 4;
+        const col = posOnPage % 2;
+        const row = Math.floor(posOnPage / 2);
+
+        if (posOnPage === 0 && i > 0) {
+            doc.addPage();
+            y = pageStartY;
+        }
+
+        const cellX = margin + col * (cellWidth + gapX);
+        const cellY = y + row * (cellHeight + gapY);
+        const photo = photos[i];
+
+        doc.setDrawColor(226, 232, 240);
+        doc.setLineWidth(0.3);
+        doc.roundedRect(cellX, cellY, cellWidth, cellHeight, 2, 2, 'S');
+
+        try {
+            const dataUrl = await blobToDataUrl(photo.blob);
+            const dims = await getImageDimensions(dataUrl);
+            const fit = fitImage(dims.width, dims.height, cellWidth - 4, imageHeight - 4);
+            const imgX = cellX + (cellWidth - fit.width) / 2;
+            const imgY = cellY + 2 + (imageHeight - 4 - fit.height) / 2;
+            doc.addImage(dataUrl, 'JPEG', imgX, imgY, fit.width, fit.height);
+        } catch (e) {
+            doc.setFont(undefined, 'normal');
+            doc.setFontSize(8);
+            doc.setTextColor(180);
+            doc.text('Bild konnte nicht geladen werden', cellX + 3, cellY + imageHeight / 2);
+        }
+
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(8.5);
+        doc.setTextColor(51, 65, 85);
+        // captionFn ermoeglicht abweichende Beschriftung (z. B. Massnahmen-Bezug
+        // statt reinem Freitext-Kommentar) - ohne captionFn unveraendertes
+        // Verhalten der allgemeinen Fotodokumentation.
+        const commentText = captionFn
+            ? captionFn(photo, i)
+            : (photo.comment && photo.comment.trim() ? photo.comment : '');
+        const commentLines = doc.splitTextToSize(commentText, cellWidth - 6).slice(0, 3);
+        doc.text(commentLines, cellX + 3, cellY + imageHeight + 6);
+    }
+
+    // Y-Position ans Ende des zuletzt genutzten Rasters setzen (fuer evtl. nachfolgenden Inhalt)
+    const lastRow = Math.floor(((photos.length - 1) % 4) / 2);
+    return pageStartY + (lastRow + 1) * (cellHeight + gapY) + 4;
+}
+
+// Fotos, die direkt an einzelnen Massnahmen haengen, als eigener Anhang -
+// gruppiert pro Massnahme (Frage-Bezug als Ueberschrift), jede Gruppe nutzt
+// intern dieselbe getestete 2x2-Raster-Logik wie renderFotosSection(). Wird
+// unabhaengig vom "includeFotos"-Schalter aufgerufen, sobald ueberhaupt
+// Massnahmen-Fotos vorhanden sind - das ist eine bewusst eigene Sache
+// gegenueber der allgemeinen Fotodokumentation.
+async function renderMeasurePhotosAppendix(doc, margin, contentWidth, pageHeight, measures) {
+    const groups = [];
+    for (const measure of measures) {
+        let photos;
+        try {
+            photos = await getPhotosForMeasure(measure.id);
+        } catch (e) {
+            photos = [];
+        }
+        if (photos.length > 0) groups.push({ measure, photos });
+    }
+    if (groups.length === 0) return false;
+
+    doc.addPage();
+    let y = 18;
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(14);
+    doc.setTextColor(28, 34, 38);
+    doc.text('Fotos zu den Maßnahmen', margin, y);
+    y += 9;
+
+  for (const group of groups) {
+    // Genug Platz fuer Ueberschrift + mindestens eine Bildreihe sicherstellen,
+    // sonst neue Seite fuer diese Massnahmen-Gruppe beginnen.
+    if (y > pageHeight - 95) {
+        doc.addPage();
+        y = 18;
+    }
+
+    const found = findItemById(group.measure.itemId);
+    // ÄNDERUNG: `${found.item.text}` wurde entfernt
+    const label = found ? `[${group.measure.itemId}]` : 'Manuell erfasste Maßnahme';
+    
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(10);
+    doc.setTextColor(30, 41, 59);
+    const labelLines = doc.splitTextToSize(label, contentWidth);
+    doc.text(labelLines, margin, y);
+    y += labelLines.length * 5 + 3;
+
+    y = await renderFotosSection(doc, y, margin, contentWidth, pageHeight, group.photos);
+    y += 6;
+}
+
+return true;
+}
+
+
+// Eigenstaendiger Foto-PDF-Export (Modus "fotos"): Deckblatt mit Bezug zur
+// Begehungsliste + alle Fotos im 2x2-Raster. Async, da Fotos aus IndexedDB
+// geladen werden.
+async function buildFotosPdf() {
+    if (typeof window.jspdf === 'undefined' || !window.jspdf.jsPDF) {
+        throw new Error('jsPDF-Bibliothek nicht geladen (window.jspdf fehlt). Bitte prüfen, ob "js/jspdf.umd.min.js" korrekt eingebunden ist, und die Seite neu laden.');
+    }
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const pageWidth = 210, pageHeight = 297, margin = 14;
+    const contentWidth = pageWidth - margin * 2;
+
+    drawCoverPage(doc, pageWidth, pageHeight, margin, 'Fotodokumentation', 'Begehungsprotokoll – Bildanhang');
+
+    let y = 18;
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(18);
+    doc.setTextColor(28, 34, 38);
+    doc.text('ASiC Handel – Fotodokumentation', pageWidth / 2, y, { align: 'center' });
+    y += 9;
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(9.5);
+    doc.setTextColor(90, 100, 108);
+    checklistPdfHeaderLines().forEach(line => {
+        doc.text(line, pageWidth / 2, y, { align: 'center' });
+        y += 5;
+    });
+    y += 1;
+    doc.setDrawColor(220);
+    doc.line(margin, y, pageWidth - margin, y);
+    y += 8;
+
+    const photos = await getUnlinkedPhotos();
+    await renderFotosSection(doc, y, margin, contentWidth, pageHeight, photos);
+
+    const totalPages = doc.getNumberOfPages();
+    for (let i = 2; i <= totalPages; i++) {
+        doc.setPage(i);
+        doc.setFontSize(8);
+        doc.setTextColor(140);
+        doc.text(`${i}/${totalPages}`, pageWidth - margin, pageHeight - 8, { align: 'right' });
+    }
+
+    return doc;
+}
+
+function fotosPdfFilename() {
+    const firma = (state.companyInfo.firma || 'markt').replace(/[^a-z0-9äöüß]+/gi, '-');
+    const datum = state.companyInfo.datum || new Date().toISOString().split('T')[0];
+    return `Fotodokumentation_${firma}_${datum}.pdf`;
+}
+
 function checklistPdfFilename() {
     const firma = (state.companyInfo.firma || 'markt').replace(/[^a-z0-9äöüß]+/gi, '-');
     const datum = state.companyInfo.datum || new Date().toISOString().split('T')[0];
@@ -333,10 +650,16 @@ function checklistPdfFilename() {
 }
 
 function buildChecklistPdf() {
+    if (typeof window.jspdf === 'undefined' || !window.jspdf.jsPDF) {
+        throw new Error('jsPDF-Bibliothek nicht geladen (window.jspdf fehlt). Bitte prüfen, ob "js/jspdf.umd.min.js" korrekt eingebunden ist, und die Seite neu laden.');
+    }
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
     const pageWidth = 210, pageHeight = 297, margin = 14;
     const contentWidth = pageWidth - margin * 2;
+
+    drawCoverPage(doc, pageWidth, pageHeight, margin, 'Checkliste');
+
     let y = 18;
 
     doc.setFont(undefined, 'bold');
@@ -359,8 +682,9 @@ function buildChecklistPdf() {
 
     y = renderChecklistPdfSection(doc, y, margin, contentWidth, pageHeight);
 
+    // Seitenzahl auf allen Seiten AUSSER dem Deckblatt (Seite 1)
     const totalPages = doc.getNumberOfPages();
-    for (let i = 1; i <= totalPages; i++) {
+    for (let i = 2; i <= totalPages; i++) {
         doc.setPage(i);
         doc.setFontSize(8);
         doc.setTextColor(140);
@@ -371,9 +695,14 @@ function buildChecklistPdf() {
 }
 
 async function shareChecklistPdf() {
-    const doc = buildChecklistPdf();
-    const filename = checklistPdfFilename();
-    await sharePdfDoc(doc, filename, buildShareEmailSubject());
+    try {
+        const doc = buildChecklistPdf();
+        const filename = checklistPdfFilename();
+        await sharePdfDoc(doc, filename, buildShareEmailSubject());
+    } catch (err) {
+        console.error('Checkliste-PDF konnte nicht erzeugt werden:', err);
+        showToast('PDF-Fehler: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+    }
 }
 
 // ===== Maßnahmen-PDF (mit optionaler Checkliste voran) =====
@@ -384,11 +713,18 @@ function pdfFilename() {
     return `Massnahmenplan_${firma}_${datum}.pdf`;
 }
 
-function buildPdf(includeChecklist) {
+async function buildPdf(includeChecklist, includeFotos) {
+    if (typeof window.jspdf === 'undefined' || !window.jspdf.jsPDF) {
+        throw new Error('jsPDF-Bibliothek nicht geladen (window.jspdf fehlt). Bitte prüfen, ob "js/jspdf.umd.min.js" korrekt eingebunden ist, und die Seite neu laden.');
+    }
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
     const pageWidth = 210, pageHeight = 297, margin = 14;
     const contentWidth = pageWidth - margin * 2;
+
+    const coverTitle = includeChecklist ? 'Gesamtbericht' : 'Maßnahmen';
+    drawCoverPage(doc, pageWidth, pageHeight, margin, coverTitle);
+
     let y = 18;
 
     doc.setFont(undefined, 'bold');
@@ -428,12 +764,19 @@ function buildPdf(includeChecklist) {
     } else {
         const padding = 6;
         const innerWidth = contentWidth - padding * 2;
-        const colWidth = innerWidth / 3;
-        const colX = [0, 1, 2].map(i => margin + padding + i * colWidth);
+        const thumbSize = 22;
+        const thumbGap = 3;
+        const thumbsPerRow = Math.max(1, Math.floor((innerWidth + thumbGap) / (thumbSize + thumbGap)));
 
-        state.measures.forEach((measure, index) => {
+        for (let index = 0; index < state.measures.length; index++) {
+            const measure = state.measures[index];
             const found = findItemById(measure.itemId);
             const questionText = found ? `${index + 1}. [${measure.itemId}] ${found.item.text}` : `${index + 1}. Manuell erfasste Maßnahme`;
+
+            let photos = [];
+            try { photos = await getPhotosForMeasure(measure.id); } catch (e) { photos = []; }
+            const photoRows = photos.length > 0 ? Math.ceil(photos.length / thumbsPerRow) : 0;
+            const photoBlockH = photoRows > 0 ? photoRows * (thumbSize + thumbGap) + 3 : 0;
 
             doc.setFont(undefined, 'bold');
             doc.setFontSize(10);
@@ -445,8 +788,8 @@ function buildPdf(includeChecklist) {
 
             const questionH = questionLines.length * 5;
             const answerH = answerLines.length * 4.3;
-            const tileH = 11;
-            const cardHeight = padding + questionH + 1 + 4.5 + answerH + 6 + tileH + padding;
+            const statusH = 11;
+            const cardHeight = padding + questionH + 1 + 4.5 + photoBlockH + 4.5 + answerH + 6 + statusH + padding;
 
             if (y + cardHeight > pageHeight - 24) {
                 doc.addPage();
@@ -468,6 +811,31 @@ function buildPdf(includeChecklist) {
             doc.line(margin + padding, cy, margin + contentWidth - padding, cy);
             cy += 4.5;
 
+            // Fotos zur Maßnahme direkt zwischen Frage und Maßnahmentext -
+            // kompakte Vorschaubild-Reihe statt separatem Anhang, damit auf
+            // einen Blick zusammensteht, was das Problem ist und wie es
+            // belegt wurde. Am Bildschirm bleiben die Fotos trotz kleiner
+            // Druckgröße beliebig zoombar, nur auf Papier wirken sie kleiner.
+            if (photos.length > 0) {
+                for (let p = 0; p < photos.length; p++) {
+                    const col = p % thumbsPerRow;
+                    const row = Math.floor(p / thumbsPerRow);
+                    const tx = margin + padding + col * (thumbSize + thumbGap);
+                    const ty = cy + row * (thumbSize + thumbGap);
+                    doc.setDrawColor(226, 232, 240);
+                    doc.roundedRect(tx, ty, thumbSize, thumbSize, 1.5, 1.5, 'S');
+                    try {
+                        const dataUrl = await blobToDataUrl(photos[p].blob);
+                        const dims = await getImageDimensions(dataUrl);
+                        const fit = fitImage(dims.width, dims.height, thumbSize - 2, thumbSize - 2);
+                        const imgX = tx + (thumbSize - fit.width) / 2;
+                        const imgY = ty + (thumbSize - fit.height) / 2;
+                        doc.addImage(dataUrl, 'JPEG', imgX, imgY, fit.width, fit.height);
+                    } catch (e) { /* Bild konnte nicht geladen werden, Rahmen bleibt sichtbar */ }
+                }
+                cy += photoBlockH;
+            }
+
             doc.setFont(undefined, 'bold');
             doc.setFontSize(7.5);
             doc.setTextColor(200, 130, 20);
@@ -480,28 +848,22 @@ function buildPdf(includeChecklist) {
             doc.text(answerLines, margin + padding, cy);
             cy += answerH + 6;
 
-            const labels = ['VERANTWORTLICH', 'FRIST', 'STATUS'];
             doc.setFont(undefined, 'bold');
             doc.setFontSize(7);
             doc.setTextColor(100, 116, 139);
-            labels.forEach((label, i) => doc.text(label, colX[i], cy));
+            doc.text('STATUS', margin + padding, cy);
             cy += 4.3;
-
-            doc.setFont(undefined, 'normal');
-            doc.setFontSize(9);
-            doc.setTextColor(30, 41, 59);
-            doc.text(measure.responsible || '-', colX[0], cy);
-            doc.text(measure.dueDate ? formatDate(measure.dueDate) : '-', colX[1], cy);
 
             const statusLabel = measure.status === 'offen' ? 'Offen' : measure.status === 'bearbeitung' ? 'In Bearbeitung' : 'Erledigt';
             const statusColor = measure.status === 'offen' ? [214, 69, 63] : measure.status === 'bearbeitung' ? [201, 127, 26] : [47, 158, 100];
             doc.setFont(undefined, 'bold');
+            doc.setFontSize(9);
             doc.setTextColor(...statusColor);
-            doc.text(statusLabel, colX[2], cy);
+            doc.text(statusLabel, margin + padding, cy);
             doc.setTextColor(0);
 
             y += cardHeight + 5;
-        });
+        }
     }
 
     if (y + 55 > pageHeight - 20) {
@@ -538,8 +900,24 @@ function buildPdf(includeChecklist) {
         doc.text(`${sig.label}: ${sig.name || '-'}`, x, y + sigHeight + 5);
     });
 
+    if (includeFotos) {
+        doc.addPage();
+        y = 18;
+        doc.setFont(undefined, 'bold');
+        doc.setFontSize(14);
+        doc.setTextColor(28, 34, 38);
+        doc.text('Fotodokumentation', margin, y);
+        y += 9;
+        const photos = await getUnlinkedPhotos();
+        await renderFotosSection(doc, y, margin, contentWidth, pageHeight, photos);
+    }
+
+    // Fotos zu einzelnen Massnahmen als eigener Anhang - unabhaengig vom
+    // "includeFotos"-Schalter, da das inhaltlich zum Massnahmenteil gehoert.
+    await renderMeasurePhotosAppendix(doc, margin, contentWidth, pageHeight, state.measures);
+
     const totalPages = doc.getNumberOfPages();
-    for (let i = 1; i <= totalPages; i++) {
+    for (let i = 2; i <= totalPages; i++) {
         doc.setPage(i);
         doc.setFontSize(8);
         doc.setTextColor(140);
@@ -549,121 +927,57 @@ function buildPdf(includeChecklist) {
     return doc;
 }
 
-// ===== Maßnahmen als HTML fuer den Druck (statische Unterschrift-Bilder statt Canvas) =====
-function buildMeasuresPrintHtml() {
-    let html = '<div class="section-title">Maßnahmen</div>';
-
-    if (state.measures.length === 0) {
-        html += '<p class="no-measures card" style="padding:1.5rem;">Keine Mängel erfasst.</p>';
-    } else {
-        html += '<div class="measures-list">' + state.measures.map((measure, index) => {
-            const found = measure.itemId ? findItemById(measure.itemId) : null;
-            const questionText = found ? `[${measure.itemId}] ${found.item.text}` : 'Manuell erfasste Maßnahme';
-            const statusLabel = measure.status === 'offen' ? 'Offen' : measure.status === 'bearbeitung' ? 'In Bearbeitung' : 'Erledigt';
-            return `
-            <div class="measure-card card">
-                <div class="measure-question">
-                    <span class="measure-number">${index + 1}.</span>
-                    <span class="measure-question-text">${questionText}</span>
-                </div>
-                <div class="measure-answer">
-                    <span class="measure-answer-label">Maßnahme</span>
-                    <p class="measure-answer-text">${measure.description || ''}</p>
-                </div>
-                <div class="measure-tile">
-                    <div class="tile-field"><span class="label">Verantwortlich</span><span class="tile-value">${measure.responsible || '-'}</span></div>
-                    <div class="tile-field"><span class="label">Frist</span><span class="tile-value">${measure.dueDate ? formatDate(measure.dueDate) : '-'}</span></div>
-                    <div class="tile-field"><span class="label">Status</span><span class="status-badge ${measure.status}">${statusLabel}</span></div>
-                </div>
-            </div>`;
-        }).join('') + '</div>';
-    }
-
-    html += '<div class="section-title" style="margin-top:1.5rem;">Unterschriften</div>';
-    html += '<div class="signatures-grid">';
-    [
-        { key: 'pruefer', label: 'Prüfer', name: state.companyInfo.pruefername },
-        { key: 'marktleitung', label: 'Marktleitung', name: state.companyInfo.marktleitung }
-    ].forEach(sig => {
-        html += `
-        <div class="card signature-block">
-            <div class="field"><label>${sig.label}</label><div class="value">${sig.name || '-'}</div></div>
-            ${state.signatures[sig.key]
-                ? `<img src="${state.signatures[sig.key]}" alt="Unterschrift ${sig.label}" style="max-width:100%; border:1px solid var(--line); border-radius:8px; display:block;">`
-                : '<p style="color:var(--steel); font-size:0.85rem;">Keine Unterschrift vorhanden.</p>'}
-        </div>`;
-    });
-    html += '</div>';
-
-    return html;
-}
-
-// ===== Vereinheitlichter Export: Modus 'checkliste' | 'massnahmen' | 'beide' =====
+// ===== Vereinheitlichter Export: Modus 'checkliste' | 'massnahmen' | 'fotos' | 'alle' =====
 function reportFilename(mode) {
     if (mode === 'checkliste') return checklistPdfFilename();
     if (mode === 'massnahmen') return pdfFilename();
+    if (mode === 'fotos') return fotosPdfFilename();
     return checklistPdfFilename().replace('Checkliste_', 'Gesamtbericht_');
 }
 
-function buildReportPdf(mode) {
+async function buildReportPdf(mode) {
     if (mode === 'checkliste') return buildChecklistPdf();
-    if (mode === 'massnahmen') return buildPdf(false);
-    return buildPdf(true);
+    if (mode === 'massnahmen') return buildPdf(false, false);
+    if (mode === 'fotos') return await buildFotosPdf();
+    return await buildPdf(true, true);
 }
 
 async function shareReportPdf(mode) {
-    const doc = buildReportPdf(mode);
-    await sharePdfDoc(doc, reportFilename(mode), buildShareEmailSubject());
+    try {
+        const doc = await buildReportPdf(mode);
+        await sharePdfDoc(doc, reportFilename(mode), buildShareEmailSubject());
+    } catch (err) {
+        console.error('Report-PDF konnte nicht erzeugt werden:', err);
+        showToast('PDF-Fehler: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+    }
 }
 
-// Druckt je nach Modus die Checkliste, die Maßnahmen (inkl. Unterschriften) oder beides -
-// funktioniert unabhaengig davon, auf welcher der beiden Seiten man sich gerade befindet.
-function printReport(mode) {
-    const printChecklist = document.getElementById('print-checklist-container');
-    const printMeasures = document.getElementById('print-measures-container');
-    const liveChecklist = document.getElementById('checklist-container');
-    const liveMeasures = document.getElementById('measures-container');
-    const liveNoMeasures = document.getElementById('no-measures');
-    const liveSignatureBlocks = document.querySelectorAll('.signature-block');
-
-    const wantChecklist = mode === 'checkliste' || mode === 'beide';
-    const wantMeasures = mode === 'massnahmen' || mode === 'beide';
-
-    if (printChecklist) {
-        // Auf massnahmen.html: Checkliste fuer den Druck injizieren
-        printChecklist.innerHTML = wantChecklist ? buildChecklistHtml(true) : '';
-    } else if (liveChecklist) {
-        // Auf index.html: vorhandene Live-Ansicht ein-/ausblenden statt zu duplizieren
-        liveChecklist.style.display = wantChecklist ? '' : 'none';
+// Druckt je nach Modus die Checkliste, die Maßnahmen (inkl. Unterschriften), die Fotos
+// oder alles zusammen - funktioniert unabhaengig davon, auf welcher Seite man sich
+// gerade befindet. Drucken: erzeugt dieselbe fertig paginierte PDF wie "PDF teilen"
+// (mit korrektem Zeilenumbruch, Seitenabstand, Deckblatt und Seitenzahlen) und
+// oeffnet sie in einem neuen Tab. Dort druckt man ueber den nativen PDF-Betrachter
+// (auf dem iPad: Teilen-Symbol -> Drucken/AirPrint). Dieser Weg umgeht zuverlaessig
+// die Einschraenkungen von window.print() auf einer HTML-Seite (Browser-eigene
+// Kopf-/Fusszeile mit URL/Datum, unzuverlaessige Seitenumbrueche).
+async function printReport(mode) {
+    try {
+        const doc = await buildReportPdf(mode);
+        const blob = doc.output('blob');
+        const url = URL.createObjectURL(blob);
+        const win = window.open(url, '_blank');
+        if (win) {
+            showToast('PDF geöffnet – über das Teilen-Symbol drucken');
+        } else {
+            // Pop-up blockiert: PDF stattdessen herunterladen, manuell drucken
+            doc.save(reportFilename(mode));
+            showToast('Pop-up blockiert – PDF heruntergeladen');
+        }
+    } catch (err) {
+        console.error('Drucken fehlgeschlagen:', err);
+        showToast('PDF-Fehler: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
     }
-
-    if (liveMeasures) {
-        // Auf massnahmen.html: vorhandene Live-Ansicht ein-/ausblenden statt zu duplizieren
-        liveMeasures.style.display = wantMeasures ? '' : 'none';
-        if (liveNoMeasures) liveNoMeasures.style.display = wantMeasures ? '' : 'none';
-        liveSignatureBlocks.forEach(el => { el.style.display = wantMeasures ? '' : 'none'; });
-    } else if (printMeasures) {
-        // Auf index.html: Maßnahmen + Unterschriften fuer den Druck injizieren
-        printMeasures.innerHTML = wantMeasures ? buildMeasuresPrintHtml() : '';
-    }
-
-    setTimeout(() => window.print(), 50);
 }
-
-window.addEventListener('afterprint', () => {
-    const printChecklist = document.getElementById('print-checklist-container');
-    const printMeasures = document.getElementById('print-measures-container');
-    const liveChecklist = document.getElementById('checklist-container');
-    const liveMeasures = document.getElementById('measures-container');
-    const liveNoMeasures = document.getElementById('no-measures');
-
-    if (printChecklist) printChecklist.innerHTML = '';
-    if (printMeasures) printMeasures.innerHTML = '';
-    if (liveChecklist) liveChecklist.style.display = '';
-    if (liveMeasures) liveMeasures.style.display = '';
-    if (liveNoMeasures) liveNoMeasures.style.display = '';
-    document.querySelectorAll('.signature-block').forEach(el => { el.style.display = ''; });
-});
 
 // ===== Betriebsdaten: Formular (index.html) =====
 function initCompanyForm() {
@@ -708,6 +1022,7 @@ function renderCompanyInfoStrip() {
 // die bei Aktivierung komplett als N.V. markiert und gesperrt wird.
 const OPTIONAL_CATEGORIES = {
     'kundenaufzug': 'Kein Kundenaufzug im Markt vorhanden',
+    'lastenaufzug': 'Kein Lastenaufzug im Markt vorhanden',
     'barrierefreies-wc': 'Kein barrierefreies WC im Markt vorhanden',
     'praktikanten': 'Keine Praktikanten/Schüleraushilfen im Markt beschäftigt',
     'co2-kuehleinrichtungen': 'Keine CO2-Kühleinrichtungen im Markt vorhanden'
@@ -840,7 +1155,9 @@ function updateComment(itemId, value) {
     saveState();
 }
 
-function updateStats() {
+// Reine Berechnung, getrennt von der DOM-Aktualisierung - so kann sie auch
+// vom PDF-Deckblatt (drawCoverPage) genutzt werden.
+function computeStats() {
     const total = totalItemCount();
     const values = Object.values(state.ratings);
     const ok = values.filter(v => v === 'ok').length;
@@ -848,6 +1165,11 @@ function updateStats() {
     const na = values.filter(v => v === 'na').length;
     const answered = ok + mangel + na;
     const offen = total - answered;
+    return { total, ok, mangel, na, offen, answered };
+}
+
+function updateStats() {
+    const { total, ok, mangel, na, offen, answered } = computeStats();
 
     const setText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
     setText('stat-ok', ok);
@@ -903,6 +1225,103 @@ function importJson(file) {
     reader.readAsText(file);
 }
 
+// ===== Archiv: aktuelle Begehung sichern, spaeter erneut exportieren =====
+// Ein Archiv-Datensatz ist ein vollstaendiger Schnappschuss (Betriebsdaten,
+// Antworten, Kommentare, Massnahmen, Unterschriften, Statistik-Zahlen zum
+// Zeitpunkt der Archivierung) inklusive der zu diesem Zeitpunkt vorhandenen
+// Fotos. Archivieren loescht NICHT die aktuelle Begehung - beides bleibt
+// parallel bestehen, bis man separat "Zurücksetzen" nutzt.
+async function archiveCurrentAudit() {
+    if (!confirm('Aktuelle Begehung jetzt archivieren? Die laufende Begehung bleibt zusätzlich unverändert bestehen, bis Sie „Zurücksetzen“ nutzen.')) return;
+    try {
+        const photos = await getAllPhotos();
+        const record = {
+            id: 'audit_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8),
+            createdAt: Date.now(),
+            companyInfo: JSON.parse(JSON.stringify(state.companyInfo)),
+            ratings: JSON.parse(JSON.stringify(state.ratings)),
+            comments: JSON.parse(JSON.stringify(state.comments)),
+            measures: JSON.parse(JSON.stringify(state.measures)),
+            signatures: JSON.parse(JSON.stringify(state.signatures)),
+            notApplicable: JSON.parse(JSON.stringify(state.notApplicable || {})),
+            stats: computeStats(),
+            photos: photos
+        };
+        await saveArchivedAudit(record);
+        showToast('Begehung archiviert');
+
+        // Optionaler automatischer NAS-Upload (nur wenn in den Einstellungen
+        // konfiguriert UND aktiviert). Eigener, getrennter Try/Catch-Block:
+        // ein Fehlschlag hier darf NICHT die bereits erfolgreich
+        // abgeschlossene lokale Archivierung als Fehler erscheinen lassen.
+        const webdavConfig = (typeof getWebDAVConfig === 'function') ? getWebDAVConfig() : null;
+        if (webdavConfig && webdavConfig.autoUpload) {
+            try {
+                await uploadArchivedAuditToWebDAV(record);
+                showToast('Zusätzlich auf NAS gesichert');
+            } catch (uploadErr) {
+                console.error('NAS-Upload fehlgeschlagen:', uploadErr);
+                showToast('Lokal archiviert, NAS-Upload fehlgeschlagen: ' + (uploadErr && uploadErr.message ? uploadErr.message : 'unbekannter Fehler'), 'error');
+            }
+        }
+    } catch (err) {
+        console.error('Archivieren fehlgeschlagen:', err);
+        showToast('Archivieren fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+    }
+}
+
+// Erzeugt eine PDF fuer einen ARCHIVIERTEN Datensatz, indem die bestehenden,
+// bereits ausfuehrlich getesteten PDF-Funktionen (die auf dem globalen "state"
+// und getAllPhotos() arbeiten) kurzzeitig auf den archivierten Schnappschuss
+// umgeleitet und danach wieder zurueckgesetzt werden. Bewusster Kompromiss:
+// spart eine komplette Parallel-Implementierung der PDF-Erzeugung, die exakt
+// dasselbe noch einmal tun muesste.
+async function buildArchivedReportPdf(record, mode) {
+    const originalState = state;
+    const originalGetAllPhotos = getAllPhotos;
+    state = {
+        companyInfo: record.companyInfo,
+        ratings: record.ratings,
+        comments: record.comments,
+        measures: record.measures,
+        signatures: record.signatures,
+        notApplicable: record.notApplicable || {}
+    };
+    getAllPhotos = async () => record.photos || [];
+    try {
+        return await buildReportPdf(mode);
+    } finally {
+        state = originalState;
+        getAllPhotos = originalGetAllPhotos;
+    }
+}
+
+// Wie buildArchivedReportPdf(), haelt die Umleitung aber zusaetzlich waehrend
+// des Teilens aktiv - sharePdfDoc() ruft bei Erfolg intern openPrefilledMail()
+// auf, das wiederum Betreff/Text aus state.companyInfo baut. Ohne die
+// Umleitung wuerde die Mail faelschlich Markt/Datum der AKTUELL laufenden
+// Begehung zeigen statt der archivierten.
+async function shareArchivedReportPdf(record, mode) {
+    const originalState = state;
+    const originalGetAllPhotos = getAllPhotos;
+    state = {
+        companyInfo: record.companyInfo,
+        ratings: record.ratings,
+        comments: record.comments,
+        measures: record.measures,
+        signatures: record.signatures,
+        notApplicable: record.notApplicable || {}
+    };
+    getAllPhotos = async () => record.photos || [];
+    try {
+        const doc = await buildReportPdf(mode);
+        await sharePdfDoc(doc, reportFilename(mode).replace(/^(Checkliste|Massnahmenplan|Gesamtbericht)_/, 'Archiv_'), buildShareEmailSubject());
+    } finally {
+        state = originalState;
+        getAllPhotos = originalGetAllPhotos;
+    }
+}
+
 function resetAll() {
     if (!confirm('Wirklich alle Eingaben zurücksetzen? Dies kann nicht rückgängig gemacht werden.')) return;
     state = defaultState();
@@ -910,6 +1329,15 @@ function resetAll() {
     initCompanyForm();
     openCategoryId = null;
     renderChecklist();
+
+    // Fotos gehoeren zur selben Begehung und sollten bei einem Reset ebenfalls
+    // verschwinden - sie liegen aber separat in IndexedDB, nicht im state.
+    if (typeof deleteAllPhotos === 'function') {
+        deleteAllPhotos().then(() => {
+            if (typeof loadAndRenderPhotos === 'function') loadAndRenderPhotos();
+        }).catch(err => console.error('Fotos konnten beim Zurücksetzen nicht gelöscht werden:', err));
+    }
+
     showToast('Zurückgesetzt');
 }
 
@@ -962,9 +1390,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnReset = document.getElementById('btn-reset');
     if (btnReset) btnReset.addEventListener('click', resetAll);
 
-    // Aufklappbares Export-Menü (Checkliste/Maßnahmen/Beide, Drucken, PDF teilen, Mail) - beide Seiten
+    const btnArchive = document.getElementById('btn-archive');
+    if (btnArchive) btnArchive.addEventListener('click', archiveCurrentAudit);
+
+    // Aufklappbares Export-Menü (Checkliste/Maßnahmen/Fotos/Alles, Drucken, PDF teilen, Mail) - alle Seiten
     initExportMenu();
 
-    // Aufklappbares Datei-Menü (Speichern, JSON exportieren/laden, Zurücksetzen) - beide Seiten
+    // Aufklappbares Datei-Menü (Speichern, JSON exportieren/laden, Zurücksetzen) - alle Seiten
     initDropdownMenu('file-menu-toggle', 'file-menu-panel');
 });
+
+// ===== Service Worker registrieren (fuer Offline-Start ohne Netzwerk) =====
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(err => {
+            // Fehlschlag ist unkritisch - App funktioniert auch ohne SW,
+            // dann eben nur nicht komplett offline startfaehig.
+            console.warn('Service Worker konnte nicht registriert werden:', err);
+        });
+    });
+}
