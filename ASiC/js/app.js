@@ -468,7 +468,7 @@ function drawCoverStats(doc, y, pageWidth, boxX, boxWidth) {
 // ein bereits geoeffnetes jsPDF-Dokument, beginnend bei der uebergebenen
 // Y-Position. Foto-Blobs kommen aus IndexedDB, daher async. Legt bei Bedarf
 // automatisch neue Seiten an (max. 4 Fotos je Seite).
-async function renderFotosSection(doc, yStart, margin, contentWidth, pageHeight, photos) {
+async function renderFotosSection(doc, yStart, margin, contentWidth, pageHeight, photos, captionFn) {
     let y = yStart;
 
     if (!photos || photos.length === 0) {
@@ -522,7 +522,12 @@ async function renderFotosSection(doc, yStart, margin, contentWidth, pageHeight,
         doc.setFont(undefined, 'normal');
         doc.setFontSize(8.5);
         doc.setTextColor(51, 65, 85);
-        const commentText = photo.comment && photo.comment.trim() ? photo.comment : '(kein Kommentar)';
+        // captionFn ermoeglicht abweichende Beschriftung (z. B. Massnahmen-Bezug
+        // statt reinem Freitext-Kommentar) - ohne captionFn unveraendertes
+        // Verhalten der allgemeinen Fotodokumentation.
+        const commentText = captionFn
+            ? captionFn(photo, i)
+            : (photo.comment && photo.comment.trim() ? photo.comment : '');
         const commentLines = doc.splitTextToSize(commentText, cellWidth - 6).slice(0, 3);
         doc.text(commentLines, cellX + 3, cellY + imageHeight + 6);
     }
@@ -531,6 +536,60 @@ async function renderFotosSection(doc, yStart, margin, contentWidth, pageHeight,
     const lastRow = Math.floor(((photos.length - 1) % 4) / 2);
     return pageStartY + (lastRow + 1) * (cellHeight + gapY) + 4;
 }
+
+// Fotos, die direkt an einzelnen Massnahmen haengen, als eigener Anhang -
+// gruppiert pro Massnahme (Frage-Bezug als Ueberschrift), jede Gruppe nutzt
+// intern dieselbe getestete 2x2-Raster-Logik wie renderFotosSection(). Wird
+// unabhaengig vom "includeFotos"-Schalter aufgerufen, sobald ueberhaupt
+// Massnahmen-Fotos vorhanden sind - das ist eine bewusst eigene Sache
+// gegenueber der allgemeinen Fotodokumentation.
+async function renderMeasurePhotosAppendix(doc, margin, contentWidth, pageHeight, measures) {
+    const groups = [];
+    for (const measure of measures) {
+        let photos;
+        try {
+            photos = await getPhotosForMeasure(measure.id);
+        } catch (e) {
+            photos = [];
+        }
+        if (photos.length > 0) groups.push({ measure, photos });
+    }
+    if (groups.length === 0) return false;
+
+    doc.addPage();
+    let y = 18;
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(14);
+    doc.setTextColor(28, 34, 38);
+    doc.text('Fotos zu den Maßnahmen', margin, y);
+    y += 9;
+
+  for (const group of groups) {
+    // Genug Platz fuer Ueberschrift + mindestens eine Bildreihe sicherstellen,
+    // sonst neue Seite fuer diese Massnahmen-Gruppe beginnen.
+    if (y > pageHeight - 95) {
+        doc.addPage();
+        y = 18;
+    }
+
+    const found = findItemById(group.measure.itemId);
+    // ÄNDERUNG: `${found.item.text}` wurde entfernt
+    const label = found ? `[${group.measure.itemId}]` : 'Manuell erfasste Maßnahme';
+    
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(10);
+    doc.setTextColor(30, 41, 59);
+    const labelLines = doc.splitTextToSize(label, contentWidth);
+    doc.text(labelLines, margin, y);
+    y += labelLines.length * 5 + 3;
+
+    y = await renderFotosSection(doc, y, margin, contentWidth, pageHeight, group.photos);
+    y += 6;
+}
+
+return true;
+}
+
 
 // Eigenstaendiger Foto-PDF-Export (Modus "fotos"): Deckblatt mit Bezug zur
 // Begehungsliste + alle Fotos im 2x2-Raster. Async, da Fotos aus IndexedDB
@@ -564,7 +623,7 @@ async function buildFotosPdf() {
     doc.line(margin, y, pageWidth - margin, y);
     y += 8;
 
-    const photos = await getAllPhotos();
+    const photos = await getUnlinkedPhotos();
     await renderFotosSection(doc, y, margin, contentWidth, pageHeight, photos);
 
     const totalPages = doc.getNumberOfPages();
@@ -705,12 +764,19 @@ async function buildPdf(includeChecklist, includeFotos) {
     } else {
         const padding = 6;
         const innerWidth = contentWidth - padding * 2;
-        const colWidth = innerWidth / 3;
-        const colX = [0, 1, 2].map(i => margin + padding + i * colWidth);
+        const thumbSize = 22;
+        const thumbGap = 3;
+        const thumbsPerRow = Math.max(1, Math.floor((innerWidth + thumbGap) / (thumbSize + thumbGap)));
 
-        state.measures.forEach((measure, index) => {
+        for (let index = 0; index < state.measures.length; index++) {
+            const measure = state.measures[index];
             const found = findItemById(measure.itemId);
             const questionText = found ? `${index + 1}. [${measure.itemId}] ${found.item.text}` : `${index + 1}. Manuell erfasste Maßnahme`;
+
+            let photos = [];
+            try { photos = await getPhotosForMeasure(measure.id); } catch (e) { photos = []; }
+            const photoRows = photos.length > 0 ? Math.ceil(photos.length / thumbsPerRow) : 0;
+            const photoBlockH = photoRows > 0 ? photoRows * (thumbSize + thumbGap) + 3 : 0;
 
             doc.setFont(undefined, 'bold');
             doc.setFontSize(10);
@@ -722,8 +788,8 @@ async function buildPdf(includeChecklist, includeFotos) {
 
             const questionH = questionLines.length * 5;
             const answerH = answerLines.length * 4.3;
-            const tileH = 11;
-            const cardHeight = padding + questionH + 1 + 4.5 + answerH + 6 + tileH + padding;
+            const statusH = 11;
+            const cardHeight = padding + questionH + 1 + 4.5 + photoBlockH + 4.5 + answerH + 6 + statusH + padding;
 
             if (y + cardHeight > pageHeight - 24) {
                 doc.addPage();
@@ -745,6 +811,31 @@ async function buildPdf(includeChecklist, includeFotos) {
             doc.line(margin + padding, cy, margin + contentWidth - padding, cy);
             cy += 4.5;
 
+            // Fotos zur Maßnahme direkt zwischen Frage und Maßnahmentext -
+            // kompakte Vorschaubild-Reihe statt separatem Anhang, damit auf
+            // einen Blick zusammensteht, was das Problem ist und wie es
+            // belegt wurde. Am Bildschirm bleiben die Fotos trotz kleiner
+            // Druckgröße beliebig zoombar, nur auf Papier wirken sie kleiner.
+            if (photos.length > 0) {
+                for (let p = 0; p < photos.length; p++) {
+                    const col = p % thumbsPerRow;
+                    const row = Math.floor(p / thumbsPerRow);
+                    const tx = margin + padding + col * (thumbSize + thumbGap);
+                    const ty = cy + row * (thumbSize + thumbGap);
+                    doc.setDrawColor(226, 232, 240);
+                    doc.roundedRect(tx, ty, thumbSize, thumbSize, 1.5, 1.5, 'S');
+                    try {
+                        const dataUrl = await blobToDataUrl(photos[p].blob);
+                        const dims = await getImageDimensions(dataUrl);
+                        const fit = fitImage(dims.width, dims.height, thumbSize - 2, thumbSize - 2);
+                        const imgX = tx + (thumbSize - fit.width) / 2;
+                        const imgY = ty + (thumbSize - fit.height) / 2;
+                        doc.addImage(dataUrl, 'JPEG', imgX, imgY, fit.width, fit.height);
+                    } catch (e) { /* Bild konnte nicht geladen werden, Rahmen bleibt sichtbar */ }
+                }
+                cy += photoBlockH;
+            }
+
             doc.setFont(undefined, 'bold');
             doc.setFontSize(7.5);
             doc.setTextColor(200, 130, 20);
@@ -757,28 +848,22 @@ async function buildPdf(includeChecklist, includeFotos) {
             doc.text(answerLines, margin + padding, cy);
             cy += answerH + 6;
 
-            const labels = ['VERANTWORTLICH', 'FRIST', 'STATUS'];
             doc.setFont(undefined, 'bold');
             doc.setFontSize(7);
             doc.setTextColor(100, 116, 139);
-            labels.forEach((label, i) => doc.text(label, colX[i], cy));
+            doc.text('STATUS', margin + padding, cy);
             cy += 4.3;
-
-            doc.setFont(undefined, 'normal');
-            doc.setFontSize(9);
-            doc.setTextColor(30, 41, 59);
-            doc.text(measure.responsible || '-', colX[0], cy);
-            doc.text(measure.dueDate ? formatDate(measure.dueDate) : '-', colX[1], cy);
 
             const statusLabel = measure.status === 'offen' ? 'Offen' : measure.status === 'bearbeitung' ? 'In Bearbeitung' : 'Erledigt';
             const statusColor = measure.status === 'offen' ? [214, 69, 63] : measure.status === 'bearbeitung' ? [201, 127, 26] : [47, 158, 100];
             doc.setFont(undefined, 'bold');
+            doc.setFontSize(9);
             doc.setTextColor(...statusColor);
-            doc.text(statusLabel, colX[2], cy);
+            doc.text(statusLabel, margin + padding, cy);
             doc.setTextColor(0);
 
             y += cardHeight + 5;
-        });
+        }
     }
 
     if (y + 55 > pageHeight - 20) {
@@ -823,9 +908,13 @@ async function buildPdf(includeChecklist, includeFotos) {
         doc.setTextColor(28, 34, 38);
         doc.text('Fotodokumentation', margin, y);
         y += 9;
-        const photos = await getAllPhotos();
+        const photos = await getUnlinkedPhotos();
         await renderFotosSection(doc, y, margin, contentWidth, pageHeight, photos);
     }
+
+    // Fotos zu einzelnen Massnahmen als eigener Anhang - unabhaengig vom
+    // "includeFotos"-Schalter, da das inhaltlich zum Massnahmenteil gehoert.
+    await renderMeasurePhotosAppendix(doc, margin, contentWidth, pageHeight, state.measures);
 
     const totalPages = doc.getNumberOfPages();
     for (let i = 2; i <= totalPages; i++) {

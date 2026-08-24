@@ -196,13 +196,17 @@ function exportAuswertungCsv() {
 }
 
 // ===== 5. Offene Maßnahmen mit Fristen-Ampel =====
-function ampelStatus(dueDate, today) {
-    if (!dueDate) return 'grau';
-    const d = new Date(dueDate);
+// Ampel nach Alter der Maßnahme statt manuell gepflegter Frist - berechnet
+// aus dem Begehungsdatum, das ohnehin immer vorhanden ist. Löst das Problem,
+// dass eine manuelle Frist in der Praxis selten gepflegt wird, ohne dass
+// dafür zusätzlicher Aufwand entsteht.
+function ampelStatus(begehungsDatum, today) {
+    if (!begehungsDatum) return 'grau';
+    const d = new Date(begehungsDatum);
     if (isNaN(d.getTime())) return 'grau';
-    const diffDays = Math.round((d - today) / 86400000);
-    if (diffDays < 0) return 'rot';
-    if (diffDays <= 7) return 'orange';
+    const alterTage = Math.round((today - d) / 86400000);
+    if (alterTage > 60) return 'rot';
+    if (alterTage >= 14) return 'orange';
     return 'gruen';
 }
 
@@ -219,10 +223,9 @@ function renderOffeneMassnahmen() {
             if (m.status === 'erledigt') return;
             allOpen.push({
                 firma: record.companyInfo.firma || '',
+                begehungsDatum: record.companyInfo.datum || '',
                 itemId: m.itemId,
                 description: m.description,
-                responsible: m.responsible,
-                dueDate: m.dueDate,
                 status: m.status,
                 aktuell: false
             });
@@ -233,10 +236,9 @@ function renderOffeneMassnahmen() {
         if (m.status === 'erledigt') return;
         allOpen.push({
             firma: (state.companyInfo && state.companyInfo.firma) || '',
+            begehungsDatum: (state.companyInfo && state.companyInfo.datum) || '',
             itemId: m.itemId,
             description: m.description,
-            responsible: m.responsible,
-            dueDate: m.dueDate,
             status: m.status,
             aktuell: true
         });
@@ -248,26 +250,32 @@ function renderOffeneMassnahmen() {
     }
 
     allOpen.sort((a, b) => {
-        if (!a.dueDate && !b.dueDate) return 0;
-        if (!a.dueDate) return 1;
-        if (!b.dueDate) return -1;
-        return a.dueDate.localeCompare(b.dueDate);
+        if (!a.begehungsDatum && !b.begehungsDatum) return 0;
+        if (!a.begehungsDatum) return 1;
+        if (!b.begehungsDatum) return -1;
+        return a.begehungsDatum.localeCompare(b.begehungsDatum);
     });
 
-    const ampelLabel = { rot: 'Überfällig', orange: 'Bald fällig', gruen: 'Im Zeitplan', grau: 'Keine Frist' };
+    const ampelLabel = { rot: 'Seit über 60 Tagen offen', orange: 'Seit 14–60 Tagen offen', gruen: 'Weniger als 14 Tage offen', grau: 'Kein Begehungsdatum' };
 
     container.innerHTML = `
         <table class="doku-table">
-            <tr><th>Ampel</th><th>Markt</th><th>Maßnahme</th><th>Verantwortlich</th><th>Frist</th></tr>
+            <tr><th>Ampel</th><th>Markt</th><th>Maßnahme</th><th>Offen seit</th></tr>
             ${allOpen.map(m => {
-                const ampel = ampelStatus(m.dueDate, today);
-                const fristText = m.dueDate ? formatDate(m.dueDate) : '—';
+                const ampel = ampelStatus(m.begehungsDatum, today);
+                let seitText = '—';
+                if (m.begehungsDatum) {
+                    const d = new Date(m.begehungsDatum);
+                    if (!isNaN(d.getTime())) {
+                        const alterTage = Math.max(0, Math.round((today - d) / 86400000));
+                        seitText = alterTage + ' Tag' + (alterTage === 1 ? '' : 'en');
+                    }
+                }
                 return `<tr>
                     <td><span class="ampel-punkt ampel-${ampel}" title="${ampelLabel[ampel]}"></span></td>
                     <td>${escapeHtml(m.firma)}${m.aktuell ? ' <span class="auswertung-aktuell-tag">aktuell</span>' : ''}</td>
                     <td>${escapeHtml(m.description || '')}</td>
-                    <td>${escapeHtml(m.responsible || '—')}</td>
-                    <td>${fristText}</td>
+                    <td>${seitText}</td>
                 </tr>`;
             }).join('')}
         </table>`;

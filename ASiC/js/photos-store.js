@@ -51,10 +51,10 @@ function openPhotoDB() {
     });
 }
 
-function addPhoto(blob, comment) {
+function addPhoto(blob, comment, measureId) {
     return openPhotoDB().then(db => new Promise((resolve, reject) => {
         const id = 'photo_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
-        const record = { id, blob, comment: comment || '', createdAt: Date.now() };
+        const record = { id, blob, comment: comment || '', createdAt: Date.now(), measureId: measureId || null };
         const tx = db.transaction(PHOTO_STORE, 'readwrite');
         tx.objectStore(PHOTO_STORE).add(record);
         tx.oncomplete = () => resolve(record);
@@ -69,6 +69,16 @@ function getAllPhotos() {
         req.onsuccess = () => resolve(req.result || []);
         req.onerror = () => reject(req.error || new Error('Fotos konnten nicht geladen werden.'));
     }));
+}
+
+// Fotos ohne Verknuepfung zu einer Massnahme (fuer die allgemeine Fotos-Seite)
+function getUnlinkedPhotos() {
+    return getAllPhotos().then(photos => photos.filter(p => !p.measureId));
+}
+
+// Fotos zu genau einer bestimmten Massnahme (fuer die Massnahmen-Seite)
+function getPhotosForMeasure(measureId) {
+    return getAllPhotos().then(photos => photos.filter(p => p.measureId === measureId));
 }
 
 function updatePhotoComment(id, comment) {

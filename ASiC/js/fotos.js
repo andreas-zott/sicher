@@ -12,7 +12,7 @@ function revokePhotoObjectUrls() {
 
 async function loadAndRenderPhotos() {
     try {
-        photosCache = await getAllPhotos();
+        photosCache = await getUnlinkedPhotos();
         renderPhotoGrid();
     } catch (err) {
         console.error('Fotos konnten nicht geladen werden:', err);
