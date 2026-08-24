@@ -1,18 +1,19 @@
 // ==========================================================================
 // ASiC Handel — Service Worker
 // ==========================================================================
-// Ermöglicht den Start der App auch ohne Netzwerkverbindung (z. B. schwaches
-// WLAN im Markt). Cached alle statischen App-Dateien beim ersten Aufruf.
+// Offline-Unterstützung für die ASiC-Handel-App.
 //
-// WICHTIG BEI JEDEM UPDATE DER APP-DATEIEN:
-// CACHE_NAME muss hochgezaehlt werden (z. B. an APP_REVISION aus app.js
-// angleichen), sonst liefert der Service Worker weiterhin die ALTEN
-// Dateien aus dem Cache aus, auch wenn neue hochgeladen wurden.
-const CACHE_NAME = 'asic-handel-v2.10';
+// WICHTIG:
+// Bei Änderungen an App-Dateien CACHE_NAME erhöhen.
+// ==========================================================================
 
-// Alle Dateien, die die App zum Start ohne Netzwerk braucht.
-// Muss mit der tatsaechlichen Dateistruktur uebereinstimmen (siehe
-// Technische_Dokumentation.md/.pdf, Abschnitt 7 "Dateiuebersicht").
+const CACHE_NAME = 'asic-handel-v3.01';
+
+
+// ==========================================================================
+// DATEIEN FÜR OFFLINE-BETRIEB
+// ==========================================================================
+
 const PRECACHE_URLS = [
     './',
     './index.html',
@@ -25,10 +26,14 @@ const PRECACHE_URLS = [
     './auswertung.html',
     './impressum.html',
     './datenschutz.html',
+
     './manifest.json',
+
     './icon-192.png',
     './icon-512.png',
+
     './css/styles.css',
+
     './js/app.js',
     './js/access-gate.js',
     './js/audit-data.js',
@@ -41,54 +46,166 @@ const PRECACHE_URLS = [
     './js/verlauf.js',
     './js/einstellungen.js',
     './js/auswertung.js',
+
     './js/jspdf.umd.min.js'
 ];
 
+
+// ==========================================================================
+// INSTALL
+// ==========================================================================
+
 self.addEventListener('install', event => {
+
     event.waitUntil(
+
         caches.open(CACHE_NAME)
-            .then(cache => cache.addAll(PRECACHE_URLS))
+
+            .then(cache => {
+
+                console.log(
+                    '[SW] Installiere Cache:',
+                    CACHE_NAME
+                );
+
+                return cache.addAll(PRECACHE_URLS);
+            })
+
+            // Neue Version sofort installieren
             .then(() => self.skipWaiting())
     );
 });
 
+
+// ==========================================================================
+// ACTIVATE
+// ==========================================================================
+
 self.addEventListener('activate', event => {
+
     event.waitUntil(
-        caches.keys().then(keys =>
-            Promise.all(
-                keys
-                    .filter(key => key !== CACHE_NAME)
-                    .map(key => caches.delete(key))
-            )
-        ).then(() => self.clients.claim())
+
+        caches.keys()
+
+            .then(keys => {
+
+                return Promise.all(
+
+                    keys
+                        .filter(key => key !== CACHE_NAME)
+
+                        .map(key => {
+
+                            console.log(
+                                '[SW] Lösche alten Cache:',
+                                key
+                            );
+
+                            return caches.delete(key);
+                        })
+                );
+            })
+
+            // Neue Version sofort für alle offenen Tabs übernehmen
+            .then(() => self.clients.claim())
     );
 });
 
-self.addEventListener('fetch', event => {
-    // Nur eigene GET-Anfragen behandeln; alles andere (z. B. mailto:-Links,
-    // POST-Anfragen) unveraendert durchreichen.
-    if (event.request.method !== 'GET') return;
 
-    // Einheitlich fuer ALLE Dateien (HTML-Seiten wie auch JS/CSS/Icons):
-    // immer zuerst das Netzwerk versuchen, damit Aenderungen sofort
-    // ankommen sobald online, und den Cache nur als Absicherung fuer
-    // fehlendes Netz nutzen. Bewusst NICHT "Cache zuerst" fuer statische
-    // Dateien, obwohl das theoretisch schneller waere - waehrend die App
-    // noch haeufig weiterentwickelt wird, hat sich gezeigt, dass ein
-    // vergessenes Hochzaehlen von CACHE_NAME sonst dazu fuehrt, dass alte
-    // und neue Dateien unbemerkt gemischt ausgeliefert werden (z. B. neues
-    // HTML mit altem CSS) - das ist die zuverlaessigere Grundeinstellung.
+// ==========================================================================
+// FETCH
+// ==========================================================================
+//
+// ONLINE:
+//   Netzwerk wird bevorzugt.
+//
+// OFFLINE:
+//   Cache wird als Fallback verwendet.
+//
+// Dadurch werden Änderungen an HTML, CSS und JS online sofort geladen,
+// während die App bei fehlendem Internet weiterhin funktioniert.
+// ==========================================================================
+
+self.addEventListener('fetch', event => {
+
+    // Nur GET-Anfragen behandeln
+    if (event.request.method !== 'GET') {
+        return;
+    }
+
+
     event.respondWith(
+
         fetch(event.request)
+
             .then(response => {
-                const copy = response.clone();
-                caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
+
+                // Nur gültige Antworten cachen
+                if (
+                    response &&
+                    response.status === 200 &&
+                    response.type !== 'opaque'
+                ) {
+
+                    const copy =
+                        response.clone();
+
+
+                    caches.open(CACHE_NAME)
+                        .then(cache => {
+
+                            cache.put(
+                                event.request,
+                                copy
+                            );
+
+                        })
+                        .catch(err => {
+
+                            console.warn(
+                                '[SW] Cache konnte nicht aktualisiert werden:',
+                                err
+                            );
+
+                        });
+                }
+
+
                 return response;
             })
-            .catch(() =>
-                caches.match(event.request).then(cached =>
-                    cached || (event.request.mode === 'navigate' ? caches.match('./index.html') : undefined)
+
+
+            // --------------------------------------------------------------
+            // KEIN NETZWERK
+            // --------------------------------------------------------------
+
+            .catch(() => {
+
+                return caches.match(
+                    event.request
                 )
-            )
+
+                .then(cachedResponse => {
+
+                    if (cachedResponse) {
+                        return cachedResponse;
+                    }
+
+
+                    // Bei Navigation auf Startseite zurückfallen
+                    if (
+                        event.request.mode ===
+                        'navigate'
+                    ) {
+
+                        return caches.match(
+                            './index.html'
+                        );
+                    }
+
+
+                    return undefined;
+                });
+            })
     );
 });
