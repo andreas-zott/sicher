@@ -8,7 +8,7 @@
 // CACHE_NAME muss hochgezaehlt werden (z. B. an APP_REVISION aus app.js
 // angleichen), sonst liefert der Service Worker weiterhin die ALTEN
 // Dateien aus dem Cache aus, auch wenn neue hochgeladen wurden.
-const CACHE_NAME = 'asic-handel-v2.7';
+const CACHE_NAME = 'asic-handel-v2.10';
 
 // Alle Dateien, die die App zum Start ohne Netzwerk braucht.
 // Muss mit der tatsaechlichen Dateistruktur uebereinstimmen (siehe
@@ -22,6 +22,7 @@ const PRECACHE_URLS = [
     './dokumentation.html',
     './hilfe.html',
     './einstellungen.html',
+    './auswertung.html',
     './impressum.html',
     './datenschutz.html',
     './manifest.json',
@@ -29,6 +30,7 @@ const PRECACHE_URLS = [
     './icon-512.png',
     './css/styles.css',
     './js/app.js',
+    './js/access-gate.js',
     './js/audit-data.js',
     './js/text.js',
     './js/massnahmen.js',
@@ -38,6 +40,7 @@ const PRECACHE_URLS = [
     './js/fotos.js',
     './js/verlauf.js',
     './js/einstellungen.js',
+    './js/auswertung.js',
     './js/jspdf.umd.min.js'
 ];
 
