@@ -39,7 +39,9 @@
     --tap: 48px;
 }
 
-* , *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -58,23 +60,28 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
     font-family: var(--font-display);
     font-weight: 600;
     letter-spacing: -0.01em;
     color: var(--ink);
 }
 
-button, input, select, textarea {
+button,
+input,
+select,
+textarea {
     font-family: inherit;
-    font-size: 16px; /* verhindert Zoom bei Fokus auf iOS */
+    font-size: 16px;
 }
 
 a {
     color: var(--brand-red-dark);
 }
 
-/* Sichtbarer Fokusring (Tastatur/iPad mit externer Tastatur) */
 :focus-visible {
     outline: 3px solid var(--brand-red);
     outline-offset: 2px;
@@ -89,8 +96,9 @@ a {
 }
 
 /* ==========================================================================
-   Warnstreifen — das Signaturelement, sparsam eingesetzt
+   Warnstreifen
    ========================================================================== */
+
 .hazard-strip {
     height: 6px;
     background: repeating-linear-gradient(
@@ -103,11 +111,9 @@ a {
 }
 
 /* ==========================================================================
-   Header
+   Zugangs-Hürde
    ========================================================================== */
-/* ==========================================================================
-   Zugangs-Hürde (KEIN echter Zugriffsschutz, siehe js/access-gate.js)
-   ========================================================================== */
+
 html.access-locked body > *:not(.access-gate-overlay) {
     display: none !important;
 }
@@ -167,6 +173,10 @@ html.access-locked body > *:not(.access-gate-overlay) {
     font-size: 0.85rem;
     margin-top: 0.85rem;
 }
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
 
 .app-header {
     position: sticky;
@@ -257,6 +267,7 @@ html.access-locked body > *:not(.access-gate-overlay) {
 /* ==========================================================================
    Layout
    ========================================================================== */
+
 .page {
     max-width: 1080px;
     margin: 0 auto;
@@ -280,8 +291,9 @@ html.access-locked body > *:not(.access-gate-overlay) {
 }
 
 /* ==========================================================================
-   Fotos
+   Fotos — normale Fotos-Seite
    ========================================================================== */
+
 .photos-section-title {
     display: flex;
     align-items: center;
@@ -314,9 +326,15 @@ html.access-locked body > *:not(.access-gate-overlay) {
     gap: 0.6rem;
 }
 
+/* ============================================================
+   FOTO-VORSCHAU
+   Einheitlich 180 × 180 px
+   ============================================================ */
+
 .photo-preview {
-    width: 100%;
-    aspect-ratio: 4 / 3;
+    width: 180px !important;
+    height: 180px !important;
+    aspect-ratio: 1 / 1;
     object-fit: cover;
     border-radius: 10px;
     background: var(--paper);
@@ -351,8 +369,9 @@ html.access-locked body > *:not(.access-gate-overlay) {
 }
 
 /* ==========================================================================
-   Verlauf (archivierte Begehungen)
+   Verlauf
    ========================================================================== */
+
 .archive-list {
     display: flex;
     flex-direction: column;
@@ -403,8 +422,9 @@ html.access-locked body > *:not(.access-gate-overlay) {
 }
 
 /* ==========================================================================
-   Sprachstil-Umschalter — als zweite Pille im dunklen Header, neben der Navigation
+   Sprachstil-Umschalter
    ========================================================================== */
+
 .style-switch {
     display: flex;
     gap: 0.15rem;
@@ -439,14 +459,6 @@ html.access-locked body > *:not(.access-gate-overlay) {
     color: #fff;
 }
 
-/* ==========================================================================
-   Betriebsdaten
-   ========================================================================== */
-/* ==========================================================================
-   Sprachstil-Umschalter — kompakte mittlere Gruppe in der Action-Bar
-   (zwischen "Datei" und "Exportieren"), damit er beim Scrollen durch die
-   Checkliste jederzeit erreichbar ist statt nur oben auf der Seite
-   ========================================================================== */
 .action-bar-group-style {
     gap: 0.5rem;
 }
@@ -457,6 +469,10 @@ html.access-locked body > *:not(.access-gate-overlay) {
     color: var(--ink-soft);
     white-space: nowrap;
 }
+
+/* ==========================================================================
+   Betriebsdaten
+   ========================================================================== */
 
 .company-card {
     padding: 1.25rem 1.5rem;
@@ -484,7 +500,8 @@ html.access-locked body > *:not(.access-gate-overlay) {
     color: var(--steel);
 }
 
-.field input, .field select {
+.field input,
+.field select {
     height: var(--tap);
     padding: 0 0.85rem;
     border: 1.5px solid var(--line);
@@ -494,13 +511,13 @@ html.access-locked body > *:not(.access-gate-overlay) {
     transition: border-color 0.15s, background 0.15s;
 }
 
-.field input:focus, .field select:focus {
+.field input:focus,
+.field select:focus {
     border-color: var(--brand-red);
     background: #fff;
     outline: none;
 }
 
-/* Read-only Betriebsdaten-Anzeige (Maßnahmen-Seite) */
 .info-strip {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
@@ -536,6 +553,7 @@ html.access-locked body > *:not(.access-gate-overlay) {
 /* ==========================================================================
    Fortschritt / Statistik
    ========================================================================== */
+
 .progress-bar-card {
     padding: 1.1rem 1.5rem;
     margin-bottom: 1.25rem;
@@ -586,14 +604,30 @@ html.access-locked body > *:not(.access-gate-overlay) {
     font-weight: 600;
 }
 
-.stat-pill.ok { background: var(--ok-tint); color: var(--ok); }
-.stat-pill.mangel { background: var(--mangel-tint); color: var(--mangel); }
-.stat-pill.na { background: var(--na-tint); color: var(--na); }
-.stat-pill.offen { background: var(--brand-red-tint); color: var(--brand-red-dark); }
+.stat-pill.ok {
+    background: var(--ok-tint);
+    color: var(--ok);
+}
+
+.stat-pill.mangel {
+    background: var(--mangel-tint);
+    color: var(--mangel);
+}
+
+.stat-pill.na {
+    background: var(--na-tint);
+    color: var(--na);
+}
+
+.stat-pill.offen {
+    background: var(--brand-red-tint);
+    color: var(--brand-red-dark);
+}
 
 /* ==========================================================================
    Kategorien / Checkliste
    ========================================================================== */
+
 .category {
     margin-bottom: 0.85rem;
     overflow: hidden;
@@ -657,9 +691,6 @@ html.access-locked body > *:not(.access-gate-overlay) {
     display: block;
 }
 
-/* ==========================================================================
-   "Kein Kundenaufzug vorhanden"-Schalter
-   ========================================================================== */
 .category-toggle-row {
     display: flex;
     align-items: center;
@@ -669,7 +700,6 @@ html.access-locked body > *:not(.access-gate-overlay) {
     border-bottom: 1px solid var(--line);
 }
 
-/* Zusaetzliche Optionszeile ueber der Action-Bar (z. B. "Komplette Checkliste einschliessen") */
 .pdf-option-row {
     max-width: 1080px;
     margin: 0 auto 1rem;
@@ -871,8 +901,9 @@ html.access-locked body > *:not(.access-gate-overlay) {
 }
 
 /* ==========================================================================
-   Maßnahmen-Karten (Maßnahmen-Seite)
+   Maßnahmen-Karten
    ========================================================================== */
+
 .measures-list {
     display: flex;
     flex-direction: column;
@@ -957,6 +988,84 @@ html.access-locked body > *:not(.access-gate-overlay) {
     min-width: 0;
 }
 
+/* ==========================================================================
+   Fotos direkt an einer Maßnahme
+   ========================================================================== */
+
+.measure-photos {
+    margin-top: 0.9rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--line);
+}
+
+.measure-photos-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.6rem;
+}
+
+.measure-photos-header .label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+}
+
+.measure-photo-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* ============================================================
+   MASSNAHMEN-FOTO
+   Exakt 180 × 180 px
+   ============================================================ */
+
+.measure-photo-thumb {
+    position: relative;
+    width: 180px !important;
+    height: 180px !important;
+    flex: 0 0 180px !important;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: var(--paper);
+}
+
+.measure-photo-thumb img {
+    display: block;
+    width: 180px !important;
+    height: 180px !important;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+}
+
+.measure-photo-delete {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: rgba(28, 34, 38, 0.72);
+    color: #fff;
+    font-size: 0.9rem;
+    line-height: 30px;
+    text-align: center;
+    cursor: pointer;
+    z-index: 2;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.measure-photo-delete:hover {
+    background: rgba(28, 34, 38, 0.9);
+}
+
 .tile-field .label {
     font-size: 0.66rem;
     font-weight: 700;
@@ -965,7 +1074,8 @@ html.access-locked body > *:not(.access-gate-overlay) {
     color: var(--steel);
 }
 
-.tile-field input, .tile-field select {
+.tile-field input,
+.tile-field select {
     height: 42px;
     padding: 0 0.65rem;
     border: 1.5px solid var(--line);
@@ -984,9 +1094,20 @@ html.access-locked body > *:not(.access-gate-overlay) {
     width: fit-content;
 }
 
-.status-badge.offen { background: var(--brand-red-tint); color: var(--brand-red-dark); }
-.status-badge.bearbeitung { background: #fdeecb; color: #a05a06; }
-.status-badge.erledigt { background: var(--ok-tint); color: var(--ok); }
+.status-badge.offen {
+    background: var(--brand-red-tint);
+    color: var(--brand-red-dark);
+}
+
+.status-badge.bearbeitung {
+    background: #fdeecb;
+    color: #a05a06;
+}
+
+.status-badge.erledigt {
+    background: var(--ok-tint);
+    color: var(--ok);
+}
 
 .no-measures {
     text-align: center;
@@ -1002,6 +1123,7 @@ html.access-locked body > *:not(.access-gate-overlay) {
 /* ==========================================================================
    Unterschriften
    ========================================================================== */
+
 .signatures-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1072,6 +1194,7 @@ html.access-locked body > *:not(.access-gate-overlay) {
 /* ==========================================================================
    Buttons
    ========================================================================== */
+
 .btn {
     display: inline-flex;
     align-items: center;
@@ -1128,8 +1251,9 @@ html.access-locked body > *:not(.access-gate-overlay) {
 }
 
 /* ==========================================================================
-   Action-Leiste (sticky, unten)
+   Action-Leiste
    ========================================================================== */
+
 .action-bar {
     position: fixed;
     left: 0;
@@ -1166,8 +1290,9 @@ html.access-locked body > *:not(.access-gate-overlay) {
 }
 
 /* ==========================================================================
-   Aufklappbares Menü (Drucken / PDF teilen / Mail vorbereiten)
+   Aufklappbares Menü
    ========================================================================== */
+
 .menu-dropdown {
     position: relative;
 }
@@ -1215,9 +1340,6 @@ html.access-locked body > *:not(.access-gate-overlay) {
     background: var(--paper);
 }
 
-/* Export-Menü sitzt auf beiden Seiten nahe am rechten Bildschirmrand -
-   Panel oeffnet daher nach links (rechtsbuendig zum Button), damit es
-   nie ueber den Rand hinauslaeuft. */
 #export-menu-panel {
     left: auto;
     right: 0;
@@ -1283,6 +1405,7 @@ html.access-locked body > *:not(.access-gate-overlay) {
 /* ==========================================================================
    Toast
    ========================================================================== */
+
 .toast {
     position: fixed;
     bottom: 6.5rem;
@@ -1310,13 +1433,21 @@ html.access-locked body > *:not(.access-gate-overlay) {
 }
 
 @keyframes toast-in {
-    from { opacity: 0; transform: translate(-50%, 10px); }
-    to { opacity: 1; transform: translate(-50%, 0); }
+    from {
+        opacity: 0;
+        transform: translate(-50%, 10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
 }
 
 /* ==========================================================================
-   Footer (Impressum/Datenschutz/Copyright)
+   Footer
    ========================================================================== */
+
 .app-footer {
     max-width: 1080px;
     margin: 0 auto;
@@ -1360,8 +1491,9 @@ html.access-locked body > *:not(.access-gate-overlay) {
 }
 
 /* ==========================================================================
-   Rechtstexte (Impressum/Datenschutz)
+   Rechtstexte
    ========================================================================== */
+
 .legal-page {
     max-width: 760px;
 }
@@ -1437,80 +1569,122 @@ html.access-locked body > *:not(.access-gate-overlay) {
 /* ==========================================================================
    Responsive
    ========================================================================== */
+
 @media (max-width: 860px) {
+
     .company-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+
     .info-strip {
         grid-template-columns: repeat(3, 1fr);
     }
+
     .measure-tile {
         grid-template-columns: repeat(2, 1fr);
     }
+
     .signatures-grid {
         grid-template-columns: 1fr;
     }
 }
 
 @media (max-width: 560px) {
-    .brand-subtitle { display: none; }
+
+    .brand-subtitle {
+        display: none;
+    }
+
     .style-btn {
         padding: 0 0.6rem;
         font-size: 0.72rem;
     }
-    .company-grid, .info-strip {
+
+    .company-grid,
+    .info-strip {
         grid-template-columns: repeat(2, 1fr);
     }
+
     .measure-tile {
         grid-template-columns: 1fr;
     }
+
     .item-row {
         flex-direction: column;
     }
+
     .item-actions {
         align-self: stretch;
     }
+
     .rating-btn {
         flex: 1;
     }
+
     .action-bar-inner {
         justify-content: center;
+    }
+
+    /* Bei kleinen iPads/Handys bleibt die gewünschte Größe
+       ebenfalls exakt 180 × 180 px. */
+    .photo-preview {
+        width: 180px !important;
+        height: 180px !important;
+    }
+
+    .measure-photo-thumb {
+        width: 180px !important;
+        height: 180px !important;
+        flex: 0 0 180px !important;
+    }
+
+    .measure-photo-thumb img {
+        width: 180px !important;
+        height: 180px !important;
     }
 }
 
 /* ==========================================================================
    Druck
    ========================================================================== */
+
 @media print {
-    /* Hinweis: Der "Drucken"-Menüpunkt nutzt inzwischen dieselbe PDF-Erzeugung wie
-       "PDF teilen" (siehe printReport() in app.js) und oeffnet die fertige PDF in
-       einem neuen Tab, statt window.print() auf dieser Seite auszuloesen - dort
-       sind Zeilenumbruch, Seitenabstand, Deckblatt und Seitenzahlen bereits sauber
-       geloest. Dieser Block dient nur noch als Fallback, falls jemand manuell mit
-       Tastenkuerzel (Strg/Cmd+P) druckt. */
+
     @page {
         margin: 0;
         size: auto;
     }
 
-    .app-header, .action-bar, .category-chevron, .signature-actions, .pdf-option-row, .category-toggle-row {
+    .app-header,
+    .action-bar,
+    .category-chevron,
+    .signature-actions,
+    .pdf-option-row,
+    .category-toggle-row {
         display: none !important;
     }
+
     body {
         background: #fff;
     }
+
     .page {
         padding: 14mm 12mm;
         max-width: 100%;
     }
+
     .card {
         box-shadow: none !important;
         border: 1px solid #ccc !important;
     }
+
     .category-body {
         display: block !important;
     }
-    .measure-card, .category, .item {
+
+    .measure-card,
+    .category,
+    .item {
         page-break-inside: avoid;
         break-inside: avoid;
     }
