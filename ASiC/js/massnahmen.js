@@ -73,7 +73,7 @@ async function renderMeasures() {
 
 
     // ----------------------------------------------------------------------
-    // Karten erzeugen
+    // Maßnahmen-Karten erzeugen
     // ----------------------------------------------------------------------
 
     container.innerHTML = state.measures.map((measure, index) => {
@@ -89,7 +89,8 @@ async function renderMeasures() {
 
 
         // ------------------------------------------------------------------
-        // Foto-Thumbnails
+        // Foto-Vorschauen
+        // Alle Fotos werden gleich dargestellt: 180 × 180 px
         // ------------------------------------------------------------------
 
         const photoThumbs = photos.map(photo => {
@@ -120,7 +121,7 @@ async function renderMeasures() {
 
 
         // ------------------------------------------------------------------
-        // Maßnahme-Karte
+        // Maßnahmen-Karte
         // ------------------------------------------------------------------
 
         return `
@@ -157,7 +158,7 @@ async function renderMeasures() {
 
 
                         <!-- ------------------------------------------------ -->
-                        <!-- KAMERA-BUTTON -->
+                        <!-- KAMERA -->
                         <!-- ------------------------------------------------ -->
 
                         <button
@@ -169,7 +170,7 @@ async function renderMeasures() {
 
 
                         <!-- ------------------------------------------------ -->
-                        <!-- FOTO AUS GALERIE -->
+                        <!-- FOTOS AUS GALERIE -->
                         <!-- ------------------------------------------------ -->
 
                         <label
@@ -178,10 +179,6 @@ async function renderMeasures() {
                             🖼️ Aus Fotos auswählen
                         </label>
 
-
-                        <!-- ------------------------------------------------ -->
-                        <!-- NORMALE DATEIAUSWAHL -->
-                        <!-- ------------------------------------------------ -->
 
                         <input
                             type="file"
@@ -195,7 +192,7 @@ async function renderMeasures() {
 
 
                     <!-- ---------------------------------------------------- -->
-                    <!-- FOTO-GRID -->
+                    <!-- FOTO-VORSCHAU -->
                     <!-- ---------------------------------------------------- -->
 
                     ${
@@ -212,7 +209,7 @@ async function renderMeasures() {
 
 
                 <!-- ====================================================== -->
-                <!-- MASSNAHME / BESCHREIBUNG -->
+                <!-- MASSNAHME -->
                 <!-- ====================================================== -->
 
                 <div class="measure-answer">
@@ -288,6 +285,7 @@ async function renderMeasures() {
 
             </div>
         `;
+
     }).join('');
 }
 
@@ -298,9 +296,11 @@ async function renderMeasures() {
 
 function openMeasureCamera(measureId) {
 
-    // Prüfen, ob bereits ein Kamera-Input vorhanden ist
     const existingInput =
-        document.getElementById(`camera-input-${measureId}`);
+        document.getElementById(
+            `camera-input-${measureId}`
+        );
+
 
     if (existingInput) {
         existingInput.click();
@@ -308,53 +308,63 @@ function openMeasureCamera(measureId) {
     }
 
 
-    // Temporäres Input-Element für die Kamera erstellen
-    const cameraInput = document.createElement('input');
+    // Temporäres Kamera-Input erzeugen
+    const cameraInput =
+        document.createElement('input');
+
 
     cameraInput.type = 'file';
 
-    // Nur Bilder erlauben
+    // Nur Bilder
     cameraInput.accept = 'image/*';
 
     // Rückseitige Kamera bevorzugen
-    cameraInput.setAttribute('capture', 'environment');
+    cameraInput.setAttribute(
+        'capture',
+        'environment'
+    );
 
-    // Kamera-Aufnahme ist hier absichtlich einzeln
+    // Eine Aufnahme pro Kamera-Aufruf
     cameraInput.multiple = false;
 
-    cameraInput.id = `camera-input-${measureId}`;
+    cameraInput.id =
+        `camera-input-${measureId}`;
 
     cameraInput.style.display = 'none';
 
 
     // ----------------------------------------------------------------------
-    // Nach Aufnahme
+    // Nach der Aufnahme
     // ----------------------------------------------------------------------
 
-    cameraInput.addEventListener('change', async () => {
+    cameraInput.addEventListener(
+        'change',
+        async () => {
 
-        if (
-            cameraInput.files &&
-            cameraInput.files.length > 0
-        ) {
+            if (
+                cameraInput.files &&
+                cameraInput.files.length > 0
+            ) {
 
-            await onMeasurePhotosCaptured(
-                measureId,
-                cameraInput.files
-            );
+                await onMeasurePhotosCaptured(
+                    measureId,
+                    cameraInput.files
+                );
+            }
+
+
+            // Temporäres Element entfernen
+            cameraInput.remove();
         }
+    );
 
 
-        // Temporäres Input wieder entfernen
-        cameraInput.remove();
-
-    });
-
-
-    document.body.appendChild(cameraInput);
+    document.body.appendChild(
+        cameraInput
+    );
 
 
-    // Kamera / Dateiauswahl des iPads öffnen
+    // Kamera öffnen
     cameraInput.click();
 }
 
@@ -363,10 +373,13 @@ function openMeasureCamera(measureId) {
 // FOTOS AUFNEHMEN / SPEICHERN
 // ==========================================================================
 
-async function onMeasurePhotosCaptured(measureId, fileList) {
+async function onMeasurePhotosCaptured(
+    measureId,
+    fileList
+) {
 
-    const files = Array.from(fileList)
-        .filter(
+    const files =
+        Array.from(fileList).filter(
             file =>
                 file.type &&
                 file.type.startsWith('image/')
@@ -382,18 +395,17 @@ async function onMeasurePhotosCaptured(measureId, fileList) {
 
 
     // ----------------------------------------------------------------------
-    // Alle ausgewählten Fotos verarbeiten
+    // Fotos verarbeiten
     // ----------------------------------------------------------------------
 
     for (const file of files) {
 
         try {
 
-            // Foto verkleinern / optimieren
-            const blob = await resizeImageFile(file);
+            const blob =
+                await resizeImageFile(file);
 
 
-            // Foto speichern
             await addPhoto(
                 blob,
                 '',
@@ -412,7 +424,7 @@ async function onMeasurePhotosCaptured(measureId, fileList) {
     }
 
 
-    // Karten neu rendern
+    // Karten neu laden
     await renderMeasures();
 
 
@@ -442,7 +454,10 @@ async function onMeasurePhotosCaptured(measureId, fileList) {
 // FOTO LÖSCHEN
 // ==========================================================================
 
-async function onMeasurePhotoDelete(photoId, measureId) {
+async function onMeasurePhotoDelete(
+    photoId,
+    measureId
+) {
 
     try {
 
@@ -471,14 +486,22 @@ async function onMeasurePhotoDelete(photoId, measureId) {
 // MASSNAHMEN-FELD AKTUALISIEREN
 // ==========================================================================
 
-function updateMeasureField(id, field, value) {
+function updateMeasureField(
+    id,
+    field,
+    value
+) {
 
     const measure =
-        state.measures.find(m => m.id === id);
+        state.measures.find(
+            m => m.id === id
+        );
+
 
     if (!measure) {
         return;
     }
+
 
     measure[field] = value;
 
@@ -490,10 +513,16 @@ function updateMeasureField(id, field, value) {
 // UNTERSCHRIFTEN-CANVAS
 // ==========================================================================
 
-function initSignaturePad(key, canvasId) {
+function initSignaturePad(
+    key,
+    canvasId
+) {
 
     const canvas =
-        document.getElementById(canvasId);
+        document.getElementById(
+            canvasId
+        );
+
 
     if (!canvas) {
         return;
@@ -502,6 +531,7 @@ function initSignaturePad(key, canvasId) {
 
     const ratio =
         window.devicePixelRatio || 1;
+
 
     const rect =
         canvas.getBoundingClientRect();
@@ -518,7 +548,11 @@ function initSignaturePad(key, canvasId) {
         canvas.getContext('2d');
 
 
-    ctx.scale(ratio, ratio);
+    ctx.scale(
+        ratio,
+        ratio
+    );
+
 
     ctx.lineWidth = 2.2;
     ctx.lineCap = 'round';
@@ -531,7 +565,7 @@ function initSignaturePad(key, canvasId) {
 
 
     // ----------------------------------------------------------------------
-    // Position der Maus / Touch-Eingabe bestimmen
+    // Touch-/Mausposition
     // ----------------------------------------------------------------------
 
     function pos(e) {
@@ -539,8 +573,11 @@ function initSignaturePad(key, canvasId) {
         const r =
             canvas.getBoundingClientRect();
 
+
         const point =
-            e.touches ? e.touches[0] : e;
+            e.touches
+                ? e.touches[0]
+                : e;
 
 
         return {
@@ -551,7 +588,7 @@ function initSignaturePad(key, canvasId) {
 
 
     // ----------------------------------------------------------------------
-    // Zeichnen starten
+    // Start
     // ----------------------------------------------------------------------
 
     function start(e) {
@@ -565,7 +602,11 @@ function initSignaturePad(key, canvasId) {
         const p = pos(e);
 
         ctx.beginPath();
-        ctx.moveTo(p.x, p.y);
+
+        ctx.moveTo(
+            p.x,
+            p.y
+        );
     }
 
 
@@ -579,18 +620,25 @@ function initSignaturePad(key, canvasId) {
             return;
         }
 
+
         e.preventDefault();
 
 
         const p = pos(e);
 
-        ctx.lineTo(p.x, p.y);
+
+        ctx.lineTo(
+            p.x,
+            p.y
+        );
+
+
         ctx.stroke();
     }
 
 
     // ----------------------------------------------------------------------
-    // Zeichnen beenden
+    // Ende
     // ----------------------------------------------------------------------
 
     function end() {
@@ -599,11 +647,14 @@ function initSignaturePad(key, canvasId) {
             return;
         }
 
+
         drawing = false;
 
 
         state.signatures[key] =
-            canvas.toDataURL('image/png');
+            canvas.toDataURL(
+                'image/png'
+            );
 
 
         saveState();
@@ -671,9 +722,13 @@ function initSignaturePad(key, canvasId) {
                 canvas.height
             );
 
+
             hasStroke = false;
 
-            state.signatures[key] = null;
+
+            state.signatures[key] =
+                null;
+
 
             saveState();
         }
@@ -687,10 +742,13 @@ function initSignaturePad(key, canvasId) {
 
 function restoreSignatures() {
 
-    Object.keys(signaturePads).forEach(key => {
+    Object.keys(
+        signaturePads
+    ).forEach(key => {
 
         const dataUrl =
             state.signatures[key];
+
 
         const pad =
             signaturePads[key];
@@ -719,8 +777,10 @@ function restoreSignatures() {
                 img,
                 0,
                 0,
-                pad.canvas.width / pad.ratio,
-                pad.canvas.height / pad.ratio
+                pad.canvas.width /
+                    pad.ratio,
+                pad.canvas.height /
+                    pad.ratio
             );
         };
 
@@ -735,10 +795,7 @@ function restoreSignatures() {
 // ==========================================================================
 //
 // buildPdf(), pdfFilename() sowie das komplette Export-Menü
-// (Modus-Auswahl, Drucken, Teilen, Mail) leben zentral in app.js,
-// damit sowohl die Checkliste als auch die Maßnahmen-Seite darauf
-// zugreifen können.
-//
+// (Modus-Auswahl, Drucken, Teilen, Mail) leben zentral in app.js.
 // ==========================================================================
 
 
@@ -746,173 +803,179 @@ function restoreSignatures() {
 // INITIALISIERUNG
 // ==========================================================================
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener(
+    'DOMContentLoaded',
+    () => {
 
+        // --------------------------------------------------------------
+        // Unterschriften
+        // --------------------------------------------------------------
 
-    // ----------------------------------------------------------------------
-    // Unterschriften initialisieren
-    // ----------------------------------------------------------------------
+        initSignaturePad(
+            'pruefer',
+            'sig-pruefer-canvas'
+        );
 
-    initSignaturePad(
-        'pruefer',
-        'sig-pruefer-canvas'
-    );
-
-    initSignaturePad(
-        'marktleitung',
-        'sig-marktleitung-canvas'
-    );
-
-
-    // ----------------------------------------------------------------------
-    // Prüfer-Name
-    // ----------------------------------------------------------------------
-
-    const sigPrueferName =
-        document.getElementById(
-            'sig-pruefer-name'
+        initSignaturePad(
+            'marktleitung',
+            'sig-marktleitung-canvas'
         );
 
 
-    if (sigPrueferName) {
+        // --------------------------------------------------------------
+        // Prüfername
+        // --------------------------------------------------------------
 
-        sigPrueferName.value =
-            state.companyInfo.pruefername || '';
-
-
-        sigPrueferName.addEventListener(
-            'change',
-            () => {
-
-                state.companyInfo.pruefername =
-                    sigPrueferName.value;
-
-                saveState();
-
-                renderCompanyInfoStrip();
-            }
-        );
-    }
+        const sigPrueferName =
+            document.getElementById(
+                'sig-pruefer-name'
+            );
 
 
-    // ----------------------------------------------------------------------
-    // Marktleitung-Name
-    // ----------------------------------------------------------------------
+        if (sigPrueferName) {
 
-    const sigMarktleitungName =
-        document.getElementById(
-            'sig-marktleitung-name'
-        );
+            sigPrueferName.value =
+                state.companyInfo.pruefername || '';
 
 
-    if (sigMarktleitungName) {
+            sigPrueferName.addEventListener(
+                'change',
+                () => {
 
-        sigMarktleitungName.value =
-            state.companyInfo.marktleitung || '';
-
-
-        sigMarktleitungName.addEventListener(
-            'change',
-            () => {
-
-                state.companyInfo.marktleitung =
-                    sigMarktleitungName.value;
-
-                saveState();
-
-                renderCompanyInfoStrip();
-            }
-        );
-    }
+                    state.companyInfo.pruefername =
+                        sigPrueferName.value;
 
 
-    // ----------------------------------------------------------------------
-    // Maßnahmen rendern
-    // ----------------------------------------------------------------------
+                    saveState();
 
-    renderMeasures();
-
-
-    // ----------------------------------------------------------------------
-    // Unterschriften wiederherstellen
-    // ----------------------------------------------------------------------
-
-    restoreSignatures();
-
-
-    // ----------------------------------------------------------------------
-    // Prüfer-Unterschrift löschen
-    // ----------------------------------------------------------------------
-
-    const clearPruefer =
-        document.getElementById(
-            'clear-sig-pruefer'
-        );
-
-
-    if (clearPruefer) {
-
-        clearPruefer.addEventListener(
-            'click',
-            () => {
-
-                if (
-                    signaturePads.pruefer
-                ) {
-                    signaturePads.pruefer.clear();
+                    renderCompanyInfoStrip();
                 }
-            }
-        );
-    }
+            );
+        }
 
 
-    // ----------------------------------------------------------------------
-    // Marktleitung-Unterschrift löschen
-    // ----------------------------------------------------------------------
+        // --------------------------------------------------------------
+        // Marktleitungsname
+        // --------------------------------------------------------------
 
-    const clearMarktleitung =
-        document.getElementById(
-            'clear-sig-marktleitung'
-        );
+        const sigMarktleitungName =
+            document.getElementById(
+                'sig-marktleitung-name'
+            );
 
 
-    if (clearMarktleitung) {
+        if (sigMarktleitungName) {
 
-        clearMarktleitung.addEventListener(
-            'click',
-            () => {
+            sigMarktleitungName.value =
+                state.companyInfo.marktleitung || '';
 
-                if (
-                    signaturePads.marktleitung
-                ) {
-                    signaturePads.marktleitung.clear();
+
+            sigMarktleitungName.addEventListener(
+                'change',
+                () => {
+
+                    state.companyInfo.marktleitung =
+                        sigMarktleitungName.value;
+
+
+                    saveState();
+
+                    renderCompanyInfoStrip();
                 }
-            }
-        );
+            );
+        }
+
+
+        // --------------------------------------------------------------
+        // Maßnahmen anzeigen
+        // --------------------------------------------------------------
+
+        renderMeasures();
+
+
+        // --------------------------------------------------------------
+        // Unterschriften wiederherstellen
+        // --------------------------------------------------------------
+
+        restoreSignatures();
+
+
+        // --------------------------------------------------------------
+        // Prüfer-Unterschrift löschen
+        // --------------------------------------------------------------
+
+        const clearPruefer =
+            document.getElementById(
+                'clear-sig-pruefer'
+            );
+
+
+        if (clearPruefer) {
+
+            clearPruefer.addEventListener(
+                'click',
+                () => {
+
+                    if (
+                        signaturePads.pruefer
+                    ) {
+                        signaturePads.pruefer.clear();
+                    }
+                }
+            );
+        }
+
+
+        // --------------------------------------------------------------
+        // Marktleitung-Unterschrift löschen
+        // --------------------------------------------------------------
+
+        const clearMarktleitung =
+            document.getElementById(
+                'clear-sig-marktleitung'
+            );
+
+
+        if (clearMarktleitung) {
+
+            clearMarktleitung.addEventListener(
+                'click',
+                () => {
+
+                    if (
+                        signaturePads.marktleitung
+                    ) {
+                        signaturePads.marktleitung.clear();
+                    }
+                }
+            );
+        }
+
+
+        // --------------------------------------------------------------
+        // Speichern
+        // --------------------------------------------------------------
+
+        const btnSave =
+            document.getElementById(
+                'btn-save-measures'
+            );
+
+
+        if (btnSave) {
+
+            btnSave.addEventListener(
+                'click',
+                () => {
+
+                    saveState();
+
+                    showToast(
+                        'Gespeichert'
+                    );
+                }
+            );
+        }
+
     }
-
-
-    // ----------------------------------------------------------------------
-    // Maßnahmen speichern
-    // ----------------------------------------------------------------------
-
-    const btnSave =
-        document.getElementById(
-            'btn-save-measures'
-        );
-
-
-    if (btnSave) {
-
-        btnSave.addEventListener(
-            'click',
-            () => {
-
-                saveState();
-
-                showToast('Gespeichert');
-            }
-        );
-    }
-
-});
+);
