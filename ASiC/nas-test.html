@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NAS-Speicher-Test</title>
+<style>
+    body {
+        font-family: -apple-system, sans-serif;
+        max-width: 600px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+        color: #1c2226;
+        background: #eef0ee;
+    }
+    h1 { font-size: 1.3rem; }
+    .card {
+        background: #fff;
+        border-radius: 12px;
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    button {
+        display: block;
+        width: 100%;
+        padding: 0.9rem;
+        margin-bottom: 0.75rem;
+        border: none;
+        border-radius: 999px;
+        background: #cc071e;
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+    }
+    button:disabled { opacity: 0.5; }
+    pre {
+        background: #f4f4f4;
+        border-radius: 8px;
+        padding: 0.75rem;
+        white-space: pre-wrap;
+        word-break: break-word;
+        font-size: 0.82rem;
+        max-height: 300px;
+        overflow: auto;
+    }
+    .ok { color: #2f9e64; font-weight: 700; }
+    .fehler { color: #d6453f; font-weight: 700; }
+    .hinweis { font-size: 0.85rem; color: #555; }
+</style>
+</head>
+<body>
+
+<h1>🧪 NAS-Speicher-Test (unabhängig von der App)</h1>
+<p class="hinweis">
+    Diese Seite testet nur, ob <code>save.php</code>, <code>list.php</code> und <code>load.php</code>
+    von hier aus erreichbar sind und funktionieren. Sie hat mit der eigentlichen ASiC-Handel-App
+    nichts zu tun und verändert keine echten Begehungsdaten.
+</p>
+
+<div class="card">
+    <div id="url-info" class="hinweis"></div>
+</div>
+
+<div class="card">
+    <button id="btn-save">1️⃣ Testdatei speichern (save.php)</button>
+    <button id="btn-list">2️⃣ Dateiliste abrufen (list.php)</button>
+    <button id="btn-load">3️⃣ Testdatei wieder laden (load.php)</button>
+    <pre id="ergebnis">Noch kein Test ausgeführt.</pre>
+</div>
+
+<script>
+// Muss exakt dem Namensschema entsprechen, das save.php tatsaechlich
+// erzeugt: Begehung_<TT.MM.JJJJ>_Markt<Marktnummer>.json
+const heuteDE = new Date().toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+const TEST_DATEINAME = 'Begehung_' + heuteDE + '_MarktTEST99.json';
+const ausgabe = document.getElementById('ergebnis');
+document.getElementById('url-info').textContent =
+    'Diese Seite läuft unter: ' + window.location.origin + window.location.pathname;
+
+function zeige(text, klasse) {
+    ausgabe.textContent = text;
+    ausgabe.className = klasse || '';
+}
+
+function alleButtonsSperren(sperren) {
+    ['btn-save', 'btn-list', 'btn-load'].forEach(id => {
+        document.getElementById(id).disabled = sperren;
+    });
+}
+
+document.getElementById('btn-save').addEventListener('click', async () => {
+    alleButtonsSperren(true);
+    zeige('Sende Testdaten an save.php …');
+    try {
+        const heute = new Date().toISOString().split('T')[0]; // z.B. 2026-08-25
+        const testDaten = {
+            companyInfo: {
+                datum: heute,
+                marktnummer: 'TEST99',
+                firma: 'Testseite'
+            },
+            testFeld: 'Hallo von der Testseite',
+            erstelltAm: new Date().toISOString()
+        };
+        const res = await fetch('./save.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            cache: 'no-store',
+            body: JSON.stringify(testDaten)
+        });
+        const status = res.status;
+        const text = await res.text();
+        if (res.ok) {
+            zeige('✅ save.php erfolgreich (HTTP ' + status + ')\n\nAntwort:\n' + text, 'ok');
+        } else {
+            zeige('❌ save.php Fehler (HTTP ' + status + ')\n\nAntwort:\n' + text, 'fehler');
+        }
+    } catch (err) {
+        zeige('❌ Verbindungsfehler beim Aufruf von save.php:\n' + err.message + '\n\nDas deutet meist auf CORS, Netzwerk oder eine falsche Adresse hin.', 'fehler');
+    } finally {
+        alleButtonsSperren(false);
+    }
+});
+
+document.getElementById('btn-list').addEventListener('click', async () => {
+    alleButtonsSperren(true);
+    zeige('Rufe Dateiliste von list.php ab …');
+    try {
+        const res = await fetch('./list.php', { cache: 'no-store' });
+        const status = res.status;
+        const text = await res.text();
+        if (res.ok) {
+            zeige('✅ list.php erfolgreich (HTTP ' + status + ')\n\nAntwort:\n' + text, 'ok');
+        } else {
+            zeige('❌ list.php Fehler (HTTP ' + status + ')\n\nAntwort:\n' + text, 'fehler');
+        }
+    } catch (err) {
+        zeige('❌ Verbindungsfehler beim Aufruf von list.php:\n' + err.message, 'fehler');
+    } finally {
+        alleButtonsSperren(false);
+    }
+});
+
+document.getElementById('btn-load').addEventListener('click', async () => {
+    alleButtonsSperren(true);
+    zeige('Lade Testdatei „' + TEST_DATEINAME + '“ über load.php …');
+    try {
+        const res = await fetch('./load.php?filename=' + encodeURIComponent(TEST_DATEINAME), { cache: 'no-store' });
+        const status = res.status;
+        const text = await res.text();
+        if (res.ok) {
+            zeige('✅ load.php erfolgreich (HTTP ' + status + ')\n\nAntwort:\n' + text + '\n\nHinweis: Falls hier genau die Testdaten von Schritt 1 stehen, funktioniert der komplette Kreislauf (Speichern → Auflisten → Laden).', 'ok');
+        } else {
+            zeige('❌ load.php Fehler (HTTP ' + status + ')\n\nAntwort:\n' + text + '\n\nFalls „save.php“ (Schritt 1) noch nicht ausgeführt wurde, ist das erwartbar.', 'fehler');
+        }
+    } catch (err) {
+        zeige('❌ Verbindungsfehler beim Aufruf von load.php:\n' + err.message, 'fehler');
+    } finally {
+        alleButtonsSperren(false);
+    }
+});
+</script>
+
+</body>
+</html>
