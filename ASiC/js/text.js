@@ -1,6 +1,6 @@
 // ===== Vordefinierte Maßnahmen-Texte je Prüfpunkt, in drei Sprachstilen =====
 // Fachliche Überarbeitung: 25.08.2026. Regelwerksbezüge wurden gegen aktuelle BGHW/DGUV-, BAuA- und Bundesrechtsquellen abgeglichen.
-// Detailüberarbeitung (1. Stufe): 25.08.2026 – jeder einzelne Prüfpunkt wurde individuell um konkrete Fristen/Intervalle,
+// Detailüberarbeitung (2. Stufe): 25.08.2026 – jeder einzelne Prüfpunkt wurde individuell um konkrete Fristen/Intervalle,
 // präzisere Paragraphen-/Absatzangaben und zusätzliche branchenspezifische DGUV-/DIN-Einzelverweise ergänzt (kein pauschaler
 // Kategorietext). Recherchequellen u. a.: BetrSichV (Gesetze-im-Internet), ASR A2.2/A2.3/A3.4 (BAuA), DIN 14406-4, DIN EN 15635,
 // DGUV Vorschrift 3 Anhang 1, DGUV Information 208-016/208-061, DIN V VDE V 0108-100 / DIN EN 50172, DIN 18040-1.

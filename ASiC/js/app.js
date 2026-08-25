@@ -8,7 +8,7 @@ const STORAGE_KEY = 'begehungState';
 
 // Revisionsstand der App/Checkliste (in Fusszeile und PDF sichtbar,
 // bei inhaltlichen Aenderungen an Fragenkatalog/Massnahmen hochzaehlen)
-const APP_REVISION = '1.0';
+const APP_REVISION = '1.3';
 const APP_REVISION_DATE = '2026-08-24';
 
 function renderFooterMeta() {
@@ -179,6 +179,121 @@ function initDropdownMenu(toggleId, panelId) {
 let exportMode = document.getElementById('measures-container') ? 'massnahmen'
     : document.getElementById('photo-grid') ? 'fotos'
     : 'checkliste';
+
+// ===== Synology-NAS-Speicherung (save.php / list.php / load.php) =====
+// Setzt voraus, dass die App direkt ueber die Synology selbst (bzw. deren
+// Tailscale-Adresse) aufgerufen wird - die drei PHP-Skripte muessen im
+// selben Verzeichnis wie diese Seite liegen. Ueber eine andere Adresse
+// (z. B. GitHub Pages) sind diese Endpunkte nicht erreichbar, da dort
+// keine serverseitigen Skripte laufen koennen.
+
+async function parseJsonResponse(res) {
+    try {
+        return await res.json();
+    } catch (parseErr) {
+        throw new Error('Ungültige Antwort vom NAS (kein gültiges JSON).');
+    }
+}
+
+async function saveStateToSynology() {
+    try {
+        const res = await fetch('./save.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            cache: 'no-store',
+            body: JSON.stringify(state)
+        });
+        const result = await parseJsonResponse(res);
+        if (!res.ok || !result.ok) {
+            throw new Error(result.message || `Fehler beim Speichern (HTTP ${res.status}).`);
+        }
+        showToast('Auf NAS gespeichert: ' + result.fileName);
+    } catch (err) {
+        console.error('NAS-Speichern fehlgeschlagen:', err);
+        showToast('NAS-Speichern fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+    }
+}
+
+async function getSynologyFiles() {
+    const res = await fetch('./list.php', { cache: 'no-store' });
+    const result = await parseJsonResponse(res);
+    if (!res.ok || !result.ok) {
+        throw new Error(result.message || `Fehler beim Abrufen der Dateiliste (HTTP ${res.status}).`);
+    }
+    return result.files || [];
+}
+
+async function loadStateFromSynology(filename) {
+    const res = await fetch('./load.php?filename=' + encodeURIComponent(filename), { cache: 'no-store' });
+    const result = await parseJsonResponse(res);
+    if (!res.ok) {
+        throw new Error((result && result.message) || `Fehler beim Laden (HTTP ${res.status}).`);
+    }
+
+    // Defensiv mit defaultState() zusammenfuehren, aehnlich wie beim JSON-Import,
+    // damit eine unvollstaendige/aeltere Datei die App nicht zum Absturz bringt.
+    const leer = defaultState();
+    state.companyInfo = Object.assign({}, leer.companyInfo, result.companyInfo || {});
+    state.ratings = result.ratings || {};
+    state.comments = result.comments || {};
+    state.measures = result.measures || [];
+    state.signatures = Object.assign({}, leer.signatures, result.signatures || {});
+    state.notApplicable = result.notApplicable || {};
+
+    saveState();
+    if (typeof renderChecklist === 'function') renderChecklist();
+    if (typeof initCompanyForm === 'function') initCompanyForm();
+    if (typeof renderCompanyInfoStrip === 'function') renderCompanyInfoStrip();
+    if (typeof renderMeasures === 'function') await renderMeasures();
+    if (typeof restoreSignatures === 'function') restoreSignatures();
+
+    showToast('Begehung vom NAS geladen: ' + filename);
+}
+
+// Einfacher Auswahl-Dialog: listet alle auf dem NAS gespeicherten Begehungen
+// auf, per Klick wird die jeweilige geladen.
+async function openSynologyLoadDialog() {
+    const overlay = document.createElement('div');
+    overlay.className = 'access-gate-overlay';
+    overlay.innerHTML = `
+        <div class="access-gate-box" style="max-width:420px; text-align:left;">
+            <div class="access-gate-brand" style="margin-bottom:0.75rem;">Vom NAS laden</div>
+            <div id="nas-load-list">
+                <p class="auswertung-empty">Lade Dateiliste …</p>
+            </div>
+            <button class="btn btn-secondary btn-small" id="nas-load-cancel" style="width:100%; margin-top:1rem;">Abbrechen</button>
+        </div>`;
+    document.body.appendChild(overlay);
+
+    document.getElementById('nas-load-cancel').addEventListener('click', () => overlay.remove());
+
+    const listEl = document.getElementById('nas-load-list');
+    try {
+        const files = await getSynologyFiles();
+        if (files.length === 0) {
+            listEl.innerHTML = '<p class="auswertung-empty">Noch keine Begehung auf dem NAS gespeichert.</p>';
+            return;
+        }
+        listEl.innerHTML = files.map(f => `
+            <button class="btn btn-secondary btn-small" style="width:100%; text-align:left; margin-bottom:0.5rem;" data-filename="${f.fileName}">
+                ${f.datum || '?'} — ${f.firma || 'ohne Markt-Angabe'}${f.marktnummer ? ' (Nr. ' + f.marktnummer + ')' : ''}
+            </button>`).join('');
+        listEl.querySelectorAll('button[data-filename]').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                overlay.remove();
+                try {
+                    await loadStateFromSynology(btn.dataset.filename);
+                } catch (err) {
+                    console.error('NAS-Laden fehlgeschlagen:', err);
+                    showToast('NAS-Laden fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+                }
+            });
+        });
+    } catch (err) {
+        console.error('Dateiliste konnte nicht geladen werden:', err);
+        listEl.innerHTML = `<p style="color:var(--mangel);">Dateiliste konnte nicht geladen werden: ${err && err.message ? err.message : 'unbekannter Fehler'}</p>`;
+    }
+}
 
 function initExportMenu() {
     initDropdownMenu('export-menu-toggle', 'export-menu-panel');
@@ -944,6 +1059,75 @@ function pdfFilename() {
     return `Massnahmenplan_${firma}_${datum}.pdf`;
 }
 
+// Quellenverzeichnis als PDF-Anhang: listet die in MEASURE_SOURCES
+// hinterlegten BGHW-/DGUV-/DIN-Regelwerke sowie gesetzlichen Rechtsquellen
+// auf, mit automatischem Zeilenumbruch bei laengeren Eintraegen und
+// automatischem Seitenumbruch, falls die Liste nicht auf eine Seite passt.
+function renderSourcesAppendix(doc, margin, contentWidth, pageHeight) {
+    doc.addPage();
+    let y = 18;
+
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(14);
+    doc.setTextColor(28, 34, 38);
+    doc.text('Quellenverzeichnis', margin, y);
+    y += 9;
+
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(8.5);
+    doc.setTextColor(100, 116, 139);
+    const introLines = doc.splitTextToSize(
+        'Die Maßnahmentexte zitieren an den jeweiligen Prüfpunkten konkrete Regelwerke bzw. Paragraphen im Fließtext. Diese Liste fasst die insgesamt herangezogenen Quellen zusammen.',
+        contentWidth
+    );
+    doc.text(introLines, margin, y);
+    y += introLines.length * 4 + 6;
+
+    function renderListe(titel, eintraege) {
+        if (y > pageHeight - 30) {
+            doc.addPage();
+            y = 18;
+        }
+        doc.setFont(undefined, 'bold');
+        doc.setFontSize(10);
+        doc.setTextColor(30, 41, 59);
+        doc.text(titel, margin, y);
+        y += 6;
+
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(8.5);
+        doc.setTextColor(51, 65, 85);
+
+        eintraege.forEach(eintrag => {
+            const zeilen = doc.splitTextToSize('•  ' + eintrag, contentWidth - 2);
+            const hoehe = zeilen.length * 4 + 2;
+            if (y + hoehe > pageHeight - 20) {
+                doc.addPage();
+                y = 18;
+            }
+            doc.text(zeilen, margin, y);
+            y += hoehe;
+        });
+        y += 5;
+    }
+
+    renderListe('BGHW-/DGUV-/DIN-Regelwerke', MEASURE_SOURCES.bghw);
+    renderListe('Gesetzliche Rechtsquellen', MEASURE_SOURCES.rechtsquellen);
+
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(7.5);
+    doc.setTextColor(140);
+    const hinweisLines = doc.splitTextToSize(
+        'DGUV-Regeln und DGUV-Informationen konkretisieren die praktische Umsetzung; sie sind rechtlich nicht mit staatlichen Rechtsvorschriften gleichzusetzen. Gesetzliche und technische Regelwerke können sich ändern.',
+        contentWidth
+    );
+    if (y + hinweisLines.length * 3.5 > pageHeight - 15) {
+        doc.addPage();
+        y = 18;
+    }
+    doc.text(hinweisLines, margin, y);
+}
+
 async function buildPdf(includeChecklist, includeFotos) {
     if (typeof window.jspdf === 'undefined' || !window.jspdf.jsPDF) {
         throw new Error('jsPDF-Bibliothek nicht geladen (window.jspdf fehlt). Bitte prüfen, ob "js/jspdf.umd.min.js" korrekt eingebunden ist, und die Seite neu laden.');
@@ -1554,6 +1738,17 @@ async function buildPdf(includeChecklist, includeFotos) {
         state.measures
     );
 
+    // Quellenverzeichnis als Anhang - nur sinnvoll, wenn ueberhaupt
+    // Massnahmen vorhanden sind UND der gewaehlte Sprachstil tatsaechlich
+    // Regelwerke/Gesetze zitiert (nicht bei "einfach").
+    if (
+        state.measures.length > 0 &&
+        MEASURE_STYLE !== 'einfach' &&
+        typeof MEASURE_SOURCES !== 'undefined'
+    ) {
+        renderSourcesAppendix(doc, margin, contentWidth, pageHeight);
+    }
+
     const totalPages =
         doc.getNumberOfPages();
 
@@ -1700,6 +1895,7 @@ async function printReport(mode) {
 function initCompanyForm() {
     const fields = [
         'firma',
+        'marktnummer',
         'standort',
         'datum',
         'pruefername',
@@ -1747,6 +1943,9 @@ function renderCompanyInfoStrip() {
     const map = {
         'info-firma':
             state.companyInfo.firma,
+
+        'info-marktnummer':
+            state.companyInfo.marktnummer,
 
         'info-standort':
             state.companyInfo.standort,
@@ -2586,6 +2785,29 @@ document.addEventListener(
                     );
                 }
             );
+        }
+
+        const btnSaveNas = document.getElementById('btn-save-nas');
+        const btnLoadNas = document.getElementById('btn-load-nas');
+        // save.php/list.php/load.php gibt es nur auf der Synology selbst,
+        // nicht auf GitHub Pages (dort laeuft kein PHP) - die beiden
+        // NAS-Buttons dort erst gar nicht anzeigen, statt sie klickbar zu
+        // lassen und erst danach eine Fehlermeldung zu zeigen.
+        const laeuftAufGithubPages = window.location.hostname.endsWith('.github.io');
+
+        if (btnSaveNas) {
+            if (laeuftAufGithubPages) {
+                btnSaveNas.style.display = 'none';
+            } else {
+                btnSaveNas.addEventListener('click', saveStateToSynology);
+            }
+        }
+        if (btnLoadNas) {
+            if (laeuftAufGithubPages) {
+                btnLoadNas.style.display = 'none';
+            } else {
+                btnLoadNas.addEventListener('click', openSynologyLoadDialog);
+            }
         }
 
         const btnExport =
