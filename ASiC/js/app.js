@@ -226,14 +226,16 @@ async function sharePdfDoc(doc, filename, shareTitle, mode) {
             const file = new File([blob], filename, { type: 'application/pdf' });
             if (navigator.canShare({ files: [file] })) {
                 try {
-                    await navigator.share({ files: [file], title: shareTitle, text: 'PDF im Anhang' });
+                    // Echten Betreff/Text direkt an navigator.share() uebergeben,
+                    // statt ihn wie zuvor per nachgereichtem mailto: zu versuchen -
+                    // dieser Umweg hat sich auf dem echten iPad als unzuverlaessig
+                    // erwiesen (Mail bleibt beim generischen Platzhaltertext).
+                    await navigator.share({
+                        files: [file],
+                        title: shareTitle,
+                        text: buildShareEmailText(mode)
+                    });
                     showToast('PDF geteilt');
-                    // Kurze Verzoegerung, bevor Betreff/Text per mailto: nachgereicht
-                    // werden: Mail auf iOS braucht nach dem Teilen-Aufruf einen Moment,
-                    // um den Entwurf (mit Anhang) tatsaechlich vollstaendig zu oeffnen -
-                    // kommt der mailto:-Aufruf zu frueh, wird haeufig ein zweiter, vom
-                    // Anhang getrennter Entwurf erzeugt statt denselben zu aktualisieren.
-                    setTimeout(() => openPrefilledMail(mode), 600);
                     return;
                 } catch (err) {
                     if (err && err.name === 'AbortError') return; // Nutzer hat abgebrochen
