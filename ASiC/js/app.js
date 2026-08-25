@@ -8,7 +8,7 @@ const STORAGE_KEY = 'begehungState';
 
 // Revisionsstand der App/Checkliste (in Fusszeile und PDF sichtbar,
 // bei inhaltlichen Aenderungen an Fragenkatalog/Massnahmen hochzaehlen)
-const APP_REVISION = '2.1';
+const APP_REVISION = '1.0';
 const APP_REVISION_DATE = '2026-08-24';
 
 function renderFooterMeta() {
@@ -2318,50 +2318,6 @@ async function archiveCurrentAudit() {
         showToast(
             'Begehung archiviert'
         );
-
-        // Optionaler automatischer NAS-Upload
-        const webdavConfig =
-            (
-                typeof getWebDAVConfig ===
-                'function'
-            )
-                ? getWebDAVConfig()
-                : null;
-
-        if (
-            webdavConfig &&
-            webdavConfig.autoUpload
-        ) {
-
-            try {
-
-                await uploadArchivedAuditToWebDAV(
-                    record
-                );
-
-                showToast(
-                    'Zusätzlich auf NAS gesichert'
-                );
-
-            } catch (uploadErr) {
-
-                console.error(
-                    'NAS-Upload fehlgeschlagen:',
-                    uploadErr
-                );
-
-                showToast(
-                    'Lokal archiviert, NAS-Upload fehlgeschlagen: ' +
-                    (
-                        uploadErr &&
-                        uploadErr.message
-                            ? uploadErr.message
-                            : 'unbekannter Fehler'
-                    ),
-                    'error'
-                );
-            }
-        }
 
     } catch (err) {
 

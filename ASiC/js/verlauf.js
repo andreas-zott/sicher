@@ -50,7 +50,6 @@ function renderArchiveList() {
             <div class="archive-item-actions">
                 <div class="archive-item-actions-primary">
                     <button class="btn btn-secondary btn-small" onclick="onArchiveExport('${record.id}')">📤 PDF exportieren</button>
-                    <button class="btn btn-secondary btn-small" onclick="onArchiveWebDAVUpload('${record.id}')">☁️ Auf NAS sichern</button>
                 </div>
                 <button class="btn-link photo-delete" onclick="onArchiveDelete('${record.id}')">🗑️ Löschen</button>
             </div>
@@ -67,23 +66,6 @@ async function onArchiveExport(id) {
     } catch (err) {
         console.error('Archivierte Begehung konnte nicht exportiert werden:', err);
         showToast('PDF-Fehler: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
-    }
-}
-
-async function onArchiveWebDAVUpload(id) {
-    const record = archiveCache.find(r => r.id === id);
-    if (!record) return;
-    if (!isWebDAVConfigured()) {
-        showToast('NAS-Backup ist noch nicht eingerichtet (siehe Einstellungen)', 'error');
-        return;
-    }
-    try {
-        showToast('Wird auf NAS hochgeladen…');
-        const filename = await uploadArchivedAuditToWebDAV(record);
-        showToast('Auf NAS gesichert: ' + filename);
-    } catch (err) {
-        console.error('NAS-Upload fehlgeschlagen:', err);
-        showToast(err && err.message ? err.message : 'NAS-Upload fehlgeschlagen', 'error');
     }
 }
 
