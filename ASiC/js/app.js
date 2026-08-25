@@ -105,25 +105,39 @@ function showToast(message, type = 'success') {
 
 // ===== Vorgefertigter Mail-Text beim PDF-Versand =====
 // Traegt automatisch Markt (aus "Firma / Markt") und den Namen des Pruefers ein.
-// Wird von allen drei PDF-Varianten (Checkliste, Massnahmen, Gesamtbericht) genutzt.
-function buildShareEmailSubject() {
+// Wird von allen PDF-Varianten genutzt, mit leicht angepasstem Wortlaut je
+// nachdem, was tatsaechlich mitgeschickt wird (mode: 'checkliste' |
+// 'massnahmen' | 'fotos' | 'alle').
+function buildShareEmailSubject(mode) {
     const markt = state.companyInfo.firma || '-';
-    return `Arbeitssicherheitsbegehung Markt ${markt}`;
+    const zusatz = mode === 'massnahmen' ? 'Maßnahmenplan – '
+        : mode === 'fotos' ? 'Fotodokumentation – '
+        : '';
+    return `${zusatz}Arbeitssicherheitsbegehung Markt ${markt}`;
 }
 
-function buildShareEmailText() {
+function buildShareEmailText(mode) {
     const markt = state.companyInfo.firma || '-';
     const pruefer = state.companyInfo.pruefername ? state.companyInfo.pruefername + '\n' : '';
-    return `Sehr geehrte Damen und Herren,\n\nim Rahmen der turnusmäßigen Arbeitssicherheitsbegehung übersende ich Ihnen anbei das Begehungsprotokoll des Marktes ${markt} zur sachlichen Prüfung.\n\nBitte prüfen Sie die dokumentierten Feststellungen und veranlassen Sie die Umsetzung der erforderlichen Maßnahmen.\n\nMit freundlichen Grüßen\n${pruefer}Fachkraft für Arbeitssicherheit (SiFa)`;
+
+    const inhalt = mode === 'massnahmen'
+        ? 'den Maßnahmenplan'
+        : mode === 'fotos'
+            ? 'die Fotodokumentation'
+            : mode === 'alle'
+                ? 'das vollständige Begehungsprotokoll inklusive Maßnahmenplan und Fotodokumentation'
+                : 'das Begehungsprotokoll';
+
+    return `Sehr geehrte Damen und Herren,\n\nim Rahmen der turnusmäßigen Arbeitssicherheitsbegehung übersende ich Ihnen anbei ${inhalt} des Marktes ${markt} zur sachlichen Prüfung.\n\nBitte prüfen Sie die dokumentierten Feststellungen und veranlassen Sie die Umsetzung der erforderlichen Maßnahmen.\n\nMit freundlichen Grüßen\n${pruefer}Fachkraft für Arbeitssicherheit (SiFa)`;
 }
 
 // Zuverlaessige Alternative zu navigator.share() fuer Betreff/Text:
 // iOS uebernimmt title/text beim Teilen an die Mail-App oft nicht zuverlaessig.
 // mailto: oeffnet eine neue Mail mit korrekt befuelltem Betreff/Text - kann aber
 // aus einer Web-App heraus keinen Anhang setzen.
-function openPrefilledMail() {
-    const subject = encodeURIComponent(buildShareEmailSubject());
-    const body = encodeURIComponent(buildShareEmailText());
+function openPrefilledMail(mode) {
+    const subject = encodeURIComponent(buildShareEmailSubject(mode));
+    const body = encodeURIComponent(buildShareEmailText(mode));
     window.location.href = `mailto:?subject=${subject}&body=${body}`;
 }
 
@@ -194,7 +208,7 @@ function initExportMenu() {
     if (btnShare) btnShare.addEventListener('click', () => shareReportPdf(exportMode));
 
     const btnMail = panel.querySelector('[data-action="mail"]');
-    if (btnMail) btnMail.addEventListener('click', openPrefilledMail);
+    if (btnMail) btnMail.addEventListener('click', () => openPrefilledMail(exportMode));
 }
 
 // ===== PDF teilen (iPad-Teilen-Menü, inkl. AirPrint) mit Download-Fallback =====
@@ -204,7 +218,7 @@ function initExportMenu() {
 // den vollstaendigen Betreff/Text nachreichen - Mail uebernimmt das in denselben,
 // bereits offenen Entwurf und behaelt dabei den Anhang. Nur der Betreff wird von
 // Mail auf iOS dabei meist nicht mehr uebernommen (bekannte Einschraenkung).
-async function sharePdfDoc(doc, filename, shareTitle) {
+async function sharePdfDoc(doc, filename, shareTitle, mode) {
     try {
         const blob = doc.output('blob');
 
@@ -214,7 +228,12 @@ async function sharePdfDoc(doc, filename, shareTitle) {
                 try {
                     await navigator.share({ files: [file], title: shareTitle, text: 'PDF im Anhang' });
                     showToast('PDF geteilt');
-                    openPrefilledMail();
+                    // Kurze Verzoegerung, bevor Betreff/Text per mailto: nachgereicht
+                    // werden: Mail auf iOS braucht nach dem Teilen-Aufruf einen Moment,
+                    // um den Entwurf (mit Anhang) tatsaechlich vollstaendig zu oeffnen -
+                    // kommt der mailto:-Aufruf zu frueh, wird haeufig ein zweiter, vom
+                    // Anhang getrennter Entwurf erzeugt statt denselben zu aktualisieren.
+                    setTimeout(() => openPrefilledMail(mode), 600);
                     return;
                 } catch (err) {
                     if (err && err.name === 'AbortError') return; // Nutzer hat abgebrochen
@@ -890,7 +909,8 @@ async function shareChecklistPdf() {
         await sharePdfDoc(
             doc,
             filename,
-            buildShareEmailSubject()
+            buildShareEmailSubject('checkliste'),
+            'checkliste'
         );
 
     } catch (err) {
@@ -1591,7 +1611,8 @@ async function shareReportPdf(mode) {
         await sharePdfDoc(
             doc,
             reportFilename(mode),
-            buildShareEmailSubject()
+            buildShareEmailSubject(mode),
+            mode
         );
 
     } catch (err) {
@@ -2465,7 +2486,8 @@ async function shareArchivedReportPdf(record, mode) {
                     /^(Checkliste|Massnahmenplan|Gesamtbericht)_/,
                     'Archiv_'
                 ),
-            buildShareEmailSubject()
+            buildShareEmailSubject(mode),
+            mode
         );
 
     } finally {
