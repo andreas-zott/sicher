@@ -476,8 +476,6 @@ function drawCoverPage(doc, pageWidth, pageHeight, margin, documentTitle, docume
     doc.setFont(undefined, 'normal');
     doc.setFontSize(11);
     doc.text('(Arbeitsschutz & Prävention)', pageWidth / 2, 30, { align: 'center' });
-    doc.setFontSize(9.5);
-    doc.text('ASiC Handel Arbeitssicherheits-Check', pageWidth / 2, 37, { align: 'center' });
 
     let y = 80;
     doc.setFont(undefined, 'bold');
@@ -499,6 +497,7 @@ function drawCoverPage(doc, pageWidth, pageHeight, margin, documentTitle, docume
     const ci = state.companyInfo;
     const rows = [
         ['Firma / Markt', ci.firma || '-'],
+        ['Marktnummer', ci.marktnummer || '-'],
         ['Standort', ci.standort || '-'],
         ['Datum', ci.datum ? formatDate(ci.datum) : '-'],
         ['Prüfer', ci.pruefername || '-'],
@@ -844,7 +843,7 @@ async function buildFotosPdf() {
     doc.setFontSize(18);
     doc.setTextColor(28, 34, 38);
     doc.text(
-        'Protokoll zur Marktbegehung (Arbeitsschutz & Prävention) – Fotodokumentation',
+        'Fotodokumentation',
         pageWidth / 2,
         y,
         { align: 'center' }
@@ -852,21 +851,6 @@ async function buildFotosPdf() {
 
     y += 9;
 
-    doc.setFont(undefined, 'normal');
-    doc.setFontSize(9.5);
-    doc.setTextColor(90, 100, 108);
-
-    checklistPdfHeaderLines().forEach(line => {
-        doc.text(
-            line,
-            pageWidth / 2,
-            y,
-            { align: 'center' }
-        );
-        y += 5;
-    });
-
-    y += 1;
 
     doc.setDrawColor(220);
     doc.line(
@@ -951,7 +935,7 @@ function buildChecklistPdf() {
         pageWidth,
         pageHeight,
         margin,
-        'Checkliste'
+           '„Sicher geprüft. Sicher gehandelt.“'
     );
 
     let y = 18;
@@ -960,7 +944,7 @@ function buildChecklistPdf() {
     doc.setFontSize(18);
     doc.setTextColor(28, 34, 38);
     doc.text(
-        'Protokoll zur Marktbegehung (Arbeitsschutz & Prävention) – Checkliste',
+        '(Arbeitsschutz & Prävention) – Checkliste',
         pageWidth / 2,
         y,
         { align: 'center' }
@@ -968,21 +952,6 @@ function buildChecklistPdf() {
 
     y += 9;
 
-    doc.setFont(undefined, 'normal');
-    doc.setFontSize(9.5);
-    doc.setTextColor(90, 100, 108);
-
-    checklistPdfHeaderLines().forEach(line => {
-        doc.text(
-            line,
-            pageWidth / 2,
-            y,
-            { align: 'center' }
-        );
-        y += 5;
-    });
-
-    y += 1;
 
     doc.setDrawColor(220);
     doc.line(
@@ -1150,8 +1119,8 @@ async function buildPdf(includeChecklist, includeFotos) {
 
     const coverTitle =
         includeChecklist
-            ? 'Gesamtbericht'
-            : 'Maßnahmen';
+            ? '„Sicher geprüft. Sicher gehandelt.“'
+            : '„Sicher geprüft. Sicher gehandelt.“';
 
     drawCoverPage(
         doc,
@@ -1168,31 +1137,12 @@ async function buildPdf(includeChecklist, includeFotos) {
     doc.setTextColor(28, 34, 38);
 
     doc.text(
-        includeChecklist
-            ? 'Protokoll zur Marktbegehung (Arbeitsschutz & Prävention) – Gesamtbericht'
-            : 'Protokoll zur Marktbegehung (Arbeitsschutz & Prävention) – Maßnahmen',
-        pageWidth / 2,
-        y,
-        { align: 'center' }
+        includeChecklist ? 'Gesamtbericht' : 'Maßnahmen',
+        margin,
+        y
     );
 
     y += 9;
-
-    doc.setFont(undefined, 'normal');
-    doc.setFontSize(9.5);
-    doc.setTextColor(90, 100, 108);
-
-    checklistPdfHeaderLines().forEach(line => {
-        doc.text(
-            line,
-            pageWidth / 2,
-            y,
-            { align: 'center' }
-        );
-        y += 5;
-    });
-
-    y += 1;
 
     doc.setDrawColor(220);
     doc.line(
