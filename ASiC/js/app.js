@@ -472,10 +472,12 @@ function drawCoverPage(doc, pageWidth, pageHeight, margin, documentTitle, docume
     doc.setFont(undefined, 'bold');
     doc.setFontSize(28);
     doc.setTextColor(255, 255, 255);
-    doc.text('ASiC Handel', pageWidth / 2, 24, { align: 'center' });
+    doc.text('Protokoll zur Marktbegehung', pageWidth / 2, 22, { align: 'center' });
     doc.setFont(undefined, 'normal');
     doc.setFontSize(11);
-    doc.text('Arbeitssicherheits-Check', pageWidth / 2, 33, { align: 'center' });
+    doc.text('(Arbeitsschutz & Prävention)', pageWidth / 2, 30, { align: 'center' });
+    doc.setFontSize(9.5);
+    doc.text('ASiC Handel Arbeitssicherheits-Check', pageWidth / 2, 37, { align: 'center' });
 
     let y = 80;
     doc.setFont(undefined, 'bold');
@@ -842,7 +844,7 @@ async function buildFotosPdf() {
     doc.setFontSize(18);
     doc.setTextColor(28, 34, 38);
     doc.text(
-        'ASiC Handel – Fotodokumentation',
+        'Protokoll zur Marktbegehung (Arbeitsschutz & Prävention) – Fotodokumentation',
         pageWidth / 2,
         y,
         { align: 'center' }
@@ -958,7 +960,7 @@ function buildChecklistPdf() {
     doc.setFontSize(18);
     doc.setTextColor(28, 34, 38);
     doc.text(
-        'ASiC Handel – Checkliste',
+        'Protokoll zur Marktbegehung (Arbeitsschutz & Prävention) – Checkliste',
         pageWidth / 2,
         y,
         { align: 'center' }
@@ -1167,8 +1169,8 @@ async function buildPdf(includeChecklist, includeFotos) {
 
     doc.text(
         includeChecklist
-            ? 'ASiC Handel – Gesamtbericht'
-            : 'ASiC Handel – Maßnahmen',
+            ? 'Protokoll zur Marktbegehung (Arbeitsschutz & Prävention) – Gesamtbericht'
+            : 'Protokoll zur Marktbegehung (Arbeitsschutz & Prävention) – Maßnahmen',
         pageWidth / 2,
         y,
         { align: 'center' }
