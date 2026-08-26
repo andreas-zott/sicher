@@ -8,7 +8,7 @@ const STORAGE_KEY = 'begehungState';
 
 // Revisionsstand der App/Checkliste (in Fusszeile und PDF sichtbar,
 // bei inhaltlichen Aenderungen an Fragenkatalog/Massnahmen hochzaehlen)
-const APP_REVISION = '1.3';
+const APP_REVISION = '1.4';
 const APP_REVISION_DATE = '2026-08-24';
 
 function renderFooterMeta() {
@@ -2093,12 +2093,29 @@ function renderItem(item, locked) {
 }
 
 function toggleCategory(categoryId) {
-    openCategoryId =
-        openCategoryId === categoryId
-            ? null
-            : categoryId;
+    const wasOpen = openCategoryId === categoryId;
+    const previousScrollY = window.scrollY;
 
+    openCategoryId = wasOpen ? null : categoryId;
     renderChecklist();
+
+    // Beim Öffnen an den Anfang der Kategorie springen, damit die Bearbeitung
+    // immer von oben nach unten beginnen kann. Beim Schließen bleibt die
+    // bisherige Position erhalten.
+    if (!wasOpen) {
+        requestAnimationFrame(() => {
+            const category = document.getElementById(`cat-${categoryId}`);
+            if (!category) return;
+
+            const header = category.querySelector('.category-header');
+            const top = (header || category).getBoundingClientRect().top + window.scrollY - 16;
+            window.scrollTo({ top, behavior: 'auto' });
+        });
+    } else {
+        requestAnimationFrame(() => {
+            window.scrollTo({ top: previousScrollY, behavior: 'auto' });
+        });
+    }
 }
 
 // ===== "Nicht vorhanden"-Schalter fuer optionale Kategorien =====
