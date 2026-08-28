@@ -63,6 +63,9 @@ function renderWiederkehrend() {
 }
 
 // ===== 2. Kategorien-Schwachstellen über alle archivierten Begehungen =====
+// Wie beim CSV-Export: iteriert ueber die in jeder Begehung selbst
+// gespeicherten Bewertungs-Schluessel, nicht ueber den aktuellen Katalog
+// (siehe ausfuehrlicher Kommentar bei buildAuswertungCsvRows()).
 function renderKategorienSchwachstellen() {
     const container = document.getElementById('kategorien-content');
     if (!container) return;
@@ -73,16 +76,18 @@ function renderKategorienSchwachstellen() {
     }
 
     const counts = {};
-    AUDIT_CATEGORIES.forEach(cat => { counts[cat.name] = { mangel: 0, total: 0 }; });
 
     auswertungArchiv.forEach(record => {
-        AUDIT_CATEGORIES.forEach(cat => {
-            cat.items.forEach(item => {
-                const rating = record.ratings ? record.ratings[item.id] : undefined;
-                if (!rating || rating === 'na') return;
-                counts[cat.name].total++;
-                if (rating === 'mangel') counts[cat.name].mangel++;
-            });
+        Object.keys(record.ratings || {}).forEach(itemId => {
+            const rating = record.ratings[itemId];
+            if (!rating || rating === 'na') return;
+
+            const found = findItemById(itemId);
+            const kategorieName = found ? found.category.name : '(Kategorie nicht mehr im aktuellen Katalog)';
+
+            if (!counts[kategorieName]) counts[kategorieName] = { mangel: 0, total: 0 };
+            counts[kategorieName].total++;
+            if (rating === 'mangel') counts[kategorieName].mangel++;
         });
     });
 
@@ -157,42 +162,133 @@ function csvEscape(val) {
     return s;
 }
 
-function exportAuswertungCsv() {
+// Baut die Zeilen fuer den CSV-Rohdatenexport aus einer Liste archivierter
+// Begehungen. Gemeinsam genutzt von "Herunterladen" und "Per Mail teilen",
+// damit beide garantiert denselben Inhalt liefern.
+//
+// WICHTIG: iteriert bewusst ueber die in JEDER Begehung selbst gespeicherten
+// Bewertungs-Schluessel (record.ratings), NICHT ueber den aktuellen
+// AUDIT_CATEGORIES-Katalog. Bei einer Suche ueber den aktuellen Katalog
+// wuerden archivierte Begehungen mit inzwischen anders nummerierten oder
+// entfernten Frage-IDs faelschlich als "keine Daten" erscheinen, obwohl die
+// Bewertungen sehr wohl gespeichert sind - genau das Verhalten, das schon
+// bei "Wiederkehrende Maengel" bewusst so (ueber Object.keys) gebaut wurde.
+function buildAuswertungCsvRows(daten) {
     const rows = [['Firma', 'Datum', 'Kategorie', 'Frage-ID', 'Frage', 'Bewertung', 'Kommentar']];
-    auswertungArchiv.forEach(record => {
-        AUDIT_CATEGORIES.forEach(cat => {
-            cat.items.forEach(item => {
-                const rating = record.ratings ? record.ratings[item.id] : undefined;
-                if (!rating) return;
-                rows.push([
-                    record.companyInfo.firma || '',
-                    record.companyInfo.datum || '',
-                    cat.name,
-                    item.id,
-                    item.text,
-                    rating,
-                    (record.comments && record.comments[item.id]) || ''
-                ]);
-            });
+    daten.forEach(record => {
+        Object.keys(record.ratings || {}).forEach(itemId => {
+            const rating = record.ratings[itemId];
+            if (!rating) return;
+            const found = findItemById(itemId);
+            rows.push([
+                record.companyInfo.firma || '',
+                record.companyInfo.datum || '',
+                found ? found.category.name : '(Kategorie nicht mehr im aktuellen Katalog)',
+                itemId,
+                found ? found.item.text : '(Frage nicht mehr im aktuellen Katalog)',
+                rating,
+                (record.comments && record.comments[itemId]) || ''
+            ]);
         });
     });
+    return rows;
+}
 
-    if (rows.length === 1) {
-        showToast('Keine archivierten Daten zum Exportieren vorhanden', 'error');
-        return;
+function csvRowsToBlob(rows) {
+    const csv = rows.map(r => r.map(csvEscape).join(';')).join('\r\n');
+    return new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+}
+
+function csvExportFilename() {
+    return 'ASiC_Handel_Auswertung_' + new Date().toISOString().split('T')[0] + '.csv';
+}
+
+// Laedt das Archiv frisch (nicht die evtl. noch nicht fertig geladene
+// auswertungArchiv-Modulvariable, siehe Kommentar weiter unten) und liefert
+// die fertigen CSV-Zeilen, oder null bei einem Ladefehler bzw. wenn es
+// nichts zu exportieren gibt (inkl. passender Toast-Meldung).
+async function ladeAuswertungCsvZeilen(fehlermeldungKontext) {
+    let daten;
+    try {
+        daten = await getAllArchivedAudits();
+    } catch (err) {
+        console.error('Archiv konnte nicht geladen werden:', err);
+        showToast(fehlermeldungKontext + ' fehlgeschlagen: Archiv konnte nicht geladen werden', 'error');
+        return null;
     }
 
-    const csv = rows.map(r => r.map(csvEscape).join(';')).join('\r\n');
-    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const rows = buildAuswertungCsvRows(daten);
+
+    if (rows.length === 1) {
+        showToast('Keine archivierten Daten zum ' + fehlermeldungKontext + ' vorhanden', 'error');
+        return null;
+    }
+
+    return rows;
+}
+
+async function exportAuswertungCsv() {
+    // Bewusst hier nochmal frisch laden statt sich auf die schon vorhandene
+    // auswertungArchiv-Variable zu verlassen: Falls der Klick erfolgt,
+    // bevor das anfängliche asynchrone Laden beim Seitenaufruf fertig war,
+    // waere auswertungArchiv sonst faelschlich noch leer gewesen, obwohl
+    // tatsaechlich archivierte Begehungen vorhanden sind.
+    const rows = await ladeAuswertungCsvZeilen('Exportieren');
+    if (!rows) return;
+
+    const blob = csvRowsToBlob(rows);
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'ASiC_Handel_Auswertung_' + new Date().toISOString().split('T')[0] + '.csv';
+    a.download = csvExportFilename();
     document.body.appendChild(a);
     a.click();
     a.remove();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
     showToast('CSV-Datei wird heruntergeladen');
+}
+
+// Teilt die CSV-Rohdaten ueber das native Teilen-Menue (z. B. direkt an
+// die Mail-App) - fuer den Fall, dass kein Zugriff auf das NAS besteht und
+// die Datei stattdessen manuell per Mail an eine Kollegin/einen Kollegen
+// weitergegeben werden soll, die/der sie im Team-Ordner ablegt.
+async function shareAuswertungCsv() {
+    const rows = await ladeAuswertungCsvZeilen('Teilen');
+    if (!rows) return;
+
+    const blob = csvRowsToBlob(rows);
+    const filename = csvExportFilename();
+    const text = 'Anbei der aktuelle Rohdaten-Export (CSV) der archivierten Begehungen aus ASiC Handel.\n\nBitte im gemeinsamen Team-Ordner ablegen, falls der direkte NAS-Zugriff gerade nicht möglich war.';
+
+    try {
+        if (navigator.canShare && typeof File !== 'undefined') {
+            const file = new File([blob], filename, { type: 'text/csv' });
+            if (navigator.canShare({ files: [file] })) {
+                try {
+                    await navigator.share({ files: [file], title: 'ASiC Handel – Rohdaten-Export', text });
+                    showToast('CSV geteilt');
+                    return;
+                } catch (err) {
+                    if (err && err.name === 'AbortError') return; // Nutzer hat abgebrochen
+                    console.error('Teilen fehlgeschlagen, falle auf Download zurück:', err);
+                }
+            }
+        }
+
+        // Fallback: direkter Download (Desktop-Browser ohne Teilen-Funktion)
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        showToast('CSV-Datei wird heruntergeladen (Teilen auf diesem Gerät nicht verfügbar)');
+    } catch (err) {
+        console.error('CSV-Teilen fehlgeschlagen:', err);
+        showToast('CSV-Teilen fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+    }
 }
 
 // ===== 5. Offene Maßnahmen mit Fristen-Ampel =====
@@ -291,4 +387,6 @@ document.addEventListener('DOMContentLoaded', () => {
     loadAuswertungData();
     const btnCsv = document.getElementById('btn-export-csv');
     if (btnCsv) btnCsv.addEventListener('click', exportAuswertungCsv);
+    const btnShareCsv = document.getElementById('btn-share-csv');
+    if (btnShareCsv) btnShareCsv.addEventListener('click', shareAuswertungCsv);
 });

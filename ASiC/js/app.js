@@ -8,8 +8,8 @@ const STORAGE_KEY = 'begehungState';
 
 // Revisionsstand der App/Checkliste (in Fusszeile und PDF sichtbar,
 // bei inhaltlichen Aenderungen an Fragenkatalog/Massnahmen hochzaehlen)
-const APP_REVISION = '1.4';
-const APP_REVISION_DATE = '2026-08-24';
+const APP_REVISION = '1.15';
+const APP_REVISION_DATE = '2026-08-26';
 
 function renderFooterMeta() {
     const el = document.getElementById('footer-version');
@@ -195,14 +195,60 @@ async function parseJsonResponse(res) {
     }
 }
 
+// Liest eine optional in den Einstellungen hinterlegte Server-Basis-Adresse
+// aus localStorage. Leer/nicht gesetzt = bisheriges Verhalten (relative
+// Pfade, Endpunkte muessen im selben Verzeichnis wie diese Seite liegen).
+function getNasBaseUrl() {
+    try {
+        const raw = localStorage.getItem('nasBaseUrl');
+        return raw ? raw.trim() : '';
+    } catch (e) {
+        return '';
+    }
+}
+
+// Baut die tatsaechlich zu verwendende Endpunkt-Adresse: mit konfigurierter
+// Basis-Adresse wird diese vorangestellt, ansonsten bleibt es beim
+// bisherigen relativen Pfad ("./save.php" etc.) - unveraendertes Verhalten
+// fuer alle, die nichts konfiguriert haben.
+function nasUrl(path) {
+    const base = getNasBaseUrl();
+    if (!base) return './' + path;
+    return base.replace(/\/+$/, '') + '/' + path;
+}
+
+// Liest den optional in den Einstellungen hinterlegten Zugriffsschluessel.
+// Wird als Kopfzeile mitgeschickt, falls gesetzt - hat serverseitig nur
+// Wirkung, wenn dort ueberhaupt ein Schluessel erwartet wird (siehe
+// save.php/list.php/load.php). Ohne Konfiguration: keine Kopfzeile,
+// unveraendertes bisheriges Verhalten.
+function getNasApiKey() {
+    try {
+        return localStorage.getItem('nasApiKey') || '';
+    } catch (e) {
+        return '';
+    }
+}
+
+// Fuegt bestehenden Fetch-Optionen die Zugriffsschluessel-Kopfzeile hinzu,
+// sofern ein Schluessel hinterlegt ist. Ohne Schluessel unveraendert.
+function withNasAuthHeaders(options) {
+    const key = getNasApiKey();
+    if (!key) return options;
+    return {
+        ...options,
+        headers: { ...(options && options.headers), 'X-Api-Key': key }
+    };
+}
+
 async function saveStateToSynology() {
     try {
-        const res = await fetch('./save.php', {
+        const res = await fetch(nasUrl('save.php'), withNasAuthHeaders({
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             cache: 'no-store',
             body: JSON.stringify(state)
-        });
+        }));
         const result = await parseJsonResponse(res);
         if (!res.ok || !result.ok) {
             throw new Error(result.message || `Fehler beim Speichern (HTTP ${res.status}).`);
@@ -215,7 +261,7 @@ async function saveStateToSynology() {
 }
 
 async function getSynologyFiles() {
-    const res = await fetch('./list.php', { cache: 'no-store' });
+    const res = await fetch(nasUrl('list.php'), withNasAuthHeaders({ cache: 'no-store' }));
     const result = await parseJsonResponse(res);
     if (!res.ok || !result.ok) {
         throw new Error(result.message || `Fehler beim Abrufen der Dateiliste (HTTP ${res.status}).`);
@@ -223,8 +269,22 @@ async function getSynologyFiles() {
     return result.files || [];
 }
 
+// Wie loadStateFromSynology(), aendert aber NICHT den globalen state - gibt
+// den geladenen Datensatz einfach zurueck. Wird fuer das Team-Archiv
+// (verlauf.html) genutzt, um eine fremde, auf dem NAS gespeicherte Begehung
+// anzusehen/zu exportieren, ohne die gerade laufende eigene Begehung zu
+// ueberschreiben.
+async function fetchSynologyRecord(filename) {
+    const res = await fetch(nasUrl('load.php') + '?filename=' + encodeURIComponent(filename), withNasAuthHeaders({ cache: 'no-store' }));
+    const result = await parseJsonResponse(res);
+    if (!res.ok) {
+        throw new Error((result && result.message) || `Fehler beim Laden (HTTP ${res.status}).`);
+    }
+    return result;
+}
+
 async function loadStateFromSynology(filename) {
-    const res = await fetch('./load.php?filename=' + encodeURIComponent(filename), { cache: 'no-store' });
+    const res = await fetch(nasUrl('load.php') + '?filename=' + encodeURIComponent(filename), withNasAuthHeaders({ cache: 'no-store' }));
     const result = await parseJsonResponse(res);
     if (!res.ok) {
         throw new Error((result && result.message) || `Fehler beim Laden (HTTP ${res.status}).`);
@@ -2761,8 +2821,11 @@ document.addEventListener(
         // save.php/list.php/load.php gibt es nur auf der Synology selbst,
         // nicht auf GitHub Pages (dort laeuft kein PHP) - die beiden
         // NAS-Buttons dort erst gar nicht anzeigen, statt sie klickbar zu
-        // lassen und erst danach eine Fehlermeldung zu zeigen.
-        const laeuftAufGithubPages = window.location.hostname.endsWith('.github.io');
+        // lassen und erst danach eine Fehlermeldung zu zeigen. AUSNAHME:
+        // Wenn unter "Einstellungen" eine externe Server-Basis-Adresse
+        // hinterlegt wurde, kann das auch von GitHub Pages aus funktionieren
+        // (sofern der Zielserver CORS fuer diese Adresse erlaubt).
+        const laeuftAufGithubPages = window.location.hostname.endsWith('.github.io') && !getNasBaseUrl();
 
         if (btnSaveNas) {
             if (laeuftAufGithubPages) {
@@ -2862,7 +2925,13 @@ if ('serviceWorker' in navigator) {
         () => {
 
             navigator.serviceWorker
-                .register('./sw.js')
+                // updateViaCache: 'none' - erzwingt, dass der Browser
+                // sw.js selbst NIE aus seinem eigenen HTTP-Cache nimmt,
+                // sondern bei jeder Registrierung frisch vom Server prueft.
+                // Ohne das kann es vorkommen, dass eine neue Version
+                // (neuer CACHE_NAME) gar nicht erst erkannt wird, weil der
+                // Browser noch die alte sw.js-Datei aus seinem Cache liest.
+                .register('./sw.js', { updateViaCache: 'none' })
 
                 .then(
                     registration => {
@@ -2871,6 +2940,11 @@ if ('serviceWorker' in navigator) {
                             '[SW] Registriert:',
                             registration.scope
                         );
+
+                        // Zusaetzlich sofort aktiv nach einer neueren
+                        // Version fragen, statt nur auf den naechsten
+                        // browserinternen periodischen Check zu warten.
+                        registration.update().catch(() => {});
                     }
                 )
 
