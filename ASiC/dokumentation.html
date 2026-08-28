@@ -294,7 +294,7 @@
                     App-Revision
                 </div>
                 <div class="doku-meta-value">
-                    1.6 (26.08.2026)
+                    1.15 (26.08.2026)
                 </div>
             </div>
 
@@ -303,7 +303,7 @@
                     Service Worker
                 </div>
                 <div class="doku-meta-value">
-                    v1.1
+                    v1.15
                 </div>
             </div>
 
@@ -551,14 +551,14 @@
 
             <p>
                 Die aktuelle technische Cache-Version lautet:
-                <strong><code>asic-handel-v1.1</code></strong>.
+                <strong><code>asic-handel-v1.15</code></strong>.
             </p>
 
             <ul>
 
                 <li>
-                    Beim Installieren von v1.1 werden die hinterlegten
-                    App-Dateien ausdrücklich mit einer
+                    Beim Installieren einer neuen Version werden die
+                    hinterlegten App-Dateien ausdrücklich mit einer
                     <code>cache: 'reload'</code>-Anforderung neu geladen.
                 </li>
 
@@ -597,6 +597,18 @@
                     Service Worker.
                 </li>
 
+                <li>
+                    Registrierung erfolgt mit
+                    <code>{ updateViaCache: 'none' }</code> — verhindert,
+                    dass der Browser <code>sw.js</code> selbst aus seinem
+                    eigenen HTTP-Cache liest und dadurch eine neue Version
+                    (neuer <code>CACHE_NAME</code>) gar nicht erst erkennt.
+                    Zusätzlich wird nach der Registrierung sofort
+                    <code>registration.update()</code> aufgerufen, statt nur
+                    auf den nächsten browserinternen periodischen Check zu
+                    warten.
+                </li>
+
             </ul>
 
         </div>
@@ -609,14 +621,39 @@
             </div>
 
             Ein neuer technischer Versionsstand des Service Workers erzeugt
-            einen neuen Cache. Bei der Umstellung auf <code>v1.1</code> werden
-            die vorgesehenen App-Dateien erneut geladen und der bisherige
-            ASiC-Handel-Cache entfernt.
+            einen neuen Cache. Bei einer Umstellung des <code>CACHE_NAME</code>
+            werden die vorgesehenen App-Dateien erneut geladen und der
+            bisherige ASiC-Handel-Cache entfernt.
 
             <strong>
                 Lokale Benutzerdaten in localStorage und IndexedDB werden
                 dabei nicht gelöscht.
             </strong>
+
+        </div>
+
+
+        <div class="doku-box">
+
+            <div class="doku-box-title">
+                Falls ein Update nicht ankommt
+            </div>
+
+            Trotz <code>updateViaCache: 'none'</code> und sofortigem
+            <code>registration.update()</code>-Aufruf kann es einzelne
+            Geräte/Browser geben, die eine neue Version nicht sofort
+            erkennen (insbesondere iOS Safari kann hier hartnäckig sein).
+            In diesem Fall der Reihe nach:
+
+            <ul>
+                <li>Seite mit einer echten Aktualisierung neu laden (nicht
+                    nur zwischen Tabs wechseln)</li>
+                <li>Falls als Home-Bildschirm-Symbol installiert: Symbol
+                    löschen und über Safari neu hinzufügen</li>
+                <li>Als letzte Möglichkeit: Einstellungen → Safari →
+                    Verlauf und Websitedaten löschen (betrifft dann
+                    allerdings auch andere Websites)</li>
+            </ul>
 
         </div>
 
@@ -630,8 +667,8 @@
             Wenn sich ausgelieferte App-Dateien technisch ändern, sollte
             <code>CACHE_NAME</code> in <code>sw.js</code> auf eine neue Version
             gesetzt werden, beispielsweise von
-            <code>asic-handel-v1.1</code> auf
-            <code>asic-handel-v1.2</code>.
+            <code>asic-handel-v1.15</code> auf
+            <code>asic-handel-v1.16</code>.
             Dadurch wird ein neuer App-Cache aufgebaut.
 
         </div>
@@ -809,6 +846,13 @@
                     <td>datenschutz.html</td>
                     <td>
                         Datenschutzerklärung
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>einstellungen.html</td>
+                    <td>
+                        Konfigurierbare externe NAS-Server-Adresse
                     </td>
                 </tr>
 
@@ -1416,6 +1460,129 @@
                 <li>Von der lokalen Speicherung komplett getrennt – ein
                     fehlgeschlagener NAS-Zugriff hat keinen Einfluss auf
                     lokal gespeicherte Daten</li>
+                <li><code>fetchSynologyRecord()</code> läd einen NAS-Datensatz,
+                    ohne den globalen <code>state</code> zu verändern – Grundlage
+                    für das Team-Archiv (siehe unten), ohne die gerade laufende
+                    eigene Begehung zu überschreiben</li>
+            </ul>
+
+        </div>
+
+
+        <div class="doku-box ok">
+
+            <div class="doku-box-title">
+                Team-Archiv (verlauf.html)
+            </div>
+
+            Auf der Verlauf-Seite listet der Reiter „Team-Archiv (NAS)"
+            alle über <code>list.php</code> gefundenen, von beliebigen
+            Nutzern auf dem NAS gespeicherten Begehungen auf – im
+            Unterschied zum Reiter „Mein Verlauf", der nur lokal
+            archivierte, eigene Begehungen zeigt (IndexedDB, geräte­gebunden).
+
+            <ul>
+                <li>Zeigt Firma/Markt, Marktnummer, Begehungsdatum und
+                    NAS-Speicherzeitpunkt je Eintrag</li>
+                <li>PDF-Export je Eintrag über <code>fetchSynologyRecord()</code>
+                    + <code>shareArchivedReportPdf()</code> (Wiederverwendung
+                    der bestehenden Archiv-Export-Logik)</li>
+                <li>Enthält keine Fotos – <code>save.php</code> speichert nur
+                    die reinen Text-/Bewertungsdaten als JSON, keine
+                    Bilddateien</li>
+                <li>Wie die NAS-Speicherung selbst nur verfügbar, wenn die
+                    App direkt über die Synology aufgerufen wird oder eine
+                    Server-Adresse in den Einstellungen hinterlegt wurde
+                    (siehe unten)</li>
+            </ul>
+
+        </div>
+
+
+        <div class="doku-box">
+
+            <div class="doku-box-title">
+                CSV-Rohdatenexport mit Teilen-Option (auswertung.html)
+            </div>
+
+            Neben dem klassischen Download-Button „CSV herunterladen"
+            gibt es „CSV per Mail teilen" — für den Fall, dass gerade
+            kein NAS-Zugriff möglich ist und die Rohdaten stattdessen
+            manuell per Mail an eine Kollegin bzw. einen Kollegen für
+            die Ablage im Team-Ordner weitergegeben werden sollen.
+
+            <ul>
+                <li>Beide Buttons nutzen dieselbe gemeinsame Logik
+                    (<code>buildAuswertungCsvRows()</code>,
+                    <code>csvRowsToBlob()</code>) — garantiert identischer
+                    Dateiinhalt, unabhängig vom gewählten Weg</li>
+                <li><code>shareAuswertungCsv()</code> nutzt
+                    <code>navigator.share()</code> mit vorgefertigtem
+                    Betreff/Text (analog zum PDF-Teilen); ohne
+                    Unterstützung dafür (z. B. Desktop-Browser) automatischer
+                    Rückfall auf den normalen Download</li>
+                <li>Wie beim CSV-Download wird das Archiv bei jedem Klick
+                    frisch geladen, nicht aus einer möglicherweise noch
+                    nicht fertig geladenen Zwischenspeicher-Variable</li>
+                <li><strong>Wichtig:</strong> <code>buildAuswertungCsvRows()</code>
+                    sowie <code>renderKategorienSchwachstellen()</code>
+                    iterieren bewusst über die in jeder archivierten
+                    Begehung selbst gespeicherten Bewertungs-Schlüssel
+                    (<code>Object.keys(record.ratings)</code>), NICHT über
+                    den aktuellen <code>AUDIT_CATEGORIES</code>-Katalog.
+                    Ein Abgleich über den aktuellen Katalog würde
+                    archivierte Begehungen mit inzwischen anders
+                    nummerierten oder entfernten Frage-IDs fälschlich als
+                    „keine Daten" erscheinen lassen, obwohl die Bewertungen
+                    durchaus gespeichert sind. Nicht mehr auffindbare Fragen
+                    werden mit dem Hinweis „(nicht mehr im aktuellen
+                    Katalog)" statt mit leerem Ergebnis ausgegeben.
+                    „Wiederkehrende Mängel" war schon immer so gebaut;
+                    diese beiden Funktionen folgen seit einem entsprechenden
+                    Fehlerbericht demselben Muster.</li>
+            </ul>
+
+        </div>
+
+
+        <div class="doku-box">
+
+            <div class="doku-box-title">
+                Konfigurierbare NAS-Server-Adresse (einstellungen.html)
+            </div>
+
+            Standardmäßig gehen alle NAS-Funktionen von relativen Pfaden
+            aus (<code>./save.php</code> usw.) — die drei PHP-Skripte
+            müssen im selben Verzeichnis wie die App liegen. Über
+            „Einstellungen" kann stattdessen eine externe
+            Server-Basis-Adresse in <code>localStorage</code>
+            (<code>nasBaseUrl</code>) hinterlegt werden.
+
+            <ul>
+                <li><code>getNasBaseUrl()</code> liest den konfigurierten
+                    Wert, <code>nasUrl(pfad)</code> baut daraus die
+                    tatsächlich zu verwendende Adresse — ohne Konfiguration
+                    identisch zum bisherigen relativen Pfad</li>
+                <li>Alle vier NAS-Funktionen (<code>saveStateToSynology</code>,
+                    <code>getSynologyFiles</code>, <code>loadStateFromSynology</code>,
+                    <code>fetchSynologyRecord</code>) sowie das Team-Archiv
+                    nutzen einheitlich <code>nasUrl()</code></li>
+                <li>Die automatische GitHub-Pages-Erkennung (NAS-Buttons
+                    ausblenden) berücksichtigt eine konfigurierte externe
+                    Adresse und zeigt die Buttons dann auch dort an</li>
+                <li>Bei externer Adresse (andere Herkunft als die App
+                    selbst) muss der Zielserver CORS für die App-Adresse
+                    erlauben, sonst blockiert der Browser die Anfrage</li>
+                <li>Zusätzlich optional konfigurierbar: ein
+                    Zugriffsschlüssel (<code>localStorage</code>-Schlüssel
+                    <code>nasApiKey</code>), der bei jeder Anfrage als
+                    Kopfzeile <code>X-Api-Key</code> mitgeschickt wird
+                    (<code>withNasAuthHeaders()</code>). Wirkt nur, wenn
+                    serverseitig in den drei PHP-Dateien ebenfalls ein
+                    Schlüssel hinterlegt ist (Variable <code>$apiKey</code>,
+                    standardmäßig leer = keine Prüfung, unverändertes
+                    bisheriges Verhalten). Der Vergleich erfolgt
+                    serverseitig zeitsicher über <code>hash_equals()</code>.</li>
             </ul>
 
         </div>
@@ -1488,7 +1655,7 @@
 
                 <tr>
                     <td>verlauf.html</td>
-                    <td>260</td>
+                    <td>330</td>
                     <td>
                         Verwaltung archivierter Begehungen
                     </td>
@@ -1496,7 +1663,7 @@
 
                 <tr>
                     <td>dokumentation.html</td>
-                    <td>1.703</td>
+                    <td>1.918</td>
                     <td>
                         Technische Dokumentation
                     </td>
@@ -1504,7 +1671,7 @@
 
                 <tr>
                     <td>hilfe.html</td>
-                    <td>1.583</td>
+                    <td>1.619</td>
                     <td>
                         Hilfe und FAQ
                     </td>
@@ -1512,7 +1679,7 @@
 
                 <tr>
                     <td>auswertung.html</td>
-                    <td>668</td>
+                    <td>693</td>
                     <td>
                         Auswertung
                     </td>
@@ -1535,8 +1702,16 @@
                 </tr>
 
                 <tr>
+                    <td>einstellungen.html</td>
+                    <td>291</td>
+                    <td>
+                        Konfigurierbare externe NAS-Server-Adresse
+                    </td>
+                </tr>
+
+                <tr>
                     <td>css/styles.css</td>
-                    <td>1.788</td>
+                    <td>1.794</td>
                     <td>
                         Gesamtes gemeinsames Styling
                     </td>
@@ -1544,7 +1719,7 @@
 
                 <tr>
                     <td>js/app.js</td>
-                    <td>2.920</td>
+                    <td>2.963</td>
                     <td>
                         Kernlogik, State-Verwaltung,
                         Checkliste, PDF-Erzeugung,
@@ -1607,15 +1782,24 @@
 
                 <tr>
                     <td>js/verlauf.js</td>
-                    <td>87</td>
+                    <td>212</td>
                     <td>
-                        Bedienlogik der Archiv-/Verlaufseite
+                        Bedienlogik der Archiv-/Verlaufseite,
+                        inkl. Team-Archiv (NAS)
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>js/einstellungen.js</td>
+                    <td>65</td>
+                    <td>
+                        Bedienlogik der Einstellungsseite
                     </td>
                 </tr>
 
                 <tr>
                     <td>js/auswertung.js</td>
-                    <td>294</td>
+                    <td>392</td>
                     <td>
                         Logik der Auswertungsseite
                     </td>
@@ -1635,7 +1819,7 @@
                     <td>271</td>
                     <td>
                         Service Worker, Offline-Fähigkeit,
-                        Cache-Version <strong>v1.4</strong>
+                        Cache-Version <strong>v1.15</strong>
                     </td>
                 </tr>
 
@@ -1651,7 +1835,7 @@
             </table>
 
             <p>
-                <strong>Gesamt (eigener Code, ohne jsPDF):</strong> 15.595 Zeilen
+                <strong>Gesamt (eigener Code, ohne jsPDF):</strong> 16.620 Zeilen
             </p>
 
             <p style="font-size:0.82rem; color:var(--ink-soft);">
@@ -1700,6 +1884,11 @@
 
         <a href="auswertung.html">
             Auswertung
+        </a>
+
+
+        <a href="einstellungen.html">
+            Einstellungen
         </a>
 
     </div>
