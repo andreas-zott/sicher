@@ -294,7 +294,7 @@
                     App-Revision
                 </div>
                 <div class="doku-meta-value">
-                    1.16 (26.08.2026)
+                    1.17 (26.08.2026)
                 </div>
             </div>
 
@@ -303,7 +303,7 @@
                     Service Worker
                 </div>
                 <div class="doku-meta-value">
-                    v1.16
+                    v1.17
                 </div>
             </div>
 
@@ -551,7 +551,7 @@
 
             <p>
                 Die aktuelle technische Cache-Version lautet:
-                <strong><code>asic-handel-v1.16</code></strong>.
+                <strong><code>asic-handel-v1.17</code></strong>.
             </p>
 
             <ul>
@@ -1549,6 +1549,36 @@
         <div class="doku-box">
 
             <div class="doku-box-title">
+                JSON-Teilen (index.html)
+            </div>
+
+            Analog zum CSV-Teilen gibt es im Datei-Menü neben „JSON
+            exportieren" jetzt auch „JSON per Mail teilen" — für den
+            Fall, dass kein NAS-Zugriff möglich ist und die vollständige
+            Begehung (im Unterschied zum CSV-Rohdatenexport verlustfrei,
+            inklusive Maßnahmen, Status und Unterschriften) stattdessen
+            manuell per Mail an eine Kollegin bzw. einen Kollegen zur
+            Ablage auf dem NAS weitergegeben werden soll.
+
+            <ul>
+                <li><code>buildJsonBlob()</code> und
+                    <code>jsonExportFilename()</code> werden von
+                    <code>exportJson()</code> (Download) und
+                    <code>shareJson()</code> (Teilen) gemeinsam genutzt —
+                    garantiert identischer Dateiinhalt</li>
+                <li><code>shareJson()</code> nutzt <code>navigator.share()</code>
+                    mit vorgefertigtem Betreff/Text; ohne Unterstützung
+                    dafür automatischer Rückfall auf den normalen Download,
+                    bei Abbruch durch den Nutzer (<code>AbortError</code>)
+                    weder Download noch Fehlermeldung</li>
+            </ul>
+
+        </div>
+
+
+        <div class="doku-box">
+
+            <div class="doku-box-title">
                 Konfigurierbare NAS-Server-Adresse (einstellungen.html)
             </div>
 
@@ -1630,7 +1660,7 @@
 
                 <tr>
                     <td>index.html</td>
-                    <td>768</td>
+                    <td>781</td>
                     <td>
                         Prüfkatalog und Eingabe der Begehungsdaten
                     </td>
@@ -1664,7 +1694,7 @@
 
                 <tr>
                     <td>dokumentation.html</td>
-                    <td>1.918</td>
+                    <td>1.949</td>
                     <td>
                         Technische Dokumentation
                     </td>
@@ -1672,7 +1702,7 @@
 
                 <tr>
                     <td>hilfe.html</td>
-                    <td>1.675</td>
+                    <td>1.685</td>
                     <td>
                         Hilfe und FAQ
                     </td>
@@ -1720,7 +1750,7 @@
 
                 <tr>
                     <td>js/app.js</td>
-                    <td>2.963</td>
+                    <td>2.983</td>
                     <td>
                         Kernlogik, State-Verwaltung,
                         Checkliste, PDF-Erzeugung,
@@ -1820,7 +1850,7 @@
                     <td>271</td>
                     <td>
                         Service Worker, Offline-Fähigkeit,
-                        Cache-Version <strong>v1.16</strong>
+                        Cache-Version <strong>v1.17</strong>
                     </td>
                 </tr>
 
@@ -1836,7 +1866,7 @@
             </table>
 
             <p>
-                <strong>Gesamt (eigener Code, ohne jsPDF):</strong> 16.663 Zeilen
+                <strong>Gesamt (eigener Code, ohne jsPDF):</strong> 16.732 Zeilen
             </p>
 
             <p style="font-size:0.82rem; color:var(--ink-soft);">
