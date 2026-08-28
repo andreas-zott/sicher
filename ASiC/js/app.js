@@ -8,7 +8,7 @@ const STORAGE_KEY = 'begehungState';
 
 // Revisionsstand der App/Checkliste (in Fusszeile und PDF sichtbar,
 // bei inhaltlichen Aenderungen an Fragenkatalog/Massnahmen hochzaehlen)
-const APP_REVISION = '1.16';
+const APP_REVISION = '1.17';
 const APP_REVISION_DATE = '2026-08-26';
 
 function renderFooterMeta() {
@@ -2337,56 +2337,71 @@ function updateStats() {
 }
 
 // ===== JSON Export / Import =====
+
+// Baut den JSON-Blob und Dateinamen aus dem aktuellen state - gemeinsam
+// genutzt von "JSON exportieren" (Download) und "JSON per Mail teilen".
+function buildJsonBlob() {
+    const dataStr = JSON.stringify(state, null, 2);
+    return new Blob([dataStr], { type: 'application/json' });
+}
+
+function jsonExportFilename() {
+    const datum = state.companyInfo.datum || new Date().toISOString().split('T')[0];
+    const firma = (state.companyInfo.firma || 'begehung').replace(/[^a-z0-9äöüß]+/gi, '-');
+    return `ASiC-Handel_${firma}_${datum}.json`;
+}
+
 function exportJson() {
-    const dataStr =
-        JSON.stringify(
-            state,
-            null,
-            2
-        );
-
-    const blob =
-        new Blob(
-            [dataStr],
-            {
-                type:
-                    'application/json'
-            }
-        );
-
-    const url =
-        URL.createObjectURL(blob);
-
-    const a =
-        document.createElement('a');
-
+    const blob = buildJsonBlob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
     a.href = url;
-
-    const datum =
-        state.companyInfo.datum ||
-        new Date()
-            .toISOString()
-            .split('T')[0];
-
-    const firma =
-        (
-            state.companyInfo.firma ||
-            'begehung'
-        ).replace(
-            /[^a-z0-9äöüß]+/gi,
-            '-'
-        );
-
-    a.download =
-        `ASiC-Handel_${firma}_${datum}.json`;
-
+    a.download = jsonExportFilename();
     a.click();
-
     URL.revokeObjectURL(url);
+    showToast('JSON exportiert');
+}
 
-    showToast(
-        'JSON exportiert'
-    );
+// Teilt die JSON-Datei ueber das native Teilen-Menue (z. B. direkt an
+// die Mail-App) - fuer den Fall, dass kein Zugriff auf das NAS besteht und
+// die Datei stattdessen manuell per Mail an eine Kollegin/einen Kollegen
+// weitergegeben werden soll, die/der sie im NAS-Ordner ablegt (z. B. ueber
+// "Vom NAS laden" ist das nicht moeglich, da das nur vorhandene NAS-Dateien
+// abruft - das manuelle Ablegen selbst erfolgt ausserhalb der App, etwa
+// per File Station).
+async function shareJson() {
+    const blob = buildJsonBlob();
+    const filename = jsonExportFilename();
+    const markt = state.companyInfo.firma || '-';
+    const text = `Anbei die JSON-Datei der Begehung „${markt}" zur Weiterleitung/Ablage auf dem NAS, falls der direkte NAS-Zugriff gerade nicht möglich war.`;
+
+    try {
+        if (navigator.canShare && typeof File !== 'undefined') {
+            const file = new File([blob], filename, { type: 'application/json' });
+            if (navigator.canShare({ files: [file] })) {
+                try {
+                    await navigator.share({ files: [file], title: 'ASiC Handel – Begehungsdaten (JSON)', text });
+                    showToast('JSON geteilt');
+                    return;
+                } catch (err) {
+                    if (err && err.name === 'AbortError') return; // Nutzer hat abgebrochen
+                    console.error('Teilen fehlgeschlagen, falle auf Download zurück:', err);
+                }
+            }
+        }
+
+        // Fallback: direkter Download (Desktop-Browser ohne Teilen-Funktion)
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('JSON heruntergeladen (Teilen auf diesem Gerät nicht verfügbar)');
+    } catch (err) {
+        console.error('JSON-Teilen fehlgeschlagen:', err);
+        showToast('JSON-Teilen fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+    }
 }
 
 function importJson(file) {
@@ -2852,6 +2867,11 @@ document.addEventListener(
                 'click',
                 exportJson
             );
+        }
+
+        const btnShareJson = document.getElementById('btn-json-share');
+        if (btnShareJson) {
+            btnShareJson.addEventListener('click', shareJson);
         }
 
         const importInput =
