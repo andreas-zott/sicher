@@ -4,6 +4,9 @@
 
 let auswertungArchiv = [];
 
+// null = "Alles", sonst Anzahl Monate rückwirkend ab heute.
+let zeitraumMonate = null;
+
 async function loadAuswertungData() {
     try {
         auswertungArchiv = await getAllArchivedAudits();
@@ -11,10 +14,49 @@ async function loadAuswertungData() {
         console.error('Archiv konnte für die Auswertung nicht geladen werden:', err);
         auswertungArchiv = [];
     }
+    renderAlleAuswertungen();
+}
+
+// Reine Filterfunktion (kein Zugriff auf auswertungArchiv) - wird von
+// gefilterteArchivDaten() (Bildschirmanzeige) UND vom CSV-/PDF-Export
+// genutzt, die jeweils frisch geladene Daten uebergeben statt sich auf
+// die evtl. noch nicht fertig geladene Modulvariable zu verlassen.
+function filterNachZeitraum(daten, monate) {
+    if (monate === null) return daten;
+    const grenze = new Date();
+    grenze.setMonth(grenze.getMonth() - monate);
+    grenze.setHours(0, 0, 0, 0);
+    return daten.filter(r => (r.createdAt || 0) >= grenze.getTime());
+}
+
+// Liefert die archivierten Begehungen, gefiltert auf den aktuell gewählten
+// Zeitraum. Wird von den meisten Auswertungsbereichen sowie CSV- und
+// PDF-Export genutzt. BEWUSST NICHT genutzt von "Wiederkehrende Mängel"
+// (soll immer die tatsächlich letzte archivierte Begehung eines Marktes
+// finden, unabhängig vom Zeitraum) und "Offene Maßnahmen" (ein altes,
+// noch offenes Maßnahme wäre sonst ausgerechnet dann unsichtbar, wenn sie
+// am dringendsten Aufmerksamkeit bräuchte).
+function gefilterteArchivDaten() {
+    return filterNachZeitraum(auswertungArchiv, zeitraumMonate);
+}
+
+function renderAlleAuswertungen() {
     renderWiederkehrend();
     renderKategorienSchwachstellen();
+    renderAuffaelligeMaerkte();
     renderVerlaufProMarkt();
     renderOffeneMassnahmen();
+    updateZeitraumInfo();
+}
+
+function updateZeitraumInfo() {
+    const info = document.getElementById('zeitraum-info');
+    if (!info) return;
+    const gefiltert = gefilterteArchivDaten().length;
+    const gesamt = auswertungArchiv.length;
+    info.textContent = zeitraumMonate === null
+        ? `${gesamt} archivierte Begehung${gesamt === 1 ? '' : 'en'}`
+        : `${gefiltert} von ${gesamt} archivierten Begehungen im gewählten Zeitraum`;
 }
 
 // ===== 1. Wiederkehrende Mängel (aktuell laufende Begehung vs. letzte archivierte desselben Marktes) =====
@@ -63,21 +105,13 @@ function renderWiederkehrend() {
 }
 
 // ===== 2. Kategorien-Schwachstellen über alle archivierten Begehungen =====
-// Wie beim CSV-Export: iteriert ueber die in jeder Begehung selbst
-// gespeicherten Bewertungs-Schluessel, nicht ueber den aktuellen Katalog
-// (siehe ausfuehrlicher Kommentar bei buildAuswertungCsvRows()).
-function renderKategorienSchwachstellen() {
-    const container = document.getElementById('kategorien-content');
-    if (!container) return;
-
-    if (auswertungArchiv.length === 0) {
-        container.innerHTML = '<p class="auswertung-empty">Noch keine archivierten Begehungen vorhanden.</p>';
-        return;
-    }
-
+// Reine Berechnung (keine DOM-Zugriffe) - wird sowohl von der
+// Bildschirmanzeige als auch vom PDF-Export genutzt, damit beide
+// garantiert dieselben Zahlen zeigen.
+function berechneKategorienSchwachstellen(daten) {
     const counts = {};
 
-    auswertungArchiv.forEach(record => {
+    daten.forEach(record => {
         Object.keys(record.ratings || {}).forEach(itemId => {
             const rating = record.ratings[itemId];
             if (!rating || rating === 'na') return;
@@ -91,10 +125,24 @@ function renderKategorienSchwachstellen() {
         });
     });
 
-    const rows = Object.entries(counts)
+    return Object.entries(counts)
         .filter(([, c]) => c.total > 0)
         .map(([name, c]) => ({ name, mangel: c.mangel, total: c.total, pct: Math.round((c.mangel / c.total) * 100) }))
         .sort((a, b) => b.pct - a.pct);
+}
+
+function renderKategorienSchwachstellen() {
+    const container = document.getElementById('kategorien-content');
+    if (!container) return;
+
+    const daten = gefilterteArchivDaten();
+
+    if (daten.length === 0) {
+        container.innerHTML = '<p class="auswertung-empty">Keine archivierten Begehungen im gewählten Zeitraum.</p>';
+        return;
+    }
+
+    const rows = berechneKategorienSchwachstellen(daten);
 
     if (rows.length === 0) {
         container.innerHTML = '<p class="auswertung-empty">Für die archivierten Begehungen liegen keine auswertbaren Antworten vor.</p>';
@@ -113,42 +161,122 @@ function renderKategorienSchwachstellen() {
         </table>`;
 }
 
-// ===== 3. Verlauf pro Markt =====
-function renderVerlaufProMarkt() {
-    const container = document.getElementById('verlauf-markt-content');
+// ===== 2B. Auffällige Märkte (Ranking nach Mängelquote) =====
+// Reine Berechnung, analog zu berechneKategorienSchwachstellen().
+function berechneAuffaelligeMaerkte(daten) {
+    const byMarket = {};
+
+    daten.forEach(record => {
+        const firma = (record.companyInfo.firma || 'Ohne Markt-Angabe').trim();
+        if (!byMarket[firma]) byMarket[firma] = { mangel: 0, total: 0 };
+
+        Object.keys(record.ratings || {}).forEach(itemId => {
+            const rating = record.ratings[itemId];
+            if (!rating || rating === 'na') return;
+            byMarket[firma].total++;
+            if (rating === 'mangel') byMarket[firma].mangel++;
+        });
+    });
+
+    const marketRates = Object.entries(byMarket)
+        .filter(([, c]) => c.total > 0)
+        .map(([name, c]) => ({ name, mangel: c.mangel, total: c.total, pct: (c.mangel / c.total) * 100 }));
+
+    if (marketRates.length === 0) {
+        return { durchschnitt: 0, auffaellig: [], alle: [] };
+    }
+
+    const gesamtMangel = marketRates.reduce((s, m) => s + m.mangel, 0);
+    const gesamtTotal = marketRates.reduce((s, m) => s + m.total, 0);
+    const durchschnitt = gesamtTotal > 0 ? (gesamtMangel / gesamtTotal) * 100 : 0;
+
+    const auffaellig = marketRates
+        .filter(m => m.pct > durchschnitt)
+        .sort((a, b) => b.pct - a.pct);
+
+    return { durchschnitt, auffaellig, alle: marketRates };
+}
+
+function renderAuffaelligeMaerkte() {
+    const container = document.getElementById('auffaellige-maerkte-content');
     if (!container) return;
 
-    if (auswertungArchiv.length === 0) {
-        container.innerHTML = '<p class="auswertung-empty">Noch keine archivierten Begehungen vorhanden.</p>';
+    const daten = gefilterteArchivDaten();
+
+    if (daten.length === 0) {
+        container.innerHTML = '<p class="auswertung-empty">Keine archivierten Begehungen im gewählten Zeitraum.</p>';
         return;
     }
 
+    const { durchschnitt, auffaellig } = berechneAuffaelligeMaerkte(daten);
+
+    if (auffaellig.length === 0) {
+        container.innerHTML = `<div class="auswertung-good">✓ Kein Markt liegt aktuell über der durchschnittlichen Mängelquote (${Math.round(durchschnitt)}%).</div>`;
+        return;
+    }
+
+    container.innerHTML = `
+        <p class="auswertung-hint">Durchschnittliche Mängelquote aller Märkte im gewählten Zeitraum: ${Math.round(durchschnitt)}%</p>
+        <table class="doku-table">
+            <tr><th>Markt</th><th>Mängelquote</th><th></th></tr>
+            ${auffaellig.map(m => `
+                <tr>
+                    <td>${escapeHtml(m.name)}</td>
+                    <td>${m.mangel} / ${m.total} (${Math.round(m.pct)}%)</td>
+                    <td><div class="auswertung-bar"><div class="auswertung-bar-fill" style="width:${Math.round(m.pct)}%"></div></div></td>
+                </tr>`).join('')}
+        </table>`;
+}
+
+// ===== 3. Verlauf pro Markt =====
+// ===== 3. Verlauf pro Markt =====
+// Reine Berechnung, analog zu den anderen berechne*()-Funktionen.
+function berechneVerlaufProMarkt(daten) {
     const byMarket = {};
-    auswertungArchiv.forEach(r => {
+    daten.forEach(r => {
         const firma = (r.companyInfo.firma || 'Ohne Markt-Angabe').trim();
         if (!byMarket[firma]) byMarket[firma] = [];
         byMarket[firma].push(r);
     });
 
     const marketNames = Object.keys(byMarket).sort();
-    container.innerHTML = marketNames.map(firma => {
+    return marketNames.map(firma => {
         const list = byMarket[firma].sort((a, b) => a.createdAt - b.createdAt);
         const entries = list.map((r, i) => {
             const stats = r.stats || { mangel: 0 };
-            let trend = '';
+            let trend = 'gleich';
             if (i > 0) {
                 const prevMangel = (list[i - 1].stats || {}).mangel || 0;
-                if (stats.mangel < prevMangel) trend = '<span class="trend-besser">▼ besser</span>';
-                else if (stats.mangel > prevMangel) trend = '<span class="trend-schlechter">▲ schlechter</span>';
-                else trend = '<span class="trend-gleich">– gleich</span>';
+                if (stats.mangel < prevMangel) trend = 'besser';
+                else if (stats.mangel > prevMangel) trend = 'schlechter';
             }
             const datum = formatDate(r.companyInfo.datum) || new Date(r.createdAt).toLocaleDateString('de-DE');
-            return `<li>${datum} — ${stats.mangel || 0} Mangel/Mängel ${trend}</li>`;
-        }).join('');
+            return { datum, mangel: stats.mangel || 0, trend: i === 0 ? null : trend };
+        });
+        return { firma, entries };
+    });
+}
+
+function renderVerlaufProMarkt() {
+    const container = document.getElementById('verlauf-markt-content');
+    if (!container) return;
+
+    const daten = gefilterteArchivDaten();
+
+    if (daten.length === 0) {
+        container.innerHTML = '<p class="auswertung-empty">Keine archivierten Begehungen im gewählten Zeitraum.</p>';
+        return;
+    }
+
+    const trendSymbol = { besser: '<span class="trend-besser">▼ besser</span>', schlechter: '<span class="trend-schlechter">▲ schlechter</span>', gleich: '<span class="trend-gleich">– gleich</span>' };
+
+    const markets = berechneVerlaufProMarkt(daten);
+    container.innerHTML = markets.map(({ firma, entries }) => {
+        const items = entries.map(e => `<li>${e.datum} — ${e.mangel} Mangel/Mängel ${e.trend ? trendSymbol[e.trend] : ''}</li>`).join('');
         return `
             <div class="auswertung-market-block">
-                <h4>${escapeHtml(firma)} <span class="auswertung-market-count">(${list.length} archivierte Begehung${list.length === 1 ? '' : 'en'})</span></h4>
-                <ul class="auswertung-market-list">${entries}</ul>
+                <h4>${escapeHtml(firma)} <span class="auswertung-market-count">(${entries.length} archivierte Begehung${entries.length === 1 ? '' : 'en'})</span></h4>
+                <ul class="auswertung-market-list">${items}</ul>
             </div>`;
     }).join('');
 }
@@ -217,10 +345,12 @@ async function ladeAuswertungCsvZeilen(fehlermeldungKontext) {
         return null;
     }
 
+    daten = filterNachZeitraum(daten, zeitraumMonate);
+
     const rows = buildAuswertungCsvRows(daten);
 
     if (rows.length === 1) {
-        showToast('Keine archivierten Daten zum ' + fehlermeldungKontext + ' vorhanden', 'error');
+        showToast('Keine archivierten Daten zum ' + fehlermeldungKontext + ' im gewählten Zeitraum vorhanden', 'error');
         return null;
     }
 
@@ -288,6 +418,186 @@ async function shareAuswertungCsv() {
     } catch (err) {
         console.error('CSV-Teilen fehlgeschlagen:', err);
         showToast('CSV-Teilen fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+    }
+}
+
+// ===== 4B. Gesamtauswertung als PDF =====
+// Fasst Kategorien-Schwachstellen, auffaellige Maerkte und den
+// Marktverlauf im gewaehlten Zeitraum als ein PDF zusammen. Nutzt
+// bewusst dieselben berechne*()-Funktionen wie die Bildschirmanzeige,
+// damit PDF und Anzeige garantiert dieselben Zahlen zeigen.
+function auswertungPdfFilename() {
+    const datum = new Date().toISOString().split('T')[0];
+    return `ASiC_Handel_Gesamtauswertung_${datum}.pdf`;
+}
+
+async function buildAuswertungPdf() {
+    let daten;
+    try {
+        daten = await getAllArchivedAudits();
+    } catch (err) {
+        throw new Error('Archiv konnte nicht geladen werden');
+    }
+
+    daten = filterNachZeitraum(daten, zeitraumMonate);
+
+    if (daten.length === 0) {
+        throw new Error('Keine archivierten Daten im gewählten Zeitraum vorhanden');
+    }
+
+    if (!window.jspdf) {
+        throw new Error('jsPDF-Bibliothek nicht geladen');
+    }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const pageWidth = 210;
+    const pageHeight = 297;
+    const margin = 14;
+
+    // Kopfbereich (bewusst eigenständig, nicht drawCoverPage() aus app.js,
+    // da diese an state.companyInfo einer EINZELNEN Begehung gebunden ist -
+    // hier geht es um alle Märkte zusammen)
+    doc.setFillColor(204, 7, 30);
+    doc.rect(0, 0, pageWidth, 42, 'F');
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(24);
+    doc.setTextColor(255, 255, 255);
+    doc.text('Gesamtauswertung', pageWidth / 2, 22, { align: 'center' });
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(11);
+    const zeitraumText = zeitraumMonate === null ? 'Gesamter bisheriger Zeitraum' : `Letzte ${zeitraumMonate} Monate`;
+    doc.text(zeitraumText, pageWidth / 2, 30, { align: 'center' });
+
+    let y = 55;
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(100, 116, 139);
+    doc.text(
+        `Erstellt am ${new Date().toLocaleDateString('de-DE')} · ${daten.length} archivierte Begehung${daten.length === 1 ? '' : 'en'} ausgewertet`,
+        pageWidth / 2, y, { align: 'center' }
+    );
+    y += 16;
+
+    function ueberschrift(text) {
+        if (y > pageHeight - 30) { doc.addPage(); y = 18; }
+        doc.setFont(undefined, 'bold');
+        doc.setFontSize(14);
+        doc.setTextColor(28, 34, 38);
+        doc.text(text, margin, y);
+        y += 8;
+    }
+
+    function zeile(links, rechts, farbe) {
+        if (y > pageHeight - 18) { doc.addPage(); y = 18; }
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(9);
+        doc.setTextColor(farbe[0], farbe[1], farbe[2]);
+        doc.text(links, margin, y);
+        if (rechts) {
+            doc.setTextColor(100, 116, 139);
+            doc.text(rechts, pageWidth - margin, y, { align: 'right' });
+        }
+        y += 6;
+    }
+
+    // Kategorien-Schwachstellen
+    ueberschrift('Kategorien-Schwachstellen');
+    const kategorienRows = berechneKategorienSchwachstellen(daten);
+    if (kategorienRows.length === 0) {
+        zeile('Keine auswertbaren Antworten im gewählten Zeitraum.', null, [100, 116, 139]);
+    } else {
+        kategorienRows.forEach(r => zeile(r.name, `${r.mangel}/${r.total} (${r.pct}%)`, [28, 34, 38]));
+    }
+    y += 8;
+
+    // Auffällige Märkte
+    ueberschrift('Auffällige Märkte');
+    const { durchschnitt, auffaellig } = berechneAuffaelligeMaerkte(daten);
+    zeile(`Durchschnittliche Mängelquote: ${Math.round(durchschnitt)}%`, null, [100, 116, 139]);
+    if (auffaellig.length === 0) {
+        zeile('Kein Markt liegt über dem Durchschnitt.', null, [50, 140, 90]);
+    } else {
+        auffaellig.forEach(m => zeile(m.name, `${m.mangel}/${m.total} (${Math.round(m.pct)}%)`, [28, 34, 38]));
+    }
+    y += 8;
+
+    // Verlauf pro Markt (kompakt)
+    ueberschrift('Verlauf pro Markt');
+    const markets = berechneVerlaufProMarkt(daten);
+    const trendKlartext = { besser: '(besser)', schlechter: '(schlechter)', gleich: '(gleich)' };
+    markets.forEach(({ firma, entries }) => {
+        if (y > pageHeight - 25) { doc.addPage(); y = 18; }
+        doc.setFont(undefined, 'bold');
+        doc.setFontSize(9.5);
+        doc.setTextColor(28, 34, 38);
+        doc.text(firma, margin, y);
+        y += 5.5;
+        entries.forEach(e => {
+            const text = `  ${e.datum} — ${e.mangel} Mangel/Mängel ${e.trend ? trendKlartext[e.trend] : ''}`;
+            zeile(text, null, [80, 90, 98]);
+        });
+        y += 3;
+    });
+
+    // Seitenzahlen
+    const totalPages = doc.getNumberOfPages();
+    for (let i = 1; i <= totalPages; i++) {
+        doc.setPage(i);
+        doc.setFontSize(8);
+        doc.setTextColor(140);
+        doc.text(`${i}/${totalPages}`, pageWidth - margin, pageHeight - 8, { align: 'right' });
+    }
+
+    return doc;
+}
+
+async function exportAuswertungPdf() {
+    try {
+        showToast('PDF wird erzeugt…');
+        const doc = await buildAuswertungPdf();
+        doc.save(auswertungPdfFilename());
+        showToast('PDF heruntergeladen');
+    } catch (err) {
+        console.error('PDF-Export fehlgeschlagen:', err);
+        showToast('PDF-Export fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+    }
+}
+
+async function shareAuswertungPdf() {
+    let doc;
+    try {
+        doc = await buildAuswertungPdf();
+    } catch (err) {
+        console.error('PDF-Erzeugung fehlgeschlagen:', err);
+        showToast('PDF-Erzeugung fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+        return;
+    }
+
+    const filename = auswertungPdfFilename();
+    const blob = doc.output('blob');
+    const zeitraumText = zeitraumMonate === null ? 'den gesamten bisherigen Zeitraum' : `die letzten ${zeitraumMonate} Monate`;
+    const text = `Anbei die Gesamtauswertung (Kategorien-Schwachstellen, auffällige Märkte, Marktverlauf) für ${zeitraumText}.`;
+
+    try {
+        if (navigator.canShare && typeof File !== 'undefined') {
+            const file = new File([blob], filename, { type: 'application/pdf' });
+            if (navigator.canShare({ files: [file] })) {
+                try {
+                    await navigator.share({ files: [file], title: 'ASiC Handel – Gesamtauswertung', text });
+                    showToast('PDF geteilt');
+                    return;
+                } catch (err) {
+                    if (err && err.name === 'AbortError') return;
+                    console.error('Teilen fehlgeschlagen, falle auf Download zurück:', err);
+                }
+            }
+        }
+        doc.save(filename);
+        showToast('PDF heruntergeladen (Teilen auf diesem Gerät nicht verfügbar)');
+    } catch (err) {
+        console.error('PDF-Teilen fehlgeschlagen:', err);
+        showToast('PDF-Teilen fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
     }
 }
 
@@ -389,4 +699,18 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnCsv) btnCsv.addEventListener('click', exportAuswertungCsv);
     const btnShareCsv = document.getElementById('btn-share-csv');
     if (btnShareCsv) btnShareCsv.addEventListener('click', shareAuswertungCsv);
+
+    const btnPdf = document.getElementById('btn-export-auswertung-pdf');
+    if (btnPdf) btnPdf.addEventListener('click', exportAuswertungPdf);
+    const btnSharePdf = document.getElementById('btn-share-auswertung-pdf');
+    if (btnSharePdf) btnSharePdf.addEventListener('click', shareAuswertungPdf);
+
+    const zeitraumSelect = document.getElementById('zeitraum-filter');
+    if (zeitraumSelect) {
+        zeitraumSelect.addEventListener('change', () => {
+            const val = zeitraumSelect.value;
+            zeitraumMonate = val === 'alle' ? null : parseInt(val, 10);
+            renderAlleAuswertungen();
+        });
+    }
 });

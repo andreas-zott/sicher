@@ -116,6 +116,21 @@ function deleteAllPhotos() {
     }));
 }
 
+// Schreibt eine Liste von Foto-Datensaetzen unveraendert zurueck (inkl.
+// urspruenglicher id/measureId/createdAt) - im Unterschied zu addPhoto()
+// wird KEINE neue id vergeben. Wird beim Wiederherstellen einer
+// archivierten Begehung genutzt, damit die measureId-Zuordnung zu den
+// ebenfalls wiederhergestellten Massnahmen exakt erhalten bleibt.
+function restorePhotos(photosArray) {
+    return openPhotoDB().then(db => new Promise((resolve, reject) => {
+        const tx = db.transaction(PHOTO_STORE, 'readwrite');
+        const store = tx.objectStore(PHOTO_STORE);
+        (photosArray || []).forEach(p => store.put(p));
+        tx.oncomplete = () => resolve(true);
+        tx.onerror = () => reject(tx.error || new Error('Fotos konnten nicht wiederhergestellt werden.'));
+    }));
+}
+
 // Verkleinert ein aufgenommenes/ausgewaehltes Bild ueber ein Canvas auf maximal
 // maxWidth Pixel Breite und komprimiert es als JPEG, bevor es gespeichert wird.
 function resizeImageFile(file, maxWidth, quality) {

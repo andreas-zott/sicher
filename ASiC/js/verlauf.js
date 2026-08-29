@@ -51,6 +51,7 @@ function renderArchiveList() {
             <div class="archive-item-actions">
                 <div class="archive-item-actions-primary">
                     <button class="btn btn-secondary btn-small" onclick="onArchiveExport('${record.id}')">📤 PDF exportieren</button>
+                    <button class="btn btn-secondary btn-small" onclick="onArchiveRestore('${record.id}')">📂 In App anzeigen</button>
                 </div>
                 <button class="btn-link photo-delete" onclick="onArchiveDelete('${record.id}')">🗑️ Löschen</button>
             </div>
@@ -67,6 +68,43 @@ async function onArchiveExport(id) {
     } catch (err) {
         console.error('Archivierte Begehung konnte nicht exportiert werden:', err);
         showToast('PDF-Fehler: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+    }
+}
+
+// Laedt eine archivierte Begehung zurueck in den "lebenden" Arbeitsstand
+// (Prüfkatalog/Aktionsplan/Fotos) - inklusive der zugehoerigen Fotos, mit
+// original erhaltener measureId-Zuordnung. Ueberschreibt bewusst NICHT das
+// Archiv selbst, sondern nur den aktuell laufenden, noch nicht archivierten
+// Bearbeitungsstand auf diesem Geraet - deshalb vorher eine Bestaetigung.
+async function onArchiveRestore(id) {
+    const record = archiveCache.find(r => r.id === id);
+    if (!record) return;
+
+    if (!confirm('Diese archivierte Begehung in der App anzeigen? Der aktuell laufende, noch nicht archivierte Bearbeitungsstand auf diesem Gerät wird dabei überschrieben. Bereits archivierte Begehungen bleiben davon unberührt.')) return;
+
+    try {
+        const restoredState = {
+            companyInfo: { ...record.companyInfo },
+            ratings: { ...(record.ratings || {}) },
+            comments: { ...(record.comments || {}) },
+            measures: JSON.parse(JSON.stringify(record.measures || [])),
+            signatures: { ...(record.signatures || {}) },
+            notApplicable: { ...(record.notApplicable || {}) }
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(restoredState));
+
+        if (typeof deleteAllPhotos === 'function' && typeof restorePhotos === 'function') {
+            await deleteAllPhotos();
+            if (record.photos && record.photos.length > 0) {
+                await restorePhotos(record.photos);
+            }
+        }
+
+        showToast('Begehung wird geöffnet…');
+        window.location.href = 'index.html';
+    } catch (err) {
+        console.error('Begehung konnte nicht wiederhergestellt werden:', err);
+        showToast('Wiederherstellen fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
     }
 }
 
