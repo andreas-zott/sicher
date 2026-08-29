@@ -294,7 +294,7 @@
                     App-Revision
                 </div>
                 <div class="doku-meta-value">
-                    1.19 (26.08.2026)
+                    1.21 (26.08.2026)
                 </div>
             </div>
 
@@ -303,7 +303,7 @@
                     Service Worker
                 </div>
                 <div class="doku-meta-value">
-                    v1.19
+                    v1.21
                 </div>
             </div>
 
@@ -551,7 +551,7 @@
 
             <p>
                 Die aktuelle technische Cache-Version lautet:
-                <strong><code>asic-handel-v1.19</code></strong>.
+                <strong><code>asic-handel-v1.21</code></strong>.
             </p>
 
             <ul>
@@ -1465,6 +1465,13 @@
                     ohne den globalen <code>state</code> zu verändern – Grundlage
                     für das Team-Archiv (siehe unten), ohne die gerade laufende
                     eigene Begehung zu überschreiben</li>
+                <li><code>list.php</code> und <code>load.php</code> erkennen
+                    zwei Namensmuster: die von <code>save.php</code> selbst
+                    erzeugten <code>Begehung_&lt;Datum&gt;_Markt&lt;Nummer&gt;.json</code>
+                    UND manuell (z. B. per File Station) in denselben Ordner
+                    eingespielte <code>ASiC-Handel_&lt;Firma&gt;_&lt;Datum&gt;.json</code>-Dateien
+                    aus „JSON exportieren"/„JSON per Mail teilen" — beide
+                    erscheinen dadurch gleichermaßen im Team-Archiv</li>
             </ul>
 
         </div>
@@ -1523,6 +1530,16 @@
                 <li>PDF-Export je Eintrag über <code>fetchSynologyRecord()</code>
                     + <code>shareArchivedReportPdf()</code> (Wiederverwendung
                     der bestehenden Archiv-Export-Logik)</li>
+                <li><code>onTeamArchiveRestore(fileName)</code> lädt eine
+                    NAS-Begehung analog zu <code>onArchiveRestore()</code>
+                    (lokales Archiv) zurück in den laufenden Arbeitsstand
+                    und leitet zu <code>index.html</code> weiter. Wichtiger
+                    Unterschied: da Team-Archiv-Datensätze keine Fotos
+                    enthalten, wird ein evtl. vorhandener lokaler
+                    Fotobestand dabei nur <strong>geleert</strong>
+                    (<code>deleteAllPhotos()</code>), nicht durch neue
+                    Fotos ersetzt – der Bestätigungsdialog weist explizit
+                    darauf hin</li>
                 <li>Enthält keine Fotos – <code>save.php</code> speichert nur
                     die reinen Text-/Bewertungsdaten als JSON, keine
                     Bilddateien</li>
@@ -1783,7 +1800,7 @@
 
                 <tr>
                     <td>dokumentation.html</td>
-                    <td>2.038</td>
+                    <td>2.055</td>
                     <td>
                         Technische Dokumentation
                     </td>
@@ -1791,7 +1808,7 @@
 
                 <tr>
                     <td>hilfe.html</td>
-                    <td>1.774</td>
+                    <td>1.779</td>
                     <td>
                         Hilfe und FAQ
                     </td>
@@ -1902,7 +1919,7 @@
 
                 <tr>
                     <td>js/verlauf.js</td>
-                    <td>256</td>
+                    <td>294</td>
                     <td>
                         Bedienlogik der Archiv-/Verlaufseite,
                         inkl. Team-Archiv (NAS)
@@ -1939,7 +1956,7 @@
                     <td>271</td>
                     <td>
                         Service Worker, Offline-Fähigkeit,
-                        Cache-Version <strong>v1.19</strong>
+                        Cache-Version <strong>v1.21</strong>
                     </td>
                 </tr>
 
@@ -1955,7 +1972,7 @@
             </table>
 
             <p>
-                <strong>Gesamt (eigener Code, ohne jsPDF):</strong> 17.387 Zeilen
+                <strong>Gesamt (eigener Code, ohne jsPDF):</strong> 17.447 Zeilen
             </p>
 
             <p style="font-size:0.82rem; color:var(--ink-soft);">
