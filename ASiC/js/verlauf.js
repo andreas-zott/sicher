@@ -188,6 +188,7 @@ function renderTeamArchiveList() {
             <div class="archive-item-actions">
                 <div class="archive-item-actions-primary">
                     <button class="btn btn-secondary btn-small" onclick="onTeamArchiveExport('${entry.fileName}')">📤 PDF exportieren</button>
+                    <button class="btn btn-secondary btn-small" onclick="onTeamArchiveRestore('${entry.fileName}')">📂 In App anzeigen</button>
                 </div>
             </div>
         </div>`;
@@ -206,6 +207,43 @@ async function onTeamArchiveExport(fileName) {
     } catch (err) {
         console.error('Team-Archiv-Begehung konnte nicht exportiert werden:', err);
         showToast('PDF-Fehler: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+    }
+}
+
+// Wie onArchiveRestore() (lokales Archiv), aber fuer eine vom NAS geladene
+// Team-Archiv-Begehung. WICHTIGER UNTERSCHIED: Team-Archiv-Datensaetze
+// enthalten keine Fotos (siehe onTeamArchiveExport) - ein evtl. lokal
+// vorhandener Fotobestand wird deshalb nur GELEERT, nicht durch etwas
+// Neues ersetzt. Der Hinweistext macht das vorher explizit klar, damit es
+// nicht ueberrascht, wenn die geoeffnete Begehung ohne Fotos erscheint,
+// obwohl die urspruengliche Kollegin/der urspruengliche Kollege welche
+// hatte.
+async function onTeamArchiveRestore(fileName) {
+    if (!confirm('Diese Begehung vom NAS in der App anzeigen? Der aktuell laufende, noch nicht archivierte Bearbeitungsstand auf diesem Gerät wird dabei überschrieben. Hinweis: Team-Archiv-Datensätze enthalten keine Fotos – ein evtl. vorhandener lokaler Fotobestand wird dabei geleert, nicht ersetzt.')) return;
+
+    try {
+        showToast('Lade Begehung vom NAS …');
+        const record = await fetchSynologyRecord(fileName);
+
+        const restoredState = {
+            companyInfo: { ...record.companyInfo },
+            ratings: { ...(record.ratings || {}) },
+            comments: { ...(record.comments || {}) },
+            measures: JSON.parse(JSON.stringify(record.measures || [])),
+            signatures: { ...(record.signatures || {}) },
+            notApplicable: { ...(record.notApplicable || {}) }
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(restoredState));
+
+        if (typeof deleteAllPhotos === 'function') {
+            await deleteAllPhotos();
+        }
+
+        showToast('Begehung wird geöffnet…');
+        window.location.href = 'index.html';
+    } catch (err) {
+        console.error('Team-Archiv-Begehung konnte nicht geöffnet werden:', err);
+        showToast('Laden fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
     }
 }
 
