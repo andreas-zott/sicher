@@ -294,7 +294,7 @@
                     App-Revision
                 </div>
                 <div class="doku-meta-value">
-                    1.17 (26.08.2026)
+                    1.19 (26.08.2026)
                 </div>
             </div>
 
@@ -303,7 +303,7 @@
                     Service Worker
                 </div>
                 <div class="doku-meta-value">
-                    v1.17
+                    v1.19
                 </div>
             </div>
 
@@ -551,7 +551,7 @@
 
             <p>
                 Die aktuelle technische Cache-Version lautet:
-                <strong><code>asic-handel-v1.17</code></strong>.
+                <strong><code>asic-handel-v1.19</code></strong>.
             </p>
 
             <ul>
@@ -1473,6 +1473,41 @@
         <div class="doku-box ok">
 
             <div class="doku-box-title">
+                Archivierte Begehung wiederherstellen (verlauf.html)
+            </div>
+
+            Auf der Verlauf-Seite (nur „Mein Verlauf", nicht Team-Archiv)
+            gibt es neben „PDF exportieren" jetzt auch „In App anzeigen" —
+            lädt eine archivierte Begehung inklusive Fotos zurück in den
+            laufenden Arbeitsstand.
+
+            <ul>
+                <li><code>onArchiveRestore(id)</code> fragt vorher per
+                    <code>confirm()</code> nach, da der aktuell laufende,
+                    noch nicht archivierte Bearbeitungsstand dabei
+                    überschrieben wird (das Archiv selbst bleibt
+                    unberührt)</li>
+                <li>Schreibt die Begehungsdaten direkt unter
+                    <code>STORAGE_KEY</code> in <code>localStorage</code>
+                    und leitet anschließend zu <code>index.html</code>
+                    weiter, wo <code>loadState()</code> sie beim Laden
+                    ganz normal übernimmt</li>
+                <li>Fotos: <code>deleteAllPhotos()</code> leert zunächst
+                    den aktuellen Fotobestand, <code>restorePhotos()</code>
+                    (neu in <code>photos-store.js</code>) schreibt die
+                    archivierten Fotos <strong>mit ihrer ursprünglichen
+                    id und measureId</strong> zurück — im Unterschied zu
+                    <code>addPhoto()</code> wird keine neue id vergeben,
+                    damit die Zuordnung zu den ebenfalls wiederhergestellten
+                    Maßnahmen exakt erhalten bleibt</li>
+            </ul>
+
+        </div>
+
+
+        <div class="doku-box ok">
+
+            <div class="doku-box-title">
                 Team-Archiv (verlauf.html)
             </div>
 
@@ -1571,6 +1606,60 @@
                     dafür automatischer Rückfall auf den normalen Download,
                     bei Abbruch durch den Nutzer (<code>AbortError</code>)
                     weder Download noch Fehlermeldung</li>
+            </ul>
+
+        </div>
+
+
+        <div class="doku-box ok">
+
+            <div class="doku-box-title">
+                Zeitraum-Filter, Auffällige Märkte, Gesamtauswertung als PDF (auswertung.html)
+            </div>
+
+            Drei zusammenhängende Ergänzungen der Auswertungsseite.
+
+            <ul>
+                <li><strong>Zeitraum-Filter</strong> – Dropdown „Letzte 3
+                    Monate / 6 Monate / Alles" oberhalb der
+                    Auswertungsbereiche. Steuert die Modulvariable
+                    <code>zeitraumMonate</code> (<code>null</code> = alle).
+                    <code>filterNachZeitraum(daten, monate)</code> ist die
+                    reine Filterfunktion (kein Zugriff auf
+                    Modulvariablen), <code>gefilterteArchivDaten()</code>
+                    wendet sie auf <code>auswertungArchiv</code> an.
+                    Bewusst <strong>nicht</strong> angewendet auf
+                    <code>renderWiederkehrend()</code> (soll immer die
+                    tatsächlich letzte archivierte Begehung eines Marktes
+                    finden) und <code>renderOffeneMassnahmen()</code>
+                    (eine alte offene Maßnahme darf nicht ausgerechnet
+                    dann unsichtbar werden, wenn sie am dringendsten
+                    Aufmerksamkeit bräuchte).</li>
+
+                <li><strong>Auffällige Märkte</strong> –
+                    <code>berechneAuffaelligeMaerkte(daten)</code> gruppiert
+                    nach Firma (wie <code>berechneVerlaufProMarkt()</code>),
+                    berechnet die durchschnittliche Mängelquote über alle
+                    Märkte und listet alle Märkte darüber, absteigend
+                    sortiert.</li>
+
+                <li><strong>Gesamtauswertung als PDF</strong> –
+                    <code>buildAuswertungPdf()</code> fasst
+                    Kategorien-Schwachstellen, Auffällige Märkte und
+                    Verlauf pro Markt in einem Dokument zusammen. Nutzt
+                    bewusst dieselben <code>berechne*()</code>-Funktionen
+                    wie die Bildschirmanzeige (nicht dupliziert), damit
+                    PDF und Anzeige garantiert identische Zahlen zeigen.
+                    Eigener, einfacher Kopfbereich statt
+                    <code>drawCoverPage()</code> aus <code>app.js</code>,
+                    da diese an <code>state.companyInfo</code> einer
+                    einzelnen Begehung gebunden ist und hier alle Märkte
+                    gemeinsam dargestellt werden. <code>exportAuswertungPdf()</code>
+                    (Download) und <code>shareAuswertungPdf()</code>
+                    (Teilen) folgen demselben Muster wie bei CSV/JSON.
+                    Setzt voraus, dass <code>js/jspdf.umd.min.js</code>
+                    auf dieser Seite eingebunden ist (zusätzlich zu den
+                    bereits vorhandenen Skripten).</li>
             </ul>
 
         </div>
@@ -1694,7 +1783,7 @@
 
                 <tr>
                     <td>dokumentation.html</td>
-                    <td>1.949</td>
+                    <td>2.038</td>
                     <td>
                         Technische Dokumentation
                     </td>
@@ -1702,7 +1791,7 @@
 
                 <tr>
                     <td>hilfe.html</td>
-                    <td>1.685</td>
+                    <td>1.774</td>
                     <td>
                         Hilfe und FAQ
                     </td>
@@ -1710,7 +1799,7 @@
 
                 <tr>
                     <td>auswertung.html</td>
-                    <td>693</td>
+                    <td>793</td>
                     <td>
                         Auswertung
                     </td>
@@ -1787,7 +1876,7 @@
 
                 <tr>
                     <td>js/photos-store.js</td>
-                    <td>172</td>
+                    <td>187</td>
                     <td>
                         IndexedDB-Speicherung und Verwaltung
                         der Fotos
@@ -1813,7 +1902,7 @@
 
                 <tr>
                     <td>js/verlauf.js</td>
-                    <td>212</td>
+                    <td>256</td>
                     <td>
                         Bedienlogik der Archiv-/Verlaufseite,
                         inkl. Team-Archiv (NAS)
@@ -1830,7 +1919,7 @@
 
                 <tr>
                     <td>js/auswertung.js</td>
-                    <td>392</td>
+                    <td>716</td>
                     <td>
                         Logik der Auswertungsseite
                     </td>
@@ -1850,7 +1939,7 @@
                     <td>271</td>
                     <td>
                         Service Worker, Offline-Fähigkeit,
-                        Cache-Version <strong>v1.17</strong>
+                        Cache-Version <strong>v1.19</strong>
                     </td>
                 </tr>
 
@@ -1866,7 +1955,7 @@
             </table>
 
             <p>
-                <strong>Gesamt (eigener Code, ohne jsPDF):</strong> 16.732 Zeilen
+                <strong>Gesamt (eigener Code, ohne jsPDF):</strong> 17.387 Zeilen
             </p>
 
             <p style="font-size:0.82rem; color:var(--ink-soft);">

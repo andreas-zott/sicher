@@ -41,6 +41,8 @@
     content="#1c2226"
 >
 
+<script src="js/jspdf.umd.min.js"></script>
+
 
 <style>
 
@@ -415,7 +417,7 @@
         <div class="doku-meta">
 
             <span class="doku-meta-item">
-                App-Revision 1.17
+                App-Revision 1.19
             </span>
 
             <span class="doku-meta-item">
@@ -450,6 +452,29 @@
         sowie den aktuellen Bearbeitungsstand der App. Die Ergebnisse
         werden im Browser berechnet und nicht automatisch an den
         Entwickler übertragen.
+
+    </div>
+
+
+
+    <!-- ================================================================== -->
+    <!-- ZEITRAUM-FILTER                                                    -->
+    <!-- ================================================================== -->
+
+    <div class="card doku-card" style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap; margin-bottom:1.5rem;">
+
+        <div class="field" style="margin:0;">
+            <label for="zeitraum-filter">
+                Zeitraum
+            </label>
+            <select id="zeitraum-filter">
+                <option value="3">Letzte 3 Monate</option>
+                <option value="6">Letzte 6 Monate</option>
+                <option value="alle" selected>Alles</option>
+            </select>
+        </div>
+
+        <span id="zeitraum-info" style="font-size:0.82rem; color:var(--ink-soft);"></span>
 
     </div>
 
@@ -495,6 +520,36 @@
         <div
             class="card doku-card"
             id="kategorien-content"
+        >
+
+            <p class="auswertung-empty">
+                Lade…
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================================================================== -->
+    <!-- 2B. AUFFÄLLIGE MÄRKTE (RANKING)                                     -->
+    <!-- ================================================================== -->
+
+    <section class="doku-section">
+
+        <h2>
+            Auffällige Märkte
+        </h2>
+
+        <p style="color:var(--ink-soft); margin-bottom:1rem;">
+            Märkte, deren Mängelquote über dem Durchschnitt aller
+            Märkte im gewählten Zeitraum liegt.
+        </p>
+
+        <div
+            class="card doku-card"
+            id="auffaellige-maerkte-content"
         >
 
             <p class="auswertung-empty">
@@ -590,6 +645,51 @@
                 Die CSV-Datei wird erst durch den Download-Vorgang
                 außerhalb der App gespeichert.
             </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================================================================== -->
+    <!-- 4B. GESAMTAUSWERTUNG ALS PDF                                        -->
+    <!-- ================================================================== -->
+
+    <section class="doku-section">
+
+        <h2>
+            Gesamtauswertung als PDF
+        </h2>
+
+        <div class="card doku-card">
+
+            <p>
+                Fasst Kategorien-Schwachstellen, auffällige Märkte und
+                den Marktverlauf im gewählten Zeitraum als ein
+                zusammenhängendes PDF-Dokument zusammen — geeignet z. B.
+                für eine monatliche Übersicht an die Regionalleitung.
+            </p>
+
+            <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+
+                <button
+                    class="btn btn-primary btn-small"
+                    id="btn-export-auswertung-pdf"
+                    type="button"
+                >
+                    ⬇️ PDF herunterladen
+                </button>
+
+                <button
+                    class="btn btn-secondary btn-small"
+                    id="btn-share-auswertung-pdf"
+                    type="button"
+                >
+                    📧 PDF per Mail teilen
+                </button>
+
+            </div>
 
         </div>
 
