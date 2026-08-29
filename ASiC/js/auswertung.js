@@ -105,180 +105,28 @@ function renderWiederkehrend() {
 }
 
 // ===== 2. Kategorien-Schwachstellen über alle archivierten Begehungen =====
-// Reine Berechnung (keine DOM-Zugriffe) - wird sowohl von der
-// Bildschirmanzeige als auch vom PDF-Export genutzt, damit beide
-// garantiert dieselben Zahlen zeigen.
-function berechneKategorienSchwachstellen(daten) {
-    const counts = {};
-
-    daten.forEach(record => {
-        Object.keys(record.ratings || {}).forEach(itemId => {
-            const rating = record.ratings[itemId];
-            if (!rating || rating === 'na') return;
-
-            const found = findItemById(itemId);
-            const kategorieName = found ? found.category.name : '(Kategorie nicht mehr im aktuellen Katalog)';
-
-            if (!counts[kategorieName]) counts[kategorieName] = { mangel: 0, total: 0 };
-            counts[kategorieName].total++;
-            if (rating === 'mangel') counts[kategorieName].mangel++;
-        });
-    });
-
-    return Object.entries(counts)
-        .filter(([, c]) => c.total > 0)
-        .map(([name, c]) => ({ name, mangel: c.mangel, total: c.total, pct: Math.round((c.mangel / c.total) * 100) }))
-        .sort((a, b) => b.pct - a.pct);
-}
-
+// Reine Berechnungslogik liegt in js/auswertung-logik.js (gemeinsam mit
+// verlauf.js genutzt) - hier nur noch der Zeitraum-Filter und die Bindung
+// an den DOM-Container dieser Seite.
 function renderKategorienSchwachstellen() {
     const container = document.getElementById('kategorien-content');
     if (!container) return;
-
-    const daten = gefilterteArchivDaten();
-
-    if (daten.length === 0) {
-        container.innerHTML = '<p class="auswertung-empty">Keine archivierten Begehungen im gewählten Zeitraum.</p>';
-        return;
-    }
-
-    const rows = berechneKategorienSchwachstellen(daten);
-
-    if (rows.length === 0) {
-        container.innerHTML = '<p class="auswertung-empty">Für die archivierten Begehungen liegen keine auswertbaren Antworten vor.</p>';
-        return;
-    }
-
-    container.innerHTML = `
-        <table class="doku-table">
-            <tr><th>Kategorie</th><th>Mängelquote</th><th></th></tr>
-            ${rows.map(r => `
-                <tr>
-                    <td>${escapeHtml(r.name)}</td>
-                    <td>${r.mangel} / ${r.total} (${r.pct}%)</td>
-                    <td><div class="auswertung-bar"><div class="auswertung-bar-fill" style="width:${r.pct}%"></div></div></td>
-                </tr>`).join('')}
-        </table>`;
+    container.innerHTML = renderKategorienSchwachstellenHtml(gefilterteArchivDaten());
 }
 
 // ===== 2B. Auffällige Märkte (Ranking nach Mängelquote) =====
-// Reine Berechnung, analog zu berechneKategorienSchwachstellen().
-function berechneAuffaelligeMaerkte(daten) {
-    const byMarket = {};
-
-    daten.forEach(record => {
-        const firma = (record.companyInfo.firma || 'Ohne Markt-Angabe').trim();
-        if (!byMarket[firma]) byMarket[firma] = { mangel: 0, total: 0 };
-
-        Object.keys(record.ratings || {}).forEach(itemId => {
-            const rating = record.ratings[itemId];
-            if (!rating || rating === 'na') return;
-            byMarket[firma].total++;
-            if (rating === 'mangel') byMarket[firma].mangel++;
-        });
-    });
-
-    const marketRates = Object.entries(byMarket)
-        .filter(([, c]) => c.total > 0)
-        .map(([name, c]) => ({ name, mangel: c.mangel, total: c.total, pct: (c.mangel / c.total) * 100 }));
-
-    if (marketRates.length === 0) {
-        return { durchschnitt: 0, auffaellig: [], alle: [] };
-    }
-
-    const gesamtMangel = marketRates.reduce((s, m) => s + m.mangel, 0);
-    const gesamtTotal = marketRates.reduce((s, m) => s + m.total, 0);
-    const durchschnitt = gesamtTotal > 0 ? (gesamtMangel / gesamtTotal) * 100 : 0;
-
-    const auffaellig = marketRates
-        .filter(m => m.pct > durchschnitt)
-        .sort((a, b) => b.pct - a.pct);
-
-    return { durchschnitt, auffaellig, alle: marketRates };
-}
-
 function renderAuffaelligeMaerkte() {
     const container = document.getElementById('auffaellige-maerkte-content');
     if (!container) return;
-
-    const daten = gefilterteArchivDaten();
-
-    if (daten.length === 0) {
-        container.innerHTML = '<p class="auswertung-empty">Keine archivierten Begehungen im gewählten Zeitraum.</p>';
-        return;
-    }
-
-    const { durchschnitt, auffaellig } = berechneAuffaelligeMaerkte(daten);
-
-    if (auffaellig.length === 0) {
-        container.innerHTML = `<div class="auswertung-good">✓ Kein Markt liegt aktuell über der durchschnittlichen Mängelquote (${Math.round(durchschnitt)}%).</div>`;
-        return;
-    }
-
-    container.innerHTML = `
-        <p class="auswertung-hint">Durchschnittliche Mängelquote aller Märkte im gewählten Zeitraum: ${Math.round(durchschnitt)}%</p>
-        <table class="doku-table">
-            <tr><th>Markt</th><th>Mängelquote</th><th></th></tr>
-            ${auffaellig.map(m => `
-                <tr>
-                    <td>${escapeHtml(m.name)}</td>
-                    <td>${m.mangel} / ${m.total} (${Math.round(m.pct)}%)</td>
-                    <td><div class="auswertung-bar"><div class="auswertung-bar-fill" style="width:${Math.round(m.pct)}%"></div></div></td>
-                </tr>`).join('')}
-        </table>`;
+    container.innerHTML = renderAuffaelligeMaerkteHtml(gefilterteArchivDaten());
 }
 
 // ===== 3. Verlauf pro Markt =====
-// ===== 3. Verlauf pro Markt =====
-// Reine Berechnung, analog zu den anderen berechne*()-Funktionen.
-function berechneVerlaufProMarkt(daten) {
-    const byMarket = {};
-    daten.forEach(r => {
-        const firma = (r.companyInfo.firma || 'Ohne Markt-Angabe').trim();
-        if (!byMarket[firma]) byMarket[firma] = [];
-        byMarket[firma].push(r);
-    });
-
-    const marketNames = Object.keys(byMarket).sort();
-    return marketNames.map(firma => {
-        const list = byMarket[firma].sort((a, b) => a.createdAt - b.createdAt);
-        const entries = list.map((r, i) => {
-            const stats = r.stats || { mangel: 0 };
-            let trend = 'gleich';
-            if (i > 0) {
-                const prevMangel = (list[i - 1].stats || {}).mangel || 0;
-                if (stats.mangel < prevMangel) trend = 'besser';
-                else if (stats.mangel > prevMangel) trend = 'schlechter';
-            }
-            const datum = formatDate(r.companyInfo.datum) || new Date(r.createdAt).toLocaleDateString('de-DE');
-            return { datum, mangel: stats.mangel || 0, trend: i === 0 ? null : trend };
-        });
-        return { firma, entries };
-    });
-}
-
+// Reine Berechnungslogik liegt in js/auswertung-logik.js.
 function renderVerlaufProMarkt() {
     const container = document.getElementById('verlauf-markt-content');
     if (!container) return;
-
-    const daten = gefilterteArchivDaten();
-
-    if (daten.length === 0) {
-        container.innerHTML = '<p class="auswertung-empty">Keine archivierten Begehungen im gewählten Zeitraum.</p>';
-        return;
-    }
-
-    const trendSymbol = { besser: '<span class="trend-besser">▼ besser</span>', schlechter: '<span class="trend-schlechter">▲ schlechter</span>', gleich: '<span class="trend-gleich">– gleich</span>' };
-
-    const markets = berechneVerlaufProMarkt(daten);
-    container.innerHTML = markets.map(({ firma, entries }) => {
-        const items = entries.map(e => `<li>${e.datum} — ${e.mangel} Mangel/Mängel ${e.trend ? trendSymbol[e.trend] : ''}</li>`).join('');
-        return `
-            <div class="auswertung-market-block">
-                <h4>${escapeHtml(firma)} <span class="auswertung-market-count">(${entries.length} archivierte Begehung${entries.length === 1 ? '' : 'en'})</span></h4>
-                <ul class="auswertung-market-list">${items}</ul>
-            </div>`;
-    }).join('');
+    container.innerHTML = renderVerlaufProMarktHtml(gefilterteArchivDaten());
 }
 
 // ===== 4. CSV-Export =====
@@ -685,12 +533,6 @@ function renderOffeneMassnahmen() {
                 </tr>`;
             }).join('')}
         </table>`;
-}
-
-function escapeHtml(str) {
-    const div = document.createElement('div');
-    div.textContent = str === undefined || str === null ? '' : String(str);
-    return div.innerHTML;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
