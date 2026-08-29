@@ -294,7 +294,7 @@
                     App-Revision
                 </div>
                 <div class="doku-meta-value">
-                    1.21 (26.08.2026)
+                    1.22 (26.08.2026)
                 </div>
             </div>
 
@@ -303,7 +303,7 @@
                     Service Worker
                 </div>
                 <div class="doku-meta-value">
-                    v1.21
+                    v1.22
                 </div>
             </div>
 
@@ -551,7 +551,7 @@
 
             <p>
                 Die aktuelle technische Cache-Version lautet:
-                <strong><code>asic-handel-v1.21</code></strong>.
+                <strong><code>asic-handel-v1.22</code></strong>.
             </p>
 
             <ul>
@@ -1682,6 +1682,50 @@
         </div>
 
 
+        <div class="doku-box ok">
+
+            <div class="doku-box-title">
+                Gemeinsame Auswertungslogik + „Auswertung Verlauf"/„Auswertung Team" (verlauf.html)
+            </div>
+
+            <code>berechneKategorienSchwachstellen()</code>,
+            <code>berechneAuffaelligeMaerkte()</code>,
+            <code>berechneVerlaufProMarkt()</code> sowie
+            <code>escapeHtml()</code> und drei begleitende
+            <code>render*Html()</code>-Funktionen wurden aus
+            <code>js/auswertung.js</code> in eine neue, gemeinsame Datei
+            <code>js/auswertung-logik.js</code> verschoben — genutzt sowohl
+            von <code>auswertung.html</code> als auch von zwei neuen
+            Reitern auf der Verlauf-Seite: „Auswertung Verlauf" (lokales
+            Archiv) und „Auswertung Team" (Team-Archiv/NAS).
+
+            <ul>
+                <li>Voraussetzung: <code>js/app.js</code> (liefert
+                    <code>findItemById()</code>/<code>formatDate()</code>)
+                    muss vor <code>js/auswertung-logik.js</code> geladen
+                    werden, diese wiederum vor <code>js/auswertung.js</code>
+                    bzw. <code>js/verlauf.js</code></li>
+                <li><code>berechneVerlaufProMarkt()</code> wurde robust für
+                    zwei unterschiedliche Datenquellen gemacht: lokale
+                    Archivdatensätze haben <code>createdAt</code>/<code>stats</code>
+                    direkt gesetzt, vom NAS geladene Datensätze
+                    (<code>fetchSynologyRecord()</code>) haben das nicht —
+                    dort wird ersatzweise nach <code>companyInfo.datum</code>
+                    sortiert und die Mängel-Zahl direkt aus
+                    <code>ratings</code> gezählt</li>
+                <li>„Auswertung Team" ruft <code>fetchSynologyRecord()</code>
+                    für <strong>jede</strong> im Team-Archiv gefundene Datei
+                    einzeln auf (<code>Promise.allSettled</code>) — eine
+                    einzelne defekte/nicht ladbare Datei wird übersprungen
+                    (mit Hinweis-Toast), statt die gesamte Auswertung
+                    scheitern zu lassen</li>
+                <li>Kein eigener Zeitraum-Filter auf der Verlauf-Seite
+                    (bewusst einfacher gehalten als <code>auswertung.html</code>)</li>
+            </ul>
+
+        </div>
+
+
         <div class="doku-box">
 
             <div class="doku-box-title">
@@ -1800,7 +1844,7 @@
 
                 <tr>
                     <td>dokumentation.html</td>
-                    <td>2.055</td>
+                    <td>2.108</td>
                     <td>
                         Technische Dokumentation
                     </td>
@@ -1808,7 +1852,7 @@
 
                 <tr>
                     <td>hilfe.html</td>
-                    <td>1.779</td>
+                    <td>1.825</td>
                     <td>
                         Hilfe und FAQ
                     </td>
@@ -1935,8 +1979,17 @@
                 </tr>
 
                 <tr>
+                    <td>js/auswertung-logik.js</td>
+                    <td>186</td>
+                    <td>
+                        Gemeinsame Auswertungs-Berechnungslogik
+                        (auswertung.html + verlauf.html)
+                    </td>
+                </tr>
+
+                <tr>
                     <td>js/auswertung.js</td>
-                    <td>716</td>
+                    <td>558</td>
                     <td>
                         Logik der Auswertungsseite
                     </td>
@@ -1956,7 +2009,7 @@
                     <td>271</td>
                     <td>
                         Service Worker, Offline-Fähigkeit,
-                        Cache-Version <strong>v1.21</strong>
+                        Cache-Version <strong>v1.22</strong>
                     </td>
                 </tr>
 
@@ -1972,7 +2025,7 @@
             </table>
 
             <p>
-                <strong>Gesamt (eigener Code, ohne jsPDF):</strong> 17.447 Zeilen
+                <strong>Gesamt (eigener Code, ohne jsPDF):</strong> 17.704 Zeilen
             </p>
 
             <p style="font-size:0.82rem; color:var(--ink-soft);">

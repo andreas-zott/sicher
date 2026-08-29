@@ -3,7 +3,7 @@
 // ==========================================================================
 // Offline-Unterstützung für die ASiC-Handel-App.
 //
-// SERVICE-WORKER-VERSION: 1.21
+// SERVICE-WORKER-VERSION: 1.22
 //
 // Bei einer neuen technischen Version:
 //   1. Alle precachten App-Dateien werden neu vom Server geladen.
@@ -19,7 +19,7 @@
 //   - Fotos
 // ==========================================================================
 
-const CACHE_NAME = 'asic-handel-v1.21';
+const CACHE_NAME = 'asic-handel-v1.22';
 
 
 // ==========================================================================
@@ -56,6 +56,7 @@ const PRECACHE_URLS = [
     './js/fotos.js',
     './js/verlauf.js',
     './js/einstellungen.js',
+    './js/auswertung-logik.js',
     './js/auswertung.js',
 
     './js/jspdf.umd.min.js'
