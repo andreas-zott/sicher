@@ -172,77 +172,10 @@
         <div class="changelog-eintrag">
             <span class="version">Version 1.0.0</span><span class="datum">August 2026</span>
             <ul>
-                <li>Versionsnummerierung zurückgesetzt auf 1.0.0 (zuvor 2.1.1) — betrifft <code>js/common.js</code>, <code>service-worker.js</code> und <code>manifest.json</code> sowie die Fußzeile von <code>foto.html</code>. Die bisherige Versionshistorie unten bleibt zur Nachvollziehbarkeit unverändert stehen.</li>
+                <li>Versionsnummerierung zurückgesetzt auf 1.0.0  — betrifft <code>js/common.js</code>, <code>service-worker.js</code> und <code>manifest.json</code> sowie die Fußzeile von <code>foto.html</code>. Die bisherige Versionshistorie unten bleibt zur Nachvollziehbarkeit unverändert stehen.</li>
                 <li><code>liste.html</code> (ältere Fassung, Datenübertragung an <code>massnahmen-sifa.html</code> bekanntermaßen fehlerhaft) bewusst unverändert und auf „Version 1.0.2“ belassen — nicht Teil dieser Zurücksetzung. <code>l1.html</code> verweist inzwischen auf <code>liste-neu.html</code> und <code>mobile-neu.html</code>.</li>
             </ul>
-        </div>
-
-        <div class="changelog-eintrag">
-            <span class="version">Version 2.1.1</span><span class="datum">August 2026</span>
-            <ul>
-                <li>Bugfix: Übergabe der Maßnahmen von <code>mobile.html</code> an <code>massnahmen-sifa.html</code> lieferte auf mobilen Browsern keine Daten — Ursache: die reine <code>window.open()</code>/<code>postMessage()</code>-Kommunikation ist auf iOS Safari anfällig für Pop-up-Blocker und verlorene <code>opener</code>-Referenzen. Umgestellt auf <code>localStorage</code> als primären, zuverlässigen Übertragungsweg — <code>postMessage</code> bleibt als schnellerer Zusatzweg bestehen, ist aber nicht mehr die einzige Quelle. Mit persistenten Browser-Profil end-to-end verifiziert</li>
-                <li>Klare Fehlermeldung ergänzt, falls der Browser das Pop-up-Fenster tatsächlich blockiert</li>
-                <li>„Gefährdungsbeurteilungen"-Kachel auf der Übersichtsseite verweist jetzt auf die eigenständige GBU-Zentrale-App (<code>bgu/index.html</code>) statt auf die alte, im Portal eingebettete <code>gbu-3.html</code></li>
-            </ul>
-        </div>
-
-        <div class="changelog-eintrag">
-            <span class="version">Version 2.1.0</span><span class="datum">August 2026</span>
-            <ul>
-                <li><code>liste.html</code> und <code>mobile.html</code> auf eine gemeinsame Datenquelle konsolidiert (<code>js/checkliste-daten.js</code>, 136 Fragen in 17 Kategorien) und eine gemeinsame Engine (<code>js/checkliste-engine.js</code>) — vorher ~4.000 Zeilen pro Datei, größtenteils dupliziert</li>
-                <li>Bugfix: Zwei parallele, nicht zusammenpassende Speichersysteme vereinheitlicht — zuvor ging die Unterschrift beim Neuladen verloren, weil der tatsächlich beim Laden verwendete Code einen anderen <code>localStorage</code>-Schlüssel las als der manuelle „Speichern"-Button beschrieb. Mit echtem Browser-Neuladen verifiziert</li>
-                <li>Die ~460-zeilige if/else-Kette zur Maßnahmen-Herleitung (<code>generateMeasure()</code>) ersetzt durch direkt an der Frage hinterlegte Maßnahmentexte in den Daten</li>
-                <li><code>massnahmen-sifa.html</code> neu gestaltet, PDF-Erzeugung von <code>html2pdf.js</code>/Screenshot auf direktes <code>jsPDF</code> umgestellt (durchsuchbarer Text statt Bild)</li>
-                <li>Übergabe der Maßnahmen an <code>massnahmen-sifa.html</code> nutzt jetzt ein Bereit-Signal vom Empfänger statt eines festen <code>setTimeout(1000)</code> — das feste Timeout bleibt nur noch als Absicherung für den Fall, dass das Signal ausbleibt</li>
-                <li><code>audit.html</code> bewusst <strong>nicht</strong> mitkonsolidiert: enthält 152 eigenständige Fragen in 20 Kategorien, keine Textgleichheit mit <code>liste.html</code>/<code>mobile.html</code></li>
-            </ul>
-        </div>
-
-        <div class="changelog-eintrag">
-            <span class="version">Version 2.0.0</span><span class="datum">August 2026</span>
-            <ul>
-                <li>Portal-Grundgerüst (Login, Übersicht, Anleitung, Fotoformular, Checklisten-Menü, Rechtliches) einheitlich neu gestaltet</li>
-                <li>Gemeinsames Stylesheet &amp; gemeinsame JS-Logik statt Kopien auf jeder Seite</li>
-                <li>Bugfix: kaputter <code>&lt;title&gt;</code>-Tag auf der Übersichtsseite</li>
-                <li>Bugfix: leere Hero-Überschrift und fehlendes Font Awesome auf der Anleitungsseite</li>
-                <li>Zwei konkurrierende Service Worker auf einen vereinheitlicht</li>
-                <li>Fünf ungenutzte Manifest-Varianten entfernt, nur <code>manifest.json</code> bleibt</li>
-                <li>Bibliotheken der Portal-Seiten von CDN auf lokale Einbindung umgestellt</li>
-                <li>„Startseite"-Links zeigen jetzt konsistent auf <code>welcome.html</code> statt teils auf den Login</li>
-            </ul>
-        </div>
-
-        <div class="changelog-eintrag">
-            <span class="version">Version 1.0.2</span><span class="datum">August 2026</span>
-            <ul>
-                <li>Footer-Layout auf FAQ- und technischer Beschreibungsseite korrigiert</li>
-                <li>Link zur technischen Beschreibung in der Fußzeile aller Seiten ergänzt</li>
-            </ul>
-        </div>
-
-        <div class="changelog-eintrag">
-            <span class="version">Version 1.0.1</span><span class="datum">August 2026</span>
-            <ul>
-                <li>FAQ- und technische Beschreibungsseite ergänzt und in der Fußzeile aller Seiten verlinkt</li>
-                <li>Service-Worker-Dateiliste um die neuen Seiten erweitert</li>
-            </ul>
-        </div>
-
-        <div class="changelog-eintrag" style="margin-bottom:0;">
-            <span class="version">Version 1.0.0</span><span class="datum">August 2026</span>
-            <ul>
-                <li>Einheitliches, moderneres Button-Design in allen Seiten</li>
-                <li>Verstreute Aktions-Buttons in <code>liste.html</code> in ein schwebendes Menü (☰) zusammengefasst</li>
-                <li>Foto-Seite komplett neu gestaltet</li>
-                <li>Maßnahmen-Darstellung auf Karten-Layout umgestellt</li>
-                <li>Einheitlicher Footer mit Impressum/Datenschutz/Startseite-Links und Versionsanzeige</li>
-                <li>Service Worker mit versionsbasiertem Cache eingeführt</li>
-                <li>Bugfix: Im „Drucken / PDF"-Export von <code>liste.html</code> fehlten die Maßnahmen wegen eines fehlerhaften Selektors</li>
-            </ul>
-        </div>
-
-    </div>
-
+        
 </div>
 
 <footer class="app-footer">
