@@ -13,6 +13,11 @@
 //   titel         - vollständiger Titel der Gefährdungsbeurteilung
 //   kategorie     - Gruppierung für die Übersichtsseite (z. B. "Maschinen", "Tätigkeiten")
 //   icon          - ein Emoji für die Übersichtskarte
+//   typ           - "standard" (Default, Gefahr/Massnahme/Risikomatrix fuer EIN Objekt)
+//                   oder "pruefliste" (mehrteilige Ja/Nein/N.V.-Pruefliste ohne Risikomatrix,
+//                   z. B. eine allgemeine Marktbegehung mit vielen Themenbereichen)
+//
+//   -- bei typ "standard" (oder weggelassen): --
 //   hatMaschine   - true = zeigt den Abschnitt "Beschreibung der Maschine"
 //   maschine      - { typ, hersteller, baujahrSeriennummer, verwendungszweck } (nur falls hatMaschine)
 //   taetigkeiten  - Liste von Stichpunkten "Beschreibung der Tätigkeit" (nur falls KEIN hatMaschine)
@@ -22,7 +27,13 @@
 //   restgefaehrdung - Freitext
 //   risikomatrix  - Liste { gefahr, wahrscheinlichkeit (1-5), schwere (1-5) }
 //
-// Risikoschwelle einheitlich für ALLE Gefährdungsbeurteilungen (siehe
+//   -- bei typ "pruefliste": --
+//   abschnitte    - Liste { titel, fragen: [{ nr, frage, massnahme }] }
+//                   (kein hatMaschine/gefaehrdungen/risikomatrix - jede Frage traegt
+//                   ihre Massnahme direkt bei sich, analog zu js/checkliste-daten.js
+//                   im Hauptportal)
+//
+// Risikoschwelle einheitlich für ALLE "standard"-Gefährdungsbeurteilungen (siehe
 // berechneRisikostufe() in gbu-engine.js): 1-6 Niedrig, 7-12 Mittel, 13-25 Hoch.
 
 const GBU_KATALOG = [
@@ -423,6 +434,30 @@ const GBU_KATALOG = [
             { gefahr: "Kreislaufbelastung bei Hitzearbeit", wahrscheinlichkeit: 3, schwere: 3 },
             { gefahr: "Kälteeinwirkung im Winter", wahrscheinlichkeit: 2, schwere: 2 }
         ]
+    },
+
+    // ======================================================================
+    // 4. Allgemeine Gefährdungsbeurteilung für den Einzelhandel (Prüfliste)
+    // ======================================================================
+    {
+        id: "allgemeine-gbu-einzelhandel",
+        titel: "Allgemeine Gefährdungsbeurteilung für den Einzelhandel",
+        kategorie: "Allgemeine Marktprüfung",
+        icon: "🏪",
+        typ: "pruefliste",
+        abschnitte: GBU_ABSCHNITTE_ALLGEMEIN
+    },
+
+    // ======================================================================
+    // 5. Umfassende Gefährdungsbeurteilung für den Einzelhandel (Prüfliste)
+    // ======================================================================
+    {
+        id: "umfassende-gbu-einzelhandel",
+        titel: "Umfassende Gefährdungsbeurteilung für den Einzelhandel",
+        kategorie: "Allgemeine Marktprüfung",
+        icon: "📋",
+        typ: "pruefliste",
+        abschnitte: GBU_ABSCHNITTE_UMFASSEND
     }
 
 ];

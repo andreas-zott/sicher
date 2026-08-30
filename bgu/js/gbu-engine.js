@@ -31,6 +31,10 @@ const GbuEngine = (() => {
         return div.innerHTML;
     }
 
+    function escapeAttr(str) {
+        return escapeHtml(str).replace(/"/g, '&quot;');
+    }
+
     function berechneRisikostufe(zahl) {
         if (zahl <= RISIKO_SCHWELLE_NIEDRIG) return { text: 'Niedrig', klasse: 'risiko-niedrig' };
         if (zahl <= RISIKO_SCHWELLE_MITTEL) return { text: 'Mittel', klasse: 'risiko-mittel' };
@@ -54,6 +58,12 @@ const GbuEngine = (() => {
     function renderFormular(gbu) {
         document.getElementById('page-title').textContent = gbu.titel + ' — GBU Zentrale';
         document.getElementById('gbu-titel').textContent = 'Gefährdungsbeurteilung — ' + gbu.titel;
+
+        if (gbu.typ === 'pruefliste') {
+            renderPruefliste(gbu);
+            document.getElementById('gbu-form').style.display = 'block';
+            return;
+        }
 
         if (gbu.hatMaschine) {
             document.getElementById('abschnitt-maschine').innerHTML = `
@@ -114,6 +124,61 @@ const GbuEngine = (() => {
         }).join('');
 
         document.getElementById('gbu-form').style.display = 'block';
+    }
+
+    // ===== Prüfliste (mehrteilige Ja/Nein/N.V.-Fragebögen) =====
+    // Fuer typ:"pruefliste" - blendet die "standard"-Abschnitte (Gefahr/
+    // Massnahme/Risikomatrix) aus und rendert stattdessen die Abschnitte
+    // mit Ja/Nein/N.V.-Fragen. Jede Frage traegt ihre Massnahme direkt bei
+    // sich (kein Risikomatrix-Konzept hier, analog zu liste.html/
+    // checkliste-engine.js im Hauptportal).
+
+    function renderPruefliste(gbu) {
+        document.getElementById('abschnitt-standard').style.display = 'none';
+        const container = document.getElementById('abschnitt-pruefliste');
+
+        container.innerHTML = gbu.abschnitte.map((abschnitt, aIdx) => `
+            <div class="pl-abschnitt">
+                <h3 class="pl-abschnitt-titel">${escapeHtml(abschnitt.titel)}</h3>
+                ${abschnitt.fragen.map((f, fIdx) => {
+                    const name = `pl-${aIdx}-${fIdx}`;
+                    return `
+                    <div class="pl-frage-zeile" data-name="${name}" data-massnahme="${escapeAttr(f.massnahme)}">
+                        <div class="pl-frage-text"><span class="pl-frage-nr">${escapeHtml(f.nr)}</span>${escapeHtml(f.frage)}</div>
+                        <div class="pl-antworten">
+                            <label class="pl-opt pl-opt-ja"><input type="radio" name="${name}" value="ja"><span>Ja</span></label>
+                            <label class="pl-opt pl-opt-nein"><input type="radio" name="${name}" value="nein"><span>Nein</span></label>
+                            <label class="pl-opt pl-opt-nv"><input type="radio" name="${name}" value="nv"><span>N/V</span></label>
+                        </div>
+                    </div>`;
+                }).join('')}
+            </div>
+        `).join('');
+
+        container.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                const zeile = radio.closest('.pl-frage-zeile');
+                zeile.classList.remove('pl-ja', 'pl-nein', 'pl-nv');
+                if (radio.value === 'ja') zeile.classList.add('pl-ja');
+                if (radio.value === 'nein') zeile.classList.add('pl-nein');
+                if (radio.value === 'nv') zeile.classList.add('pl-nv');
+                speichereEntwurf();
+            });
+        });
+    }
+
+    function pruefBeantwortung() {
+        const ergebnis = [];
+        document.querySelectorAll('.pl-frage-zeile').forEach(zeile => {
+            const checked = zeile.querySelector('input[type="radio"]:checked');
+            ergebnis.push({
+                name: zeile.dataset.name,
+                frage: zeile.querySelector('.pl-frage-text').textContent,
+                massnahme: zeile.dataset.massnahme,
+                antwort: checked ? checked.value : null
+            });
+        });
+        return ergebnis;
     }
 
     function risikoNeuBerechnen(selectElement) {
@@ -191,7 +256,7 @@ const GbuEngine = (() => {
 
     function speichereEntwurf() {
         if (!aktuelleGbu) return;
-        const daten = { felder: {}, risiko: [], unterschriften: {} };
+        const daten = { felder: {}, risiko: [], unterschriften: {}, pruefliste: {} };
 
         document.querySelectorAll('#gbu-form input, #gbu-form textarea, #gbu-form select').forEach(el => {
             if (!el.id) return;
@@ -201,6 +266,11 @@ const GbuEngine = (() => {
         document.querySelectorAll('#tabelle-risiko tbody tr').forEach(row => {
             const selects = row.querySelectorAll('select');
             daten.risiko.push([selects[0].value, selects[1].value]);
+        });
+
+        document.querySelectorAll('.pl-frage-zeile').forEach(zeile => {
+            const checked = zeile.querySelector('input[type="radio"]:checked');
+            if (checked) daten.pruefliste[zeile.dataset.name] = checked.value;
         });
 
         ['sign1', 'sign2'].forEach(id => {
@@ -237,6 +307,16 @@ const GbuEngine = (() => {
             selects[0].value = paar[0];
             selects[1].value = paar[1];
             risikoNeuBerechnen(selects[0]);
+        });
+
+        Object.keys(daten.pruefliste || {}).forEach(name => {
+            const antwort = daten.pruefliste[name];
+            const radio = document.querySelector(`input[name="${name}"][value="${antwort}"]`);
+            if (!radio) return;
+            radio.checked = true;
+            const zeile = radio.closest('.pl-frage-zeile');
+            zeile.classList.remove('pl-ja', 'pl-nein', 'pl-nv');
+            zeile.classList.add('pl-' + antwort);
         });
 
         Object.keys(daten.unterschriften || {}).forEach(id => {
@@ -436,7 +516,62 @@ const GbuEngine = (() => {
         feldZeile('Datum', formatDatum(d.datum));
         y += 4;
 
-        if (aktuelleGbu.hatMaschine) {
+        if (aktuelleGbu.typ === 'pruefliste') {
+            const FARBE = { ja: [47, 143, 91], nein: [192, 57, 43], nv: [107, 114, 128] };
+            const antworten = pruefBeantwortung();
+            let fGesamt = 0;
+
+            aktuelleGbu.abschnitte.forEach((abschnitt) => {
+                neueSeiteFallsNoetig(12);
+                doc.setFont(undefined, 'bold');
+                doc.setFontSize(11);
+                doc.setTextColor(...INK);
+                doc.text(abschnitt.titel, margin, y);
+                y += 6;
+
+                abschnitt.fragen.forEach((f) => {
+                    const eintrag = antworten[fGesamt];
+                    fGesamt++;
+                    const frageZeilen = doc.splitTextToSize(f.nr + '  ' + f.frage, contentWidth - 16);
+                    neueSeiteFallsNoetig(frageZeilen.length * 4.2 + 3);
+
+                    doc.setFont(undefined, 'normal');
+                    doc.setFontSize(8.6);
+                    doc.setTextColor(60, 60, 60);
+                    doc.text(frageZeilen, margin, y);
+
+                    const antwortText = eintrag && eintrag.antwort === 'ja' ? 'Ja' : eintrag && eintrag.antwort === 'nein' ? 'Nein' : eintrag && eintrag.antwort === 'nv' ? 'N/V' : '—';
+                    doc.setFont(undefined, 'bold');
+                    doc.setTextColor(...(FARBE[eintrag && eintrag.antwort] || [150, 150, 150]));
+                    doc.text(antwortText, margin + contentWidth - 12, y);
+
+                    y += frageZeilen.length * 4.2 + 3;
+                    doc.setDrawColor(...LINE);
+                    doc.line(margin, y - 1.5, margin + contentWidth, y - 1.5);
+                });
+                y += 4;
+            });
+
+            const neinEintraege = antworten.filter(e => e.antwort === 'nein');
+            if (neinEintraege.length > 0) {
+                neueSeiteFallsNoetig(14);
+                ueberschrift('Maßnahmen (aus „Nein“-Antworten)');
+                neinEintraege.forEach(e => {
+                    const frageZeilen = doc.splitTextToSize(e.frage, contentWidth);
+                    const massnahmeZeilen = doc.splitTextToSize(e.massnahme, contentWidth);
+                    neueSeiteFallsNoetig((frageZeilen.length + massnahmeZeilen.length) * 4.2 + 6);
+                    doc.setFont(undefined, 'bold');
+                    doc.setFontSize(9);
+                    doc.setTextColor(...INK);
+                    doc.text(frageZeilen, margin, y);
+                    y += frageZeilen.length * 4.2 + 1;
+                    doc.setFont(undefined, 'normal');
+                    doc.setTextColor(...SOFT);
+                    doc.text(massnahmeZeilen, margin, y);
+                    y += massnahmeZeilen.length * 4.2 + 5;
+                });
+            }
+        } else if (aktuelleGbu.hatMaschine) {
             ueberschrift('2. Beschreibung der Maschine');
             feldZeile('Maschinentyp / Modell', d.maschinentyp);
             feldZeile('Hersteller', d.hersteller);
@@ -455,6 +590,7 @@ const GbuEngine = (() => {
         }
         y += 4;
 
+        if (aktuelleGbu.typ !== 'pruefliste') {
         ueberschrift('3. Gefährdungen');
         tabelle(
             ['Gefahr', 'Beschreibung', 'Mögliche Folgen'],
@@ -518,6 +654,7 @@ const GbuEngine = (() => {
         feldZeile('Datum der nächsten Prüfung', formatDatum(d.naechstePruefung));
         feldZeile('Bemerkungen', d.bemerkungen);
         y += 4;
+        }
 
         ueberschrift('7. Unterschriften');
         neueSeiteFallsNoetig(45);
