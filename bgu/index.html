@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GBU Zentrale — Gefährdungsbeurteilungen</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="hazard-strip"></div>
+<header class="app-header">
+    <div class="app-header-inner">
+        <div class="brand">
+            <span class="brand-title">GBU Zentrale</span>
+            <span class="brand-tag">Gefährdungsbeurteilungen</span>
+        </div>
+    </div>
+</header>
+
+<main class="page">
+
+    <h1>Gefährdungsbeurteilungen</h1>
+    <p style="color:var(--ink-soft); max-width: 640px;">
+        Formular auswählen, ausfüllen und als PDF speichern — zur eigenen
+        Dokumentation oder zur Vorlage bei Behörden.
+    </p>
+
+    <div id="katalog"></div>
+
+</main>
+
+<footer class="app-footer">
+    <span id="footer-jahr"></span> Andreas Zott — Alle Rechte vorbehalten
+    <br>
+    <a href="impressum.html">Impressum</a>
+    <a href="datenschutz.html">Datenschutz</a>
+</footer>
+
+<script src="js/gbu-daten.js"></script>
+<script>
+    function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str === undefined || str === null ? '' : String(str);
+        return div.innerHTML;
+    }
+
+    function renderKatalog() {
+        const container = document.getElementById('katalog');
+
+        const kategorien = [];
+        GBU_KATALOG.forEach(g => {
+            if (!kategorien.includes(g.kategorie)) kategorien.push(g.kategorie);
+        });
+
+        container.innerHTML = kategorien.map(kat => {
+            const items = GBU_KATALOG.filter(g => g.kategorie === kat);
+            return `
+                <div class="kategorie-label">${escapeHtml(kat)}</div>
+                <div class="gbu-grid">
+                    ${items.map(g => `
+                        <a class="gbu-tile" href="gbu.html?id=${encodeURIComponent(g.id)}">
+                            <span class="icon">${g.icon || '📋'}</span>
+                            <span class="titel">${escapeHtml(g.titel)}</span>
+                            <span class="kategorie">${g.gefaehrdungen.length} Gefährdungen erfasst</span>
+                        </a>
+                    `).join('')}
+                </div>
+            `;
+        }).join('');
+    }
+
+    document.getElementById('footer-jahr').textContent = '© ' + new Date().getFullYear();
+    renderKatalog();
+</script>
+
+</body>
+</html>

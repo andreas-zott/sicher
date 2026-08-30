@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="page-title">Gefährdungsbeurteilung — GBU Zentrale</title>
+<link rel="stylesheet" href="css/styles.css">
+<script src="js/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+<div class="hazard-strip"></div>
+<header class="app-header">
+    <div class="app-header-inner">
+        <div class="brand">
+            <span class="brand-title">GBU Zentrale</span>
+            <span class="brand-tag">Gefährdungsbeurteilungen</span>
+        </div>
+        <nav class="app-nav">
+            <a href="index.html">← Übersicht</a>
+        </nav>
+    </div>
+</header>
+
+<main class="page">
+
+    <div id="gbu-nicht-gefunden" style="display:none;" class="card">
+        <h2>Gefährdungsbeurteilung nicht gefunden</h2>
+        <p>Der aufgerufene Datensatz existiert nicht (mehr). <a href="index.html">Zurück zur Übersicht</a>.</p>
+    </div>
+
+    <form id="gbu-form" style="display:none;">
+
+        <h1 id="gbu-titel"></h1>
+
+        <div class="hinweis">
+            Eingaben werden ausschließlich lokal in diesem Browser
+            zwischengespeichert (Schutz vor Datenverlust bei versehentlichem
+            Neuladen) — es gibt kein Archiv vergangener Beurteilungen. Über
+            „PDF speichern“ oder „Teilen“ wird die Beurteilung als Datei
+            gesichert.
+        </div>
+
+        <h2>1. Allgemeine Angaben</h2>
+        <div class="card">
+            <label for="f-unternehmen">Unternehmen</label>
+            <input type="text" id="f-unternehmen">
+
+            <label for="f-standort">Abteilung / Standort</label>
+            <input type="text" id="f-standort">
+
+            <label for="f-beurteiler">Beurteiler (Name / Funktion)</label>
+            <input type="text" id="f-beurteiler">
+
+            <label for="f-datum">Datum</label>
+            <input type="date" id="f-datum">
+        </div>
+
+        <div id="abschnitt-maschine"></div>
+        <div id="abschnitt-taetigkeit"></div>
+
+        <h2 id="ueberschrift-gefaehrdungen">3. Gefährdungen</h2>
+        <div class="card">
+            <table class="gbu-table" id="tabelle-gefaehrdungen">
+                <thead>
+                    <tr><th>Gefahr</th><th>Beschreibung</th><th>Mögliche Folgen</th></tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <h2>4. Schutzmaßnahmen</h2>
+        <div class="card">
+            <table class="gbu-table" id="tabelle-massnahmen">
+                <thead>
+                    <tr><th>Gefahr</th><th>Schutzmaßnahme</th><th>Beschreibung</th></tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <label for="f-psa">Persönliche Schutzausrüstung (PSA)</label>
+            <textarea id="f-psa" rows="3"></textarea>
+        </div>
+
+        <h2>5. Bewertung der Risiken</h2>
+        <div class="card">
+            <h3 style="margin-top:0;">Dynamische Risikobewertung</h3>
+            <table class="gbu-table" id="tabelle-risiko">
+                <thead>
+                    <tr>
+                        <th>Gefährdung</th>
+                        <th>Eintrittswahrscheinlichkeit</th>
+                        <th>Schadensschwere</th>
+                        <th>Risikozahl</th>
+                        <th>Risikostufe</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <label for="f-restgefaehrdung">Restgefährdung nach Maßnahmen</label>
+            <textarea id="f-restgefaehrdung" rows="3"></textarea>
+
+            <label for="f-restrisiko">Restrisiko vertretbar?</label>
+            <select id="f-restrisiko">
+                <option>Ja</option>
+                <option>Nein</option>
+            </select>
+
+            <label for="f-weitere-massnahmen">Weitere Maßnahmen erforderlich?</label>
+            <textarea id="f-weitere-massnahmen" rows="2"></textarea>
+        </div>
+
+        <h2>6. Dokumentation</h2>
+        <div class="card">
+            <label for="f-unterweisung">Unterweisung durchgeführt?</label>
+            <select id="f-unterweisung">
+                <option>Ja</option>
+                <option>Nein</option>
+            </select>
+
+            <label for="f-naechste-pruefung">Datum der nächsten Prüfung</label>
+            <input type="date" id="f-naechste-pruefung">
+
+            <label for="f-bemerkungen">Bemerkungen</label>
+            <textarea id="f-bemerkungen" rows="2">Wird jährlich oder bei Änderungen an Maschine/Tätigkeit oder Standort aktualisiert.</textarea>
+        </div>
+
+        <h2>7. Unterschriften</h2>
+        <div class="card">
+            <table class="gbu-table">
+                <tr><th>Name / Funktion</th><th>Unterschrift</th></tr>
+                <tr>
+                    <td><input type="text" id="f-unterschrift1-name" placeholder="z. B. Max Muster / Fachkraft für Arbeitssicherheit"></td>
+                    <td>
+                        <canvas id="sign1" class="sign-canvas" width="360" height="110"></canvas><br>
+                        <button type="button" class="btn btn-secondary" style="height:32px; padding:0 12px; margin-top:6px; font-size:0.82rem;" onclick="GbuEngine.clearSignature('sign1')">Löschen</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="text" id="f-unterschrift2-name" placeholder="z. B. Bereichsleitung / Verantwortliche Person"></td>
+                    <td>
+                        <canvas id="sign2" class="sign-canvas" width="360" height="110"></canvas><br>
+                        <button type="button" class="btn btn-secondary" style="height:32px; padding:0 12px; margin-top:6px; font-size:0.82rem;" onclick="GbuEngine.clearSignature('sign2')">Löschen</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="button-row" id="buttonContainer">
+            <button type="button" class="btn btn-primary" onclick="GbuEngine.pdfHerunterladen()">⬇️ PDF speichern</button>
+            <button type="button" class="btn btn-secondary" onclick="GbuEngine.pdfTeilen()">📤 Teilen</button>
+            <button type="button" class="btn btn-secondary" onclick="window.print()">🖨️ Drucken</button>
+            <button type="button" class="btn btn-danger-ghost" onclick="GbuEngine.formularZuruecksetzen()">Zurücksetzen</button>
+        </div>
+
+    </form>
+
+</main>
+
+<footer class="app-footer">
+    <span id="footer-jahr"></span> Andreas Zott — Alle Rechte vorbehalten
+    <br>
+    <a href="impressum.html">Impressum</a>
+    <a href="datenschutz.html">Datenschutz</a>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/gbu-daten.js"></script>
+<script src="js/gbu-engine.js"></script>
+<script>
+    document.getElementById('footer-jahr').textContent = '© ' + new Date().getFullYear();
+    document.addEventListener('DOMContentLoaded', () => GbuEngine.init());
+</script>
+
+</body>
+</html>
