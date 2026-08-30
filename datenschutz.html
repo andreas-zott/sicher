@@ -1,328 +1,130 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Datenschutz - Arbeitssicherheit 2025</title>
-    <link rel="icon" href="/sicher/favicon.ico" type="image/x-icon">
-    <link rel="manifest" href="/sicher/manifest.json">
-    <meta name="theme-color" content="#C62828">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        html, body {
-            height: 100%;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        body {
-            background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 50%, #e0e7ff 100%);
-            color: #1e293b;
-            transition: all 0.3s ease;
-            line-height: 1.6;
-        }
-
-        body.dark {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
-            color: #e2e8f0;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            min-height: 100vh;
-        }
-
-        .back-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 20px;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            text-decoration: none;
-            color: #3b82f6;
-            font-weight: 500;
-            margin-bottom: 30px;
-            transition: all 0.3s ease;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .back-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
-        }
-
-        body.dark .back-button {
-            background: rgba(30, 41, 59, 0.8);
-            color: #60a5fa;
-        }
-
-        .content {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        body.dark .content {
-            background: rgba(30, 41, 59, 0.7);
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #3b82f6, #6366f1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 30px;
-        }
-
-        h2, h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin: 30px 0 15px 0;
-            color: #1e293b;
-        }
-
-        body.dark h2, body.dark h3 {
-            color: #e2e8f0;
-        }
-
-        p {
-            margin-bottom: 15px;
-            color: #475569;
-        }
-
-        body.dark p {
-            color: #cbd5e1;
-        }
-
-        ul {
-            margin: 15px 0;
-            padding-left: 20px;
-        }
-
-        li {
-            margin-bottom: 8px;
-            color: #475569;
-        }
-
-        body.dark li {
-            color: #cbd5e1;
-        }
-
-        .theme-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body.dark .theme-toggle {
-            background: rgba(30, 41, 59, 0.8);
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
-
-            .content {
-                padding: 25px;
-            }
-
-            h1 {
-                font-size: 2rem;
-            }
-        }
-
-        /* --- Einheitlicher App-Footer (auf allen Seiten identisch) --- */
-        .app-footer {
-            margin-top: 40px;
-            padding: 22px 16px calc(22px + env(safe-area-inset-bottom));
-            text-align: center;
-            font-size: 12px;
-            color: #6b7280;
-            border-top: 1px solid rgba(0, 0, 0, 0.08);
-        }
-        .app-footer .app-footer-links {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-        .app-footer .app-footer-links a {
-            color: #C62828;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 12px;
-            padding: 5px 12px;
-            border-radius: 14px;
-            background: rgba(198, 40, 40, 0.08);
-            transition: background 0.2s ease, color 0.2s ease;
-        }
-        .app-footer .app-footer-links a:hover {
-            background: #C62828;
-            color: #fff;
-        }
-        .app-footer p {
-            margin: 2px 0;
-        }
-        .app-footer .app-footer-version {
-            margin-top: 8px;
-            font-size: 10.5px;
-            color: #9ca3af;
-        }
-        body.dark .app-footer {
-            border-top-color: rgba(255, 255, 255, 0.1);
-            color: #94a3b8;
-        }
-        body.dark .app-footer .app-footer-links a {
-            background: rgba(248, 113, 113, 0.15);
-            color: #f87171;
-        }
-        body.dark .app-footer .app-footer-links a:hover {
-            background: #f87171;
-            color: #1e293b;
-        }
-        body.dark .app-footer .app-footer-version {
-            color: #64748b;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Datenschutz — Arbeitssicherheit</title>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0a2f73">
+<link rel="stylesheet" href="lib/css/fontawesome.min.css">
+<link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <button class="theme-toggle" id="themeToggle" aria-label="Theme umschalten">🌙</button>
 
-    <div class="container">
-        <a href="index.html" class="back-button">
-            <i class="fas fa-arrow-left"></i>
-            Zurück zur Startseite
-        </a>
+<button class="theme-toggle" id="themeToggle" aria-label="Theme umschalten">🌙</button>
 
-        <div class="content">
-            <h1>Datenschutzerklärung</h1>
-            <p><em>Stand: Oktober 2025</em></p>
+<section class="hero">
+    <div class="hero-icon"><i class="fas fa-lock"></i></div>
+    <h1>Datenschutz</h1>
+    <p>Stand: August 2026</p>
+</section>
 
-            <h3>Allgemeine Hinweise</h3>
-            <p>Der Schutz Ihrer persönlichen Daten ist uns ein wichtiges Anliegen. Diese Website verarbeitet keinerlei personenbezogene Daten und speichert keine Eingaben, Unterschriften oder Fotos dauerhaft. Die Nutzung erfolgt vollständig lokal im Browser (Client-seitig), ohne Serververbindung oder Datenübertragung an Dritte.</p>
-            
-            <ul>
-                <li>Keine Serververbindung</li>
-                <li>Keine Speicherung von Daten</li>
-                <li>Keine Cookies oder Analyse-Tools</li>
-            </ul>
+<div class="container container-narrow">
 
-            <p>Diese Website informiert über das Thema Arbeitssicherheit und bietet Werkzeuge zur Eigenkontrolle. Sie ist ein rein privates, nicht-kommerzielles Projekt.</p>
+    <a href="welcome.html" class="back-button"><i class="fas fa-arrow-left"></i> Zurück zur Startseite</a>
 
-            <h3>Erhebung und Speicherung personenbezogener Daten</h3>
-            <p>Diese Website speichert keine personenbezogenen Daten. Alle eingegebenen Informationen (z. B. Checklisten, Unterschriften oder Fotos) werden ausschließlich lokal im Browser des Nutzers verarbeitet. Es erfolgt keine Übertragung oder Speicherung auf einem Server.</p>
+    <div class="content">
 
-            <h3>Cookies</h3>
-            <p>Diese Website verwendet keine Cookies oder Tracking-Technologien.</p>
+        <h2 style="margin-top:0;">Allgemeine Hinweise</h2>
+        <p>
+            Der Schutz Ihrer persönlichen Daten ist uns ein wichtiges Anliegen.
+            Diese Website verarbeitet keinerlei personenbezogene Daten und
+            speichert keine Eingaben, Unterschriften oder Fotos dauerhaft auf
+            einem Server. Die Nutzung erfolgt vollständig lokal im Browser
+            (client-seitig), ohne Serververbindung oder Datenübertragung an
+            Dritte.
+        </p>
+        <ul>
+            <li>Keine Serververbindung</li>
+            <li>Keine Speicherung von Daten außerhalb des eigenen Geräts</li>
+            <li>Keine Cookies oder Analyse-Tools</li>
+        </ul>
+        <p>
+            Diese Website informiert über das Thema Arbeitssicherheit und
+            bietet Werkzeuge zur Eigenkontrolle. Sie ist ein rein privates,
+            nicht-kommerzielles Projekt.
+        </p>
 
-            <h3>Eingebettete Inhalte und externe Dienste</h3>
-            <p>Es werden keine externen Dienste eingebunden (wie Google Fonts, YouTube, Analytics o. ä.). Alle Funktionen laufen lokal im Browser.</p>
+        <h2>Erhebung und Speicherung personenbezogener Daten</h2>
+        <p>
+            Diese Website speichert keine personenbezogenen Daten auf einem
+            Server. Alle eingegebenen Informationen (z. B. Checklisten,
+            Unterschriften oder Fotos) werden ausschließlich lokal im Browser
+            der nutzenden Person verarbeitet. Es erfolgt keine Übertragung
+            oder Speicherung auf einem Server.
+        </p>
 
-            <h3>Hosting</h3>
-            <p>Diese Website wird über <strong>GitHub Pages</strong> gehostet, einem Dienst der GitHub, Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA. GitHub speichert ggf. technische Informationen (wie IP-Adressen) beim Aufruf der Seite – auf diese Vorgänge haben wir keinen Einfluss. Weitere Informationen: <a href="https://docs.github.com/de/site-policy/privacy-policies/github-privacy-statement" target="_blank">GitHub Datenschutzerklärung</a>.</p>
+        <h2>Cookies</h2>
+        <p>Diese Website verwendet keine Cookies oder Tracking-Technologien.</p>
 
-            <h3>Rechte der betroffenen Personen</h3>
-            <p>Ihnen stehen folgende Rechte gemäß DSGVO zu:</p>
-            <ul>
-                <li>Auskunft (Art. 15 DSGVO)</li>
-                <li>Berichtigung (Art. 16 DSGVO)</li>
-                <li>Löschung (Art. 17 DSGVO)</li>
-                <li>Einschränkung der Verarbeitung (Art. 18 DSGVO)</li>
-                <li>Datenübertragbarkeit (Art. 20 DSGVO)</li>
-                <li>Widerspruch gegen die Verarbeitung (Art. 21 DSGVO)</li>
-            </ul>
-            <p>Da keine personenbezogenen Daten verarbeitet werden, bestehen in der Praxis keine gespeicherten Informationen, auf die sich diese Rechte beziehen könnten.</p>
-            <p>Für Datenschutzanfragen können Sie sich an <a href="mailto:AndreasZott@me.com">AndreasZott@me.com</a> wenden.</p>
+        <h2>Eingebettete Inhalte und externe Dienste</h2>
+        <p>
+            Alle Bibliotheken (Schriftarten, PDF-Erzeugung) sind lokal in die
+            Anwendung eingebunden, es werden keine externen Dienste zur
+            Laufzeit nachgeladen (kein Google Fonts, kein Analytics o. Ä.).
+        </p>
 
-            <h3>Änderungen dieser Datenschutzerklärung</h3>
-            <p>Diese Datenschutzerklärung kann angepasst werden, falls sich der Funktionsumfang der Website ändert oder neue gesetzliche Vorgaben gelten.</p>
+        <h2>Hosting</h2>
+        <p>
+            Diese Website wird über <strong>GitHub Pages</strong> gehostet,
+            einem Dienst der GitHub, Inc., 88 Colin P Kelly Jr St, San
+            Francisco, CA 94107, USA. GitHub speichert ggf. technische
+            Informationen (wie IP-Adressen) beim Aufruf der Seite — auf diese
+            Vorgänge besteht kein Einfluss. Weitere Informationen:
+            <a href="https://docs.github.com/de/site-policy/privacy-policies/github-privacy-statement" target="_blank" rel="noopener noreferrer">GitHub Datenschutzerklärung</a>.
+        </p>
 
-            <p>Die erzeugten PDFs werden nur lokal erstellt und können manuell gespeichert oder versendet werden. Für die Versendung sind Sie selbst verantwortlich.</p>
+        <h2>Rechte der betroffenen Personen</h2>
+        <p>Ihnen stehen folgende Rechte gemäß DSGVO zu:</p>
+        <ul>
+            <li>Auskunft (Art. 15 DSGVO)</li>
+            <li>Berichtigung (Art. 16 DSGVO)</li>
+            <li>Löschung (Art. 17 DSGVO)</li>
+            <li>Einschränkung der Verarbeitung (Art. 18 DSGVO)</li>
+            <li>Datenübertragbarkeit (Art. 20 DSGVO)</li>
+            <li>Widerspruch gegen die Verarbeitung (Art. 21 DSGVO)</li>
+        </ul>
+        <p>
+            Da keine personenbezogenen Daten auf einem Server verarbeitet
+            werden, bestehen in der Praxis keine dort gespeicherten
+            Informationen, auf die sich diese Rechte beziehen könnten.
+        </p>
+        <p>
+            Für Datenschutzanfragen: <a href="mailto:AndreasZott@me.com">AndreasZott@me.com</a>
+        </p>
 
-            <h3>Verantwortlich gemäß DSGVO</h3>
-            <p>
-                Andreas Zott<br>
-                E-Mail:  <a href="mailto:AndreasZott@me.com">AndreasZott@me.com</a> 
-            </p>
-        </div>
+        <h2>Erzeugte PDFs</h2>
+        <p>
+            Die erzeugten PDFs werden ausschließlich lokal im Browser erstellt
+            und können manuell gespeichert oder versendet werden. Für die
+            Versendung ist die nutzende Person selbst verantwortlich.
+        </p>
+
+        <h2>Änderungen dieser Datenschutzerklärung</h2>
+        <p style="margin-bottom:0;">
+            Diese Datenschutzerklärung kann angepasst werden, falls sich der
+            Funktionsumfang der Website ändert oder neue gesetzliche Vorgaben
+            gelten.
+        </p>
+
     </div>
 
-    <script>
-        // Theme toggle functionality
-        const themeToggle = document.getElementById('themeToggle');
-        const body = document.body;
+</div>
 
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'dark') {
-            body.classList.add('dark');
-            themeToggle.textContent = '☀️';
-        }
-
-        themeToggle.addEventListener('click', function () {
-            body.classList.toggle('dark');
-            const isDark = body.classList.contains('dark');
-            themeToggle.textContent = isDark ? '☀️' : '🌙';
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        });
-    </script>
 <footer class="app-footer">
-  <nav class="app-footer-links">
-    <a href="impressum.html">Impressum</a>
-    <a href="datenschutz.html">Datenschutz</a>
-    <a href="faq.html">FAQ</a>
-    <a href="technische-beschreibung.html">Technik</a>
-    <a href="index.html">Startseite</a>
-  </nav>
-  <p>© <span class="app-footer-jahr"></span> Andreas Zott – Alle Rechte vorbehalten</p>
-  <p class="app-footer-sub">(SiFa) Arbeitssicherheit</p>
-  <p class="app-footer-version">Version 1.0.2</p>
+    <nav class="app-footer-links">
+        <a href="impressum.html">Impressum</a>
+        <a href="faq.html">FAQ</a>
+        <a href="technische-beschreibung.html">Technik</a>
+        <a href="welcome.html">Startseite</a>
+    </nav>
+    <p>© <span class="app-footer-jahr"></span> Andreas Zott — Alle Rechte vorbehalten</p>
+    <p class="app-footer-version"></p>
 </footer>
 
-<script>
-  document.querySelectorAll('.app-footer-jahr').forEach(el => el.textContent = new Date().getFullYear());
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sicher/service-worker.js')
-        .catch(err => console.warn('Service Worker konnte nicht registriert werden:', err));
-    });
-  }
-</script>
+<script src="js/common.js"></script>
 
 </body>
 </html>

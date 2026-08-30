@@ -1,358 +1,159 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Help: Arbeitssicherheits-Checkliste</title>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anleitung — Arbeitssicherheit</title>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0a2f73">
+<link rel="stylesheet" href="lib/css/fontawesome.min.css">
+<link rel="stylesheet" href="css/styles.css">
 <style>
-  /* --- Grundlayout --- */
-  :root {
-    --bg-light: #e6f2ff;
-    --bg-dark: #121212;
-    --text-light: #222;
-    --text-dark: #e0e0e0;
-    --accent: #004080;
-    --accent-light: #80b3ff;
-    --card-light: #ffffff;
-    --card-dark: #1e1e1e;
-  }
-
-  * { box-sizing: border-box; }
-
-  body {
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-    max-width: 750px;
-    margin: 2rem auto;
-    padding: 1rem 1.5rem;
-    line-height: 1.6;
-    color: var(--text-light);
-    background: var(--bg-light);
-    transition: background 0.4s ease, color 0.4s ease;
-  }
-
-  h1, h2 { color: var(--accent); transition: color 0.4s ease; }
-  h1 { text-align: center; margin-bottom: 2rem; font-size: 1.8rem; }
-
-  section {
-    background: var(--card-light);
-    border-radius: 12px;
-    padding: 1.5rem 2rem;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    transition: background 0.4s ease, box-shadow 0.4s ease;
-  }
-
-  ul, ol { margin-left: 20px; }
-  ul li { margin-bottom: 0.7rem; }
-
-  .emoji { font-size: 1.2rem; margin-right: 0.6rem; }
-  .highlight { font-weight: bold; }
-
-  .hint {
-    color: red;
-    font-weight: bold;
-    background-color: #fff3cd;
-    border-left: 4px solid #ffeeba;
-    padding: 10px;
-    margin: 5px 0 10px 0;
-    display: none;
-  }
-
-  footer {
-    font-size: 0.8rem;
-    text-align: center;
-    padding: 1rem 0;
-    color: #555;
-    margin-top: 2rem;
-  }
-
-  footer a { color: #4f46e5; text-decoration: none; margin: 0 8px; font-size: 0.9rem; }
-  footer a:hover { text-decoration: underline; }
-
-  /* --- Dark Mode --- */
-  body.dark-mode { background-color: var(--bg-dark); color: var(--text-dark); }
-  body.dark-mode section { background-color: var(--card-dark); box-shadow: 0 2px 6px rgba(255,255,255,0.03); }
-  body.dark-mode h1, body.dark-mode h2 { color: var(--accent-light); }
-  body.dark-mode footer { color: #aaa; }
-
-  /* --- Dark Mode Button (dezent, kleiner, transparenter Hintergrund) --- */
-  #darkModeToggle {
-    position: fixed;
-    top: 0.6rem;
-    right: 0.6rem;
-    width: 28px;
-    height: 28px;
-    background: transparent; /* transparenter Hintergrund */
-    color: inherit;
-    border: none;
-    border-radius: 50%;
-    font-size: 14px;
-    line-height: 1;
-    cursor: pointer;
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.15s ease, opacity 0.15s ease, background-color 0.15s ease;
-    opacity: 0.85; /* leicht dezenter Eindruck */
-    padding: 0;
-  }
-
-  /* very subtle focus outline for accessibility */
-  #darkModeToggle:focus {
-    outline: 2px solid rgba(0, 64, 128, 0.18);
-    outline-offset: 3px;
-    border-radius: 50%;
-  }
-
-  /* minimal hover effect: slight scale, faint translucent backdrop for discoverability */
-  #darkModeToggle:hover {
-    transform: scale(1.06);
-    background-color: rgba(0,0,0,0.04);
-    opacity: 1;
-  }
-
-  /* keep it readable in dark mode while keeping background transparent */
-  body.dark-mode #darkModeToggle {
-    color: #ffeb3b;
-    /* still transparent but give a subtle backdrop on hover only */
-  }
-  body.dark-mode #darkModeToggle:hover {
-    background-color: rgba(255,235,59,0.08);
-  }
-
-  /* remove heavy global transitions to avoid interfering with subtle button */
-  * { transition: background-color 0.3s ease, color 0.3s ease; }
-/* ================= HERO ================= */
-
-.hero{
-    background:linear-gradient(135deg,#003b8f 0%, #0a2f73 60%, #05204d 100%);
-    color:#fff;
-    padding:60px 20px 100px;
-    position:relative;
-    overflow:hidden;
-    text-align:center;
-}
-
-.hero::after{
-    content:'';
-    position:absolute;
-    left:0;
-    bottom:-60px;
-    width:100%;
-    height:120px;
-    background:#eef3f9;
-    border-radius:100% 100% 0 0;
-}
-
-.hero-icon{
-    font-size:50px;
-    margin-bottom:15px;
-}
-
-.hero h1{
-    font-size:54px;
-    font-weight:800;
-    margin-bottom:10px;
-}
-
-.hero p{
-    font-size:22px;
-    opacity:0.95;
-}
-.container{
-    margin-top:-60px;
-    position:relative;
-    z-index:2;
-}
-
-/* Darkmode Hero Übergang */
-body.dark .hero::after{
-    background:#0f172a;
-}
-
-/* Mobile */
-@media(max-width:600px){
-
-    .hero h1{
-        font-size:32px;
+    .hint {
+        color: #b91c1c;
+        font-weight: 600;
+        background-color: #fff3cd;
+        border-left: 4px solid #ffcc02;
+        padding: 10px 14px;
+        margin: 8px 0 4px;
+        border-radius: 6px;
+        display: none;
+        font-size: 0.9rem;
     }
-
-    .hero p{
-        font-size:16px;
-    }
-
-    .tiles-container{
-        padding:22px;
-        border-radius:20px;
-    }
-}
-
-
+    .hint.show { display: block; }
+    .emoji { margin-right: 6px; }
+    .highlight { font-weight: 700; }
+    .beispielfrage { margin-bottom: 20px; }
+    .beispielfrage label { display: inline-block; margin: 0 14px 0 0; font-weight: 400; }
 </style>
 </head>
-
 <body>
-<button id="darkModeToggle" aria-label="Dark Mode umschalten" title="Dark Mode umschalten">🌙</button>
+
+<button class="theme-toggle" id="themeToggle" aria-label="Theme umschalten">🌙</button>
 
 <section class="hero">
-    <div class="hero-icon">
-        <i class="fas fa-shield-alt"></i>
+    <div class="hero-icon"><i class="fas fa-shield-alt"></i></div>
+    <h1>Anleitung</h1>
+    <p>Nutzung der Arbeitssicherheits-Checkliste</p>
+</section>
+
+<div class="container container-narrow">
+
+    <a href="welcome.html" class="back-button"><i class="fas fa-arrow-left"></i> Zurück zur Übersicht</a>
+
+    <div class="content" style="margin-bottom:20px;">
+        <h2 style="margin-top:0;">1. Übersicht</h2>
+        <p>
+            Die Webseite bietet eine strukturierte Checkliste zur Überprüfung der
+            Arbeitssicherheit in verschiedenen Bereichen eines Marktes. Jede Frage
+            muss beantwortet werden, um die Einhaltung von Sicherheitsstandards zu
+            gewährleisten.
+        </p>
+
+        <h2>2. Ausfüllen — Übersicht und Farbkennzeichnung</h2>
+        <ol>
+            <li>Marktnummer und Name eintragen.</li>
+            <li>SiFa (Sicherheitsfachkraft) eintragen.</li>
+            <li>Bereich auswählen, z. B. „Gesamtmarkt".</li>
+            <li>
+                Jede Frage sorgfältig beantworten:
+                <ul>
+                    <li><span class="highlight">Ja</span> — Alles in Ordnung. Diese Antwort wird <span style="color:var(--ok);">grün hinterlegt</span>.</li>
+                    <li><span class="highlight">Nein</span> — Problem vorhanden → Maßnahmen erforderlich. Diese Antwort wird <span style="color:var(--red);">rot hinterlegt</span>, automatisch erscheinen Hinweise zur Behebung.</li>
+                    <li><span class="highlight">Nicht vorhanden</span> — Frage bzw. Einrichtung ist nicht relevant. Diese Antwort wird <span style="color:#6b7280;">grau hinterlegt</span>.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h2>3. Beispiel — Bereich auswählen und Fragen beantworten</h2>
+        <p>Für jeden Bereich wird <strong>Ja</strong>, <strong>Nein</strong> oder <strong>Nicht vorhanden</strong> gewählt. Bei einer „Nein"-Antwort erscheinen automatisch Hinweise:</p>
+
+        <div class="beispielfrage">
+            <span class="emoji">🛠️</span><strong>Frage:</strong> Feuerlöscher geprüft?<br>
+            <label><input type="radio" name="feuerloescher" value="ja"> Ja</label>
+            <label><input type="radio" name="feuerloescher" value="nein"> Nein</label>
+            <label><input type="radio" name="feuerloescher" value="nv"> N/V</label>
+            <div class="hint">❗ Bitte Feuerlöscher sofort überprüfen und fehlende Wartungen nachholen.</div>
+        </div>
+
+        <div class="beispielfrage">
+            <span class="emoji">🚪</span><strong>Frage:</strong> Notausgänge frei und beschildert?<br>
+            <label><input type="radio" name="notausgang" value="ja"> Ja</label>
+            <label><input type="radio" name="notausgang" value="nein"> Nein</label>
+            <label><input type="radio" name="notausgang" value="nv"> N/V</label>
+            <div class="hint">❗ Blockierte oder fehlend beschilderte Notausgänge sofort freiräumen und markieren.</div>
+        </div>
+
+        <div class="beispielfrage">
+            <span class="emoji">⚡</span><strong>Frage:</strong> Elektrische Geräte überprüft?<br>
+            <label><input type="radio" name="elektrisch" value="ja"> Ja</label>
+            <label><input type="radio" name="elektrisch" value="nein"> Nein</label>
+            <label><input type="radio" name="elektrisch" value="nv"> N/V</label>
+            <div class="hint">❗ Defekte Geräte sofort kennzeichnen und nicht benutzen; Sicherheitsprüfung durchführen.</div>
+        </div>
+
+        <p style="color:var(--ink-soft); font-size:0.88rem;">Hinweis: Automatische Hinweise werden nur angezeigt, wenn „Nein" gewählt wird — hier nur zur Veranschaulichung, ohne Auswirkung auf eine echte Begehung.</p>
+
+        <h2>4. Webseiten-Versionen</h2>
+        <p>
+            Die Seite <a href="liste.html">liste.html</a> zeigt die
+            Arbeitssicherheits-Checkliste im klassischen Layout, geeignet für
+            Desktop-PCs und Tablets — optimiert für größere Bildschirme mit voller
+            Übersicht der Checklistenpunkte.
+        </p>
+        <p>
+            Die Seite <a href="mobile.html">mobile.html</a> ist speziell für die
+            Nutzung auf dem iPhone gestaltet und passt das Layout automatisch an
+            kleine Bildschirme an. Bei Verwendung auf dem iPad passt sich das
+            Design dynamisch an: Im Querformat wird das Layout wie auf einem
+            Tablet dargestellt, um mehr Inhalte gleichzeitig sichtbar zu machen.
+        </p>
+
+        <h2>5. Abschluss</h2>
+        <p style="margin-bottom:0;">
+            Nach dem Ausfüllen können die Ergebnisse zur
+            <strong>Gefährdungsbeurteilung</strong> und
+            <strong>Wirksamkeitskontrolle</strong> genutzt werden. Die Checkliste
+            sollte regelmäßig aktualisiert werden, um gesetzliche Vorgaben
+            einzuhalten.
+        </p>
     </div>
 
-    <h1 id="titel"></h1>
+    <div class="content">
+        <h2 style="margin-top:0;">Checkliste als PDF versenden (iPad)</h2>
+        <ul>
+            <li><span class="emoji">📧</span>In der Checkliste auf den roten Button „PDF teilen (iPad)" tippen.</li>
+            <li><span class="emoji">📧</span>Im Teilen-Menü auf „Mail" tippen.</li>
+            <li><span class="emoji">📝</span>Eine neue E-Mail öffnet sich mit dem PDF als Anhang — Empfänger, Betreff und Nachricht eingeben.</li>
+            <li><span class="emoji">📨</span>Oben rechts auf das Senden-Symbol (Pfeil) tippen, um die Mail zu verschicken.</li>
+        </ul>
+    </div>
 
-    <p>
-        Moderne Lösungen für Arbeitssicherheit im Einzelhandel
-    </p>
-</section>
+</div>
 
-<h1>Nutzung der Arbeitssicherheits-Checkliste</h1>
-
-<section>
-<h2>1. Übersicht</h2>
-<p>
-Die Webseite bietet eine strukturierte Checkliste zur Überprüfung der Arbeitssicherheit in verschiedenen Bereichen eines Marktes. 
-Jede Frage muss beantwortet werden, um die Einhaltung von Sicherheitsstandards zu gewährleisten.
-</p>
-</section>
-
-<h1>Ausfüllen der Checkliste</h1>
-<section>
-<h2>2. Übersicht und Farbkennzeichnung</h2>
-<ol>
-  <li>Marktnummer und Name eintragen.</li>
-  <li>SiFa (Sicherheitsfachkraft) eintragen.</li>
-  <li>Bereich auswählen, z. B. „Gesamtmarkt“.</li>
-  <li>Jede Frage sorgfältig beantworten:
-    <ul>
-      <li><span class="highlight">Ja</span> – Alles in Ordnung. Diese Antwort wird <span style="color:green;">grün hinterlegt</span>.</li>
-      <li><span class="highlight">Nein</span> – Problem vorhanden → Maßnahmen erforderlich. Diese Antwort wird <span style="color:red;">rot hinterlegt</span> und es erscheinen automatisch Hinweise zur Behebung.</li>
-      <li><span class="highlight">Nicht vorhanden</span> – Frage oder Einrichtung ist nicht relevant. Diese Antwort wird <span style="color:gray;">grau hinterlegt</span>.</li>
-    </ul>
-  </li>
-</ol>
-</section>
-
-<h1>Spezielle Hinweise</h1>
-<section>
-<h2>3. Bereich auswählen und Fragen beantworten</h2>
-<p>Für jeden Bereich wähle <strong>Ja</strong>, <strong>Nein</strong> oder <strong>Nicht vorhanden</strong>. Bei einer „Nein“-Antwort erscheinen automatisch Hinweise:</p>
-
-<ul>
-  <li>
-    <span class="emoji">🛠️</span><strong>Frage:</strong> Feuerlöscher geprüft?<br>
-    <label><input type="radio" name="feuerloescher" value="ja"> Ja</label>
-    <label><input type="radio" name="feuerloescher" value="nein"> Nein</label>
-    <label><input type="radio" name="feuerloescher" value="nv"> N/V</label>
-    <div class="hint">❗ Bitte Feuerlöscher sofort überprüfen und fehlende Wartungen nachholen.</div>
-  </li>
-  <li>
-    <span class="emoji">🚪</span><strong>Frage:</strong> Notausgänge frei und beschildert?<br>
-    <label><input type="radio" name="notausgang" value="ja"> Ja</label>
-    <label><input type="radio" name="notausgang" value="nein"> Nein</label>
-    <label><input type="radio" name="notausgang" value="nv"> N/V</label>
-    <div class="hint">❗ Blockierte oder fehlend beschilderte Notausgänge sofort freiräumen und markieren.</div>
-  </li>
-  <li>
-    <span class="emoji">⚡</span><strong>Frage:</strong> Elektrische Geräte überprüft?<br>
-    <label><input type="radio" name="elektrisch" value="ja"> Ja</label>
-    <label><input type="radio" name="elektrisch" value="nein"> Nein</label>
-    <label><input type="radio" name="elektrisch" value="nv"> N/V</label>
-    <div class="hint">❗ Defekte Geräte sofort kennzeichnen und nicht benutzen; Sicherheitsprüfung durchführen.</div>
-  </li>
-</ul>
-
-<script>
-  // Hinweis nur bei "Nein" anzeigen
-  document.querySelectorAll('input[type=radio]').forEach(radio => {
-    radio.addEventListener('change', () => {
-      const hint = radio.closest('li').querySelector('.hint');
-      if (radio.value === 'nein') {
-        hint.style.display = 'block';
-      } else {
-        hint.style.display = 'none';
-      }
-    });
-  });
-
-  // Dark Mode Toggle Logic (unchanged behaviour)
-  const toggle = document.getElementById('darkModeToggle');
-  const body = document.body;
-
-  if (localStorage.getItem('darkMode') === 'enabled') {
-    body.classList.add('dark-mode');
-    toggle.textContent = '☀️';
-  }
-
-  toggle.addEventListener('click', () => {
-    body.classList.toggle('dark-mode');
-    const isDark = body.classList.contains('dark-mode');
-    localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
-    toggle.textContent = isDark ? '☀️' : '🌙';
-  });
-</script>
-</section>
-
-<section>
-<h2>Hinweis</h2>
-<p>Automatische Hinweise werden nur angezeigt, wenn „Nein“ gewählt wird.</p>
-</section>
-
-<h1>Webseiten-Versionen</h1>
-<section>
-<h2>4. Liste für Desktop und Tablets</h2>
-<p>
-Die Seite <a href="liste.html">liste.html</a> zeigt die Arbeitssicherheits-Checkliste im klassischen Layout, geeignet für Desktop-PCs und Tablets. 
-Sie ist optimiert für größere Bildschirme und bietet die volle Übersicht der Checklistenpunkte.
-</p>
-</section>
-
-<section>
-<h2>5. Mobile Version für iPhone</h2>
-<p>
-Die Seite <a href="mobile.html">mobile.html</a> ist speziell für die Nutzung auf dem iPhone gestaltet. 
-Sie passt das Layout automatisch an kleine Bildschirme an, sodass die Checkliste gut lesbar und einfach zu bedienen ist. 
-</p>
-<p>
-Bei Verwendung auf dem iPad passt sich das Design dynamisch an: Dreht man das iPad ins Querformat, 
-wird das Layout wie auf einem Tablet dargestellt, um mehr Inhalte gleichzeitig sichtbar zu machen.
-</p>
-</section>
-
-<h1>Abschluss</h1>
-<section>
-<h2>6. Abschluss</h2>
-<p>
-Nach dem Ausfüllen können die Ergebnisse zur <strong>Gefährdungsbeurteilung</strong> und <strong>Wirksamkeitskontrolle</strong> genutzt werden. 
-Die Checkliste sollte regelmäßig aktualisiert werden, um gesetzliche Vorgaben einzuhalten.
-</p>
-</section>
-</section>
-<h1>Checkliste als PDF versenden (iPad)</h1>
-<section>
-<h2>1. PDF per E-Mail versenden</h2>
-<ul>
-<li><span class="emoji">📧</span>Tippe in der Checkliste auf dem roten Button (PDF teilen iPad).</li>
-  <li><span class="emoji">📧</span>Tippe im Teilen-Menü auf „Mail“.</li>
-  <li><span class="emoji">📝</span>Eine neue E-Mail öffnet sich mit dem PDF als Anhang. Gib Empfänger, Betreff und Nachricht ein.</li>
-  <li><span class="emoji">📨</span>Tippe oben rechts auf das Senden-Symbol (Pfeil), um die Mail zu verschicken.</li>
-</ul>
-</section>
-
-<footer>
-© <span id="jahr1">2025</span> Andreas Zott. Alle Rechte vorbehalten. (Sifa) Arbeitssicherheit <span id="jahr2">2025</span><br>
-<a href="impressum.html">Impressum</a> | 
-<a href="datenschutz.html">Datenschutz</a> | 
-<a href="welcome.html">Startseite</a>
+<footer class="app-footer">
+    <nav class="app-footer-links">
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutz</a>
+        <a href="faq.html">FAQ</a>
+        <a href="technische-beschreibung.html">Technik</a>
+        <a href="welcome.html">Startseite</a>
+    </nav>
+    <p>© <span class="app-footer-jahr"></span> Andreas Zott — Alle Rechte vorbehalten</p>
+    <p class="app-footer-version"></p>
 </footer>
 
+<script src="js/common.js"></script>
 <script>
-  // Aktuelles Jahr automatisch einfügen
-  const jahr = new Date().getFullYear();
-  document.getElementById('jahr1').textContent = jahr;
-  document.getElementById('jahr2').textContent = jahr;
+    document.querySelectorAll('input[type=radio]').forEach(radio => {
+        radio.addEventListener('change', () => {
+            const hint = radio.closest('.beispielfrage').querySelector('.hint');
+            hint.classList.toggle('show', radio.value === 'nein');
+        });
+    });
 </script>
+
 </body>
 </html>

@@ -1,376 +1,258 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8" />
-<meta content="width=device-width, initial-scale=1" name="viewport" />
-<title>Technische Beschreibung – Arbeitssicherheit Checkliste</title>
-<link href="/sicher/favicon.ico" rel="icon" type="image/x-icon"/>
-<link href="/sicher/manifest.json" rel="manifest"/>
-<meta content="#C62828" name="theme-color"/>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Technische Beschreibung — Arbeitssicherheit</title>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0a2f73">
+<link rel="stylesheet" href="lib/css/fontawesome.min.css">
+<link rel="stylesheet" href="css/styles.css">
 <style>
-  :root {
-    --rot: #C62828;
-    --rot-dunkel: #A11F1F;
-    --rot-hell: #FDEDED;
-    --bg: #f5f7fa;
-    --card: #ffffff;
-    --text: #212529;
-    --muted: #6b7280;
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: -apple-system, "Segoe UI", Arial, sans-serif;
-    padding: 1rem;
-  }
-  .container-box {
-    margin: 0 auto;
-  }
-  .container-box {
-    background: var(--card);
-    max-width: 900px;
-    width: 100%;
-    padding: 1.75rem 1.75rem 2rem;
-    border-radius: 20px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-  }
-  .kopf {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    justify-content: center;
-    margin-bottom: 6px;
-    text-align: center;
-  }
-  .kopf .icon { font-size: 2rem; line-height: 1; }
-  h1 { margin: 0; font-size: 1.4rem; letter-spacing: -0.01em; }
-  .untertitel {
-    text-align: center;
-    color: var(--muted);
-    font-size: 13.5px;
-    margin: 0 0 1.5rem;
-  }
-  .zurueck {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    text-decoration: none;
-    color: var(--rot);
-    font-weight: 600;
-    font-size: 13px;
-    margin-bottom: 18px;
-  }
-  .zurueck:hover { text-decoration: underline; }
-
-  .inhalt-box {
-    background: var(--rot-hell);
-    border-radius: 14px;
-    padding: 16px 20px;
-    margin-bottom: 28px;
-  }
-  .inhalt-box h2 { margin: 0 0 8px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--rot-dunkel); }
-  .inhalt-box ol { margin: 0; padding-left: 20px; }
-  .inhalt-box a { color: var(--rot-dunkel); font-weight: 600; text-decoration: none; font-size: 13.5px; }
-  .inhalt-box a:hover { text-decoration: underline; }
-  .inhalt-box li { margin-bottom: 4px; }
-
-  section { margin-bottom: 30px; scroll-margin-top: 16px; }
-  section h2 {
-    font-size: 17px;
-    color: var(--rot-dunkel);
-    border-left: 5px solid var(--rot);
-    padding-left: 10px;
-    margin: 0 0 12px;
-  }
-  section h3 {
-    font-size: 14.5px;
-    margin: 18px 0 8px;
-    color: var(--text);
-  }
-  section p, section li {
-    font-size: 14px;
-    line-height: 1.6;
-    color: #374151;
-  }
-  section ul, section ol { padding-left: 22px; margin: 8px 0 14px; }
-  code, .mono {
-    font-family: "SF Mono", Consolas, monospace;
-    background: var(--rot-hell);
-    color: var(--rot-dunkel);
-    padding: 1px 6px;
-    border-radius: 6px;
-    font-size: 12.5px;
-  }
-
-  table.tech-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 10px 0 18px;
-    font-size: 13px;
-  }
-  table.tech-table th {
-    background: var(--rot);
-    color: white;
-    text-align: left;
-    padding: 8px 10px;
-    font-weight: 600;
-  }
-  table.tech-table td {
-    padding: 8px 10px;
-    border-bottom: 1px solid #eee;
-    vertical-align: top;
-  }
-  table.tech-table tr:nth-child(even) td { background: #fafafa; }
-
-  .badge {
-    display: inline-block;
-    background: #eef2f7;
-    color: #374151;
-    border-radius: 8px;
-    padding: 2px 8px;
-    font-size: 11px;
-    font-weight: 600;
-    margin-right: 4px;
-  }
-
-  .changelog-eintrag {
-    border-left: 3px solid var(--rot);
-    padding: 4px 0 4px 14px;
-    margin-bottom: 14px;
-  }
-  .changelog-eintrag .version {
-    font-weight: 700;
-    color: var(--rot-dunkel);
-    font-size: 13.5px;
-  }
-  .changelog-eintrag .datum {
-    color: var(--muted);
-    font-size: 12px;
-    margin-left: 8px;
-  }
-  .changelog-eintrag ul { margin: 6px 0 0; padding-left: 18px; }
-  .changelog-eintrag li { font-size: 13px; margin-bottom: 3px; }
-
-  .hinweis-box {
-    background: #fff8e1;
-    border: 1px solid #ffe08a;
-    border-radius: 12px;
-    padding: 14px 16px;
-    font-size: 13.5px;
-    color: #7a5b00;
-    margin: 14px 0;
-  }
-
-  /* --- Einheitlicher App-Footer --- */
-  .app-footer {
-    margin-top: 40px;
-    padding: 22px 16px calc(22px + env(safe-area-inset-bottom));
-    text-align: center;
-    font-size: 12px;
-    color: #6b7280;
-    border-top: 1px solid rgba(0,0,0,0.08);
-  }
-  .app-footer .app-footer-links {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 12px;
-  }
-  .app-footer .app-footer-links a {
-    color: #C62828;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 12px;
-    padding: 5px 12px;
-    border-radius: 14px;
-    background: rgba(198,40,40,0.08);
-    transition: background 0.2s ease, color 0.2s ease;
-  }
-  .app-footer .app-footer-links a:hover { background: #C62828; color: #fff; }
-  .app-footer p { margin: 2px 0; }
-  .app-footer .app-footer-version { margin-top: 8px; font-size: 10.5px; color: #9ca3af; }
-
-  @media (max-width: 640px) {
-    .container-box { padding: 1.25rem 1rem 1.5rem; border-radius: 16px; }
-    table.tech-table { font-size: 12px; }
-  }
+    .tech-table { width: 100%; border-collapse: collapse; margin: 14px 0 20px; font-size: 0.9rem; }
+    .tech-table th { background: var(--navy); color: #fff; text-align: left; padding: 9px 12px; font-size: 0.82rem; }
+    .tech-table td { border-bottom: 1px solid var(--line); padding: 9px 12px; vertical-align: top; }
+    .tech-table code { font-size: 0.85em; }
+    .badge {
+        display: inline-block; background: rgba(10,47,115,0.08); color: var(--navy-bright);
+        padding: 2px 9px; border-radius: 999px; font-size: 0.8rem; font-weight: 600;
+    }
+    body.dark .badge { background: rgba(96,165,250,0.15); color: #93c5fd; }
+    .hinweis-box {
+        background: #fff3cd; border-left: 4px solid #ffcc02; border-radius: 8px;
+        padding: 12px 16px; font-size: 0.88rem; margin: 12px 0;
+    }
+    code {
+        background: rgba(0,0,0,0.06); padding: 1px 5px; border-radius: 4px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.9em;
+    }
+    body.dark code { background: rgba(255,255,255,0.1); }
+    .changelog-eintrag { border-left: 3px solid var(--navy-bright); padding: 4px 0 4px 16px; margin-bottom: 18px; }
+    .changelog-eintrag .version { font-weight: 700; color: var(--navy); }
+    body.dark .changelog-eintrag .version { color: #93c5fd; }
+    .changelog-eintrag .datum { color: var(--ink-soft); font-size: 0.85rem; margin-left: 10px; }
 </style>
 </head>
 <body>
-<div class="container-box">
 
-  <a class="zurueck" href="welcome.html"><i class="fas fa-arrow-left"></i> Zur Startseite</a>
+<button class="theme-toggle" id="themeToggle" aria-label="Theme umschalten">🌙</button>
 
-  <div class="kopf">
-    <span class="icon">⚙️</span>
+<section class="hero">
+    <div class="hero-icon"><i class="fas fa-gears"></i></div>
     <h1>Technische Beschreibung</h1>
-  </div>
-  <p class="untertitel">Aufbau, Datenfluss und eingesetzte Technik der Arbeitssicherheit-App</p>
+    <p>Architektur, Datenfluss und Versionsverlauf</p>
+</section>
 
-  <div class="inhalt-box">
-    <h2>Inhalt</h2>
-    <ol>
-      <li><a href="#ueberblick">Überblick &amp; Architektur</a></li>
-      <li><a href="#seiten">Seiten &amp; Dateien</a></li>
-      <li><a href="#datenfluss">Datenfluss zwischen den Seiten</a></li>
-      <li><a href="#bibliotheken">Eingesetzte Bibliotheken</a></li>
-      <li><a href="#pwa">PWA, Manifest &amp; Service Worker</a></li>
-      <li><a href="#speicherung">Datenspeicherung &amp; Datenschutz</a></li>
-      <li><a href="#kompatibilitaet">Kompatibilität &amp; bekannte Einschränkungen</a></li>
-      <li><a href="#versionierung">Versionierung &amp; Änderungsprotokoll</a></li>
-    </ol>
-  </div>
+<div class="container container-narrow">
 
-  <section id="ueberblick">
-    <h2>1. Überblick &amp; Architektur</h2>
-    <p>Die Anwendung ist eine rein <strong>clientseitige, statische Web-App</strong> (kein Backend, keine Datenbank, kein Server-Rendering). Jede Seite ist eine eigenständige HTML-Datei mit eingebettetem CSS und JavaScript. Der Datenaustausch zwischen den Seiten erfolgt ausschließlich über den Browser selbst (URL-Parameter, <code>window.postMessage</code>, <code>window.open</code>) – es gibt keine zentrale Datenbank und keine API.</p>
-    <p>Alle Dateien liegen unter dem gemeinsamen Pfad <code>/sicher/</code> (z. B. GitHub Pages) und werden als installierbare <strong>Progressive Web App (PWA)</strong> ausgeliefert, sodass sie auf iPad/iPhone zum Home-Bildschirm hinzugefügt werden und offline funktionieren kann.</p>
-  </section>
+    <a href="welcome.html" class="back-button"><i class="fas fa-arrow-left"></i> Zurück zur Übersicht</a>
 
-  <section id="seiten">
-    <h2>2. Seiten &amp; Dateien</h2>
-    <table class="tech-table">
-      <thead>
-        <tr><th>Datei</th><th>Zweck</th></tr>
-      </thead>
-      <tbody>
-        <tr><td><code>welcome.html</code> / <code>index.html</code></td><td>Startseite / Einstieg in die App</td></tr>
-        <tr><td><code>liste.html</code></td><td>Haupt-Checkliste: 119 Prüfpunkte, automatische Maßnahmen-Ableitung bei „Nein", Unterschrift, Abschlussbestätigung, PDF-Export</td></tr>
-        <tr><td><code>foto.html</code></td><td>Fotoerfassung zur Begehung: Kamera/Galerie, Drehen, Kommentieren, eigener PDF-Export</td></tr>
-        <tr><td><code>massnahmen-sifa.html</code></td><td>Eigenständige Auswertungsansicht aller Maßnahmen, empfängt Daten per <code>postMessage</code> von <code>liste.html</code></td></tr>
-        <tr><td><code>faq.html</code></td><td>Häufig gestellte Fragen (diese Seite gehört zur gleichen Seitenfamilie)</td></tr>
-        <tr><td><code>technische-beschreibung.html</code></td><td>Diese Seite – technische Dokumentation</td></tr>
-        <tr><td><code>impressum.html</code></td><td>Impressum gemäß § 5 DDG</td></tr>
-        <tr><td><code>datenschutz.html</code></td><td>Datenschutzerklärung</td></tr>
-        <tr><td><code>manifest.json</code></td><td>PWA-Manifest (Name, Icons, Farben, Version)</td></tr>
-        <tr><td><code>service-worker.js</code></td><td>Offline-Caching &amp; Versionsverwaltung</td></tr>
-      </tbody>
-    </table>
-  </section>
+    <div class="content">
 
-  <section id="datenfluss">
-    <h2>3. Datenfluss zwischen den Seiten</h2>
-    <h3>liste.html → foto.html</h3>
-    <p>Beim Klick auf <code>📸 Zur Foto-Seite</code> prüft <code>liste.html</code>, ob Marktnummer, Teilnehmer und SiFa ausgefüllt sind, und übergibt diese anschließend als <strong>URL-Parameter</strong> (<code>?marktnummer=…&amp;name=…&amp;sifa=…</code>) an <code>foto.html</code>. Dort werden sie beim Laden automatisch in die passenden Felder eingetragen.</p>
-    <h3>liste.html → massnahmen-sifa.html</h3>
-    <p>Beim Klick auf <code>📝 Defizite exportieren</code> öffnet <code>liste.html</code> ein neues Fenster (<code>window.open('massnahmen-sifa.html', …)</code>) und sendet die gesammelten Maßnahmen sowie Metadaten (Datum, Markt, Marktleitung, Name, SiFa) per <code>window.postMessage()</code> an dieses Fenster. <code>massnahmen-sifa.html</code> lauscht auf <code>message</code>-Events und rendert die Daten als Kartenliste.</p>
-    <div class="hinweis-box">
-      ⚠️ Da <code>postMessage</code> asynchron erst nach dem vollständigen Laden des neuen Fensters funktioniert, wartet <code>liste.html</code> aktuell mit einem festen <code>setTimeout</code> (1000 ms), bevor die Daten gesendet werden. Bei sehr langsamen Geräten kann das im Einzelfall zu knapp sein.
+        <h2 style="margin-top:0;">1. Überblick &amp; Architektur</h2>
+        <p>
+            Die Anwendung ist eine rein <strong>clientseitige, statische
+            Web-App</strong> (kein Backend, keine Datenbank, kein
+            Server-Rendering). Jede Seite ist eine eigenständige HTML-Datei;
+            das Portal-Grundgerüst (Login, Übersicht, Anleitung, Fotoformular,
+            Checklisten-Menü, Rechtliches) teilt sich seit der Überarbeitung
+            ein gemeinsames Stylesheet (<code>css/styles.css</code>) und eine
+            gemeinsame Logik-Datei (<code>js/common.js</code>) für Dark Mode,
+            Fußzeile und Service-Worker-Registrierung — zuvor war das auf
+            jeder Seite einzeln kopiert.
+        </p>
+        <p>
+            Alle Dateien liegen unter dem gemeinsamen Pfad <code>/sicher/</code>
+            (GitHub Pages) und werden als installierbare
+            <strong>Progressive Web App (PWA)</strong> ausgeliefert, sodass
+            sie auf iPad/iPhone zum Home-Bildschirm hinzugefügt werden und
+            offline funktionieren kann.
+        </p>
+
+        <h2>2. Seiten &amp; Dateien</h2>
+        <table class="tech-table">
+            <thead><tr><th>Datei</th><th>Zweck</th></tr></thead>
+            <tbody>
+                <tr><td><code>index.html</code></td><td>Login / Einstieg</td></tr>
+                <tr><td><code>welcome.html</code></td><td>Übersicht nach dem Login, Kacheln zu allen Werkzeugen</td></tr>
+                <tr><td><code>l1.html</code></td><td>Untermenü: Checklisten-Formate (Desktop, Mobil, Audit, Theke, Aushänge)</td></tr>
+                <tr><td><code>liste.html</code></td><td>Haupt-Checkliste (Desktop/Tablet): Prüfpunkte, automatische Maßnahmen-Ableitung bei „Nein", Unterschrift, PDF-Export</td></tr>
+                <tr><td><code>mobile.html</code></td><td>Checkliste, optimiert für iPhone/iPad-Hochformat</td></tr>
+                <tr><td><code>audit.html</code></td><td>Audit-Variante der Checkliste</td></tr>
+                <tr><td><code>foto.html</code></td><td>Fotoerfassung zur Begehung: Kamera/Galerie, Drehen, Kommentieren, eigener PDF-Export</td></tr>
+                <tr><td><code>massnahmen-sifa.html</code></td><td>Eigenständige Auswertungsansicht aller Maßnahmen, empfängt Daten per <code>postMessage</code> von <code>liste.html</code>/<code>mobile.html</code></td></tr>
+                <tr><td><code>help.html</code></td><td>Bedienungsanleitung</td></tr>
+                <tr><td><code>faq.html</code></td><td>Häufig gestellte Fragen</td></tr>
+                <tr><td><code>technische-beschreibung.html</code></td><td>Diese Seite</td></tr>
+                <tr><td><code>impressum.html</code> / <code>datenschutz.html</code></td><td>Rechtliches</td></tr>
+                <tr><td><code>manifest.json</code></td><td>PWA-Manifest (Name, Icons, Farben, Version)</td></tr>
+                <tr><td><code>service-worker.js</code></td><td>Offline-Caching &amp; Versionsverwaltung</td></tr>
+            </tbody>
+        </table>
+
+        <h2>3. Datenfluss zwischen den Seiten</h2>
+        <h3>liste.html / audit.html → foto.html</h3>
+        <p>
+            Beim Wechsel zur Foto-Seite werden Marktnummer, Teilnehmer und
+            SiFa als <strong>URL-Parameter</strong>
+            (<code>?marktnummer=…&amp;name=…&amp;sifa=…</code>) übergeben und
+            dort beim Laden automatisch in die passenden Felder eingetragen.
+        </p>
+        <h3>liste.html / mobile.html → massnahmen-sifa.html</h3>
+        <p>
+            Beim Exportieren der Defizite öffnet die Checkliste ein neues
+            Fenster (<code>window.open('massnahmen-sifa.html', …)</code>) und
+            sendet die gesammelten Maßnahmen sowie Metadaten (Datum, Markt,
+            Marktleitung, Name, SiFa) per <code>window.postMessage()</code>.
+            <code>massnahmen-sifa.html</code> lauscht auf
+            <code>message</code>-Events und rendert die Daten als
+            Kartenliste.
+        </p>
+        <div class="hinweis-box">
+            ⚠️ Da <code>postMessage</code> asynchron erst nach dem
+            vollständigen Laden des neuen Fensters funktioniert, wartet die
+            aufrufende Seite aktuell mit einem festen <code>setTimeout</code>
+            (1000 ms). Bei sehr langsamen Geräten kann das im Einzelfall zu
+            knapp sein — bekannte Einschränkung, noch nicht behoben.
+        </div>
+        <div class="hinweis-box">
+            ⚠️ <code>audit.html</code> versucht zusätzlich, eine Datei
+            <code>Maßnahmenplan.html</code> zu öffnen. Im aktuellen
+            Dateibestand ist dieser Dateiname durch ein Kodierungsproblem
+            beim Export defekt — die Datei ist unter diesem Namen nicht
+            erreichbar. Noch zu klären, ob <code>audit.html</code> stattdessen
+            ebenfalls <code>massnahmen-sifa.html</code> nutzen sollte.
+        </div>
+        <h3>Innerhalb einer Seite</h3>
+        <p style="margin-bottom:0;">
+            Formulareingaben in <code>liste.html</code> werden fortlaufend
+            automatisch im <code>localStorage</code> des Browsers
+            zwischengespeichert, sodass ein versehentlich geschlossener Tab
+            die Eingaben nicht verliert.
+        </p>
+
+        <h2>4. Eingesetzte Bibliotheken</h2>
+        <p>
+            Das Portal-Grundgerüst (Login, Übersicht, Anleitung, Fotoformular,
+            Rechtliches) bindet alle Bibliotheken seit der Überarbeitung
+            <strong>lokal</strong> ein (<code>lib/</code>), ohne Laufzeit-Anfrage
+            an ein CDN. Die dahinterliegenden Checklisten-Werkzeuge
+            (<code>liste.html</code>, <code>mobile.html</code>,
+            <code>audit.html</code>, <code>massnahmen-sifa.html</code>) laden
+            ihre Bibliotheken aktuell noch per CDN — Umstellung auf lokale
+            Einbindung steht für diese Seiten noch aus.
+        </p>
+        <table class="tech-table">
+            <thead><tr><th>Bibliothek</th><th>Verwendet in</th><th>Zweck</th></tr></thead>
+            <tbody>
+                <tr><td><span class="badge">jsPDF 2.5.1</span></td><td>liste.html, foto.html, mobile.html, audit.html</td><td>Manuelle, layoutgenaue PDF-Erzeugung direkt im Browser</td></tr>
+                <tr><td><span class="badge">html2pdf.js 0.10.1</span></td><td>massnahmen-sifa.html</td><td>Screenshot-basierter PDF-Export der Maßnahmenkarten</td></tr>
+                <tr><td><span class="badge">Font Awesome 6.5.0</span></td><td>alle Portal-Seiten</td><td>Icons (jetzt lokal eingebunden)</td></tr>
+                <tr><td><span class="badge">exif-js 2.3.0</span></td><td>foto.html</td><td>EXIF-Auslesung von Fotos (z. B. Ausrichtung), jetzt lokal eingebunden</td></tr>
+            </tbody>
+        </table>
+
+        <h2>5. PWA, Manifest &amp; Service Worker</h2>
+        <p>
+            <code>manifest.json</code> definiert Name, Icons, Start-URL sowie
+            <code>theme_color</code> (<code>#0a2f73</code>, passend zur neuen
+            Portal-Farbe) und eine eigene <code>version</code>-Angabe.
+        </p>
+        <p><code>service-worker.js</code> übernimmt das Offline-Caching (Cache-First-Strategie, versionierter Cache-Name, alte Caches werden beim Aktivieren automatisch gelöscht).</p>
+        <div class="hinweis-box">
+            🔧 Zuvor registrierten einige Seiten <code>sw.js</code>, andere
+            <code>service-worker.js</code> — zwei unterschiedliche Service
+            Worker im selben Geltungsbereich, was zu Cache-Konflikten führen
+            konnte. Seit der Überarbeitung registrieren alle Portal-Seiten
+            einheitlich <code>service-worker.js</code> über
+            <code>js/common.js</code>. Bei jeder inhaltlichen Änderung an
+            einer gecachten Datei sollte <code>APP_VERSION</code>
+            hochgezählt werden, damit zuverlässig ein neuer Cache angelegt
+            wird.
+        </div>
+
+        <h2>6. Datenspeicherung &amp; Datenschutz</h2>
+        <ul>
+            <li>Es gibt <strong>keine Serverkommunikation</strong> und keine Übertragung an Dritte.</li>
+            <li><code>localStorage</code> wird für den Formularstand der Checkliste sowie das Theme (hell/dunkel) genutzt.</li>
+            <li>Fotos, Unterschrift und generierte PDFs verbleiben nur im Arbeitsspeicher des Browsers, bis sie manuell heruntergeladen oder geteilt werden.</li>
+            <li>Der Service-Worker-Cache enthält ausschließlich die statischen App-Dateien selbst, keine Nutzereingaben.</li>
+        </ul>
+        <p>Ausführliche rechtliche Formulierung: siehe <a href="datenschutz.html">Datenschutzerklärung</a>.</p>
+
+        <h2>7. Kompatibilität &amp; bekannte Einschränkungen</h2>
+        <ul>
+            <li><strong>Zielplattform:</strong> iPadOS/iOS Safari (Web-Share-API mit Dateianhang, Kamera-Capture, Touch-Bedienung).</li>
+            <li>Die native <em>„Teilen"</em>-Funktion (<code>navigator.share</code> mit Dateien) wird nicht von allen Browsern/Desktop-Systemen unterstützt; in diesem Fall fällt die App automatisch auf einen normalen PDF-Download zurück.</li>
+            <li>Sehr große Foto-Mengen (deutlich über 20–30 Fotos) können die PDF-Erzeugung im Browser spürbar verlangsamen.</li>
+            <li>Der Login (<code>index.html</code>) prüft Benutzername/Passwort rein clientseitig im JavaScript — eine organisatorische Zugriffshürde, kein echter Zugriffsschutz. Bewusst so belassen.</li>
+            <li>Mehrere ältere Dateivarianten (u. a. <code>liste-alt.html</code>, <code>foto2.html</code>, <code>audit-iphone.html</code>, mehrere <code>massnahmen*.html</code>-Varianten sowie diverse unverlinkte Themenseiten) liegen noch im Repository, sind aber nicht mehr Teil der Navigation.</li>
+        </ul>
+
+        <h2>8. Versionierung &amp; Änderungsprotokoll</h2>
+        <p>Die App verwendet eine <span class="badge">MAJOR.MINOR.PATCH</span>-Versionsnummer, sichtbar im Footer jeder Seite sowie im Service-Worker-Cache-Namen.</p>
+
+        <div class="changelog-eintrag">
+            <span class="version">Version 2.0.0</span><span class="datum">August 2026</span>
+            <ul>
+                <li>Portal-Grundgerüst (Login, Übersicht, Anleitung, Fotoformular, Checklisten-Menü, Rechtliches) einheitlich neu gestaltet</li>
+                <li>Gemeinsames Stylesheet &amp; gemeinsame JS-Logik statt Kopien auf jeder Seite</li>
+                <li>Bugfix: kaputter <code>&lt;title&gt;</code>-Tag auf der Übersichtsseite</li>
+                <li>Bugfix: leere Hero-Überschrift und fehlendes Font Awesome auf der Anleitungsseite</li>
+                <li>Zwei konkurrierende Service Worker auf einen vereinheitlicht</li>
+                <li>Fünf ungenutzte Manifest-Varianten entfernt, nur <code>manifest.json</code> bleibt</li>
+                <li>Bibliotheken der Portal-Seiten von CDN auf lokale Einbindung umgestellt</li>
+                <li>„Startseite"-Links zeigen jetzt konsistent auf <code>welcome.html</code> statt teils auf den Login</li>
+            </ul>
+        </div>
+
+        <div class="changelog-eintrag">
+            <span class="version">Version 1.0.2</span><span class="datum">August 2026</span>
+            <ul>
+                <li>Footer-Layout auf FAQ- und technischer Beschreibungsseite korrigiert</li>
+                <li>Link zur technischen Beschreibung in der Fußzeile aller Seiten ergänzt</li>
+            </ul>
+        </div>
+
+        <div class="changelog-eintrag">
+            <span class="version">Version 1.0.1</span><span class="datum">August 2026</span>
+            <ul>
+                <li>FAQ- und technische Beschreibungsseite ergänzt und in der Fußzeile aller Seiten verlinkt</li>
+                <li>Service-Worker-Dateiliste um die neuen Seiten erweitert</li>
+            </ul>
+        </div>
+
+        <div class="changelog-eintrag" style="margin-bottom:0;">
+            <span class="version">Version 1.0.0</span><span class="datum">August 2026</span>
+            <ul>
+                <li>Einheitliches, moderneres Button-Design in allen Seiten</li>
+                <li>Verstreute Aktions-Buttons in <code>liste.html</code> in ein schwebendes Menü (☰) zusammengefasst</li>
+                <li>Foto-Seite komplett neu gestaltet</li>
+                <li>Maßnahmen-Darstellung auf Karten-Layout umgestellt</li>
+                <li>Einheitlicher Footer mit Impressum/Datenschutz/Startseite-Links und Versionsanzeige</li>
+                <li>Service Worker mit versionsbasiertem Cache eingeführt</li>
+                <li>Bugfix: Im „Drucken / PDF"-Export von <code>liste.html</code> fehlten die Maßnahmen wegen eines fehlerhaften Selektors</li>
+            </ul>
+        </div>
+
     </div>
-    <h3>Innerhalb einer Seite</h3>
-    <p>Formulareingaben in <code>liste.html</code> werden fortlaufend automatisch im <code>localStorage</code> des Browsers zwischengespeichert (Funktion „Speichern bei jeder Eingabeänderung"), sodass ein versehentlich geschlossener Tab die Eingaben nicht verliert.</p>
-  </section>
-
-  <section id="bibliotheken">
-    <h2>4. Eingesetzte Bibliotheken (alle per CDN eingebunden)</h2>
-    <table class="tech-table">
-      <thead><tr><th>Bibliothek</th><th>Verwendet in</th><th>Zweck</th></tr></thead>
-      <tbody>
-        <tr><td><span class="badge">jsPDF 2.5.1</span></td><td>liste.html, foto.html</td><td>Manuelle, layoutgenaue PDF-Erzeugung direkt im Browser</td></tr>
-        <tr><td><span class="badge">html2pdf.js 0.10.1</span></td><td>massnahmen-sifa.html</td><td>Screenshot-basierter PDF-Export der Maßnahmenkarten</td></tr>
-        <tr><td><span class="badge">Font Awesome 6.5.0</span></td><td>impressum, datenschutz, faq, technische-beschreibung</td><td>Icons</td></tr>
-        <tr><td><span class="badge">exif-js 2.3.0</span></td><td>foto.html</td><td>Eingebunden für EXIF-Auslesung von Fotos (z. B. Ausrichtung)</td></tr>
-      </tbody>
-    </table>
-  </section>
-
-  <section id="pwa">
-    <h2>5. PWA, Manifest &amp; Service Worker</h2>
-    <p><code>manifest.json</code> definiert Name, Icons, Start-URL (<code>/sicher/index.html</code>) sowie <code>theme_color</code> (<code>#C62828</code>, passend zur roten App-Farbe) und eine eigene <code>version</code>-Angabe.</p>
-    <p><code>service-worker.js</code> übernimmt das Offline-Caching:</p>
-    <ul>
-      <li><strong>Install:</strong> Alle in <code>FILES_TO_CACHE</code> gelisteten Seiten/Assets werden in einen versionierten Cache (<code>checkliste-cache-v&lt;APP_VERSION&gt;</code>) geladen. Einzelne fehlschlagende Dateien brechen den restlichen Cache-Vorgang nicht ab.</li>
-      <li><strong>Activate:</strong> Alte Caches mit abweichendem Namen (= alte Version) werden automatisch gelöscht.</li>
-      <li><strong>Fetch:</strong> Anfragen werden zuerst aus dem Cache bedient, ansonsten aus dem Netz nachgeladen (Cache-First-Strategie).</li>
-    </ul>
-    <div class="hinweis-box">
-      🔧 Bei jeder inhaltlichen Änderung an einer gecachten Datei sollte <code>APP_VERSION</code> in <code>service-worker.js</code> hochgezählt werden (z. B. <code>1.0.0</code> → <code>1.0.1</code>). Nur so wird zuverlässig ein neuer Cache angelegt und Nutzer erhalten nicht versehentlich eine veraltete Version. Der Wert sollte parallel im Footer-Text der HTML-Seiten und in <code>manifest.json</code> nachgezogen werden.
-    </div>
-  </section>
-
-  <section id="speicherung">
-    <h2>6. Datenspeicherung &amp; Datenschutz</h2>
-    <ul>
-      <li>Es gibt <strong>keine Serverkommunikation</strong> und keine Übertragung an Dritte.</li>
-      <li><code>localStorage</code> wird für: Formularstand der Checkliste (automatisches Zwischenspeichern) sowie das Theme (hell/dunkel) auf Impressum/Datenschutz genutzt.</li>
-      <li>Fotos, Unterschrift und generierte PDFs verbleiben nur im Arbeitsspeicher des Browsers, bis sie manuell heruntergeladen oder geteilt werden.</li>
-      <li>Der Service-Worker-Cache enthält ausschließlich die statischen App-Dateien selbst, keine Nutzereingaben.</li>
-    </ul>
-    <p>Ausführliche rechtliche Formulierung: siehe <a href="datenschutz.html">Datenschutzerklärung</a>.</p>
-  </section>
-
-  <section id="kompatibilitaet">
-    <h2>7. Kompatibilität &amp; bekannte Einschränkungen</h2>
-    <ul>
-      <li><strong>Zielplattform:</strong> iPadOS/iOS Safari (Web-Share-API mit Dateianhang, Kamera-Capture, Touch-Bedienung).</li>
-      <li>Die native <em>„Teilen"</em>-Funktion (<code>navigator.share</code> mit Dateien) wird nicht von allen Browsern/Desktop-Systemen unterstützt; in diesem Fall fällt die App automatisch auf einen normalen PDF-Download zurück.</li>
-      <li>Sehr große Foto-Mengen (deutlich über 20–30 Fotos) können die PDF-Erzeugung im Browser spürbar verlangsamen, da alles clientseitig ohne Server-Ressourcen läuft.</li>
-      <li>Der Service Worker cached nur exakt die in <code>FILES_TO_CACHE</code> gelisteten URLs – neue Seiten müssen dort ergänzt werden, sonst funktionieren sie offline nicht.</li>
-    </ul>
-  </section>
-
-  <section id="versionierung">
-    <h2>8. Versionierung &amp; Änderungsprotokoll</h2>
-    <p>Die App verwendet eine einfache <span class="mono">MAJOR.MINOR.PATCH</span>-Versionsnummer, sichtbar im Footer jeder Seite sowie im Service-Worker-Cache-Namen.</p>
-
-    <div class="changelog-eintrag">
-      <span class="version">Version 1.0.2</span><span class="datum">August 2026</span>
-      <ul>
-        <li>Footer-Layout auf FAQ- und technischer Beschreibungsseite korrigiert (Footer stand fälschlich neben statt unter dem Inhalt)</li>
-        <li>Link zur technischen Beschreibung in der Fußzeile aller Seiten ergänzt</li>
-      </ul>
-    </div>
-
-    <div class="changelog-eintrag">
-      <span class="version">Version 1.0.1</span><span class="datum">August 2026</span>
-      <ul>
-        <li>FAQ- und technische Beschreibungsseite ergänzt und in der Fußzeile aller Seiten verlinkt</li>
-        <li>Service-Worker-Dateiliste um die neuen Seiten erweitert</li>
-      </ul>
-    </div>
-
-    <div class="changelog-eintrag">
-      <span class="version">Version 1.0.0</span><span class="datum">August 2026</span>
-      <ul>
-        <li>Einheitliches, moderneres Button-Design in allen Seiten (kleinere, konsistente Größen)</li>
-        <li>Verstreute Aktions-Buttons in <code>liste.html</code> in ein schwebendes Menü (☰) zusammengefasst</li>
-        <li>Foto-Seite (<code>foto.html</code>) komplett neu gestaltet</li>
-        <li>Maßnahmen-Darstellung in <code>liste.html</code> und <code>massnahmen-sifa.html</code> auf Karten-Layout umgestellt (Frage in einer Zeile, Maßnahme darunter)</li>
-        <li>Einheitlicher Footer mit Impressum/Datenschutz/Startseite-Links und Versionsanzeige auf allen Seiten</li>
-        <li>Service Worker mit Versions-basiertem Cache eingeführt, alte Caches werden automatisch bereinigt</li>
-        <li>Bugfix: Im „Drucken / PDF"-Export von <code>liste.html</code> fehlten die Maßnahmen wegen eines fehlerhaften Selektors (<code>#maßnahmen-tabelle tbody tr</code> statt <code>#maßnahmen-tabelle tr</code>) sowie einer falschen Spaltenzuordnung – behoben</li>
-        <li>FAQ- und technische Beschreibungsseite neu erstellt</li>
-      </ul>
-    </div>
-  </section>
 
 </div>
 
 <footer class="app-footer">
-  <nav class="app-footer-links">
-    <a href="impressum.html">Impressum</a>
-    <a href="datenschutz.html">Datenschutz</a>
-    <a href="faq.html">FAQ</a>
-    <a href="technische-beschreibung.html">Technik</a>
-    <a href="welcome.html">Startseite</a>
-  </nav>
-  <p>© <span class="app-footer-jahr"></span> Andreas Zott – Alle Rechte vorbehalten</p>
-  <p class="app-footer-sub">(SiFa) Arbeitssicherheit</p>
-  <p class="app-footer-version">Version 1.0.2</p>
+    <nav class="app-footer-links">
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutz</a>
+        <a href="faq.html">FAQ</a>
+        <a href="welcome.html">Startseite</a>
+    </nav>
+    <p>© <span class="app-footer-jahr"></span> Andreas Zott — Alle Rechte vorbehalten</p>
+    <p class="app-footer-version"></p>
 </footer>
 
-<script>
-  document.querySelectorAll('.app-footer-jahr').forEach(el => el.textContent = new Date().getFullYear());
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sicher/service-worker.js')
-        .catch(err => console.warn('Service Worker konnte nicht registriert werden:', err));
-    });
-  }
-</script>
+<script src="js/common.js"></script>
+
 </body>
 </html>

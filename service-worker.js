@@ -1,20 +1,27 @@
 // ─────────────────────────────────────────────────────────────
 // Arbeitssicherheit – Service Worker
-// Versionsnummer: bei jeder inhaltlichen Änderung an einer der
-// gecachten Dateien bitte APP_VERSION hochzählen. Dadurch wird
+//
+// ACHTUNG: Zuvor registrierten manche Seiten sw.js, andere
+// service-worker.js - zwei unterschiedliche Service Worker im
+// selben Geltungsbereich. Das ist jetzt vereinheitlicht: ALLE
+// Seiten registrieren ausschliesslich DIESE Datei (ueber
+// js/common.js). sw.js sollte aus dem Repository entfernt werden.
+//
+// Versionsnummer: bei jeder inhaltlichen Aenderung an einer der
+// gecachten Dateien bitte APP_VERSION hochzaehlen. Dadurch wird
 // automatisch ein neuer Cache angelegt und der alte verworfen,
-// sodass Nutzer zuverlässig die neue Version erhalten.
+// sodass Nutzer zuverlaessig die neue Version erhalten.
 // ─────────────────────────────────────────────────────────────
-const APP_VERSION = '1.0.2';
-const CACHE_NAME = `checkliste-cache-v${APP_VERSION}`;
+const APP_VERSION = '2.0.0';
+const CACHE_NAME = `sicherheit-cache-v${APP_VERSION}`;
 
 const FILES_TO_CACHE = [
   '/sicher/',
   '/sicher/index.html',
   '/sicher/welcome.html',
-  '/sicher/liste.html',
+  '/sicher/l1.html',
+  '/sicher/help.html',
   '/sicher/foto.html',
-  '/sicher/massnahmen-sifa.html',
   '/sicher/faq.html',
   '/sicher/technische-beschreibung.html',
   '/sicher/impressum.html',
@@ -22,15 +29,21 @@ const FILES_TO_CACHE = [
   '/sicher/manifest.json',
   '/sicher/icon.png',
   '/sicher/favicon.ico',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css'
+  '/sicher/css/styles.css',
+  '/sicher/js/common.js',
+  '/sicher/lib/css/fontawesome.min.css',
+  '/sicher/lib/webfonts/fa-solid-900.woff2',
+  '/sicher/lib/webfonts/fa-regular-400.woff2',
+  '/sicher/lib/webfonts/fa-brands-400.woff2',
+  '/sicher/lib/jspdf.umd.min.js',
+  '/sicher/lib/exif.js'
 ];
 
 // Installations-Ereignis: Dateien cachen
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
-      // addAll bricht komplett ab, wenn eine einzelne Datei fehlt
-      // (z. B. weil index.html oder welcome.html so nicht existiert).
+      // addAll bricht komplett ab, wenn eine einzelne Datei fehlt.
       // Deshalb jede Datei einzeln versuchen, statt alles abzubrechen.
       return Promise.all(
         FILES_TO_CACHE.map(url =>

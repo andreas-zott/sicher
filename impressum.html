@@ -1,365 +1,138 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Impressum - Arbeitssicherheit 2025</title>
-    <link rel="icon" href="/sicher/favicon.ico" type="image/x-icon">
-    <link rel="manifest" href="/sicher/manifest.json">
-    <meta name="theme-color" content="#C62828">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        html, body {
-            height: 100%;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        body {
-            background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 50%, #e0e7ff 100%);
-            color: #1e293b;
-            transition: all 0.3s ease;
-            line-height: 1.6;
-        }
-
-        body.dark {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
-            color: #e2e8f0;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            min-height: 100vh;
-        }
-
-        .back-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 20px;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            text-decoration: none;
-            color: #3b82f6;
-            font-weight: 500;
-            margin-bottom: 30px;
-            transition: all 0.3s ease;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .back-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
-        }
-
-        body.dark .back-button {
-            background: rgba(30, 41, 59, 0.8);
-            color: #60a5fa;
-        }
-
-        .content {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        body.dark .content {
-            background: rgba(30, 41, 59, 0.7);
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #3b82f6, #6366f1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 30px;
-        }
-
-        h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin: 30px 0 15px 0;
-            color: #1e293b;
-        }
-
-        body.dark h2 {
-            color: #e2e8f0;
-        }
-
-        p {
-            margin-bottom: 15px;
-            color: #475569;
-        }
-
-        body.dark p {
-            color: #cbd5e1;
-        }
-
-        .contact-box {
-            background: rgba(59, 130, 246, 0.1);
-            border-radius: 12px;
-            padding: 25px;
-            margin: 25px 0;
-            border-left: 4px solid #3b82f6;
-        }
-
-        body.dark .contact-box {
-            background: rgba(59, 130, 246, 0.2);
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        .contact-item i {
-            color: #3b82f6;
-            width: 20px;
-        }
-
-        body.dark .contact-item i {
-            color: #60a5fa;
-        }
-
-        .disclaimer {
-            background: rgba(239, 68, 68, 0.1);
-            border-radius: 12px;
-            padding: 20px;
-            margin: 25px 0;
-            border-left: 4px solid #ef4444;
-        }
-
-        body.dark .disclaimer {
-            background: rgba(239, 68, 68, 0.2);
-        }
-
-        .theme-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body.dark .theme-toggle {
-            background: rgba(30, 41, 59, 0.8);
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
-
-            .content {
-                padding: 25px;
-            }
-
-            h1 {
-                font-size: 2rem;
-            }
-        }
-
-        /* --- Einheitlicher App-Footer (auf allen Seiten identisch) --- */
-        .app-footer {
-            margin-top: 40px;
-            padding: 22px 16px calc(22px + env(safe-area-inset-bottom));
-            text-align: center;
-            font-size: 12px;
-            color: #6b7280;
-            border-top: 1px solid rgba(0, 0, 0, 0.08);
-        }
-        .app-footer .app-footer-links {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-        .app-footer .app-footer-links a {
-            color: #C62828;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 12px;
-            padding: 5px 12px;
-            border-radius: 14px;
-            background: rgba(198, 40, 40, 0.08);
-            transition: background 0.2s ease, color 0.2s ease;
-        }
-        .app-footer .app-footer-links a:hover {
-            background: #C62828;
-            color: #fff;
-        }
-        .app-footer p {
-            margin: 2px 0;
-        }
-        .app-footer .app-footer-version {
-            margin-top: 8px;
-            font-size: 10.5px;
-            color: #9ca3af;
-        }
-        body.dark .app-footer {
-            border-top-color: rgba(255, 255, 255, 0.1);
-            color: #94a3b8;
-        }
-        body.dark .app-footer .app-footer-links a {
-            background: rgba(248, 113, 113, 0.15);
-            color: #f87171;
-        }
-        body.dark .app-footer .app-footer-links a:hover {
-            background: #f87171;
-            color: #1e293b;
-        }
-        body.dark .app-footer .app-footer-version {
-            color: #64748b;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Impressum — Arbeitssicherheit</title>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0a2f73">
+<link rel="stylesheet" href="lib/css/fontawesome.min.css">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+    .contact-box {
+        background: rgba(10, 47, 115, 0.06);
+        border-radius: 12px;
+        padding: 20px 24px;
+        margin: 20px 0;
+        border-left: 4px solid var(--navy-bright);
+    }
+    body.dark .contact-box { background: rgba(96, 165, 250, 0.12); }
+    .contact-item { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .contact-item i { color: var(--navy-bright); width: 18px; }
+    .disclaimer {
+        background: rgba(198, 40, 40, 0.06);
+        border-radius: 12px;
+        padding: 18px 22px;
+        margin: 20px 0;
+        border-left: 4px solid var(--red);
+    }
+    body.dark .disclaimer { background: rgba(239,68,68,0.15); }
+</style>
 </head>
 <body>
-    <button class="theme-toggle" id="themeToggle" aria-label="Theme umschalten">
-        🌙
-    </button>
 
-    <div class="container">
-        <a href="index.html" class="back-button">
-            <i class="fas fa-arrow-left"></i>
-            Zurück zur Startseite
-        </a>
+<button class="theme-toggle" id="themeToggle" aria-label="Theme umschalten">🌙</button>
 
-        <div class="content">
+<section class="hero">
+    <div class="hero-icon"><i class="fas fa-scale-balanced"></i></div>
     <h1>Impressum</h1>
+    <p>Angaben gemäß § 5 DDG</p>
+</section>
 
-    <h2>Angaben gemäß § 5 DDG</h2>
-    
-    <div class="contact-box">
-        <h3>Verantwortlich für den Inhalt:</h3>
-<br>
-        <div class="contact-item">
-            <i class="fas fa-user"></i>
-            <span>Andreas Zott</span>
+<div class="container container-narrow">
+
+    <a href="welcome.html" class="back-button"><i class="fas fa-arrow-left"></i> Zurück zur Startseite</a>
+
+    <div class="content">
+
+        <h2 style="margin-top:0;">Verantwortlich für den Inhalt</h2>
+        <div class="contact-box">
+            <div class="contact-item"><i class="fas fa-user"></i> Andreas Zott</div>
+            <div class="contact-item"><i class="fas fa-envelope"></i> <a href="mailto:AndreasZott@me.com">AndreasZott@me.com</a></div>
         </div>
-       
-        <div class="contact-item">
-            <i class="fas fa-envelope"></i>
-            <span>AndreasZott@me.com</span>
+
+        <div class="disclaimer">
+            <h3 style="margin-top:0;">Hinweis zur privaten Nutzung</h3>
+            <p><strong>Private Website:</strong> Diese Website wird privat betrieben und dient ausschließlich informativen Zwecken im Bereich Arbeitssicherheit. Es handelt sich um keine gewerbliche Tätigkeit.</p>
+            <p style="margin-bottom:0;"><strong>Keine Rechtsberatung:</strong> Die bereitgestellten Informationen und Checklisten stellen keine Rechts- oder Fachberatung dar. Für verbindliche Auskünfte wenden Sie sich bitte an entsprechende Fachkräfte oder Behörden.</p>
         </div>
+
+        <h2>Haftungsausschluss</h2>
+        <h3>Haftung für Inhalte</h3>
+        <p>
+            Die Inhalte dieser Seiten wurden mit größter Sorgfalt erstellt. Für
+            die Richtigkeit, Vollständigkeit und Aktualität der Inhalte kann
+            jedoch keine Gewähr übernommen werden. Als Diensteanbieter ist der
+            Betreiber gemäß § 7 Abs. 1 TMG für eigene Inhalte auf diesen Seiten
+            nach den allgemeinen Gesetzen verantwortlich.
+        </p>
+
+        <h3>Haftung für Links</h3>
+        <p>
+            Diese Website enthält Links zu externen Websites Dritter, auf
+            deren Inhalte kein Einfluss besteht. Deshalb kann für diese
+            fremden Inhalte auch keine Gewähr übernommen werden. Für die
+            Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter
+            oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten
+            wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße
+            überprüft. Rechtswidrige Inhalte waren zum Zeitpunkt der
+            Verlinkung nicht erkennbar.
+        </p>
+
+        <h3>Urheberrecht</h3>
+        <p>
+            Die durch den Seitenbetreiber erstellten Inhalte und Werke auf
+            diesen Seiten unterliegen dem deutschen Urheberrecht. Die
+            Vervielfältigung, Bearbeitung, Verbreitung und jede Art der
+            Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der
+            schriftlichen Zustimmung des Autors bzw. Erstellers. Downloads
+            und Kopien dieser Seite sind nur für den privaten, nicht
+            kommerziellen Gebrauch gestattet.
+        </p>
+
+        <h3>Datenschutz</h3>
+        <p>
+            Die Nutzung dieser Website ist in der Regel ohne Angabe
+            personenbezogener Daten möglich. Soweit auf diesen Seiten
+            personenbezogene Daten (beispielsweise Name, Anschrift oder
+            E-Mail-Adressen) erhoben werden, erfolgt dies, soweit möglich,
+            stets auf freiwilliger Basis. Diese Daten werden ohne
+            ausdrückliche Zustimmung nicht an Dritte weitergegeben. Details
+            siehe <a href="datenschutz.html">Datenschutzerklärung</a>.
+        </p>
+
+        <h2>Verwendung der Checklisten</h2>
+        <p>
+            <strong>Eigenverantwortung:</strong> Die bereitgestellten
+            Checklisten und Formulare dienen als Hilfsmittel und Orientierung.
+            Die Verwendung erfolgt auf eigene Verantwortung. Eine Haftung für
+            Vollständigkeit oder Richtigkeit wird ausgeschlossen.
+        </p>
+        <p style="margin-bottom:0;">
+            <strong>Anpassung erforderlich:</strong> Die Checklisten müssen an
+            die jeweiligen betrieblichen Gegebenheiten angepasst werden. Sie
+            ersetzen nicht die Beratung durch eine Fachkraft für
+            Arbeitssicherheit.
+        </p>
+
     </div>
 
-    <div class="disclaimer">
-        <h2>Hinweis zur privaten Nutzung</h2>
-        <p><strong>Private Website:</strong> Diese Website wird privat betrieben und dient ausschließlich informativen Zwecken im Bereich Arbeitssicherheit. Es handelt sich um keine gewerbliche Tätigkeit.</p>
-        
-        <p><strong>Keine Rechtsberatung:</strong> Die bereitgestellten Informationen und Checklisten stellen keine Rechts- oder Fachberatung dar. Für verbindliche Auskünfte wenden Sie sich bitte an entsprechende Fachkräfte oder Behörden.</p>
-    </div>
-
-    <h2>Haftungsausschluss</h2>
-    
-    <h3>Haftung für Inhalte</h3>
-    <p>Die Inhalte dieser Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte kann jedoch keine Gewähr übernommen werden. Als Diensteanbieter bin ich gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich.</p>
-
-    <h3>Haftung für Links</h3>
-    <p>Diese Website enthält Links zu externen Websites Dritter, auf deren Inhalte ich keinen Einfluss habe. Deshalb kann für diese fremden Inhalte auch keine Gewähr übernommen werden. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar.</p>
-
-    <h3>Urheberrecht</h3>
-    <p>Die durch den Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des Autors bzw. Erstellers. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet.</p>
-
-    <h3>Datenschutz</h3>
-    <p>Die Nutzung dieser Website ist in der Regel ohne Angabe personenbezogene Daten möglich. Soweit auf diesen Seiten personenbezogene Daten (beispielsweise Name, Anschrift oder E-Mail-Adressen) erhoben werden, erfolgt dies, soweit möglich, stets auf freiwilliger Basis. Diese Daten werden ohne Ihre ausdrückliche Zustimmung nicht an Dritte weitergegeben.</p>
-
-    <div class="contact-box">
-        <h3>Kontakt bei Fragen</h3>
-        <p>Bei Fragen zum Impressum oder zu den Inhalten dieser Website können Sie mich gerne kontaktieren:</p>
-        <div class="contact-item">
-            <i class="fas fa-envelope"></i>
-            <span>AndreasZotrt@me.com</span>
-        </div>
-    </div>
-
-    <h2>Verwendung der Checklisten</h2>
-    <p><strong>Eigenverantwortung:</strong> Die bereitgestellten Checklisten und Formulare dienen als Hilfsmittel und Orientierung. Die Verwendung erfolgt auf eigene Verantwortung. Eine Haftung für Vollständigkeit oder Richtigkeit wird ausgeschlossen.</p>
-
-    <p><strong>Anpassung erforderlich:</strong> Die Checklisten müssen an die jeweiligen betrieblichen Gegebenheiten angepasst werden. Sie ersetzen nicht die Beratung durch eine Fachkraft für Arbeitssicherheit.</p>
-
-    <p><em>Stand: <span id="currentDate"></span></em></p>
 </div>
-    </div>
 
-    <script>
-        // Set current date
-        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('de-DE');
-
-        // Theme toggle functionality
-        const themeToggle = document.getElementById('themeToggle');
-        const body = document.body;
-
-        // Check for saved theme preference
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'dark') {
-            body.classList.add('dark');
-            themeToggle.textContent = '☀️';
-        }
-
-        themeToggle.addEventListener('click', function() {
-            body.classList.toggle('dark');
-            const isDark = body.classList.contains('dark');
-            themeToggle.textContent = isDark ? '☀️' : '🌙';
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        });
-    </script>
 <footer class="app-footer">
-  <nav class="app-footer-links">
-    <a href="impressum.html">Impressum</a>
-    <a href="datenschutz.html">Datenschutz</a>
-    <a href="faq.html">FAQ</a>
-    <a href="technische-beschreibung.html">Technik</a>
-    <a href="index.html">Startseite</a>
-  </nav>
-  <p>© <span class="app-footer-jahr"></span> Andreas Zott – Alle Rechte vorbehalten</p>
-  <p class="app-footer-sub">(SiFa) Arbeitssicherheit</p>
-  <p class="app-footer-version">Version 1.0.2</p>
+    <nav class="app-footer-links">
+        <a href="datenschutz.html">Datenschutz</a>
+        <a href="faq.html">FAQ</a>
+        <a href="technische-beschreibung.html">Technik</a>
+        <a href="welcome.html">Startseite</a>
+    </nav>
+    <p>© <span class="app-footer-jahr"></span> Andreas Zott — Alle Rechte vorbehalten</p>
+    <p class="app-footer-version"></p>
 </footer>
 
-<script>
-  document.querySelectorAll('.app-footer-jahr').forEach(el => el.textContent = new Date().getFullYear());
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sicher/service-worker.js')
-        .catch(err => console.warn('Service Worker konnte nicht registriert werden:', err));
-    });
-  }
-</script>
+<script src="js/common.js"></script>
 
 </body>
 </html>
