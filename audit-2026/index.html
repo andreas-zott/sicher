@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arbeitssicherheits-Audit Tool</title>
+    <link rel="icon" href="favicon.ico">
+<link href="audit-2026.json" rel="manifest"/>
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- jsPDF lokal oder CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+       <style>
+        /* Inline-Anzeige der empfohlenen Maßnahme unter einem Mangel */
+        .measure-suggestion {
+            margin-top: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-left: 4px solid #b30000;
+            background: #fff5f5;
+            border-radius: 4px;
+        }
+
+        .measure-label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #b30000;
+            margin-bottom: 0.25rem;
+        }
+
+        .measure-text {
+            margin: 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #1f2937;
+        }
+
+        @media print {
+            @page {
+                size: A4;
+                /* Zwingend 0, damit die tauri.localhost URL links unten verschwindet */
+                margin: 0 !important; 
+            }
+
+            .header,
+            .footer,
+            .action-bar,
+            .filter-buttons,
+            .signature-actions {
+                display: none !important;
+            }
+
+            html,
+            body {
+                background: white;
+                color: black;
+                font-size: 10px; /* Leicht verkleinert, spart enorm viele Seiten */
+                line-height: 1.3;
+                counter-reset: page;
+            }
+
+            .main-content {
+                width: 100%;
+                /* Padding simuliert den Seitenrand, hält aber die URL fern */
+                padding: 15mm 15mm 20mm 15mm !important; 
+                box-sizing: border-box;
+            }
+
+            /* --- PLATZSPARENDE OPTIONEN NEBENEINANDER --- */
+            /* Ersetze '.options-container' mit der echten CSS-Klasse deiner Buttons/Radio-Kompontente */
+            .checklist-item .options-container, 
+            .checklist-item .radio-group,
+            .checklist-item .status-buttons {
+                display: flex !important;
+                flex-direction: row !important; /* Erzwingt Nebeneinander-Darstellung */
+                gap: 15px !important;
+                margin-top: 5px !important;
+                margin-bottom: 5px !important;
+            }
+
+            /* Gestaltet die Auswahl-Optionen kompakt nebeneinander */
+            .checklist-item label, 
+            .checklist-item .btn-option {
+                display: inline-flex !important;
+                align-items: center !important;
+                font-size: 10px !important;
+                padding: 2px 6px !important;
+                margin: 0 !important;
+            }
+
+            /* Verhindert riesige Lücken bei Textfeldern im Druck */
+            .checklist-item textarea {
+                min-height: auto !important;
+                height: 35px !important; 
+                margin-top: 5px !important;
+            }
+
+            .card,
+            .checklist-item,
+            .signature-block {
+                box-shadow: none !important;
+                border: 1px solid #ccc;
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
+            .card {
+                margin-bottom: 8px;
+                padding: 8px;
+            }
+
+            .checklist-item {
+                margin-bottom: 6px;
+                padding: 6px;
+            }
+
+            .item-title,
+            .measure-text,
+            textarea,
+            p,
+            span {
+                word-break: break-word;
+                overflow-wrap: break-word;
+                white-space: pre-wrap;
+            }
+
+            .signatures-section {
+                page-break-before: always;
+                break-before: page;
+            }
+
+            .signatures-grid {
+                grid-template-columns: 1fr 1fr; /* Unterschriften nebeneinander spart eine halbe Seite */
+                gap: 15px;
+            }
+
+            .signature-block {
+                margin-top: 10px;
+                padding: 8px;
+            }
+
+            .signature-canvas {
+                width: 100% !important;
+                max-width: 100%;
+                height: 80px !important; /* Kompaktere Boxen */
+                border: 1px solid #000;
+            }
+
+            /* --- MINI SEITENANZAHL UNTEN RECHTS --- */
+            .print-footer {
+                display: block !important;
+                position: fixed;
+                bottom: 8mm;
+                right: 15mm;
+                font-size: 7.5pt; /* Sehr kleine Schrift */
+                font-family: sans-serif;
+                color: #555;
+            }
+
+            .print-footer::after {
+                counter-increment: page;
+                content: "Seite " counter(page) " von " counter(pages);
+            }
+        }
+
+        /* Verhindert, dass der Footer auf dem normalen Bildschirm sichtbar ist */
+        @media screen {
+            .print-footer {
+                display: none;
+            }
+        }
+
+
+    </style>
+
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="images/logo.png" alt="Sicherheits-Audit Logo" class="logo">
+                <div class="title-section">
+                    <h1>Arbeitssicherheits-Audit</h1>
+                    <p class="subtitle">Checkliste gemäß Paragraph 5 ArbSchG</p>
+                </div>
+            </div>
+
+            <nav class="nav">
+                <a href="index.html" class="nav-link active">Checkliste</a>
+                <a href="massnahmenplan.html" class="nav-link">Massnahmenplan</a>
+                <a href="fotos.html" class="nav-link">Fotos</a>
+                <a href="impressum.html" class="nav-link">Impressum</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+
+       <section class="card company-info">
+
+    <h2 class="card-title">
+        Betriebsinformationen
+    </h2>
+
+    <div class="form-grid">
+
+        <div class="form-group">
+
+            <label for="firma">
+                Firma / Betrieb
+            </label>
+
+            <input type="text"
+                   id="firma"
+                   name="firma"
+                   placeholder="Name des Unternehmens">
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="standort">
+                Standort / Bereich
+            </label>
+
+            <input type="text"
+                   id="standort"
+                   name="standort"
+                   placeholder="Adresse oder Bereich">
+
+        </div>
+ <div class="form-group">
+
+            <label for="verantwortlicher">
+                Verantwortlicher
+            </label>
+
+            <input type="text"
+                   id="verantwortlicher"
+                   name="verantwortlicher"
+                   placeholder="Name des Verantwortlichen">
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="pruefer">
+                Prüfer
+            </label>
+
+            <input type="text"
+                   id="pruefer"
+                   name="pruefer"
+                   placeholder="Name des Prüfers">
+
+        </div>
+
+ <div class="form-group">
+
+            <label for="teilnehmer1">
+               Teilnehmer
+            </label>
+
+            <input type="text"
+                   id="teilnehmer1"
+                   name="teilnehmer1"
+                   placeholder="Teilnehmer">
+
+        </div>
+
+    <div class="form-group">
+
+            <label for="teilnehmer2">
+               Teilnehmer
+            </label>
+
+            <input type="text"
+                   id="teilnehmer2"
+                   name="teilnehmer2"
+                   placeholder="Teilnehmer">
+
+        </div>  
+  
+
+<div class="form-group empty-field">
+</div>
+
+<div class="form-group">
+
+            <label for="datum">
+                Datum
+            </label>
+
+            <input type="date"
+                   id="datum"
+                   name="datum">
+
+        </div>
+
+    </div>
+
+</section>
+
+
+        <section class="dashboard-cards">
+            <div class="stat-card">
+                <div class="stat-content">
+                    <span class="stat-value" id="stat-ok">0</span>
+                    <span class="stat-label">In Ordnung</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-content">
+                    <span class="stat-value" id="stat-mangel">0</span>
+                    <span class="stat-label">Mängel</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-content">
+                    <span class="stat-value" id="stat-na">0</span>
+                    <span class="stat-label">Nicht zutreffend</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-content">
+                    <span class="stat-value" id="stat-total">0</span>
+                    <span class="stat-label">Gesamt bewertet</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="card checklist-section">
+            <div class="card-header">
+                <h2 class="card-title">Prüfpunkte</h2>
+
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">Alle</button>
+                    <button class="filter-btn" data-filter="ok">OK</button>
+                    <button class="filter-btn" data-filter="mangel">Mangel</button>
+                    <button class="filter-btn" data-filter="na">N/A</button>
+                    <button class="filter-btn" data-filter="offen">Offen</button>
+                </div>
+            </div>
+
+            <div id="checklist-container"></div>
+        </section>
+
+        <section class="card signatures-section">
+            <h2 class="card-title">Unterschriften</h2>
+
+            <div class="signatures-grid">
+                <div class="signature-block">
+                    <label>Prüfer</label>
+                    <canvas id="signature-pruefer" class="signature-canvas" width="400" height="150"></canvas>
+
+                    <div class="signature-actions">
+                        <button class="btn-secondary btn-small" onclick="clearSignature('pruefer')">
+                            Löschen
+                        </button>
+                    </div>
+                </div>
+
+                <div class="signature-block">
+                    <label>Verantwortlicher</label>
+                    <canvas id="signature-verantwortlicher" class="signature-canvas" width="400" height="150"></canvas>
+
+                    <div class="signature-actions">
+                        <button class="btn-secondary btn-small" onclick="clearSignature('verantwortlicher')">
+                            Löschen
+                        </button>
+                    </div>
+                </div>
+            </div>
+       </section>
+
+<section class="action-bar">
+    <div class="button-group">
+        <button class="btn-secondary" onclick="resetAudit()">
+            Zurücksetzen
+        </button>
+            </div>
+
+<section class="action-bar">
+    
+    <div class="action-right">
+        <!-- Button zum Exportieren der JSON-Datei -->
+        <button type="button" class="btn-secondary" onclick="saveAuditJSON()">
+            JSON Speichern
+        </button>
+
+        <!-- Button zum Auslösen des Datei-Auswählers -->
+        <button type="button" class="btn-secondary" onclick="loadAuditJSON()">
+            JSON Laden
+        </button>
+
+        <!-- WICHTIG: Unsichtbares Feld für das System-Dateifenster -->
+        <input type="file" 
+               id="jsonFileInput" 
+               style="display: none;" 
+               accept=".json" 
+               onchange="handleJSONFile(event)">
+    </div>
+
+</section>
+
+<section class="action-bar">
+    
+    <div class="action-right">
+
+
+<input 
+    type="file"
+    id="jsonFileInput"
+    accept=".json"
+    style="display:none"
+    onchange="handleJSONFile(event)"
+>
+        <button class="btn-secondary" onclick="printAudit()">
+            Drucken
+        </button>
+
+        <button class="btn-secondary" onclick="exportMeasuresPDF()">
+            PDF Export
+        </button>
+
+<button class="btn-primary"
+                    onclick="shareAuditPDF()">
+                iPad Teilen
+            </button>
+
+    </div>
+</section>
+            
+
+    </main>
+
+    <footer class="footer">
+        <p>Arbeitssicherheits-Audit Tool - Version 1.1</p>
+
+        <div class="footer-links">
+            <a href="datenschutz.html">Datenschutz</a>
+            <a href="impressum.html">Impressum</a>
+        </div>
+    </footer>
+
+    <script src="js/audit-data.js"></script>
+    <script src="js/text.js"></script>
+    <script src="js/app.js"></script>
+
+    <script>
+async function shareAuditPDF() {
+
+    try {
+
+        const { jsPDF } = window.jspdf;
+
+        const doc = new jsPDF({
+            orientation: "portrait",
+            unit: "mm",
+            format: "a4"
+        });
+
+        const pageWidth = 210;
+        const pageHeight = 297;
+
+        const margin = 18;
+        const maxWidth = pageWidth - (margin * 2);
+
+        let y = 20;
+
+        // =========================
+        // HEADER
+        // =========================
+
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(20);
+
+        doc.text(
+            "Arbeitssicherheits-Audit",
+            margin,
+            y
+        );
+
+        y += 14;
+
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(11);
+
+        const firma =
+            document.getElementById("firma").value || "-";
+
+        const standort =
+            document.getElementById("standort").value || "-";
+
+        const pruefer =
+            document.getElementById("pruefer").value || "-";
+
+        const datum =
+            document.getElementById("datum").value || "-";
+
+        const infoLines = [
+            `Firma: ${firma}`,
+            `Standort: ${standort}`,
+            `Prüfer: ${pruefer}`,
+            `Datum: ${datum}`
+        ];
+
+        infoLines.forEach(line => {
+
+            doc.text(line, margin, y);
+
+            y += 7;
+        });
+
+        y += 10;
+
+        // =========================
+        // CHECKLISTE
+        // =========================
+
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(15);
+
+        doc.text("Prüfpunkte", margin, y);
+
+        y += 10;
+
+        const checklistItems =
+            document.querySelectorAll(".checklist-item");
+
+        checklistItems.forEach((item, index) => {
+
+            const title =
+                item.querySelector(".item-title")
+                    ?.innerText ||
+                `Prüfpunkt ${index + 1}`;
+
+            const itemId =
+                item.getAttribute("data-item-id");
+
+            let status = "Offen";
+
+            const selectedBtn =
+                item.querySelector(".rating-btn.selected");
+
+            if (selectedBtn) {
+
+                if (
+                    selectedBtn.classList.contains("ok")
+                ) {
+                    status = "OK";
+                }
+
+                if (
+                    selectedBtn.classList.contains("mangel")
+                ) {
+                    status = "Mangel";
+                }
+
+                if (
+                    selectedBtn.classList.contains("na")
+                ) {
+                    status = "Nicht zutreffend";
+                }
+            }
+
+            const kommentar =
+                item.querySelector("textarea")
+                    ?.value || "";
+
+            let measureText = "";
+
+            if (
+                status === "Mangel" &&
+                typeof getMeasureText === "function"
+            ) {
+
+                measureText =
+                    getMeasureText(itemId);
+            }
+
+            // =========================
+            // TEXT UMBRUCH
+            // =========================
+
+            const titleLines =
+                doc.splitTextToSize(
+                    `${index + 1}. ${title} (${status})`,
+                    maxWidth
+                );
+
+            const kommentarLines =
+                kommentar
+                    ? doc.splitTextToSize(
+                        `Kommentar: ${kommentar}`,
+                        maxWidth - 5
+                    )
+                    : [];
+
+            const measureLines =
+                measureText
+                    ? doc.splitTextToSize(
+                        `Maßnahme: ${measureText}`,
+                        maxWidth - 5
+                    )
+                    : [];
+
+            // =========================
+            // HÖHE BERECHNEN
+            // =========================
+
+            let blockHeight =
+                (titleLines.length * 6) +
+                (kommentarLines.length * 5) +
+                (measureLines.length * 5) +
+                12;
+
+            // =========================
+            // SEITENUMBRUCH
+            // =========================
+
+            if (
+                y + blockHeight >
+                pageHeight - 25
+            ) {
+
+                doc.addPage();
+
+                y = 20;
+            }
+
+            // =========================
+            // TITEL
+            // =========================
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(11);
+
+            doc.text(
+                titleLines,
+                margin,
+                y
+            );
+
+            y += titleLines.length * 6;
+
+            // =========================
+            // KOMMENTAR
+            // =========================
+
+            if (kommentarLines.length > 0) {
+
+                doc.setFont("helvetica", "normal");
+                doc.setFontSize(10);
+
+                doc.text(
+                    kommentarLines,
+                    margin + 5,
+                    y
+                );
+
+                y +=
+                    (kommentarLines.length * 5) + 3;
+            }
+
+            // =========================
+            // MASSNAHME
+            // =========================
+
+            if (measureLines.length > 0) {
+
+                doc.setFont("helvetica", "italic");
+                doc.setFontSize(10);
+
+                doc.text(
+                    measureLines,
+                    margin + 5,
+                    y
+                );
+
+                y +=
+                    (measureLines.length * 5) + 3;
+            }
+
+            // Linie
+
+            doc.setDrawColor(220);
+
+            doc.line(
+                margin,
+                y,
+                pageWidth - margin,
+                y
+            );
+
+            y += 8;
+        });
+
+        // =========================
+        // UNTERSCHRIFTEN EXTRA SEITE
+        // =========================
+
+        doc.addPage();
+
+        y = 30;
+
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(16);
+
+        doc.text(
+            "Unterschriften",
+            margin,
+            y
+        );
+
+        y += 25;
+
+        // Prüfer
+
+        doc.setFontSize(12);
+
+        doc.text(
+            "Prüfer",
+            margin,
+            y
+        );
+
+        y += 5;
+
+        doc.rect(
+            margin,
+            y,
+            75,
+            35
+        );
+
+        const prueferCanvas =
+            document.getElementById(
+                "signature-pruefer"
+            );
+
+        if (prueferCanvas) {
+
+            const img =
+                prueferCanvas.toDataURL(
+                    "image/png"
+                );
+
+            doc.addImage(
+                img,
+                "PNG",
+                margin + 2,
+                y + 2,
+                71,
+                31
+            );
+        }
+
+        // Verantwortlicher
+
+        const x2 = 115;
+
+        doc.text(
+            "Verantwortlicher",
+            x2,
+            y - 5
+        );
+
+        doc.rect(
+            x2,
+            y,
+            75,
+            35
+        );
+
+        const verCanvas =
+            document.getElementById(
+                "signature-verantwortlicher"
+            );
+
+        if (verCanvas) {
+
+            const img2 =
+                verCanvas.toDataURL(
+                    "image/png"
+                );
+
+            doc.addImage(
+                img2,
+                "PNG",
+                x2 + 2,
+                y + 2,
+                71,
+                31
+            );
+        }
+
+        // =========================
+        // SEITENNUMMERN
+        // =========================
+
+        const pageCount =
+            doc.internal.getNumberOfPages();
+
+        for (
+            let i = 1;
+            i <= pageCount;
+            i++
+        ) {
+
+            doc.setPage(i);
+
+            doc.setFontSize(9);
+
+            doc.text(
+                `Seite ${i} von ${pageCount}`,
+                170,
+                290
+            );
+        }
+
+        // =========================
+        // PDF
+        // =========================
+
+        const pdfBlob =
+            doc.output("blob");
+
+        const fileName =
+            `audit_${Date.now()}.pdf`;
+
+        const file =
+            new File(
+                [pdfBlob],
+                fileName,
+                {
+                    type:
+                        "application/pdf"
+                }
+            );
+
+        // =========================
+        // iPAD SHARE
+        // =========================
+
+        if (
+            navigator.canShare &&
+            navigator.canShare({
+                files: [file]
+            })
+        ) {
+
+            await navigator.share({
+
+                title:
+                    "Arbeitssicherheits-Audit",
+
+                text:
+                    "Audit PDF im Anhang",
+
+                files: [file]
+
+            });
+
+        } else {
+
+            // FALLBACK DOWNLOAD
+
+            const url =
+                URL.createObjectURL(
+                    pdfBlob
+                );
+
+            const a =
+                document.createElement("a");
+
+            a.href = url;
+
+            a.download = fileName;
+
+            document.body.appendChild(a);
+
+            a.click();
+
+            document.body.removeChild(a);
+
+            URL.revokeObjectURL(url);
+        }
+
+        // =========================
+        // MAIL APP ÖFFNEN
+        // =========================
+
+        const subject =
+            encodeURIComponent(
+                "Arbeitssicherheits-Audit"
+            );
+
+    const markt =
+    `${firma} - ${standort}`;
+
+const body =
+    encodeURIComponent(
+`Sehr geehrte Damen und Herren,
+
+im Rahmen der turnusmäßigen Arbeitssicherheitsbegehung übersende ich Ihnen anbei das Begehungsprotokoll des Marktes ${markt} zur sachlichen Prüfung.
+
+Bitte prüfen Sie die dokumentierten Feststellungen und veranlassen Sie die Umsetzung der erforderlichen Maßnahmen.
+
+Mit freundlichen Grüßen
+Fachkraft für Arbeitssicherheit (SiFa)`
+    );
+
+        window.location.href =
+            `mailto:?subject=${subject}&body=${body}`;
+
+    } catch (err) {
+
+        console.error(err);
+
+        alert(
+            "PDF Export fehlgeschlagen"
+        );
+    }
+}
+
+        // ==========================================
+        // Druckfunktion fuer Tauri/Desktop
+        // ==========================================
+        function printAudit() {
+
+            // Vor dem Drucken alle Textfelder automatisch an Inhalt anpassen
+            document.querySelectorAll("textarea").forEach((textarea) => {
+                textarea.style.height = "auto";
+                textarea.style.height = textarea.scrollHeight + "px";
+            });
+
+            // Kleine Verzögerung damit das Layout korrekt berechnet wird
+            setTimeout(() => {
+                window.print();
+            }, 150);
+        }
+
+        // ==========================================
+        // Tauri-kompatibler PDF Export
+        // ==========================================
+        async function exportPDF() {
+
+            try {
+
+                const { jsPDF } = window.jspdf;
+
+                const doc = new jsPDF({
+                    orientation: "portrait",
+                    unit: "mm",
+                    format: "a4"
+                });
+
+
+                let y = 20;
+
+                doc.setFontSize(18);
+                doc.text("Arbeitssicherheits-Audit", 20, y);
+
+                y += 12;
+
+                const firma = document.getElementById("firma").value || "-";
+                const standort = document.getElementById("standort").value || "-";
+                const pruefer = document.getElementById("pruefer").value || "-";
+                const datum = document.getElementById("datum").value || "-";
+
+                doc.setFontSize(11);
+
+                doc.text(`Firma: ${firma}`, 20, y);
+                y += 8;
+
+                doc.text(`Standort: ${standort}`, 20, y);
+                y += 8;
+
+                doc.text(`Pruefer: ${pruefer}`, 20, y);
+                y += 8;
+
+                doc.text(`Datum: ${datum}`, 20, y);
+                y += 15;
+
+                doc.setFontSize(14);
+                doc.text("Checkliste", 20, y);
+
+                y += 10;
+
+                const checklistItems = document.querySelectorAll(".checklist-item");
+
+                checklistItems.forEach((item, index) => {
+
+                    const title =
+                        item.querySelector(".item-title")?.innerText ||
+                        `Pruefpunkt ${index + 1}`;
+
+                    const itemId = item.getAttribute("data-item-id");
+
+                    let status = "offen";
+                    const selectedBtn = item.querySelector(".rating-btn.selected");
+                    if (selectedBtn) {
+                        if (selectedBtn.classList.contains("ok")) status = "ok";
+                        else if (selectedBtn.classList.contains("mangel")) status = "mangel";
+                        else if (selectedBtn.classList.contains("na")) status = "na";
+                    }
+
+                    const kommentar =
+                        item.querySelector("textarea")?.value || "";
+
+                    let statusText = "";
+
+                    switch (status) {
+                        case "ok":
+                            statusText = "OK";
+                            break;
+
+                        case "mangel":
+                            statusText = "Mangel";
+                            break;
+
+                        case "na":
+                            statusText = "Nicht zutreffend";
+                            break;
+
+                        default:
+                            statusText = "Offen";
+                    }
+
+                    const line = `${index + 1}. ${title} [${statusText}]`;
+
+                    const splitText = doc.splitTextToSize(line, 170);
+
+                    let estimatedHeight = (splitText.length * 7) + 10;
+
+                    if (kommentar.trim() !== "") {
+                        estimatedHeight += 18;
+                    }
+
+                    if (status === "mangel" && typeof getMeasureText === "function") {
+                        estimatedHeight += 18;
+                    }
+
+                    if (y + estimatedHeight > 270) {
+                        doc.addPage();
+                        y = 20;
+                    }
+
+                    doc.text(splitText, 20, y);
+
+                    y += splitText.length * 7;
+
+                    if (kommentar.trim() !== "") {
+
+                        const commentText =
+                            doc.splitTextToSize(
+                                "Kommentar: " + kommentar,
+                                160
+                            );
+
+                        doc.setFontSize(10);
+
+                        doc.text(commentText, 28, y);
+
+                        y += commentText.length * 6;
+
+                        doc.setFontSize(11);
+                    }
+
+                    if (status === "mangel" && typeof getMeasureText === "function") {
+                        const measureText = doc.splitTextToSize(
+                            "Maßnahme: " + getMeasureText(itemId),
+                            160
+                        );
+                        doc.setFontSize(10);
+                        doc.text(measureText, 28, y);
+                        y += measureText.length * 6;
+                        doc.setFontSize(11);
+                    }
+
+                    y += 5;
+
+                    if (y > 270) {
+                        doc.addPage();
+                        y = 20;
+                    }
+                });
+
+                // Download
+                doc.save("arbeitssicherheits-audit.pdf");
+
+            } catch (err) {
+
+                console.error("PDF Fehler:", err);
+
+                alert(
+                    "PDF Export fehlgeschlagen. Druckdialog wird geöffnet."
+                );
+
+                window.print();
+            }
+        }
+
+    </script>
+<script>
+
+function exportMeasuresPDF() {
+
+    alert("PDF Export gestartet");
+
+    window.print();
+
+}
+
+// Speichert die IDs der aktuell geöffneten Kategorien
+let openCategories = new Set();
+
+function renderChecklist() {
+    const container = document.getElementById('checklist-container');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    AUDIT_CATEGORIES.forEach(category => {
+        const filteredItems = filterItems(category.items);
+        if (filteredItems.length === 0 && currentFilter !== 'all') return;
+        
+        // Prüfen, ob diese Kategorie offen sein soll
+        const isOpen = openCategories.has(category.id);
+        
+        const categoryEl = document.createElement('div');
+        categoryEl.className = 'category-section';
+        categoryEl.innerHTML = `
+            <div class="category-header" onclick="toggleCategory('${category.id}')">
+                <span class="category-title">
+                    <!-- Icon-Drehung angepasst an den Zustand -->
+                    <svg xmlns="http://w3.org" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: ${isOpen ? 'rotate(90deg)' : 'rotate(0deg)'}; transition: transform 0.2s;"><path d="m9 18 6-6-6-6"/></svg>
+                    ${category.name}
+                </span>
+                <span class="category-badge">${filteredItems.length} / ${category.items.length} Prüfpunkte</span>
+            </div>
+            <!-- Klasse "collapsed" wird nur hinzugefügt, wenn sie NICHT offen ist -->
+            <div class="category-content ${isOpen ? '' : 'collapsed'}" id="category-${category.id}">
+                ${renderCategoryItems(filteredItems)}
+            </div>
+        `;
+        container.appendChild(categoryEl);
+    });
+}
+
+function toggleCategory(categoryId) {
+    const content = document.getElementById(`category-${categoryId}`);
+    const header = content.previousElementSibling;
+    const icon = header.querySelector('svg');
+    
+    content.classList.toggle('collapsed');
+    
+    const isCollapsed = content.classList.contains('collapsed');
+    
+    // Zustand im Set speichern oder löschen
+    if (isCollapsed) {
+        openCategories.delete(categoryId);
+        icon.style.transform = 'rotate(0deg)';
+    } else {
+        openCategories.add(categoryId);
+        icon.style.transform = 'rotate(90deg)';
+    }
+}
+
+
+</script>
+
+<script>
+
+// ==========================================
+// JSON EXPORT / IMPORT
+// ==========================================
+
+function collectAuditData() {
+
+    const auditData = {
+        firma: document.getElementById("firma")?.value || "",
+        standort: document.getElementById("standort")?.value || "",
+        pruefer: document.getElementById("pruefer")?.value || "",
+        datum: document.getElementById("datum")?.value || "",
+        checklist: [],
+        exportedAt: new Date().toISOString()
+    };
+
+    document.querySelectorAll(".checklist-item").forEach(item => {
+
+        const itemId =
+            item.getAttribute("data-item-id");
+
+        let status = "";
+
+        const selectedBtn =
+            item.querySelector(".rating-btn.selected");
+
+        if (selectedBtn) {
+
+            if (selectedBtn.classList.contains("ok")) {
+                status = "ok";
+            }
+
+            if (selectedBtn.classList.contains("mangel")) {
+                status = "mangel";
+            }
+
+            if (selectedBtn.classList.contains("na")) {
+                status = "na";
+            }
+        }
+
+        const kommentar =
+            item.querySelector("textarea")?.value || "";
+
+        auditData.checklist.push({
+            itemId,
+            status,
+            kommentar
+        });
+    });
+
+    return auditData;
+}
+
+// ==========================================
+// JSON SPEICHERN
+// ==========================================
+
+// ==========================================
+// JSON EXPORT / IMPORT
+// ==========================================
+
+function collectAuditData() {
+
+    const auditData = {
+        firma: document.getElementById("firma")?.value || "",
+        standort: document.getElementById("standort")?.value || "",
+        verantwortlicher: document.getElementById("verantwortlicher")?.value || "", // NEU
+        pruefer: document.getElementById("pruefer")?.value || "",
+        datum: document.getElementById("datum")?.value || "",
+        teilnehmer1: document.getElementById("teilnehmer1")?.value || "", // NEU (Erstes Teilnehmer-Feld)
+        teilnehmer2: document.getElementById("teilnehmer2")?.value || "", // NEU (Zweites Teilnehmer-Feld)
+        checklist: [],
+        exportedAt: new Date().toISOString()
+    };
+
+    document.querySelectorAll(".checklist-item").forEach(item => {
+
+        const itemId = item.getAttribute("data-item-id");
+        let status = "";
+        const selectedBtn = item.querySelector(".rating-btn.selected");
+
+        if (selectedBtn) {
+            if (selectedBtn.classList.contains("ok")) status = "ok";
+            if (selectedBtn.classList.contains("mangel")) status = "mangel";
+            if (selectedBtn.classList.contains("na")) status = "na";
+        }
+
+        const kommentar = item.querySelector("textarea")?.value || "";
+
+        auditData.checklist.push({
+            itemId,
+            status,
+            kommentar
+        });
+    });
+
+    return auditData;
+}
+
+// ==========================================
+// JSON SPEICHERN
+// ==========================================
+
+function saveAuditJSON() {
+
+    try {
+        const auditData = collectAuditData();
+        const jsonString = JSON.stringify(auditData, null, 2);
+
+        const blob = new Blob([jsonString], { type: "application/json" });
+
+        const firma = document.getElementById("firma")?.value || "audit";
+        const date = new Date().toISOString().split("T")[0];
+        const fileName = `${firma.replace(/[^a-z0-9]/gi, "_")}_${date}.json`;
+
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        alert("JSON erfolgreich gespeichert");
+
+    } catch (err) {
+        console.error(err);
+        alert("Fehler beim Speichern");
+    }
+}
+
+// ==========================================
+// JSON LADEN
+// ==========================================
+
+function loadAuditJSON() {
+    document.getElementById("jsonFileInput").click();
+}
+
+function handleJSONFile(event) {
+
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const data = JSON.parse(e.target.result);
+            applyAuditData(data);
+            alert("JSON erfolgreich geladen");
+        } catch (err) {
+            console.error(err);
+            alert("Ungültige JSON Datei");
+        }
+    };
+
+    reader.readAsText(file);
+}
+
+// ==========================================
+// DATEN WIEDERHERSTELLEN
+// ==========================================
+
+function applyAuditData(data) {
+
+    // Betriebsinformationen wiederherstellen
+    if (document.getElementById("firma")) document.getElementById("firma").value = data.firma || "";
+    if (document.getElementById("standort")) document.getElementById("standort").value = data.standort || "";
+    if (document.getElementById("verantwortlicher")) document.getElementById("verantwortlicher").value = data.verantwortlicher || ""; // NEU
+    if (document.getElementById("pruefer")) document.getElementById("pruefer").value = data.pruefer || "";
+    if (document.getElementById("datum")) document.getElementById("datum").value = data.datum || "";
+
+    // Teilnehmer-Felder wiederherstellen (NEU)
+    if (document.getElementById("teilnehmer1")) document.getElementById("teilnehmer1").value = data.teilnehmer1 || "";
+    if (document.getElementById("teilnehmer2")) document.getElementById("teilnehmer2").value = data.teilnehmer2 || "";
+
+    // Checkliste wiederherstellen
+    if (Array.isArray(data.checklist)) {
+
+        data.checklist.forEach(entry => {
+
+            const item = document.querySelector(`.checklist-item[data-item-id="${entry.itemId}"]`);
+            if (!item) return;
+
+            // Buttons zurücksetzen
+            item.querySelectorAll(".rating-btn").forEach(btn => {
+                btn.classList.remove("selected");
+            });
+
+            // Status wieder setzen
+            if (entry.status) {
+                const targetBtn = item.querySelector(`.rating-btn.${entry.status}`);
+                if (targetBtn) {
+                    targetBtn.classList.add("selected");
+                    targetBtn.click();
+                }
+            }
+
+            // Kommentar wiederherstellen
+            const textarea = item.querySelector("textarea");
+            if (textarea) {
+                textarea.value = entry.kommentar || "";
+                textarea.dispatchEvent(new Event("input"));
+            }
+        });
+    }
+
+    // Statistik aktualisieren
+    if (typeof updateStats === "function") {
+        updateStats();
+    }
+}
+
+</script>
+  <div class="print-footer"></div>
+
+<script>
+// ===== Erweiterte JSON-Speicherung / Laden / Reset =====
+
+function collectAuditData() {
+    const teilnehmerInputs = document.getElementsByName("teilnehmer");
+
+    // auditState (aus app.js) ist die zentrale Datenquelle inkl. Mängel/Maßnahmen.
+    const state = (typeof auditState !== "undefined" && auditState) ? auditState : {};
+    const ratings = state.ratings || {};
+    const comments = state.comments || {};
+    const measures = Array.isArray(state.measures) ? state.measures : [];
+
+    const auditData = {
+        firma: document.getElementById("firma")?.value || "",
+        standort: document.getElementById("standort")?.value || "",
+        verantwortlicher: document.getElementById("verantwortlicher")?.value || "",
+        pruefer: document.getElementById("pruefer")?.value || "",
+        datum: document.getElementById("datum")?.value || "",
+        teilnehmer: Array.from(teilnehmerInputs).map(i => i.value || ""),
+        checklist: [],
+        // WICHTIG: Bewertungen, Kommentare und die komplette Maßnahmen-/Mängelliste
+        // werden mitgespeichert, damit sie beim Laden wiederhergestellt werden können.
+        ratings: ratings,
+        comments: comments,
+        measures: measures,
+        signatures: {
+            pruefer: document.getElementById("signature-pruefer")?.toDataURL("image/png") || "",
+            verantwortlicher: document.getElementById("signature-verantwortlicher")?.toDataURL("image/png") || ""
+        },
+        exportedAt: new Date().toISOString()
+    };
+
+    document.querySelectorAll(".checklist-item").forEach(item => {
+        const itemId = item.getAttribute("data-item-id");
+        let status = ratings[itemId] || "";
+        const selectedBtn = item.querySelector(".rating-btn.selected");
+
+        if (selectedBtn) {
+            if (selectedBtn.classList.contains("ok")) status = "ok";
+            if (selectedBtn.classList.contains("mangel")) status = "mangel";
+            if (selectedBtn.classList.contains("na")) status = "na";
+        }
+
+        auditData.checklist.push({
+            itemId,
+            status,
+            kommentar: item.querySelector("textarea")?.value || comments[itemId] || ""
+        });
+    });
+
+    return auditData;
+}
+
+function applyAuditData(data) {
+    const setVal = (id,val) => {
+      const el=document.getElementById(id);
+      if(el) el.value=val || "";
+    };
+
+    setVal("firma", data.firma);
+    setVal("standort", data.standort);
+    setVal("verantwortlicher", data.verantwortlicher);
+    setVal("pruefer", data.pruefer);
+    setVal("datum", data.datum);
+
+    const teilnehmerInputs = document.getElementsByName("teilnehmer");
+    if (Array.isArray(data.teilnehmer)) {
+        data.teilnehmer.forEach((v,i)=>{
+            if (teilnehmerInputs[i]) teilnehmerInputs[i].value = v || "";
+        });
+    } else {
+        if (teilnehmerInputs[0]) teilnehmerInputs[0].value = data.teilnehmer1 || "";
+        if (teilnehmerInputs[1]) teilnehmerInputs[1].value = data.teilnehmer2 || "";
+    }
+
+    // ===== Bewertungen, Kommentare und Mängel/Maßnahmen in den auditState laden =====
+    if (typeof auditState !== "undefined" && auditState) {
+
+        // Ratings + Kommentare wiederherstellen.
+        // Neues Format (ratings/comments) bevorzugen, sonst aus checklist ableiten.
+        if (data.ratings && typeof data.ratings === "object") {
+            auditState.ratings = { ...data.ratings };
+            auditState.comments = { ...(data.comments || {}) };
+        } else if (Array.isArray(data.checklist)) {
+            auditState.ratings = {};
+            auditState.comments = {};
+            data.checklist.forEach(entry => {
+                if (entry.status) auditState.ratings[entry.itemId] = entry.status;
+                if (entry.kommentar) auditState.comments[entry.itemId] = entry.kommentar;
+            });
+        }
+
+        // Maßnahmen/Mängel wiederherstellen.
+        if (Array.isArray(data.measures) && data.measures.length > 0) {
+            // Gespeicherte Maßnahmen (inkl. Verantwortlicher, Fälligkeit, Priorität, Status) übernehmen.
+            auditState.measures = data.measures.map(m => ({ ...m }));
+        } else {
+            // Fallback: für jeden Mangel eine Standard-Maßnahme erzeugen.
+            auditState.measures = [];
+            Object.keys(auditState.ratings || {}).forEach(itemId => {
+                if (auditState.ratings[itemId] === "mangel") {
+                    auditState.measures.push({
+                        id: Date.now().toString() + Math.random().toString(36).slice(2, 8),
+                        itemId: itemId,
+                        description: (typeof getMeasureText === "function") ? getMeasureText(itemId) : "",
+                        priority: "mittel",
+                        responsible: "",
+                        dueDate: "",
+                        status: "offen",
+                        comment: (auditState.comments && auditState.comments[itemId]) || ""
+                    });
+                }
+            });
+        }
+
+        // Betriebsinformationen und Unterschriften im State ablegen.
+        auditState.companyInfo = {
+            ...(auditState.companyInfo || {}),
+            firma: data.firma || "",
+            standort: data.standort || "",
+            pruefer: data.pruefer || "",
+            datum: data.datum || ""
+        };
+        if (data.signatures) {
+            auditState.signatures = { ...(auditState.signatures || {}), ...data.signatures };
+        }
+
+        // In localStorage speichern, damit der Maßnahmenplan die Mängel/Maßnahmen sieht.
+        localStorage.setItem("auditState", JSON.stringify(auditState));
+
+        // Checkliste komplett neu aufbauen, damit Bewertungen + Kommentare sichtbar sind.
+        if (typeof renderChecklist === "function") renderChecklist();
+        if (typeof updateStatistics === "function") updateStatistics();
+    } else {
+        // Fallback ohne auditState: nur die DOM-Buttons setzen.
+        document.querySelectorAll(".checklist-item .rating-btn").forEach(btn => btn.classList.remove("selected"));
+
+        if (Array.isArray(data.checklist)) {
+            data.checklist.forEach(entry => {
+                const item = document.querySelector(`.checklist-item[data-item-id="${entry.itemId}"]`);
+                if (!item) return;
+
+                const targetBtn = entry.status ? item.querySelector(`.rating-btn.${entry.status}`) : null;
+                if (targetBtn) targetBtn.click();
+
+                const textarea = item.querySelector("textarea");
+                if (textarea) {
+                    textarea.value = entry.kommentar || "";
+                    textarea.dispatchEvent(new Event("input"));
+                }
+            });
+        }
+    }
+
+    const restoreSignature = (canvasId, imgData) => {
+        if (!imgData) return;
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        const img = new Image();
+        img.onload = () => {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.drawImage(img,0,0,canvas.width,canvas.height);
+        };
+        img.src = imgData;
+    };
+
+    if (data.signatures) {
+        restoreSignature("signature-pruefer", data.signatures.pruefer);
+        restoreSignature("signature-verantwortlicher", data.signatures.verantwortlicher);
+    }
+
+    if (typeof updateStats === "function") updateStats();
+}
+
+function resetAudit() {
+
+    if (!confirm("Möchten Sie wirklich alle Eingaben zurücksetzen?")) {
+        return;
+    }
+
+    // Kompletter Audit-State zurücksetzen
+    auditState = {
+        companyInfo: {
+            firma: "",
+            standort: "",
+            pruefer: "",
+            datum: ""
+        },
+        ratings: {},
+        comments: {},
+        measures: [],
+        photos: [],
+        signatures: {
+            pruefer: null,
+            verantwortlicher: null
+        }
+    };
+
+    // Formularfelder löschen
+    [
+        "firma",
+        "standort",
+        "verantwortlicher",
+        "pruefer",
+        "datum",
+        "teilnehmer1",
+        "teilnehmer2"
+    ].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = "";
+    });
+
+    // alte Teilnehmerfelder (falls vorhanden)
+    document.querySelectorAll('[name="teilnehmer"]').forEach(el => {
+        el.value = "";
+    });
+
+    // Unterschriften löschen
+    ["pruefer", "verantwortlicher"].forEach(type => {
+
+        if (signatureCanvases[type]) {
+
+            const { canvas, ctx } = signatureCanvases[type];
+
+            ctx.clearRect(
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+        }
+    });
+
+    // LocalStorage komplett löschen
+    localStorage.removeItem("auditState");
+
+    // Checkliste neu aufbauen
+    renderChecklist();
+
+    // Statistik neu berechnen
+    updateStatistics();
+
+    // Dashboard sicherheitshalber auf 0 setzen
+    document.getElementById("stat-ok").textContent = "0";
+    document.getElementById("stat-mangel").textContent = "0";
+    document.getElementById("stat-na").textContent = "0";
+    document.getElementById("stat-total").textContent = "0";
+
+    showToast(
+        "Audit vollständig zurückgesetzt",
+        "success"
+    );
+}</script>
+
+</body>
+</html>
