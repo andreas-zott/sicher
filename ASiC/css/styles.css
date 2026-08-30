@@ -1212,6 +1212,22 @@ html.access-locked body > *:not(.access-gate-overlay) {
     -webkit-tap-highlight-color: transparent;
 }
 
+/* Falls .btn auf einem <a>-Element statt <button> verwendet wird (z. B.
+   ein Tab, der stattdessen zu einer eigenen Seite verlinkt): Unterstreichung
+   entfernen. WICHTIG: KEINE color-Regel hier - "a.btn" hat als
+   Element+Klasse-Selektor eine hoehere Spezifitaet (0,1,1) als reine
+   Klassen wie ".btn-primary"/".btn-secondary" (0,1,0) und wuerde deren
+   eigene Textfarbe sonst ungewollt ueberschreiben (genau das war der Bug:
+   der bestehende "Weiter"-Link auf index.html nutzt .btn-primary, das
+   explizit color:#fff setzt - eine hier ergaenzte color:inherit hat das
+   trotzdem uebersteuert und die Schrift schwarz statt weiss angezeigt).
+   Die jeweilige .btn-*-Klasse setzt ihre Farbe ohnehin schon zuverlaessig,
+   auch auf einem <a>-Element, da eine Klasse den globalen "a"-Selektor
+   bereits allein durch hoehere Spezifitaet schlaegt. */
+a.btn {
+    text-decoration: none;
+}
+
 .btn:active {
     transform: scale(0.98);
 }
