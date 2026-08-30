@@ -294,7 +294,7 @@
                     App-Revision
                 </div>
                 <div class="doku-meta-value">
-                    1.22 (26.08.2026)
+                    1.28 (26.08.2026)
                 </div>
             </div>
 
@@ -303,7 +303,7 @@
                     Service Worker
                 </div>
                 <div class="doku-meta-value">
-                    v1.22
+                    v1.28
                 </div>
             </div>
 
@@ -551,7 +551,7 @@
 
             <p>
                 Die aktuelle technische Cache-Version lautet:
-                <strong><code>asic-handel-v1.22</code></strong>.
+                <strong><code>asic-handel-v1.28</code></strong>.
             </p>
 
             <ul>
@@ -819,6 +819,14 @@
                     <td>
                         Auswertung und statistische Darstellung
                         des aktuellen Begehungsstands
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>auswertung-team.html</td>
+                    <td>
+                        Auswertung aller im Team-Archiv (NAS)
+                        gefundenen Begehungen gemeinsam
                     </td>
                 </tr>
 
@@ -1441,330 +1449,179 @@
         <div class="doku-box ok">
 
             <div class="doku-box-title">
-                Synology-NAS-Speicherung (save.php / list.php / load.php)
+                NAS-Speicherung (save.php / list.php / load.php)
             </div>
 
-            Über „Datei ▾ → Auf NAS speichern" bzw. „Vom NAS laden" kann
-            der aktuelle Begehungsstand zusätzlich auf einer Synology
-            gesichert werden, über drei serverseitige PHP-Skripte im
-            selben Verzeichnis wie die App. Funktioniert nur, wenn die
-            App direkt über die Synology selbst aufgerufen wird (bzw.
-            deren Tailscale-Adresse) – über eine andere Adresse (z. B.
-            GitHub Pages) sind diese Endpunkte nicht erreichbar, da dort
-            keine serverseitigen Skripte ausgeführt werden.
+            Über „Datei ▾ → Auf NAS speichern" bzw. „Vom NAS laden" lässt
+            sich der aktuelle Begehungsstand zusätzlich auf einer Synology
+            sichern, über drei serverseitige PHP-Skripte. Standardmäßig
+            wird eine relative Adresse im selben Verzeichnis wie die App
+            verwendet; unter „Einstellungen" lässt sich stattdessen eine
+            externe Server-Adresse hinterlegen (<code>nasUrl()</code> baut
+            daraus die tatsächliche Adresse, ohne Konfiguration identisch
+            zum bisherigen relativen Pfad). Optional zusätzlich ein
+            Zugriffsschlüssel, der als Kopfzeile mitgeschickt und
+            serverseitig zeitsicher per <code>hash_equals()</code>
+            geprüft wird, sofern dort ebenfalls einer hinterlegt ist.
 
             <ul>
                 <li>Voraussetzung zum Speichern: Datum und Marktnummer
                     müssen in den Betriebsdaten ausgefüllt sein</li>
-                <li>Dateiname folgt dem Schema
-                    <code>Begehung_&lt;TT.MM.JJJJ&gt;_Markt&lt;Marktnummer&gt;.json</code></li>
                 <li>Von der lokalen Speicherung komplett getrennt – ein
                     fehlgeschlagener NAS-Zugriff hat keinen Einfluss auf
                     lokal gespeicherte Daten</li>
-                <li><code>fetchSynologyRecord()</code> läd einen NAS-Datensatz,
-                    ohne den globalen <code>state</code> zu verändern – Grundlage
-                    für das Team-Archiv (siehe unten), ohne die gerade laufende
-                    eigene Begehung zu überschreiben</li>
-                <li><code>list.php</code> und <code>load.php</code> erkennen
-                    zwei Namensmuster: die von <code>save.php</code> selbst
-                    erzeugten <code>Begehung_&lt;Datum&gt;_Markt&lt;Nummer&gt;.json</code>
-                    UND manuell (z. B. per File Station) in denselben Ordner
-                    eingespielte <code>ASiC-Handel_&lt;Firma&gt;_&lt;Datum&gt;.json</code>-Dateien
-                    aus „JSON exportieren"/„JSON per Mail teilen" — beide
-                    erscheinen dadurch gleichermaßen im Team-Archiv</li>
-            </ul>
-
-        </div>
-
-
-        <div class="doku-box ok">
-
-            <div class="doku-box-title">
-                Archivierte Begehung wiederherstellen (verlauf.html)
-            </div>
-
-            Auf der Verlauf-Seite (nur „Mein Verlauf", nicht Team-Archiv)
-            gibt es neben „PDF exportieren" jetzt auch „In App anzeigen" —
-            lädt eine archivierte Begehung inklusive Fotos zurück in den
-            laufenden Arbeitsstand.
-
-            <ul>
-                <li><code>onArchiveRestore(id)</code> fragt vorher per
-                    <code>confirm()</code> nach, da der aktuell laufende,
-                    noch nicht archivierte Bearbeitungsstand dabei
-                    überschrieben wird (das Archiv selbst bleibt
-                    unberührt)</li>
-                <li>Schreibt die Begehungsdaten direkt unter
-                    <code>STORAGE_KEY</code> in <code>localStorage</code>
-                    und leitet anschließend zu <code>index.html</code>
-                    weiter, wo <code>loadState()</code> sie beim Laden
-                    ganz normal übernimmt</li>
-                <li>Fotos: <code>deleteAllPhotos()</code> leert zunächst
-                    den aktuellen Fotobestand, <code>restorePhotos()</code>
-                    (neu in <code>photos-store.js</code>) schreibt die
-                    archivierten Fotos <strong>mit ihrer ursprünglichen
-                    id und measureId</strong> zurück — im Unterschied zu
-                    <code>addPhoto()</code> wird keine neue id vergeben,
-                    damit die Zuordnung zu den ebenfalls wiederhergestellten
-                    Maßnahmen exakt erhalten bleibt</li>
-            </ul>
-
-        </div>
-
-
-        <div class="doku-box ok">
-
-            <div class="doku-box-title">
-                Team-Archiv (verlauf.html)
-            </div>
-
-            Auf der Verlauf-Seite listet der Reiter „Team-Archiv (NAS)"
-            alle über <code>list.php</code> gefundenen, von beliebigen
-            Nutzern auf dem NAS gespeicherten Begehungen auf – im
-            Unterschied zum Reiter „Mein Verlauf", der nur lokal
-            archivierte, eigene Begehungen zeigt (IndexedDB, geräte­gebunden).
-
-            <ul>
-                <li>Zeigt Firma/Markt, Marktnummer, Begehungsdatum und
-                    NAS-Speicherzeitpunkt je Eintrag</li>
-                <li>PDF-Export je Eintrag über <code>fetchSynologyRecord()</code>
-                    + <code>shareArchivedReportPdf()</code> (Wiederverwendung
-                    der bestehenden Archiv-Export-Logik)</li>
-                <li><code>onTeamArchiveRestore(fileName)</code> lädt eine
-                    NAS-Begehung analog zu <code>onArchiveRestore()</code>
-                    (lokales Archiv) zurück in den laufenden Arbeitsstand
-                    und leitet zu <code>index.html</code> weiter. Wichtiger
-                    Unterschied: da Team-Archiv-Datensätze keine Fotos
-                    enthalten, wird ein evtl. vorhandener lokaler
-                    Fotobestand dabei nur <strong>geleert</strong>
-                    (<code>deleteAllPhotos()</code>), nicht durch neue
-                    Fotos ersetzt – der Bestätigungsdialog weist explizit
-                    darauf hin</li>
-                <li>Enthält keine Fotos – <code>save.php</code> speichert nur
-                    die reinen Text-/Bewertungsdaten als JSON, keine
-                    Bilddateien</li>
-                <li>Wie die NAS-Speicherung selbst nur verfügbar, wenn die
-                    App direkt über die Synology aufgerufen wird oder eine
-                    Server-Adresse in den Einstellungen hinterlegt wurde
-                    (siehe unten)</li>
-            </ul>
-
-        </div>
-
-
-        <div class="doku-box">
-
-            <div class="doku-box-title">
-                CSV-Rohdatenexport mit Teilen-Option (auswertung.html)
-            </div>
-
-            Neben dem klassischen Download-Button „CSV herunterladen"
-            gibt es „CSV per Mail teilen" — für den Fall, dass gerade
-            kein NAS-Zugriff möglich ist und die Rohdaten stattdessen
-            manuell per Mail an eine Kollegin bzw. einen Kollegen für
-            die Ablage im Team-Ordner weitergegeben werden sollen.
-
-            <ul>
-                <li>Beide Buttons nutzen dieselbe gemeinsame Logik
-                    (<code>buildAuswertungCsvRows()</code>,
-                    <code>csvRowsToBlob()</code>) — garantiert identischer
-                    Dateiinhalt, unabhängig vom gewählten Weg</li>
-                <li><code>shareAuswertungCsv()</code> nutzt
-                    <code>navigator.share()</code> mit vorgefertigtem
-                    Betreff/Text (analog zum PDF-Teilen); ohne
-                    Unterstützung dafür (z. B. Desktop-Browser) automatischer
-                    Rückfall auf den normalen Download</li>
-                <li>Wie beim CSV-Download wird das Archiv bei jedem Klick
-                    frisch geladen, nicht aus einer möglicherweise noch
-                    nicht fertig geladenen Zwischenspeicher-Variable</li>
-                <li><strong>Wichtig:</strong> <code>buildAuswertungCsvRows()</code>
-                    sowie <code>renderKategorienSchwachstellen()</code>
-                    iterieren bewusst über die in jeder archivierten
-                    Begehung selbst gespeicherten Bewertungs-Schlüssel
-                    (<code>Object.keys(record.ratings)</code>), NICHT über
-                    den aktuellen <code>AUDIT_CATEGORIES</code>-Katalog.
-                    Ein Abgleich über den aktuellen Katalog würde
-                    archivierte Begehungen mit inzwischen anders
-                    nummerierten oder entfernten Frage-IDs fälschlich als
-                    „keine Daten" erscheinen lassen, obwohl die Bewertungen
-                    durchaus gespeichert sind. Nicht mehr auffindbare Fragen
-                    werden mit dem Hinweis „(nicht mehr im aktuellen
-                    Katalog)" statt mit leerem Ergebnis ausgegeben.
-                    „Wiederkehrende Mängel" war schon immer so gebaut;
-                    diese beiden Funktionen folgen seit einem entsprechenden
-                    Fehlerbericht demselben Muster.</li>
-            </ul>
-
-        </div>
-
-
-        <div class="doku-box">
-
-            <div class="doku-box-title">
-                JSON-Teilen (index.html)
-            </div>
-
-            Analog zum CSV-Teilen gibt es im Datei-Menü neben „JSON
-            exportieren" jetzt auch „JSON per Mail teilen" — für den
-            Fall, dass kein NAS-Zugriff möglich ist und die vollständige
-            Begehung (im Unterschied zum CSV-Rohdatenexport verlustfrei,
-            inklusive Maßnahmen, Status und Unterschriften) stattdessen
-            manuell per Mail an eine Kollegin bzw. einen Kollegen zur
-            Ablage auf dem NAS weitergegeben werden soll.
-
-            <ul>
-                <li><code>buildJsonBlob()</code> und
-                    <code>jsonExportFilename()</code> werden von
-                    <code>exportJson()</code> (Download) und
-                    <code>shareJson()</code> (Teilen) gemeinsam genutzt —
-                    garantiert identischer Dateiinhalt</li>
-                <li><code>shareJson()</code> nutzt <code>navigator.share()</code>
-                    mit vorgefertigtem Betreff/Text; ohne Unterstützung
-                    dafür automatischer Rückfall auf den normalen Download,
-                    bei Abbruch durch den Nutzer (<code>AbortError</code>)
-                    weder Download noch Fehlermeldung</li>
-            </ul>
-
-        </div>
-
-
-        <div class="doku-box ok">
-
-            <div class="doku-box-title">
-                Zeitraum-Filter, Auffällige Märkte, Gesamtauswertung als PDF (auswertung.html)
-            </div>
-
-            Drei zusammenhängende Ergänzungen der Auswertungsseite.
-
-            <ul>
-                <li><strong>Zeitraum-Filter</strong> – Dropdown „Letzte 3
-                    Monate / 6 Monate / Alles" oberhalb der
-                    Auswertungsbereiche. Steuert die Modulvariable
-                    <code>zeitraumMonate</code> (<code>null</code> = alle).
-                    <code>filterNachZeitraum(daten, monate)</code> ist die
-                    reine Filterfunktion (kein Zugriff auf
-                    Modulvariablen), <code>gefilterteArchivDaten()</code>
-                    wendet sie auf <code>auswertungArchiv</code> an.
-                    Bewusst <strong>nicht</strong> angewendet auf
-                    <code>renderWiederkehrend()</code> (soll immer die
-                    tatsächlich letzte archivierte Begehung eines Marktes
-                    finden) und <code>renderOffeneMassnahmen()</code>
-                    (eine alte offene Maßnahme darf nicht ausgerechnet
-                    dann unsichtbar werden, wenn sie am dringendsten
-                    Aufmerksamkeit bräuchte).</li>
-
-                <li><strong>Auffällige Märkte</strong> –
-                    <code>berechneAuffaelligeMaerkte(daten)</code> gruppiert
-                    nach Firma (wie <code>berechneVerlaufProMarkt()</code>),
-                    berechnet die durchschnittliche Mängelquote über alle
-                    Märkte und listet alle Märkte darüber, absteigend
-                    sortiert.</li>
-
-                <li><strong>Gesamtauswertung als PDF</strong> –
-                    <code>buildAuswertungPdf()</code> fasst
-                    Kategorien-Schwachstellen, Auffällige Märkte und
-                    Verlauf pro Markt in einem Dokument zusammen. Nutzt
-                    bewusst dieselben <code>berechne*()</code>-Funktionen
-                    wie die Bildschirmanzeige (nicht dupliziert), damit
-                    PDF und Anzeige garantiert identische Zahlen zeigen.
-                    Eigener, einfacher Kopfbereich statt
-                    <code>drawCoverPage()</code> aus <code>app.js</code>,
-                    da diese an <code>state.companyInfo</code> einer
-                    einzelnen Begehung gebunden ist und hier alle Märkte
-                    gemeinsam dargestellt werden. <code>exportAuswertungPdf()</code>
-                    (Download) und <code>shareAuswertungPdf()</code>
-                    (Teilen) folgen demselben Muster wie bei CSV/JSON.
-                    Setzt voraus, dass <code>js/jspdf.umd.min.js</code>
-                    auf dieser Seite eingebunden ist (zusätzlich zu den
-                    bereits vorhandenen Skripten).</li>
-            </ul>
-
-        </div>
-
-
-        <div class="doku-box ok">
-
-            <div class="doku-box-title">
-                Gemeinsame Auswertungslogik + „Auswertung Verlauf"/„Auswertung Team" (verlauf.html)
-            </div>
-
-            <code>berechneKategorienSchwachstellen()</code>,
-            <code>berechneAuffaelligeMaerkte()</code>,
-            <code>berechneVerlaufProMarkt()</code> sowie
-            <code>escapeHtml()</code> und drei begleitende
-            <code>render*Html()</code>-Funktionen wurden aus
-            <code>js/auswertung.js</code> in eine neue, gemeinsame Datei
-            <code>js/auswertung-logik.js</code> verschoben — genutzt sowohl
-            von <code>auswertung.html</code> als auch von zwei neuen
-            Reitern auf der Verlauf-Seite: „Auswertung Verlauf" (lokales
-            Archiv) und „Auswertung Team" (Team-Archiv/NAS).
-
-            <ul>
-                <li>Voraussetzung: <code>js/app.js</code> (liefert
-                    <code>findItemById()</code>/<code>formatDate()</code>)
-                    muss vor <code>js/auswertung-logik.js</code> geladen
-                    werden, diese wiederum vor <code>js/auswertung.js</code>
-                    bzw. <code>js/verlauf.js</code></li>
-                <li><code>berechneVerlaufProMarkt()</code> wurde robust für
-                    zwei unterschiedliche Datenquellen gemacht: lokale
-                    Archivdatensätze haben <code>createdAt</code>/<code>stats</code>
-                    direkt gesetzt, vom NAS geladene Datensätze
-                    (<code>fetchSynologyRecord()</code>) haben das nicht —
-                    dort wird ersatzweise nach <code>companyInfo.datum</code>
-                    sortiert und die Mängel-Zahl direkt aus
-                    <code>ratings</code> gezählt</li>
-                <li>„Auswertung Team" ruft <code>fetchSynologyRecord()</code>
-                    für <strong>jede</strong> im Team-Archiv gefundene Datei
-                    einzeln auf (<code>Promise.allSettled</code>) — eine
-                    einzelne defekte/nicht ladbare Datei wird übersprungen
-                    (mit Hinweis-Toast), statt die gesamte Auswertung
-                    scheitern zu lassen</li>
-                <li>Kein eigener Zeitraum-Filter auf der Verlauf-Seite
-                    (bewusst einfacher gehalten als <code>auswertung.html</code>)</li>
-            </ul>
-
-        </div>
-
-
-        <div class="doku-box">
-
-            <div class="doku-box-title">
-                Konfigurierbare NAS-Server-Adresse (einstellungen.html)
-            </div>
-
-            Standardmäßig gehen alle NAS-Funktionen von relativen Pfaden
-            aus (<code>./save.php</code> usw.) — die drei PHP-Skripte
-            müssen im selben Verzeichnis wie die App liegen. Über
-            „Einstellungen" kann stattdessen eine externe
-            Server-Basis-Adresse in <code>localStorage</code>
-            (<code>nasBaseUrl</code>) hinterlegt werden.
-
-            <ul>
-                <li><code>getNasBaseUrl()</code> liest den konfigurierten
-                    Wert, <code>nasUrl(pfad)</code> baut daraus die
-                    tatsächlich zu verwendende Adresse — ohne Konfiguration
-                    identisch zum bisherigen relativen Pfad</li>
-                <li>Alle vier NAS-Funktionen (<code>saveStateToSynology</code>,
-                    <code>getSynologyFiles</code>, <code>loadStateFromSynology</code>,
-                    <code>fetchSynologyRecord</code>) sowie das Team-Archiv
-                    nutzen einheitlich <code>nasUrl()</code></li>
-                <li>Die automatische GitHub-Pages-Erkennung (NAS-Buttons
-                    ausblenden) berücksichtigt eine konfigurierte externe
-                    Adresse und zeigt die Buttons dann auch dort an</li>
                 <li>Bei externer Adresse (andere Herkunft als die App
                     selbst) muss der Zielserver CORS für die App-Adresse
-                    erlauben, sonst blockiert der Browser die Anfrage</li>
-                <li>Zusätzlich optional konfigurierbar: ein
-                    Zugriffsschlüssel (<code>localStorage</code>-Schlüssel
-                    <code>nasApiKey</code>), der bei jeder Anfrage als
-                    Kopfzeile <code>X-Api-Key</code> mitgeschickt wird
-                    (<code>withNasAuthHeaders()</code>). Wirkt nur, wenn
-                    serverseitig in den drei PHP-Dateien ebenfalls ein
-                    Schlüssel hinterlegt ist (Variable <code>$apiKey</code>,
-                    standardmäßig leer = keine Prüfung, unverändertes
-                    bisheriges Verhalten). Der Vergleich erfolgt
-                    serverseitig zeitsicher über <code>hash_equals()</code>.</li>
+                    erlauben</li>
+                <li><code>list.php</code>/<code>load.php</code> erkennen
+                    sowohl die von <code>save.php</code> selbst erzeugten
+                    Dateien als auch manuell (z. B. per File Station)
+                    eingespielte Exporte aus „JSON exportieren"/„JSON per
+                    Mail teilen" — beide erscheinen im Team-Archiv</li>
             </ul>
+
+        </div>
+
+
+        <div class="doku-box ok">
+
+            <div class="doku-box-title">
+                Verlauf-Seite: Mein Verlauf, Team-Archiv, Wiederherstellen
+            </div>
+
+            Zwei Reiter: „Mein Verlauf" (lokal archivierte Begehungen,
+            IndexedDB) und „Team-Archiv (NAS)" (alle über <code>list.php</code>
+            gefundenen, von beliebigen Nutzern auf dem NAS gespeicherten
+            Begehungen). Beide bieten „PDF exportieren" sowie „In App
+            anzeigen" — lädt die jeweilige Begehung zurück in den
+            laufenden Arbeitsstand (nach Bestätigung, da der aktuell
+            laufende Stand dabei überschrieben wird; das Archiv selbst
+            bleibt unberührt).
+
+            <ul>
+                <li>Beim lokalen Archiv werden auch die zugehörigen
+                    Fotos zurückgeschrieben (mit ursprünglicher id/measureId,
+                    damit die Zuordnung zu den Maßnahmen erhalten bleibt)</li>
+                <li>Team-Archiv-Datensätze enthalten keine Fotos (nur
+                    Text-/Bewertungsdaten) — beim Wiederherstellen wird
+                    ein vorhandener lokaler Fotobestand deshalb nur
+                    geleert, nicht ersetzt</li>
+                <li>Beide Reiter nur verfügbar, wenn die App direkt über
+                    die Synology aufgerufen wird oder eine Server-Adresse
+                    in den Einstellungen hinterlegt wurde</li>
+            </ul>
+
+        </div>
+
+
+        <div class="doku-box">
+
+            <div class="doku-box-title">
+                Rohdaten teilen: CSV (auswertung.html) und JSON (index.html)
+            </div>
+
+            Neben dem jeweiligen Download-Button („CSV herunterladen" /
+            „JSON exportieren") gibt es „… per Mail teilen" — für den
+            Fall, dass kein NAS-Zugriff möglich ist und die Daten
+            stattdessen manuell weitergegeben werden sollen. Beide nutzen
+            <code>navigator.share()</code> mit vorgefertigtem Betreff/Text
+            und fallen ohne Unterstützung dafür automatisch auf den
+            normalen Download zurück. Der JSON-Export ist verlustfrei
+            (vollständige Begehung inkl. Maßnahmen/Status/Unterschriften),
+            der CSV-Export enthält nur die reinen Bewertungsdaten.
+
+            <p>
+                <strong>Wichtig:</strong> Der CSV-Export sowie
+                „Kategorien-Schwachstellen" lesen die Bewertungen direkt
+                aus den in jeder Begehung gespeicherten Schlüsseln
+                (<code>Object.keys(record.ratings)</code>), nicht über
+                den aktuellen Fragenkatalog. So bleiben auch Begehungen
+                auswertbar, deren Frage-IDs sich seither geändert haben —
+                nicht mehr zuordenbare Fragen werden mit „(nicht mehr im
+                aktuellen Katalog)" gekennzeichnet statt zu verschwinden.
+            </p>
+
+        </div>
+
+
+        <div class="doku-box ok">
+
+            <div class="doku-box-title">
+                Auswertungsseiten: Zeitraum-Filter, Auffällige Märkte, Gesamtauswertung als PDF
+            </div>
+
+            <code>auswertung.html</code> bietet zusätzlich einen
+            Zeitraum-Filter („Letzte 3/6 Monate/Alles"), eine Liste
+            „Auffällige Märkte" (Märkte über der durchschnittlichen
+            Mängelquote) sowie eine „Gesamtauswertung als PDF"
+            (Kategorien-Schwachstellen, Auffällige Märkte und
+            Marktverlauf in einem Dokument, herunterladbar oder per
+            Mail teilbar).
+
+            <ul>
+                <li>Der Zeitraum-Filter gilt bewusst nicht für
+                    „Wiederkehrende Mängel" (soll immer den tatsächlich
+                    letzten Vergleich finden) und „Offene Maßnahmen"
+                    (eine alte offene Maßnahme darf nicht gerade dann
+                    verschwinden, wenn sie am dringendsten ist)</li>
+                <li>Die eigentliche Berechnungslogik
+                    (<code>berechneKategorienSchwachstellen()</code>,
+                    <code>berechneAuffaelligeMaerkte()</code>,
+                    <code>berechneVerlaufProMarkt()</code>,
+                    <code>filterNachZeitraum()</code>) liegt zentral in
+                    <code>js/auswertung-logik.js</code>, genutzt von
+                    <code>auswertung.html</code> und
+                    <code>auswertung-team.html</code> — Bildschirmanzeige
+                    und PDF greifen auf dieselben Funktionen zu, zeigen
+                    also garantiert identische Zahlen</li>
+                <li><code>zeitwertVonBegehung(r)</code> ermittelt einen
+                    Zeitstempel unabhängig von der Datenquelle (lokale
+                    Datensätze: <code>createdAt</code>; NAS-Datensätze
+                    ohne dieses Feld: ersatzweise aus
+                    <code>companyInfo.datum</code>)</li>
+            </ul>
+
+        </div>
+
+
+        <div class="doku-box ok">
+
+            <div class="doku-box-title">
+                „Auswertung Verlauf" und „Auswertung Team"
+            </div>
+
+            Zwei Buttons auf der Verlauf-Seite, neben „Mein Verlauf" und
+            „Team-Archiv (NAS)". Beide sind reine Links auf eigenständige
+            Seiten, kein eingebettetes Panel — optisch identisch gestaltet
+            (<code>&lt;a class="btn btn-secondary btn-small verlauf-tab"&gt;</code>).
+
+            <ul>
+                <li>„Auswertung Verlauf" → <code>auswertung.html</code>
+                    (lokales Archiv)</li>
+                <li>„Auswertung Team" → <code>auswertung-team.html</code>
+                    (Team-Archiv/NAS; dieselben drei Bereiche
+                    Kategorien-Schwachstellen/Auffällige Märkte/Verlauf
+                    pro Markt, eigener Zeitraum-Filter; lädt jede
+                    Team-Datei einzeln, defekte Dateien werden
+                    übersprungen statt die Auswertung scheitern zu
+                    lassen)</li>
+                <li><code>js/verlauf.js</code> kennt dadurch nur noch zwei
+                    echte Tabs (<code>lokal</code>, <code>team</code>)</li>
+            </ul>
+
+        </div>
+
+
+        <div class="doku-box">
+
+            <div class="doku-box-title">
+                Jahreszahlen in der Fußzeile
+            </div>
+
+            Werden anhand des aktuellen Systemdatums berechnet, nicht
+            fest hinterlegt: Copyright als Zeitspanne ab Gründungsjahr
+            2026 (z. B. „© 2026–2027" ab dem jeweils nächsten Jahr),
+            „(Sifa) Arbeitssicherheit" mit dem jeweils aktuellen Jahr.
 
         </div>
 
@@ -1836,7 +1693,7 @@
 
                 <tr>
                     <td>verlauf.html</td>
-                    <td>330</td>
+                    <td>356</td>
                     <td>
                         Verwaltung archivierter Begehungen
                     </td>
@@ -1844,7 +1701,7 @@
 
                 <tr>
                     <td>dokumentation.html</td>
-                    <td>2.108</td>
+                    <td>1.986</td>
                     <td>
                         Technische Dokumentation
                     </td>
@@ -1852,7 +1709,7 @@
 
                 <tr>
                     <td>hilfe.html</td>
-                    <td>1.825</td>
+                    <td>1.846</td>
                     <td>
                         Hilfe und FAQ
                     </td>
@@ -1860,9 +1717,17 @@
 
                 <tr>
                     <td>auswertung.html</td>
-                    <td>793</td>
+                    <td>799</td>
                     <td>
                         Auswertung
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>auswertung-team.html</td>
+                    <td>633</td>
+                    <td>
+                        Team-Auswertung
                     </td>
                 </tr>
 
@@ -1892,7 +1757,7 @@
 
                 <tr>
                     <td>css/styles.css</td>
-                    <td>1.794</td>
+                    <td>1.810</td>
                     <td>
                         Gesamtes gemeinsames Styling
                     </td>
@@ -1900,7 +1765,7 @@
 
                 <tr>
                     <td>js/app.js</td>
-                    <td>2.983</td>
+                    <td>2.993</td>
                     <td>
                         Kernlogik, State-Verwaltung,
                         Checkliste, PDF-Erzeugung,
@@ -1963,7 +1828,7 @@
 
                 <tr>
                     <td>js/verlauf.js</td>
-                    <td>294</td>
+                    <td>280</td>
                     <td>
                         Bedienlogik der Archiv-/Verlaufseite,
                         inkl. Team-Archiv (NAS)
@@ -1980,18 +1845,26 @@
 
                 <tr>
                     <td>js/auswertung-logik.js</td>
-                    <td>186</td>
+                    <td>203</td>
                     <td>
                         Gemeinsame Auswertungs-Berechnungslogik
-                        (auswertung.html + verlauf.html)
+                        (auswertung.html + auswertung-team.html + verlauf.html)
                     </td>
                 </tr>
 
                 <tr>
                     <td>js/auswertung.js</td>
-                    <td>558</td>
+                    <td>550</td>
                     <td>
                         Logik der Auswertungsseite
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>js/auswertung-team.js</td>
+                    <td>90</td>
+                    <td>
+                        Logik der Team-Auswertungsseite
                     </td>
                 </tr>
 
@@ -2009,7 +1882,7 @@
                     <td>271</td>
                     <td>
                         Service Worker, Offline-Fähigkeit,
-                        Cache-Version <strong>v1.22</strong>
+                        Cache-Version <strong>v1.28</strong>
                     </td>
                 </tr>
 
@@ -2025,7 +1898,7 @@
             </table>
 
             <p>
-                <strong>Gesamt (eigener Code, ohne jsPDF):</strong> 17.704 Zeilen
+                <strong>Gesamt (eigener Code, ohne jsPDF):</strong> 18.277 Zeilen
             </p>
 
             <p style="font-size:0.82rem; color:var(--ink-soft);">
@@ -2074,6 +1947,11 @@
 
         <a href="auswertung.html">
             Auswertung
+        </a>
+
+
+        <a href="auswertung-team.html">
+            Auswertung Team
         </a>
 
 

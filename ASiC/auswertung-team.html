@@ -11,7 +11,7 @@
 >
 
 <title>
-    Auswertung – ASiC Handel
+    Team-Auswertung – ASiC Handel
 </title>
 
 <link
@@ -399,18 +399,18 @@
     <div class="doku-hero">
 
         <div class="doku-hero-badge">
-            Auswertung
+            Team-Auswertung
         </div>
 
 
         <h1>
-            Aussagekräftige Analyse
+            Alle Märkte gemeinsam im Blick
         </h1>
 
 
         <p>
-            Erkenntnisse über die archivierten Begehungen
-            und den aktuellen Bearbeitungsstand
+            Wertet alle im Team-Archiv (NAS) gefundenen Begehungen
+            gemeinsam aus — unabhängig davon, wer sie gespeichert hat
         </p>
 
 
@@ -420,16 +420,8 @@
                 App-Revision 1.28
             </span>
 
-            <span class="doku-meta-item">
-                22 Kategorien
-            </span>
-
-            <span class="doku-meta-item">
-                174 Prüfpunkte
-            </span>
-
-            <span class="doku-meta-item">
-                Lokale Archivdaten
+            <span class="doku-meta-item" id="team-anzahl-info">
+                Lade Team-Archiv …
             </span>
 
         </div>
@@ -445,13 +437,16 @@
     <div class="doku-note">
 
         <div class="doku-note-title">
-            Grundlage der Auswertung
+            Grundlage dieser Auswertung
         </div>
 
-        Die Auswertung verwendet die lokal archivierten Begehungen
-        sowie den aktuellen Bearbeitungsstand der App. Die Ergebnisse
-        werden im Browser berechnet und nicht automatisch an den
-        Entwickler übertragen.
+        Diese Seite lädt für jede im Team-Archiv gefundene Datei den
+        vollständigen Inhalt einzeln vom NAS und wertet alle gemeinsam
+        aus. Bei vielen Begehungen kann das einen Moment dauern.
+        Einzelne nicht ladbare Dateien werden übersprungen, ohne die
+        gesamte Auswertung zu blockieren. Für die Auswertung der nur
+        lokal auf diesem Gerät archivierten Begehungen siehe stattdessen
+        die <a href="auswertung.html">normale Auswertungsseite</a>.
 
     </div>
 
@@ -464,45 +459,19 @@
     <div class="card doku-card" style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap; margin-bottom:1.5rem;">
 
         <div class="field" style="margin:0;">
-            <label for="zeitraum-filter">
+            <label for="team-zeitraum-filter">
                 Zeitraum
             </label>
-            <select id="zeitraum-filter">
+            <select id="team-zeitraum-filter">
                 <option value="3">Letzte 3 Monate</option>
                 <option value="6">Letzte 6 Monate</option>
                 <option value="alle" selected>Alles</option>
             </select>
         </div>
 
-        <span id="zeitraum-info" style="font-size:0.82rem; color:var(--ink-soft);"></span>
+        <span id="team-zeitraum-info" style="font-size:0.82rem; color:var(--ink-soft);"></span>
 
     </div>
-
-
-
-    <!-- ================================================================== -->
-    <!-- 1. WIEDERKEHRENDE MÄNGEL                                           -->
-    <!-- ================================================================== -->
-
-    <section class="doku-section">
-
-        <h2>
-            Wiederkehrende Mängel
-        </h2>
-
-
-        <div
-            class="card doku-card"
-            id="wiederkehrend-content"
-        >
-
-            <p class="auswertung-empty">
-                Lade…
-            </p>
-
-        </div>
-
-    </section>
 
 
 
@@ -513,13 +482,13 @@
     <section class="doku-section">
 
         <h2>
-            Kategorien-Schwachstellen
+            Kategorien-Schwachstellen (Team)
         </h2>
 
 
         <div
             class="card doku-card"
-            id="kategorien-content"
+            id="team-kategorien-content"
         >
 
             <p class="auswertung-empty">
@@ -539,7 +508,7 @@
     <section class="doku-section">
 
         <h2>
-            Auffällige Märkte
+            Auffällige Märkte (Team)
         </h2>
 
         <p style="color:var(--ink-soft); margin-bottom:1rem;">
@@ -549,7 +518,7 @@
 
         <div
             class="card doku-card"
-            id="auffaellige-maerkte-content"
+            id="team-maerkte-content"
         >
 
             <p class="auswertung-empty">
@@ -569,148 +538,13 @@
     <section class="doku-section">
 
         <h2>
-            Verlauf pro Markt
+            Verlauf pro Markt (Team)
         </h2>
 
 
         <div
             class="card doku-card"
-            id="verlauf-markt-content"
-        >
-
-            <p class="auswertung-empty">
-                Lade…
-            </p>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- ================================================================== -->
-    <!-- 4. CSV-EXPORT                                                       -->
-    <!-- ================================================================== -->
-
-    <section class="doku-section">
-
-        <h2>
-            Rohdaten-Export
-        </h2>
-
-
-        <div class="card doku-card">
-
-            <p>
-                Lädt alle verfügbaren archivierten Begehungen als
-                strukturierte CSV-Datei herunter. Die Datei enthält
-                die für die Auswertung verfügbaren Prüfdaten und kann
-                anschließend beispielsweise in Excel weiterverarbeitet
-                oder für eigene Pivot-Auswertungen verwendet werden.
-            </p>
-
-
-            <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
-
-                <button
-                    class="btn btn-primary btn-small"
-                    id="btn-export-csv"
-                    type="button"
-                >
-                    ⬇️ CSV herunterladen
-                </button>
-
-                <button
-                    class="btn btn-secondary btn-small"
-                    id="btn-share-csv"
-                    type="button"
-                >
-                    📧 CSV per Mail teilen
-                </button>
-
-            </div>
-
-
-            <p class="export-hinweis">
-                „CSV per Mail teilen" öffnet das Teilen-Menü direkt mit
-                der Datei im Anhang — praktisch, falls kein Zugriff auf
-                das NAS möglich ist und die Datei stattdessen per Mail
-                an eine Kollegin bzw. einen Kollegen geschickt werden
-                soll, die/der sie dann manuell im gemeinsamen
-                Team-Ordner ablegt.
-            </p>
-
-            <p class="export-hinweis">
-                Der Export erfolgt lokal im Browser.
-                Die CSV-Datei wird erst durch den Download-Vorgang
-                außerhalb der App gespeichert.
-            </p>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- ================================================================== -->
-    <!-- 4B. GESAMTAUSWERTUNG ALS PDF                                        -->
-    <!-- ================================================================== -->
-
-    <section class="doku-section">
-
-        <h2>
-            Gesamtauswertung als PDF
-        </h2>
-
-        <div class="card doku-card">
-
-            <p>
-                Fasst Kategorien-Schwachstellen, auffällige Märkte und
-                den Marktverlauf im gewählten Zeitraum als ein
-                zusammenhängendes PDF-Dokument zusammen — geeignet z. B.
-                für eine monatliche Übersicht an die Regionalleitung.
-            </p>
-
-            <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
-
-                <button
-                    class="btn btn-primary btn-small"
-                    id="btn-export-auswertung-pdf"
-                    type="button"
-                >
-                    ⬇️ PDF herunterladen
-                </button>
-
-                <button
-                    class="btn btn-secondary btn-small"
-                    id="btn-share-auswertung-pdf"
-                    type="button"
-                >
-                    📧 PDF per Mail teilen
-                </button>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- ================================================================== -->
-    <!-- 5. OFFENE MASSNAHMEN                                                -->
-    <!-- ================================================================== -->
-
-    <section class="doku-section">
-
-        <h2>
-            Offene Maßnahmen
-        </h2>
-
-
-        <div
-            class="card doku-card"
-            id="offene-massnahmen-content"
+            id="team-verlauf-content"
         >
 
             <p class="auswertung-empty">
@@ -762,8 +596,8 @@
             Hilfe &amp; FAQ
         </a>
 
-        <a href="auswertung-team.html">
-            Auswertung Team
+        <a href="auswertung.html">
+            Auswertung
         </a>
 
         <a href="einstellungen.html">
@@ -792,7 +626,7 @@
 
 <script src="js/auswertung-logik.js"></script>
 
-<script src="js/auswertung.js"></script>
+<script src="js/auswertung-team.js"></script>
 
 
 </body>
