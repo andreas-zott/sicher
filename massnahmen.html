@@ -1,82 +1,174 @@
 <!DOCTYPE html>
-
 <html lang="de">
 <head>
 <meta charset="utf-8"/>
 <title>Maßnahmen-Auswertung</title>
+<link href="/sicher/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="/sicher/manifest.json" rel="manifest"/>
+<meta content="#C62828" name="theme-color"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<script src="html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
+    :root {
+      --rot: #C62828;
+      --rot-dunkel: #A11F1F;
+      --rot-hell: #FDEDED;
+      --text: #212529;
+      --muted: #6b7280;
+      --bg: #f0f2f5;
+      --card: #ffffff;
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; }
+
     body {
-      font-family: Arial, sans-serif;
+      font-family: -apple-system, "Segoe UI", Arial, sans-serif;
       padding: 20px;
-      background: #f0f2f5;
-      color: #333;
-      max-width: 1200px;
+      background: var(--bg);
+      color: var(--text);
+      max-width: 900px;
       margin: auto;
     }
 
     h1 {
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 24px;
+      font-size: 1.5rem;
+      letter-spacing: -0.01em;
     }
 
     .info {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      margin-bottom: 30px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      background: var(--card);
+      padding: 18px 22px;
+      border-radius: var(--radius);
+      margin-bottom: 24px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 6px 20px;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-      margin-bottom: 30px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-
-    th, td {
-      padding: 14px;
-      border: 1px solid #ccc;
-      text-align: left;
+    .info p {
+      margin: 4px 0;
       font-size: 14px;
     }
 
-    th {
-      background-color: #C62828;
-      color: white;
-    }
-
-    td:nth-child(2) {
-      font-style: italic;
-      font-size: 0.9em;
-      color: #555;
-    }
-
+    /* --- Moderne Button-Leiste --- */
     .btn-group {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 12px;
+      gap: 10px;
       margin-bottom: 32px;
     }
 
-    button {
-      background-color: #C62828;
+    button.action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background-color: var(--rot);
       color: white;
-      font-size: 15px;
-      padding: 10px 18px;
+      font-size: 13.5px;
+      font-weight: 600;
+      padding: 10px 14px;
       border: none;
-      border-radius: 8px;
+      border-radius: 12px;
       cursor: pointer;
-      min-width: 140px;
-      transition: background-color 0.2s;
+      min-width: 130px;
+      justify-content: center;
+      box-shadow: 0 3px 10px rgba(198,40,40,0.25);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.15s ease;
     }
 
-    button:hover {
-      background-color: #0056b3;
+    button.action-btn.sekundaer {
+      background-color: #4b5563;
+      box-shadow: 0 3px 10px rgba(75,85,99,0.22);
+    }
+
+    button.action-btn:hover {
+      background-color: var(--rot-dunkel);
+      transform: translateY(-1px);
+    }
+
+    button.action-btn.sekundaer:hover {
+      background-color: #374151;
+    }
+
+    button.action-btn:active {
+      transform: translateY(0) scale(0.97);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+
+    /* --- Karten-Liste statt Tabelle --- */
+    .massnahmen-liste {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .massnahme-karte {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      overflow: hidden;
+      border-left: 6px solid var(--rot);
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .massnahme-frage {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      background: var(--rot-hell);
+      padding: 12px 16px;
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--rot-dunkel);
+      line-height: 1.4;
+    }
+
+    .massnahme-frage .nr {
+      flex: none;
+      background: var(--rot);
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: 999px;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .massnahme-beschreibung {
+      padding: 14px 16px 16px 16px;
+      font-size: 14.5px;
+      line-height: 1.5;
+      color: var(--text);
+    }
+
+    .massnahme-beschreibung .label {
+      display: block;
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+
+    .leer-hinweis {
+      text-align: center;
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 40px 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      font-size: 16px;
+      color: #388e3c;
+      font-weight: 600;
     }
 
     .nav-buttons {
@@ -87,242 +179,174 @@
       display: flex;
       gap: 10px;
       z-index: 9999;
+      pointer-events: auto;
       backdrop-filter: blur(4px);
       background: rgba(0, 0, 0, 0.05);
       padding: 4px 8px;
       border-radius: 6px;
     }
 
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-      background: #fff;
-      padding: 40px;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    .nav-buttons button {
+      padding: 6px 10px;
+      font-size: 14px;
+      opacity: 0.6;
+      background: #444;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
     }
 
-    .btn-back {
-      display: inline-flex;
-      align-items: center;
-      text-decoration: none;
-      color: #555;
-      background-color: #e9ecef;
-      padding: 10px 18px;
-      border-radius: 6px;
-      font-size: 14px;
-      font-weight: 500;
-      margin-bottom: 25px;
+    .nav-buttons button:hover {
+      opacity: 1;
     }
 
     @media (max-width: 800px) {
-      th, td { font-size: 12px; padding: 10px; }
-      button { font-size: 16px; padding: 10px 20px; }
-      .container { width: 100%; padding: 15px; border-radius: 0; }
-    }
-
-    /* === PRÄZISE DRUCKEINSTELLUNGEN GEGEN ÜBERLAUF UND LOCALHOST === */
-    @page {
-      size: A4 portrait;
-      margin: 0 !important; /* Entfernt den Browser-Footer (localhost) restlos */
+      button.action-btn {
+        font-size: 13.5px;
+        padding: 11px 14px;
+        flex: 1 1 auto;
+      }
+      .massnahme-frage { font-size: 14px; }
+      .massnahme-beschreibung { font-size: 14px; }
     }
 
     @media print {
-      body {
-        background: transparent !important;
-        color: #000 !important;
-        margin: 0 !important;
-        /* Definiert die exakte A4-Breite minus Ränder */
-        width: 210mm !important;
-        max-width: 210mm !important;
-        /* Simuliert die Seitenränder im Dokumentkörper selbst */
-        padding: 20mm 15mm 20mm 15mm !important;
-        box-sizing: border-box !important;
-      }
-
-      .container {
-        background: transparent !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        box-shadow: none !important;
-        width: 100% !important;
-        max-width: 100% !important;
-      }
-
-      .btn-group, .nav-buttons, .btn-back, button, footer, [id*="footer"] {
+      .btn-group,
+      .nav-buttons,
+      footer {
         display: none !important;
       }
 
-      h1 {
-        font-size: 20pt !important;
-        margin-top: 0 !important;
-        text-align: left !important;
+      body {
+        margin: 20mm;
+        max-width: 100%;
       }
 
-      .info {
-        border: 1px solid #bbb !important;
-        box-shadow: none !important;
-        margin-bottom: 20px !important;
-        padding: 15px !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
+      .massnahme-karte {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        border-left: 6px solid var(--rot);
       }
-
-      /* Tabellen-Bändigung für exakte A4-Passform */
-      table {
-        width: 100% !important;
-        max-width: 100% !important;
-        table-layout: fixed !important; /* Erzwingt Einhaltung der Spaltenbreiten */
-        font-size: 10pt !important;
-        border-collapse: collapse !important;
-        box-shadow: none !important;
-        page-break-inside: auto !important;
-      }
-
-      tr {
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-      }
-
-      th, td {
-        padding: 8px !important;
-        border: 1px solid #666 !important;
-        word-wrap: break-word !important; /* Bricht zu lange Wörter in Zellen um */
-        overflow-wrap: break-word !important;
-        white-space: normal !important;
-      }
-
-      /* Fixierte Spaltenbreiten beim Drucken */
-      th:nth-child(1), td:nth-child(1) { width: 10mm !important; }
-      th:nth-child(2), td:nth-child(2) { width: 60mm !important; color: #333 !important; font-style: italic !important; }
-      th:nth-child(3), td:nth-child(3) { width: 110mm !important; }
-
-      th {
-        background-color: #f2f2f2 !important;
-        color: #000 !important;
-        font-weight: bold !important;
-      }
-
-      thead { display: table-header-group !important; }
-      tfoot { display: table-footer-group !important; }
     }
+
+    /* --- Einheitlicher App-Footer (auf allen Seiten identisch) --- */
+    .app-footer {
+      margin-top: 40px;
+      padding: 22px 16px calc(22px + env(safe-area-inset-bottom));
+      text-align: center;
+      font-size: 12px;
+      color: #6b7280;
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+    }
+    .app-footer .app-footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .app-footer .app-footer-links a {
+      color: #C62828;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 12px;
+      padding: 5px 12px;
+      border-radius: 14px;
+      background: rgba(198, 40, 40, 0.08);
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .app-footer .app-footer-links a:hover {
+      background: #C62828;
+      color: #fff;
+    }
+    .app-footer p {
+      margin: 2px 0;
+    }
+    .app-footer .app-footer-version {
+      margin-top: 8px;
+      font-size: 10.5px;
+      color: #9ca3af;
+    }
+    @media print {
+      .app-footer { display: none !important; }
+    }
+
 </style>
 <meta content="Auswertung von Arbeitssicherheitsmaßnahmen – Checkliste und PDF-Export." name="description"/></head>
 <body>
-<div class="container">
-
-    <a href="index.html" class="btn-back">
-        <span>&larr;</span> Zurück
-    </a>
 <h1>🛠️ Maßnahmen-Auswertung</h1>
 <section aria-label="Metadaten" class="info" id="meta-info"></section>
 <div class="btn-group">
-<button onclick="druckMitFooterAusblenden()">📄 Drucken / PDF</button>
-<button onclick="pdfTeilen()">📄 PDF generieren &amp; teilen 📤</button>
-<button onclick="teilen()">🧾 Text teilen (iPad)</button>
-
+<button class="action-btn" onclick="druckMitFooterAusblenden()">📄 Drucken / PDF</button>
+<button class="action-btn" onclick="pdfTeilen()">📤 PDF generieren &amp; teilen</button>
+<button class="action-btn sekundaer" onclick="teilen()">🧾 Text teilen (iPad)</button>
 </div>
-<table id="maßnahmen-tabelle">
-<caption style="display:none;">Liste der Maßnahmen</caption>
-<thead>
-<tr>
-<th style="width: 50px;">Nr.</th>
-<th style="width: 35%;">Frage</th>
-<th>Beschreibung der Maßnahme</th>
-</tr>
-</thead>
-<tbody>
-</tbody>
-</table>
+
+<div class="massnahmen-liste" id="massnahmen-liste">
+  <div class="leer-hinweis">Noch keine Daten empfangen …</div>
+</div>
+
 <script>
     let aktuelleDaten = null;
 
-    // Meldet dem öffnenden Fenster (liste.html), dass diese Seite fertig
-    // geladen ist und jetzt Nachrichten empfangen kann. Verhindert, dass
-    // liste.html die Maßnahmen-Daten zu früh sendet und sie verloren gehen.
-    if (window.opener) {
-      window.opener.postMessage('massnahmen-bereit', '*');
-    }
+    window.addEventListener('message', (event) => {
+      const data = event.data;
+      if (!data) return;
 
-    function zeigeMassnahmen(data) {
-      if (!data || typeof data !== 'object') return;
       aktuelleDaten = data;
 
       let datum = '—';
-      if (data.datum) {
-        if (/^\d{2}\.\d{2}\.\d{4}$/.test(data.datum)) {
-          datum = data.datum;
-        } else {
-          const d = new Date(data.datum);
-          if (!isNaN(d)) {
-            datum = d.toLocaleDateString('de-DE', {
-              day: '2-digit',
-              month: '2-digit',
-              year: 'numeric'
-            });
-          }
-        }
-      }
+if (data.datum) {
+  if (/^\d{2}\.\d{2}\.\d{4}$/.test(data.datum)) {
+    datum = data.datum; // already German format
+  } else {
+    const d = new Date(data.datum);
+    if (!isNaN(d)) {
+      datum = d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    } else {
+      datum = data.datum;
+    }
+  }
+}
 
       document.getElementById('meta-info').innerHTML = `
-        <p><strong>📅 Datum:</strong> ${datum}</p>
-        <p><strong>🏬 Marktnummer:</strong> ${data.markt || '—'}</p>
-        <p><strong>👤 Marktleitung:</strong> ${data.marktleitung || '—'}</p>
-        <p><strong>👤 Teilnehmer:</strong> ${data.name || '—'}</p>
-        <p><strong>🛡️ SiFa:</strong> ${data.sifa || '—'}</p>
+ <p><strong>📅 Datum:</strong> ${datum}</p>
+  <p><strong>🏬 Marktnummer:</strong> ${data.markt || '—'}</p>
+  <p><strong>👤 Marktleitung:</strong> ${data.marktleitung || '—'}</p>
+  <p><strong>👤 Teilnehmer:</strong> ${data.name || '—'}</p>
+  <p><strong>🛡️ SiFa:</strong> ${data.sifa || '—'}</p>
       `;
 
-      const tbody = document.querySelector('#maßnahmen-tabelle tbody');
-      tbody.innerHTML = '';
+      const liste = document.getElementById('massnahmen-liste');
+      liste.innerHTML = '';
 
       if (!Array.isArray(data.maßnahmen) || data.maßnahmen.length === 0) {
-        tbody.innerHTML =
-          '<tr><td colspan="3" style="text-align:center;">🎉 Keine Maßnahmen erforderlich!</td></tr>';
+        liste.innerHTML = `<div class="leer-hinweis">🎉 Keine Maßnahmen erforderlich!</div>`;
       } else {
         data.maßnahmen.forEach((m, i) => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${m.nr || (i + 1)}</td>
-            <td>${m.frage || '—'}</td>
-            <td>${m.beschreibung || '—'}</td>
+          const karte = document.createElement('div');
+          karte.className = 'massnahme-karte';
+          karte.innerHTML = `
+            <div class="massnahme-frage">
+              <span class="nr">${m.nr || (i + 1)}</span>
+              <span>${m.frage || '—'}</span>
+            </div>
+            <div class="massnahme-beschreibung">
+              <span class="label">Maßnahme</span>
+              ${m.beschreibung || '—'}
+            </div>
           `;
-          tbody.appendChild(row);
+          liste.appendChild(karte);
         });
       }
-    }
-
-    // Primärer Übertragungsweg: liste.html sendet die Daten per postMessage
-    // direkt an dieses Fenster (siehe exportiereMassnahmen() in liste.html).
-    window.addEventListener('message', (event) => {
-      if (event.data && event.data !== 'massnahmen-bereit') {
-        zeigeMassnahmen(event.data);
-      }
     });
 
-    // Rückfalloption für ältere Aufrufe/andere Seiten, die noch über
-    // localStorage übergeben.
-    document.addEventListener('DOMContentLoaded', () => {
-      if (aktuelleDaten) return; // per postMessage schon erhalten
-      try {
-        const data = JSON.parse(localStorage.getItem('massnahmenDaten') || 'null');
-        if (data) zeigeMassnahmen(data);
-      } catch (e) {
-        console.error('Fehler beim Laden aus localStorage:', e);
-      }
-    });
-
-   function druckMitFooterAusblenden() {
-  // Sucht und versteckt alle potenziellen Footer-Elemente im DOM vor dem Drucken
-  const footerElemente = document.querySelectorAll('footer, [id*="footer"], .nav-buttons');
-  footerElemente.forEach(el => el.style.display = 'none');
-
- // nativer Druckaufruf (Tauri öffnet hier den System-Dialog)
-  window.print();
-
-  // Blendet die Elemente nach dem Drucken für die App-Ansicht wieder ein
-  footerElemente.forEach(el => el.style.display = '');
+    function druckMitFooterAusblenden() {
+      const footer = document.querySelector("footer");
+      if (footer) footer.style.display = "none";
+      window.print();
+      if (footer) footer.style.display = "";
     }
 
     async function teilen() {
@@ -392,70 +416,27 @@
       }
     }
   </script>
-<footer style="
-    background-color: #f3f4f6;
-    color: #374151;
-    padding: 12px 0;
-    margin-top: 40px;
-    text-align: center;
-">
-<hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
-
- 
-   <footer style="text-align: center; font-size: 12px; color: #6b7280;">
-
-    <!-- Kleine Buttons -->
-    <div style="
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        margin-bottom: 10px;
-    ">
-
-        <a href="impressum.html" style="background: rgb(243, 244, 246); color: rgb(211, 47, 47); text-decoration: none; font-size: 11px; padding: 4px 10px; border-radius: 14px; border: 1px solid rgb(229, 231, 235); transition: 0.2s;" onmouseover="this.style.background='#D32F2F';this.style.color='#fff';" onmouseout="this.style.background='#f3f4f6';this.style.color='#D32F2F';">
-            Impressum
-        </a>
-
-        <a href="datenschutz.html" style="
-            background: #f3f4f6;
-            color: #D32F2F;
-            text-decoration: none;
-            font-size: 11px;
-            padding: 4px 10px;
-            border-radius: 14px;
-            border: 1px solid #e5e7eb;
-            transition: all 0.2s ease;
-        " onmouseover="this.style.background='#D32F2F';this.style.color='#fff';" onmouseout="this.style.background='#f3f4f6';this.style.color='#D32F2F';">
-            Datenschutz
-        </a>
-
-    </div>
-
-    © <span>2026</span> Andreas Zott – Alle Rechte vorbehalten<br>
-
-    <span style="font-size: 11px;">
-        (Sifa) Arbeitssicherheit <span>2026</span>
-    </span>
-
-    <div style="font-size:11px; color:#999; margin-top:8px;">
-        Stand: Mai 2026
-    </div>
-    <div id="app-version" style="font-size:11px; color:#999; margin-top:4px;"></div>
+<footer class="app-footer">
+  <nav class="app-footer-links">
+    <a href="impressum.html">Impressum</a>
+    <a href="datenschutz.html">Datenschutz</a>
+    <a href="faq.html">FAQ</a>
+    <a href="technische-beschreibung.html">Technik</a>
+    <a href="welcome.html">Startseite</a>
+  </nav>
+  <p>© <span class="app-footer-jahr"></span> Andreas Zott – Alle Rechte vorbehalten</p>
+  <p class="app-footer-sub">(SiFa) Arbeitssicherheit</p>
+  <p class="app-footer-version">Version 1.0.2</p>
+</footer>
 
 <script>
-// Zentrale Versionsangabe – identisch zu index.html/foto.html
-const APP_VERSION = "2.2.0";
-const APP_VERSION_DATUM = "20.08.2026";
-document.getElementById('app-version').textContent = `Version ${APP_VERSION} · Stand: ${APP_VERSION_DATUM}`;
-
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(() => console.log("✅ Service Worker registriert"))
-      .catch(err => console.error("❌ Service Worker Fehler:", err));
-  });
-}
+  document.querySelectorAll('.app-footer-jahr').forEach(el => el.textContent = new Date().getFullYear());
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sicher/service-worker.js')
+        .catch(err => console.warn('Service Worker konnte nicht registriert werden:', err));
+    });
+  }
 </script>
-
 </body>
 </html>
