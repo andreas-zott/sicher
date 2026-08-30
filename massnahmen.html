@@ -1,249 +1,442 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Maßnahmen-Auswertung — Arbeitssicherheit</title>
-<link rel="icon" href="favicon.ico" type="image/x-icon">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0a2f73">
-<meta name="description" content="Auswertung von Arbeitssicherheitsmaßnahmen – Checkliste und PDF-Export.">
-<link rel="stylesheet" href="lib/css/fontawesome.min.css">
-<link rel="stylesheet" href="css/styles.css">
-<script src="lib/jspdf.umd.min.js"></script>
+<meta charset="utf-8"/>
+<title>Maßnahmen-Auswertung</title>
+<link href="/sicher/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="/sicher/manifest.json" rel="manifest"/>
+<meta content="#C62828" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
+    :root {
+      --rot: #C62828;
+      --rot-dunkel: #A11F1F;
+      --rot-hell: #FDEDED;
+      --text: #212529;
+      --muted: #6b7280;
+      --bg: #f0f2f5;
+      --card: #ffffff;
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+      padding: 20px;
+      background: var(--bg);
+      color: var(--text);
+      max-width: 900px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 24px;
+      font-size: 1.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .info {
+      background: var(--card);
+      padding: 18px 22px;
+      border-radius: var(--radius);
+      margin-bottom: 24px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 6px 20px;
+    }
+
+    .info p {
+      margin: 4px 0;
+      font-size: 14px;
+    }
+
+    /* --- Moderne Button-Leiste --- */
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+
+    button.action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background-color: var(--rot);
+      color: white;
+      font-size: 13.5px;
+      font-weight: 600;
+      padding: 10px 14px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      min-width: 130px;
+      justify-content: center;
+      box-shadow: 0 3px 10px rgba(198,40,40,0.25);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.15s ease;
+    }
+
+    button.action-btn.sekundaer {
+      background-color: #4b5563;
+      box-shadow: 0 3px 10px rgba(75,85,99,0.22);
+    }
+
+    button.action-btn:hover {
+      background-color: var(--rot-dunkel);
+      transform: translateY(-1px);
+    }
+
+    button.action-btn.sekundaer:hover {
+      background-color: #374151;
+    }
+
+    button.action-btn:active {
+      transform: translateY(0) scale(0.97);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+
+    /* --- Karten-Liste statt Tabelle --- */
+    .massnahmen-liste {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
     .massnahme-karte {
-        background: var(--card);
-        border: 1px solid var(--line);
-        border-left: 4px solid var(--red);
-        border-radius: 12px;
-        padding: 16px 20px;
-        margin-bottom: 12px;
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      overflow: hidden;
+      border-left: 6px solid var(--rot);
+      page-break-inside: avoid;
+      break-inside: avoid;
     }
-    body.dark .massnahme-karte { background: #1e293b; border-left-color: #f87171; }
-    .massnahme-nr {
-        display: inline-flex; align-items: center; justify-content: center;
-        width: 24px; height: 24px; border-radius: 50%;
-        background: var(--red); color: #fff; font-size: 0.78rem; font-weight: 700;
-        margin-right: 8px; flex-shrink: 0;
+
+    .massnahme-frage {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      background: var(--rot-hell);
+      padding: 12px 16px;
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--rot-dunkel);
+      line-height: 1.4;
     }
-    .massnahme-frage { font-weight: 700; margin-bottom: 6px; }
-    .massnahme-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-soft); display: block; margin-bottom: 2px; }
-    .leer-hinweis { text-align: center; color: var(--ink-soft); padding: 40px 20px; }
-    .meta-info {
-        display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 6px 20px; margin-bottom: 20px;
+
+    .massnahme-frage .nr {
+      flex: none;
+      background: var(--rot);
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: 999px;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .meta-info p { margin: 2px 0; font-size: 0.9rem; }
-    @media print { .app-footer, .button-row, .back-button, .theme-toggle { display: none !important; } }
+
+    .massnahme-beschreibung {
+      padding: 14px 16px 16px 16px;
+      font-size: 14.5px;
+      line-height: 1.5;
+      color: var(--text);
+    }
+
+    .massnahme-beschreibung .label {
+      display: block;
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+
+    .leer-hinweis {
+      text-align: center;
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 40px 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      font-size: 16px;
+      color: #388e3c;
+      font-weight: 600;
+    }
+
+    .nav-buttons {
+      position: fixed;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 9999;
+      pointer-events: auto;
+      backdrop-filter: blur(4px);
+      background: rgba(0, 0, 0, 0.05);
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .nav-buttons button {
+      padding: 6px 10px;
+      font-size: 14px;
+      opacity: 0.6;
+      background: #444;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .nav-buttons button:hover {
+      opacity: 1;
+    }
+
+    @media (max-width: 800px) {
+      button.action-btn {
+        font-size: 13.5px;
+        padding: 11px 14px;
+        flex: 1 1 auto;
+      }
+      .massnahme-frage { font-size: 14px; }
+      .massnahme-beschreibung { font-size: 14px; }
+    }
+
+    @media print {
+      .btn-group,
+      .nav-buttons,
+      footer {
+        display: none !important;
+      }
+
+      body {
+        margin: 20mm;
+        max-width: 100%;
+      }
+
+      .massnahme-karte {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        border-left: 6px solid var(--rot);
+      }
+    }
+
+    /* --- Einheitlicher App-Footer (auf allen Seiten identisch) --- */
+    .app-footer {
+      margin-top: 40px;
+      padding: 22px 16px calc(22px + env(safe-area-inset-bottom));
+      text-align: center;
+      font-size: 12px;
+      color: #6b7280;
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+    }
+    .app-footer .app-footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .app-footer .app-footer-links a {
+      color: #C62828;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 12px;
+      padding: 5px 12px;
+      border-radius: 14px;
+      background: rgba(198, 40, 40, 0.08);
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .app-footer .app-footer-links a:hover {
+      background: #C62828;
+      color: #fff;
+    }
+    .app-footer p {
+      margin: 2px 0;
+    }
+    .app-footer .app-footer-version {
+      margin-top: 8px;
+      font-size: 10.5px;
+      color: #9ca3af;
+    }
+    @media print {
+      .app-footer { display: none !important; }
+    }
+
 </style>
-</head>
+<meta content="Auswertung von Arbeitssicherheitsmaßnahmen – Checkliste und PDF-Export." name="description"/></head>
 <body>
-
-<button class="theme-toggle" id="themeToggle" aria-label="Theme umschalten">🌙</button>
-
-<section class="hero hero-compact">
-    <div class="hero-icon"><i class="fas fa-list-check"></i></div>
-    <h1>Maßnahmen-Auswertung</h1>
-    <p>Empfängt Daten automatisch aus der Checkliste</p>
-</section>
-
-<div class="container container-narrow">
-
-    <a href="l1.html" class="back-button"><i class="fas fa-arrow-left"></i> Zurück zu Checklisten</a>
-
-    <div class="card">
-        <div class="meta-info" id="meta-info">
-            <p style="grid-column: 1 / -1; color: var(--ink-soft);">Warte auf Daten aus der Checkliste …</p>
-        </div>
-
-        <div class="button-row" style="margin-top:0;">
-            <button type="button" class="btn btn-secondary" onclick="druckMitFooterAusblenden()"><i class="fas fa-print"></i> Drucken / PDF</button>
-            <button type="button" class="btn btn-primary" onclick="pdfTeilen()"><i class="fas fa-file-pdf"></i> PDF generieren &amp; teilen</button>
-            <button type="button" class="btn btn-secondary" onclick="textTeilen()"><i class="fas fa-comment"></i> Text teilen</button>
-        </div>
-    </div>
-
-    <div id="massnahmen-liste">
-        <div class="leer-hinweis">Noch keine Daten empfangen — bitte über „Maßnahmen exportieren" aus der Checkliste heraus öffnen.</div>
-    </div>
-
+<h1>🛠️ Maßnahmen-Auswertung</h1>
+<section aria-label="Metadaten" class="info" id="meta-info"></section>
+<div class="btn-group">
+<button class="action-btn" onclick="druckMitFooterAusblenden()">📄 Drucken / PDF</button>
+<button class="action-btn" onclick="pdfTeilen()">📤 PDF generieren &amp; teilen</button>
+<button class="action-btn sekundaer" onclick="teilen()">🧾 Text teilen (iPad)</button>
 </div>
 
-<footer class="app-footer">
-    <nav class="app-footer-links">
-        <a href="impressum.html">Impressum</a>
-        <a href="datenschutz.html">Datenschutz</a>
-        <a href="faq.html">FAQ</a>
-        <a href="technische-beschreibung.html">Technik</a>
-        <a href="welcome.html">Startseite</a>
-    </nav>
-    <p>© <span class="app-footer-jahr"></span> Andreas Zott — Alle Rechte vorbehalten</p>
-    <p class="app-footer-version"></p>
-</footer>
+<div class="massnahmen-liste" id="massnahmen-liste">
+  <div class="leer-hinweis">Noch keine Daten empfangen …</div>
+</div>
 
-<script src="js/common.js"></script>
 <script>
     let aktuelleDaten = null;
 
-    function formatDatum(datum) {
-        if (!datum) return '—';
-        if (/^\d{2}\.\d{2}\.\d{4}$/.test(datum)) return datum;
-        const d = new Date(datum);
-        return isNaN(d) ? datum : d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
-    }
-
-    function escapeHtml(str) {
-        const div = document.createElement('div');
-        div.textContent = str === undefined || str === null ? '' : String(str);
-        return div.innerHTML;
-    }
-
-    function datenAnzeigen(data) {
-        aktuelleDaten = data;
-
-        document.getElementById('meta-info').innerHTML = `
-            <p><strong>📅 Datum:</strong> ${escapeHtml(formatDatum(data.datum))}</p>
-            <p><strong>🏬 Markt:</strong> ${escapeHtml(data.markt || '—')}</p>
-            <p><strong>👤 Marktleitung:</strong> ${escapeHtml(data.marktleitung || '—')}</p>
-            <p><strong>👤 Name:</strong> ${escapeHtml(data.name || '—')}</p>
-            <p><strong>🛡️ SiFa:</strong> ${escapeHtml(data.sifa || '—')}</p>
-        `;
-
-        const liste = document.getElementById('massnahmen-liste');
-        const massnahmen = Array.isArray(data.massnahmen) ? data.massnahmen : (Array.isArray(data['maßnahmen']) ? data['maßnahmen'] : []);
-
-        if (massnahmen.length === 0) {
-            liste.innerHTML = '<div class="leer-hinweis">🎉 Keine Maßnahmen erforderlich!</div>';
-            return;
-        }
-
-        liste.innerHTML = massnahmen.map((m, i) => `
-            <div class="massnahme-karte">
-                <div class="massnahme-frage"><span class="massnahme-nr">${m.nr || (i + 1)}</span>${escapeHtml(m.frage || '—')}</div>
-                <span class="massnahme-label">Maßnahme</span>
-                ${escapeHtml(m.beschreibung || '—')}
-            </div>
-        `).join('');
-    }
-
-    // Beim Laden ZUERST localStorage pruefen (zuverlaessig, unabhaengig von
-    // Pop-up-Blockern und Fenster-Beziehungen) - postMessage bleibt als
-    // zusaetzlicher, schnellerer Weg bestehen, falls beide Fenster schon
-    // eine funktionierende Verbindung haben.
-    const MASSNAHMEN_UEBERGABE_KEY = 'massnahmen_uebergabe';
-
-    window.addEventListener('DOMContentLoaded', () => {
-        try {
-            const gespeichert = localStorage.getItem(MASSNAHMEN_UEBERGABE_KEY);
-            if (gespeichert) {
-                datenAnzeigen(JSON.parse(gespeichert));
-            }
-        } catch (e) {
-            console.warn('Zwischengespeicherte Maßnahmen konnten nicht gelesen werden:', e);
-        }
-        if (window.opener) {
-            window.opener.postMessage({ typ: 'massnahmen-sifa-bereit' }, '*');
-        }
-    });
-
     window.addEventListener('message', (event) => {
-        const data = event.data;
-        if (!data || data.typ === 'massnahmen-sifa-bereit') return;
-        datenAnzeigen(data);
+      const data = event.data;
+      if (!data) return;
+
+      aktuelleDaten = data;
+
+      let datum = '—';
+if (data.datum) {
+  if (/^\d{2}\.\d{2}\.\d{4}$/.test(data.datum)) {
+    datum = data.datum; // already German format
+  } else {
+    const d = new Date(data.datum);
+    if (!isNaN(d)) {
+      datum = d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    } else {
+      datum = data.datum;
+    }
+  }
+}
+
+      document.getElementById('meta-info').innerHTML = `
+ <p><strong>📅 Datum:</strong> ${datum}</p>
+  <p><strong>🏬 Marktnummer:</strong> ${data.markt || '—'}</p>
+  <p><strong>👤 Marktleitung:</strong> ${data.marktleitung || '—'}</p>
+  <p><strong>👤 Teilnehmer:</strong> ${data.name || '—'}</p>
+  <p><strong>🛡️ SiFa:</strong> ${data.sifa || '—'}</p>
+      `;
+
+      const liste = document.getElementById('massnahmen-liste');
+      liste.innerHTML = '';
+
+      if (!Array.isArray(data.maßnahmen) || data.maßnahmen.length === 0) {
+        liste.innerHTML = `<div class="leer-hinweis">🎉 Keine Maßnahmen erforderlich!</div>`;
+      } else {
+        data.maßnahmen.forEach((m, i) => {
+          const karte = document.createElement('div');
+          karte.className = 'massnahme-karte';
+          karte.innerHTML = `
+            <div class="massnahme-frage">
+              <span class="nr">${m.nr || (i + 1)}</span>
+              <span>${m.frage || '—'}</span>
+            </div>
+            <div class="massnahme-beschreibung">
+              <span class="label">Maßnahme</span>
+              ${m.beschreibung || '—'}
+            </div>
+          `;
+          liste.appendChild(karte);
+        });
+      }
     });
 
     function druckMitFooterAusblenden() {
-        window.print();
+      const footer = document.querySelector("footer");
+      if (footer) footer.style.display = "none";
+      window.print();
+      if (footer) footer.style.display = "";
     }
 
-    async function textTeilen() {
-        if (!aktuelleDaten) { alert('Noch keine Daten empfangen.'); return; }
-        const massnahmen = aktuelleDaten.massnahmen || aktuelleDaten['maßnahmen'] || [];
-        const text = `Maßnahmenübersicht für Markt ${aktuelleDaten.markt} vom ${formatDatum(aktuelleDaten.datum)}:\n\n` +
-            massnahmen.map((m, i) => `${m.nr || (i + 1)}. ${m.frage ? m.frage + '\n   ' : ''}${m.beschreibung}`).join('\n\n') +
-            `\n\nName: ${aktuelleDaten.name}\nSiFa: ${aktuelleDaten.sifa}`;
+    async function teilen() {
+      if (!aktuelleDaten) {
+        alert("❗ Noch keine Daten empfangen.");
+        return;
+      }
 
-        if (navigator.share) {
-            try { await navigator.share({ title: `Checkliste ${aktuelleDaten.markt}`, text }); }
-            catch (err) { if (err.name !== 'AbortError') console.error('Teilen fehlgeschlagen:', err); }
-        } else {
-            alert('Teilen wird auf diesem Gerät nicht unterstützt.');
+      const text = `Maßnahmenübersicht für Markt ${aktuelleDaten.markt} vom ${aktuelleDaten.datum}:\n\n` +
+        aktuelleDaten.maßnahmen.map((m, i) => 
+          `${m.nr || (i + 1)}. ${m.frage ? m.frage + '\n   ' : ''}${m.beschreibung}`
+        ).join("\n\n") +
+        `\n\nName: ${aktuelleDaten.name}\nSiFa: ${aktuelleDaten.sifa}`;
+
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: `Checkliste ${aktuelleDaten.markt}`,
+            text: text
+          });
+        } catch (err) {
+          console.error("❌ Teilen fehlgeschlagen", err);
         }
-    }
-
-    function buildPdf() {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-        const pageWidth = 210, pageHeight = 297, margin = 16;
-        const contentWidth = pageWidth - margin * 2;
-        let y = 20;
-        const INK = [10, 47, 115], SOFT = [71, 85, 105], RED = [198, 40, 40];
-
-        function neueSeiteFallsNoetig(hoehe) {
-            if (y + hoehe > pageHeight - 16) { doc.addPage(); y = 20; }
-        }
-
-        doc.setFont(undefined, 'bold'); doc.setFontSize(16); doc.setTextColor(...INK);
-        doc.text('Maßnahmen-Auswertung', margin, y);
-        y += 9;
-
-        doc.setFont(undefined, 'normal'); doc.setFontSize(10); doc.setTextColor(...SOFT);
-        doc.text(`Markt: ${aktuelleDaten.markt || '—'}    Name: ${aktuelleDaten.name || '—'}    SiFa: ${aktuelleDaten.sifa || '—'}`, margin, y);
-        y += 5;
-        doc.text(`Datum: ${formatDatum(aktuelleDaten.datum)}`, margin, y);
-        y += 10;
-
-        const massnahmen = aktuelleDaten.massnahmen || aktuelleDaten['maßnahmen'] || [];
-        if (massnahmen.length === 0) {
-            doc.setFont(undefined, 'italic'); doc.setFontSize(11); doc.setTextColor(...SOFT);
-            doc.text('Keine Maßnahmen erforderlich.', margin, y);
-        } else {
-            massnahmen.forEach((m, i) => {
-                const frageZeilen = doc.splitTextToSize(`${m.nr || (i + 1)}. ${m.frage || '—'}`, contentWidth);
-                const massnahmeZeilen = doc.splitTextToSize(m.beschreibung || '—', contentWidth);
-                neueSeiteFallsNoetig((frageZeilen.length + massnahmeZeilen.length) * 4.2 + 6);
-
-                doc.setFont(undefined, 'bold'); doc.setFontSize(9.5); doc.setTextColor(...RED);
-                doc.text(frageZeilen, margin, y);
-                y += frageZeilen.length * 4.2 + 1;
-
-                doc.setFont(undefined, 'normal'); doc.setTextColor(...SOFT);
-                doc.text(massnahmeZeilen, margin, y);
-                y += massnahmeZeilen.length * 4.2 + 5;
-            });
-        }
-
-        const seiten = doc.getNumberOfPages();
-        for (let i = 1; i <= seiten; i++) {
-            doc.setPage(i);
-            doc.setFont(undefined, 'normal'); doc.setFontSize(7.5); doc.setTextColor(150, 150, 150);
-            doc.text(`Seite ${i} von ${seiten}`, pageWidth - margin, pageHeight - 8, { align: 'right' });
-        }
-        return doc;
+      } else {
+        alert("❌ Teilen wird auf diesem Gerät nicht unterstützt. Bitte Text manuell kopieren.");
+      }
     }
 
     async function pdfTeilen() {
-        if (!aktuelleDaten) { alert('Noch keine Daten empfangen.'); return; }
-        const doc = buildPdf();
-        const dateiname = `Massnahmen-${aktuelleDaten.markt || 'markt'}.pdf`;
-        const blob = doc.output('blob');
-        try {
-            if (navigator.canShare && typeof File !== 'undefined') {
-                const file = new File([blob], dateiname, { type: 'application/pdf' });
-                if (navigator.canShare({ files: [file] })) {
-                    await navigator.share({ title: 'Maßnahmen-Auswertung', text: `PDF zur Checkliste vom ${formatDatum(aktuelleDaten.datum)}`, files: [file] });
-                    return;
-                }
-            }
-            doc.save(dateiname);
-        } catch (err) {
-            if (err && err.name === 'AbortError') return;
-            doc.save(dateiname);
-        }
-    }
-</script>
+      if (!aktuelleDaten) {
+        alert("❗ Noch keine Daten empfangen.");
+        return;
+      }
 
+      const clone = document.body.cloneNode(true);
+      clone.querySelector('.btn-group')?.remove();
+      clone.querySelector('.nav-buttons')?.remove();
+      clone.querySelector('footer')?.remove();
+
+      const opt = {
+        margin: 56.7,
+        filename: `Maßnahmen-${aktuelleDaten.markt || 'markt'}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2.5, scrollY: 0 },
+        jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }, pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+      };
+
+      const blob = await html2pdf().set(opt).from(clone).output('blob');
+      const file = new File([blob], opt.filename, { type: "application/pdf" });
+
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            title: "Maßnahmen-Auswertung",
+            text: `PDF zur Checkliste vom ${aktuelleDaten.datum}`,
+            files: [file]
+          });
+        } catch (err) {
+          console.error("❌ Teilen fehlgeschlagen", err);
+        }
+      } else {
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = opt.filename;
+        link.click();
+        alert("📥 PDF wurde heruntergeladen. Mailversand wird nicht unterstützt.");
+      }
+    }
+  </script>
+<footer class="app-footer">
+  <nav class="app-footer-links">
+    <a href="impressum.html">Impressum</a>
+    <a href="datenschutz.html">Datenschutz</a>
+    <a href="faq.html">FAQ</a>
+    <a href="technische-beschreibung.html">Technik</a>
+    <a href="welcome.html">Startseite</a>
+  </nav>
+  <p>© <span class="app-footer-jahr"></span> Andreas Zott – Alle Rechte vorbehalten</p>
+  <p class="app-footer-sub">(SiFa) Arbeitssicherheit</p>
+  <p class="app-footer-version">Version 1.0.2</p>
+</footer>
+
+<script>
+  document.querySelectorAll('.app-footer-jahr').forEach(el => el.textContent = new Date().getFullYear());
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sicher/service-worker.js')
+        .catch(err => console.warn('Service Worker konnte nicht registriert werden:', err));
+    });
+  }
+</script>
 </body>
 </html>
