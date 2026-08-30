@@ -257,6 +257,19 @@ const ChecklisteEngine = (() => {
     }
 
     // ===== Übergabe an massnahmen-sifa.html =====
+    //
+    // WICHTIG: Ursprünglich per window.open() + postMessage() umgesetzt -
+    // das funktionierte auf mobile.html (iOS Safari) unzuverlässig: Pop-up-
+    // Blocker verhindern das Öffnen ohne Fehlermeldung, und die opener-
+    // Referenz zwischen den Fenstern geht auf mobilen Browsern leicht
+    // verloren (z. B. bei Tab-Wechsel). Jetzt: Die Daten werden VOR dem
+    // Öffnen in localStorage geschrieben - massnahmen-sifa.html liest sie
+    // beim Laden direkt aus, unabhängig von Pop-up-Blockern oder einer
+    // funktionierenden Fenster-Beziehung. postMessage bleibt zusätzlich
+    // bestehen (falls beide Fenster bereits offen sind), ist aber nicht
+    // mehr der einzige Übertragungsweg.
+
+    const MASSNAHMEN_UEBERGABE_KEY = 'massnahmen_uebergabe';
 
     function exportiereMassnahmen() {
         const zeilen = [];
@@ -280,12 +293,21 @@ const ChecklisteEngine = (() => {
             massnahmen: zeilen
         };
 
+        try {
+            localStorage.setItem(MASSNAHMEN_UEBERGABE_KEY, JSON.stringify(daten));
+        } catch (e) {
+            console.warn('Maßnahmen konnten nicht zwischengespeichert werden:', e);
+        }
+
         const neuesFenster = window.open('massnahmen-sifa.html', 'massnahmen');
-        // Wartet auf das Bereit-Signal von massnahmen-sifa.html, statt
-        // blind einen festen setTimeout zu verwenden (bei sehr langsamen
-        // Geraeten war das bisherige feste Timeout ein bekanntes Risiko,
-        // siehe technische-beschreibung.html). Timeout bleibt nur noch
-        // als Absicherung fuer den Fall, dass das Signal ausbleibt.
+        if (!neuesFenster) {
+            alert('Die Maßnahmen-Auswertung konnte nicht geöffnet werden — vermutlich blockiert dein Browser das Pop-up. Bitte Pop-ups für diese Seite erlauben und erneut versuchen, oder „massnahmen-sifa.html" direkt aus der Übersicht öffnen.');
+            return;
+        }
+
+        // Zusaetzlich per postMessage, falls beide Fenster bereits eine
+        // funktionierende Verbindung haben (schneller als der Storage-Read
+        // beim Laden, aber nicht mehr die einzige Quelle).
         let gesendet = false;
         function empfaengerHorchen(event) {
             if (gesendet) return;
@@ -297,10 +319,8 @@ const ChecklisteEngine = (() => {
         }
         window.addEventListener('message', empfaengerHorchen);
         setTimeout(() => {
-            if (gesendet) return;
             gesendet = true;
             window.removeEventListener('message', empfaengerHorchen);
-            if (neuesFenster) neuesFenster.postMessage(daten, '*');
         }, 2500);
     }
 
