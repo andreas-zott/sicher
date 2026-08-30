@@ -37,12 +37,23 @@
     <a href="datenschutz.html">Datenschutz</a>
 </footer>
 
+<script src="js/pruefliste-allgemein.js"></script>
+<script src="js/pruefliste-umfassend.js"></script>
 <script src="js/gbu-daten.js"></script>
 <script>
     function escapeHtml(str) {
         const div = document.createElement('div');
         div.textContent = str === undefined || str === null ? '' : String(str);
         return div.innerHTML;
+    }
+
+    // Funktioniert fuer beide GBU-Typen: "standard" zaehlt die Gefaehrdungen,
+    // "pruefliste" zaehlt die Fragen ueber alle Abschnitte hinweg.
+    function anzahlPruefpunkte(g) {
+        if (g.typ === 'pruefliste') {
+            return g.abschnitte.reduce((summe, a) => summe + a.fragen.length, 0);
+        }
+        return g.gefaehrdungen.length;
     }
 
     function renderKatalog() {
@@ -62,7 +73,7 @@
                         <a class="gbu-tile" href="gbu.html?id=${encodeURIComponent(g.id)}">
                             <span class="icon">${g.icon || '📋'}</span>
                             <span class="titel">${escapeHtml(g.titel)}</span>
-                            <span class="kategorie">${g.gefaehrdungen.length} Gefährdungen erfasst</span>
+                            <span class="kategorie">${anzahlPruefpunkte(g)} Prüfpunkte erfasst</span>
                         </a>
                     `).join('')}
                 </div>
