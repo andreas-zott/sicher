@@ -12,7 +12,7 @@
 // automatisch ein neuer Cache angelegt und der alte verworfen,
 // sodass Nutzer zuverlaessig die neue Version erhalten.
 // ─────────────────────────────────────────────────────────────
-const APP_VERSION = '2.0.0';
+const APP_VERSION = '2.1.0';
 const CACHE_NAME = `sicherheit-cache-v${APP_VERSION}`;
 
 const FILES_TO_CACHE = [
@@ -22,6 +22,9 @@ const FILES_TO_CACHE = [
   '/sicher/l1.html',
   '/sicher/help.html',
   '/sicher/foto.html',
+  '/sicher/liste.html',
+  '/sicher/mobile.html',
+  '/sicher/massnahmen-sifa.html',
   '/sicher/faq.html',
   '/sicher/technische-beschreibung.html',
   '/sicher/impressum.html',
@@ -30,7 +33,10 @@ const FILES_TO_CACHE = [
   '/sicher/icon.png',
   '/sicher/favicon.ico',
   '/sicher/css/styles.css',
+  '/sicher/css/checkliste.css',
   '/sicher/js/common.js',
+  '/sicher/js/checkliste-daten.js',
+  '/sicher/js/checkliste-engine.js',
   '/sicher/lib/css/fontawesome.min.css',
   '/sicher/lib/webfonts/fa-solid-900.woff2',
   '/sicher/lib/webfonts/fa-regular-400.woff2',

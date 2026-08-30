@@ -195,6 +195,18 @@
         <p>Die App verwendet eine <span class="badge">MAJOR.MINOR.PATCH</span>-Versionsnummer, sichtbar im Footer jeder Seite sowie im Service-Worker-Cache-Namen.</p>
 
         <div class="changelog-eintrag">
+            <span class="version">Version 2.1.0</span><span class="datum">August 2026</span>
+            <ul>
+                <li><code>liste.html</code> und <code>mobile.html</code> auf eine gemeinsame Datenquelle konsolidiert (<code>js/checkliste-daten.js</code>, 136 Fragen in 17 Kategorien) und eine gemeinsame Engine (<code>js/checkliste-engine.js</code>) — vorher ~4.000 Zeilen pro Datei, größtenteils dupliziert</li>
+                <li>Bugfix: Zwei parallele, nicht zusammenpassende Speichersysteme vereinheitlicht — zuvor ging die Unterschrift beim Neuladen verloren, weil der tatsächlich beim Laden verwendete Code einen anderen <code>localStorage</code>-Schlüssel las als der manuelle „Speichern"-Button beschrieb. Mit echtem Browser-Neuladen verifiziert</li>
+                <li>Die ~460-zeilige if/else-Kette zur Maßnahmen-Herleitung (<code>generateMeasure()</code>) ersetzt durch direkt an der Frage hinterlegte Maßnahmentexte in den Daten</li>
+                <li><code>massnahmen-sifa.html</code> neu gestaltet, PDF-Erzeugung von <code>html2pdf.js</code>/Screenshot auf direktes <code>jsPDF</code> umgestellt (durchsuchbarer Text statt Bild)</li>
+                <li>Übergabe der Maßnahmen an <code>massnahmen-sifa.html</code> nutzt jetzt ein Bereit-Signal vom Empfänger statt eines festen <code>setTimeout(1000)</code> — das feste Timeout bleibt nur noch als Absicherung für den Fall, dass das Signal ausbleibt</li>
+                <li><code>audit.html</code> bewusst <strong>nicht</strong> mitkonsolidiert: enthält 152 eigenständige Fragen in 20 Kategorien, keine Textgleichheit mit <code>liste.html</code>/<code>mobile.html</code></li>
+            </ul>
+        </div>
+
+        <div class="changelog-eintrag">
             <span class="version">Version 2.0.0</span><span class="datum">August 2026</span>
             <ul>
                 <li>Portal-Grundgerüst (Login, Übersicht, Anleitung, Fotoformular, Checklisten-Menü, Rechtliches) einheitlich neu gestaltet</li>
