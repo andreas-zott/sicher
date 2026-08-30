@@ -128,12 +128,21 @@
         `).join('');
     }
 
-    // Bereit-Signal an das oeffnende Fenster senden, sobald diese Seite
-    // geladen ist - loest das bisherige Risiko eines zu knappen, festen
-    // setTimeout(1000) auf der sendenden Seite ab. Die sendende Seite
-    // (checkliste-engine.js) wartet jetzt auf dieses Signal, mit einem
-    // Timeout nur noch als Absicherung, nicht als Regelfall.
+    // Beim Laden ZUERST localStorage pruefen (zuverlaessig, unabhaengig von
+    // Pop-up-Blockern und Fenster-Beziehungen) - postMessage bleibt als
+    // zusaetzlicher, schnellerer Weg bestehen, falls beide Fenster schon
+    // eine funktionierende Verbindung haben.
+    const MASSNAHMEN_UEBERGABE_KEY = 'massnahmen_uebergabe';
+
     window.addEventListener('DOMContentLoaded', () => {
+        try {
+            const gespeichert = localStorage.getItem(MASSNAHMEN_UEBERGABE_KEY);
+            if (gespeichert) {
+                datenAnzeigen(JSON.parse(gespeichert));
+            }
+        } catch (e) {
+            console.warn('Zwischengespeicherte Maßnahmen konnten nicht gelesen werden:', e);
+        }
         if (window.opener) {
             window.opener.postMessage({ typ: 'massnahmen-sifa-bereit' }, '*');
         }
