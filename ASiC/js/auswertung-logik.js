@@ -17,6 +17,28 @@ function escapeHtml(str) {
     return div.innerHTML;
 }
 
+// Liefert einen Zeitstempel fuer eine Begehung, unabhaengig von der
+// Datenquelle: lokale Archivdatensaetze haben createdAt direkt gesetzt,
+// vom NAS geladene Datensaetze (fetchSynologyRecord()) haben das NICHT -
+// dort wird ersatzweise aus companyInfo.datum ermittelt.
+function zeitwertVonBegehung(r) {
+    if (r.createdAt) return r.createdAt;
+    if (r.companyInfo && r.companyInfo.datum) return new Date(r.companyInfo.datum).getTime() || 0;
+    return 0;
+}
+
+// Reine Filterfunktion (kein Zugriff auf Modulvariablen) - wird von
+// auswertung.js (lokales Archiv, Modulvariable auswertungArchiv) UND von
+// auswertung-team.js (Team-Archiv/NAS, keine Modulvariable, immer frisch
+// geladene Daten) genutzt. monate=null bedeutet "alle".
+function filterNachZeitraum(daten, monate) {
+    if (monate === null) return daten;
+    const grenze = new Date();
+    grenze.setMonth(grenze.getMonth() - monate);
+    grenze.setHours(0, 0, 0, 0);
+    return daten.filter(r => zeitwertVonBegehung(r) >= grenze.getTime());
+}
+
 // ===== Kategorien-Schwachstellen =====
 // Iteriert bewusst ueber die in jeder Begehung selbst gespeicherten
 // Bewertungs-Schluessel (record.ratings), NICHT ueber den aktuellen
@@ -89,11 +111,6 @@ function berechneAuffaelligeMaerkte(daten) {
 //   Mangel-Zahl direkt aus den Bewertungen gezaehlt, statt sich auf ein
 //   vorab gespeichertes Feld zu verlassen.
 function berechneVerlaufProMarkt(daten) {
-    function sortierWert(r) {
-        if (r.createdAt) return r.createdAt;
-        if (r.companyInfo && r.companyInfo.datum) return new Date(r.companyInfo.datum).getTime() || 0;
-        return 0;
-    }
     function mangelZahl(r) {
         if (r.stats && typeof r.stats.mangel === 'number') return r.stats.mangel;
         return Object.values(r.ratings || {}).filter(v => v === 'mangel').length;
@@ -108,7 +125,7 @@ function berechneVerlaufProMarkt(daten) {
 
     const marketNames = Object.keys(byMarket).sort();
     return marketNames.map(firma => {
-        const list = byMarket[firma].sort((a, b) => sortierWert(a) - sortierWert(b));
+        const list = byMarket[firma].sort((a, b) => zeitwertVonBegehung(a) - zeitwertVonBegehung(b));
         const entries = list.map((r, i) => {
             const mangel = mangelZahl(r);
             let trend = 'gleich';
@@ -117,7 +134,7 @@ function berechneVerlaufProMarkt(daten) {
                 if (mangel < prevMangel) trend = 'besser';
                 else if (mangel > prevMangel) trend = 'schlechter';
             }
-            const datum = formatDate(r.companyInfo.datum) || new Date(sortierWert(r)).toLocaleDateString('de-DE');
+            const datum = formatDate(r.companyInfo.datum) || new Date(zeitwertVonBegehung(r)).toLocaleDateString('de-DE');
             return { datum, mangel, trend: i === 0 ? null : trend };
         });
         return { firma, entries };

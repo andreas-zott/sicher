@@ -8,7 +8,7 @@ const STORAGE_KEY = 'begehungState';
 
 // Revisionsstand der App/Checkliste (in Fusszeile und PDF sichtbar,
 // bei inhaltlichen Aenderungen an Fragenkatalog/Massnahmen hochzaehlen)
-const APP_REVISION = '1.22';
+const APP_REVISION = '1.28';
 const APP_REVISION_DATE = '2026-08-26';
 
 function renderFooterMeta() {
@@ -16,7 +16,17 @@ function renderFooterMeta() {
     if (el) el.textContent = `Rev. ${APP_REVISION} · Stand ${formatDate(APP_REVISION_DATE)}`;
 
     const copyright = document.getElementById('footer-copyright');
-    if (copyright) copyright.innerHTML = '© 2026 Andreas Zott – Alle Rechte vorbehalten<br>(Sifa) Arbeitssicherheit 2026';
+    if (copyright) {
+        // Gruendungsjahr fest, Anzeige laeuft automatisch als Zeitspanne mit,
+        // sobald ein neues Jahr beginnt (z. B. "2026–2027" ab Januar 2027).
+        // Bleibt so lange nur "2026", wie das aktuelle Jahr noch 2026 ist.
+        const gruendungsjahr = 2026;
+        const aktuellesJahr = new Date().getFullYear();
+        const jahresangabe = aktuellesJahr > gruendungsjahr
+            ? `${gruendungsjahr}–${aktuellesJahr}`
+            : `${gruendungsjahr}`;
+        copyright.innerHTML = `© ${jahresangabe} Andreas Zott – Alle Rechte vorbehalten<br>(Sifa) Arbeitssicherheit ${aktuellesJahr}`;
+    }
 }
 
 function defaultState() {

@@ -17,17 +17,9 @@ async function loadAuswertungData() {
     renderAlleAuswertungen();
 }
 
-// Reine Filterfunktion (kein Zugriff auf auswertungArchiv) - wird von
-// gefilterteArchivDaten() (Bildschirmanzeige) UND vom CSV-/PDF-Export
-// genutzt, die jeweils frisch geladene Daten uebergeben statt sich auf
-// die evtl. noch nicht fertig geladene Modulvariable zu verlassen.
-function filterNachZeitraum(daten, monate) {
-    if (monate === null) return daten;
-    const grenze = new Date();
-    grenze.setMonth(grenze.getMonth() - monate);
-    grenze.setHours(0, 0, 0, 0);
-    return daten.filter(r => (r.createdAt || 0) >= grenze.getTime());
-}
+// filterNachZeitraum() liegt jetzt in js/auswertung-logik.js (gemeinsam
+// mit auswertung-team.js genutzt) - hier nur noch der Wrapper, der die
+// Modulvariablen dieser Seite (auswertungArchiv, zeitraumMonate) einsetzt.
 
 // Liefert die archivierten Begehungen, gefiltert auf den aktuell gewählten
 // Zeitraum. Wird von den meisten Auswertungsbereichen sowie CSV- und

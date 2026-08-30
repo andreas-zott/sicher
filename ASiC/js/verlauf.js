@@ -248,7 +248,7 @@ async function onTeamArchiveRestore(fileName) {
 }
 
 function switchVerlaufTab(tab) {
-    ['lokal', 'team', 'auswertung-verlauf', 'auswertung-team'].forEach(t => {
+    ['lokal', 'team'].forEach(t => {
         const btn = document.getElementById('tab-' + t);
         if (btn) btn.classList.toggle('active', t === tab);
     });
@@ -260,17 +260,9 @@ function switchVerlaufTab(tab) {
     document.getElementById('no-team-archive').style.display = 'none';
     document.getElementById('team-archive-loading').style.display = 'none';
     document.getElementById('team-archive-unavailable').style.display = 'none';
-    document.getElementById('auswertung-verlauf-panel').style.display = 'none';
-    document.getElementById('auswertung-team-panel').style.display = 'none';
 
     if (tab === 'team') {
         loadAndRenderTeamArchive();
-    } else if (tab === 'auswertung-verlauf') {
-        document.getElementById('auswertung-verlauf-panel').style.display = 'block';
-        renderAuswertungVerlaufTab();
-    } else if (tab === 'auswertung-team') {
-        document.getElementById('auswertung-team-panel').style.display = 'block';
-        renderAuswertungTeamTab();
     } else {
         // "lokal" (Mein Verlauf)
         document.getElementById('archive-list').style.display = 'block';
@@ -278,72 +270,10 @@ function switchVerlaufTab(tab) {
     }
 }
 
-// ===== Auswertung Verlauf (lokales Archiv, direkt auf der Verlauf-Seite) =====
-// Nutzt dieselbe Berechnungslogik wie auswertung.html (js/auswertung-logik.js),
-// laedt das Archiv aber bewusst frisch, statt sich auf archiveCache zu
-// verlassen (analog zum Race-Condition-Fix beim CSV-Export).
-async function renderAuswertungVerlaufTab() {
-    let daten;
-    try {
-        daten = await getAllArchivedAudits();
-    } catch (err) {
-        console.error('Archiv konnte für die Auswertung nicht geladen werden:', err);
-        daten = [];
-    }
-    document.getElementById('av-kategorien-content').innerHTML = renderKategorienSchwachstellenHtml(daten);
-    document.getElementById('av-maerkte-content').innerHTML = renderAuffaelligeMaerkteHtml(daten);
-    document.getElementById('av-verlauf-content').innerHTML = renderVerlaufProMarktHtml(daten);
-}
-
-// ===== Auswertung Team (alle Begehungen aus dem Team-Archiv/NAS) =====
-// list.php liefert nur Metadaten (Firma, Datum, Marktnummer) - fuer eine
-// echte Auswertung werden die vollstaendigen Bewertungen benoetigt, daher
-// wird hier fuer JEDE gefundene Datei fetchSynologyRecord() aufgerufen.
-// Einzelne fehlgeschlagene Dateien werden uebersprungen (Promise.allSettled),
-// statt die gesamte Auswertung an einer einzelnen defekten Datei scheitern
-// zu lassen.
-async function renderAuswertungTeamTab() {
-    const containerIds = ['at-kategorien-content', 'at-maerkte-content', 'at-verlauf-content'];
-    const zeigeInAllen = (html) => containerIds.forEach(id => { document.getElementById(id).innerHTML = html; });
-
-    zeigeInAllen('<p class="auswertung-empty">Lade Team-Daten vom NAS …</p>');
-
-    if (window.location.hostname.endsWith('.github.io') && !getNasBaseUrl()) {
-        zeigeInAllen('<p class="auswertung-empty">Team-Auswertung ist hier nicht verfügbar (siehe Reiter „Team-Archiv (NAS)").</p>');
-        return;
-    }
-
-    let fileList;
-    try {
-        fileList = await getSynologyFiles();
-    } catch (err) {
-        console.error('Team-Archiv-Liste konnte nicht geladen werden:', err);
-        zeigeInAllen('<p style="color:var(--mangel);">Team-Archiv konnte nicht geladen werden: ' + (err && err.message ? err.message : 'unbekannter Fehler') + '</p>');
-        return;
-    }
-
-    if (fileList.length === 0) {
-        zeigeInAllen('<p class="auswertung-empty">Noch keine Begehung im Team-Archiv.</p>');
-        return;
-    }
-
-    const ergebnisse = await Promise.allSettled(fileList.map(f => fetchSynologyRecord(f.fileName)));
-    const daten = ergebnisse.filter(r => r.status === 'fulfilled').map(r => r.value);
-    const fehlgeschlagen = ergebnisse.length - daten.length;
-
-    document.getElementById('at-kategorien-content').innerHTML = renderKategorienSchwachstellenHtml(daten);
-    document.getElementById('at-maerkte-content').innerHTML = renderAuffaelligeMaerkteHtml(daten);
-    document.getElementById('at-verlauf-content').innerHTML = renderVerlaufProMarktHtml(daten);
-
-    if (fehlgeschlagen > 0) {
-        showToast(fehlgeschlagen + ' von ' + ergebnisse.length + ' Team-Dateien konnten nicht geladen werden', 'error');
-    }
-}
-
 document.addEventListener('DOMContentLoaded', () => {
     loadAndRenderArchive();
 
-    ['lokal', 'team', 'auswertung-verlauf', 'auswertung-team'].forEach(tab => {
+    ['lokal', 'team'].forEach(tab => {
         const btn = document.getElementById('tab-' + tab);
         if (btn) btn.addEventListener('click', () => switchVerlaufTab(tab));
     });
