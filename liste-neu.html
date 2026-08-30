@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkliste — Arbeitssicherheit</title>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0a2f73">
+<link rel="stylesheet" href="lib/css/fontawesome.min.css">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/checkliste.css">
+<script src="lib/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle" aria-label="Theme umschalten">🌙</button>
+
+<section class="hero hero-compact">
+    <div class="hero-icon"><i class="fas fa-clipboard-check"></i></div>
+    <h1>Arbeitssicherheits-Checkliste</h1>
+    <p>Desktop &amp; Tablet — 17 Kategorien, 136 Prüfpunkte</p>
+</section>
+
+<div class="container">
+
+    <a href="l1.html" class="back-button"><i class="fas fa-arrow-left"></i> Zurück zu Checklisten</a>
+
+    <div class="card">
+        <div class="stammdaten-grid">
+            <div>
+                <label for="markt">Marktnummer</label>
+                <input type="text" id="markt" placeholder="z. B. M123">
+            </div>
+            <div>
+                <label for="name">Name (Marktleitung / Ansprechperson)</label>
+                <input type="text" id="name">
+            </div>
+            <div>
+                <label for="sifa">SiFa</label>
+                <input type="text" id="sifa">
+            </div>
+            <div>
+                <label for="Marktleitung">Marktleitung</label>
+                <input type="text" id="Marktleitung">
+            </div>
+            <div>
+                <label>Datum</label>
+                <div id="datum" style="padding:12px 14px; background:var(--bg); border-radius:12px; font-weight:600;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="fragenContainer"></div>
+
+    <div class="card">
+        <h2 style="margin-top:0;">Maßnahmen (aus „Nein"-Antworten)</h2>
+        <p id="auswertung-hinweis" style="color:var(--ink-soft); font-size:0.9rem;"></p>
+        <table class="gbu-table">
+            <thead><tr><th style="width:40px;">Nr.</th><th>Frage</th><th>Maßnahme</th></tr></thead>
+            <tbody id="massnahmenTabelle"></tbody>
+        </table>
+    </div>
+
+    <div class="card">
+        <h2 style="margin-top:0;">Unterschrift</h2>
+        <canvas id="unterschriftCanvas" class="sign-canvas"></canvas>
+        <div style="margin-top:10px;">
+            <button type="button" class="btn btn-secondary" style="height:36px; padding:0 16px; font-size:0.85rem;" onclick="ChecklisteEngine.unterschriftLoeschen()">Löschen</button>
+        </div>
+    </div>
+
+    <div class="button-row">
+        <button type="button" class="btn btn-primary" onclick="ChecklisteEngine.pdfHerunterladen()"><i class="fas fa-file-pdf"></i> PDF speichern</button>
+        <button type="button" class="btn btn-secondary" onclick="ChecklisteEngine.pdfTeilen()"><i class="fas fa-share-nodes"></i> PDF teilen</button>
+        <button type="button" class="btn btn-secondary" onclick="ChecklisteEngine.weiterZuFotos()"><i class="fas fa-camera"></i> Zur Foto-Seite</button>
+        <button type="button" class="btn btn-secondary" onclick="ChecklisteEngine.exportiereMassnahmen()"><i class="fas fa-list-check"></i> Maßnahmen exportieren</button>
+        <button type="button" class="btn btn-danger-ghost" onclick="ChecklisteEngine.formularZuruecksetzen()">Zurücksetzen</button>
+    </div>
+
+</div>
+
+<footer class="app-footer">
+    <nav class="app-footer-links">
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutz</a>
+        <a href="faq.html">FAQ</a>
+        <a href="technische-beschreibung.html">Technik</a>
+        <a href="welcome.html">Startseite</a>
+    </nav>
+    <p>© <span class="app-footer-jahr"></span> Andreas Zott — Alle Rechte vorbehalten</p>
+    <p class="app-footer-version"></p>
+</footer>
+
+<script src="js/checkliste-daten.js"></script>
+<script src="js/checkliste-engine.js"></script>
+<script src="js/common.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => ChecklisteEngine.init());
+</script>
+
+</body>
+</html>

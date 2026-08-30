@@ -109,22 +109,7 @@
             <code>massnahmen-sifa.html</code> lauscht auf
             <code>message</code>-Events und rendert die Daten als
             Kartenliste.
-        </p>
-        <div class="hinweis-box">
-            ⚠️ Da <code>postMessage</code> asynchron erst nach dem
-            vollständigen Laden des neuen Fensters funktioniert, wartet die
-            aufrufende Seite aktuell mit einem festen <code>setTimeout</code>
-            (1000 ms). Bei sehr langsamen Geräten kann das im Einzelfall zu
-            knapp sein — bekannte Einschränkung, noch nicht behoben.
-        </div>
-        <div class="hinweis-box">
-            ⚠️ <code>audit.html</code> versucht zusätzlich, eine Datei
-            <code>Maßnahmenplan.html</code> zu öffnen. Im aktuellen
-            Dateibestand ist dieser Dateiname durch ein Kodierungsproblem
-            beim Export defekt — die Datei ist unter diesem Namen nicht
-            erreichbar. Noch zu klären, ob <code>audit.html</code> stattdessen
-            ebenfalls <code>massnahmen-sifa.html</code> nutzen sollte.
-        </div>
+        </p>      
         <h3>Innerhalb einer Seite</h3>
         <p style="margin-bottom:0;">
             Formulareingaben in <code>liste.html</code> werden fortlaufend
@@ -161,17 +146,7 @@
             Portal-Farbe) und eine eigene <code>version</code>-Angabe.
         </p>
         <p><code>service-worker.js</code> übernimmt das Offline-Caching (Cache-First-Strategie, versionierter Cache-Name, alte Caches werden beim Aktivieren automatisch gelöscht).</p>
-        <div class="hinweis-box">
-            🔧 Zuvor registrierten einige Seiten <code>sw.js</code>, andere
-            <code>service-worker.js</code> — zwei unterschiedliche Service
-            Worker im selben Geltungsbereich, was zu Cache-Konflikten führen
-            konnte. Seit der Überarbeitung registrieren alle Portal-Seiten
-            einheitlich <code>service-worker.js</code> über
-            <code>js/common.js</code>. Bei jeder inhaltlichen Änderung an
-            einer gecachten Datei sollte <code>APP_VERSION</code>
-            hochgezählt werden, damit zuverlässig ein neuer Cache angelegt
-            wird.
-        </div>
+      
 
         <h2>6. Datenspeicherung &amp; Datenschutz</h2>
         <ul>
