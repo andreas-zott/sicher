@@ -12,7 +12,7 @@
 // automatisch ein neuer Cache angelegt und der alte verworfen,
 // sodass Nutzer zuverlaessig die neue Version erhalten.
 // ─────────────────────────────────────────────────────────────
-const APP_VERSION = '2.1.1';
+const APP_VERSION = '2.1.2';
 const CACHE_NAME = `sicherheit-cache-v${APP_VERSION}`;
 
 const FILES_TO_CACHE = [
