@@ -1,0 +1,94 @@
+/* ==========================================================================
+   Checkliste — responsives Stylesheet
+   Passt sich automatisch zwischen Desktop/Tablet (breiter) und Telefon
+   (schmal) an - dieselbe Markup-Struktur fuer beide, siehe checkliste-engine.js
+   ========================================================================== */
+
+.hero-compact { padding: 36px 20px 70px; }
+.hero-compact h1 { font-size: 1.7rem; }
+.hero-compact p { font-size: 0.95rem; }
+
+.stammdaten-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 4px 16px;
+}
+.stammdaten-grid label { margin-top: 12px; }
+
+.kategorie-block {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
+}
+body.dark .kategorie-block { background: #1e293b; border-color: rgba(255,255,255,0.08); }
+
+.kategorie-titel {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 0 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--line);
+}
+body.dark .kategorie-titel { color: #93c5fd; }
+
+.frage-zeile {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 10px;
+    border-radius: 10px;
+    border-bottom: 1px solid var(--line);
+}
+.frage-zeile:last-child { border-bottom: none; }
+body.dark .frage-zeile { border-bottom-color: rgba(255,255,255,0.06); }
+
+.frage-zeile.hervorhebung-ja { background: rgba(22,163,74,0.07); }
+.frage-zeile.hervorhebung-nein { background: rgba(198,40,40,0.07); }
+.frage-zeile.hervorhebung-nv { background: rgba(107,114,128,0.07); }
+
+.frage-text { flex: 1; font-size: 0.92rem; color: var(--ink); }
+
+.antwort-optionen {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+}
+.antwort-opt {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    border: 1.5px solid var(--line);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--ink-soft);
+    user-select: none;
+    transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+.antwort-opt input { width: auto; margin: 0; accent-color: currentColor; }
+.antwort-opt.opt-ja:has(input:checked) { background: var(--ok); border-color: var(--ok); color: #fff; }
+.antwort-opt.opt-nein:has(input:checked) { background: var(--red); border-color: var(--red); color: #fff; }
+.antwort-opt.opt-nv:has(input:checked) { background: #6b7280; border-color: #6b7280; color: #fff; }
+
+/* Breite Bildschirme: Fragezeile bleibt einzeilig, mehr Abstand */
+@media (min-width: 760px) {
+    .frage-zeile { padding: 14px 16px; }
+    .frage-text { font-size: 0.95rem; }
+}
+
+/* Schmale Bildschirme (Telefon): Frage und Antworten untereinander,
+   groessere Tap-Ziele */
+@media (max-width: 560px) {
+    .frage-zeile { flex-direction: column; align-items: stretch; gap: 10px; }
+    .antwort-optionen { justify-content: stretch; }
+    .antwort-opt { flex: 1; justify-content: center; padding: 10px 8px; font-size: 0.85rem; }
+    .stammdaten-grid { grid-template-columns: 1fr; }
+    .kategorie-block { padding: 16px; }
+}
