@@ -170,6 +170,14 @@
         <p>Die App verwendet eine <span class="badge">MAJOR.MINOR.PATCH</span>-Versionsnummer, sichtbar im Footer jeder Seite sowie im Service-Worker-Cache-Namen.</p>
 
         <div class="changelog-eintrag">
+            <span class="version">Version 1.0.0</span><span class="datum">August 2026</span>
+            <ul>
+                <li>Versionsnummerierung zurückgesetzt auf 1.0.0 (zuvor 2.1.1) — betrifft <code>js/common.js</code>, <code>service-worker.js</code> und <code>manifest.json</code> sowie die Fußzeile von <code>foto.html</code>. Die bisherige Versionshistorie unten bleibt zur Nachvollziehbarkeit unverändert stehen.</li>
+                <li><code>liste.html</code> (ältere Fassung, Datenübertragung an <code>massnahmen-sifa.html</code> bekanntermaßen fehlerhaft) bewusst unverändert und auf „Version 1.0.2“ belassen — nicht Teil dieser Zurücksetzung. <code>l1.html</code> verweist inzwischen auf <code>liste-neu.html</code> und <code>mobile-neu.html</code>.</li>
+            </ul>
+        </div>
+
+        <div class="changelog-eintrag">
             <span class="version">Version 2.1.1</span><span class="datum">August 2026</span>
             <ul>
                 <li>Bugfix: Übergabe der Maßnahmen von <code>mobile.html</code> an <code>massnahmen-sifa.html</code> lieferte auf mobilen Browsern keine Daten — Ursache: die reine <code>window.open()</code>/<code>postMessage()</code>-Kommunikation ist auf iOS Safari anfällig für Pop-up-Blocker und verlorene <code>opener</code>-Referenzen. Umgestellt auf <code>localStorage</code> als primären, zuverlässigen Übertragungsweg — <code>postMessage</code> bleibt als schnellerer Zusatzweg bestehen, ist aber nicht mehr die einzige Quelle. Mit persistenten Browser-Profil end-to-end verifiziert</li>
