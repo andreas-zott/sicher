@@ -444,9 +444,17 @@
 
 <script>
 // Zentrale Versionsangabe – identisch zu liste-zott.html/foto.html
-const APP_VERSION = "2.1.0";
+const APP_VERSION = "2.2.0";
 const APP_VERSION_DATUM = "20.08.2026";
 document.getElementById('app-version').textContent = `Version ${APP_VERSION} · Stand: ${APP_VERSION_DATUM}`;
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log("✅ Service Worker registriert"))
+      .catch(err => console.error("❌ Service Worker Fehler:", err));
+  });
+}
 </script>
 
 </body>
