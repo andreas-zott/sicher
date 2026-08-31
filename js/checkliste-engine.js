@@ -109,6 +109,44 @@ const ChecklisteEngine = (() => {
         }
     }
 
+    // ===== Freies Bemerkungsfeld mit vorgefertigten Textbausteinen =====
+    // Diese Funktion gab es urspruenglich nur in mobile.html, nicht in
+    // liste.html - jetzt fuer beide Seiten gleichermassen ueber die
+    // gemeinsame Engine verfuegbar.
+
+    const FREITEXT_VORLAGEN = {
+        'freitext-notiz': 'Notiz:\nDie Überprüfung der Arbeitssicherheit verlief sehr produktiv. Das Marktmanagement zeigte ein tiefgehendes Verständnis für die betrieblichen Sicherheitsanforderungen und unterstützte die gemeinsame Bewertung maßgeblich.',
+        'freitext-hinweis': 'Hinweis zum Ablauf:\nAufgrund akuter Verpflichtungen der Marktleitung im Bereich der Warenpräsenz und des laufenden Betriebs wurde die Begehung in einem kompakten Zeitfenster durchgeführt. Die Rahmenbedingungen waren dabei durch einen allgemeinen Zeitdruck und eine herausfordernde Personaldecke geprägt. Der Fokus lag daher zielgerichtet auf den wesentlichen Kern- und Gefahrenbereichen. Detail- und Nebenbereiche wurden stichprobenartig betrachtet; die ergänzende Nachprüfung dieser Abschnitte erfolgt im Rahmen einer zeitnahen Folgebegehung.',
+        'freitext-fazit-positiv': 'Fazit:\nEin sehr produktiver Rundgang, der von einem partnerschaftlichen Austausch geprägt war. Die Überprüfung der Arbeitssicherheit profitierte maßgeblich von dem tiefen Verständnis des Marktmanagements für die operativen Abläufe. Die reibungslose Zusammenarbeit und die konsequente praktische Umsetzung der Vorgaben vor Ort sind ausdrücklich positiv hervorzuheben.',
+        'freitext-fazit-negativ': 'Fazit:\nDer gemeinsame Rundgang machte deutlich, dass bei der Umsetzung der Arbeitssicherheitsstandards vor Ort noch spürbarer Nachholbedarf besteht. Die Abstimmung mit der Marktleitung gestaltete sich stellenweise schwierig. Um das Sicherheitsniveau im Markt auf den geforderten Standard zu bringen, ist eine intensivere Unterstützung und Sensibilisierung des Managements im Tagesgeschäft erforderlich.'
+    };
+
+    function freitextEinfuegen(text) {
+        const feld = document.getElementById('freitextfeld');
+        if (!feld) return;
+        const start = feld.selectionStart;
+        const end = feld.selectionEnd;
+        feld.value = feld.value.substring(0, start) + text + feld.value.substring(end);
+        feld.selectionStart = feld.selectionEnd = start + text.length;
+        feld.focus();
+        speichereStand();
+    }
+
+    function freitextLoeschen() {
+        const feld = document.getElementById('freitextfeld');
+        if (!feld) return;
+        feld.value = '';
+        speichereStand();
+    }
+
+    function initFreitext() {
+        document.querySelectorAll('.freitext-buttons .btn[data-text]').forEach(button => {
+            button.addEventListener('click', () => {
+                freitextEinfuegen(FREITEXT_VORLAGEN[button.dataset.text] || '');
+            });
+        });
+    }
+
     // ===== Unterschriften-Canvas =====
 
     let canvas, ctx, malend = false;
@@ -193,6 +231,7 @@ const ChecklisteEngine = (() => {
             name: feldWert('name'),
             sifa: feldWert('sifa'),
             marktleitung: feldWert('Marktleitung'),
+            freitext: feldWert('freitextfeld'),
             antworten,
             unterschrift: istCanvasLeer() ? null : canvas.toDataURL('image/png')
         };
@@ -218,6 +257,9 @@ const ChecklisteEngine = (() => {
                 el.value = stand[id === 'Marktleitung' ? 'marktleitung' : id];
             }
         });
+
+        const freitextfeld = document.getElementById('freitextfeld');
+        if (freitextfeld && stand.freitext) freitextfeld.value = stand.freitext;
 
         Object.keys(stand.antworten || {}).forEach(name => {
             const radio = document.querySelector(`input[name="${name}"][value="${stand.antworten[name]}"]`);
@@ -329,71 +371,160 @@ const ChecklisteEngine = (() => {
     async function buildPdf() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-        const pageWidth = 210, pageHeight = 297, margin = 16;
+        const pageWidth = 210, pageHeight = 297, margin = 15;
         const contentWidth = pageWidth - margin * 2;
-        let y = 20;
+        const heute = new Date().toLocaleDateString('de-DE');
+        const markt = feldWert('markt') || 'Unbekannt';
+        const name = feldWert('name') || '-';
+        const marktleitung = feldWert('Marktleitung') || '-';
+        const sifa = feldWert('sifa') || '-';
+        let y = margin;
 
-        const INK = [10, 47, 115], SOFT = [71, 85, 105], LINE = [226, 232, 240];
-        const FARBE = { ja: [22, 163, 74], nein: [198, 40, 40], nv: [107, 114, 128] };
+        const ROT = [183, 28, 28];
+        const spaltenBreiten = [contentWidth * 0.7, contentWidth * 0.1, contentWidth * 0.1, contentWidth * 0.1];
 
-        function neueSeiteFallsNoetig(hoehe) {
-            if (y + hoehe > pageHeight - 16) { doc.addPage(); y = 20; }
+        function miniHeader() {
+            doc.setFontSize(8);
+            doc.setTextColor(100);
+            doc.text(`Arbeitssicherheits-Checkliste | ${markt}`, margin, 8);
+            doc.text(heute, pageWidth - margin, 8, { align: 'right' });
+            doc.setDrawColor(200);
+            doc.line(margin, 10, pageWidth - margin, 10);
         }
 
+        function neueSeite() {
+            doc.addPage();
+            miniHeader();
+            y = 18;
+        }
+
+        function platzPruefen(hoehe) {
+            if (y + hoehe > pageHeight - 20) neueSeite();
+        }
+
+        function tabellenKopf() {
+            doc.setFillColor(...ROT);
+            doc.rect(margin, y, contentWidth, 8, 'F');
+            doc.setFontSize(9);
+            doc.setTextColor(255);
+            doc.setFont(undefined, 'bold');
+            doc.text('Frage', margin + 3, y + 5.5);
+            doc.text('Ja', margin + spaltenBreiten[0] + spaltenBreiten[1] / 2, y + 5.5, { align: 'center' });
+            doc.text('Nein', margin + spaltenBreiten[0] + spaltenBreiten[1] + spaltenBreiten[2] / 2, y + 5.5, { align: 'center' });
+            doc.text('N/V', margin + spaltenBreiten[0] + spaltenBreiten[1] + spaltenBreiten[2] + spaltenBreiten[3] / 2, y + 5.5, { align: 'center' });
+            doc.setFont(undefined, 'normal');
+            y += 8;
+        }
+
+        // ===== Titelbereich =====
         doc.setFont(undefined, 'bold');
-        doc.setFontSize(16);
-        doc.setTextColor(...INK);
-        doc.text('Arbeitssicherheits-Checkliste', margin, y);
-        y += 10;
+        doc.setFontSize(20);
+        doc.setTextColor(33, 37, 41);
+        doc.text('Arbeitssicherheits-Checkliste', margin, y + 8);
+        doc.setFontSize(12);
+        doc.setTextColor(...ROT);
+        doc.text(heute, pageWidth - margin, y + 8, { align: 'right' });
+        doc.setDrawColor(...ROT);
+        doc.setLineWidth(0.8);
+        doc.line(margin, y + 12, pageWidth - margin, y + 12);
+        y += 22;
 
         doc.setFont(undefined, 'normal');
-        doc.setFontSize(10);
-        doc.setTextColor(...SOFT);
-        doc.text(`Markt: ${feldWert('markt')}    Name: ${feldWert('name')}    SiFa: ${feldWert('sifa')}`, margin, y);
-        y += 5;
-        doc.text(`Datum: ${new Date().toLocaleDateString('de-DE')}`, margin, y);
-        y += 10;
+        doc.setFontSize(11);
+        doc.setTextColor(0);
+        [`Marktnummer: ${markt}`, `Marktleitung: ${marktleitung}`, `Teilnehmer: ${name}`, `SiFa: ${sifa}`].forEach(zeile => {
+            doc.text(zeile, margin, y);
+            y += 6;
+        });
+        y += 6;
+
+        // ===== Kategorien als farbige Tabellen =====
+        let totalJa = 0, totalNein = 0, totalNV = 0, totalOffen = 0;
+        neueSeite();
 
         CHECKLISTE_KATALOG.forEach((kat, kIdx) => {
-            neueSeiteFallsNoetig(14);
+            const geschaetzteHoehe = 16 + 8 + kat.fragen.length * 8;
+            if (y + Math.min(geschaetzteHoehe, pageHeight - 38) > pageHeight - 20 && y > 18) {
+                neueSeite();
+            } else if (y > 18) {
+                y += 6;
+            }
+
+            doc.setFillColor(245, 233, 233);
+            doc.roundedRect(margin, y, contentWidth, 10, 2, 2, 'F');
+            doc.setFontSize(12);
+            doc.setTextColor(91, 33, 33);
             doc.setFont(undefined, 'bold');
-            doc.setFontSize(11);
-            doc.setTextColor(...INK);
-            doc.text(`${kat.nummer} ${kat.name}`, margin, y);
-            y += 6;
+            doc.text(`${kat.nummer} ${kat.name}`, margin + 5, y + 7);
+            doc.setFont(undefined, 'normal');
+            y += 16;
+
+            tabellenKopf();
 
             kat.fragen.forEach((f, fIdx) => {
                 const zeile = document.querySelector(`.frage-zeile[data-name="frage-${kIdx}-${fIdx}"]`);
                 const checked = zeile ? zeile.querySelector('input[type="radio"]:checked') : null;
-                const antwort = checked ? checked.value : '—';
+                const antwort = checked ? checked.value : null;
 
-                const frageZeilen = doc.splitTextToSize(f.frage, contentWidth - 20);
-                neueSeiteFallsNoetig(frageZeilen.length * 4.2 + 3);
+                doc.setFontSize(9);
+                const frageZeilen = doc.splitTextToSize(f.frage, spaltenBreiten[0] - 6);
+                const rowHoehe = Math.max(8, frageZeilen.length * 4 + 4);
 
+                if (y + rowHoehe > pageHeight - 20) {
+                    neueSeite();
+                    tabellenKopf();
+                }
+
+                if (fIdx % 2 === 1) {
+                    doc.setFillColor(248, 248, 248);
+                    doc.rect(margin, y, contentWidth, rowHoehe, 'F');
+                }
+
+                doc.setDrawColor(222, 226, 230);
+                let x = margin;
+                spaltenBreiten.forEach(b => { doc.rect(x, y, b, rowHoehe); x += b; });
+
+                doc.setTextColor(0);
+                doc.text(frageZeilen, margin + 3, y + 4);
+
+                const mitteY = y + rowHoehe / 2 + 1;
+                if (antwort === 'ja') {
+                    totalJa++;
+                    doc.setFillColor(212, 237, 218);
+                    doc.rect(margin + spaltenBreiten[0], y, spaltenBreiten[1], rowHoehe, 'F');
+                    doc.setTextColor(46, 125, 50);
+                    doc.setFont(undefined, 'bold');
+                    doc.text('Ja', margin + spaltenBreiten[0] + spaltenBreiten[1] / 2, mitteY, { align: 'center' });
+                } else if (antwort === 'nein') {
+                    totalNein++;
+                    doc.setFillColor(248, 215, 218);
+                    doc.rect(margin + spaltenBreiten[0] + spaltenBreiten[1], y, spaltenBreiten[2], rowHoehe, 'F');
+                    doc.setTextColor(...ROT);
+                    doc.setFont(undefined, 'bold');
+                    doc.text('Nein', margin + spaltenBreiten[0] + spaltenBreiten[1] + spaltenBreiten[2] / 2, mitteY, { align: 'center' });
+                } else if (antwort === 'nv') {
+                    totalNV++;
+                    doc.setFillColor(226, 227, 229);
+                    doc.rect(margin + spaltenBreiten[0] + spaltenBreiten[1] + spaltenBreiten[2], y, spaltenBreiten[3], rowHoehe, 'F');
+                    doc.setTextColor(102);
+                    doc.setFont(undefined, 'bold');
+                    doc.text('N/V', margin + spaltenBreiten[0] + spaltenBreiten[1] + spaltenBreiten[2] + spaltenBreiten[3] / 2, mitteY, { align: 'center' });
+                } else {
+                    totalOffen++;
+                }
                 doc.setFont(undefined, 'normal');
-                doc.setFontSize(8.8);
-                doc.setTextColor(60, 60, 60);
-                doc.text(frageZeilen, margin, y);
-
-                doc.setFont(undefined, 'bold');
-                doc.setTextColor(...(FARBE[antwort] || [150, 150, 150]));
-                doc.text(antwort === 'ja' ? 'Ja' : antwort === 'nein' ? 'Nein' : antwort === 'nv' ? 'N/V' : '—', margin + contentWidth - 12, y);
-
-                y += frageZeilen.length * 4.2 + 3;
-                doc.setDrawColor(...LINE);
-                doc.line(margin, y - 1.5, margin + contentWidth, y - 1.5);
+                y += rowHoehe;
             });
-            y += 4;
         });
 
-        // Maßnahmentabelle
+        // ===== Maßnahmen =====
         const massnahmenZeilen = document.querySelectorAll('#massnahmenTabelle tr');
         if (massnahmenZeilen.length > 0) {
-            neueSeiteFallsNoetig(14);
+            platzPruefen(14);
             doc.setFont(undefined, 'bold');
             doc.setFontSize(13);
-            doc.setTextColor(...INK);
-            doc.text('Maßnahmen (aus "Nein"-Antworten)', margin, y);
+            doc.setTextColor(33, 37, 41);
+            doc.text('Maßnahmen (aus „Nein"-Antworten)', margin, y);
             y += 8;
 
             massnahmenZeilen.forEach(tr => {
@@ -403,27 +534,43 @@ const ChecklisteEngine = (() => {
                 const massnahme = zellen[2].textContent.trim();
                 const frageZeilen = doc.splitTextToSize(frage, contentWidth);
                 const massnahmeZeilen = doc.splitTextToSize(massnahme, contentWidth);
-                neueSeiteFallsNoetig((frageZeilen.length + massnahmeZeilen.length) * 4.2 + 6);
+                platzPruefen((frageZeilen.length + massnahmeZeilen.length) * 4.2 + 6);
 
                 doc.setFont(undefined, 'bold');
                 doc.setFontSize(9);
-                doc.setTextColor(...INK);
+                doc.setTextColor(33, 37, 41);
                 doc.text(frageZeilen, margin, y);
                 y += frageZeilen.length * 4.2 + 1;
 
                 doc.setFont(undefined, 'normal');
-                doc.setTextColor(...SOFT);
+                doc.setTextColor(71, 85, 105);
                 doc.text(massnahmeZeilen, margin, y);
                 y += massnahmeZeilen.length * 4.2 + 5;
             });
         }
 
-        // Unterschrift
+        // ===== Freies Bemerkungsfeld =====
+        platzPruefen(20);
+        doc.setFont(undefined, 'bold');
+        doc.setFontSize(11);
+        doc.setTextColor(33, 37, 41);
+        doc.text('Freies Bemerkungsfeld / Besonderheiten', margin, y);
+        y += 6;
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(9.5);
+        doc.setTextColor(71, 85, 105);
+        const freitextWert = feldWert('freitextfeld').trim() || 'Keine zusätzlichen Bemerkungen eingetragen.';
+        const freitextZeilen = doc.splitTextToSize(freitextWert, contentWidth);
+        platzPruefen(freitextZeilen.length * 4.2);
+        doc.text(freitextZeilen, margin, y);
+        y += freitextZeilen.length * 4.2 + 8;
+
+        // ===== Unterschrift =====
         if (!istCanvasLeer()) {
-            neueSeiteFallsNoetig(40);
+            platzPruefen(40);
             doc.setFont(undefined, 'bold');
             doc.setFontSize(11);
-            doc.setTextColor(...INK);
+            doc.setTextColor(33, 37, 41);
             doc.text('Unterschrift', margin, y);
             y += 4;
             try {
@@ -432,16 +579,97 @@ const ChecklisteEngine = (() => {
             y += 30;
         }
 
+        // ===== Zusammenfassungs-Box =====
+        platzPruefen(45);
+        doc.setFont(undefined, 'bold');
+        doc.setFontSize(12);
+        doc.setTextColor(33, 37, 41);
+        doc.text('Zusammenfassung', margin, y);
+        doc.setFont(undefined, 'normal');
+        y += 8;
+
+        const gesamt = totalJa + totalNein + totalNV + totalOffen;
+        doc.setFillColor(248, 249, 250);
+        doc.setDrawColor(200);
+        doc.roundedRect(margin, y, contentWidth, 35, 3, 3, 'FD');
+        const boxY = y + 8;
+        const spalte = contentWidth / 4;
+        const box = (index, wert, label, fuellR, fuellG, fuellB, textR, textG, textB) => {
+            const bx = margin + spalte * index;
+            doc.setFillColor(fuellR, fuellG, fuellB);
+            doc.roundedRect(bx + 5, boxY, spalte - 10, 20, 2, 2, 'F');
+            doc.setTextColor(textR, textG, textB);
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.text(String(wert), bx + spalte / 2, boxY + 10, { align: 'center' });
+            doc.setFontSize(8);
+            doc.setFont(undefined, 'normal');
+            doc.text(label, bx + spalte / 2, boxY + 17, { align: 'center' });
+        };
+        box(0, totalJa, 'Ja', 212, 237, 218, 46, 125, 50);
+        box(1, totalNein, 'Nein', 248, 215, 218, ...ROT);
+        box(2, totalNV, 'N/V', 226, 227, 229, 102, 102, 102);
+        doc.setFillColor(255, 255, 255);
+        doc.setDrawColor(...ROT);
+        doc.roundedRect(margin + spalte * 3 + 5, boxY, spalte - 10, 20, 2, 2, 'FD');
+        doc.setTextColor(...ROT);
+        doc.setFontSize(14);
+        doc.setFont(undefined, 'bold');
+        doc.text(String(gesamt), margin + spalte * 3 + spalte / 2, boxY + 10, { align: 'center' });
+        doc.setFontSize(8);
+        doc.setFont(undefined, 'normal');
+        doc.text('Gesamt', margin + spalte * 3 + spalte / 2, boxY + 17, { align: 'center' });
+        y += 45;
+
+        // ===== Fußnotiz =====
+        platzPruefen(16);
+        doc.setDrawColor(200);
+        doc.line(margin, y, pageWidth - margin, y);
+        y += 8;
+        doc.setFontSize(8);
+        doc.setTextColor(100);
+        const hinweis = doc.splitTextToSize(
+            'Hinweis: Dieses Dokument wurde elektronisch erstellt und ist auch ohne handschriftliche Unterschrift gültig, sofern die digitale Signatur vorliegt.',
+            contentWidth
+        );
+        doc.text(hinweis, margin, y);
+        y += hinweis.length * 3.5 + 4;
+        doc.text(`Erstellt am: ${heute} | Markt: ${markt} | SiFa: ${sifa}`, margin, y);
+
+        // ===== Seitenzahlen =====
         const seiten = doc.getNumberOfPages();
         for (let i = 1; i <= seiten; i++) {
             doc.setPage(i);
             doc.setFont(undefined, 'normal');
-            doc.setFontSize(7.5);
-            doc.setTextColor(150, 150, 150);
-            doc.text(`Seite ${i} von ${seiten}`, pageWidth - margin, pageHeight - 8, { align: 'right' });
+            doc.setFontSize(8);
+            doc.setTextColor(100);
+            doc.text(`Seite ${i} von ${seiten}`, pageWidth / 2, pageHeight - 8, { align: 'center' });
         }
 
         return doc;
+    }
+
+    // Text fuer den E-Mail-Versand (navigator.share() UND "Mail vorbereiten").
+    // iOS uebernimmt title/text beim Teilen an die Mail-App oft nicht
+    // zuverlaessig - daher zusaetzlich der separate, mailto:-basierte Weg
+    // ueber mailVorbereiten() unten (analog zu ASiC Handel).
+    function emailBetreff() {
+        return `Arbeitssicherheits-Checkliste — Markt ${feldWert('markt') || ''}`;
+    }
+    function emailText() {
+        const markt = feldWert('markt') || '';
+        const sifa = feldWert('sifa') || '';
+        return `Sehr geehrte Damen und Herren,\n\nim Rahmen der turnusmäßigen Arbeitssicherheitsbegehung übersende ich Ihnen anbei das Begehungsprotokoll des Marktes ${markt} zur sachlichen Prüfung.\n\nBitte prüfen Sie die dokumentierten Feststellungen und veranlassen Sie die Umsetzung der erforderlichen Maßnahmen.\n\nMit freundlichen Grüßen\n${sifa}\nFachkraft für Arbeitssicherheit (SiFa)`;
+    }
+
+    // Zuverlaessige Alternative zu navigator.share() fuer Betreff/Text: oeffnet
+    // eine neue Mail mit korrekt befuelltem Betreff/Text - kann aber aus einer
+    // Web-App heraus keinen Anhang setzen. Das per "PDF speichern"/"PDF teilen"
+    // gesicherte PDF muss hier einmal zusaetzlich manuell angehaengt werden.
+    function mailVorbereiten() {
+        const subject = encodeURIComponent(emailBetreff());
+        const body = encodeURIComponent(emailText());
+        window.location.href = `mailto:?subject=${subject}&body=${body}`;
     }
 
     function pdfDateiname() {
@@ -463,7 +691,7 @@ const ChecklisteEngine = (() => {
             if (navigator.canShare && typeof File !== 'undefined') {
                 const file = new File([blob], dateiname, { type: 'application/pdf' });
                 if (navigator.canShare({ files: [file] })) {
-                    await navigator.share({ files: [file], title: 'Arbeitssicherheits-Checkliste' });
+                    await navigator.share({ files: [file], title: emailBetreff(), text: emailText() });
                     return;
                 }
             }
@@ -479,6 +707,7 @@ const ChecklisteEngine = (() => {
     function init() {
         renderKategorien();
         initSignatur();
+        initFreitext();
         ladeStand();
         aktualisiereMassnahmenTabelle();
 
@@ -488,7 +717,7 @@ const ChecklisteEngine = (() => {
             datumsfeld.textContent = heute.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
         }
 
-        document.querySelectorAll('#markt, #name, #sifa, #Marktleitung').forEach(el => {
+        document.querySelectorAll('#markt, #name, #sifa, #Marktleitung, #freitextfeld').forEach(el => {
             el.addEventListener('input', speichereStand);
         });
     }
@@ -496,11 +725,13 @@ const ChecklisteEngine = (() => {
     return {
         init,
         weiterZuFotos,
+        freitextLoeschen,
         exportiereMassnahmen,
         unterschriftLoeschen,
         formularZuruecksetzen,
         pdfHerunterladen,
-        pdfTeilen
+        pdfTeilen,
+        mailVorbereiten
     };
 
 })();
