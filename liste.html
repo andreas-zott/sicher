@@ -3550,7 +3550,23 @@ marktleitung,
     sifa,
     maßnahmen: maßnahmenTabelle
   };
-  const newWindow = window.open('massnahmen.html', 'maßnahmen');
+  // BUGFIX: Oeffnete zuvor 'massnahmen.html' (eine unverbundene, aeltere
+  // Kopie) statt 'massnahmen-sifa.html' - dorthin kamen die Daten nie an.
+  // Zusaetzlich: reine postMessage-Uebertragung ist auf mobilen Browsern
+  // (Pop-up-Blocker, verlorene opener-Referenz) unzuverlaessig. Die Daten
+  // werden jetzt VOR dem Oeffnen zusaetzlich in localStorage geschrieben -
+  // massnahmen-sifa.html liest sie beim Laden direkt aus, unabhaengig
+  // davon, ob das Popup oder postMessage funktionieren.
+  try {
+    localStorage.setItem('massnahmen_uebergabe', JSON.stringify(daten));
+  } catch (e) {
+    console.warn('Maßnahmen konnten nicht zwischengespeichert werden:', e);
+  }
+  const newWindow = window.open('massnahmen-sifa.html', 'massnahmen');
+  if (!newWindow) {
+    alert('Die Maßnahmen-Auswertung konnte nicht geöffnet werden — vermutlich blockiert dein Browser das Pop-up. Bitte Pop-ups für diese Seite erlauben und erneut versuchen.');
+    return;
+  }
   setTimeout(() => {
     newWindow.postMessage(daten, "*");
   }, 1000);
@@ -3594,26 +3610,14 @@ if ('serviceWorker' in navigator) {
   });
 }
 function manuellSpeichern() {
-  const formData = {
-    markt: document.getElementById('markt')?.value || '',
-    teilnehmer: document.getElementById('teilnehmer')?.value || '',
-marktleitung: document.getElementById('Marktleitung')?.value || '',
-    sifa: document.getElementById('sifa')?.value || '',
-    datum: document.getElementById('datum')?.textContent || '',
-    antworten: {},
-    checkboxes: {
-      mangel: document.getElementById('mangel')?.checked || false,
-      massnahmen: document.getElementById('massnahmen')?.checked || false,
-      nachkontrolle: document.getElementById('nachkontrolle')?.checked || false,
-      mitarbeiter: document.getElementById('mitarbeiter')?.checked || false
-    },
-    unterschrift: canvas.toDataURL()
-  };
-  const radios = document.querySelectorAll('#fragenTabelle input[type="radio"]:checked');
-  radios.forEach(radio => {
-    formData.antworten[radio.name] = radio.value;
-  });
-  localStorage.setItem('arbeitssicherheit_formular', JSON.stringify(formData));
+  // BUGFIX: Schrieb zuvor eine eigene, unvollstaendige Kopie der Daten unter
+  // dem Schluessel 'arbeitssicherheit_formular' - dieser wurde von der
+  // tatsaechlich beim Laden verwendeten Funktion nie gelesen (siehe unten,
+  // 'formSicherheit2025'). Manuell gespeicherte Eingaben gingen dadurch beim
+  // naechsten Laden verloren. Nutzt jetzt dieselbe Speicherlogik/denselben
+  // Schluessel wie das automatische Speichern, analog zum bereits
+  // korrigierten manuellSpeichern() in mobile.html.
+  speichereFormular();
   alert('✅ Formular wurde gespeichert!');
 }
 function ladeFormular() {
@@ -3665,7 +3669,7 @@ function formularZuruecksetzen() {
   });  
   clearSignature();
   neinFragenInMaßnahmen();
-  localStorage.removeItem('arbeitssicherheit_formular');  
+  localStorage.removeItem('formSicherheit2025');  
   alert('✅ Formular wurde zurückgesetzt!');
 }
 // Set title

@@ -12,7 +12,7 @@
 // automatisch ein neuer Cache angelegt und der alte verworfen,
 // sodass Nutzer zuverlaessig die neue Version erhalten.
 // ─────────────────────────────────────────────────────────────
-const APP_VERSION = '1.0.0';
+const APP_VERSION = '1.0.1';
 const CACHE_NAME = `sicherheit-cache-v${APP_VERSION}`;
 
 const FILES_TO_CACHE = [
@@ -24,6 +24,8 @@ const FILES_TO_CACHE = [
   '/sicher/foto.html',
   '/sicher/liste-neu.html',
   '/sicher/mobile-neu.html',
+  '/sicher/liste.html',
+  '/sicher/mobile.html',
   '/sicher/massnahmen-sifa.html',
   '/sicher/faq.html',
   '/sicher/technische-beschreibung.html',
