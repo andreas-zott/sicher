@@ -2277,57 +2277,83 @@ function downloadJson() {
     showToast('JSON-Datei lokal gespeichert!', 'success');
 }
 
-function exportJson() {
+// ===== Synology-NAS-Speicherung (save.php) =====
+// Analog zu ASiC Handel: setzt voraus, dass save.php im selben Verzeichnis
+// wie diese Seite liegt (bzw. ueber eine in den Einstellungen hinterlegte
+// Basis-Adresse erreichbar ist). Ueber GitHub Pages allein ist dieser
+// Endpunkt nicht erreichbar, da dort keine serverseitigen Skripte laufen
+// koennen - die Seite muss dafuer direkt ueber die Synology (bzw. deren
+// Tailscale-Adresse) aufgerufen werden.
+
+async function parseJsonResponse(res) {
+    try {
+        return await res.json();
+    } catch (parseErr) {
+        throw new Error('Ungültige Antwort vom NAS (kein gültiges JSON).');
+    }
+}
+
+function getNasBaseUrl() {
+    try {
+        const raw = localStorage.getItem('nasBaseUrl');
+        return raw ? raw.trim() : '';
+    } catch (e) {
+        return '';
+    }
+}
+
+function nasUrl(path) {
+    const base = getNasBaseUrl();
+    if (!base) return './' + path;
+    return base.replace(/\/+$/, '') + '/' + path;
+}
+
+function getNasApiKey() {
+    try {
+        return localStorage.getItem('nasApiKey') || '';
+    } catch (e) {
+        return '';
+    }
+}
+
+function withNasAuthHeaders(options) {
+    const key = getNasApiKey();
+    if (!key) return options;
+    return {
+        ...options,
+        headers: { ...(options && options.headers), 'X-Api-Key': key }
+    };
+}
+
+async function exportJson() {
     const data = getFormData();
 
-    // Marktname / Marktnummer holen
-    const markt = (document.getElementById('markt').value || 'Markt')
-        .trim()
-        .replace(/[^a-zA-Z0-9_-]/g, '_');
-
-    // Deutsches Datum erzeugen
-    let deutschesDatum = 'ohne-datum';
-
-    const datumWert = document.getElementById('datum').value;
-
-    if (datumWert) {
-        const datumObj = new Date(datumWert);
-
-        deutschesDatum = datumObj
-            .toLocaleDateString('de-DE')
-            .replace(/\./g, '-');
-    }
-
-    // Dateiname zusammensetzen
-  const sifa = (document.getElementById('sifa').value || 'SiFa')
-    .trim()
-    .replace(/[^a-zA-Z0-9_-]/g, '_');
-
-data.dateiname = `${markt}_${deutschesDatum}_${sifa}.json`;
+    // save.php erwartet die Pflichtangaben (Datum, Marktnummer) unter
+    // companyInfo - dieselbe Struktur wie bei ASiC Handel.
+    data.companyInfo = {
+        firma: data.marktleitung || data.teilnehmer || '',
+        marktnummer: data.markt || '',
+        datum: data.datum || ''
+    };
 
     showToast('Speichere auf NAS...', 'success');
 
-    fetch('upload.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data, null, 2)
-    })
-    .then(response => response.json())
-    .then(result => {
-
-        if (result.status === 'success') {
-            showToast(result.message, 'success');
-        } else {
-            showToast(result.message, 'error');
+    try {
+        const res = await fetch(nasUrl('save.php'), withNasAuthHeaders({
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            cache: 'no-store',
+            body: JSON.stringify(data)
+        }));
+        const result = await parseJsonResponse(res);
+        if (!res.ok || !result.ok) {
+            throw new Error(result.message || `Fehler beim Speichern (HTTP ${res.status}).`);
         }
-
-    })
-    .catch(error => {
-        console.error(error);
-        showToast('Fehler beim Speichern!', 'error');
-    });
+        showToast('Auf NAS gespeichert: ' + result.fileName, 'success');
+    } catch (error) {
+        console.error('NAS-Speichern fehlgeschlagen:', error);
+        showToast('NAS-Speichern fehlgeschlagen: ' + (error && error.message ? error.message : 'unbekannter Fehler'), 'error');
+    }
 }
         
         function importJson(event) {
