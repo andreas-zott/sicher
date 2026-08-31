@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Gefährdungsbeurteilung – Springer Metzgerei / BackShop</title>
+<style>
+  :root{
+    --primary:#1f3a5f;
+    --primary-light:#e7edf5;
+    --accent:#b5321f;
+    --gray:#5b6470;
+    --line:#c9d2dc;
+    --bg-alt:#f6f8fa;
+    --risk-high:#b5321f;
+    --risk-mid:#c07a12;
+    --risk-low:#2c6e49;
+  }
+  *{box-sizing:border-box;}
+  body{
+    font-family:"Segoe UI","Calibri",Arial,sans-serif;
+    color:#1a1f26;
+    font-size:9.5pt;
+    line-height:1.35;
+    margin:0;
+    padding:0;
+  }
+  .page{
+    padding:10mm 12mm;
+    page-break-after:always;
+  }
+  .page:last-child{page-break-after:auto;}
+
+  /* Formularfelder (druckbar) */
+  input[type="text"], input[type="date"]{
+    font-family:inherit;
+    font-size:inherit;
+    color:#1a1f26;
+    border:none;
+    border-bottom:1px solid #7c8896;
+    background:transparent;
+    padding:2px 3px;
+    width:100%;
+  }
+  input[type="text"]:focus, input[type="date"]:focus{
+    outline:1px solid var(--primary);
+    background:#fffceb;
+  }
+  input[type="checkbox"]{
+    width:15px;
+    height:15px;
+    accent-color:var(--primary);
+    cursor:pointer;
+    vertical-align:middle;
+  }
+  .chk-line{display:flex; align-items:center; gap:5px; white-space:nowrap;}
+  .chk-line input[type="date"]{width:auto; flex:1; min-width:60px;}
+
+  /* Deckblatt */
+  .cover{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    min-height:180mm;
+    border-top:10px solid var(--primary);
+  }
+  .cover .tag{
+    color:var(--accent);
+    font-weight:700;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    font-size:10pt;
+    margin-bottom:6px;
+  }
+  .cover h1{
+    font-size:26pt;
+    color:var(--primary);
+    margin:0 0 2px 0;
+  }
+  .cover h2{
+    font-size:13.5pt;
+    color:var(--gray);
+    font-weight:400;
+    margin:0 0 20px 0;
+  }
+  .cover-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0 40px;
+    max-width:100%;
+  }
+  .cover-table{
+    width:100%;
+    border-collapse:collapse;
+  }
+  .cover-table td{
+    padding:6px 0;
+    border-bottom:1px solid var(--line);
+    font-size:9.5pt;
+    vertical-align:bottom;
+  }
+  .cover-table td.label{
+    color:var(--gray);
+    width:44%;
+    padding-right:8px;
+  }
+  .cover-footer{
+    margin-top:22px;
+    font-size:8.5pt;
+    color:var(--gray);
+    max-width:800px;
+  }
+
+  h1.section-title{
+    font-size:16pt;
+    color:var(--primary);
+    border-bottom:3px solid var(--primary);
+    padding-bottom:5px;
+    margin:0 0 10px 0;
+  }
+  h2.sub{
+    font-size:12.5pt;
+    color:var(--primary);
+    margin:16px 0 4px 0;
+    padding:5px 9px;
+    background:var(--primary-light);
+    border-left:5px solid var(--primary);
+  }
+  h2.sub .num{
+    color:var(--accent);
+    font-weight:700;
+    margin-right:6px;
+  }
+  p.intro{color:#333; margin-bottom:10px;}
+  ul.legal-list{columns:2; column-gap:30px; margin:0 0 8px 0; padding-left:18px;}
+  ul.legal-list li{margin-bottom:4px; break-inside:avoid;}
+  ul.legal-list b{color:var(--primary);}
+
+  table.gbu{
+    width:100%;
+    border-collapse:collapse;
+    margin:6px 0 4px 0;
+    font-size:8pt;
+    table-layout:fixed;
+  }
+  table.gbu th{
+    background:var(--primary);
+    color:#fff;
+    text-align:left;
+    padding:5px 5px;
+    font-size:7.3pt;
+    text-transform:uppercase;
+    letter-spacing:.2px;
+  }
+  table.gbu td{
+    border:1px solid var(--line);
+    padding:5px 5px;
+    vertical-align:top;
+  }
+  table.gbu tr:nth-child(even) td{background:var(--bg-alt);}
+  table.gbu td ul{margin:0;padding-left:12px;}
+  table.gbu td ul li{margin-bottom:3px;}
+  table.gbu td.small{font-size:7.6pt; color:var(--gray);}
+
+  col.c-gef{width:22%;}
+  col.c-recht{width:11%;}
+  col.c-risk{width:8%;}
+  col.c-mass{width:32%;}
+  col.c-verant{width:14%;}
+  col.c-status{width:13%;}
+
+  .top-tag{
+    display:inline-block;
+    font-size:7pt;
+    font-weight:700;
+    padding:1px 4px;
+    border-radius:3px;
+    margin:0 3px 1px 0;
+    color:#fff;
+  }
+  .top-t{background:#2c6e49;}
+  .top-o{background:#1f6fb2;}
+  .top-p{background:#a8631f;}
+
+  .risk{
+    display:inline-block;
+    font-size:7pt;
+    font-weight:700;
+    padding:2px 5px;
+    border-radius:3px;
+    color:#fff;
+    white-space:nowrap;
+  }
+  .risk-high{background:var(--risk-high);}
+  .risk-mid{background:var(--risk-mid);}
+  .risk-low{background:var(--risk-low);}
+  .risk-arrow{font-weight:700; color:var(--gray); margin:0 2px;}
+  .risk-cell{text-align:center;}
+
+  .meta-box{
+    background:var(--bg-alt);
+    border:1px solid var(--line);
+    border-left:4px solid var(--accent);
+    padding:7px 9px;
+    font-size:8.3pt;
+    margin:4px 0 10px 0;
+  }
+  .meta-box b{color:var(--primary);}
+
+  table.sig{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:10px;
+    font-size:9pt;
+  }
+  table.sig th{
+    background:var(--primary);
+    color:#fff;
+    padding:5px;
+    font-size:8pt;
+    text-transform:uppercase;
+  }
+  table.sig td{
+    border:1px solid var(--line);
+    padding:7px 6px;
+    height:20px;
+  }
+
+  .footer-note{font-size:8pt; color:var(--gray); margin-top:6px;}
+
+  @media print{
+    .page{padding:8mm 10mm;}
+    h2.sub{break-after:avoid; break-inside:avoid;}
+    table.gbu tr{break-inside:avoid;}
+    input[type="text"], input[type="date"]{border-bottom:1px solid #999;}
+  }
+  @page{
+    size:A4 landscape;
+    margin:9mm;
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= DECKBLATT ================= -->
+<section class="page cover">
+  <div class="tag">Gefährdungsbeurteilung nach § 5 ArbSchG</div>
+  <h1>Metzgerei &amp; BackShop</h1>
+  <h2>Arbeitsplatz „Springer Metzger/-in" – wechselnde Einsatzmärkte</h2>
+
+  <div class="cover-grid">
+    <table class="cover-table">
+      <tr><td class="label">Unternehmen / Firma</td><td><input type="text" placeholder="Firmenname"></td></tr>
+      <tr><td class="label">Anschrift (Hauptsitz)</td><td><input type="text" placeholder="Straße, PLZ Ort"></td></tr>
+      <tr><td class="label">Betriebs-/Filialnummer</td><td><input type="text" placeholder="z. B. Markt-Nr."></td></tr>
+      <tr><td class="label">Betriebsbereich</td><td><input type="text" value="Metzgerei / Fleischtheke / BackShop – Springereinsatz"></td></tr>
+      <tr><td class="label">Zuständige Berufsgenossenschaft</td><td><input type="text" value="BGHW (ergänzend DGUV Regel 110-011)"></td></tr>
+      <tr><td class="label">Anzahl betroffener Beschäftigter</td><td><input type="text" placeholder="Anzahl Springer-Kräfte"></td></tr>
+      <tr><td class="label">Einsatzmärkte / Standorte</td><td><input type="text" placeholder="z. B. Markt A, B, C ..."></td></tr>
+    </table>
+    <table class="cover-table">
+      <tr><td class="label">Erstellt durch (Name, Funktion)</td><td><input type="text" placeholder="Name, Funktion"></td></tr>
+      <tr><td class="label">Fachkraft für Arbeitssicherheit</td><td><input type="text" placeholder="Name, Kontakt"></td></tr>
+      <tr><td class="label">Betriebsarzt/-ärztin</td><td><input type="text" placeholder="Name, Kontakt"></td></tr>
+      <tr><td class="label">Datum der Erstellung</td><td><input type="date"></td></tr>
+      <tr><td class="label">Letzte Aktualisierung</td><td><input type="date"></td></tr>
+      <tr><td class="label">Nächste turnusmäßige Überprüfung</td><td><input type="date"></td></tr>
+      <tr><td class="label">Notfallnummer / Ersthelfer zentral</td><td><input type="text" placeholder="Telefonnummer"></td></tr>
+    </table>
+  </div>
+
+  <div class="cover-footer">
+    Diese Gefährdungsbeurteilung ergänzt die Gefährdungsbeurteilung Online (GBO) der BGHW um
+    branchen- und tätigkeitsspezifische Gefährdungen der Fleischerei-Handwerksmaschinen, des BackShops,
+    des Kühlhauses (inkl. CO<sub>2</sub>-Kältemittel, falls vorhanden), der Bodenbeläge sowie der Fahrten
+    zwischen wechselnden Einsatzmärkten (Springer-Tätigkeit). Sie ist nach § 5 ArbSchG zu dokumentieren,
+    den Beschäftigten im Rahmen der Unterweisung bekannt zu machen und regelmäßig sowie anlassbezogen
+    zu aktualisieren (§ 6 ArbSchG, § 3 BetrSichV). Felder können direkt am Bildschirm ausgefüllt und
+    anschließend gedruckt werden.
+  </div>
+</section>
+
+<!-- ================= RECHTSGRUNDLAGEN ================= -->
+<section class="page">
+  <h1 class="section-title">Rechtliche Grundlagen &amp; Regelwerke</h1>
+  <p class="intro">Grundlage dieser Beurteilung sind die BGHW-GBO sowie folgende ergänzende staatliche
+  Vorschriften, Unfallverhütungsvorschriften (DGUV Vorschriften) und Regeln:</p>
+
+  <ul class="legal-list">
+    <li><b>ArbSchG</b> – Gesetz über die Durchführung von Maßnahmen des Arbeitsschutzes (Grundpflicht zur Gefährdungsbeurteilung, §§ 5, 6)</li>
+    <li><b>ArbStättV</b> inkl. Technische Regeln für Arbeitsstätten (ASR A1.3 Kennzeichnung, ASR A1.5 Fußböden, ASR A1.8 Verkehrswege, ASR A3.4 Beleuchtung, ASR A3.5 Raumtemperatur, ASR A3.6 Lüftung)</li>
+    <li><b>BetrSichV</b> – Betriebssicherheitsverordnung (Prüfpflichten Schneidemaschine, Fleischwolf, Wurstfüller, Knochensäge, Kälteanlage als überwachungsbedürftige Anlage, Teigknetmaschine)</li>
+    <li><b>DGUV Vorschrift 1</b> – Grundsätze der Prävention</li>
+    <li><b>DGUV Vorschrift 3</b> – Elektrische Anlagen und Betriebsmittel</li>
+    <li><b>DGUV Regel 100-500</b> – Betreiben von Arbeitsmitteln, Kap. 2.35 Kälteanlagen, Wärmepumpen und Kühleinrichtungen</li>
+    <li><b>DGUV Regel 110-011 „Branche Fleischwirtschaft – Handwerk"</b> (2025, löst DGUV Regel 110-008 ab)</li>
+    <li><b>DGUV Regel 112-195 / 112-991</b> – Benutzung von Schutzhandschuhen bzw. Schnitt-/Stichschutzausrüstung</li>
+    <li><b>DGUV Information 208-041</b> – Fußböden in Arbeitsräumen und Arbeitsbereichen mit Rutschgefahr</li>
+    <li><b>DGUV Information 205-034</b> – Umgang mit CO<sub>2</sub> in Räumen (Erstickungsgefahr, sinngemäß auf CO<sub>2</sub>-Kälteanlagen übertragbar)</li>
+    <li><b>LasthandhabV</b> – Lastenhandhabungsverordnung</li>
+    <li><b>PSA-Benutzungsverordnung</b> – Bereitstellung und Benutzung persönlicher Schutzausrüstung</li>
+    <li><b>GDA-Leitlinie „Gefährdungsbeurteilung psychischer Belastung"</b> – Grundlage für Abschnitt Personalführung/psychische Belastung</li>
+    <li><b>GefStoffV, TRGS 400/401/500/900</b> – Gefahrstoffe, Reinigungs-/Desinfektionsmittel, Mehlstaub, Gewürzstaub, Arbeitsplatzgrenzwerte</li>
+    <li><b>Lärm- und Vibrations-ArbSchV</b> – Bandsäge, Fleischwolf, Kühlaggregate</li>
+    <li><b>BiostoffV</b> – Biologische Arbeitsstoffe (Umgang mit rohem Fleisch, Zoonosen)</li>
+    <li><b>StVO / StVZO / DGUV Vorschrift 70</b> – Fahrzeuge und Verkehrssicherheit bei Fahrten zum Einsatzmarkt</li>
+    <li><b>Druckgeräterichtlinie 2014/68/EU</b> – Prüfpflichten von Druckanlagen (z. B. CO<sub>2</sub>-Kälteanlage im transkritischen Betrieb)</li>
+    <li><b>JArbSchG / MuSchG</b> – sofern Jugendliche oder schwangere/stillende Beschäftigte betroffen sind</li>
+    <li><b>LMHV / HACCP</b> – Lebensmittelhygiene, soweit arbeitsschutzrelevant</li>
+  </ul>
+
+  <div class="meta-box">
+    <b>Methodik:</b> Maßnahmen sind nach dem <b>TOP-Prinzip</b> geordnet –
+    <span class="top-tag top-t">T</span> Technisch &gt;
+    <span class="top-tag top-o">O</span> Organisatorisch &gt;
+    <span class="top-tag top-p">P</span> Personenbezogen (PSA/Verhalten). Technische Maßnahmen haben Vorrang.
+    Die Spalte <b>Risiko</b> zeigt eine grobe Einschätzung <span class="risk risk-high">hoch</span>
+    <span class="risk risk-mid">mittel</span> <span class="risk risk-low">niedrig</span> jeweils
+    <u>vor</u> und <u>nach</u> Umsetzung der Maßnahmen (Kombination aus Eintrittswahrscheinlichkeit
+    und möglicher Schadensschwere) und ist betriebsindividuell zu verifizieren.
+  </div>
+</section>
+
+<!-- ================= 1. SCHNEIDEMASCHINE ================= -->
+<section class="page">
+  <h1 class="section-title">Gefährdungsbeurteilung nach Arbeitsmitteln / Arbeitsbereichen</h1>
+
+  <h2 class="sub"><span class="num">1</span>Schneidemaschine (Aufschnittschneidemaschine)</h2>
+  <table class="gbu">
+    <colgroup><col class="c-gef"><col class="c-recht"><col class="c-risk"><col class="c-mass"><col class="c-verant"><col class="c-status"></colgroup>
+    <thead><tr><th>Gefährdung</th><th>Rechtsgrundlage</th><th>Risiko</th><th>Maßnahmen</th><th>Verantw. / Termin</th><th>Wirksamkeit geprüft</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Schnittverletzung an der rotierenden Rundmesserklinge während des normalen Schneidevorgangs (Abrutschen des Schneidguts, Handkontakt im Klingenbereich)</td>
+        <td>BetrSichV §3, DGUV Regel 110-011</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-t">T</span>Fingerschutz/Restehalter konsequent nutzen, Schneidgutauflage korrekt einstellen</li>
+          <li><span class="top-tag top-o">O</span>Nur so viel Andruck wie nötig, kein Hantieren im Klingenbereich bei laufender Maschine</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Schnittverletzung bei Reinigung und Klingendemontage/-montage (freiliegende Klinge ohne Schneidgutauflage)</td>
+        <td>DGUV Regel 110-011, BetrSichV</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-mid">mittel</span></td>
+        <td><ul>
+          <li><span class="top-tag top-o">O</span>Reinigung/Wartung ausschließlich bei gezogenem Netzstecker; Betriebsanweisung „Reinigung" verbindlich einhalten</li>
+          <li><span class="top-tag top-p">P</span>Schnittfeste Handschuhe bei Klingenreinigung und -wechsel tragen</li>
+          <li><span class="top-tag top-o">O</span>Reinigung nur durch namentlich unterwiesene Personen; Vertretung/Springer vor Ort einweisen</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Verletzung beim Nachschärfen der Klinge (integrierte Schärfeinrichtung)</td>
+        <td>DGUV Regel 110-011</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-o">O</span>Schärfen nur nach Herstelleranleitung, Schutzeinrichtung der Schärfvorrichtung nicht manipulieren</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Elektrische Gefährdung durch defekte Geräte, Kabel oder Steckverbindungen (v. a. bei mobilem Einsatz an mehreren Standorten)</td>
+        <td>DGUV Vorschrift 3</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-t">T</span>Wiederkehrende Prüfung nach DGUV V3 durch befähigte Person (i. d. R. jährlich, Prüfplakette)</li>
+          <li><span class="top-tag top-o">O</span>Sichtprüfung vor jeder Nutzung; bei Beschädigung sofortige Außerbetriebnahme und Meldung</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Ausrutschen im Arbeitsbereich durch Fett-/Feuchtigkeitsfilm am Boden</td>
+        <td>ArbStättV, ASR A1.5</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-t">T</span>Rutschhemmender Bodenbelag (siehe Abschnitt 13)</li>
+          <li><span class="top-tag top-p">P</span>Rutschhemmendes Sicherheitsschuhwerk (Kategorie SRC)</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Fehlbedienung durch nicht (ausreichend) unterwiesenes Springer-Personal an unbekanntem Maschinenmodell</td>
+        <td>DGUV Vorschrift 1, ArbSchG §12</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-o">O</span>Betriebsanweisung sichtbar aushängen, jährliche Unterweisung dokumentieren</li>
+          <li><span class="top-tag top-o">O</span>Kurz-Einweisung am jeweiligen Gerätemodell vor erstmaligem Einsatz an neuem Markt (Springer-spezifisch)</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="sub"><span class="num">2</span>Knochensäge (Bandsäge)</h2>
+  <table class="gbu">
+    <colgroup><col class="c-gef"><col class="c-recht"><col class="c-risk"><col class="c-mass"><col class="c-verant"><col class="c-status"></colgroup>
+    <thead><tr><th>Gefährdung</th><th>Rechtsgrundlage</th><th>Risiko</th><th>Maßnahmen</th><th>Verantw. / Termin</th><th>Wirksamkeit geprüft</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Schwere bis schwerste Schnittverletzungen (Amputationsgefahr) am umlaufenden Sägeband bei zu weit geöffneter Schutzabdeckung oder falscher Handführung</td>
+        <td>DGUV Regel 110-011, BetrSichV</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-mid">mittel</span></td>
+        <td><ul>
+          <li><span class="top-tag top-t">T</span>Bandabdeckung nur so weit öffnen, wie für das jeweilige Werkstück nötig; nach Gebrauch wieder schließen</li>
+          <li><span class="top-tag top-t">T</span>Schiebehilfe/Restehalter für kleine oder kurze Werkstücke zwingend verwenden</li>
+          <li><span class="top-tag top-o">O</span>Nutzung ausschließlich durch unterwiesene, volljährige Beschäftigte; Zweite Person bei ungünstigen Werkstücken hinzuziehen</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Erfassen von Kleidung, Schmuck oder ungeeigneten Handschuhen durch das Sägeband (Einzugsgefahr)</td>
+        <td>DGUV Regel 110-011</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-p">P</span>Eng anliegende Arbeitskleidung, kein Schmuck; nur vom Hersteller ausdrücklich für Bandsägen freigegebene PSA (z. B. Metallgewebe-/Kettenhandschuh), kein einfacher Stoffhandschuh</li>
+          <li><span class="top-tag top-o">O</span>Lange Haare zusammenbinden/Haarnetz</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Sägeblattbruch durch Materialermüdung, falsche Spannung oder ungeeignetes Schneidgut (z. B. gefrorene Knochen)</td>
+        <td>BetrSichV</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-t">T</span>Bandspannung nach Herstellerangabe regelmäßig prüfen und einstellen</li>
+          <li><span class="top-tag top-o">O</span>Nur für das Gerät freigegebenes Schneidgut sägen, keine tiefgefrorenen/harten Fremdkörper</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Schnittverletzung beim Sägeblattwechsel oder bei der Reinigung im Bandbereich</td>
+        <td>BetrSichV, DGUV Regel 110-011</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-mid">mittel</span></td>
+        <td><ul>
+          <li><span class="top-tag top-o">O</span>Blattwechsel/Reinigung nur im spannungsfreien Zustand (Netzstecker gezogen) nach Betriebsanweisung</li>
+          <li><span class="top-tag top-p">P</span>Schnittfeste Handschuhe beim Handling des demontierten Sägeblatts</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Lärmbelastung im Dauerbetrieb (Richtwert häufig im Bereich 80–85 dB(A), abhängig vom Gerät)</td>
+        <td>Lärm-Vibrations-ArbSchV, TRLV Lärm</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-o">O</span>Lärmmessung/Herstellerangaben prüfen; ab 80 dB(A) unterer Auslösewert Gehörschutz bereitstellen, ab 85 dB(A) Tragepflicht</li>
+          <li><span class="top-tag top-p">P</span>Gehörschutz (Kapsel- oder Stöpselgehörschutz) bereithalten</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="sub"><span class="num">3</span>Fleischwolf</h2>
+  <table class="gbu">
+    <colgroup><col class="c-gef"><col class="c-recht"><col class="c-risk"><col class="c-mass"><col class="c-verant"><col class="c-status"></colgroup>
+    <thead><tr><th>Gefährdung</th><th>Rechtsgrundlage</th><th>Risiko</th><th>Maßnahmen</th><th>Verantw. / Termin</th><th>Wirksamkeit geprüft</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Einzugsgefahr an Einfülltrichter und Förderschnecke, insbesondere beim Nachschieben von Fleisch mit der bloßen Hand</td>
+        <td>DGUV Regel 110-011, BetrSichV</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-t">T</span>Ausschließlich mitgelieferten Stopfer/Stössel zum Nachschieben verwenden, niemals die Hand in den Trichter</li>
+          <li><span class="top-tag top-t">T</span>Schutzgitter/Sicherheitsabstand am Einfüllrohr auf Funktion prüfen, keine Manipulation von Schutzeinrichtungen</li>
+          <li><span class="top-tag top-o">O</span>Geräteindividuelle Unterweisung vor erstem Einsatz an jedem Standort (unterschiedliche Modelle möglich)</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Schnittverletzung an Lochscheiben, Schneidmessern und Schnecke bei Montage, Demontage und Reinigung</td>
+        <td>DGUV Regel 110-011</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-mid">mittel</span></td>
+        <td><ul>
+          <li><span class="top-tag top-p">P</span>Schnittfeste Handschuhe bei Reinigung und Zusammenbau der Schneidsätze tragen</li>
+          <li><span class="top-tag top-o">O</span>Reinigung/Demontage ausschließlich im ausgeschalteten und stromlosen Zustand (Netzstecker ziehen)</li>
+          <li><span class="top-tag top-o">O</span>Bauteile geordnet ablegen, nicht lose in der Spüle mit anderem Werkzeug</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Quetschgefahr beim Zusammenbau der Schneidgarnitur (Verschlussmutter, Vorschubschnecke)</td>
+        <td>DGUV Regel 110-011</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-o">O</span>Zusammenbau nach Herstellerreihenfolge, keine Gewalt anwenden, bei Klemmen Ursache beseitigen statt forcieren</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="sub"><span class="num">4</span>Wurstfüller</h2>
+  <table class="gbu">
+    <colgroup><col class="c-gef"><col class="c-recht"><col class="c-risk"><col class="c-mass"><col class="c-verant"><col class="c-status"></colgroup>
+    <thead><tr><th>Gefährdung</th><th>Rechtsgrundlage</th><th>Risiko</th><th>Maßnahmen</th><th>Verantw. / Termin</th><th>Wirksamkeit geprüft</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Quetschgefahr an Kolben/Förderorgan durch hohen Anpressdruck, insbesondere bei hydraulischen/pneumatischen Füllern</td>
+        <td>BetrSichV, DGUV Regel 110-011</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-mid">mittel</span></td>
+        <td><ul>
+          <li><span class="top-tag top-t">T</span>Not-Halt-Funktion vor jeder Schicht auf Funktion prüfen</li>
+          <li><span class="top-tag top-o">O</span>Keine Reinigung, Nachjustierung oder Eingriffe während des laufenden Betriebs</li>
+          <li><span class="top-tag top-o">O</span>Befüllöffnung nicht mit der Hand nachdrücken</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Ausrutschen durch austretendes Fett, Wasser oder Bratenfond während Befüllung, Betrieb oder Reinigung</td>
+        <td>ArbStättV, ASR A1.5</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-t">T</span>Rutschhemmender Boden im Umfeld der Maschine</li>
+          <li><span class="top-tag top-p">P</span>Rutschhemmendes Schuhwerk</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Verletzung an scharfen Kanten von Füllrohren/Portioniereinheit bei Reinigung</td>
+        <td>DGUV Regel 110-011</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-p">P</span>Schnittfeste Handschuhe bei der Reinigung der Portioniereinheit</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="sub"><span class="num">5</span>Schneidetisch / Hackklotz (Handmesser, Beile)</h2>
+  <table class="gbu">
+    <colgroup><col class="c-gef"><col class="c-recht"><col class="c-risk"><col class="c-mass"><col class="c-verant"><col class="c-status"></colgroup>
+    <thead><tr><th>Gefährdung</th><th>Rechtsgrundlage</th><th>Risiko</th><th>Maßnahmen</th><th>Verantw. / Termin</th><th>Wirksamkeit geprüft</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Schnittverletzung durch Abrutschen des Handmessers, insbesondere bei stumpfer Klinge oder Schnittrichtung zum Körper</td>
+        <td>DGUV Regel 110-011, DGUV Regel 112-991</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-mid">mittel</span></td>
+        <td><ul>
+          <li><span class="top-tag top-p">P</span>Schnittschutzhandschuh (nicht führende Hand) und ggf. Armschutz gemäß Betriebsanweisung tragen</li>
+          <li><span class="top-tag top-o">O</span>Messer stets scharf und gepflegt halten – weniger Kraftaufwand senkt die Abrutschgefahr erheblich; regelmäßiges Nachschärfen/Wetzen einplanen</li>
+          <li><span class="top-tag top-o">O</span>Schneidrichtung grundsätzlich vom Körper weg, Finger der Führhand eingekrallt halten</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Stichverletzung beim Ablegen, Transportieren oder ungeordneten Lagern von Messern (z. B. in der Spüle)</td>
+        <td>DGUV Regel 112-195</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-o">O</span>Messer nur in Messerscheide oder auf Magnetleiste ablegen, nie unsichtbar in Spülwasser</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Schwere Schnitt-/Hackverletzung beim Umgang mit dem Hackbeil (hohe Schlagkraft, Absplittern von Knochen)</td>
+        <td>DGUV Regel 110-011</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-mid">mittel</span></td>
+        <td><ul>
+          <li><span class="top-tag top-o">O</span>Beileinsatz nur durch erfahrenes, unterwiesenes Personal; kontrollierter, nicht überhasteter Schlag</li>
+          <li><span class="top-tag top-p">P</span>Ggf. Schutzbrille gegen Knochensplitter</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Ergonomische Belastung durch Zwangshaltung und repetitive Bewegungen am Schneidetisch über die Schicht</td>
+        <td>ArbSchG, ASR A1.2</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-t">T</span>Arbeitshöhe des Tisches/Hackklotzes möglichst an Körpergröße anpassen (höhenverstellbar oder Podest)</li>
+          <li><span class="top-tag top-o">O</span>Regelmäßiger Tätigkeitswechsel, Mikropausen einplanen</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Mikrobiologische Gefährdung durch Kontamination der Arbeitsfläche/des Holzhackklotzes</td>
+        <td>BiostoffV, LMHV</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-o">O</span>Regelmäßige Reinigung/Desinfektion nach Hygieneplan, getrennte Schneidunterlagen je Produktart</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ================= SEITE 2 DER TABELLEN ================= -->
+<section class="page">
+  <h2 class="sub"><span class="num">6</span>Heiße Theke (Warmhalte-/Imbisstheke)</h2>
+  <table class="gbu">
+    <colgroup><col class="c-gef"><col class="c-recht"><col class="c-risk"><col class="c-mass"><col class="c-verant"><col class="c-status"></colgroup>
+    <thead><tr><th>Gefährdung</th><th>Rechtsgrundlage</th><th>Risiko</th><th>Maßnahmen</th><th>Verantw. / Termin</th><th>Wirksamkeit geprüft</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Verbrennungen/Verbrühungen an heißen Oberflächen, Warmhalteschalen, Fett oder heißen Speisen beim Bestücken/Entnehmen</td>
+        <td>DGUV Regel 110-011, DGUV Vorschrift 1</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-mid">mittel</span></td>
+        <td><ul>
+          <li><span class="top-tag top-t">T</span>Kennzeichnung heißer Bereiche/Griffe, isolierte Bedienelemente</li>
+          <li><span class="top-tag top-p">P</span>Hitzeschutzhandschuhe bereitstellen und konsequent nutzen</li>
+          <li><span class="top-tag top-o">O</span>Kundenverkehr vom unmittelbaren Thekenrückraum fernhalten</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Elektrische Gefährdung und Brandgefahr durch Dauerbetrieb, Fettansammlung an Heizelementen</td>
+        <td>DGUV Vorschrift 3</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-t">T</span>Regelmäßige E-Prüfung nach DGUV V3, regelmäßige Fettreinigung der Heizelemente</li>
+          <li><span class="top-tag top-p">P</span>Geeigneter Feuerlöscher (ggf. Fettbrandlöscher Klasse F) griffbereit</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="sub"><span class="num">7</span>Fleischtheke (Verkaufs-/Kühlmöbel)</h2>
+  <table class="gbu">
+    <colgroup><col class="c-gef"><col class="c-recht"><col class="c-risk"><col class="c-mass"><col class="c-verant"><col class="c-status"></colgroup>
+    <thead><tr><th>Gefährdung</th><th>Rechtsgrundlage</th><th>Risiko</th><th>Maßnahmen</th><th>Verantw. / Termin</th><th>Wirksamkeit geprüft</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Kälte-/Erfrierungsgefahr an Händen bei häufigem Beladen/Kontakt mit gekühlten Flächen über die Schicht</td>
+        <td>ArbStättV, ASR A3.5</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-p">P</span>Wärmende, ggf. wasserabweisende Arbeitskleidung bei häufigem Kühlkontakt bereitstellen</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Quetschgefahr an Glas-/Schiebetüren beim Beladen; Rutschgefahr durch Kondenswasser am Sockel der Theke</td>
+        <td>ArbStättV</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-t">T</span>Kondenswasser zeitnah entfernen</li>
+          <li><span class="top-tag top-o">O</span>Vorsichtiges, langsames Öffnen/Schließen der Schiebetüren, nicht mit Kraft zuschieben</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Schnittgefahr bei Warenpräsentation/Etikettierung mit Cuttermesser oder scharfkantigen Verpackungen</td>
+        <td>DGUV Regel 110-011</td>
+        <td class="risk-cell"><span class="risk risk-low">niedrig</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-t">T</span>Cuttermesser mit automatischem Klingenrückzug verwenden</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="sub"><span class="num">8</span>Backofen (Fleischprodukte) &amp; Backofen für Brote</h2>
+  <table class="gbu">
+    <colgroup><col class="c-gef"><col class="c-recht"><col class="c-risk"><col class="c-mass"><col class="c-verant"><col class="c-status"></colgroup>
+    <thead><tr><th>Gefährdung</th><th>Rechtsgrundlage</th><th>Risiko</th><th>Maßnahmen</th><th>Verantw. / Termin</th><th>Wirksamkeit geprüft</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Verbrennungsgefahr an Ofentür, Backblechen und Einschubschienen beim Be- und Entladen</td>
+        <td>DGUV Regel 110-011</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-mid">mittel</span></td>
+        <td><ul>
+          <li><span class="top-tag top-p">P</span>Backhandschuhe mit Unterarmschutz konsequent verwenden</li>
+          <li><span class="top-tag top-o">O</span>Blechzange/Blechheber für tiefe Einschübe nutzen statt direkten Handkontakts</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Verbrühung durch schlagartig austretenden Dampf beim Öffnen der Ofentür (insb. bei Beschwadung im Brot-Backofen)</td>
+        <td>DGUV Regel 110-011</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-mid">mittel</span></td>
+        <td><ul>
+          <li><span class="top-tag top-o">O</span>Ofentür zunächst einen Spalt öffnen, Kopf/Gesicht zur Seite halten, Dampf kurz entweichen lassen, erst danach vollständig öffnen</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Hitzestau und erhöhte Raumtemperatur im Arbeitsbereich bei unzureichender Lüftung, insbesondere bei Doppelbetrieb beider Öfen</td>
+        <td>ArbStättV, ASR A3.5/A3.6</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-t">T</span>Ausreichende technische Be- und Entlüftung/Dunstabzug sicherstellen; ggf. Getränkeversorgung bei Hitzearbeit</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Brandgefahr durch Fettspritzer, Krümel oder Backpapierreste im Backraum</td>
+        <td>DGUV Vorschrift 1</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-o">O</span>Regelmäßige Reinigung des Ofeninnenraums nach Herstellervorgabe</li>
+          <li><span class="top-tag top-p">P</span>Löschdecke/geeigneter Feuerlöscher griffbereit; kein Wasser bei Fettbrand verwenden</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="sub"><span class="num">9</span>Bräter (Kippbratpfanne)</h2>
+  <table class="gbu">
+    <colgroup><col class="c-gef"><col class="c-recht"><col class="c-risk"><col class="c-mass"><col class="c-verant"><col class="c-status"></colgroup>
+    <thead><tr><th>Gefährdung</th><th>Rechtsgrundlage</th><th>Risiko</th><th>Maßnahmen</th><th>Verantw. / Termin</th><th>Wirksamkeit geprüft</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Verbrennungen/Verbrühungen durch heißes Fett oder Bratgut beim Kippen und Entleeren des Bräters</td>
+        <td>DGUV Regel 110-011</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-mid">mittel</span></td>
+        <td><ul>
+          <li><span class="top-tag top-p">P</span>Hitzeschutzhandschuhe und -schürze konsequent nutzen</li>
+          <li><span class="top-tag top-o">O</span>Kippvorgang langsam, gleichmäßig und kontrolliert durchführen; bei großen Mengen zu zweit arbeiten</li>
+          <li><span class="top-tag top-o">O</span>Auffanggefäß vorab bereitstellen und korrekt positionieren</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Rutschgefahr durch Fettspritzer auf dem Boden im Umfeld des Bräters</td>
+        <td>ArbStättV, ASR A1.5</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-t">T</span>Spritzschutz, rutschhemmender Bodenbelag, zügiges Aufwischen von Verschmutzungen</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Muskel-Skelett-Belastung durch das manuelle Kippen schwerer, gefüllter Bräter</td>
+        <td>LasthandhabV</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-o">O</span>Bei größeren Füllmengen grundsätzlich zu zweit kippen, Kipphilfe/Getriebe nutzen sofern vorhanden</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ================= SEITE 3 KÜHLHAUS ================= -->
+<section class="page">
+  <h2 class="sub"><span class="num">10</span>Kühlhaus (Kühlzelle / Tiefkühlraum)</h2>
+  <table class="gbu">
+    <colgroup><col class="c-gef"><col class="c-recht"><col class="c-risk"><col class="c-mass"><col class="c-verant"><col class="c-status"></colgroup>
+    <thead><tr><th>Gefährdung</th><th>Rechtsgrundlage</th><th>Risiko</th><th>Maßnahmen</th><th>Verantw. / Termin</th><th>Wirksamkeit geprüft</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Einschließen bei Türdefekt, -blockade oder Vereisung des Schließmechanismus, besonders kritisch bei Alleinarbeit</td>
+        <td>DGUV Vorschrift 1, ArbStättV</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-mid">mittel</span></td>
+        <td><ul>
+          <li><span class="top-tag top-t">T</span>Türen müssen von innen jederzeit ohne Schlüssel zu öffnen sein (Notentriegelung/Panikverschluss); Funktion regelmäßig prüfen</li>
+          <li><span class="top-tag top-o">O</span>Bei Alleinarbeit im Kühlhaus: Kontaktpflicht mit Kollegen/Marktleitung, ggf. Personen-Notsignal-Anlage</li>
+          <li><span class="top-tag top-o">O</span>Springer-Personal bei jedem neuen Standort auf Lage der Notentriegelung hinweisen</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Kälteschäden/Erfrierungen bei längerem Aufenthalt oder unzureichender Schutzkleidung, insbesondere im Tiefkühlbereich (ca. -18 °C bis -25 °C)</td>
+        <td>ArbStättV, ASR A3.5</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-o">O</span>Maximale Aufenthaltsdauer je nach Temperatur begrenzen, regelmäßige Aufwärmpausen einplanen</li>
+          <li><span class="top-tag top-p">P</span>Geeignete Kälteschutzkleidung (Jacke, Handschuhe, ggf. Kopfbedeckung) bereitstellen</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Rutschgefahr durch Eis-/Reifbildung auf dem Boden, besonders an häufig genutzten Ein-/Ausgangsbereichen</td>
+        <td>ArbStättV, ASR A1.5</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-t">T</span>Rutschhemmender, tauwasserresistenter Bodenbelag (siehe Abschnitt 13)</li>
+          <li><span class="top-tag top-p">P</span>Kälteisoliertes, rutschhemmendes Schuhwerk</li>
+          <li><span class="top-tag top-o">O</span>Regelmäßige Kontrolle und Abtauen bei sichtbarer Eisbildung</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Lärmbelastung durch Kühlaggregate/Ventilatoren bei längerem Aufenthalt</td>
+        <td>Lärm-Vibrations-ArbSchV</td>
+        <td class="risk-cell"><span class="risk risk-low">niedrig</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-t">T</span>Bei Auffälligkeiten Lärmmessung veranlassen, Wartung der Aggregate</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Muskel-Skelett-Belastung beim Ein-/Auslagern schwerer Ware in engen, kalten Räumen</td>
+        <td>LasthandhabV</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-t">T</span>Rollwagen/Hubhilfen nutzen, ergonomische Hebetechnik anwenden, Lasten nicht allein über Kopfhöhe stapeln</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Eingeschränkte Sicht/Orientierung in engen, dicht gelagerten Kühlräumen (Stoßgefahr, Sturzgefahr über Bodenware)</td>
+        <td>ArbStättV, ASR A1.8</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-t">T</span>Ausreichende Beleuchtung (ASR A3.4), freie Verkehrswege im Kühlhaus einhalten und kennzeichnen</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="sub"><span class="num">11</span>Kühlhaus mit CO<sub>2</sub>-Kältemittel (R-744) – Zusatzgefährdungen</h2>
+  <div class="meta-box">
+    <b>Nur relevant, wenn das Kühlhaus/die Kälteanlage mit CO<sub>2</sub> (R-744) als Kältemittel betrieben wird.</b>
+    CO<sub>2</sub> ist farb- und geruchlos, schwerer als Luft und sammelt sich bevorzugt am Boden bzw.
+    in Gruben/Senken. Es ist nicht brennbar, wirkt aber bereits in mäßiger Konzentration
+    gesundheitsschädlich und ab höheren Konzentrationen erstickend. CO<sub>2</sub>-Kälteanlagen arbeiten
+    zudem mit deutlich höheren Systemdrücken (transkritischer Betrieb) als klassische Kältemittel.
+  </div>
+  <table class="gbu">
+    <colgroup><col class="c-gef"><col class="c-recht"><col class="c-risk"><col class="c-mass"><col class="c-verant"><col class="c-status"></colgroup>
+    <thead><tr><th>Gefährdung</th><th>Rechtsgrundlage</th><th>Risiko</th><th>Maßnahmen</th><th>Verantw. / Termin</th><th>Wirksamkeit geprüft</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Erstickungsgefahr durch CO<sub>2</sub>-Leckage: ab ca. 3–5 Vol.-% Gesundheitsschäden (verstärkter Atemantrieb, Atemnot, Kopfschmerz), ab ca. 8 Vol.-% akute Lebensgefahr; CO<sub>2</sub> sammelt sich am Boden/in Vertiefungen und Kühlgruben</td>
+        <td>GefStoffV, TRGS 900 (AGW CO<sub>2</sub>), DGUV Regel 100-500 Kap. 2.35, EN 378</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-mid">mittel</span></td>
+        <td><ul>
+          <li><span class="top-tag top-t">T</span>Stationäre CO<sub>2</sub>-Gaswarnanlage mit akustisch/optischem Alarm und automatischer Zwangslüftung installieren, regelmäßig prüfen/kalibrieren lassen</li>
+          <li><span class="top-tag top-t">T</span>Technische Leckage-Überwachung der Kälteanlage (Dichtheitskontrollen nach BetrSichV)</li>
+          <li><span class="top-tag top-o">O</span>Bei Alarm: Betreten des Kühlhauses untersagen, Fluchtweg freihalten, Raum sofort verlassen und lüften lassen</li>
+          <li><span class="top-tag top-p">P</span>Für Beschäftigte mit regelmäßigem Zugang: tragbares CO<sub>2</sub>-Personenwarngerät erwägen</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Hoher Systemdruck der CO<sub>2</sub>-Kälteanlage (transkritischer Betrieb, teils &gt;100 bar) – Berst-/Freisetzungsgefahr bei Leckage, Korrosion oder Wartungsfehlern</td>
+        <td>BetrSichV §§14–17 (überwachungsbedürftige Anlage), Druckgeräterichtlinie 2014/68/EU</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-mid">mittel</span></td>
+        <td><ul>
+          <li><span class="top-tag top-t">T</span>Prüfung vor Erstinbetriebnahme sowie wiederkehrend durch zugelassene Überwachungsstelle (ZÜS) bzw. befähigte Person, Fristen dokumentieren</li>
+          <li><span class="top-tag top-o">O</span>Wartung/Eingriffe an der Anlage ausschließlich durch zertifizierte Kältefachfirma, keine Eigeneingriffe durch Markt-/Springer-Personal</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Kälteverbrennungen (Erfrierungen), Augenschäden durch Kontakt mit austretendem, expandierendem CO<sub>2</sub> (Trockeneisbildung, sehr niedrige Temperaturen an der Austrittsstelle)</td>
+        <td>DGUV Vorschrift 1</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-p">P</span>Bei Wartungsarbeiten Kälteschutzhandschuhe und Augenschutz gemäß Betriebsanweisung der Kältefachfirma verwenden (nur Fachpersonal)</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Fehlendes Wissen des wechselnden Springer-Personals über die konkrete CO<sub>2</sub>-Gefahr am jeweiligen Marktstandort</td>
+        <td>ASR A1.3, DGUV Regel 110-011</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-o">O</span>Warnzeichen „Warnung vor Erstickungsgefahr" gut sichtbar an allen Zugängen anbringen</li>
+          <li><span class="top-tag top-o">O</span>Betriebsanweisung „CO<sub>2</sub>-Kälteanlage" aushängen und bei jedem neuen Einsatz am Standort aktiv ansprechen</li>
+          <li><span class="top-tag top-o">O</span>Standortbezogene Kurzunterweisung zur CO<sub>2</sub>-Gefahr fester Bestandteil der Springer-Einweisung</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ================= SEITE 4 BACKSHOP / BODEN ================= -->
+<section class="page">
+  <h2 class="sub"><span class="num">12</span>BackShop – weitere Arbeitsmittel</h2>
+  <table class="gbu">
+    <colgroup><col class="c-gef"><col class="c-recht"><col class="c-risk"><col class="c-mass"><col class="c-verant"><col class="c-status"></colgroup>
+    <thead><tr><th>Gefährdung</th><th>Rechtsgrundlage</th><th>Risiko</th><th>Maßnahmen</th><th>Verantw. / Termin</th><th>Wirksamkeit geprüft</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Teigknetmaschine: Einzugs-/Quetschgefahr an Knetwerkzeug und Kessel, insbesondere beim Nachstoßen von Teig oder Zutaten von Hand während des Knetvorgangs</td>
+        <td>BetrSichV, DGUV Regel 110-011</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-mid">mittel</span></td>
+        <td><ul>
+          <li><span class="top-tag top-t">T</span>Schutzgitter/Verriegelung des Kessels funktionsfähig halten; Betrieb nur bei vollständig geschlossener Schutzeinrichtung möglich</li>
+          <li><span class="top-tag top-o">O</span>Nachstoßen nur mit zugelassenem Hilfsmittel, niemals mit der Hand; Reinigung nur im Stillstand und stromlos</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Gärschrank/Gärautomat: Verbrühungsgefahr durch Dampf/Feuchtigkeit beim Öffnen, Verbrennungsgefahr an beheizten Innenflächen, Rutschgefahr durch Kondenswasser am Boden davor</td>
+        <td>ArbStättV, DGUV Regel 110-011</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-o">O</span>Tür vorsichtig öffnen, Dampf entweichen lassen, bevor Ware entnommen wird</li>
+          <li><span class="top-tag top-t">T</span>Kondenswasser vor dem Gerät zügig entfernen, rutschhemmender Bodenbelag im Umfeld</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Brotschneidemaschine: Schnittverletzungen an rotierenden Sägeblättern, Erfassen der Hand beim Nachschieben des Brotlaibs</td>
+        <td>BetrSichV, DGUV Regel 110-011</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-mid">mittel</span></td>
+        <td><ul>
+          <li><span class="top-tag top-t">T</span>Schutzabdeckung/Andrückvorrichtung stets nutzen, Zweihandschutz beachten</li>
+          <li><span class="top-tag top-o">O</span>Reinigung nur im spannungsfreien Zustand durch unterwiesenes Personal</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Aufback-/Umluftofen für Backwaren: Verbrennungs-/Verbrühungsgefahr an Ofentür und Blechen, Hitzestau, Brandgefahr durch Krümel/Fett</td>
+        <td>DGUV Regel 110-011, ArbStättV</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-p">P</span>Backhandschuhe mit Unterarmschutz</li>
+          <li><span class="top-tag top-t">T</span>Ausreichende Be-/Entlüftung, regelmäßige Reinigung nach Herstellervorgabe</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Mehl- und Staubbelastung (Einschütten, Mehlstreuer, Reinigung): Atemwegsbelastung, allergisierende Wirkung (Bäckerasthma), bei sehr hoher Staubkonzentration in engen, unbelüfteten Räumen theoretische Staubexplosionsgefahr</td>
+        <td>GefStoffV, TRGS 500/900, DGUV Regel 110-011</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-t">T</span>Absaugung an Mehlsilo/Einschüttstation, sofern vorhanden</li>
+          <li><span class="top-tag top-o">O</span>Staubarme Arbeitsweise (kein Verwirbeln, langsames Einschütten), gute Grundlüftung</li>
+          <li><span class="top-tag top-p">P</span>Bei starker Staubentwicklung Atemschutz (FFP2) bereitstellen</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Brot-/Brötchentransportwagen und Backbleche: Quetschgefahr beim Manövrieren, Verbrennungsgefahr an frisch aus dem Ofen entnommenen Blechen, Muskel-Skelett-Belastung beim Beladen oberer Wagenebenen</td>
+        <td>LasthandhabV, DGUV Regel 110-011</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-p">P</span>Hitzeschutzhandschuhe beim Blechwechsel</li>
+          <li><span class="top-tag top-o">O</span>Transportwagen mit funktionsfähigen Feststellbremsen nutzen, langsames kontrolliertes Fahren, oberste Ebene nur mit Hilfsmittel beladen</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="sub"><span class="num">13</span>Bodenbeläge (übergreifend für alle Arbeitsbereiche)</h2>
+  <div class="meta-box">
+    Der Bodenbelag ist eine bereichsübergreifende Gefährdung, die in Metzgerei, BackShop, Kühlhaus und
+    Verkaufsbereich gleichermaßen relevant ist (Feuchtigkeit, Fett, Mehl, Kälte/Eisbildung) und daher
+    hier gesondert zusammengefasst wird.
+  </div>
+  <table class="gbu">
+    <colgroup><col class="c-gef"><col class="c-recht"><col class="c-risk"><col class="c-mass"><col class="c-verant"><col class="c-status"></colgroup>
+    <thead><tr><th>Gefährdung</th><th>Rechtsgrundlage</th><th>Risiko</th><th>Maßnahmen</th><th>Verantw. / Termin</th><th>Wirksamkeit geprüft</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Rutschgefahr durch Fett, Wasser, Mehl, Kondens- oder Reinigungswasser auf dem Boden in Metzgerei/BackShop</td>
+        <td>ArbStättV, ASR A1.5, DGUV Information 208-041</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-t">T</span>Rutschhemmenden Bodenbelag entsprechend Bewertungsgruppe wählen: i. d. R. mind. R11 in trockenen Bereichen, R12/R13 mit ausreichendem Verdrängungsraum (V4/V6) in Nass-/Fettbereichen wie Metzgerei und BackShop</li>
+          <li><span class="top-tag top-o">O</span>Verschmutzungen/Nässe sofort beseitigen, Warnschilder bei Reinigungsarbeiten aufstellen</li>
+          <li><span class="top-tag top-p">P</span>Rutschhemmendes, für den Bereich geeignetes Sicherheitsschuhwerk (Kategorie SRC) tragen</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Rutschgefahr durch Eis-/Reifbildung im Kühlhaus sowie an Türschwellen zwischen warmen und kalten Bereichen</td>
+        <td>ArbStättV, ASR A1.5</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-t">T</span>Tauwasserresistenter, rutschhemmender Bodenbelag im Kühlhaus; ggf. Bodenheizung an kritischen Übergängen</li>
+          <li><span class="top-tag top-o">O</span>Regelmäßige Kontrolle auf Eisbildung, insbesondere nach häufigem Türöffnen bei Springer-Einsätzen mit häufigem Ein-/Auslagern</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Stolpergefahr durch beschädigte Fliesen, Bodenunebenheiten, lose Kabel oder Übergänge zwischen unterschiedlichen Bodenbelägen</td>
+        <td>ArbStättV, ASR A1.5/A1.8</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-t">T</span>Schäden am Bodenbelag zeitnah instand setzen, Kabel nicht lose über Verkehrswege verlegen</li>
+          <li><span class="top-tag top-o">O</span>Bei Neubelegung/Wechsel des Einsatzmarktes: Beschäftigte aktiv auf lokale Besonderheiten des Bodens hinweisen</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Erschwerte Reinigung/Hygienemängel bei ungeeignetem, porösem oder beschädigtem Bodenbelag (Nährboden für Keime)</td>
+        <td>LMHV/HACCP, ArbStättV</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-o">O</span>Bodenbelag muss leicht zu reinigen und zu desinfizieren sein (fugenarm, chemikalienbeständig gegen Reinigungsmittel)</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ================= WARENEINGANG ================= -->
+<section class="page">
+  <h2 class="sub"><span class="num">14</span>Wareneingang / Anlieferung (Rampe, Rollbehälter, Abräumwagen)</h2>
+  <table class="gbu">
+    <colgroup><col class="c-gef"><col class="c-recht"><col class="c-risk"><col class="c-mass"><col class="c-verant"><col class="c-status"></colgroup>
+    <thead><tr><th>Gefährdung</th><th>Rechtsgrundlage</th><th>Risiko</th><th>Maßnahmen</th><th>Verantw. / Termin</th><th>Wirksamkeit geprüft</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Absturz-/Stolpergefahr an der Anlieferrampe (Höhenunterschied zum Lkw, ungesicherte Rampenkante, witterungsbedingte Nässe/Glätte)</td>
+        <td>ArbStättV, ASR A1.5/A1.8, DGUV Vorschrift 1</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-mid">mittel</span></td>
+        <td><ul>
+          <li><span class="top-tag top-t">T</span>Rampenkante deutlich kennzeichnen, Absturzsicherung/Geländer wo möglich, rutschhemmender Belag</li>
+          <li><span class="top-tag top-o">O</span>Bei Nässe/Glätte besondere Vorsicht, ggf. Streumittel bereithalten</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Quetsch-/Anfahrgefahr durch rangierende Lkw oder Hubwagen im Rampenbereich; Kollision zwischen Fahrzeug und Personal beim Be-/Entladen</td>
+        <td>DGUV Vorschrift 1, StVO (Betriebsgelände)</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-mid">mittel</span></td>
+        <td><ul>
+          <li><span class="top-tag top-o">O</span>Sichtkontakt zum Fahrer herstellen, nicht im toten Winkel aufhalten, Ladevorgang nur bei stehendem, gesichertem Fahrzeug (Feststellbremse, Unterlegkeile)</li>
+          <li><span class="top-tag top-t">T</span>Warnkleidung im Anlieferbereich tragen, ausreichende Beleuchtung der Rampe</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Quetsch- und Stoßgefahr beim Rangieren, Auf- und Abladen von Rollbehältern (Fleisch-/Backwarenwagen) über die Rampenkante oder Bordsteinkante</td>
+        <td>LasthandhabV, DGUV Regel 110-011</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-t">T</span>Ladebrücke/Verladerampe mit möglichst geringem Spalt und Gefälle nutzen</li>
+          <li><span class="top-tag top-o">O</span>Rollbehälter mit beiden Händen kontrolliert führen, nicht anschieben und loslassen; Feststellbremsen vor dem Entladen prüfen</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Kippgefahr überladener oder falsch beladener Rollbehälter, insbesondere bei Gefälle oder unebenem Boden im Anlieferbereich</td>
+        <td>LasthandhabV, DGUV Vorschrift 1</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-o">O</span>Zulässige Beladehöhe/-gewicht beachten, Schwerpunkt niedrig halten, keine Behälter mit blockierten Rollen ziehen</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Muskel-Skelett-Belastung und Schnittverletzungen (Kartonagen) beim manuellen Warenempfang, Kontrolle und Umpacken an der Rampe</td>
+        <td>LasthandhabV, DGUV Regel 110-011</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-t">T</span>Hubwagen/Rollhilfen statt manuellem Tragen einsetzen</li>
+          <li><span class="top-tag top-t">T</span>Cuttermesser mit automatischem Klingenrückzug für Kartonagen</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Quetsch-/Stoßgefahr sowie Rückenbelastung beim Rangieren und Entleeren von Abräumwagen (Leergut, Kartonagen, Verpackungsmüll) im engen Rampen-/Lagerbereich</td>
+        <td>LasthandhabV, ArbStättV</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-o">O</span>Abräumwagen nicht überladen, Verkehrswege im Lager-/Rampenbereich freihalten und kennzeichnen</li>
+          <li><span class="top-tag top-p">P</span>Schnittfeste Handschuhe beim Sortieren scharfkantiger Verpackungen/Leergut</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Unterbrochene Kühlkette und mikrobiologische Gefährdung durch zu langes Stehenlassen leicht verderblicher Ware im Anlieferbereich</td>
+        <td>LMHV/HACCP, BiostoffV</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-o">O</span>Kühlpflichtige Ware unverzüglich kontrollieren und ins Kühlhaus verräumen, Wareneingangskontrolle zügig durchführen</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ================= SEITE 5 WARENVERRÄUMUNG / FAHRTEN ================= -->
+<section class="page">
+  <h2 class="sub"><span class="num">15</span>Warenverräumung (Heben, Tragen, Regalbestückung)</h2>
+  <table class="gbu">
+    <colgroup><col class="c-gef"><col class="c-recht"><col class="c-risk"><col class="c-mass"><col class="c-verant"><col class="c-status"></colgroup>
+    <thead><tr><th>Gefährdung</th><th>Rechtsgrundlage</th><th>Risiko</th><th>Maßnahmen</th><th>Verantw. / Termin</th><th>Wirksamkeit geprüft</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Muskel-Skelett-Belastungen durch Heben, Tragen und Bücken beim Ein- und Ausräumen von Waren, insbesondere bei häufig wechselnden Standorten mit unbekannten Gegebenheiten</td>
+        <td>LasthandhabV, ArbSchG</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-mid">mittel</span></td>
+        <td><ul>
+          <li><span class="top-tag top-t">T</span>Hebehilfen, Rollcontainer und Hubwagen bereitstellen und konsequent nutzen</li>
+          <li><span class="top-tag top-o">O</span>Unterweisung in ergonomischer Hebe-/Tragetechnik, betriebliche Lastgrenzen beachten</li>
+          <li><span class="top-tag top-o">O</span>Schwere Lasten möglichst zu zweit tragen</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Schnittverletzungen beim Öffnen von Kartonagen und Umverpackungen</td>
+        <td>DGUV Regel 110-011</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-t">T</span>Cuttermesser mit automatischem Klingenrückzug verwenden</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Sturz von Tritten oder Behelfsmitteln bei Verräumarbeiten in der Höhe</td>
+        <td>ArbStättV, BetrSichV</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-o">O</span>Nur geprüfte Trittleitern verwenden, keine Kisten, Stühle oder Rollcontainer als Aufstiegshilfe zweckentfremden</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Quetschgefahr an Fingern/Füßen beim Manövrieren von Rollcontainern und Paletten</td>
+        <td>DGUV Vorschrift 1</td>
+        <td class="risk-cell"><span class="risk risk-low">niedrig</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-p">P</span>Sicherheitsschuhe mit Zehenschutz tragen</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ================= MESSER ================= -->
+<section class="page">
+  <h2 class="sub"><span class="num">16</span>Umgang mit und Schleifen von Messern</h2>
+  <div class="meta-box">
+    Ergänzt Abschnitt 5 (Schneidetisch/Hackklotz) um den bereichsübergreifenden Umgang mit dem
+    persönlichen Messerbesteck der Springer-Kraft, das Schärfen/Wetzen sowie den Transport zwischen
+    verschiedenen Einsatzmärkten.
+  </div>
+  <table class="gbu">
+    <colgroup><col class="c-gef"><col class="c-recht"><col class="c-risk"><col class="c-mass"><col class="c-verant"><col class="c-status"></colgroup>
+    <thead><tr><th>Gefährdung</th><th>Rechtsgrundlage</th><th>Risiko</th><th>Maßnahmen</th><th>Verantw. / Termin</th><th>Wirksamkeit geprüft</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Schnittverletzung beim täglichen Abziehen/Wetzen der Messerklinge mit dem Wetzstahl (falscher Winkel, Abrutschen)</td>
+        <td>DGUV Regel 110-011, DGUV Regel 112-991</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-o">O</span>Wetzstahl körperfern und in kontrollierter Bewegung führen, korrekte Technik in der Unterweisung vermitteln</li>
+          <li><span class="top-tag top-p">P</span>Schnittschutzhandschuh an der Führhand während des Wetzens</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Schnitt- und Erfassungsgefahr an der elektrischen Messerschleifmaschine (rotierende Schleifscheibe), Funkenflug, Metallabrieb</td>
+        <td>BetrSichV, DGUV Vorschrift 3, DGUV Regel 110-011</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-mid">mittel</span></td>
+        <td><ul>
+          <li><span class="top-tag top-t">T</span>Schutzabdeckung der Schleifscheibe funktionsfähig halten, Maschine regelmäßig prüfen (DGUV V3)</li>
+          <li><span class="top-tag top-o">O</span>Nur unterwiesenes Personal, Messer sicher und mit festem Griff führen, nicht ablenken lassen</li>
+          <li><span class="top-tag top-p">P</span>Schutzbrille gegen Funkenflug/Metallabrieb, ggf. Schnittschutzhandschuh an der Nichtführhand</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Schnitt-/Stichverletzung Dritter oder der Springer-Kraft selbst beim Transport des eigenen Messerbestecks zwischen Einsatzmärkten (in Tasche/Fahrzeug)</td>
+        <td>DGUV Regel 112-195, StVO §22</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-t">T</span>Verschließbarer, gepolsterter Messerkoffer/-rolle mit fixierten Klingenscheiden verwenden</li>
+          <li><span class="top-tag top-o">O</span>Messerkoffer im Fahrzeug gegen Verrutschen sichern (siehe Abschnitt 20, Ladungssicherung)</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Verletzung durch stumpfe oder beschädigte Messer (höherer Kraftaufwand, unkontrolliertes Abrutschen, ausbrechende Klingenspitzen)</td>
+        <td>DGUV Regel 110-011</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-o">O</span>Regelmäßige Sichtkontrolle der Messer, beschädigte Klingen aussondern und fachgerecht nachschleifen oder entsorgen</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Schnittverletzung Dritter (Kollegen, Reinigungspersonal) durch unachtsam abgelegte oder in der Spüle „versteckte" Messer</td>
+        <td>DGUV Regel 112-195</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-o">O</span>Klare Regel: Messer nie unsichtbar ins Spülwasser legen, immer mit Klinge sichtbar und griffbereit ablegen</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="sub"><span class="num">17</span>Reinigung sowie Umgang mit Gefahrstoffen und Reinigungsmitteln</h2>
+  <table class="gbu">
+    <colgroup><col class="c-gef"><col class="c-recht"><col class="c-risk"><col class="c-mass"><col class="c-verant"><col class="c-status"></colgroup>
+    <thead><tr><th>Gefährdung</th><th>Rechtsgrundlage</th><th>Risiko</th><th>Maßnahmen</th><th>Verantw. / Termin</th><th>Wirksamkeit geprüft</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Hautschäden (Reizungen, Verätzungen) durch Kontakt mit konzentrierten Reinigungs- und Desinfektionsmitteln bei der täglichen Endreinigung</td>
+        <td>GefStoffV, TRGS 401, TRGS 400</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-mid">mittel</span></td>
+        <td><ul>
+          <li><span class="top-tag top-t">T</span>Dosiersysteme statt manuellem Abmessen verwenden, wo verfügbar</li>
+          <li><span class="top-tag top-p">P</span>Chemikalienbeständige Schutzhandschuhe und ggf. Schutzbrille entsprechend Sicherheitsdatenblatt</li>
+          <li><span class="top-tag top-o">O</span>Betriebsanweisung je Reinigungsmittel aushängen, Unterweisung anhand des Sicherheitsdatenblatts</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Gesundheitsgefährdung durch Einatmen von Dämpfen/Aerosolen bei Sprühanwendung oder unzureichender Lüftung während der Reinigung</td>
+        <td>GefStoffV, ArbStättV</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-t">T</span>Während und nach der Reinigung ausreichend lüften; Sprühnebel vermeiden, wo möglich Direktauftrag bevorzugen</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Gefährliche chemische Reaktion durch Vermischen unterschiedlicher Reinigungsmittel (z. B. Säure- und Chlorreiniger &rarr; giftige Gase)</td>
+        <td>GefStoffV, TRGS 400</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-o">O</span>Reinigungsmittel niemals mischen; Anwendungshinweise strikt einhalten</li>
+          <li><span class="top-tag top-o">O</span>Klare Kennzeichnung, welches Mittel wofür bestimmt ist, keine Umfüllung in unbeschriftete Behälter</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Verwechslungsgefahr und unsachgemäße Aufbewahrung von Reinigungs-/Desinfektionsmitteln (z. B. Lagerung in der Nähe von Lebensmitteln oder in Getränkeflaschen)</td>
+        <td>GefStoffV, LMHV</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-t">T</span>Gefahrstoffe ausschließlich in Originalgebinden mit Originaletikett aufbewahren, nie in Lebensmittelbehältern</li>
+          <li><span class="top-tag top-o">O</span>Separater, gekennzeichneter Lagerschrank/-bereich räumlich getrennt von Lebensmitteln und Gewürzen; abschließbar, wenn Zugang durch Unbefugte/Kinder möglich</li>
+          <li><span class="top-tag top-o">O</span>Gefahrstoffverzeichnis führen, Sicherheitsdatenblätter am Standort verfügbar halten</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Rutsch- und Sturzgefahr während laufender Reinigungsarbeiten am nassen Boden (auch für Kunden/Kollegen im laufenden Betrieb)</td>
+        <td>ArbStättV, ASR A1.5</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-o">O</span>Warnschilder „Rutschgefahr" aufstellen, Reinigung nach Möglichkeit außerhalb der Verkaufszeiten oder bereichsweise durchführen</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Schnittverletzung beim Reinigen von Maschinenteilen mit scharfen Klingen/Kanten (siehe auch Abschnitte 1–4)</td>
+        <td>DGUV Regel 110-011</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-p">P</span>Schnittfeste Handschuhe bei der Reinigung aller Schneidwerkzeuge/Maschinenteile</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="sub"><span class="num">18</span>Gewürze – Lagerung und Verwendung</h2>
+  <table class="gbu">
+    <colgroup><col class="c-gef"><col class="c-recht"><col class="c-risk"><col class="c-mass"><col class="c-verant"><col class="c-status"></colgroup>
+    <thead><tr><th>Gefährdung</th><th>Rechtsgrundlage</th><th>Risiko</th><th>Maßnahmen</th><th>Verantw. / Termin</th><th>Wirksamkeit geprüft</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Atemwegs- und Schleimhautreizung durch Gewürzstaub beim Öffnen von Gebinden, Umfüllen oder Würzen größerer Mengen (z. B. Pfeffer, Paprika, Chili)</td>
+        <td>GefStoffV, TRGS 900</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-o">O</span>Staubarmes Umfüllen (langsam, geringe Fallhöhe), Räume gut lüften</li>
+          <li><span class="top-tag top-p">P</span>Bei stark stäubenden Gewürzen oder größeren Mengen Atemschutz (FFP2) und Schutzbrille bereitstellen</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Allergische Reaktionen der Beschäftigten bei wiederholtem Kontakt/Einatmen bestimmter Gewürze und Zusatzstoffe</td>
+        <td>GefStoffV, ArbSchG</td>
+        <td class="risk-cell"><span class="risk risk-low">niedrig</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-o">O</span>Bei bekannten Allergien Tätigkeitswechsel ermöglichen, arbeitsmedizinische Beratung anbieten</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Verwechslungsgefahr zwischen Gewürzen/Zusatzstoffen und technischen Hilfsstoffen (z. B. Pökelsalz, Reinigungsmittel) bei unklarer Kennzeichnung oder Umfüllung in ähnliche Behälter</td>
+        <td>GefStoffV, LMHV</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-o">O</span>Eindeutige, dauerhafte Beschriftung aller Vorrats-/Umfüllbehälter; Pökelsalz (nitrithaltig) optisch klar von Speisesalz unterscheidbar lagern</li>
+          <li><span class="top-tag top-o">O</span>Räumlich getrennte Lagerung von Gewürzen/Lebensmittelzusatzstoffen und Reinigungs-/Gefahrstoffen (siehe Abschnitt 17)</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Hygienische Beeinträchtigung durch falsche Lagerbedingungen (Feuchtigkeit, Wärme, Schädlingsbefall in offenen Gebinden)</td>
+        <td>LMHV/HACCP</td>
+        <td class="risk-cell"><span class="risk risk-low">niedrig</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-o">O</span>Trockene, kühle Lagerung in verschlossenen, schädlingssicheren Behältern; Mindesthaltbarkeit beachten</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="sub"><span class="num">19</span>Persönliche Schutzausrüstung (PSA) – Benutzung</h2>
+  <table class="gbu">
+    <colgroup><col class="c-gef"><col class="c-recht"><col class="c-risk"><col class="c-mass"><col class="c-verant"><col class="c-status"></colgroup>
+    <thead><tr><th>Gefährdung</th><th>Rechtsgrundlage</th><th>Risiko</th><th>Maßnahmen</th><th>Verantw. / Termin</th><th>Wirksamkeit geprüft</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Verletzungen durch Nichttragen, falsche Auswahl oder unsachgemäße Benutzung der PSA (Schnittschutz, Hitzeschutz, Sicherheitsschuhe u. a.), z. B. weil am Einsatzmarkt keine passende PSA bereitsteht</td>
+        <td>DGUV Vorschrift 1, PSA-Benutzungsverordnung, DGUV Regel 112-195/112-991</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-mid">mittel</span></td>
+        <td><ul>
+          <li><span class="top-tag top-o">O</span>Vor Beginn der Gefährdungsbeurteilung ermittelte PSA je Tätigkeit verbindlich festlegen (PSA-Matrix je Arbeitsmittel/Bereich)</li>
+          <li><span class="top-tag top-o">O</span>Sicherstellen, dass an <u>jedem</u> Einsatzmarkt passende PSA in ausreichender Anzahl und Größe für Springer-Kräfte vorhanden ist</li>
+          <li><span class="top-tag top-p">P</span>PSA konsequent tragen; Vorgesetzte kontrollieren stichprobenartig die Benutzung</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Eingeschränkte Schutzwirkung durch verschlissene, beschädigte oder falsch gepflegte PSA (z. B. durchnässte Schnittschutzhandschuhe, abgenutzte Schuhsohlen)</td>
+        <td>DGUV Vorschrift 1</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-o">O</span>Regelmäßige Sicht-/Funktionskontrolle der PSA vor Gebrauch; beschädigte PSA sofort austauschen</li>
+          <li><span class="top-tag top-o">O</span>PSA nach Herstellerangabe reinigen/pflegen und austauschen (Nutzungsdauer beachten)</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Falsche PSA-Auswahl für die jeweilige Maschine (z. B. Stoffhandschuh an der Bandsäge statt zugelassenem Schutzhandschuh) durch fehlende Kenntnis bei wechselndem Personal</td>
+        <td>DGUV Regel 110-011</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-o">O</span>PSA-Kennzeichnung direkt an der jeweiligen Maschine anbringen, Unterweisung explizit auf maschinenspezifische PSA eingehen</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Fehlende Unterweisung in der korrekten Benutzung, Anlegen/Ablegen und den Grenzen der PSA</td>
+        <td>DGUV Vorschrift 1, ArbSchG §12</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-o">O</span>PSA-Benutzung fester Bestandteil der jährlichen Unterweisung sowie der Ersteinweisung neuer Springer-Kräfte</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ================= FAHRTEN ================= -->
+<section class="page">
+  <h2 class="sub"><span class="num">20</span>Fahrten zum Einsatzmarkt (Springer-spezifisch)</h2>
+  <table class="gbu">
+    <colgroup><col class="c-gef"><col class="c-recht"><col class="c-risk"><col class="c-mass"><col class="c-verant"><col class="c-status"></colgroup>
+    <thead><tr><th>Gefährdung</th><th>Rechtsgrundlage</th><th>Risiko</th><th>Maßnahmen</th><th>Verantw. / Termin</th><th>Wirksamkeit geprüft</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Verkehrsunfälle bei häufigen Fahrten zu wechselnden Einsatzorten, teils an unbekannte oder mehrere Standorte pro Tag (Wegeunfälle)</td>
+        <td>StVO/StVZO, DGUV Vorschrift 70, SGB VII (Wegeunfall)</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-mid">mittel</span></td>
+        <td><ul>
+          <li><span class="top-tag top-t">T</span>Regelmäßige Prüfung der Verkehrssicherheit des Fahrzeugs (Bremsen, Bereifung, Beleuchtung)</li>
+          <li><span class="top-tag top-o">O</span>Realistische Zeitplanung ohne Zeitdruck; regelmäßige Führerscheinkontrolle (mind. jährlich)</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Ermüdung und Ablenkung bei langen oder häufigen Fahrstrecken zwischen mehreren Märkten am selben Tag</td>
+        <td>ArbSchG, ArbZG</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-o">O</span>Ausreichende Pausen einplanen, Anzahl der Einsatzorte pro Tag realistisch begrenzen, Ablenkung (z. B. Mobiltelefon) während der Fahrt vermeiden</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Unbekannte Strecken und Standorte, Orientierungsschwierigkeiten, fehlende Ortskenntnis der Flucht-/Rettungswege</td>
+        <td>DGUV Vorschrift 1</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-o">O</span>Einweisung am neuen Marktstandort inkl. Flucht-/Rettungswegen, Notentriegelung Kühlhaus und lokalem Ansprechpartner vor Arbeitsbeginn</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Ungenügende Ladungssicherung mitgeführter Werkzeuge, Messer oder Waren im Fahrzeug</td>
+        <td>StVO §22</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-o">O</span>Unterweisung zur Ladungssicherung, geeignete verschließbare Transportbehälter für Messer/Werkzeug verwenden</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Witterungsbedingte Gefährdung (Glätte, Dunkelheit, Starkregen) auf Wegstrecken zwischen den Märkten</td>
+        <td>ArbSchG</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-o">O</span>Anpassung der Fahrweise und Zeitplanung an die Witterung, geeignete Winterausrüstung des Fahrzeugs</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ================= PERSONALFÜHRUNG / PSYCHISCHE BELASTUNG ================= -->
+<section class="page">
+  <h2 class="sub"><span class="num">21</span>Personalführung und psychische Belastung</h2>
+  <div class="meta-box">
+    Die Beurteilung psychischer Belastung ist gemäß § 5 ArbSchG verpflichtender Bestandteil der
+    Gefährdungsbeurteilung. Bei der Springer-Tätigkeit wirken die Merkmalsbereiche Arbeitsintensität,
+    Arbeitsorganisation, soziale Beziehungen und Arbeitsumgebung durch den ständigen Standort- und
+    Teamwechsel besonders zusammen.
+  </div>
+  <table class="gbu">
+    <colgroup><col class="c-gef"><col class="c-recht"><col class="c-risk"><col class="c-mass"><col class="c-verant"><col class="c-status"></colgroup>
+    <thead><tr><th>Gefährdung</th><th>Rechtsgrundlage</th><th>Risiko</th><th>Maßnahmen</th><th>Verantw. / Termin</th><th>Wirksamkeit geprüft</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Zeit- und Leistungsdruck durch enge Personaleinsatzplanung, kurzfristige Einsatzänderungen oder Personalmangel am Zielmarkt</td>
+        <td>ArbSchG §5, GDA-Leitlinie psychische Belastung</td>
+        <td class="risk-cell"><span class="risk risk-high">hoch</span><span class="risk-arrow">→</span><span class="risk risk-mid">mittel</span></td>
+        <td><ul>
+          <li><span class="top-tag top-o">O</span>Realistische, vorausschauende Personaleinsatzplanung mit ausreichendem Vorlauf für Springer-Kräfte</li>
+          <li><span class="top-tag top-o">O</span>Klare Priorisierung der Aufgaben vor Ort durch die jeweilige Marktleitung kommunizieren</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Fehlende Einbindung und soziale Isolation durch ständig wechselnde Kolleginnen/Kollegen und Vorgesetzte an unterschiedlichen Standorten, keine feste Teamzugehörigkeit</td>
+        <td>ArbSchG §5</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-o">O</span>Feste, dauerhafte Ansprechperson (z. B. Regionalverantwortliche/r) außerhalb der wechselnden Märkte benennen</li>
+          <li><span class="top-tag top-o">O</span>Kurze Vorstellungs-/Übergaberoutine bei Ankunft an jedem neuen Markt etablieren, damit die Springer-Kraft integriert wird</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Uneinheitliches oder unklares Führungsverhalten unterschiedlicher Marktleitungen (widersprüchliche Anweisungen, unterschiedliche Erwartungen, fehlende Rollenklarheit für die Springer-Kraft)</td>
+        <td>ArbSchG §5</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-o">O</span>Einheitlicher, schriftlicher Einarbeitungs-/Übergabeleitfaden für alle Standorte, den jede Marktleitung nutzt</li>
+          <li><span class="top-tag top-o">O</span>Führungskräfteschulung zu einheitlichem, wertschätzendem Umgang mit Springer-Personal</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Fehlende Wertschätzung/Rückmeldung sowie eingeschränkte Möglichkeit, Probleme oder Überlastung zu melden, wenn kein fester Vorgesetzter vor Ort ansprechbar ist</td>
+        <td>ArbSchG §5</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-o">O</span>Regelmäßige Mitarbeitergespräche unabhängig vom aktuellen Einsatzort sicherstellen</li>
+          <li><span class="top-tag top-o">O</span>Niedrigschwelligen Meldeweg für Überlastung, Konflikte oder sicherheitsrelevante Beobachtungen einrichten (z. B. feste Telefonnummer/Kontaktperson)</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Belastung durch Kundenkontakt und Konfliktsituationen im Verkauf, teils ohne Rückhalt eines eingespielten Teams am jeweiligen Markt</td>
+        <td>ArbSchG §5, DGUV Regel 110-011</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-o">O</span>Verhaltensleitfaden für den Umgang mit schwierigen Kundensituationen, Rückendeckung durch Marktleitung zusichern</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Fehlende oder unzureichende Einarbeitung an neuen Standorten (Maschinen, Abläufe, Ansprechpartner), die zusätzlichen Stress und Unsicherheit erzeugt</td>
+        <td>ArbSchG §12</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-o">O</span>Standardisierte Kurzeinweisung (Checkliste) bei jedem neuen Markteinsatz: Maschinen, Fluchtwege, Ersthelfer, Ansprechpartner, Besonderheiten</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ================= ÜBERGREIFEND ================= -->
+<section class="page">
+  <h2 class="sub"><span class="num">22</span>Übergreifende Gefährdungen (alle Bereiche)</h2>
+  <table class="gbu">
+    <colgroup><col class="c-gef"><col class="c-recht"><col class="c-risk"><col class="c-mass"><col class="c-verant"><col class="c-status"></colgroup>
+    <thead><tr><th>Gefährdung</th><th>Rechtsgrundlage</th><th>Risiko</th><th>Maßnahmen</th><th>Verantw. / Termin</th><th>Wirksamkeit geprüft</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Hautbelastung durch häufige Feuchtarbeit sowie Kontakt mit Reinigungs-/Desinfektionsmitteln</td>
+        <td>GefStoffV, TRGS 401</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul>
+          <li><span class="top-tag top-o">O</span>Hautschutzplan (Schutz – Reinigung – Pflege) aushängen und einhalten</li>
+          <li><span class="top-tag top-p">P</span>Geeignete Schutzhandschuhe je nach Tätigkeit bereitstellen</li>
+        </ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Biologische Gefährdung durch Kontakt mit rohem Fleisch (Zoonosen, z. B. Erysipeloid)</td>
+        <td>BiostoffV</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-o">O</span>Konsequente Hygieneregeln, Handschutz bei Verletzungen der Haut, arbeitsmedizinische Vorsorge anbieten</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+      <tr>
+        <td>Unzureichende Erste-Hilfe-Versorgung an einem fremden, unbekannten Marktstandort</td>
+        <td>DGUV Vorschrift 1</td>
+        <td class="risk-cell"><span class="risk risk-mid">mittel</span><span class="risk-arrow">→</span><span class="risk risk-low">niedrig</span></td>
+        <td><ul><li><span class="top-tag top-o">O</span>Ersthelfer und Standort des Verbandkastens je Markt vor Einsatzbeginn aktiv bekannt machen</li></ul></td>
+        <td><input type="text" placeholder="Verantwortlich"><input type="text" placeholder="Termin"></td>
+        <td><div class="chk-line"><input type="checkbox"><input type="date"></div></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ================= UNTERWEISUNG / UNTERSCHRIFTEN ================= -->
+<section class="page">
+  <h1 class="section-title">Unterweisung &amp; Wirksamkeitskontrolle</h1>
+  <p class="intro">Die vorliegende Gefährdungsbeurteilung ist Grundlage der Betriebsanweisungen und der
+  jährlichen (bei Jugendlichen halbjährlichen) Unterweisung. Sie ist bei jedem Einsatz an einem neuen
+  Marktstandort auf lokale Besonderheiten hin zu ergänzen (§ 12 ArbSchG).</p>
+
+  <h2 class="sub">Bestätigung der Unterweisung</h2>
+  <table class="sig">
+    <thead><tr><th>Name</th><th>Datum</th><th>Einsatzmarkt / Standort</th><th>Unterschrift</th></tr></thead>
+    <tbody>
+      <tr><td><input type="text"></td><td><input type="date"></td><td><input type="text"></td><td>&nbsp;</td></tr>
+      <tr><td><input type="text"></td><td><input type="date"></td><td><input type="text"></td><td>&nbsp;</td></tr>
+      <tr><td><input type="text"></td><td><input type="date"></td><td><input type="text"></td><td>&nbsp;</td></tr>
+      <tr><td><input type="text"></td><td><input type="date"></td><td><input type="text"></td><td>&nbsp;</td></tr>
+      <tr><td><input type="text"></td><td><input type="date"></td><td><input type="text"></td><td>&nbsp;</td></tr>
+      <tr><td><input type="text"></td><td><input type="date"></td><td><input type="text"></td><td>&nbsp;</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="sub">Erstellung &amp; Freigabe</h2>
+  <table class="sig">
+    <thead><tr><th>Funktion</th><th>Name</th><th>Datum</th><th>Unterschrift</th></tr></thead>
+    <tbody>
+      <tr><td>Erstellt durch</td><td><input type="text"></td><td><input type="date"></td><td>&nbsp;</td></tr>
+      <tr><td>Fachkraft für Arbeitssicherheit</td><td><input type="text"></td><td><input type="date"></td><td>&nbsp;</td></tr>
+      <tr><td>Betriebsarzt/-ärztin</td><td><input type="text"></td><td><input type="date"></td><td>&nbsp;</td></tr>
+      <tr><td>Beschäftigtenvertretung / Betriebsrat</td><td><input type="text"></td><td><input type="date"></td><td>&nbsp;</td></tr>
+      <tr><td>Unternehmensleitung (Freigabe)</td><td><input type="text"></td><td><input type="date"></td><td>&nbsp;</td></tr>
+    </tbody>
+  </table>
+
+  <p class="footer-note">
+    Diese Gefährdungsbeurteilung ist zu überprüfen und ggf. anzupassen: regelmäßig (z. B. jährlich),
+    bei Einführung neuer Arbeitsmittel oder Marktstandorte, nach Unfällen/Beinaheunfällen sowie bei
+    Änderungen der Rechtslage. Sie ersetzt nicht die BGHW-GBO, sondern ergänzt diese um die hier
+    dargestellten branchen- und tätigkeitsspezifischen Gefährdungen.
+  </p>
+</section>
+
+</body>
+</html>
