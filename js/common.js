@@ -6,7 +6,7 @@
 // Service-Workern (sw.js / service-worker.js), die sich gegenseitig
 // ueberschrieben haben. Jetzt: eine Quelle, ein Service Worker.
 
-const APP_VERSION = '1.0.0';
+const APP_VERSION = '1.0.1';
 
 function initThemeToggle() {
     const toggle = document.getElementById('themeToggle');
