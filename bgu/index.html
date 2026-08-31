@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -9,6 +10,7 @@
 <body>
 
 <div class="hazard-strip"></div>
+
 <header class="app-header">
     <div class="app-header-inner">
         <div class="brand">
@@ -21,12 +23,24 @@
 <main class="page">
 
     <h1>Gefährdungsbeurteilungen</h1>
+
     <p style="color:var(--ink-soft); max-width: 640px;">
         Formular auswählen, ausfüllen und als PDF speichern — zur eigenen
         Dokumentation oder zur Vorlage bei Behörden.
     </p>
 
     <div id="katalog"></div>
+
+    <!-- Branchenspezifischer Eintrag -->
+    <div class="kategorie-label">Branchenspezifisch</div>
+
+    <div class="gbu-grid">
+        <a class="gbu-tile" href="metzgerei.html">
+            <span class="icon">🥩</span>
+            <span class="titel">Metzgerei</span>
+            <span class="kategorie">Gefährdungsbeurteilung Metzgerei</span>
+        </a>
+    </div>
 
 </main>
 
@@ -40,19 +54,26 @@
 <script src="js/pruefliste-allgemein.js"></script>
 <script src="js/pruefliste-umfassend.js"></script>
 <script src="js/gbu-daten.js"></script>
+
 <script>
     function escapeHtml(str) {
         const div = document.createElement('div');
-        div.textContent = str === undefined || str === null ? '' : String(str);
+        div.textContent =
+            str === undefined || str === null ? '' : String(str);
         return div.innerHTML;
     }
 
-    // Funktioniert fuer beide GBU-Typen: "standard" zaehlt die Gefaehrdungen,
+    // Funktioniert fuer beide GBU-Typen:
+    // "standard" zaehlt die Gefaehrdungen,
     // "pruefliste" zaehlt die Fragen ueber alle Abschnitte hinweg.
     function anzahlPruefpunkte(g) {
         if (g.typ === 'pruefliste') {
-            return g.abschnitte.reduce((summe, a) => summe + a.fragen.length, 0);
+            return g.abschnitte.reduce(
+                (summe, a) => summe + a.fragen.length,
+                0
+            );
         }
+
         return g.gefaehrdungen.length;
     }
 
@@ -60,20 +81,41 @@
         const container = document.getElementById('katalog');
 
         const kategorien = [];
+
         GBU_KATALOG.forEach(g => {
-            if (!kategorien.includes(g.kategorie)) kategorien.push(g.kategorie);
+            if (!kategorien.includes(g.kategorie)) {
+                kategorien.push(g.kategorie);
+            }
         });
 
         container.innerHTML = kategorien.map(kat => {
-            const items = GBU_KATALOG.filter(g => g.kategorie === kat);
+            const items = GBU_KATALOG.filter(
+                g => g.kategorie === kat
+            );
+
             return `
-                <div class="kategorie-label">${escapeHtml(kat)}</div>
+                <div class="kategorie-label">
+                    ${escapeHtml(kat)}
+                </div>
+
                 <div class="gbu-grid">
                     ${items.map(g => `
-                        <a class="gbu-tile" href="gbu.html?id=${encodeURIComponent(g.id)}">
-                            <span class="icon">${g.icon || '📋'}</span>
-                            <span class="titel">${escapeHtml(g.titel)}</span>
-                            <span class="kategorie">${anzahlPruefpunkte(g)} Prüfpunkte erfasst</span>
+                        <a
+                            class="gbu-tile"
+                            href="gbu.html?id=${encodeURIComponent(g.id)}"
+                        >
+                            <span class="icon">
+                                ${g.icon || '📋'}
+                            </span>
+
+                            <span class="titel">
+                                ${escapeHtml(g.titel)}
+                            </span>
+
+                            <span class="kategorie">
+                                ${anzahlPruefpunkte(g)}
+                                Prüfpunkte erfasst
+                            </span>
                         </a>
                     `).join('')}
                 </div>
@@ -81,9 +123,20 @@
         }).join('');
     }
 
-    document.getElementById('footer-jahr').textContent = '© ' + new Date().getFullYear();
+    document.getElementById('footer-jahr').textContent =
+        '© ' + new Date().getFullYear();
+
     renderKatalog();
 </script>
 
 </body>
 </html>
+```
+
+Damit erscheint unter deinen bisherigen GBU-Kategorien zusätzlich:
+
+**Branchenspezifisch**
+🥩 **Metzgerei**
+*Gefährdungsbeurteilung Metzgerei*
+
+Beim Anklicken wird direkt **`metzgerei.html`** geöffnet.
