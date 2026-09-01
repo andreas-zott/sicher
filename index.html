@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Arbeitssicherheit — Anmeldung</title>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0a2f73">
+<link rel="stylesheet" href="lib/css/fontawesome.min.css">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle" aria-label="Theme umschalten">🌙</button>
+
+<section class="hero">
+    <div class="hero-icon"><i class="fas fa-shield-alt"></i></div>
+    <h1>Arbeitssicherheit</h1>
+    <p>„Sicher geprüft. Sicher gehandelt."</p>
+</section>
+
+<div class="container container-narrow">
+
+    <div class="card">
+        <div style="text-align:center; font-size:0.95rem; margin-bottom:8px; color:var(--navy-bright); font-weight:600;">
+            🔐 Passwortgeschützt
+        </div>
+
+        <form id="loginForm">
+            <label for="username">Benutzername</label>
+            <input type="text" id="username" autocomplete="username" required>
+
+            <label for="password">Passwort</label>
+            <input type="password" id="password" autocomplete="current-password" required>
+
+            <div style="display:flex; align-items:center; gap:8px; margin-top:10px; font-size:0.88rem;">
+                <input type="checkbox" id="togglePassword" style="width:auto;">
+                <label for="togglePassword" style="margin:0; font-weight:400;">Passwort anzeigen</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="margin-top:22px;">Anmelden</button>
+            <div class="error-msg" id="errorMsg"></div>
+        </form>
+    </div>
+
+</div>
+
+<footer class="app-footer">
+    <nav class="app-footer-links">
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutz</a>
+    </nav>
+    <p>© <span class="app-footer-jahr"></span> Andreas Zott — Alle Rechte vorbehalten</p>
+    <p class="app-footer-version"></p>
+</footer>
+
+<script src="js/common.js"></script>
+<script>
+    document.getElementById('togglePassword').addEventListener('change', function () {
+        document.getElementById('password').type = this.checked ? 'text' : 'password';
+    });
+
+    const validUsers = {
+        'admin': 'sifa',
+        'frank': '877',
+        'jörg': '380',
+        'carsten': '159'
+    };
+
+    document.getElementById('loginForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const u = document.getElementById('username').value.trim().toLowerCase();
+        const p = document.getElementById('password').value;
+
+        if (validUsers[u] && validUsers[u] === p) {
+            window.location.href = 'welcome.html';
+        } else {
+            document.getElementById('errorMsg').textContent = 'Falscher Benutzername oder Passwort!';
+        }
+    });
+</script>
+
+</body>
+</html>
