@@ -34,11 +34,18 @@ function gefilterteArchivDaten() {
 
 function renderAlleAuswertungen() {
     renderWiederkehrend();
+    renderGesamtverteilung();
     renderKategorienSchwachstellen();
     renderAuffaelligeMaerkte();
     renderVerlaufProMarkt();
     renderOffeneMassnahmen();
     updateZeitraumInfo();
+}
+
+function renderGesamtverteilung() {
+    const container = document.getElementById('gesamtverteilung-content');
+    if (!container) return;
+    container.innerHTML = renderGesamtverteilungHtml(gefilterteArchivDaten());
 }
 
 function updateZeitraumInfo() {
@@ -55,19 +62,19 @@ function updateZeitraumInfo() {
 function renderWiederkehrend() {
     const container = document.getElementById('wiederkehrend-content');
     if (!container) return;
-    const firma = (state.companyInfo && state.companyInfo.firma || '').trim();
+    const marktnummer = (state.companyInfo && state.companyInfo.marktnummer || '').trim();
 
-    if (!firma) {
+    if (!marktnummer) {
         container.innerHTML = '<p class="auswertung-empty">Für die aktuell laufende Begehung ist noch kein Markt eingetragen (Prüfkatalog-Seite → Betriebsdaten).</p>';
         return;
     }
 
     const previous = auswertungArchiv
-        .filter(r => (r.companyInfo.firma || '').trim() === firma)
+        .filter(r => (r.companyInfo.marktnummer || '').trim() === marktnummer)
         .sort((a, b) => b.createdAt - a.createdAt)[0];
 
     if (!previous) {
-        container.innerHTML = `<p class="auswertung-empty">Für „${escapeHtml(firma)}“ liegt noch keine archivierte Begehung zum Vergleich vor.</p>`;
+        container.innerHTML = `<p class="auswertung-empty">Für „${escapeHtml(marktnummer)}“ liegt noch keine archivierte Begehung zum Vergleich vor.</p>`;
         return;
     }
 
@@ -84,12 +91,12 @@ function renderWiederkehrend() {
     const vorherDatum = formatDate(previous.companyInfo.datum) || new Date(previous.createdAt).toLocaleDateString('de-DE');
 
     if (recurring.length === 0) {
-        container.innerHTML = `<div class="auswertung-good">✓ Keine wiederkehrenden Mängel gegenüber der letzten Begehung von „${escapeHtml(firma)}“ am ${vorherDatum}.</div>`;
+        container.innerHTML = `<div class="auswertung-good">✓ Keine wiederkehrenden Mängel gegenüber der letzten Begehung von „${escapeHtml(marktnummer)}“ am ${vorherDatum}.</div>`;
         return;
     }
 
     container.innerHTML = `
-        <p class="auswertung-hint">Diese Punkte waren bei der letzten Begehung von „${escapeHtml(firma)}“ am ${vorherDatum} bereits ein Mangel:</p>
+        <p class="auswertung-hint">Diese Punkte waren bei der letzten Begehung von „${escapeHtml(marktnummer)}“ am ${vorherDatum} bereits ein Mangel:</p>
         <table class="doku-table">
             <tr><th>Frage</th><th>Aktueller Status</th></tr>
             ${recurring.map(r => `<tr><td>[${r.itemId}] ${escapeHtml(r.text)}</td><td>${escapeHtml(r.currentRating)}</td></tr>`).join('')}
@@ -142,14 +149,14 @@ function csvEscape(val) {
 // Bewertungen sehr wohl gespeichert sind - genau das Verhalten, das schon
 // bei "Wiederkehrende Maengel" bewusst so (ueber Object.keys) gebaut wurde.
 function buildAuswertungCsvRows(daten) {
-    const rows = [['Firma', 'Datum', 'Kategorie', 'Frage-ID', 'Frage', 'Bewertung', 'Kommentar']];
+    const rows = [['Marktnummer', 'Datum', 'Kategorie', 'Frage-ID', 'Frage', 'Bewertung', 'Kommentar']];
     daten.forEach(record => {
         Object.keys(record.ratings || {}).forEach(itemId => {
             const rating = record.ratings[itemId];
             if (!rating) return;
             const found = findItemById(itemId);
             rows.push([
-                record.companyInfo.firma || '',
+                record.companyInfo.marktnummer || '',
                 record.companyInfo.datum || '',
                 found ? found.category.name : '(Kategorie nicht mehr im aktuellen Katalog)',
                 itemId,
@@ -271,6 +278,86 @@ function auswertungPdfFilename() {
     return `ASiC_Handel_Gesamtauswertung_${datum}.pdf`;
 }
 
+// ===== PDF-Diagramme (dieselben Farben/Zahlen wie die SVGs am Bildschirm) =====
+// jsPDF kennt keine Kreissegmente von Haus aus - die Torte wird deshalb aus
+// vielen schmalen Dreiecken zusammengesetzt (Fächer-Prinzip), die bei
+// ausreichend feiner Unterteilung rund wirken.
+
+const PDF_DIAGRAMM_FARBEN = { ok: [47, 158, 100], mangel: [214, 69, 63], na: [124, 135, 144] };
+
+function zeichneBalkendiagrammPdf(doc, rows, x, y, breite, hoehe) {
+    if (rows.length === 0) return;
+    const margenUnten = 16;
+    const plotHoehe = hoehe - margenUnten;
+    const abstand = breite / rows.length;
+    const balkenBreite = Math.min(16, abstand * 0.6);
+
+    doc.setDrawColor(223, 227, 230);
+    doc.setLineWidth(0.2);
+    doc.line(x, y + plotHoehe, x + breite, y + plotHoehe);
+
+    rows.forEach((r, i) => {
+        const bx = x + i * abstand + (abstand - balkenBreite) / 2;
+        const balkenHoehe = Math.max(0.8, (r.pct / 100) * plotHoehe);
+        const by = y + (plotHoehe - balkenHoehe);
+        const farbe = r.pct >= 50 ? PDF_DIAGRAMM_FARBEN.mangel : (r.pct >= 20 ? [217, 119, 6] : PDF_DIAGRAMM_FARBEN.ok);
+        doc.setFillColor(...farbe);
+        doc.roundedRect(bx, by, balkenBreite, balkenHoehe, 0.8, 0.8, 'F');
+
+        doc.setFont(undefined, 'bold');
+        doc.setFontSize(7.5);
+        doc.setTextColor(28, 34, 38);
+        doc.text(`${r.pct}%`, bx + balkenBreite / 2, by - 1.5, { align: 'center' });
+
+        const kurzName = r.name.length > 12 ? r.name.slice(0, 11) + '…' : r.name;
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(6.5);
+        doc.setTextColor(91, 102, 112);
+        doc.text(kurzName, bx + balkenBreite / 2, y + plotHoehe + 5, { align: 'center', angle: 35 });
+    });
+}
+
+function zeichneTortendiagrammPdf(doc, verteilung, cx, cy, radius) {
+    const { ok, mangel, na, total } = verteilung;
+    if (total === 0) return;
+
+    const segmente = [
+        { wert: ok, farbe: PDF_DIAGRAMM_FARBEN.ok },
+        { wert: mangel, farbe: PDF_DIAGRAMM_FARBEN.mangel },
+        { wert: na, farbe: PDF_DIAGRAMM_FARBEN.na }
+    ].filter(s => s.wert > 0);
+
+    let startWinkel = -90;
+    segmente.forEach(s => {
+        const anteil = s.wert / total;
+        const endWinkel = startWinkel + anteil * 360;
+        doc.setFillColor(...s.farbe);
+        const schrittGrad = 3;
+        for (let w = startWinkel; w < endWinkel; w += schrittGrad) {
+            const w2 = Math.min(w + schrittGrad, endWinkel);
+            const x1 = cx + radius * Math.cos(w * Math.PI / 180);
+            const y1 = cy + radius * Math.sin(w * Math.PI / 180);
+            const x2 = cx + radius * Math.cos(w2 * Math.PI / 180);
+            const y2 = cy + radius * Math.sin(w2 * Math.PI / 180);
+            doc.triangle(cx, cy, x1, y1, x2, y2, 'F');
+        }
+        startWinkel = endWinkel;
+    });
+}
+
+function zeichnePdfLegende(doc, segmente, x, y) {
+    segmente.forEach(s => {
+        doc.setFillColor(...s.farbe);
+        doc.rect(x, y - 2.8, 3.2, 3.2, 'F');
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(8.5);
+        doc.setTextColor(28, 34, 38);
+        doc.text(s.label, x + 5, y);
+        y += 5.5;
+    });
+    return y;
+}
+
 async function buildAuswertungPdf() {
     let daten;
     try {
@@ -341,12 +428,34 @@ async function buildAuswertungPdf() {
         y += 6;
     }
 
+    // Gesamtverteilung (Torte)
+    ueberschrift('Gesamtverteilung');
+    const verteilung = berechneGesamtverteilung(daten);
+    if (verteilung.total === 0) {
+        zeile('Keine auswertbaren Antworten im gewählten Zeitraum.', null, [100, 116, 139]);
+    } else {
+        const tortenRadius = 20;
+        const tortenCx = margin + tortenRadius;
+        const tortenCy = y + tortenRadius;
+        zeichneTortendiagrammPdf(doc, verteilung, tortenCx, tortenCy, tortenRadius);
+        const legendeSegmente = [
+            { farbe: PDF_DIAGRAMM_FARBEN.ok, label: `In Ordnung: ${verteilung.ok} (${Math.round(verteilung.ok / verteilung.total * 100)}%)` },
+            { farbe: PDF_DIAGRAMM_FARBEN.mangel, label: `Mangel: ${verteilung.mangel} (${Math.round(verteilung.mangel / verteilung.total * 100)}%)` },
+            { farbe: PDF_DIAGRAMM_FARBEN.na, label: `Nicht vorhanden: ${verteilung.na} (${Math.round(verteilung.na / verteilung.total * 100)}%)` }
+        ].filter(s => s.label.match(/: (\d+)/)[1] !== '0');
+        zeichnePdfLegende(doc, legendeSegmente, tortenCx + tortenRadius + 12, y + 8);
+        y += tortenRadius * 2 + 10;
+    }
+
     // Kategorien-Schwachstellen
     ueberschrift('Kategorien-Schwachstellen');
     const kategorienRows = berechneKategorienSchwachstellen(daten);
     if (kategorienRows.length === 0) {
         zeile('Keine auswertbaren Antworten im gewählten Zeitraum.', null, [100, 116, 139]);
     } else {
+        if (y + 62 > pageHeight - 20) { doc.addPage(); y = 18; }
+        zeichneBalkendiagrammPdf(doc, kategorienRows, margin, y, pageWidth - margin * 2, 55);
+        y += 62;
         kategorienRows.forEach(r => zeile(r.name, `${r.mangel}/${r.total} (${r.pct}%)`, [28, 34, 38]));
     }
     y += 8;
@@ -366,12 +475,12 @@ async function buildAuswertungPdf() {
     ueberschrift('Verlauf pro Markt');
     const markets = berechneVerlaufProMarkt(daten);
     const trendKlartext = { besser: '(besser)', schlechter: '(schlechter)', gleich: '(gleich)' };
-    markets.forEach(({ firma, entries }) => {
+    markets.forEach(({ marktnummer, entries }) => {
         if (y > pageHeight - 25) { doc.addPage(); y = 18; }
         doc.setFont(undefined, 'bold');
         doc.setFontSize(9.5);
         doc.setTextColor(28, 34, 38);
-        doc.text(firma, margin, y);
+        doc.text(marktnummer, margin, y);
         y += 5.5;
         entries.forEach(e => {
             const text = `  ${e.datum} — ${e.mangel} Mangel/Mängel ${e.trend ? trendKlartext[e.trend] : ''}`;
@@ -468,7 +577,7 @@ function renderOffeneMassnahmen() {
         (record.measures || []).forEach(m => {
             if (m.status === 'erledigt') return;
             allOpen.push({
-                firma: record.companyInfo.firma || '',
+                marktnummer: record.companyInfo.marktnummer || '',
                 begehungsDatum: record.companyInfo.datum || '',
                 itemId: m.itemId,
                 description: m.description,
@@ -481,7 +590,7 @@ function renderOffeneMassnahmen() {
     (state.measures || []).forEach(m => {
         if (m.status === 'erledigt') return;
         allOpen.push({
-            firma: (state.companyInfo && state.companyInfo.firma) || '',
+            marktnummer: (state.companyInfo && state.companyInfo.marktnummer) || '',
             begehungsDatum: (state.companyInfo && state.companyInfo.datum) || '',
             itemId: m.itemId,
             description: m.description,
@@ -519,7 +628,7 @@ function renderOffeneMassnahmen() {
                 }
                 return `<tr>
                     <td><span class="ampel-punkt ampel-${ampel}" title="${ampelLabel[ampel]}"></span></td>
-                    <td>${escapeHtml(m.firma)}${m.aktuell ? ' <span class="auswertung-aktuell-tag">aktuell</span>' : ''}</td>
+                    <td>${escapeHtml(m.marktnummer)}${m.aktuell ? ' <span class="auswertung-aktuell-tag">aktuell</span>' : ''}</td>
                     <td>${escapeHtml(m.description || '')}</td>
                     <td>${seitText}</td>
                 </tr>`;

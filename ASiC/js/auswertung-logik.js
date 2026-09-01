@@ -72,14 +72,14 @@ function berechneAuffaelligeMaerkte(daten) {
     const byMarket = {};
 
     daten.forEach(record => {
-        const firma = (record.companyInfo.firma || 'Ohne Markt-Angabe').trim();
-        if (!byMarket[firma]) byMarket[firma] = { mangel: 0, total: 0 };
+        const marktnummer = (record.companyInfo.marktnummer || 'Ohne Markt-Angabe').trim();
+        if (!byMarket[marktnummer]) byMarket[marktnummer] = { mangel: 0, total: 0 };
 
         Object.keys(record.ratings || {}).forEach(itemId => {
             const rating = record.ratings[itemId];
             if (!rating || rating === 'na') return;
-            byMarket[firma].total++;
-            if (rating === 'mangel') byMarket[firma].mangel++;
+            byMarket[marktnummer].total++;
+            if (rating === 'mangel') byMarket[marktnummer].mangel++;
         });
     });
 
@@ -118,14 +118,14 @@ function berechneVerlaufProMarkt(daten) {
 
     const byMarket = {};
     daten.forEach(r => {
-        const firma = (r.companyInfo.firma || 'Ohne Markt-Angabe').trim();
-        if (!byMarket[firma]) byMarket[firma] = [];
-        byMarket[firma].push(r);
+        const marktnummer = (r.companyInfo.marktnummer || 'Ohne Markt-Angabe').trim();
+        if (!byMarket[marktnummer]) byMarket[marktnummer] = [];
+        byMarket[marktnummer].push(r);
     });
 
     const marketNames = Object.keys(byMarket).sort();
-    return marketNames.map(firma => {
-        const list = byMarket[firma].sort((a, b) => zeitwertVonBegehung(a) - zeitwertVonBegehung(b));
+    return marketNames.map(marktnummer => {
+        const list = byMarket[marktnummer].sort((a, b) => zeitwertVonBegehung(a) - zeitwertVonBegehung(b));
         const entries = list.map((r, i) => {
             const mangel = mangelZahl(r);
             let trend = 'gleich';
@@ -137,13 +137,120 @@ function berechneVerlaufProMarkt(daten) {
             const datum = formatDate(r.companyInfo.datum) || new Date(zeitwertVonBegehung(r)).toLocaleDateString('de-DE');
             return { datum, mangel, trend: i === 0 ? null : trend };
         });
-        return { firma, entries };
+        return { marktnummer, entries };
     });
 }
 
 // Kleine gemeinsame HTML-Renderfunktionen, damit auswertung.js UND
 // verlauf.js exakt dieselbe Darstellung erzeugen (Tabellen, Balken usw.).
 // escapeHtml() muss im aufrufenden Kontext bereits vorhanden sein.
+
+// ===== Gesamtverteilung (Ja/Mangel/N.V. über alle Bewertungen) =====
+function berechneGesamtverteilung(daten) {
+    let ok = 0, mangel = 0, na = 0;
+    daten.forEach(record => {
+        Object.values(record.ratings || {}).forEach(rating => {
+            if (rating === 'ok') ok++;
+            else if (rating === 'mangel') mangel++;
+            else if (rating === 'na') na++;
+        });
+    });
+    return { ok, mangel, na, total: ok + mangel + na };
+}
+
+// ===== SVG-Diagramme (bildschirmseitig, dieselben Farben/Zahlen wie im PDF) =====
+// Bewusst ohne externe Chart-Bibliothek von Hand als SVG erzeugt, analog
+// zum PDF-Export (buildAuswertungPdf in auswertung.js zeichnet dieselben
+// Diagramme direkt mit jsPDF-Bordmitteln) - keine zusaetzliche Abhaengigkeit.
+
+const DIAGRAMM_FARBEN = { ok: '#2f9e64', mangel: '#d6453f', na: '#7c8790' };
+
+function svgBalkendiagramm(rows, opts) {
+    opts = opts || {};
+    const breite = opts.breite || 560;
+    const hoehe = opts.hoehe || 200;
+    const margin = { oben: 10, unten: 46, links: 4, rechts: 4 };
+    const anzahl = rows.length;
+    if (anzahl === 0) return '';
+
+    const plotHoehe = hoehe - margin.oben - margin.unten;
+    const balkenBreite = Math.min(46, (breite - margin.links - margin.rechts) / anzahl * 0.6);
+    const abstand = (breite - margin.links - margin.rechts) / anzahl;
+
+    const balken = rows.map((r, i) => {
+        const x = margin.links + i * abstand + (abstand - balkenBreite) / 2;
+        const balkenHoehe = Math.max(2, (r.pct / 100) * plotHoehe);
+        const y = margin.oben + (plotHoehe - balkenHoehe);
+        const farbe = r.pct >= 50 ? DIAGRAMM_FARBEN.mangel : (r.pct >= 20 ? '#d97706' : DIAGRAMM_FARBEN.ok);
+        const labelY = hoehe - margin.unten + 14;
+        const kurzName = r.name.length > 14 ? r.name.slice(0, 13) + '…' : r.name;
+        return `
+            <g>
+                <rect x="${x}" y="${y}" width="${balkenBreite}" height="${balkenHoehe}" rx="3" fill="${farbe}"></rect>
+                <text x="${x + balkenBreite / 2}" y="${y - 4}" text-anchor="middle" font-size="10" font-weight="700" fill="#1c2226">${r.pct}%</text>
+                <text x="${x + balkenBreite / 2}" y="${labelY}" text-anchor="middle" font-size="8.5" fill="#5b6670" transform="rotate(-35 ${x + balkenBreite / 2} ${labelY})">${escapeHtml(kurzName)}</text>
+            </g>`;
+    }).join('');
+
+    return `<svg class="auswertung-chart" viewBox="0 0 ${breite} ${hoehe}" xmlns="http://www.w3.org/2000/svg">
+        <line x1="${margin.links}" y1="${margin.oben + plotHoehe}" x2="${breite - margin.rechts}" y2="${margin.oben + plotHoehe}" stroke="#dfe3e6" stroke-width="1"></line>
+        ${balken}
+    </svg>`;
+}
+
+function svgTortendiagramm(verteilung, opts) {
+    opts = opts || {};
+    const groesse = opts.groesse || 180;
+    const radius = groesse / 2 - 4;
+    const cx = groesse / 2, cy = groesse / 2;
+    const { ok, mangel, na, total } = verteilung;
+
+    if (total === 0) {
+        return `<p class="auswertung-empty">Keine auswertbaren Antworten im gewählten Zeitraum.</p>`;
+    }
+
+    const segmente = [
+        { wert: ok, farbe: DIAGRAMM_FARBEN.ok, label: 'In Ordnung' },
+        { wert: mangel, farbe: DIAGRAMM_FARBEN.mangel, label: 'Mangel' },
+        { wert: na, farbe: DIAGRAMM_FARBEN.na, label: 'Nicht vorhanden' }
+    ].filter(s => s.wert > 0);
+
+    let startWinkel = -90;
+    const pfade = segmente.map(s => {
+        const anteil = s.wert / total;
+        const endWinkel = startWinkel + anteil * 360;
+        const grossBogen = (endWinkel - startWinkel) > 180 ? 1 : 0;
+        const x1 = cx + radius * Math.cos(startWinkel * Math.PI / 180);
+        const y1 = cy + radius * Math.sin(startWinkel * Math.PI / 180);
+        const x2 = cx + radius * Math.cos(endWinkel * Math.PI / 180);
+        const y2 = cy + radius * Math.sin(endWinkel * Math.PI / 180);
+        const pfad = segmente.length === 1
+            ? `<circle cx="${cx}" cy="${cy}" r="${radius}" fill="${s.farbe}"></circle>`
+            : `<path d="M${cx},${cy} L${x1.toFixed(2)},${y1.toFixed(2)} A${radius},${radius} 0 ${grossBogen} 1 ${x2.toFixed(2)},${y2.toFixed(2)} Z" fill="${s.farbe}"></path>`;
+        startWinkel = endWinkel;
+        return pfad;
+    }).join('');
+
+    const legende = segmente.map(s => `
+        <div class="auswertung-legende-eintrag">
+            <span class="auswertung-legende-farbe" style="background:${s.farbe}"></span>
+            ${s.label}: ${s.wert} (${Math.round((s.wert / total) * 100)}%)
+        </div>`).join('');
+
+    return `
+        <div class="auswertung-torte-wrapper">
+            <svg class="auswertung-chart auswertung-torte" viewBox="0 0 ${groesse} ${groesse}" xmlns="http://www.w3.org/2000/svg">${pfade}</svg>
+            <div class="auswertung-legende">${legende}</div>
+        </div>`;
+}
+
+function renderGesamtverteilungHtml(daten) {
+    if (daten.length === 0) {
+        return '<p class="auswertung-empty">Keine Begehungen vorhanden.</p>';
+    }
+    const verteilung = berechneGesamtverteilung(daten);
+    return svgTortendiagramm(verteilung);
+}
 
 function renderKategorienSchwachstellenHtml(daten) {
     if (daten.length === 0) {
@@ -154,6 +261,7 @@ function renderKategorienSchwachstellenHtml(daten) {
         return '<p class="auswertung-empty">Für die vorhandenen Begehungen liegen keine auswertbaren Antworten vor.</p>';
     }
     return `
+        ${svgBalkendiagramm(rows)}
         <table class="doku-table">
             <tr><th>Kategorie</th><th>Mängelquote</th><th></th></tr>
             ${rows.map(r => `
@@ -192,11 +300,11 @@ function renderVerlaufProMarktHtml(daten) {
     }
     const trendSymbol = { besser: '<span class="trend-besser">▼ besser</span>', schlechter: '<span class="trend-schlechter">▲ schlechter</span>', gleich: '<span class="trend-gleich">– gleich</span>' };
     const markets = berechneVerlaufProMarkt(daten);
-    return markets.map(({ firma, entries }) => {
+    return markets.map(({ marktnummer, entries }) => {
         const items = entries.map(e => `<li>${e.datum} — ${e.mangel} Mangel/Mängel ${e.trend ? trendSymbol[e.trend] : ''}</li>`).join('');
         return `
             <div class="auswertung-market-block">
-                <h4>${escapeHtml(firma)} <span class="auswertung-market-count">(${entries.length} Begehung${entries.length === 1 ? '' : 'en'})</span></h4>
+                <h4>${escapeHtml(marktnummer)} <span class="auswertung-market-count">(${entries.length} Begehung${entries.length === 1 ? '' : 'en'})</span></h4>
                 <ul class="auswertung-market-list">${items}</ul>
             </div>`;
     }).join('');

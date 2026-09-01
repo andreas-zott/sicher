@@ -7,7 +7,7 @@
 // Berechnungslogik wie die normale Auswertungsseite (js/auswertung-logik.js),
 // laedt die Daten aber vom NAS statt aus dem lokalen Archiv.
 //
-// list.php liefert nur Metadaten (Firma, Datum, Marktnummer) - fuer eine
+// list.php liefert nur Metadaten (PLZ/Ort, Datum, Marktnummer) - fuer eine
 // echte Auswertung werden die vollstaendigen Bewertungen benoetigt, daher
 // wird hier fuer JEDE gefundene Datei fetchSynologyRecord() aufgerufen.
 // Einzelne fehlgeschlagene Dateien werden uebersprungen (Promise.allSettled),
@@ -71,6 +71,7 @@ function teamGefilterteDaten() {
 
 function renderTeamAuswertungAlle() {
     const daten = teamGefilterteDaten();
+    document.getElementById('team-gesamtverteilung-content').innerHTML = renderGesamtverteilungHtml(daten);
     document.getElementById('team-kategorien-content').innerHTML = renderKategorienSchwachstellenHtml(daten);
     document.getElementById('team-maerkte-content').innerHTML = renderAuffaelligeMaerkteHtml(daten);
     document.getElementById('team-verlauf-content').innerHTML = renderVerlaufProMarktHtml(daten);

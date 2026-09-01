@@ -38,7 +38,7 @@ function renderArchiveList() {
         <div class="archive-item card" data-id="${record.id}">
             <div class="archive-item-head">
                 <div>
-                    <div class="archive-item-firma">${ci.firma || 'Ohne Markt-Angabe'}</div>
+                    <div class="archive-item-firma">${ci.marktnummer || 'Ohne Markt-Angabe'}</div>
                     <div class="archive-item-meta">Begehung vom ${auditDatum} · archiviert am ${archiviertAm}${fotoAnzahl ? ' · ' + fotoAnzahl + ' Foto(s)' : ''}</div>
                 </div>
             </div>
@@ -181,7 +181,7 @@ function renderTeamArchiveList() {
         <div class="archive-item card" data-filename="${entry.fileName}">
             <div class="archive-item-head">
                 <div>
-                    <div class="archive-item-firma">${entry.firma || 'Ohne Markt-Angabe'}${entry.marktnummer ? ' (Nr. ' + entry.marktnummer + ')' : ''}</div>
+                    <div class="archive-item-firma">${entry.plzOrt || 'Ohne Markt-Angabe'}${entry.marktnummer ? ' (Nr. ' + entry.marktnummer + ')' : ''}</div>
                     <div class="archive-item-meta">Begehung vom ${entry.datum || '-'} · auf NAS gespeichert am ${gespeichertAm}</div>
                 </div>
             </div>

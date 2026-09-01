@@ -8,8 +8,8 @@ const STORAGE_KEY = 'begehungState';
 
 // Revisionsstand der App/Checkliste (in Fusszeile und PDF sichtbar,
 // bei inhaltlichen Aenderungen an Fragenkatalog/Massnahmen hochzaehlen)
-const APP_REVISION = '1.28';
-const APP_REVISION_DATE = '2026-08-26';
+const APP_REVISION = '1.30';
+const APP_REVISION_DATE = '2026-09-01';
 
 function renderFooterMeta() {
     const el = document.getElementById('footer-version');
@@ -32,8 +32,9 @@ function renderFooterMeta() {
 function defaultState() {
     return {
         companyInfo: {
-            firma: '',
-            standort: '',
+            marktnummer: '',
+            plzOrt: '',
+            strasse: '',
             datum: new Date().toISOString().split('T')[0],
             pruefername: '',
             marktleitung: '',
@@ -114,12 +115,12 @@ function showToast(message, type = 'success') {
 }
 
 // ===== Vorgefertigter Mail-Text beim PDF-Versand =====
-// Traegt automatisch Markt (aus "Firma / Markt") und den Namen des Pruefers ein.
-// Wird von allen PDF-Varianten genutzt, mit leicht angepasstem Wortlaut je
-// nachdem, was tatsaechlich mitgeschickt wird (mode: 'checkliste' |
-// 'massnahmen' | 'fotos' | 'alle').
+// Traegt automatisch Markt (Marktnummer, Strasse, PLZ/Ort) und den Namen
+// des Pruefers ein. Wird von allen PDF-Varianten genutzt, mit leicht
+// angepasstem Wortlaut je nachdem, was tatsaechlich mitgeschickt wird
+// (mode: 'checkliste' | 'massnahmen' | 'fotos' | 'alle').
 function buildShareEmailSubject(mode) {
-    const markt = state.companyInfo.firma || '-';
+    const markt = state.companyInfo.marktnummer || '-';
     const zusatz = mode === 'massnahmen' ? 'Maßnahmenplan – '
         : mode === 'fotos' ? 'Fotodokumentation – '
         : '';
@@ -127,8 +128,11 @@ function buildShareEmailSubject(mode) {
 }
 
 function buildShareEmailText(mode) {
-    const markt = state.companyInfo.firma || '-';
+    const markt = state.companyInfo.marktnummer || '-';
     const pruefer = state.companyInfo.pruefername ? state.companyInfo.pruefername + '\n' : '';
+
+    const adresseTeile = [state.companyInfo.strasse, state.companyInfo.plzOrt].filter(Boolean);
+    const adresse = adresseTeile.length > 0 ? ` (${adresseTeile.join(', ')})` : '';
 
     const inhalt = mode === 'massnahmen'
         ? 'den Maßnahmenplan'
@@ -138,7 +142,7 @@ function buildShareEmailText(mode) {
                 ? 'das vollständige Begehungsprotokoll inklusive Maßnahmenplan und Fotodokumentation'
                 : 'das Begehungsprotokoll';
 
-    return `Sehr geehrte Damen und Herren,\n\nim Rahmen der turnusmäßigen Arbeitssicherheitsbegehung übersende ich Ihnen anbei ${inhalt} des Marktes ${markt} zur sachlichen Prüfung.\n\nBitte prüfen Sie die dokumentierten Feststellungen und veranlassen Sie die Umsetzung der erforderlichen Maßnahmen.\n\nMit freundlichen Grüßen\n${pruefer}Fachkraft für Arbeitssicherheit (SiFa)`;
+    return `Sehr geehrte Damen und Herren,\n\nim Rahmen der turnusmäßigen Arbeitssicherheitsbegehung übersende ich Ihnen anbei ${inhalt} des Marktes ${markt}${adresse} zur sachlichen Prüfung.\n\nIch bitte Sie, die im Protokoll dokumentierten Feststellungen zu prüfen und die erforderlichen Maßnahmen zur Behebung der festgestellten Mängel zu veranlassen.\n\nVielen Dank für Ihre Unterstützung.\n\nMit freundlichen Grüßen\n${pruefer}Fachkraft für Arbeitssicherheit (SiFa)`;
 }
 
 // Zuverlaessige Alternative zu navigator.share() fuer Betreff/Text:
@@ -346,7 +350,7 @@ async function openSynologyLoadDialog() {
         }
         listEl.innerHTML = files.map(f => `
             <button class="btn btn-secondary btn-small" style="width:100%; text-align:left; margin-bottom:0.5rem;" data-filename="${f.fileName}">
-                ${f.datum || '?'} — ${f.firma || 'ohne Markt-Angabe'}${f.marktnummer ? ' (Nr. ' + f.marktnummer + ')' : ''}
+                ${f.datum || '?'} — ${f.plzOrt || 'ohne Angabe'}${f.marktnummer ? ' (Nr. ' + f.marktnummer + ')' : ''}
             </button>`).join('');
         listEl.querySelectorAll('button[data-filename]').forEach(btn => {
             btn.addEventListener('click', async () => {
@@ -529,7 +533,7 @@ function checklistPdfHeaderLines() {
     const ci = state.companyInfo;
     const teilnehmer = ci.teilnehmer || '-';
     return [
-        `Firma/Markt: ${ci.firma || '-'}    Standort: ${ci.standort || '-'}    Datum: ${ci.datum ? formatDate(ci.datum) : '-'}`,
+        `Marktnummer: ${ci.marktnummer || '-'}    PLZ/Ort: ${ci.plzOrt || '-'}    Straße: ${ci.strasse || '-'}    Datum: ${ci.datum ? formatDate(ci.datum) : '-'}`,
         `Prüfer: ${ci.pruefername || '-'}    Marktleitung: ${ci.marktleitung || '-'}    Teilnehmer: ${teilnehmer}`
     ];
 }
@@ -566,9 +570,9 @@ function drawCoverPage(doc, pageWidth, pageHeight, margin, documentTitle, docume
     // Betriebsdaten zentriert als Liste
     const ci = state.companyInfo;
     const rows = [
-        ['Firma / Markt', ci.firma || '-'],
         ['Marktnummer', ci.marktnummer || '-'],
-        ['Standort', ci.standort || '-'],
+        ['Postleitzahl und Ort', ci.plzOrt || '-'],
+        ['Straße und Hausnummer', ci.strasse || '-'],
         ['Datum', ci.datum ? formatDate(ci.datum) : '-'],
         ['Prüfer', ci.pruefername || '-'],
         ['Marktleitung', ci.marktleitung || '-'],
@@ -961,25 +965,25 @@ async function buildFotosPdf() {
 }
 
 function fotosPdfFilename() {
-    const firma = (state.companyInfo.firma || 'markt')
+    const marktnummer = (state.companyInfo.marktnummer || 'markt')
         .replace(/[^a-z0-9äöüß]+/gi, '-');
 
     const datum =
         state.companyInfo.datum ||
         new Date().toISOString().split('T')[0];
 
-    return `Fotodokumentation_${firma}_${datum}.pdf`;
+    return `Fotodokumentation_${marktnummer}_${datum}.pdf`;
 }
 
 function checklistPdfFilename() {
-    const firma = (state.companyInfo.firma || 'markt')
+    const marktnummer = (state.companyInfo.marktnummer || 'markt')
         .replace(/[^a-z0-9äöüß]+/gi, '-');
 
     const datum =
         state.companyInfo.datum ||
         new Date().toISOString().split('T')[0];
 
-    return `Checkliste_${firma}_${datum}.pdf`;
+    return `Checkliste_${marktnummer}_${datum}.pdf`;
 }
 
 function buildChecklistPdf() {
@@ -1090,14 +1094,14 @@ async function shareChecklistPdf() {
 // ===== Maßnahmen-PDF (mit optionaler Checkliste voran) =====
 // Uebernommen aus massnahmen.js, damit auch die Checkliste-Seite Maßnahmen exportieren kann.
 function pdfFilename() {
-    const firma = (state.companyInfo.firma || 'begehung')
+    const marktnummer = (state.companyInfo.marktnummer || 'begehung')
         .replace(/[^a-z0-9äöüß]+/gi, '-');
 
     const datum =
         state.companyInfo.datum ||
         new Date().toISOString().split('T')[0];
 
-    return `Massnahmenplan_${firma}_${datum}.pdf`;
+    return `Massnahmenplan_${marktnummer}_${datum}.pdf`;
 }
 
 // Quellenverzeichnis als PDF-Anhang: listet die in MEASURE_SOURCES
@@ -1916,9 +1920,9 @@ async function printReport(mode) {
 // ===== Betriebsdaten: Formular (index.html) =====
 function initCompanyForm() {
     const fields = [
-        'firma',
         'marktnummer',
-        'standort',
+        'plzOrt',
+        'strasse',
         'datum',
         'pruefername',
         'marktleitung',
@@ -1963,14 +1967,14 @@ function renderCompanyInfoStrip() {
     if (!strip) return;
 
     const map = {
-        'info-firma':
-            state.companyInfo.firma,
-
         'info-marktnummer':
             state.companyInfo.marktnummer,
 
-        'info-standort':
-            state.companyInfo.standort,
+        'info-plzOrt':
+            state.companyInfo.plzOrt,
+
+        'info-strasse':
+            state.companyInfo.strasse,
 
         'info-datum':
             state.companyInfo.datum
@@ -2357,8 +2361,8 @@ function buildJsonBlob() {
 
 function jsonExportFilename() {
     const datum = state.companyInfo.datum || new Date().toISOString().split('T')[0];
-    const firma = (state.companyInfo.firma || 'begehung').replace(/[^a-z0-9äöüß]+/gi, '-');
-    return `ASiC-Handel_${firma}_${datum}.json`;
+    const marktnummer = (state.companyInfo.marktnummer || 'begehung').replace(/[^a-z0-9äöüß]+/gi, '-');
+    return `ASiC-Handel_${marktnummer}_${datum}.json`;
 }
 
 function exportJson() {
@@ -2382,7 +2386,7 @@ function exportJson() {
 async function shareJson() {
     const blob = buildJsonBlob();
     const filename = jsonExportFilename();
-    const markt = state.companyInfo.firma || '-';
+    const markt = state.companyInfo.marktnummer || '-';
     const text = `Anbei die JSON-Datei der Begehung „${markt}" zur Weiterleitung/Ablage auf dem NAS, falls der direkte NAS-Zugriff gerade nicht möglich war.`;
 
     try {
