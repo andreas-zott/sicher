@@ -207,7 +207,7 @@ async function renderMeasures() {
                     <!-- ---------------------------------------------------- -->
 
                     ${
-                        photos.length > 0
+                        (photos.length > 0 || (measure.photoThumbnails && measure.photoThumbnails.length > 0))
                             ? `
                                 <div class="measure-photo-grid">
                                     ${photoThumbs}
