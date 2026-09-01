@@ -1114,6 +1114,54 @@
 
             <summary>
                 <span>
+                    <span class="faq-tag foto">
+                        Foto
+                    </span>
+                    Warum sehe ich bei manchen Fotos „Vorschau" statt des echten Bildes, und warum lässt es sich nicht löschen?
+                </span>
+            </summary>
+
+            <div class="faq-body">
+
+                <p>
+                    Zu jedem einer Maßnahme zugeordneten Foto wird
+                    zusätzlich ein kleines, stark komprimiertes
+                    Vorschaubild direkt in der Begehungsdatei (JSON)
+                    gespeichert. Das eigentliche Foto bleibt dagegen
+                    geräte­gebunden in der lokalen Fotodatenbank
+                    (IndexedDB) — nicht Teil der JSON-Datei.
+                </p>
+
+                <p>
+                    Wird eine Begehung z. B. über das Team-Archiv auf
+                    einem <strong>anderen Gerät</strong> geöffnet, liegt
+                    dort kein echtes Foto vor — die App zeigt dann
+                    stattdessen automatisch das mitgelieferte
+                    Vorschaubild (gestrichelter Rahmen, „Vorschau"-
+                    Kennzeichnung). Da dahinter kein echtes Foto in der
+                    lokalen Fotodatenbank steckt, lässt es sich von dort
+                    aus auch nicht löschen — nur auf dem Gerät, auf dem
+                    das Original tatsächlich aufgenommen wurde.
+                </p>
+
+                <p>
+                    Fotos, die vor dieser Funktion aufgenommen wurden
+                    (z. B. bei einer bereits laufenden Begehung während
+                    eines App-Updates), bekommen ihr Vorschaubild
+                    automatisch beim nächsten Öffnen der Maßnahmenseite
+                    nachträglich erzeugt — kein manuelles Neu-Fotografieren
+                    nötig.
+                </p>
+
+            </div>
+
+        </details>
+
+
+        <details class="faq-item card">
+
+            <summary>
+                <span>
                     <span class="faq-tag daten">
                         Verlauf
                     </span>
@@ -1645,11 +1693,21 @@
 
                 <p>
                     <strong>Gesamtauswertung als PDF</strong> fasst
-                    Kategorien-Schwachstellen, Auffällige Märkte und den
-                    Marktverlauf als ein zusammenhängendes Dokument
-                    zusammen — z. B. für eine monatliche Übersicht an die
-                    Regionalleitung. Wie bei CSV und JSON gibt es sowohl
-                    „Herunterladen" als auch „Per Mail teilen".
+                    Gesamtverteilung, Kategorien-Schwachstellen,
+                    Auffällige Märkte und den Marktverlauf als ein
+                    zusammenhängendes Dokument zusammen — z. B. für eine
+                    monatliche Übersicht an die Regionalleitung. Wie bei
+                    CSV und JSON gibt es sowohl „Herunterladen" als auch
+                    „Per Mail teilen".
+                </p>
+
+                <p>
+                    <strong>Gesamtverteilung</strong> (Tortendiagramm
+                    Ja/Mangel/N.V.) und <strong>Kategorien-Schwachstellen</strong>
+                    (Balkendiagramm nach Mängelquote) werden zusätzlich
+                    als Diagramm dargestellt — am Bildschirm ebenso wie im
+                    PDF-Export, mit identischen Farben und Zahlen an
+                    beiden Stellen.
                 </p>
 
             </div>
@@ -1697,6 +1755,14 @@
                     „Auswertung Team" funktioniert nur unter denselben
                     Voraussetzungen wie das Team-Archiv selbst (siehe
                     entsprechende Frage weiter oben).
+                </p>
+
+                <p>
+                    Genau wie die normale Auswertungsseite bietet auch
+                    „Auswertung Team" einen eigenen Rohdaten-Export (CSV)
+                    und eine eigene Gesamtauswertung als PDF — bezogen auf
+                    alle im Team-Archiv gefundenen Begehungen statt nur
+                    die lokal auf diesem Gerät archivierten.
                 </p>
 
             </div>
