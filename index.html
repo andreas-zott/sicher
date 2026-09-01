@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+<title>
+    ASiC Handel – Arbeitssicherheits-Check
+</title>
+
+<link
+    rel="stylesheet"
+    href="css/styles.css"
+>
+
+<script src="js/access-gate.js"></script>
+
+<link
+    rel="manifest"
+    href="manifest.json"
+>
+
+<link
+    rel="apple-touch-icon"
+    href="icon-192.png"
+>
+
+<meta
+    name="apple-mobile-web-app-capable"
+    content="yes"
+>
+
+<meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="black-translucent"
+>
+
+<meta
+    name="theme-color"
+    content="#1c2226"
+>
+
+<script src="js/jspdf.umd.min.js"></script>
+
+</head>
+
+
+<body>
+
+
+<!-- ====================================================================== -->
+<!-- HEADER                                                                 -->
+<!-- ====================================================================== -->
+
+<header class="app-header">
+
+    <div class="hazard-strip"></div>
+
+    <div class="app-header-inner">
+
+
+        <div class="brand">
+
+            <span class="brand-title">
+                ASiC Handel
+            </span>
+
+            <span class="brand-tag">
+                Märkte
+            </span>
+
+            <span class="brand-subtitle">
+                „Sicher geprüft. Sicher gehandelt.“
+            </span>
+
+        </div>
+
+
+        <nav class="app-nav">
+
+            <a
+                href="index.html"
+                class="active"
+            >
+                Prüfkatalog
+            </a>
+
+            <a href="massnahmen.html">
+                Aktionsplan
+            </a>
+
+            <a href="fotos.html">
+                Fotos
+            </a>
+
+            <a href="verlauf.html">
+                Verlauf
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+
+<!-- ====================================================================== -->
+<!-- HAUPTBEREICH                                                           -->
+<!-- ====================================================================== -->
+
+<main class="page">
+
+
+    <!-- ================================================================== -->
+    <!-- BETRIEBSDATEN                                                       -->
+    <!-- ================================================================== -->
+
+    <section class="card company-card">
+
+        <div class="section-title">
+            Betriebsdaten
+        </div>
+
+
+        <div class="company-grid">
+
+
+            <div class="field">
+
+                <label for="firma">
+                  Marktnummer  
+                </label>
+
+                <input
+                    type="text"
+                    id="firma"
+                    placeholder="z.B. 123"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="marktnummer">
+                   Postleitzahl und Ort
+                </label>
+
+                <input
+                    type="text"
+                    id="marktnummer"
+                    placeholder="z. B. 12345 Musterstadt"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="standort">
+                  Straße und Hausnummer
+                </label>
+
+                <input
+                    type="text"
+                    id="standort"
+                    placeholder="z. B. Musterstraße 123"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="datum">
+                    Datum
+                </label>
+
+                <input
+                    type="date"
+                    id="datum"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="pruefername">
+                    Prüfer
+                </label>
+
+                <input
+                    type="text"
+                    id="pruefername"
+                    placeholder="Name des Prüfers"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="marktleitung">
+                    Marktleitung
+                </label>
+
+                <input
+                    type="text"
+                    id="marktleitung"
+                    placeholder="Name der Marktleitung"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="teilnehmer">
+                    Teilnehmer
+                </label>
+
+                <input
+                    type="text"
+                    id="teilnehmer"
+                    placeholder="Weitere Teilnehmer"
+                >
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================================================================== -->
+    <!-- FORTSCHRITT                                                         -->
+    <!-- ================================================================== -->
+
+    <section class="card progress-bar-card">
+
+        <div class="progress-row">
+
+            <span
+                class="progress-label"
+                id="progress-label"
+            >
+                0 / 174 geprüft
+            </span>
+
+
+            <div class="progress-track">
+
+                <div
+                    class="progress-fill"
+                    id="progress-fill"
+                    style="width: 0%;"
+                ></div>
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-pills">
+
+            <span class="stat-pill ok">
+
+                ✓
+
+                <span id="stat-ok">
+                    0
+                </span>
+
+                In Ordnung
+
+            </span>
+
+
+            <span class="stat-pill mangel">
+
+                !
+
+                <span id="stat-mangel">
+                    0
+                </span>
+
+                Mangel
+
+            </span>
+
+
+            <span class="stat-pill na">
+
+                –
+
+                <span id="stat-na">
+                    0
+                </span>
+
+                N.V.
+
+            </span>
+
+
+            <span class="stat-pill offen">
+
+                <span id="stat-offen">
+                    174
+                </span>
+
+                Offen
+
+            </span>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================================================================== -->
+    <!-- HINWEIS FOTODOKUMENTATION                                          -->
+    <!-- ================================================================== -->
+
+    <div
+        class="card"
+        style="
+            margin-bottom: 1rem;
+            padding: 0.75rem 1rem;
+        "
+    >
+
+        <p
+            style="
+                margin: 0;
+                font-size: 0.86rem;
+                color: var(--ink-soft);
+            "
+        >
+
+            <strong>
+                Fotodokumentation:
+            </strong>
+
+            Festgestellte Mängel können direkt auf der Seite
+            <strong>„Fotos“</strong>
+            fotografiert oder aus der Mediathek eingefügt und
+            anschließend einer Maßnahme zugeordnet werden.
+
+        </p>
+
+    </div>
+
+
+
+    <!-- ================================================================== -->
+    <!-- CHECKLISTE                                                          -->
+    <!-- ================================================================== -->
+
+    <div
+        id="checklist-container"
+    ></div>
+
+
+</main>
+
+
+
+<!-- ====================================================================== -->
+<!-- FOOTER                                                                 -->
+<!-- ====================================================================== -->
+
+<footer class="app-footer">
+
+    <div class="app-footer-meta">
+
+        <span
+            id="footer-version"
+        ></span>
+
+
+        <span
+            class="footer-copyright"
+            id="footer-copyright"
+        ></span>
+
+    </div>
+
+
+    <div class="app-footer-links">
+
+        <a href="impressum.html">
+            Impressum
+        </a>
+
+
+        <a href="datenschutz.html">
+            Datenschutz
+        </a>
+
+
+        <a href="dokumentation.html">
+            Technische Dokumentation
+        </a>
+
+
+        <a href="hilfe.html">
+            Hilfe &amp; FAQ
+        </a>
+
+
+        <a href="auswertung.html">
+            Auswertung
+        </a>
+
+
+        <a href="auswertung-team.html">
+            Auswertung Team
+        </a>
+
+
+        <a href="einstellungen.html">
+            Einstellungen
+        </a>
+
+    </div>
+
+</footer>
+
+
+
+<!-- ====================================================================== -->
+<!-- ACTION BAR                                                             -->
+<!-- ====================================================================== -->
+
+<div class="action-bar">
+
+    <div class="action-bar-inner">
+
+
+        <!-- ================================================================ -->
+        <!-- DATEI                                                           -->
+        <!-- ================================================================ -->
+
+        <div class="action-bar-group">
+
+            <div class="menu-dropdown">
+
+                <button
+                    class="btn btn-secondary btn-small"
+                    id="file-menu-toggle"
+                    type="button"
+                >
+                    Datei ▾
+                </button>
+
+
+                <div
+                    class="menu-dropdown-panel"
+                    id="file-menu-panel"
+                >
+
+                    <!-- -------------------------------------------------- -->
+                    <!-- LOKAL SPEICHERN                                    -->
+                    <!-- -------------------------------------------------- -->
+
+                    <button
+                        class="menu-item"
+                        id="btn-save"
+                        type="button"
+                    >
+                        💾 Speichern
+                    </button>
+
+
+                    <div class="menu-divider"></div>
+
+
+                    <!-- -------------------------------------------------- -->
+                    <!-- NAS SPEICHERN/LADEN                                -->
+                    <!-- Funktioniert nur, wenn die App direkt ueber die    -->
+                    <!-- Synology (bzw. deren Tailscale-Adresse) laeuft -   -->
+                    <!-- ueber GitHub Pages sind save.php/list.php/load.php -->
+                    <!-- nicht erreichbar (keine serverseitigen Skripte).  -->
+                    <!-- -------------------------------------------------- -->
+
+                    <button
+                        class="menu-item"
+                        id="btn-save-nas"
+                        type="button"
+                    >
+                        ☁️ Auf NAS speichern
+                    </button>
+
+                    <button
+                        class="menu-item"
+                        id="btn-load-nas"
+                        type="button"
+                    >
+                        📂 Vom NAS laden
+                    </button>
+
+
+                    <div class="menu-divider"></div>
+
+
+                    <!-- -------------------------------------------------- -->
+                    <!-- JSON EXPORT                                        -->
+                    <!-- -------------------------------------------------- -->
+
+                    <button
+                        class="menu-item"
+                        id="btn-json-export"
+                        type="button"
+                    >
+                        ⬆️ JSON exportieren
+                    </button>
+
+                    <button
+                        class="menu-item"
+                        id="btn-json-share"
+                        type="button"
+                    >
+                        📧 JSON per Mail teilen
+                    </button>
+
+
+                    <!-- -------------------------------------------------- -->
+                    <!-- JSON IMPORT                                        -->
+                    <!-- -------------------------------------------------- -->
+
+                    <label
+                        class="menu-item"
+                        for="json-import-input"
+                        style="cursor:pointer;"
+                    >
+
+                        ⬇️ JSON laden
+
+
+                        <input
+                            type="file"
+                            id="json-import-input"
+                            accept="application/json"
+                            style="display:none;"
+                        >
+
+                    </label>
+
+
+                    <div class="menu-divider"></div>
+
+
+                    <!-- -------------------------------------------------- -->
+                    <!-- ARCHIV                                              -->
+                    <!-- -------------------------------------------------- -->
+
+                    <button
+                        class="menu-item"
+                        id="btn-archive"
+                        type="button"
+                    >
+                        📦 Begehung archivieren
+                    </button>
+
+
+                    <div class="menu-divider"></div>
+
+
+                    <!-- -------------------------------------------------- -->
+                    <!-- ZURÜCKSETZEN                                       -->
+                    <!-- -------------------------------------------------- -->
+
+                    <button
+                        class="menu-item menu-item-danger"
+                        id="btn-reset"
+                        type="button"
+                    >
+                        🗑️ Zurücksetzen
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================================================================ -->
+        <!-- SPRACHSTIL                                                       -->
+        <!-- ================================================================ -->
+
+        <div
+            class="action-bar-group action-bar-group-style"
+        >
+
+            <span
+                class="style-switch-label"
+            >
+                Sprachstil der Maßnahmentexte:
+            </span>
+
+
+            <div
+                class="style-switch"
+                id="style-switch"
+            >
+
+                <button
+                    class="style-btn"
+                    data-style="einfach"
+                    type="button"
+                >
+                    Einfach
+                </button>
+
+
+                <button
+                    class="style-btn"
+                    data-style="bghw"
+                    type="button"
+                >
+                    BGHW
+                </button>
+
+
+                <button
+                    class="style-btn"
+                    data-style="rechtlich"
+                    type="button"
+                >
+                    Rechtlich
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================================================================ -->
+        <!-- EXPORT                                                           -->
+        <!-- ================================================================ -->
+
+        <div
+            class="action-bar-group"
+        >
+
+            <div
+                class="menu-dropdown"
+            >
+
+                <button
+                    class="btn btn-primary btn-small"
+                    id="export-menu-toggle"
+                    type="button"
+                >
+                    Exportieren ▾
+                </button>
+
+
+                <div
+                    class="menu-dropdown-panel"
+                    id="export-menu-panel"
+                >
+
+                    <div
+                        class="menu-mode-row"
+                    >
+
+                        <button
+                            class="mode-btn"
+                            data-mode="checkliste"
+                            type="button"
+                        >
+                            Checkliste
+                        </button>
+
+
+                        <button
+                            class="mode-btn"
+                            data-mode="massnahmen"
+                            type="button"
+                        >
+                            Maßnahmen
+                        </button>
+
+
+                        <button
+                            class="mode-btn"
+                            data-mode="fotos"
+                            type="button"
+                        >
+                            Fotos
+                        </button>
+
+
+                        <button
+                            class="mode-btn"
+                            data-mode="alle"
+                            type="button"
+                        >
+                            Alles
+                        </button>
+
+                    </div>
+
+
+                    <div class="menu-divider"></div>
+
+
+                    <button
+                        class="menu-item"
+                        data-action="print"
+                        type="button"
+                    >
+                        🖨️ Drucken
+                    </button>
+
+
+                    <button
+                        class="menu-item"
+                        data-action="share"
+                        type="button"
+                    >
+                        📤 PDF teilen
+                    </button>
+
+
+                    <button
+                        class="menu-item"
+                        data-action="mail"
+                        type="button"
+                    >
+                        ✉️ Mail vorbereiten
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <a
+                href="massnahmen.html"
+                class="btn btn-primary btn-small"
+            >
+                Weiter →
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- ====================================================================== -->
+<!-- JAVASCRIPT                                                             -->
+<!-- ====================================================================== -->
+
+<script src="js/audit-data.js"></script>
+
+<script src="js/text.js"></script>
+
+<script src="js/photos-store.js"></script>
+
+<script src="js/archive-store.js"></script>
+
+
+<script src="js/app.js"></script>
+
+
+</body>
+
+</html>

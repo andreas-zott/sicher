@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Technische Beschreibung — Arbeitssicherheit</title>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0a2f73">
+<link rel="stylesheet" href="lib/css/fontawesome.min.css">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+    .tech-table { width: 100%; border-collapse: collapse; margin: 14px 0 20px; font-size: 0.9rem; }
+    .tech-table th { background: var(--navy); color: #fff; text-align: left; padding: 9px 12px; font-size: 0.82rem; }
+    .tech-table td { border-bottom: 1px solid var(--line); padding: 9px 12px; vertical-align: top; }
+    .tech-table code { font-size: 0.85em; }
+    .badge {
+        display: inline-block; background: rgba(10,47,115,0.08); color: var(--navy-bright);
+        padding: 2px 9px; border-radius: 999px; font-size: 0.8rem; font-weight: 600;
+    }
+    body.dark .badge { background: rgba(96,165,250,0.15); color: #93c5fd; }
+    .hinweis-box {
+        background: #fff3cd; border-left: 4px solid #ffcc02; border-radius: 8px;
+        padding: 12px 16px; font-size: 0.88rem; margin: 12px 0;
+    }
+    code {
+        background: rgba(0,0,0,0.06); padding: 1px 5px; border-radius: 4px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.9em;
+    }
+    body.dark code { background: rgba(255,255,255,0.1); }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle" aria-label="Theme umschalten">🌙</button>
+
+<section class="hero">
+    <div class="hero-icon"><i class="fas fa-gears"></i></div>
+    <h1>Technische Beschreibung</h1>
+    <p>Architektur, Datenfluss und eingesetzte Technik</p>
+</section>
+
+<div class="container container-narrow">
+
+    <a href="welcome.html" class="back-button"><i class="fas fa-arrow-left"></i> Zurück zur Übersicht</a>
+
+    <div class="content">
+
+        <h2 style="margin-top:0;">1. Überblick &amp; Architektur</h2>
+        <p>
+            Die Anwendung ist eine rein <strong>clientseitige, statische
+            Web-App</strong> (kein Backend, keine Datenbank, kein
+            Server-Rendering). Jede Seite ist eine eigenständige HTML-Datei;
+            das Portal-Grundgerüst (Login, Übersicht, Anleitung, Fotoformular,
+            Checklisten-Menü, Rechtliches) teilt sich seit der Überarbeitung
+            ein gemeinsames Stylesheet (<code>css/styles.css</code>) und eine
+            gemeinsame Logik-Datei (<code>js/common.js</code>) für Dark Mode,
+            Fußzeile und Service-Worker-Registrierung — zuvor war das auf
+            jeder Seite einzeln kopiert.
+        </p>
+        <p>
+            Alle Dateien liegen unter dem gemeinsamen Pfad <code>/sicher/</code>
+            (GitHub Pages) und werden als installierbare
+            <strong>Progressive Web App (PWA)</strong> ausgeliefert, sodass
+            sie auf iPad/iPhone zum Home-Bildschirm hinzugefügt werden und
+            offline funktionieren kann.
+        </p>
+
+        <h2>2. Seiten &amp; Dateien</h2>
+        <table class="tech-table">
+            <thead><tr><th>Datei</th><th>Zweck</th></tr></thead>
+            <tbody>
+                <tr><td><code>index.html</code></td><td>Login / Einstieg</td></tr>
+                <tr><td><code>welcome.html</code></td><td>Übersicht nach dem Login, Kacheln zu allen Werkzeugen</td></tr>
+                <tr><td><code>l1.html</code></td><td>Untermenü: Checklisten-Formate (Desktop, Mobil, Audit, Theke, Aushänge, plus „Ältere Version")</td></tr>
+                <tr><td><code>liste-neu.html</code></td><td>Aktuelle Haupt-Checkliste (Desktop/Tablet): Prüfpunkte, automatische Maßnahmen-Ableitung bei „Nein", Unterschrift, PDF-Export</td></tr>
+                <tr><td><code>mobile-neu.html</code></td><td>Aktuelle Checkliste, optimiert für iPhone/iPad-Hochformat</td></tr>
+                <tr><td><code>liste.html</code> / <code>mobile.html</code></td><td>Ältere Fassung der Checkliste, weiterhin verfügbar (eigener Bereich „Ältere Version" in <code>l1.html</code>) — für neue Begehungen wird <code>liste-neu.html</code>/<code>mobile-neu.html</code> empfohlen</td></tr>
+                <tr><td><code>audit.html</code></td><td>Audit-Variante der Checkliste, inkl. direktem NAS-Speichern (<code>save.php</code>) und Maßnahmenplan-Export</td></tr>
+                <tr><td><code>Maßnahmenplan.html</code></td><td>Editierbare Maßnahmenplan-Ansicht mit Dashboard, JSON-/PDF-Export — Zielseite von <code>audit.html</code>s „Maßnahmenplan"-Button</td></tr>
+                <tr><td><code>theke.html</code></td><td>Checkliste Theke/Metzgerei (Fleischverarbeitung), 70 Prüfpunkte, Unterschrift, Drucken</td></tr>
+                <tr><td><code>aushang.html</code></td><td>Digitale Übersicht aller Pflicht-Aushänge im Einzelhandel, mit Suchfunktion</td></tr>
+                <tr><td><code>foto.html</code></td><td>Fotoerfassung zur Begehung: Kamera/Galerie, Drehen, Kommentieren, eigener PDF-Export</td></tr>
+                <tr><td><code>massnahmen-sifa.html</code></td><td>Eigenständige Auswertungsansicht aller Maßnahmen, empfängt Daten von <code>liste.html</code>/<code>liste-neu.html</code>/<code>mobile.html</code>/<code>mobile-neu.html</code></td></tr>
+                <tr><td><code>help.html</code></td><td>Bedienungsanleitung</td></tr>
+                <tr><td><code>faq.html</code></td><td>Häufig gestellte Fragen</td></tr>
+                <tr><td><code>technische-beschreibung.html</code></td><td>Diese Seite</td></tr>
+                <tr><td><code>impressum.html</code> / <code>datenschutz.html</code></td><td>Rechtliches</td></tr>
+                <tr><td><code>manifest.json</code></td><td>PWA-Manifest (Name, Icons, Farben, Version)</td></tr>
+                <tr><td><code>service-worker.js</code></td><td>Offline-Caching &amp; Versionsverwaltung</td></tr>
+                <tr><td><code>save.php</code> / <code>list.php</code> / <code>load.php</code></td><td>Serverseitige NAS-Anbindung für <code>audit.html</code> (Synology, analog zu ASiC Handel) — laufen nur, wenn diese Seite direkt über die Synology bzw. deren Tailscale-Adresse aufgerufen wird, nicht über GitHub Pages</td></tr>
+            </tbody>
+        </table>
+
+        <h2>3. Datenfluss zwischen den Seiten</h2>
+        <h3>liste-neu.html / mobile-neu.html / audit.html → foto.html</h3>
+        <p>
+            Beim Wechsel zur Foto-Seite werden Marktnummer, Teilnehmer und
+            SiFa als <strong>URL-Parameter</strong>
+            (<code>?marktnummer=…&amp;name=…&amp;sifa=…</code>) übergeben und
+            dort beim Laden automatisch in die passenden Felder eingetragen.
+        </p>
+        <h3>liste.html / liste-neu.html / mobile.html / mobile-neu.html → massnahmen-sifa.html</h3>
+        <p>
+            Beim Exportieren der Defizite werden die gesammelten Maßnahmen
+            sowie Metadaten (Datum, Markt, Marktleitung, Name, SiFa) VOR dem
+            Öffnen in <code>localStorage</code> geschrieben (Schlüssel
+            <code>massnahmen_uebergabe</code>) — <code>massnahmen-sifa.html</code>
+            liest diesen Stand beim Laden direkt aus. Das ist der
+            zuverlässige Hauptweg, unabhängig von Pop-up-Blockern oder
+            Fenster-Beziehungen. Zusätzlich wird weiterhin
+            <code>window.postMessage()</code> versucht, falls beide Fenster
+            bereits offen sind.
+        </p>
+        <h3>audit.html → Maßnahmenplan.html</h3>
+        <p>
+            Der „Maßnahmenplan"-Button öffnet <code>Maßnahmenplan.html</code>
+            in einem neuen Fenster und übergibt die Daten als URL-Parameter
+            (<code>?data=…</code>, JSON-kodiert).
+        </p>
+        <h3>audit.html → save.php (NAS)</h3>
+        <p style="margin-bottom:0;">
+            „Direkt auf NAS speichern" sendet die vollständige Begehung per
+            <code>fetch()</code> als JSON an <code>save.php</code>, das die
+            Datei auf der Synology ablegt und Erfolg/Fehler als JSON-Antwort
+            zurückgibt. Erwartet unter <code>companyInfo.datum</code> und
+            <code>companyInfo.marktnummer</code> die Pflichtangaben, sonst
+            wird mit einer klaren Fehlermeldung abgelehnt.
+        </p>
+
+        <h3>Innerhalb einer Seite</h3>
+        <p style="margin-bottom:0;">
+            Formulareingaben werden fortlaufend automatisch im
+            <code>localStorage</code> des Browsers zwischengespeichert,
+            sodass ein versehentlich geschlossener Tab die Eingaben nicht
+            verliert.
+        </p>
+
+        <h2>4. Eingesetzte Bibliotheken</h2>
+        <p>
+            Das Portal-Grundgerüst sowie <code>liste-neu.html</code>,
+            <code>mobile-neu.html</code> und <code>massnahmen-sifa.html</code>
+            binden alle Bibliotheken <strong>lokal</strong> ein
+            (<code>lib/</code>), ohne Laufzeit-Anfrage an ein CDN. Die
+            älteren Dateien (<code>liste.html</code>, <code>mobile.html</code>,
+            <code>audit.html</code>, <code>theke.html</code>) laden ihre
+            Bibliotheken noch per CDN — Umstellung auf lokale Einbindung
+            steht für diese Seiten noch aus. <code>aushang.html</code>
+            benötigt keine externen Bibliotheken.
+        </p>
+        <table class="tech-table">
+            <thead><tr><th>Bibliothek</th><th>Verwendet in</th><th>Zweck</th></tr></thead>
+            <tbody>
+                <tr><td><span class="badge">jsPDF 2.5.1</span></td><td>liste.html, liste-neu.html, foto.html, mobile.html, mobile-neu.html, audit.html, massnahmen-sifa.html</td><td>Manuelle, layoutgenaue PDF-Erzeugung direkt im Browser</td></tr>
+                <tr><td><span class="badge">html2pdf.js 0.10.1</span></td><td>audit.html</td><td>Screenshot-basierter PDF-Export</td></tr>
+                <tr><td><span class="badge">Font Awesome 6.5.0</span></td><td>alle Portal-Seiten</td><td>Icons (jetzt lokal eingebunden)</td></tr>
+                <tr><td><span class="badge">exif-js 2.3.0</span></td><td>foto.html</td><td>EXIF-Auslesung von Fotos (z. B. Ausrichtung), jetzt lokal eingebunden</td></tr>
+            </tbody>
+        </table>
+        <p style="margin-bottom:0; font-size:0.88rem; color:var(--ink-soft);"><code>theke.html</code> und <code>aushang.html</code> benötigen kein PDF — <code>theke.html</code> nutzt den nativen Browser-Druck, <code>aushang.html</code> ist eine reine Übersichtsseite.</p>
+
+        <h2>5. PWA, Manifest &amp; Service Worker</h2>
+        <p>
+            <code>manifest.json</code> definiert Name, Icons, Start-URL sowie
+            <code>theme_color</code> (<code>#0a2f73</code>, passend zur neuen
+            Portal-Farbe) und eine eigene <code>version</code>-Angabe.
+        </p>
+        <p><code>service-worker.js</code> übernimmt das Offline-Caching (Cache-First-Strategie, versionierter Cache-Name, alte Caches werden beim Aktivieren automatisch gelöscht).</p>
+      
+
+        <h2>6. Datenspeicherung &amp; Datenschutz</h2>
+        <ul>
+            <li>Für den Großteil der App gilt: <strong>keine Serverkommunikation</strong>, keine Übertragung an Dritte. <strong>Ausnahme:</strong> <code>audit.html</code> kann optional per „Direkt auf NAS speichern" die komplette Begehung an den eigenen Server (Synology) senden — bewusste Funktion, kein Dritter beteiligt.</li>
+            <li><code>localStorage</code> wird für den Formularstand der Checklisten sowie das Theme (hell/dunkel) genutzt.</li>
+            <li>Fotos, Unterschrift und generierte PDFs verbleiben nur im Arbeitsspeicher des Browsers, bis sie manuell heruntergeladen, geteilt oder (nur bei <code>audit.html</code>) aktiv auf die eigene NAS gespeichert werden.</li>
+            <li>Der Service-Worker-Cache enthält ausschließlich die statischen App-Dateien selbst, keine Nutzereingaben.</li>
+        </ul>
+        <p>Ausführliche rechtliche Formulierung: siehe <a href="datenschutz.html">Datenschutzerklärung</a>.</p>
+
+        <h2>7. Kompatibilität &amp; bekannte Einschränkungen</h2>
+        <ul>
+            <li><strong>Zielplattform:</strong> iPadOS/iOS Safari (Web-Share-API mit Dateianhang, Kamera-Capture, Touch-Bedienung).</li>
+            <li>Die native <em>„Teilen"</em>-Funktion (<code>navigator.share</code> mit Dateien) wird nicht von allen Browsern/Desktop-Systemen unterstützt; in diesem Fall fällt die App automatisch auf einen normalen PDF-Download zurück.</li>
+            <li>Sehr große Foto-Mengen (deutlich über 20–30 Fotos) können die PDF-Erzeugung im Browser spürbar verlangsamen.</li>
+            <li>Der Login (<code>index.html</code>) prüft Benutzername/Passwort rein clientseitig im JavaScript — eine organisatorische Zugriffshürde, kein echter Zugriffsschutz. Bewusst so belassen.</li>
+            <li><code>audit.html</code>s NAS-Speichern (<code>save.php</code>) funktioniert nur, wenn die Seite direkt über die Synology (bzw. deren Tailscale-Adresse) aufgerufen wird — über GitHub Pages allein ist der Endpunkt nicht erreichbar, da dort keine serverseitigen Skripte laufen können.</li>
+         </ul>
+
+    </div>
+
+</div>
+
+<footer class="app-footer">
+    <nav class="app-footer-links">
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutz</a>
+        <a href="faq.html">FAQ</a>
+        <a href="welcome.html">Startseite</a>
+    </nav>
+    <p>© <span class="app-footer-jahr"></span> Andreas Zott — Alle Rechte vorbehalten</p>
+    <p class="app-footer-version"></p>
+</footer>
+
+<script src="js/common.js"></script>
+
+</body>
+</html>
