@@ -91,33 +91,44 @@ async function renderMeasures() {
         // ------------------------------------------------------------------
         // Foto-Vorschauen
         // Alle Fotos werden gleich dargestellt: 180 × 180 px
+        // Fallback: liegen lokal (IndexedDB) keine Fotos zu dieser Maßnahme
+        // vor - z. B. weil die Begehung gerade erst vom NAS geladen wurde,
+        // auf einem anderen Geraet gespeichert - werden die im JSON
+        // mitgelieferten kleinen Vorschaubilder gezeigt (nur Ansicht, kein
+        // Löschen möglich, da kein echtes Foto in IndexedDB dahinter steht).
         // ------------------------------------------------------------------
 
-        const photoThumbs = photos.map(photo => {
+        const photoThumbs = photos.length > 0
+            ? photos.map(photo => {
 
-            const url = URL.createObjectURL(photo.blob);
+                const url = URL.createObjectURL(photo.blob);
 
-            measurePhotoObjectUrls.push(url);
+                measurePhotoObjectUrls.push(url);
 
-            return `
-                <div class="measure-photo-thumb">
+                return `
+                    <div class="measure-photo-thumb">
 
-                    <img
-                        src="${url}"
-                        alt="Foto zur Maßnahme">
+                        <img
+                            src="${url}"
+                            alt="Foto zur Maßnahme">
 
-                    <button
-                        type="button"
-                        class="measure-photo-delete"
-                        onclick="onMeasurePhotoDelete('${photo.id}', '${measure.id}')"
-                        title="Foto löschen">
-                        ✕
-                    </button>
+                        <button
+                            type="button"
+                            class="measure-photo-delete"
+                            onclick="onMeasurePhotoDelete('${photo.id}', '${measure.id}')"
+                            title="Foto löschen">
+                            ✕
+                        </button>
 
+                    </div>
+                `;
+
+            }).join('')
+            : (measure.photoThumbnails || []).map(t => `
+                <div class="measure-photo-thumb measure-photo-thumb-readonly" title="Nur Vorschau — Originalfoto liegt auf einem anderen Gerät">
+                    <img src="${t.dataUrl}" alt="Vorschaubild zur Maßnahme">
                 </div>
-            `;
-
-        }).join('');
+            `).join('');
 
 
         // ------------------------------------------------------------------
@@ -406,11 +417,33 @@ async function onMeasurePhotosCaptured(
                 await resizeImageFile(file);
 
 
-            await addPhoto(
-                blob,
-                '',
-                measureId
-            );
+            const record =
+                await addPhoto(
+                    blob,
+                    '',
+                    measureId
+                );
+
+            // Kleines Vorschaubild zusaetzlich im state.measures ablegen
+            // (Teil des JSON-Exports/NAS-Speicherns) - im Unterschied zum
+            // Blob in IndexedDB ist das die einzige Version, die beim
+            // Laden einer Begehung auf einem ANDEREN Geraet (z. B. aus dem
+            // Team-Archiv) ueberhaupt verfuegbar ist, da IndexedDB
+            // geraetegebunden ist. Bewusst klein gehalten (220px, niedrige
+            // Qualitaet), um die Dateigroesse fuer den Mail-Versand nicht
+            // relevant zu vergroessern.
+            try {
+                const thumbBlob = await resizeImageFile(file, 220, 0.55);
+                const thumbDataUrl = await blobToDataUrl(thumbBlob);
+                const measure = state.measures.find(m => m.id === measureId);
+                if (measure) {
+                    if (!measure.photoThumbnails) measure.photoThumbnails = [];
+                    measure.photoThumbnails.push({ photoId: record.id, dataUrl: thumbDataUrl });
+                    saveState();
+                }
+            } catch (thumbErr) {
+                console.warn('Vorschaubild konnte nicht erzeugt werden:', thumbErr);
+            }
 
         } catch (err) {
 
@@ -462,6 +495,12 @@ async function onMeasurePhotoDelete(
     try {
 
         await deletePhoto(photoId);
+
+        const measure = state.measures.find(m => m.id === measureId);
+        if (measure && measure.photoThumbnails) {
+            measure.photoThumbnails = measure.photoThumbnails.filter(t => t.photoId !== photoId);
+            saveState();
+        }
 
         await renderMeasures();
 

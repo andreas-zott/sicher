@@ -182,17 +182,20 @@ function csvExportFilename() {
 // auswertungArchiv-Modulvariable, siehe Kommentar weiter unten) und liefert
 // die fertigen CSV-Zeilen, oder null bei einem Ladefehler bzw. wenn es
 // nichts zu exportieren gibt (inkl. passender Toast-Meldung).
-async function ladeAuswertungCsvZeilen(fehlermeldungKontext) {
+async function ladeAuswertungCsvZeilen(fehlermeldungKontext, datenOverride) {
     let daten;
-    try {
-        daten = await getAllArchivedAudits();
-    } catch (err) {
-        console.error('Archiv konnte nicht geladen werden:', err);
-        showToast(fehlermeldungKontext + ' fehlgeschlagen: Archiv konnte nicht geladen werden', 'error');
-        return null;
+    if (datenOverride) {
+        daten = datenOverride;
+    } else {
+        try {
+            daten = await getAllArchivedAudits();
+        } catch (err) {
+            console.error('Archiv konnte nicht geladen werden:', err);
+            showToast(fehlermeldungKontext + ' fehlgeschlagen: Archiv konnte nicht geladen werden', 'error');
+            return null;
+        }
+        daten = filterNachZeitraum(daten, zeitraumMonate);
     }
-
-    daten = filterNachZeitraum(daten, zeitraumMonate);
 
     const rows = buildAuswertungCsvRows(daten);
 
@@ -358,15 +361,20 @@ function zeichnePdfLegende(doc, segmente, x, y) {
     return y;
 }
 
-async function buildAuswertungPdf() {
+async function buildAuswertungPdf(datenOverride, titel, zeitraumMonateOverride) {
     let daten;
-    try {
-        daten = await getAllArchivedAudits();
-    } catch (err) {
-        throw new Error('Archiv konnte nicht geladen werden');
+    let effektiverZeitraum = zeitraumMonate;
+    if (datenOverride) {
+        daten = datenOverride;
+        effektiverZeitraum = zeitraumMonateOverride !== undefined ? zeitraumMonateOverride : null;
+    } else {
+        try {
+            daten = await getAllArchivedAudits();
+        } catch (err) {
+            throw new Error('Archiv konnte nicht geladen werden');
+        }
+        daten = filterNachZeitraum(daten, zeitraumMonate);
     }
-
-    daten = filterNachZeitraum(daten, zeitraumMonate);
 
     if (daten.length === 0) {
         throw new Error('Keine archivierten Daten im gewählten Zeitraum vorhanden');
@@ -390,10 +398,10 @@ async function buildAuswertungPdf() {
     doc.setFont(undefined, 'bold');
     doc.setFontSize(24);
     doc.setTextColor(255, 255, 255);
-    doc.text('Gesamtauswertung', pageWidth / 2, 22, { align: 'center' });
+    doc.text(titel || 'Gesamtauswertung', pageWidth / 2, 22, { align: 'center' });
     doc.setFont(undefined, 'normal');
     doc.setFontSize(11);
-    const zeitraumText = zeitraumMonate === null ? 'Gesamter bisheriger Zeitraum' : `Letzte ${zeitraumMonate} Monate`;
+    const zeitraumText = effektiverZeitraum === null ? 'Gesamter bisheriger Zeitraum' : `Letzte ${effektiverZeitraum} Monate`;
     doc.text(zeitraumText, pageWidth / 2, 30, { align: 'center' });
 
     let y = 55;
