@@ -68,7 +68,8 @@ function berechneKategorienSchwachstellen(daten) {
 }
 
 // ===== Auffällige Märkte (Ranking nach Mängelquote) =====
-function berechneAuffaelligeMaerkte(daten) {
+function berechneAuffaelligeMaerkte(daten, modus) {
+    modus = modus || 'durchschnitt';
     const byMarket = {};
 
     daten.forEach(record => {
@@ -95,9 +96,20 @@ function berechneAuffaelligeMaerkte(daten) {
     const gesamtTotal = marketRates.reduce((s, m) => s + m.total, 0);
     const durchschnitt = gesamtTotal > 0 ? (gesamtMangel / gesamtTotal) * 100 : 0;
 
-    const auffaellig = marketRates
-        .filter(m => m.pct > durchschnitt)
-        .sort((a, b) => b.pct - a.pct);
+    const sortiert = () => [...marketRates].sort((a, b) => b.pct - a.pct);
+
+    let auffaellig;
+    if (modus === 'top5') {
+        auffaellig = sortiert().slice(0, 5);
+    } else if (modus === 'top10') {
+        auffaellig = sortiert().slice(0, 10);
+    } else if (modus === 'ab50') {
+        auffaellig = sortiert().filter(m => m.pct >= 50);
+    } else if (modus === 'ab75') {
+        auffaellig = sortiert().filter(m => m.pct >= 75);
+    } else {
+        auffaellig = sortiert().filter(m => m.pct > durchschnitt);
+    }
 
     return { durchschnitt, auffaellig, alle: marketRates };
 }
@@ -185,7 +197,8 @@ function svgBalkendiagramm(rows, opts) {
         const labelY = hoehe - margin.unten + 14;
         const kurzName = r.name.length > 14 ? r.name.slice(0, 13) + '…' : r.name;
         return `
-            <g>
+            <g class="auswertung-balken-klickbar" data-kategorie="${escapeHtml(r.name)}" onclick="onKategorieBalkenKlick(this)" style="cursor:pointer;">
+                <rect x="${x - 3}" y="${margin.oben - 2}" width="${balkenBreite + 6}" height="${plotHoehe + 4}" fill="transparent"></rect>
                 <rect x="${x}" y="${y}" width="${balkenBreite}" height="${balkenHoehe}" rx="3" fill="${farbe}"></rect>
                 <text x="${x + balkenBreite / 2}" y="${y - 4}" text-anchor="middle" font-size="10" font-weight="700" fill="#1c2226">${r.pct}%</text>
                 <text x="${x + balkenBreite / 2}" y="${labelY}" text-anchor="middle" font-size="8.5" fill="#5b6670" transform="rotate(-35 ${x + balkenBreite / 2} ${labelY})">${escapeHtml(kurzName)}</text>
@@ -252,6 +265,131 @@ function renderGesamtverteilungHtml(daten) {
     return svgTortendiagramm(verteilung);
 }
 
+// ===== Einzelfragen-Schwachstellen innerhalb EINER Kategorie (Drilldown) =====
+function berechneEinzelfragenSchwachstellen(daten, kategorieName) {
+    const counts = {};
+
+    daten.forEach(record => {
+        Object.keys(record.ratings || {}).forEach(itemId => {
+            const rating = record.ratings[itemId];
+            if (!rating || rating === 'na') return;
+
+            const found = findItemById(itemId);
+            const eigeneKategorie = found ? found.category.name : '(Kategorie nicht mehr im aktuellen Katalog)';
+            if (eigeneKategorie !== kategorieName) return;
+
+            const frageText = found ? found.item.text : itemId;
+            if (!counts[frageText]) counts[frageText] = { mangel: 0, total: 0 };
+            counts[frageText].total++;
+            if (rating === 'mangel') counts[frageText].mangel++;
+        });
+    });
+
+    return Object.entries(counts)
+        .filter(([, c]) => c.total > 0)
+        .map(([name, c]) => ({ name, mangel: c.mangel, total: c.total, pct: Math.round((c.mangel / c.total) * 100) }))
+        .sort((a, b) => b.pct - a.pct);
+}
+
+function renderEinzelfragenSchwachstellenHtml(daten, kategorieName) {
+    const rows = berechneEinzelfragenSchwachstellen(daten, kategorieName);
+    if (rows.length === 0) {
+        return '<p class="auswertung-empty">Keine auswertbaren Antworten in dieser Kategorie.</p>';
+    }
+    return `
+        <table class="doku-table">
+            <tr><th>Frage</th><th>Mängelquote</th><th></th></tr>
+            ${rows.map(r => `
+                <tr>
+                    <td>${escapeHtml(r.name)}</td>
+                    <td>${r.mangel} / ${r.total} (${r.pct}%)</td>
+                    <td><div class="auswertung-bar"><div class="auswertung-bar-fill" style="width:${r.pct}%"></div></div></td>
+                </tr>`).join('')}
+        </table>`;
+}
+
+// ===== Gesamt-Trend über Zeit (Mängelquote je Monat, über alle Märkte) =====
+function berechneGesamtTrend(daten) {
+    const proMonat = {};
+
+    daten.forEach(record => {
+        const zeitwert = zeitwertVonBegehung(record);
+        if (!zeitwert) return;
+        const d = new Date(zeitwert);
+        const monatSchluessel = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+
+        if (!proMonat[monatSchluessel]) proMonat[monatSchluessel] = { mangel: 0, total: 0 };
+
+        Object.values(record.ratings || {}).forEach(rating => {
+            if (!rating || rating === 'na') return;
+            proMonat[monatSchluessel].total++;
+            if (rating === 'mangel') proMonat[monatSchluessel].mangel++;
+        });
+    });
+
+    return Object.keys(proMonat)
+        .sort()
+        .filter(monat => proMonat[monat].total > 0)
+        .map(monat => {
+            const [jahr, monatNr] = monat.split('-');
+            const label = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'][parseInt(monatNr, 10) - 1] + ' ' + jahr.slice(2);
+            const c = proMonat[monat];
+            return { monat, label, mangel: c.mangel, total: c.total, pct: Math.round((c.mangel / c.total) * 100) };
+        });
+}
+
+function svgLiniendiagramm(punkte, opts) {
+    opts = opts || {};
+    const breite = opts.breite || 560;
+    const hoehe = opts.hoehe || 200;
+    const margin = { oben: 16, unten: 34, links: 30, rechts: 12 };
+    if (punkte.length === 0) return '';
+
+    const plotBreite = breite - margin.links - margin.rechts;
+    const plotHoehe = hoehe - margin.oben - margin.unten;
+    const schrittX = punkte.length > 1 ? plotBreite / (punkte.length - 1) : 0;
+
+    const koordinaten = punkte.map((p, i) => ({
+        x: margin.links + i * schrittX,
+        y: margin.oben + plotHoehe - (p.pct / 100) * plotHoehe,
+        p
+    }));
+
+    const linie = koordinaten.map((k, i) => (i === 0 ? 'M' : 'L') + k.x.toFixed(1) + ',' + k.y.toFixed(1)).join(' ');
+
+    const gitterlinien = [0, 25, 50, 75, 100].map(pct => {
+        const y = margin.oben + plotHoehe - (pct / 100) * plotHoehe;
+        return `
+            <line x1="${margin.links}" y1="${y}" x2="${breite - margin.rechts}" y2="${y}" stroke="#eef0ee" stroke-width="1"></line>
+            <text x="${margin.links - 6}" y="${y + 3}" text-anchor="end" font-size="8" fill="#94a3b8">${pct}%</text>`;
+    }).join('');
+
+    const punkteSvg = koordinaten.map(k => `
+        <circle cx="${k.x}" cy="${k.y}" r="3.5" fill="${DIAGRAMM_FARBEN.mangel}"></circle>
+        <text x="${k.x}" y="${k.y - 8}" text-anchor="middle" font-size="8.5" font-weight="700" fill="#1c2226">${k.p.pct}%</text>
+        <text x="${k.x}" y="${hoehe - margin.unten + 14}" text-anchor="middle" font-size="8" fill="#5b6670">${escapeHtml(k.p.label)}</text>`).join('');
+
+    return `<svg class="auswertung-chart" viewBox="0 0 ${breite} ${hoehe}" xmlns="http://www.w3.org/2000/svg">
+        ${gitterlinien}
+        <path d="${linie}" fill="none" stroke="${DIAGRAMM_FARBEN.mangel}" stroke-width="2"></path>
+        ${punkteSvg}
+    </svg>`;
+}
+
+function renderGesamtTrendHtml(daten) {
+    if (daten.length === 0) {
+        return '<p class="auswertung-empty">Keine Begehungen vorhanden.</p>';
+    }
+    const punkte = berechneGesamtTrend(daten);
+    if (punkte.length === 0) {
+        return '<p class="auswertung-empty">Für die vorhandenen Begehungen liegen keine auswertbaren Antworten vor.</p>';
+    }
+    if (punkte.length === 1) {
+        return `<p class="auswertung-hint">Nur ein Monat mit Daten (${escapeHtml(punkte[0].label)}: ${punkte[0].pct}% Mängelquote) — für einen Trend werden mindestens zwei Monate benötigt.</p>`;
+    }
+    return svgLiniendiagramm(punkte);
+}
+
 function renderKategorienSchwachstellenHtml(daten) {
     if (daten.length === 0) {
         return '<p class="auswertung-empty">Keine Begehungen vorhanden.</p>';
@@ -260,8 +398,11 @@ function renderKategorienSchwachstellenHtml(daten) {
     if (rows.length === 0) {
         return '<p class="auswertung-empty">Für die vorhandenen Begehungen liegen keine auswertbaren Antworten vor.</p>';
     }
+    window.__letzteKategorienDaten = daten;
     return `
+        <p class="auswertung-hint">Auf einen Balken tippen, um die einzelnen Fragen dieser Kategorie zu sehen.</p>
         ${svgBalkendiagramm(rows)}
+        <div class="auswertung-drilldown" style="display:none;"></div>
         <table class="doku-table">
             <tr><th>Kategorie</th><th>Mängelquote</th><th></th></tr>
             ${rows.map(r => `
@@ -273,16 +414,50 @@ function renderKategorienSchwachstellenHtml(daten) {
         </table>`;
 }
 
-function renderAuffaelligeMaerkteHtml(daten) {
+// Wird beim Klick auf einen Balken in "Kategorien-Schwachstellen" aufgerufen
+// (inline onclick im erzeugten SVG, siehe svgBalkendiagramm). Zeigt/versteckt
+// die Einzelfragen dieser Kategorie direkt unter dem Diagramm. Nutzt die
+// zuletzt gerenderten Daten (window.__letzteKategorienDaten) - dieselben,
+// mit denen auch der Balken selbst berechnet wurde, unabhaengig davon, ob
+// das auf der lokalen oder der Team-Auswertungsseite passiert.
+function onKategorieBalkenKlick(gruppenElement) {
+    const kategorie = gruppenElement.getAttribute('data-kategorie');
+    const container = gruppenElement.closest('[id]');
+    const drilldown = container ? container.querySelector('.auswertung-drilldown') : null;
+    if (!drilldown) return;
+
+    if (drilldown.style.display !== 'none' && drilldown.dataset.kategorie === kategorie) {
+        drilldown.style.display = 'none';
+        drilldown.dataset.kategorie = '';
+        return;
+    }
+
+    const daten = window.__letzteKategorienDaten || [];
+    drilldown.innerHTML = `<h4 style="margin:0.75rem 0 0.5rem;">${escapeHtml(kategorie)} — Einzelfragen</h4>` +
+        renderEinzelfragenSchwachstellenHtml(daten, kategorie);
+    drilldown.dataset.kategorie = kategorie;
+    drilldown.style.display = 'block';
+}
+
+function renderAuffaelligeMaerkteHtml(daten, modus) {
     if (daten.length === 0) {
         return '<p class="auswertung-empty">Keine Begehungen vorhanden.</p>';
     }
-    const { durchschnitt, auffaellig } = berechneAuffaelligeMaerkte(daten);
+    const { durchschnitt, auffaellig } = berechneAuffaelligeMaerkte(daten, modus);
+
+    const hinweisText = {
+        durchschnitt: `Durchschnittliche Mängelquote aller Märkte: ${Math.round(durchschnitt)}% — angezeigt werden Märkte darüber.`,
+        top5: 'Die 5 Märkte mit der höchsten Mängelquote.',
+        top10: 'Die 10 Märkte mit der höchsten Mängelquote.',
+        ab50: 'Märkte mit einer Mängelquote von mindestens 50%.',
+        ab75: 'Märkte mit einer Mängelquote von mindestens 75%.'
+    }[modus || 'durchschnitt'];
+
     if (auffaellig.length === 0) {
-        return `<div class="auswertung-good">✓ Kein Markt liegt aktuell über der durchschnittlichen Mängelquote (${Math.round(durchschnitt)}%).</div>`;
+        return `<div class="auswertung-good">✓ Kein Markt erfüllt aktuell dieses Kriterium (${hinweisText})</div>`;
     }
     return `
-        <p class="auswertung-hint">Durchschnittliche Mängelquote aller Märkte: ${Math.round(durchschnitt)}%</p>
+        <p class="auswertung-hint">${hinweisText}</p>
         <table class="doku-table">
             <tr><th>Markt</th><th>Mängelquote</th><th></th></tr>
             ${auffaellig.map(m => `

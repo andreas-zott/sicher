@@ -7,6 +7,9 @@ let auswertungArchiv = [];
 // null = "Alles", sonst Anzahl Monate rückwirkend ab heute.
 let zeitraumMonate = null;
 
+// 'alle' = kein Markt-Filter, sonst die gewählte Marktnummer als String.
+let marktFilter = 'alle';
+
 async function loadAuswertungData() {
     try {
         auswertungArchiv = await getAllArchivedAudits();
@@ -14,27 +17,60 @@ async function loadAuswertungData() {
         console.error('Archiv konnte für die Auswertung nicht geladen werden:', err);
         auswertungArchiv = [];
     }
+    populateMarktFilter(auswertungArchiv, 'markt-filter');
     renderAlleAuswertungen();
+}
+
+// Füllt ein <select> mit allen in den übergebenen Daten vorkommenden
+// Marktnummern (alphabetisch/numerisch sortiert), mit "Alle Märkte" als
+// erster, vorausgewählter Option. Wird sowohl von der lokalen als auch
+// von der Team-Auswertungsseite genutzt.
+function populateMarktFilter(daten, selectId) {
+    const select = document.getElementById(selectId);
+    if (!select) return;
+
+    const bisherigeAuswahl = select.value || 'alle';
+
+    const marktnummern = Array.from(new Set(
+        daten
+            .map(r => (r.companyInfo && r.companyInfo.marktnummer || '').trim())
+            .filter(Boolean)
+    )).sort((a, b) => a.localeCompare(b, 'de', { numeric: true }));
+
+    select.innerHTML = '<option value="alle">Alle Märkte</option>' +
+        marktnummern.map(m => `<option value="${escapeHtml(m)}">${escapeHtml(m)}</option>`).join('');
+
+    if (marktnummern.includes(bisherigeAuswahl)) {
+        select.value = bisherigeAuswahl;
+    }
 }
 
 // filterNachZeitraum() liegt jetzt in js/auswertung-logik.js (gemeinsam
 // mit auswertung-team.js genutzt) - hier nur noch der Wrapper, der die
-// Modulvariablen dieser Seite (auswertungArchiv, zeitraumMonate) einsetzt.
+// Modulvariablen dieser Seite (auswertungArchiv, zeitraumMonate,
+// marktFilter) einsetzt.
 
 // Liefert die archivierten Begehungen, gefiltert auf den aktuell gewählten
-// Zeitraum. Wird von den meisten Auswertungsbereichen sowie CSV- und
-// PDF-Export genutzt. BEWUSST NICHT genutzt von "Wiederkehrende Mängel"
-// (soll immer die tatsächlich letzte archivierte Begehung eines Marktes
-// finden, unabhängig vom Zeitraum) und "Offene Maßnahmen" (ein altes,
-// noch offenes Maßnahme wäre sonst ausgerechnet dann unsichtbar, wenn sie
-// am dringendsten Aufmerksamkeit bräuchte).
+// Zeitraum UND (falls gesetzt) den gewählten Markt. Wird von den meisten
+// Auswertungsbereichen sowie CSV- und PDF-Export genutzt. BEWUSST NICHT
+// genutzt von "Wiederkehrende Mängel" (soll immer die tatsächlich letzte
+// archivierte Begehung eines Marktes finden, unabhängig vom Zeitraum) und
+// "Offene Maßnahmen" (ein altes, noch offenes Maßnahme wäre sonst
+// ausgerechnet dann unsichtbar, wenn sie am dringendsten Aufmerksamkeit
+// bräuchte) - der Markt-Filter gilt dort trotzdem, siehe
+// renderOffeneMassnahmen().
 function gefilterteArchivDaten() {
-    return filterNachZeitraum(auswertungArchiv, zeitraumMonate);
+    let daten = filterNachZeitraum(auswertungArchiv, zeitraumMonate);
+    if (marktFilter !== 'alle') {
+        daten = daten.filter(r => (r.companyInfo && r.companyInfo.marktnummer || '').trim() === marktFilter);
+    }
+    return daten;
 }
 
 function renderAlleAuswertungen() {
     renderWiederkehrend();
     renderGesamtverteilung();
+    renderGesamtTrend();
     renderKategorienSchwachstellen();
     renderAuffaelligeMaerkte();
     renderVerlaufProMarkt();
@@ -46,6 +82,12 @@ function renderGesamtverteilung() {
     const container = document.getElementById('gesamtverteilung-content');
     if (!container) return;
     container.innerHTML = renderGesamtverteilungHtml(gefilterteArchivDaten());
+}
+
+function renderGesamtTrend() {
+    const container = document.getElementById('gesamttrend-content');
+    if (!container) return;
+    container.innerHTML = renderGesamtTrendHtml(gefilterteArchivDaten());
 }
 
 function updateZeitraumInfo() {
@@ -114,10 +156,12 @@ function renderKategorienSchwachstellen() {
 }
 
 // ===== 2B. Auffällige Märkte (Ranking nach Mängelquote) =====
+let auffaelligModus = 'durchschnitt';
+
 function renderAuffaelligeMaerkte() {
     const container = document.getElementById('auffaellige-maerkte-content');
     if (!container) return;
-    container.innerHTML = renderAuffaelligeMaerkteHtml(gefilterteArchivDaten());
+    container.innerHTML = renderAuffaelligeMaerkteHtml(gefilterteArchivDaten(), auffaelligModus);
 }
 
 // ===== 3. Verlauf pro Markt =====
@@ -361,7 +405,50 @@ function zeichnePdfLegende(doc, segmente, x, y) {
     return y;
 }
 
-async function buildAuswertungPdf(datenOverride, titel, zeitraumMonateOverride) {
+function zeichneLiniendiagrammPdf(doc, punkte, x, y, breite, hoehe) {
+    if (punkte.length === 0) return;
+    const margenLinks = 10, margenUnten = 12;
+    const plotBreite = breite - margenLinks;
+    const plotHoehe = hoehe - margenUnten;
+    const schrittX = punkte.length > 1 ? plotBreite / (punkte.length - 1) : 0;
+
+    doc.setDrawColor(238, 240, 238);
+    doc.setLineWidth(0.15);
+    [0, 25, 50, 75, 100].forEach(pct => {
+        const gy = y + plotHoehe - (pct / 100) * plotHoehe;
+        doc.line(x + margenLinks, gy, x + breite, gy);
+        doc.setFontSize(6.5);
+        doc.setTextColor(148, 163, 184);
+        doc.text(pct + '%', x + margenLinks - 2, gy + 1, { align: 'right' });
+    });
+
+    const koordinaten = punkte.map((p, i) => ({
+        x: x + margenLinks + i * schrittX,
+        y: y + plotHoehe - (p.pct / 100) * plotHoehe,
+        p
+    }));
+
+    doc.setDrawColor(...PDF_DIAGRAMM_FARBEN.mangel);
+    doc.setLineWidth(0.6);
+    for (let i = 0; i < koordinaten.length - 1; i++) {
+        doc.line(koordinaten[i].x, koordinaten[i].y, koordinaten[i + 1].x, koordinaten[i + 1].y);
+    }
+
+    koordinaten.forEach(k => {
+        doc.setFillColor(...PDF_DIAGRAMM_FARBEN.mangel);
+        doc.circle(k.x, k.y, 1.1, 'F');
+        doc.setFont(undefined, 'bold');
+        doc.setFontSize(7);
+        doc.setTextColor(28, 34, 38);
+        doc.text(k.p.pct + '%', k.x, k.y - 3, { align: 'center' });
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(6.5);
+        doc.setTextColor(91, 102, 112);
+        doc.text(k.p.label, k.x, y + plotHoehe + 8, { align: 'center' });
+    });
+}
+
+async function buildAuswertungPdf(datenOverride, titel, zeitraumMonateOverride, auffaelligModusOverride) {
     let daten;
     let effektiverZeitraum = zeitraumMonate;
     if (datenOverride) {
@@ -455,6 +542,17 @@ async function buildAuswertungPdf(datenOverride, titel, zeitraumMonateOverride) 
         y += tortenRadius * 2 + 10;
     }
 
+    // Gesamt-Trend über Zeit
+    ueberschrift('Gesamt-Trend über Zeit');
+    const trendPunkte = berechneGesamtTrend(daten);
+    if (trendPunkte.length < 2) {
+        zeile('Für einen Trend werden mindestens zwei Monate mit Daten benötigt.', null, [100, 116, 139]);
+    } else {
+        if (y + 55 > pageHeight - 20) { doc.addPage(); y = 18; }
+        zeichneLiniendiagrammPdf(doc, trendPunkte, margin, y, pageWidth - margin * 2, 48);
+        y += 58;
+    }
+
     // Kategorien-Schwachstellen
     ueberschrift('Kategorien-Schwachstellen');
     const kategorienRows = berechneKategorienSchwachstellen(daten);
@@ -470,10 +568,18 @@ async function buildAuswertungPdf(datenOverride, titel, zeitraumMonateOverride) 
 
     // Auffällige Märkte
     ueberschrift('Auffällige Märkte');
-    const { durchschnitt, auffaellig } = berechneAuffaelligeMaerkte(daten);
-    zeile(`Durchschnittliche Mängelquote: ${Math.round(durchschnitt)}%`, null, [100, 116, 139]);
+    const effektiverModus = auffaelligModusOverride !== undefined ? auffaelligModusOverride : auffaelligModus;
+    const { durchschnitt, auffaellig } = berechneAuffaelligeMaerkte(daten, effektiverModus);
+    const modusLabel = {
+        durchschnitt: `Kriterium: über dem Durchschnitt (${Math.round(durchschnitt)}%)`,
+        top5: 'Kriterium: Top 5',
+        top10: 'Kriterium: Top 10',
+        ab50: 'Kriterium: ab 50% Mängelquote',
+        ab75: 'Kriterium: ab 75% Mängelquote'
+    }[effektiverModus];
+    zeile(modusLabel, null, [100, 116, 139]);
     if (auffaellig.length === 0) {
-        zeile('Kein Markt liegt über dem Durchschnitt.', null, [50, 140, 90]);
+        zeile('Kein Markt erfüllt aktuell dieses Kriterium.', null, [50, 140, 90]);
     } else {
         auffaellig.forEach(m => zeile(m.name, `${m.mangel}/${m.total} (${Math.round(m.pct)}%)`, [28, 34, 38]));
     }
@@ -582,6 +688,7 @@ function renderOffeneMassnahmen() {
 
     const allOpen = [];
     auswertungArchiv.forEach(record => {
+        if (marktFilter !== 'alle' && (record.companyInfo.marktnummer || '').trim() !== marktFilter) return;
         (record.measures || []).forEach(m => {
             if (m.status === 'erledigt') return;
             allOpen.push({
@@ -595,17 +702,19 @@ function renderOffeneMassnahmen() {
         });
     });
     // Aktuell laufende (noch nicht archivierte) Begehung ebenfalls einbeziehen
-    (state.measures || []).forEach(m => {
-        if (m.status === 'erledigt') return;
-        allOpen.push({
-            marktnummer: (state.companyInfo && state.companyInfo.marktnummer) || '',
-            begehungsDatum: (state.companyInfo && state.companyInfo.datum) || '',
-            itemId: m.itemId,
-            description: m.description,
-            status: m.status,
-            aktuell: true
+    if (marktFilter === 'alle' || ((state.companyInfo && state.companyInfo.marktnummer) || '').trim() === marktFilter) {
+        (state.measures || []).forEach(m => {
+            if (m.status === 'erledigt') return;
+            allOpen.push({
+                marktnummer: (state.companyInfo && state.companyInfo.marktnummer) || '',
+                begehungsDatum: (state.companyInfo && state.companyInfo.datum) || '',
+                itemId: m.itemId,
+                description: m.description,
+                status: m.status,
+                aktuell: true
+            });
         });
-    });
+    }
 
     if (allOpen.length === 0) {
         container.innerHTML = '<div class="auswertung-good">✓ Keine offenen Maßnahmen vorhanden.</div>';
@@ -662,6 +771,22 @@ document.addEventListener('DOMContentLoaded', () => {
             const val = zeitraumSelect.value;
             zeitraumMonate = val === 'alle' ? null : parseInt(val, 10);
             renderAlleAuswertungen();
+        });
+    }
+
+    const marktSelect = document.getElementById('markt-filter');
+    if (marktSelect) {
+        marktSelect.addEventListener('change', () => {
+            marktFilter = marktSelect.value;
+            renderAlleAuswertungen();
+        });
+    }
+
+    const auffaelligSelect = document.getElementById('auffaellig-modus-filter');
+    if (auffaelligSelect) {
+        auffaelligSelect.addEventListener('change', () => {
+            auffaelligModus = auffaelligSelect.value;
+            renderAuffaelligeMaerkte();
         });
     }
 });

@@ -16,6 +16,8 @@
 
 let teamAuswertungAlleDaten = [];
 let teamZeitraumMonate = null;
+let teamMarktFilter = 'alle';
+let teamAuffaelligModus = 'durchschnitt';
 
 async function ladeTeamAuswertungDaten() {
     const containerIds = ['team-kategorien-content', 'team-maerkte-content', 'team-verlauf-content'];
@@ -62,18 +64,24 @@ async function ladeTeamAuswertungDaten() {
         showToast(fehlgeschlagen + ' von ' + ergebnisse.length + ' Team-Dateien konnten nicht geladen werden', 'error');
     }
 
+    populateMarktFilter(teamAuswertungAlleDaten, 'team-markt-filter');
     renderTeamAuswertungAlle();
 }
 
 function teamGefilterteDaten() {
-    return filterNachZeitraum(teamAuswertungAlleDaten, teamZeitraumMonate);
+    let daten = filterNachZeitraum(teamAuswertungAlleDaten, teamZeitraumMonate);
+    if (teamMarktFilter !== 'alle') {
+        daten = daten.filter(r => (r.companyInfo && r.companyInfo.marktnummer || '').trim() === teamMarktFilter);
+    }
+    return daten;
 }
 
 function renderTeamAuswertungAlle() {
     const daten = teamGefilterteDaten();
     document.getElementById('team-gesamtverteilung-content').innerHTML = renderGesamtverteilungHtml(daten);
+    document.getElementById('team-gesamttrend-content').innerHTML = renderGesamtTrendHtml(daten);
     document.getElementById('team-kategorien-content').innerHTML = renderKategorienSchwachstellenHtml(daten);
-    document.getElementById('team-maerkte-content').innerHTML = renderAuffaelligeMaerkteHtml(daten);
+    document.getElementById('team-maerkte-content').innerHTML = renderAuffaelligeMaerkteHtml(daten, teamAuffaelligModus);
     document.getElementById('team-verlauf-content').innerHTML = renderVerlaufProMarktHtml(daten);
 }
 
@@ -85,6 +93,22 @@ document.addEventListener('DOMContentLoaded', () => {
         zeitraumSelect.addEventListener('change', () => {
             const val = zeitraumSelect.value;
             teamZeitraumMonate = val === 'alle' ? null : parseInt(val, 10);
+            renderTeamAuswertungAlle();
+        });
+    }
+
+    const marktSelect = document.getElementById('team-markt-filter');
+    if (marktSelect) {
+        marktSelect.addEventListener('change', () => {
+            teamMarktFilter = marktSelect.value;
+            renderTeamAuswertungAlle();
+        });
+    }
+
+    const auffaelligSelect = document.getElementById('team-auffaellig-modus-filter');
+    if (auffaelligSelect) {
+        auffaelligSelect.addEventListener('change', () => {
+            teamAuffaelligModus = auffaelligSelect.value;
             renderTeamAuswertungAlle();
         });
     }
@@ -167,7 +191,7 @@ function teamAuswertungPdfFilename() {
 async function exportTeamAuswertungPdf() {
     try {
         showToast('PDF wird erzeugt…');
-        const doc = await buildAuswertungPdf(teamGefilterteDaten(), 'Team-Gesamtauswertung', teamZeitraumMonate);
+        const doc = await buildAuswertungPdf(teamGefilterteDaten(), 'Team-Gesamtauswertung', teamZeitraumMonate, teamAuffaelligModus);
         doc.save(teamAuswertungPdfFilename());
         showToast('PDF heruntergeladen');
     } catch (err) {
@@ -179,7 +203,7 @@ async function exportTeamAuswertungPdf() {
 async function shareTeamAuswertungPdf() {
     let doc;
     try {
-        doc = await buildAuswertungPdf(teamGefilterteDaten(), 'Team-Gesamtauswertung', teamZeitraumMonate);
+        doc = await buildAuswertungPdf(teamGefilterteDaten(), 'Team-Gesamtauswertung', teamZeitraumMonate, teamAuffaelligModus);
     } catch (err) {
         console.error('PDF-Erzeugung fehlgeschlagen:', err);
         showToast('PDF-Erzeugung fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
