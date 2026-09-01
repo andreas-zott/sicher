@@ -275,6 +275,16 @@
     }
 
 
+    .auswertung-drilldown {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-sm);
+        padding: 0.9rem 1rem;
+        margin-bottom: 1.25rem;
+    }
+
+
+
 
     .auswertung-market-block {
         margin-bottom: 1.25rem;
@@ -526,6 +536,15 @@
             </select>
         </div>
 
+        <div class="field" style="margin:0;">
+            <label for="markt-filter">
+                Markt
+            </label>
+            <select id="markt-filter">
+                <option value="alle" selected>Alle Märkte</option>
+            </select>
+        </div>
+
         <span id="zeitraum-info" style="font-size:0.82rem; color:var(--ink-soft);"></span>
 
     </div>
@@ -585,6 +604,36 @@
 
 
     <!-- ================================================================== -->
+    <!-- 1C. GESAMT-TREND ÜBER ZEIT                                          -->
+    <!-- ================================================================== -->
+
+    <section class="doku-section">
+
+        <h2>
+            Gesamt-Trend über Zeit
+        </h2>
+
+        <p class="auswertung-hint" style="margin-top:-0.5rem;">
+            Mängelquote je Monat, über alle Märkte hinweg — zeigt, ob sich
+            die Gesamtsituation über die Zeit verbessert oder verschlechtert.
+        </p>
+
+        <div
+            class="card doku-card"
+            id="gesamttrend-content"
+        >
+
+            <p class="auswertung-empty">
+                Lade…
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================================================================== -->
     <!-- 2. KATEGORIEN-SCHWACHSTELLEN                                       -->
     <!-- ================================================================== -->
 
@@ -620,10 +669,18 @@
             Auffällige Märkte
         </h2>
 
-        <p style="color:var(--ink-soft); margin-bottom:1rem;">
-            Märkte, deren Mängelquote über dem Durchschnitt aller
-            Märkte im gewählten Zeitraum liegt.
-        </p>
+        <div class="field" style="max-width:260px; margin-bottom:1rem;">
+            <label for="auffaellig-modus-filter">
+                Kriterium
+            </label>
+            <select id="auffaellig-modus-filter">
+                <option value="durchschnitt" selected>Über Durchschnitt</option>
+                <option value="top5">Top 5</option>
+                <option value="top10">Top 10</option>
+                <option value="ab50">Ab 50% Mängelquote</option>
+                <option value="ab75">Ab 75% Mängelquote</option>
+            </select>
+        </div>
 
         <div
             class="card doku-card"
