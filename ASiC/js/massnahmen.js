@@ -69,6 +69,45 @@ async function renderMeasures() {
     }
 
 
+    // ----------------------------------------------------------------------
+    // Vorschaubilder nachrüsten
+    // Fotos, die VOR dieser Funktion aufgenommen wurden (also ohne die
+    // damals noch nicht vorhandene Miniatur-Erzeugung), bekommen hier
+    // rückwirkend eine kleine Vorschau nachgetragen - nur für Fotos, die
+    // tatsächlich lokal (IndexedDB) vorhanden sind und noch KEIN
+    // zugehöriges Vorschaubild im JSON-Zustand haben. So landet beim
+    // nächsten Speichern/Exportieren auch für ältere, bereits laufende
+    // Begehungen ein Vorschaubild in der Datei.
+    // ----------------------------------------------------------------------
+
+    let nachgeruestet = false;
+
+    for (const measure of state.measures) {
+        const echteFotos = measurePhotosByMeasure[measure.id] || [];
+        if (echteFotos.length === 0) continue;
+
+        if (!measure.photoThumbnails) measure.photoThumbnails = [];
+        const vorhandeneIds = new Set(measure.photoThumbnails.map(t => t.photoId));
+
+        for (const photo of echteFotos) {
+            if (vorhandeneIds.has(photo.id)) continue;
+
+            try {
+                const thumbBlob = await resizeImageFile(photo.blob, 220, 0.55);
+                const thumbDataUrl = await blobToDataUrl(thumbBlob);
+                measure.photoThumbnails.push({ photoId: photo.id, dataUrl: thumbDataUrl });
+                nachgeruestet = true;
+            } catch (thumbErr) {
+                console.warn('Vorschaubild konnte nicht nachträglich erzeugt werden:', thumbErr);
+            }
+        }
+    }
+
+    if (nachgeruestet) {
+        saveState();
+    }
+
+
     revokeMeasurePhotoObjectUrls();
 
 
