@@ -1116,6 +1116,20 @@
                     <strong>konkreten Maßnahme</strong> zugeordnet werden
                 </li>
 
+                <li>
+                    Von jedem einer Maßnahme zugeordneten Foto wird
+                    zusätzlich ein kleines Vorschaubild (220px, stark
+                    komprimiert, wenige KB) direkt im JSON der Begehung
+                    gespeichert. Das eigentliche Foto bleibt geräte-
+                    gebunden in IndexedDB — wird eine Begehung z. B. über
+                    das Team-Archiv auf einem anderen Gerät geladen, sind
+                    dort keine echten Fotos vorhanden. Das Vorschaubild
+                    dient dann als reine Anzeige-Referenz in der
+                    Maßnahmenliste (erkennbar an gestricheltem Rahmen und
+                    „Vorschau"-Kennzeichnung), kann dort aber nicht
+                    gelöscht werden.
+                </li>
+
             </ul>
 
         </div>
@@ -1566,6 +1580,18 @@
                 Chart-Bibliothek) als auch im PDF-Export (direkt mit
                 jsPDF-Bordmitteln gezeichnet), mit identischen Farben
                 und Zahlen an beiden Stellen.
+            </p>
+
+            <p>
+                <code>auswertung-team.html</code> bietet dieselben
+                Diagramme sowie ebenfalls Rohdaten-Export (CSV) und
+                Gesamtauswertung als PDF, nur bezogen auf alle im
+                Team-Archiv (NAS) gefundenen Begehungen statt nur die
+                lokal auf diesem Gerät archivierten. Die eigentliche
+                Erzeugungslogik ist dieselbe wie bei
+                <code>auswertung.html</code> (<code>js/auswertung.js</code>
+                wird dafür auch auf dieser Seite mitgeladen) – nur die
+                Datenquelle unterscheidet sich.
             </p>
 
             <ul>

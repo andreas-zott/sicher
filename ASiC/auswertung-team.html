@@ -375,14 +375,7 @@
         color: var(--ink-soft);
     }
 
-
-
-    .team-export-status {
-        margin-top: 0.75rem;
-        font-size: 0.82rem;
-        color: var(--ink-soft);
-    }
-\n</style>
+</style>
 
 </head>
 
@@ -642,62 +635,98 @@
 
 
     <!-- ================================================================== -->
-    <!-- 4. EXPORT                                                          -->
+    <!-- 4. CSV-EXPORT (TEAM)                                                -->
     <!-- ================================================================== -->
 
     <section class="doku-section">
 
-        <h2>Rohdaten-Export</h2>
+        <h2>
+            Rohdaten-Export (Team)
+        </h2>
+
 
         <div class="card doku-card">
+
             <p>
-                Exportiert die für die Team-Auswertung geladenen Begehungen als
-                strukturierte CSV-Datei. Der Export erfolgt lokal im Browser.
+                Lädt alle im Team-Archiv (NAS) gefundenen Begehungen als
+                strukturierte CSV-Datei herunter — unabhängig davon, wer
+                sie gespeichert hat. Die Datei enthält die für die
+                Auswertung verfügbaren Prüfdaten und kann anschließend
+                beispielsweise in Excel weiterverarbeitet oder für eigene
+                Pivot-Auswertungen verwendet werden.
             </p>
 
             <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
-                <button class="btn btn-primary btn-small" id="btn-team-export-csv" type="button">
+
+                <button
+                    class="btn btn-primary btn-small"
+                    id="team-btn-export-csv"
+                    type="button"
+                >
                     ⬇️ CSV herunterladen
                 </button>
-                <button class="btn btn-secondary btn-small" id="btn-team-share-csv" type="button">
+
+                <button
+                    class="btn btn-secondary btn-small"
+                    id="team-btn-share-csv"
+                    type="button"
+                >
                     📧 CSV per Mail teilen
                 </button>
+
             </div>
 
             <p class="export-hinweis">
-                Der Export verwendet zunächst die vom Team-Auswertungsmodul
-                bereitgestellten Rohdaten. Falls dieses keine globale Rohdatenliste
-                bereitstellt, wird die aktuell dargestellte Team-Auswertung als
-                CSV-Sicherung exportiert.
+                Der Export erfolgt lokal im Browser, basierend auf den
+                bereits geladenen Team-Daten dieser Seite.
             </p>
+
         </div>
 
     </section>
 
 
+
     <!-- ================================================================== -->
-    <!-- 5. GESAMTAUSWERTUNG ALS PDF                                          -->
+    <!-- 4B. GESAMTAUSWERTUNG ALS PDF (TEAM)                                 -->
     <!-- ================================================================== -->
 
     <section class="doku-section">
 
-        <h2>Gesamtauswertung als PDF</h2>
+        <h2>
+            Gesamtauswertung als PDF (Team)
+        </h2>
 
         <div class="card doku-card">
+
             <p>
-                Erstellt ein zusammenhängendes PDF mit Gesamtverteilung,
-                Kategorien-Schwachstellen, auffälligen Märkten und Marktverlauf
-                für den aktuell gewählten Zeitraum.
+                Fasst Gesamtverteilung, Kategorien-Schwachstellen,
+                auffällige Märkte und den Marktverlauf über alle im
+                Team-Archiv gefundenen Begehungen im gewählten Zeitraum
+                als ein zusammenhängendes PDF-Dokument zusammen — geeignet
+                z. B. für eine gemeinsame Übersicht an die Regionalleitung.
             </p>
 
             <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
-                <button class="btn btn-primary btn-small" id="btn-team-export-auswertung-pdf" type="button">
+
+                <button
+                    class="btn btn-primary btn-small"
+                    id="team-btn-export-auswertung-pdf"
+                    type="button"
+                >
                     ⬇️ PDF herunterladen
                 </button>
-                <button class="btn btn-secondary btn-small" id="btn-team-share-auswertung-pdf" type="button">
+
+                <button
+                    class="btn btn-secondary btn-small"
+                    id="team-btn-share-auswertung-pdf"
+                    type="button"
+                >
                     📧 PDF per Mail teilen
                 </button>
+
             </div>
+
         </div>
 
     </section>
@@ -773,247 +802,10 @@
 
 <script src="js/auswertung-logik.js"></script>
 
+<script src="js/auswertung.js"></script>
+
 <script src="js/auswertung-team.js"></script>
 
-
-
-<script>
-(function () {
-    "use strict";
-
-    function csvEscape(value) {
-        if (value === null || value === undefined) return "";
-        var text = typeof value === "object" ? JSON.stringify(value) : String(value);
-        return '"' + text.replace(/"/g, '""') + '"';
-    }
-
-    function flattenObject(obj, prefix, out) {
-        out = out || {};
-        if (!obj || typeof obj !== "object") return out;
-        Object.keys(obj).forEach(function (key) {
-            var value = obj[key];
-            var name = prefix ? prefix + "." + key : key;
-            if (value && typeof value === "object" && !Array.isArray(value)) {
-                flattenObject(value, name, out);
-            } else {
-                out[name] = Array.isArray(value) ? JSON.stringify(value) : value;
-            }
-        });
-        return out;
-    }
-
-    function findRawRows() {
-        var candidates = [
-            "teamBegehungen", "teamArchivDaten", "teamRohdaten",
-            "teamData", "teamDaten", "begehungen", "archivDaten"
-        ];
-
-        for (var i = 0; i < candidates.length; i++) {
-            var value = window[candidates[i]];
-            if (Array.isArray(value) && value.length && typeof value[0] === "object") {
-                return value;
-            }
-        }
-
-        // Manche Implementierungen hängen die Daten unter einem Team-Objekt ein.
-        var roots = ["teamAuswertung", "teamEvaluation", "teamArchiv"];
-        for (var r = 0; r < roots.length; r++) {
-            var root = window[roots[r]];
-            if (!root || typeof root !== "object") continue;
-            for (var k in root) {
-                if (Array.isArray(root[k]) && root[k].length && typeof root[k][0] === "object") {
-                    return root[k];
-                }
-            }
-        }
-
-        return null;
-    }
-
-    function rowsFromDom() {
-        var tables = document.querySelectorAll(
-            "#team-gesamtverteilung-content table, " +
-            "#team-kategorien-content table, " +
-            "#team-maerkte-content table, " +
-            "#team-verlauf-content table"
-        );
-        var rows = [];
-        tables.forEach(function (table) {
-            var headers = Array.from(table.querySelectorAll("thead th")).map(function (th) {
-                return th.innerText.trim();
-            });
-            table.querySelectorAll("tbody tr").forEach(function (tr) {
-                var cells = Array.from(tr.querySelectorAll("th,td")).map(function (td) {
-                    return td.innerText.trim();
-                });
-                if (cells.length) {
-                    var obj = {};
-                    cells.forEach(function (cell, idx) {
-                        obj[headers[idx] || ("Spalte " + (idx + 1))] = cell;
-                    });
-                    rows.push(obj);
-                }
-            });
-        });
-        return rows;
-    }
-
-    function makeCsv(rows) {
-        if (!rows.length) {
-            throw new Error("Es sind noch keine Team-Daten geladen.");
-        }
-
-        var flat = rows.map(function (row) { return flattenObject(row); });
-        var headers = [];
-        flat.forEach(function (row) {
-            Object.keys(row).forEach(function (key) {
-                if (headers.indexOf(key) === -1) headers.push(key);
-            });
-        });
-
-        var lines = [
-            headers.map(csvEscape).join(";")
-        ];
-        flat.forEach(function (row) {
-            lines.push(headers.map(function (h) { return csvEscape(row[h]); }).join(";"));
-        });
-
-        return "\uFEFF" + lines.join("\r\n");
-    }
-
-    function downloadBlob(blob, filename) {
-        var url = URL.createObjectURL(blob);
-        var a = document.createElement("a");
-        a.href = url;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
-    }
-
-    function getPdfSections() {
-        return [
-            ["Gesamtverteilung", "team-gesamtverteilung-content"],
-            ["Kategorien-Schwachstellen (Team)", "team-kategorien-content"],
-            ["Auffällige Märkte (Team)", "team-maerkte-content"],
-            ["Verlauf pro Markt (Team)", "team-verlauf-content"]
-        ];
-    }
-
-    function exportPdf() {
-        var jsPDF = window.jspdf && window.jspdf.jsPDF;
-        if (!jsPDF) throw new Error("Die PDF-Bibliothek ist nicht verfügbar.");
-
-        var doc = new jsPDF({ unit: "mm", format: "a4" });
-        var margin = 14, y = 16, pageHeight = 297, bottom = 16;
-        var filter = document.getElementById("team-zeitraum-filter");
-        var zeitraum = filter ? filter.options[filter.selectedIndex].text : "Alles";
-
-        doc.setFontSize(18);
-        doc.text("ASiC Handel – Team-Auswertung", margin, y);
-        y += 8;
-        doc.setFontSize(10);
-        doc.text("Zeitraum: " + zeitraum, margin, y);
-        y += 8;
-
-        getPdfSections().forEach(function (section) {
-            var el = document.getElementById(section[1]);
-            if (!el) return;
-
-            if (y > pageHeight - 35) {
-                doc.addPage();
-                y = margin;
-            }
-
-            doc.setFontSize(13);
-            doc.text(section[0], margin, y);
-            y += 6;
-            doc.setFontSize(9);
-
-            var text = el.innerText.trim() || "Keine Daten vorhanden.";
-            var lines = doc.splitTextToSize(text, 180);
-
-            lines.forEach(function (line) {
-                if (y > pageHeight - bottom) {
-                    doc.addPage();
-                    y = margin;
-                }
-                doc.text(line, margin, y);
-                y += 4.5;
-            });
-            y += 4;
-        });
-
-        return doc;
-    }
-
-    function pdfBlob(doc) {
-        return doc.output("blob");
-    }
-
-    function shareFile(file, fallbackFilename) {
-        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-            navigator.share({
-                title: "ASiC Handel – Team-Auswertung",
-                text: "Team-Auswertung",
-                files: [file]
-            }).catch(function () {});
-            return true;
-        }
-        downloadBlob(file, fallbackFilename);
-        return false;
-    }
-
-    var csvBtn = document.getElementById("btn-team-export-csv");
-    var csvShareBtn = document.getElementById("btn-team-share-csv");
-    var pdfBtn = document.getElementById("btn-team-export-auswertung-pdf");
-    var pdfShareBtn = document.getElementById("btn-team-share-auswertung-pdf");
-
-    if (csvBtn) csvBtn.addEventListener("click", function () {
-        try {
-            var rows = findRawRows() || rowsFromDom();
-            var csv = makeCsv(rows);
-            downloadBlob(new Blob([csv], { type: "text/csv;charset=utf-8" }),
-                "asic-team-rohdaten.csv");
-        } catch (err) {
-            alert(err.message || "CSV-Export konnte nicht erstellt werden.");
-        }
-    });
-
-    if (csvShareBtn) csvShareBtn.addEventListener("click", function () {
-        try {
-            var rows = findRawRows() || rowsFromDom();
-            var csv = makeCsv(rows);
-            var file = new File([csv], "asic-team-rohdaten.csv",
-                { type: "text/csv;charset=utf-8" });
-            shareFile(file, "asic-team-rohdaten.csv");
-        } catch (err) {
-            alert(err.message || "CSV-Export konnte nicht erstellt werden.");
-        }
-    });
-
-    if (pdfBtn) pdfBtn.addEventListener("click", function () {
-        try {
-            var doc = exportPdf();
-            doc.save("asic-team-gesamtauswertung.pdf");
-        } catch (err) {
-            alert(err.message || "PDF-Export konnte nicht erstellt werden.");
-        }
-    });
-
-    if (pdfShareBtn) pdfShareBtn.addEventListener("click", function () {
-        try {
-            var doc = exportPdf();
-            var file = new File([pdfBlob(doc)], "asic-team-gesamtauswertung.pdf",
-                { type: "application/pdf" });
-            shareFile(file, "asic-team-gesamtauswertung.pdf");
-        } catch (err) {
-            alert(err.message || "PDF-Export konnte nicht erstellt werden.");
-        }
-    });
-})();
-</script>
 
 </body>
 
