@@ -10,9 +10,7 @@
     content="width=device-width, initial-scale=1.0, viewport-fit=cover"
 >
 
-<title>
-    Maßnahmen – ASiC Handel
-</title>
+<title>Fotos – ASiC Handel</title>
 
 <link
     rel="stylesheet"
@@ -82,14 +80,14 @@
                 Prüfkatalog
             </a>
 
-            <a
-                href="massnahmen.html"
-                class="active"
-            >
+            <a href="massnahmen.html">
                 Aktionsplan
             </a>
 
-            <a href="fotos.html">
+            <a
+                href="fotos.html"
+                class="active"
+            >
                 Fotos
             </a>
 
@@ -237,250 +235,108 @@
 
 
     <!-- ================================================================== -->
-    <!-- MASSNAHMEN                                                          -->
+    <!-- FOTODOKUMENTATION                                                   -->
     <!-- ================================================================== -->
 
     <div
-        class="section-title"
+        class="section-title photos-section-title"
         style="margin-bottom: 0.75rem;"
     >
-        Maßnahmen
+
+        <span>
+            Fotodokumentation
+        </span>
+
+
+        <label
+            class="btn btn-primary btn-small"
+            for="photo-capture-input"
+        >
+
+            📷
+            Foto aufnehmen / einfügen
+
+
+            <input
+                type="file"
+                id="photo-capture-input"
+                accept="image/*"
+                capture="environment"
+                multiple
+                style="display:none;"
+            >
+
+        </label>
+
     </div>
 
+
+
+    <!-- ================================================================== -->
+    <!-- HINWEIS                                                            -->
+    <!-- ================================================================== -->
 
     <div
         class="card"
         style="
             margin-bottom: 1rem;
-            padding: 0.75rem 1rem;
-        "
-    >
-
-        <p
-            style="
-                margin: 0 0 0.7rem 0;
-                font-size: 0.86rem;
-                color: var(--ink-soft);
-            "
-        >
-
-            Hier werden alle in der Checkliste als
-            <strong>„Mangel“</strong> bewerteten Prüfpunkte
-            als Maßnahmen geführt.
-
-            Zu jeder Maßnahme können ein
-            <strong>Bearbeitungsstatus</strong> sowie – sofern vorhanden –
-            <strong>zugehörige Fotos</strong> dokumentiert werden.
-
-        </p>
-
-
-        <div
-            style="
-                padding-top: 0.7rem;
-                border-top: 1px solid var(--line);
-                font-size: 0.86rem;
-                color: var(--ink-soft);
-            "
-        >
-
-            <strong>
-                Verantwortung:
-            </strong>
-
-            Die Gesamtverantwortung für die Durchführung der Prüfung
-            sowie für die Beseitigung festgestellter Mängel liegt bei
-            der Marktleitung.
-
-            Einzelne Maßnahmen können an fachlich zuständige Personen
-            zur Bearbeitung übertragen werden. Die Verantwortung für
-            die ordnungsgemäße Umsetzung sowie die Aufsichts- und
-            Kontrollpflicht verbleibt bei der Marktleitung.
-
-        </div>
-
-    </div>
-
-
-    <div
-        id="measures-container"
-        class="measures-list"
-    ></div>
-
-
-    <div
-        id="no-measures"
-        class="no-measures card"
-        style="display:none;"
-    >
-
-        <h3>
-            Keine Mängel erfasst
-        </h3>
-
-        <p>
-            Alle Prüfpunkte der Begehung wurden mit
-            „In Ordnung“ oder „N.V.“ bewertet.
-        </p>
-
-    </div>
-
-
-
-    <!-- ================================================================== -->
-    <!-- UNTERSCHRIFTEN                                                      -->
-    <!-- ================================================================== -->
-
-    <div
-        class="section-title"
-        style="
-            margin: 1.75rem 0 0.75rem;
-        "
-    >
-        Unterschriften
-    </div>
-
-
-    <div class="signatures-grid">
-
-
-        <!-- PRÜFER -->
-
-        <section class="card signature-block">
-
-            <div class="field">
-
-                <label
-                    for="sig-pruefer-name"
-                >
-                    Prüfer
-                </label>
-
-                <input
-                    type="text"
-                    id="sig-pruefer-name"
-                    placeholder="Name des Prüfers"
-                >
-
-            </div>
-
-
-            <div class="signature-pad-wrap">
-
-                <canvas
-                    id="sig-pruefer-canvas"
-                ></canvas>
-
-                <div class="signature-baseline"></div>
-
-                <span class="signature-hint">
-                    Mit dem Finger oder Stift unterschreiben
-                </span>
-
-            </div>
-
-
-            <div class="signature-actions">
-
-                <button
-                    class="btn-link"
-                    id="clear-sig-pruefer"
-                    type="button"
-                >
-                    Löschen
-                </button>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- MARKTLEITUNG -->
-
-        <section class="card signature-block">
-
-            <div class="field">
-
-                <label
-                    for="sig-marktleitung-name"
-                >
-                    Marktleitung
-                </label>
-
-                <input
-                    type="text"
-                    id="sig-marktleitung-name"
-                    placeholder="Name der Marktleitung"
-                >
-
-            </div>
-
-
-            <div class="signature-pad-wrap">
-
-                <canvas
-                    id="sig-marktleitung-canvas"
-                ></canvas>
-
-                <div class="signature-baseline"></div>
-
-                <span class="signature-hint">
-                    Mit dem Finger oder Stift unterschreiben
-                </span>
-
-            </div>
-
-
-            <div class="signature-actions">
-
-                <button
-                    class="btn-link"
-                    id="clear-sig-marktleitung"
-                    type="button"
-                >
-                    Löschen
-                </button>
-
-            </div>
-
-        </section>
-
-
-    </div>
-
-
-
-    <!-- ================================================================== -->
-    <!-- FOTO-HINWEIS                                                        -->
-    <!-- ================================================================== -->
-
-    <div
-        class="card"
-        style="
-            margin-top: 1rem;
-            padding: 0.75rem 1rem;
+            padding: 0.85rem 1rem;
         "
     >
 
         <p
             style="
                 margin: 0;
-                font-size: 0.86rem;
+                font-size: 0.88rem;
                 color: var(--ink-soft);
             "
         >
 
             <strong>Fotodokumentation:</strong>
-
-            Fotos, die einer Maßnahme zugeordnet wurden,
-            können in den Maßnahmen-PDFs als Vorschaubilder
-            und zusätzlich im Fotoanhang ausgegeben werden.
+            Sie können Fotos direkt mit der Kamera aufnehmen oder
+            vorhandene Bilder aus der Mediathek auswählen und kommentieren.
+            Fotos, die zu einer konkreten Maßnahme gehören, fügen Sie
+            direkt auf der Aktionsplan-Seite bei der jeweiligen Maßnahme
+            hinzu.
 
         </p>
 
     </div>
 
+
+
+    <!-- ================================================================== -->
+    <!-- FOTO-GRID                                                          -->
+    <!-- ================================================================== -->
+
+    <div
+        id="photo-grid"
+        class="photo-grid"
+    ></div>
+
+
+    <!-- ================================================================== -->
+    <!-- KEINE FOTOS                                                        -->
+    <!-- ================================================================== -->
+
+    <div
+        id="no-photos"
+        class="no-measures card"
+        style="display:none;"
+    >
+
+        <h3>
+            Noch keine Fotos erfasst
+        </h3>
+
+        <p>
+            Tippen Sie oben auf
+            „Foto aufnehmen / einfügen“,
+            um ein Bild mit der Kamera aufzunehmen
+            oder ein vorhandenes Foto aus der Mediathek auszuwählen.
+        </p>
+
+    </div>
 
 </main>
 
@@ -589,35 +445,32 @@
 
                         <button
                             class="mode-btn"
-                            data-mode="checkliste"
                             type="button"
+                            data-mode="checkliste"
                         >
                             Checkliste
                         </button>
 
-
                         <button
                             class="mode-btn"
-                            data-mode="massnahmen"
                             type="button"
+                            data-mode="massnahmen"
                         >
                             Maßnahmen
                         </button>
 
-
                         <button
                             class="mode-btn"
-                            data-mode="fotos"
                             type="button"
+                            data-mode="fotos"
                         >
                             Fotos
                         </button>
 
-
                         <button
                             class="mode-btn"
-                            data-mode="alle"
                             type="button"
+                            data-mode="alle"
                         >
                             Alles
                         </button>
@@ -630,8 +483,8 @@
 
                     <button
                         class="menu-item"
-                        data-action="print"
                         type="button"
+                        data-action="print"
                     >
                         🖨️ Drucken
                     </button>
@@ -639,8 +492,8 @@
 
                     <button
                         class="menu-item"
-                        data-action="share"
                         type="button"
+                        data-action="share"
                     >
                         📤 PDF teilen
                     </button>
@@ -648,8 +501,8 @@
 
                     <button
                         class="menu-item"
-                        data-action="mail"
                         type="button"
+                        data-action="mail"
                     >
                         ✉️ Mail vorbereiten
                     </button>
@@ -657,15 +510,6 @@
                 </div>
 
             </div>
-
-
-            <button
-                class="btn btn-secondary btn-small"
-                id="btn-save-measures"
-                type="button"
-            >
-                Speichern
-            </button>
 
         </div>
 
@@ -683,13 +527,13 @@
 
 <script src="js/text.js"></script>
 
+<script src="js/app.js"></script>
+
 <script src="js/photos-store.js"></script>
 
 <script src="js/archive-store.js"></script>
 
-<script src="js/app.js"></script>
-
-<script src="js/massnahmen.js"></script>
+<script src="js/fotos.js"></script>
 
 
 </body>

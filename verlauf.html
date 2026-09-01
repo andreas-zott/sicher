@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+<title>
+    Verlauf – ASiC Handel
+</title>
+
+<link
+    rel="stylesheet"
+    href="css/styles.css"
+>
+
+<script src="js/access-gate.js"></script>
+
+<link
+    rel="manifest"
+    href="manifest.json"
+>
+
+<link
+    rel="apple-touch-icon"
+    href="icon-192.png"
+>
+
+<meta
+    name="apple-mobile-web-app-capable"
+    content="yes"
+>
+
+<meta
+    name="theme-color"
+    content="#1c2226"
+>
+
+<script src="js/jspdf.umd.min.js"></script>
+
+</head>
+
+
+<body>
+
+
+<!-- ====================================================================== -->
+<!-- HEADER                                                                 -->
+<!-- ====================================================================== -->
+
+<header class="app-header">
+
+    <div class="hazard-strip"></div>
+
+    <div class="app-header-inner">
+
+
+        <div class="brand">
+
+            <span class="brand-title">
+                ASiC Handel
+            </span>
+
+            <span class="brand-tag">
+                Märkte
+            </span>
+
+            <span class="brand-subtitle">
+                „Sicher geprüft. Sicher gehandelt.“
+            </span>
+
+        </div>
+
+
+        <nav class="app-nav">
+
+            <a href="index.html">
+                Prüfkatalog
+            </a>
+
+            <a href="massnahmen.html">
+                Aktionsplan
+            </a>
+
+            <a href="fotos.html">
+                Fotos
+            </a>
+
+            <a
+                href="verlauf.html"
+                class="active"
+            >
+                Verlauf
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+
+<!-- ====================================================================== -->
+<!-- HAUPTBEREICH                                                           -->
+<!-- ====================================================================== -->
+
+<main class="page">
+
+
+    <div class="section-title">
+        Archivierte Begehungen
+    </div>
+
+
+    <!-- ================================================================== -->
+    <!-- HINWEIS                                                            -->
+    <!-- ================================================================== -->
+
+    <div
+        class="card"
+        style="
+            margin-bottom: 1rem;
+            padding: 0.85rem 1rem;
+        "
+    >
+
+        <p
+            style="
+                margin: 0;
+                font-size: 0.88rem;
+                color: var(--ink-soft);
+            "
+        >
+
+            <strong>Archiv:</strong>
+            Beim Archivieren wird ein vollständiger Schnappschuss
+            der Begehung gespeichert. Dazu gehören Betriebsdaten,
+            Bewertungen, Kommentare, Maßnahmen, Unterschriften,
+            Statistikdaten und die zum Zeitpunkt der Archivierung
+            vorhandenen Fotos.
+
+        </p>
+
+    </div>
+
+
+
+    <!-- ================================================================== -->
+    <!-- UMSCHALTER: MEIN VERLAUF / TEAM-ARCHIV                              -->
+    <!-- ================================================================== -->
+
+    <div class="verlauf-tabs" style="display:flex; gap:0.5rem; margin-bottom:1rem;">
+
+        <button
+            id="tab-lokal"
+            class="btn btn-secondary btn-small verlauf-tab active"
+            type="button"
+        >
+            📱 Mein Verlauf
+        </button>
+
+        <button
+            id="tab-team"
+            class="btn btn-secondary btn-small verlauf-tab"
+            type="button"
+        >
+            👥 Team-Archiv (NAS)
+        </button>
+
+        <a
+            href="auswertung.html"
+            id="tab-auswertung-verlauf"
+            class="btn btn-secondary btn-small verlauf-tab"
+        >
+            📊 Auswertung Verlauf
+        </a>
+
+        <a
+            href="auswertung-team.html"
+            id="tab-auswertung-team"
+            class="btn btn-secondary btn-small verlauf-tab"
+        >
+            📊 Auswertung Team
+        </a>
+
+    </div>
+
+
+    <!-- ================================================================== -->
+    <!-- ARCHIVLISTE                                                         -->
+    <!-- ================================================================== -->
+
+    <div
+        id="archive-list"
+        class="archive-list"
+    ></div>
+
+
+    <!-- ================================================================== -->
+    <!-- TEAM-ARCHIVLISTE (NAS)                                              -->
+    <!-- ================================================================== -->
+
+    <div
+        id="team-archive-list"
+        class="archive-list"
+        style="display:none;"
+    ></div>
+
+    <div
+        id="team-archive-loading"
+        class="no-measures card"
+        style="display:none;"
+    >
+        <p style="margin:0;">Lade Team-Archiv vom NAS …</p>
+    </div>
+
+    <div
+        id="no-team-archive"
+        class="no-measures card"
+        style="display:none;"
+    >
+        <h3>Noch keine Begehung im Team-Archiv</h3>
+        <p>
+            Begehungen, die Kolleginnen und Kollegen über
+            „Datei ▾ → Auf NAS speichern“ gesichert haben,
+            erscheinen hier.
+        </p>
+    </div>
+
+    <div
+        id="team-archive-unavailable"
+        class="no-measures card"
+        style="display:none;"
+    >
+        <h3>Team-Archiv hier nicht verfügbar</h3>
+        <p>
+            Das Team-Archiv funktioniert nur, wenn die App direkt
+            über die Synology selbst aufgerufen wird (bzw. deren
+            Tailscale-Adresse) — nicht über diese Adresse.
+        </p>
+    </div>
+
+
+    <!-- ================================================================== -->
+    <!-- KEIN ARCHIV                                                         -->
+    <!-- ================================================================== -->
+
+    <div
+        id="no-archive"
+        class="no-measures card"
+        style="display:none;"
+    >
+
+        <h3>
+            Noch keine Begehung archiviert
+        </h3>
+
+        <p>
+            Über „Datei ▾ → Begehung archivieren“
+            auf der Prüfkatalog-Seite können Sie den aktuellen
+            Stand hier sichern.
+        </p>
+
+        <p>
+            Die archivierte Begehung kann später erneut geöffnet
+            bzw. als PDF exportiert werden.
+        </p>
+
+    </div>
+
+</main>
+
+
+
+<!-- ====================================================================== -->
+<!-- FOOTER                                                                 -->
+<!-- ====================================================================== -->
+
+<footer class="app-footer">
+
+    <div class="app-footer-meta">
+
+        <span id="footer-version"></span>
+
+        <span
+            class="footer-copyright"
+            id="footer-copyright"
+        ></span>
+
+    </div>
+
+
+    <div class="app-footer-links">
+
+        <a href="impressum.html">
+            Impressum
+        </a>
+
+        <a href="datenschutz.html">
+            Datenschutz
+        </a>
+
+        <a href="dokumentation.html">
+            Technische Dokumentation
+        </a>
+
+        <a href="hilfe.html">
+            Hilfe &amp; FAQ
+        </a>
+
+        <a href="auswertung.html">
+            Auswertung
+        </a>
+
+
+        <a href="auswertung-team.html">
+            Auswertung Team
+        </a>
+
+
+        <a href="einstellungen.html">
+            Einstellungen
+        </a>
+
+    </div>
+
+</footer>
+
+
+
+<!-- ====================================================================== -->
+<!-- JAVASCRIPT                                                             -->
+<!-- ====================================================================== -->
+
+<script src="js/audit-data.js"></script>
+
+<script src="js/text.js"></script>
+
+<script src="js/photos-store.js"></script>
+
+<script src="js/archive-store.js"></script>
+
+
+<script src="js/app.js"></script>
+
+<script src="js/verlauf.js"></script>
+
+
+</body>
+
+</html>
