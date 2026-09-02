@@ -994,7 +994,7 @@ const MEASURES_BY_ID = (() => {
 })();
 
 // Aktuell gewaehlter Sprachstil (wird von der App per Umschalter gesetzt und in localStorage gemerkt).
-let MEASURE_STYLE = localStorage.getItem('measureStyle') || 'rechtlich';
+let MEASURE_STYLE = localStorage.getItem('measureStyle') || 'bghw';
 
 function setMeasureStyle(style) {
     if (['einfach', 'bghw', 'rechtlich'].indexOf(style) === -1) return;
