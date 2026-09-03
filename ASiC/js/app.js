@@ -8,7 +8,7 @@ const STORAGE_KEY = 'begehungState';
 
 // Revisionsstand der App/Checkliste (in Fusszeile und PDF sichtbar,
 // bei inhaltlichen Aenderungen an Fragenkatalog/Massnahmen hochzaehlen)
-const APP_REVISION = '1.38';
+const APP_REVISION = '1.39';
 const APP_REVISION_DATE = '2026-09-01';
 
 function renderFooterMeta() {
@@ -2168,7 +2168,7 @@ function renderItem(item, locked) {
         ${isMangel ? `
         <div class="item-detail">
             <label for="comment-${item.id}">Beschreibung des Mangels</label>
-            <textarea id="comment-${item.id}" placeholder="Was wurde festgestellt? (optional)" onchange="updateComment('${item.id}', this.value)">${comment}</textarea>
+            <textarea id="comment-${item.id}" placeholder="Was wurde festgestellt? (optional)" oninput="updateComment('${item.id}', this.value)">${comment}</textarea>
             <div class="measure-preview">
                 <span class="label">Empfohlene Maßnahme</span>
                 ${getMeasureText(item.id)}

@@ -269,7 +269,7 @@ async function renderMeasures() {
                     </span>
 
                     <textarea
-                        onchange="updateMeasureField(
+                        oninput="updateMeasureField(
                             '${measure.id}',
                             'description',
                             this.value
