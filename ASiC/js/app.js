@@ -8,7 +8,7 @@ const STORAGE_KEY = 'begehungState';
 
 // Revisionsstand der App/Checkliste (in Fusszeile und PDF sichtbar,
 // bei inhaltlichen Aenderungen an Fragenkatalog/Massnahmen hochzaehlen)
-const APP_REVISION = '1.37';
+const APP_REVISION = '1.38';
 const APP_REVISION_DATE = '2026-09-01';
 
 function renderFooterMeta() {
@@ -316,6 +316,11 @@ async function loadStateFromSynology(filename) {
 
     saveState();
     if (typeof renderChecklist === 'function') renderChecklist();
+    // WICHTIG: erneutes saveState() NACH renderChecklist(), da dort die
+    // Kommentar-Nachruestung fuer die Maßnahmen passiert - sonst wuerde der
+    // nachgetragene Kommentar beim naechsten Laden (z. B. auf der
+    // Maßnahmenseite) wieder fehlen.
+    saveState();
     if (typeof initCompanyForm === 'function') initCompanyForm();
     if (typeof renderCompanyInfoStrip === 'function') renderCompanyInfoStrip();
     if (typeof renderMeasures === 'function') await renderMeasures();
@@ -1335,6 +1340,20 @@ async function buildPdf(includeChecklist, includeFotos) {
                 photos = [];
             }
 
+            // Fallback: liegen lokal (IndexedDB) keine Fotos zu dieser
+            // Maßnahme vor - z. B. weil die Begehung gerade erst importiert
+            // oder vom NAS geladen wurde, auf einem anderen Geraet
+            // gespeichert - werden ersatzweise die im JSON mitgelieferten
+            // kleinen Vorschaubilder gedruckt. Qualitativ schlechter als das
+            // Original, aber besser als gar kein Foto im Ausdruck.
+            if (
+                photos.length === 0 &&
+                measure.photoThumbnails &&
+                measure.photoThumbnails.length > 0
+            ) {
+                photos = measure.photoThumbnails.map(t => ({ dataUrl: t.dataUrl }));
+            }
+
             const photoRows =
                 photos.length > 0
                     ? Math.ceil(
@@ -1537,6 +1556,7 @@ async function buildPdf(includeChecklist, includeFotos) {
                     try {
 
                         const dataUrl =
+                            photos[p].dataUrl ||
                             await blobToDataUrl(
                                 photos[p].blob
                             );
@@ -2498,7 +2518,7 @@ function importJson(file) {
                     data.comments || {},
 
                 measures:
-                    data.measures || {},
+                    data.measures || [],
 
                 signatures: {
                     ...defaultState().signatures,
@@ -2509,11 +2529,17 @@ function importJson(file) {
                     data.notApplicable || {}
             };
 
-            saveState();
-
             initCompanyForm();
             renderChecklist();
             renderCompanyInfoStrip();
+
+            // WICHTIG: saveState() erst NACH renderChecklist(), da dort die
+            // Kommentar-Nachruestung fuer die Maßnahmen passiert (siehe
+            // renderChecklist()). Vorher gespeichert, wuerde der
+            // nachgetragene Kommentar beim naechsten Laden (z. B. auf der
+            // Maßnahmenseite, die den Zustand frisch aus dem Speicher
+            // liest) wieder fehlen.
+            saveState();
 
             if (
                 typeof renderMeasures ===
