@@ -277,10 +277,10 @@ async function renderMeasures() {
 
 
                     ${
-                        measure.comment
+                        (state.comments && state.comments[measure.itemId])
                             ? `
                                 <p class="measure-comment">
-                                    Kommentar: ${measure.comment}
+                                    Kommentar: ${state.comments[measure.itemId]}
                                 </p>
                               `
                             : ''

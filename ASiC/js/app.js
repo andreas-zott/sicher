@@ -8,7 +8,7 @@ const STORAGE_KEY = 'begehungState';
 
 // Revisionsstand der App/Checkliste (in Fusszeile und PDF sichtbar,
 // bei inhaltlichen Aenderungen an Fragenkatalog/Massnahmen hochzaehlen)
-const APP_REVISION = '1.39';
+const APP_REVISION = '1.40';
 const APP_REVISION_DATE = '2026-09-01';
 
 function renderFooterMeta() {
@@ -1400,9 +1400,11 @@ async function buildPdf(includeChecklist, includeFotos) {
             const answerH =
                 answerLines.length * 4.3;
 
+            const kommentarText =
+                (state.comments && state.comments[measure.itemId]) || '';
             const commentLinesFuerHoehe =
-                (measure.comment && measure.comment.trim())
-                    ? doc.splitTextToSize('Beschreibung des Mangels: ' + measure.comment.trim(), innerWidth)
+                kommentarText.trim()
+                    ? doc.splitTextToSize('Beschreibung des Mangels: ' + kommentarText.trim(), innerWidth)
                     : [];
             const commentH =
                 commentLinesFuerHoehe.length > 0
@@ -1619,9 +1621,9 @@ async function buildPdf(includeChecklist, includeFotos) {
 
             cy += answerH + 6;
 
-            if (measure.comment && measure.comment.trim()) {
+            if (kommentarText.trim()) {
                 const commentLines = doc.splitTextToSize(
-                    'Beschreibung des Mangels: ' + measure.comment.trim(),
+                    'Beschreibung des Mangels: ' + kommentarText.trim(),
                     innerWidth
                 );
                 doc.setFont(undefined, 'italic');
