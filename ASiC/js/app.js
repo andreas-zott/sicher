@@ -8,7 +8,7 @@ const STORAGE_KEY = 'begehungState';
 
 // Revisionsstand der App/Checkliste (in Fusszeile und PDF sichtbar,
 // bei inhaltlichen Aenderungen an Fragenkatalog/Massnahmen hochzaehlen)
-const APP_REVISION = '1.36';
+const APP_REVISION = '1.37';
 const APP_REVISION_DATE = '2026-09-01';
 
 function renderFooterMeta() {
@@ -1381,6 +1381,15 @@ async function buildPdf(includeChecklist, includeFotos) {
             const answerH =
                 answerLines.length * 4.3;
 
+            const commentLinesFuerHoehe =
+                (measure.comment && measure.comment.trim())
+                    ? doc.splitTextToSize('Beschreibung des Mangels: ' + measure.comment.trim(), innerWidth)
+                    : [];
+            const commentH =
+                commentLinesFuerHoehe.length > 0
+                    ? commentLinesFuerHoehe.length * 4 + 5
+                    : 0;
+
             const statusH = 11;
 
             const cardHeight =
@@ -1393,6 +1402,7 @@ async function buildPdf(includeChecklist, includeFotos) {
                 photoGapAfter +
                 answerH +
                 6 +
+                commentH +
                 statusH +
                 padding;
 
@@ -1588,6 +1598,23 @@ async function buildPdf(includeChecklist, includeFotos) {
             );
 
             cy += answerH + 6;
+
+            if (measure.comment && measure.comment.trim()) {
+                const commentLines = doc.splitTextToSize(
+                    'Beschreibung des Mangels: ' + measure.comment.trim(),
+                    innerWidth
+                );
+                doc.setFont(undefined, 'italic');
+                doc.setFontSize(8.5);
+                doc.setTextColor(100, 116, 139);
+                doc.text(
+                    commentLines,
+                    margin + padding,
+                    cy
+                );
+                cy += commentLines.length * 4 + 5;
+                doc.setFont(undefined, 'normal');
+            }
 
             doc.setFont(undefined, 'bold');
             doc.setFontSize(7);
@@ -2080,6 +2107,18 @@ function renderChecklist() {
 
     if (!container) return;
 
+    // Nachruesten: Maßnahmen, die schon vor diesem Fix angelegt wurden
+    // (oder deren Kommentar sich seitdem geaendert hat, ohne dass
+    // updateComment() lief - z. B. nach dem Laden einer Begehung), bekommen
+    // hier den aktuellen Kommentar aus state.comments synchronisiert. Guenstige
+    // Pruefung, daher unproblematisch bei jedem renderChecklist()-Aufruf.
+    state.measures.forEach(m => {
+        const aktuellerKommentar = state.comments[m.itemId] || '';
+        if (m.comment !== aktuellerKommentar) {
+            m.comment = aktuellerKommentar;
+        }
+    });
+
     container.innerHTML =
         buildChecklistHtml(false);
 
@@ -2245,6 +2284,9 @@ function setRating(itemId, rating) {
             description:
                 getMeasureText(itemId),
 
+            comment:
+                state.comments[itemId] || '',
+
             responsible: '',
             dueDate: '',
             status: 'offen',
@@ -2259,6 +2301,16 @@ function setRating(itemId, rating) {
 function updateComment(itemId, value) {
     state.comments[itemId] =
         value;
+
+    // Falls zu dieser Frage bereits eine Maßnahme angelegt wurde (Bewertung
+    // "Mangel"), Kommentar dort synchron halten - unabhaengig davon, ob der
+    // Kommentar vor oder nach dem Anlegen der Maßnahme geschrieben/geaendert
+    // wurde. Die "description" (Maßnahmentext) bleibt davon unberuehrt, da
+    // sie im Aktionsplan frei editierbar ist.
+    const measure = state.measures.find(m => m.itemId === itemId);
+    if (measure) {
+        measure.comment = value;
+    }
 
     saveState();
 }
