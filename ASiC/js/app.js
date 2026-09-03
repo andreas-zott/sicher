@@ -9,7 +9,7 @@ const STORAGE_KEY = 'begehungState';
 // Revisionsstand der App/Checkliste (in Fusszeile und PDF sichtbar,
 // bei inhaltlichen Aenderungen an Fragenkatalog/Massnahmen hochzaehlen)
 const APP_REVISION = '1.40';
-const APP_REVISION_DATE = '2026-09-01';
+const APP_REVISION_DATE = '2026-09-03';
 
 function renderFooterMeta() {
     const el = document.getElementById('footer-version');
