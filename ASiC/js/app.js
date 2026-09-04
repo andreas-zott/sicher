@@ -8,8 +8,8 @@ const STORAGE_KEY = 'begehungState';
 
 // Revisionsstand der App/Checkliste (in Fusszeile und PDF sichtbar,
 // bei inhaltlichen Aenderungen an Fragenkatalog/Massnahmen hochzaehlen)
-const APP_REVISION = '1.40';
-const APP_REVISION_DATE = '2026-09-03';
+const APP_REVISION = '1.41';
+const APP_REVISION_DATE = '2026-09-04';
 
 function renderFooterMeta() {
     const el = document.getElementById('footer-version');
@@ -1770,37 +1770,44 @@ async function buildPdf(includeChecklist, includeFotos) {
 
     if (includeFotos) {
 
-        doc.addPage();
-
-        y = 18;
-
-        doc.setFont(undefined, 'bold');
-        doc.setFontSize(14);
-        doc.setTextColor(
-            28,
-            34,
-            38
-        );
-
-        doc.text(
-            'Fotodokumentation',
-            margin,
-            y
-        );
-
-        y += 9;
-
         const photos =
             await getUnlinkedPhotos();
 
-        await renderFotosSection(
-            doc,
-            y,
-            margin,
-            contentWidth,
-            pageHeight,
-            photos
-        );
+        // Abschnitt "Fotodokumentation" nur anlegen, wenn tatsaechlich
+        // (allgemeine, nicht einer Massnahme zugeordnete) Fotos vorhanden
+        // sind - sonst wuerde eine leere Seite mit nur der Ueberschrift
+        // im Gesamt-PDF erscheinen.
+        if (photos.length > 0) {
+
+            doc.addPage();
+
+            y = 18;
+
+            doc.setFont(undefined, 'bold');
+            doc.setFontSize(14);
+            doc.setTextColor(
+                28,
+                34,
+                38
+            );
+
+            doc.text(
+                'Fotodokumentation',
+                margin,
+                y
+            );
+
+            y += 9;
+
+            await renderFotosSection(
+                doc,
+                y,
+                margin,
+                contentWidth,
+                pageHeight,
+                photos
+            );
+        }
     }
 
     // Fotos zu einzelnen Massnahmen als eigener Anhang - unabhaengig vom
