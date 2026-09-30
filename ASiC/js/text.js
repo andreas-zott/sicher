@@ -81,9 +81,9 @@ const MEASURE_SOURCES = {
 const MEASURES_TEXT = {
 
     "Gesamtmarkt": {        "1.1": {
-            einfach: 'Achten Sie darauf, dass alle Mitarbeitenden festes, vorne geschlossenes und rutschfestes Schuhwerk tragen.',
-            bghw: 'Setzen Sie die Vorgaben zu sicherem Schuhwerk gemäß § 5 ArbSchG (Gefährdungsbeurteilung), DGUV Vorschrift 1 und DGUV Regel 108-601 „Branche Einzelhandel“ um: festes, im Zehenbereich geschlossenes und rutschhemmendes Schuhwerk. Maßgeblich sind mind. die Rutschhemmklassen SRA/SRB nach DIN EN ISO 20345/20347.',
-            rechtlich: 'Gemäß Gefährdungsbeurteilung und DGUV Vorschrift 1 ist sicherzustellen, dass alle Beschäftigten geeignetes, festes, geschlossenes und rutschhemmendes Schuhwerk tragen. Die Einhaltung ist regelmäßig zu kontrollieren. Die PSA-Kategorie ist anhand der Gefährdungsbeurteilung festzulegen (i. d. R. Rutschhemmklasse SRA/SRB nach DIN EN ISO 20345/20347); die Kontrolle ist im Rahmen der jährlichen Unterweisung nach § 12 ArbSchG zu dokumentieren.'
+            einfach: 'Stellen Sie für die jeweilige Tätigkeit geeignetes Schuhwerk bzw. erforderlichen Fußschutz mit ausreichender Rutschhemmung bereit bzw. sicher. Welche Anforderungen erforderlich sind, richtet sich nach der Gefährdungsbeurteilung, insbesondere nach Bodenbeschaffenheit, Nässe und möglichen Verunreinigungen.',
+            bghw: 'Wählen Sie geeignetes Schuhwerk bzw. erforderlichen Fußschutz auf Grundlage der Gefährdungsbeurteilung aus. Berücksichtigen Sie insbesondere Bodenbeschaffenheit, auftretende gleitfördernde Stoffe und die erforderliche Rutschhemmung. Die früheren Rutschhemmklassen SRA/SRB/SRC sind nicht mehr als aktuelle Mindestanforderung zu verwenden.',
+            rechtlich: 'Die Auswahl erforderlichen Fußschutzes erfolgt auf Grundlage der Gefährdungsbeurteilung. Anforderungen an Sicherheitsschuhe und deren Rutschhemmung werden insbesondere durch die jeweils einschlägigen Produktnormen und die DGUV Regel 112-191 konkretisiert. Die früheren Kennzeichnungen SRA, SRB und SRC sind für neu ausgewählten Fußschutz nicht als aktuelle Anforderung anzusetzen.'
         },
         "1.2": {
             einfach: 'Weisen Sie Ihre Mitarbeitenden regelmäßig ein, wie sie Hubwagen & Co. sicher benutzen: Schutzausrüstung tragen, Lasten nicht überladen, niemanden mitfahren lassen. Nur volljährige Beschäftigte mit Fahrauftrag dürfen mitfahrbare Geräte führen.',
@@ -91,9 +91,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Beschäftigte sind regelmäßig anhand der Betriebsanweisung zum sicheren Umgang mit Flurförderfahrzeugen zu unterweisen. PSA-Pflicht, Traglastbegrenzungen und das Verbot der Personenmitnahme sind konsequent einzuhalten. Fahrer mitfahrbarer Flurförderzeuge müssen mindestens 18 Jahre alt, körperlich/geistig geeignet und schriftlich beauftragt sein (§ 7 DGUV Vorschrift 68); die Unterweisung ist mindestens jährlich zu wiederholen (§ 4 Abs. 3 DGUV Vorschrift 68).'
         },
         "1.3": {
-            einfach: 'Lassen Sie die Automatiktüren umgehend prüfen. Schränken Sie den Betrieb bis dahin bei Bedarf ein und beheben Sie festgestellte Mängel zügig. Eine Sachkundigenprüfung ist ohnehin mindestens einmal jährlich Pflicht.',
-            bghw: 'Veranlassen Sie die Prüfung der Automatiktüren gemäß ASR A1.7 und der DGUV Regel 108-601 umgehend über einen Sachkundigen, schränken Sie den Betrieb bis dahin bei Bedarf ein und dokumentieren Sie die Mängelbeseitigung. Regelprüfintervall: mindestens jährlich durch eine sachkundige Person gemäß DIN 18650-2.',
-            rechtlich: 'Fachgerechte Prüfung der betroffenen Automatiktüren nach ASR A1.7 umgehend veranlassen. Betrieb bis zur Prüfung ggf. einschränken. Festgestellte Mängel zügig beheben und Dokumentation aktualisieren. Die Regelprüffrist für kraftbetätigte Türen/Tore beträgt gemäß DIN 18650-2 mindestens einmal jährlich durch eine sachkundige Person; das Ergebnis ist im Prüfbuch zu dokumentieren.'
+            einfach: 'Lassen Sie auffällige oder beschädigte Automatiktüren umgehend fachkundig prüfen und festgestellte Mängel beseitigen. Kraftbetätigte Türen sind wiederkehrend sicherheitstechnisch zu prüfen; die ASR A1.7 empfiehlt hierfür mindestens eine jährliche Prüfung.',
+            bghw: 'Veranlassen Sie bei Mängeln die Prüfung und Instandsetzung der Automatiktüren. Nach ASR A1.7 müssen kraftbetätigte Türen nach Herstellervorgaben vor der ersten Inbetriebnahme, nach wesentlichen Änderungen und wiederkehrend auf sicheren Zustand geprüft werden; die wiederkehrende Prüfung sollte mindestens einmal jährlich erfolgen.',
+            rechtlich: 'Nach ASR A1.7 Abschnitt 10.2 sind kraftbetätigte Türen nach Herstellervorgaben vor der ersten Inbetriebnahme, nach wesentlichen Änderungen sowie wiederkehrend sachgerecht auf sicheren Zustand zu prüfen. Die wiederkehrende Prüfung sollte mindestens einmal jährlich erfolgen; die Ergebnisse sind aufzuzeichnen und in der Arbeitsstätte aufzubewahren.'
         },
         "1.4": {
             einfach: 'Lassen Sie den Aufzug regelmäßig von einem Fachbetrieb prüfen und halten Sie ihn in einwandfreiem Zustand. Spätestens alle zwei Jahre ist die Prüfung durch eine zugelassene Prüfstelle (ZÜS) gesetzlich vorgeschrieben.',
@@ -106,9 +106,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Geeignete und geprüfte Aufstiegshilfen sind bereitzustellen. Die Nutzung hat gemäß DGUV Information 208-016 zu erfolgen. Ungeeignete Aufstiegshilfen wie Kisten, Regale oder Stühle sind zu untersagen; dies ist im Rahmen der Unterweisung nach § 12 ArbSchG zu kontrollieren.'
         },
         "1.7": {
-            einfach: 'Lassen Sie Leitern und Tritte regelmäßig prüfen und sortieren Sie beschädigte sofort aus. Als Richtwert gilt: mindestens einmal jährlich, mit Prüfplakette pro Leiter.',
-            bghw: 'Prüfen Sie Leitern und Tritte gemäß DGUV Information 208-016 und der DGUV Regel 108-601 durch eine befähigte Person in angemessenen Intervallen. Als Richtwert gilt mindestens jährlich (§ 3 Abs. 6 BetrSichV); führen Sie ein Kontrollblatt je Leiter mit Prüfplakette.',
-            rechtlich: 'Leitern und Tritte sind regelmäßig durch befähigte Personen zu prüfen. Beschädigte Leitern sind sofort auszusondern. Art, Umfang und Frist der Prüfung sind anhand der Gefährdungsbeurteilung festzulegen (§ 3 Abs. 6 BetrSichV); als Richtwert gilt mindestens jährlich. Beschädigte Leitern sind sofort der Nutzung zu entziehen (§ 5 BetrSichV).'
+            einfach: 'Kontrollieren Sie Leitern und Tritte vor der Verwendung auf erkennbare Mängel und lassen Sie sie wiederkehrend prüfen. Die BGHW empfiehlt mindestens eine jährliche Prüfung. Beschädigte Leitern und Tritte sofort aus der Benutzung nehmen.',
+            bghw: 'Leitern und Tritte sind vor der Verwendung auf ordnungsgemäßen Zustand zu kontrollieren und wiederkehrend einer Sicht- und Funktionsprüfung zu unterziehen. Die Prüffrist ist unter Berücksichtigung von Nutzungshäufigkeit, Beanspruchung und bisherigen Mängeln festzulegen. Die BGHW empfiehlt mindestens eine jährliche Prüfung. Eine Prüfplakette kann die Organisation unterstützen, wird hier aber nicht als allgemeine gesetzliche Pflicht dargestellt.',
+            rechtlich: 'Art, Umfang und Fristen erforderlicher Prüfungen sind auf Grundlage der Gefährdungsbeurteilung festzulegen. Nach DGUV Information 208-016 richten sich die Zeitabstände insbesondere nach Nutzungshäufigkeit, Beanspruchung sowie Häufigkeit und Schwere festgestellter Mängel; eine mindestens jährliche Prüfung wird empfohlen. Eine pauschale gesetzliche Pflicht zu einer Prüfplakette wird daraus nicht abgeleitet.'
         },
         "1.8": {
             einfach: 'Nutzen Sie nur die freigegebenen Sicherheitsmesser aus dem Ordersatz.',
@@ -131,19 +131,19 @@ const MEASURES_TEXT = {
             rechtlich: 'Betriebsanweisungen sind gemäß § 14 GefStoffV bzw. § 4 BetrSichV aktuell, zugänglich und für Beschäftigte verständlich bereitzustellen. Betriebsanweisungen sind in einer für die Beschäftigten verständlichen Form und Sprache abzufassen (§ 14 Abs. 1 GefStoffV) und regelmäßig auf Aktualität zu prüfen.'
         },
         "1.12": {
-            einfach: 'Sorgen Sie für ausreichend helles Licht in Verkauf und Lager, damit Gefahrenhinweise und Flüssigkeiten im Regal gut zu erkennen sind.',
-            bghw: 'Stellen Sie die Beleuchtung in Verkaufs- und Lagerbereichen gemäß ASR A3.4 entsprechend der ermittelten Beleuchtungsanforderungen und der DGUV Regel 108-601 sicher, damit Gefahrenhinweise und Leckagen zuverlässig erkennbar sind.',
-            rechtlich: 'Die Beleuchtung ist gemäß ASR A3.4 entsprechend der Tätigkeit, Raumgröße und Sehaufgabe ausreichend zu dimensionieren. Gefahrenstellen und Leckagen müssen sicher erkennbar sein. Als Anhaltswert gilt nach ASR A3.4 Anhang 1 für Verkaufsräume üblicherweise mindestens 300 Lux, für Lagerbereiche mindestens 100–200 Lux, je nach Sehaufgabe.'
+            einfach: 'Sorgen Sie für ausreichende und funktionsfähige Beleuchtung. Im Verkaufsbereich sind nach ASR A3.4 mindestens 300 lx erforderlich, im Kassenbereich und am Packtisch mindestens 500 lx. Für Lagerbereiche richtet sich die erforderliche Beleuchtungsstärke nach der jeweiligen Tätigkeit und Sehaufgabe.',
+            bghw: 'Stellen Sie eine ausreichende Beleuchtung entsprechend ASR A3.4 sicher. Für Verkaufsbereiche gilt ein Mindestwert von 300 lx, für Kassenbereiche und Packtische 500 lx. Lager- und Nebenbereiche sind entsprechend der dort ausgeübten Tätigkeiten und Sehaufgaben zu beleuchten.',
+            rechtlich: 'Nach ArbStättV in Verbindung mit ASR A3.4 sind Arbeitsstätten entsprechend der jeweiligen Tätigkeit ausreichend zu beleuchten. Die ASR A3.4 nennt für Verkaufsbereiche mindestens 300 lx und für Kassenbereiche und Packtische mindestens 500 lx. Für Lagerbereiche sind die jeweils einschlägigen tätigkeitsbezogenen Mindestwerte anzuwenden.'
         },
         "1.13": {
-            einfach: 'Lassen Sie das Schnelllauftor umgehend vom Hersteller oder einem Fachmann prüfen und reparieren. Nutzen Sie den Torbereich bis dahin besonders vorsichtig. Kraftbetätigte Tore sind mindestens einmal jährlich sachkundig zu prüfen.',
-            bghw: 'Veranlassen Sie die Prüfung und ggf. Instandsetzung des Schnelllauftors gemäß § 14 BetrSichV und der DGUV Regel 108-601 unverzüglich über einen Sachkundigen bzw. den Hersteller; der Torbereich ist bis zur Mängelfreiheit mit besonderer Vorsicht zu nutzen. Die Prüffrist beträgt gemäß DIN EN 13241 i. V. m. ASR A1.7 mindestens jährlich durch eine sachkundige Person.',
-            rechtlich: 'Prüfung und ggf. erforderliche Instandsetzung des Schnelllauftors sind gemäß § 14 BetrSichV unverzüglich über einen Sachkundigen bzw. den Hersteller zu veranlassen. Bis zur Mängelfreiheit ist der Torbereich mit besonderer Vorsicht zu nutzen. Kraftbetätigte Tore sind gemäß DIN EN 13241 i. V. m. § 14 BetrSichV mindestens jährlich durch eine sachkundige Person zu prüfen; das Ergebnis ist zu dokumentieren.'
+            einfach: 'Lassen Sie ein mangelhaftes Schnelllauftor umgehend fachkundig prüfen und instand setzen. Kraftbetätigte Tore sind wiederkehrend sicherheitstechnisch zu prüfen; die ASR A1.7 empfiehlt mindestens eine jährliche Prüfung.',
+            bghw: 'Veranlassen Sie bei Mängeln Prüfung und Instandsetzung des Schnelllauftors. Nach ASR A1.7 erfolgt die wiederkehrende sicherheitstechnische Prüfung nach den Vorgaben des Herstellers; sie sollte mindestens einmal jährlich durchgeführt werden.',
+            rechtlich: 'Nach ASR A1.7 Abschnitt 10.2 sind kraftbetätigte Tore nach Herstellervorgaben vor der ersten Inbetriebnahme, nach wesentlichen Änderungen und wiederkehrend sachgerecht auf sicheren Zustand zu prüfen. Die wiederkehrende Prüfung sollte mindestens einmal jährlich erfolgen; die Ergebnisse sind aufzuzeichnen.'
         },
         "1.14": {
-            einfach: 'Lassen Sie das Rolltor zeitnah von einem Fachmann prüfen und warten und halten Sie den Zustand schriftlich fest. Auch Rolltore sind mindestens einmal jährlich sachkundig zu prüfen.',
-            bghw: 'Veranlassen Sie die Sachkundigenprüfung sowie die erforderliche Wartung des Rolltors gemäß § 14 BetrSichV und der DGUV Regel 108-601 kurzfristig und dokumentieren Sie den Zustand im Prüfbuch. Die Prüffrist beträgt gemäß DIN EN 13241 mindestens jährlich durch eine sachkundige Person.',
-            rechtlich: 'Sachkundigenprüfung sowie erforderliche Wartung des Rolltors sind gemäß § 14 BetrSichV kurzfristig zu veranlassen; der ordnungsgemäße Zustand ist im Prüfbuch zu dokumentieren. Rolltore sind gemäß DIN EN 13241 i. V. m. § 14 BetrSichV mindestens jährlich durch eine sachkundige Person zu prüfen und im Prüfbuch zu dokumentieren.'
+            einfach: 'Lassen Sie ein mangelhaftes Rolltor fachkundig prüfen und instand setzen. Die erforderliche Wartung ist nach Herstellervorgaben durchzuführen. Die wiederkehrende sicherheitstechnische Prüfung sollte nach ASR A1.7 mindestens einmal jährlich erfolgen.',
+            bghw: 'Veranlassen Sie Prüfung, erforderliche Wartung und Instandsetzung des Rolltors nach Herstellervorgaben und ASR A1.7. Die wiederkehrende sicherheitstechnische Prüfung sollte mindestens einmal jährlich durchgeführt werden.',
+            rechtlich: 'Nach ASR A1.7 Abschnitt 10.2 sind kraftbetätigte Tore nach Herstellervorgaben wiederkehrend sachgerecht auf sicheren Zustand zu prüfen. Die wiederkehrende Prüfung sollte mindestens einmal jährlich erfolgen; die Ergebnisse sind aufzuzeichnen und in der Arbeitsstätte aufzubewahren.'
         }
     },
     "Brandschutz": {        "2.1": {
@@ -157,9 +157,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Feuerlöscher und Wandhydranten sind gemäß ASR A2.2 jederzeit frei zugänglich zu halten und nach ASR A1.3 zu kennzeichnen. Freihaltung und Kennzeichnung sind nach ASR A2.2 i. V. m. ASR A1.3 (Sicherheitskennzeichnung) sicherzustellen.'
         },
         "2.3": {
-            einfach: 'Kontrollieren Sie regelmäßig, ob die Plomben an den Wandhydranten unversehrt sind. Zusätzlich zur Sichtkontrolle ist eine technische Prüfung der Wandhydranten mindestens jährlich vorgeschrieben.',
-            bghw: 'Kontrollieren Sie die Prüfsiegel der Wandhydranten im Rahmen der gemäß der DGUV Regel 108-601 „Branche Einzelhandel“ durchgeführten Brandschutzbegehung regelmäßig auf Unversehrtheit. Wandhydranten sind zusätzlich zur Plombenkontrolle gemäß DIN 1988-600 mindestens jährlich technisch zu prüfen.',
-            rechtlich: 'Wandhydranten sind entsprechend den festgelegten Prüf- und Wartungsanforderungen zu kontrollieren; die Prüfung ist nachvollziehbar zu dokumentieren. ASR A2.2 enthält die Anforderungen an die Bereitstellung und Instandhaltung der Einrichtungen zur Brandbekämpfung. Wandhydranten sind gemäß DIN 1988-600 mindestens jährlich einer technischen Prüfung zu unterziehen; die Sichtkontrolle der Plomben erfolgt ergänzend im Rahmen der betrieblichen Brandschutzbegehung.'
+            einfach: 'Kontrollieren Sie Wandhydranten regelmäßig auf erkennbare Mängel und stellen Sie die vorgeschriebene Instandhaltung und Funktionsprüfung nach den für die Anlage geltenden Vorgaben sicher.',
+            bghw: 'Stellen Sie die regelmäßigen Betreiberkontrollen sowie die fachgerechte Instandhaltung der Wandhydrantenanlage sicher. Maßgeblich sind insbesondere Brandschutzkonzept, Herstellerangaben und die aktuelle DIN 14462; festgestellte Mängel sind zu beseitigen und Kontrollen bzw. Instandhaltung nachvollziehbar zu dokumentieren.',
+            rechtlich: 'Wandhydranten und Löschwasseranlagen sind funktionsfähig zu halten und entsprechend den für die konkrete Anlage geltenden Vorgaben zu kontrollieren und instand zu halten. Für Planung, Betrieb und Instandhaltung ist insbesondere DIN 14462:2023-07 einschlägig; DIN 1988-600 betrifft insbesondere die Anbindung an Trinkwasserinstallationen und ist nicht alleinige Grundlage für die wiederkehrende Instandhaltung.'
         },
         "2.4": {
             einfach: 'Stellen Sie nichts vor Brandschutztüren und blockieren Sie sie nicht.',
@@ -182,9 +182,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Ein aktueller Flucht- und Rettungsplan ist gemäß ASR A2.3 zu erstellen und an geeigneten Stellen gut sichtbar auszuhängen. Der Flucht- und Rettungsplan ist gemäß ASR A2.3 Anlage 1 nach DIN ISO 23601 zu gestalten und bei baulichen oder organisatorischen Änderungen zu aktualisieren.'
         },
         "2.8": {
-            einfach: 'Prüfen Sie regelmäßig, ob die Notbeleuchtung noch funktioniert. Notwendig sind: wöchentlicher Funktionstest, jährlicher Volltest der gesamten Betriebsdauer und alle drei Jahre eine Prüfung durch einen Sachverständigen.',
-            bghw: 'Prüfen Sie die Sicherheits- und Notbeleuchtung gemäß ASR A3.4 und der DGUV Regel 108-601 in regelmäßigen Intervallen (in der Regel jährlich) auf Funktion. Erforderlich sind: wöchentlicher Funktionstest, jährlicher Volltest (Bemessungsbetriebsdauer) sowie eine Sachverständigenprüfung alle drei Jahre gemäß DIN V VDE V 0108-100 / DIN EN 50172.',
-            rechtlich: 'Die Sicherheits- und Notbeleuchtung ist gemäß ASR A2.3 und den einschlägigen elektrotechnischen Regeln regelmäßig auf Funktionsfähigkeit zu prüfen. Die Sicherheits- und Notbeleuchtung ist gemäß DIN V VDE V 0108-100 / DIN EN 50172 wöchentlich (Funktionstest), jährlich (Volltest der Bemessungsbetriebsdauer) sowie alle drei Jahre durch einen Sachverständigen zu prüfen; ein Prüfbuch ist mindestens vier Jahre aufzubewahren.'
+            einfach: 'Lassen Sie die Sicherheitsbeleuchtung regelmäßig auf Funktion prüfen und festgestellte Mängel unverzüglich beseitigen. Prüfintervalle und Prüfumfang richten sich nach Herstellerangaben und den anerkannten Regeln der Technik.',
+            bghw: 'Stellen Sie die regelmäßige Funktionsprüfung und Instandhaltung der Sicherheitsbeleuchtung gemäß ASR A2.3 sicher. Abstände und Umfang der Prüfungen sowie die Dokumentation richten sich nach Herstellerangaben und den anerkannten Regeln der Technik.',
+            rechtlich: 'Nach ASR A2.3 ist die Sicherheitsbeleuchtung instand zu halten und in regelmäßigen Abständen auf ihre Funktionsfähigkeit zu prüfen. Abstände und Umfang der Prüfung sowie die Dokumentationspflicht ergeben sich aus den Herstellerangaben und den anerkannten Regeln der Technik. Festgestellte Mängel sind unverzüglich sachgerecht zu beseitigen.'
         },
         "2.9": {
             einfach: 'Halten Sie Fluchtwege und Notausgänge komplett frei – innen wie außen.',
@@ -233,9 +233,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Kaffeemaschine und andere hitzeentwickelnde Geräte sind auf Grundlage der Gefährdungsbeurteilung und der Anforderungen an den Brandschutz so aufzustellen und zu betreiben, dass Brandgefährdungen vermieden werden (§§ 3, 4 ArbSchG; § 4 ArbStättV; ASR A2.2). Der erforderliche Sicherheitsabstand zu brennbaren Materialien richtet sich nach Herstellerangaben und der Gefährdungsbeurteilung (§ 5 ArbSchG).'
         },
         "3.3": {
-            einfach: 'Lassen Sie Kabel, Steckdosen und Geräte regelmäßig auf Sicherheit prüfen. Als Richtwert gilt: alle 6 bis 24 Monate, je nach Beanspruchung.',
-            bghw: 'Prüfen Sie ortsveränderliche elektrische Betriebsmittel gemäß DGUV Vorschrift 3 und der DGUV Regel 108-601 in angemessenen Intervallen. Als Richtwert nach DGUV Vorschrift 3 Anhang 1 Tabelle 1B gilt: ortsveränderliche Betriebsmittel alle 6–24 Monate, abhängig von Nutzungsintensität und Fehlerquote (< 2 %).',
-            rechtlich: 'Ortsveränderliche elektrische Betriebsmittel sind gemäß DGUV Vorschrift 3 in angemessenen Zeitabständen zu prüfen. Ortsveränderliche elektrische Betriebsmittel sind gemäß DGUV Vorschrift 3 Anhang 1 Tabelle 1B als Richtwert alle 6 bis 24 Monate zu prüfen; die konkrete Frist ist anhand der Gefährdungsbeurteilung nach § 3 BetrSichV festzulegen und bei einer Fehlerquote über 2 % zu verkürzen.'
+            einfach: 'Lassen Sie elektrische Betriebsmittel in den anhand der Gefährdungsbeurteilung festgelegten Fristen prüfen. Prüffristen müssen zu Einsatzbedingungen und Beanspruchung passen; erkennbare Mängel sind sofort zu beseitigen bzw. das Gerät ist außer Betrieb zu nehmen.',
+            bghw: 'Prüfen Sie ortsveränderliche elektrische Betriebsmittel gemäß DGUV Vorschrift 3 in angemessenen, anhand der Gefährdungsbeurteilung festgelegten Intervallen. Die Durchführungsanweisung nennt sechs Monate als Richtwert; die Frist kann anhand der Einsatzbedingungen und der bei Prüfungen festgestellten Fehlerquote angepasst werden.',
+            rechtlich: 'Nach § 5 DGUV Vorschrift 3 sind elektrische Anlagen und Betriebsmittel auf ordnungsgemäßen Zustand zu prüfen. Für ortsveränderliche elektrische Betriebsmittel nennt die Durchführungsanweisung einen Richtwert von sechs Monaten. Die konkrete Prüffrist ist unter Berücksichtigung von Einsatzbedingungen, Beanspruchung und Fehlerquote festzulegen.'
         },
         "3.4": {
             einfach: 'Halten Sie den Pausenraum frei von Lagergut, damit er wirklich der Erholung dient.',
@@ -259,9 +259,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Die Dokumentation von Erste-Hilfe-Leistungen ist gemäß DGUV Information 204-020 ordnungsgemäß zu führen. Aufzeichnungen über Erste-Hilfe-Leistungen sind gemäß DGUV Information 204-020 mindestens fünf Jahre nach dem Unfalltag aufzubewahren.'
         },
         "4.4": {
-            einfach: 'Stellen Sie sicher, dass während der ganzen Öffnungszeit genug ausgebildete Ersthelfer da sind. Für Handel/Verwaltung gilt: bei 2–20 Beschäftigten mind. 1 Ersthelfer, ab 21 Beschäftigten mind. 10 % der Anwesenden.',
-            bghw: 'Stellen Sie die nach DGUV Vorschrift 1 und der DGUV Regel 108-601 erforderliche Anzahl ausgebildeter Ersthelfer während der gesamten Öffnungszeit sicher. Für Handel und Verwaltung gilt gemäß § 26 DGUV Vorschrift 1: bei 2–20 Beschäftigten mindestens 1 Ersthelfer, bei mehr als 20 Beschäftigten mindestens 10 %.',
-            rechtlich: 'Während der gesamten Öffnungszeit ist die nach DGUV Vorschrift 1 erforderliche Anzahl ausgebildeter Ersthelfer anwesend zu halten. Die Mindestzahl der Ersthelfer ergibt sich aus § 26 Abs. 2 DGUV Vorschrift 1: in Verwaltungs- und Handelsbetrieben bei 2 bis 20 anwesenden Versicherten mindestens 1 Ersthelfer, bei mehr als 20 Versicherten mindestens 10 %; die Anwesenheit ist während der gesamten Öffnungszeit sicherzustellen.'
+            einfach: 'Sorgen Sie dafür, dass während der Arbeitszeit ausreichend ausgebildete Ersthelfer zur Verfügung stehen. Bei 2 bis 20 anwesenden Versicherten ist mindestens ein Ersthelfer erforderlich. Bei mehr als 20 anwesenden Versicherten müssen in Verwaltungs- und Handelsbetrieben grundsätzlich mindestens 5 % als Ersthelfer zur Verfügung stehen.',
+            bghw: 'Stellen Sie sicher, dass die nach § 26 Abs. 1 DGUV Vorschrift 1 erforderliche Zahl an Ersthelfern zur Verfügung steht. Bei 2 bis 20 anwesenden Versicherten ist mindestens ein Ersthelfer erforderlich; bei mehr als 20 anwesenden Versicherten sind in Verwaltungs- und Handelsbetrieben grundsätzlich 5 % als Ersthelfer erforderlich. Berücksichtigen Sie Schichtbetrieb und Abwesenheiten bei der Organisation.',
+            rechtlich: 'Nach § 26 Abs. 1 DGUV Vorschrift 1 hat der Unternehmer dafür zu sorgen, dass bei 2 bis 20 anwesenden Versicherten mindestens ein Ersthelfer und bei mehr als 20 anwesenden Versicherten in Verwaltungs- und Handelsbetrieben grundsätzlich 5 % der anwesenden Versicherten als Ersthelfer zur Verfügung stehen.'
         },
         "4.5": {
             einfach: 'Hängen Sie die Notrufnummer gut sichtbar aus.',
@@ -285,9 +285,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Von der Decke geführte Leitungen und Steckverbindungen sind durch geeignete mechanische Zugentlastungen so zu sichern, dass keine Zugkräfte auf die elektrischen Kontaktstellen wirken (DGUV Vorschrift 3). Zugentlastungen sind so zu bemessen, dass keine mechanische Zugkraft auf Steckverbindungen und Anschlussklemmen übertragen wird (DGUV Vorschrift 3, DIN VDE 0100-520).'
         },
         "5.3": {
-            einfach: 'Prüfen Sie Steckdosen und Kabel regelmäßig auf Schäden. Als Richtwert gilt: alle 6 bis 24 Monate, je nach Beanspruchung.',
-            bghw: 'Kontrollieren Sie Steckdosen und Kabel gemäß DGUV Vorschrift 3 in den von der DGUV Regel 108-601 „Branche Einzelhandel“ empfohlenen Intervallen (ortsveränderliche Betriebsmittel in der Regel jährlich). Als Richtwert nach DGUV Vorschrift 3 Anhang 1 Tabelle 1B gilt: 6–24 Monate für ortsveränderliche Betriebsmittel, 4 Jahre für ortsfeste Anlagen.',
-            rechtlich: 'Steckdosen und Kabel sind regelmäßig auf ihren ordnungsgemäßen Zustand zu prüfen (DGUV Vorschrift 3). Prüffristen richten sich nach DGUV Vorschrift 3 Anhang 1 Tabelle 1B: als Richtwert 6–24 Monate für ortsveränderliche Betriebsmittel und bis zu 4 Jahre für ortsfeste Anlagen; maßgeblich ist die anhand der Gefährdungsbeurteilung (§ 3 BetrSichV) ermittelte Fehlerquote (Verlängerung nur bei < 2 % Fehlerquote).'
+            einfach: 'Kontrollieren Sie Steckdosen, Leitungen und elektrische Geräte auf erkennbare Schäden und lassen Sie erforderliche elektrische Prüfungen in den festgelegten Fristen durchführen.',
+            bghw: 'Stellen Sie Prüfungen elektrischer Anlagen und Betriebsmittel gemäß DGUV Vorschrift 3 sicher. Prüffristen sind anhand der Gefährdungsbeurteilung, der Einsatzbedingungen und der betrieblichen Erfahrungen festzulegen; für unterschiedliche Anlagen und Betriebsmittel gelten unterschiedliche Richtwerte.',
+            rechtlich: 'Nach § 5 DGUV Vorschrift 3 sind elektrische Anlagen und Betriebsmittel vor der ersten Inbetriebnahme bzw. nach Änderung oder Instandsetzung sowie in bestimmten Zeitabständen auf ordnungsgemäßen Zustand zu prüfen. Die Prüffristen sind so festzulegen, dass entstehende Mängel rechtzeitig festgestellt werden; Richtwerte der Durchführungsanweisung sind unter Berücksichtigung der betrieblichen Bedingungen anzuwenden.'
         },
         "5.4": {
             einfach: 'Lassen Sie Kabelverbindungen nicht offen auf dem Boden liegen, z. B. unter Kühltruhen.',
@@ -301,9 +301,9 @@ const MEASURES_TEXT = {
         }
     },
     "CO2 Kühleinrichtungen": {        "6.1": {
-            einfach: 'Weisen Sie alle, die sich in der Nähe von Kühlanlagen aufhalten, in die Gefahren ein.',
-            bghw: 'Unterweisen Sie Beschäftigte im Bereich von CO2-Kühlanlagen gemäß § 12 ArbSchG, DGUV Regel 110-008 und der DGUV Regel 108-601 zu den spezifischen Gefahren.',
-            rechtlich: 'Personen, die sich im Bereich von CO2-Kühlanlagen oder Kühlhäusern aufhalten, sind gemäß § 12 ArbSchG und DGUV Regel 110-008 zu unterweisen. Die Unterweisung ist gemäß § 12 ArbSchG vor Aufnahme der Tätigkeit und danach mindestens jährlich zu wiederholen und muss Verhalten bei Alarm sowie Fluchtwege umfassen (DGUV Regel 110-008 Abschn. 5).'
+            einfach: 'Unterweisen Sie Beschäftigte vor Aufnahme der Tätigkeit über die Gefahren von CO₂-Kälteanlagen, das Verhalten bei Alarm und die Fluchtwege. Wiederholen Sie die Unterweisung entsprechend den Gefährdungen, mindestens jedoch jährlich.',
+            bghw: 'Unterweisen Sie Beschäftigte im Bereich von CO₂-Kälteanlagen tätigkeitsbezogen über die spezifischen Gefahren, Alarmierung und das Verhalten im Notfall. Die Wiederholung erfolgt nach § 4 Abs. 1 DGUV Vorschrift 1 erforderlichenfalls, mindestens jedoch einmal jährlich.',
+            rechtlich: 'Die tätigkeitsbezogene Unterweisung ist nach § 12 ArbSchG durchzuführen. Nach § 4 Abs. 1 DGUV Vorschrift 1 muss sie erforderlichenfalls wiederholt werden, mindestens jedoch einmal jährlich. Bei CO₂-Kälteanlagen sind die spezifischen Gefährdungen und Notfallmaßnahmen zu berücksichtigen.'
         },
         "6.2": {
             einfach: 'Prüfen Sie, ob sich die Notentriegelung leicht öffnen lässt.',
@@ -353,9 +353,9 @@ const MEASURES_TEXT = {
         }
     },
     "Lager und Regale": {        "8.1": {
-            einfach: 'Lassen Sie den elektrischen Hubwagen regelmäßig prüfen und beheben Sie Schäden sofort.',
-            bghw: 'Lassen Sie den elektrischen Hubwagen gemäß DGUV Vorschrift 68 und der DGUV Regel 108-601 regelmäßig prüfen.',
-            rechtlich: 'Der elektrische Hubwagen ist gemäß DGUV Vorschrift 68 wiederkehrend zu prüfen; Schutzeinrichtungen müssen funktionsfähig sein. Der elektrische Hubwagen ist gemäß § 37 Abs. 2 DGUV Vorschrift 68 mindestens jährlich durch eine befähigte Person zu prüfen; das Ergebnis ist in einem Prüfbuch zu dokumentieren.'
+            einfach: 'Lassen Sie Flurförderzeuge, z. B. elektrische Hubwagen, in Abständen von längstens einem Jahr durch einen Sachkundigen prüfen. Festgestellte Mängel sind zu beheben und die Prüfung ist nachzuweisen.',
+            bghw: 'Lassen Sie Flurförderzeuge und ihre Anbaugeräte gemäß § 37 Abs. 1 DGUV Vorschrift 68 in Abständen von längstens einem Jahr durch einen Sachkundigen prüfen. Sorgen Sie dafür, dass sicherheitsrelevante Mängel beseitigt werden und ein Prüfnachweis geführt wird.',
+            rechtlich: 'Nach § 37 Abs. 1 DGUV Vorschrift 68 sind Flurförderzeuge und ihre Anbaugeräte in Abständen von längstens einem Jahr durch einen Sachkundigen zu prüfen. Nach § 39 DGUV Vorschrift 68 ist über die wiederkehrenden Prüfungen ein Prüfnachweis zu führen.'
         },
         "8.2": {
             einfach: 'Kontrollieren Sie den Gabelhubwagen regelmäßig auf Schäden.',
@@ -363,9 +363,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Der Gabelhubwagen ist gemäß § 3 DGUV Vorschrift 1 regelmäßig auf seinen ordnungsgemäßen Zustand zu prüfen. Für handgeführte Flurförderzeuge ist als Richtwert eine jährliche Prüfung durch eine befähigte Person angemessen (§ 3 Abs. 6 BetrSichV).'
         },
         "8.3": {
-            einfach: 'Lassen Sie die Schwerlastregale regelmäßig von einem Fachmann prüfen. Nötig sind eine wöchentliche Sichtkontrolle durch geschultes Personal und eine jährliche Expertenprüfung.',
-            bghw: 'Lassen Sie Schwerlastregale gemäß DGUV Information 208-061 und der DGUV Regel 108-601 regelmäßig durch eine befähigte Person prüfen. Erforderlich sind eine wöchentliche Sichtkontrolle durch unterwiesenes Personal sowie mindestens jährlich eine Experteninspektion durch eine befähigte Person gemäß DIN EN 15635 und § 10 BetrSichV.',
-            rechtlich: 'Schwerlastregale sind gemäß DGUV Information 208-061 regelmäßig durch eine befähigte Person zu prüfen. Regalanlagen sind gemäß DIN EN 15635 i. V. m. § 10 BetrSichV zweistufig zu prüfen: wöchentliche Sichtkontrolle durch unterwiesenes Personal sowie mindestens jährliche Experteninspektion durch eine befähigte Person (Regalinspekteur); Schadensklassen sind nach dem Ampelsystem (grün/orange/rot) zu bewerten und Rot-Befunde sofort zu sperren.'
+            einfach: 'Kontrollieren Sie Regale regelmäßig auf Schäden. Legen Sie die Abstände der Sichtkontrollen anhand der Gefährdung fest. Bei entsprechend prüfpflichtigen Regalanlagen ist zusätzlich mindestens alle 12 Monate eine Experteninspektion durch eine fachkundige Person durchzuführen.',
+            bghw: 'Sorgen Sie für regelmäßige Kontrollen der Regalanlagen. Sichtkontrollen sind in kürzeren Zeitabständen durchzuführen – wöchentlich oder in Abständen, die auf Grundlage einer Risikoanalyse festgelegt werden. Die Experteninspektion ist mindestens alle 12 Monate durch eine fachkundige Person durchzuführen. Festgestellte Schäden sind zu bewerten und erforderliche Maßnahmen einzuleiten.',
+            rechtlich: 'Für Regalanlagen konkretisiert DGUV Information 208-043 die wiederkehrenden Kontrollen: Eine Experteninspektion ist mindestens alle 12 Monate durch eine fachkundige Person durchzuführen. Zusätzliche Inspektionen bzw. Sichtkontrollen erfolgen in kürzeren Zeitabständen, wöchentlich oder in anhand einer Risikoanalyse festgelegten Abständen.'
         },
         "8.4": {
             einfach: 'Bringen Sie an den Regalen einen Anfahrschutz an.',
@@ -388,9 +388,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Die Absturzsicherung ist regelmäßig auf ihren ordnungsgemäßen Zustand und ihre Kennzeichnung zu prüfen (ASR A2.1). Die Kennzeichnung erfolgt nach ASR A1.3 (Sicherheits- und Gesundheitsschutzkennzeichnung); Beschädigungen sind im Rahmen der wöchentlichen Sichtkontrolle zu erfassen.'
         },
         "8.8": {
-            einfach: 'Lassen Sie die Müll-/Papierpresse regelmäßig prüfen.',
-            bghw: 'Lassen Sie die Müll-/Papierpresse gemäß § 14 BetrSichV und der DGUV Regel 108-601 regelmäßig prüfen.',
-            rechtlich: 'Die Müll-/Papierpresse ist gemäß § 14 BetrSichV wiederkehrend durch eine befähigte Person zu prüfen. Die Müll-/Papierpresse ist gemäß § 14 BetrSichV vor erstmaliger Inbetriebnahme und danach wiederkehrend, als Richtwert mindestens jährlich, durch eine befähigte Person zu prüfen.'
+            einfach: 'Legen Sie für die Müll- bzw. Papierpresse die erforderlichen Kontrollen und Prüfungen anhand der Gefährdungsbeurteilung und Herstellerangaben fest und lassen Sie diese fristgerecht durchführen.',
+            bghw: 'Ermitteln Sie für die Müll- bzw. Papierpresse Art, Umfang und Fristen erforderlicher Kontrollen und Prüfungen nach BetrSichV. Berücksichtigen Sie insbesondere schädigende Einflüsse, Einsatzbedingungen und Herstellerangaben; erforderliche Prüfungen sind durch entsprechend qualifizierte Personen durchzuführen.',
+            rechtlich: 'Nach § 3 Abs. 6 BetrSichV sind Art und Umfang erforderlicher Prüfungen sowie die Fristen wiederkehrender Prüfungen zu ermitteln und festzulegen. Ob und in welchen Fristen Prüfungen nach § 14 BetrSichV erforderlich sind, richtet sich nach den dort genannten Voraussetzungen und der Gefährdungsbeurteilung; eine pauschale jährliche Prüffrist gilt nicht für jede Presse.'
         },
         "8.9": {
             einfach: 'Kontrollieren Sie die Presse auf Schäden, funktionierende Schutzeinrichtungen und festen Stand.',
@@ -497,9 +497,9 @@ const MEASURES_TEXT = {
         }
     },
     "Backstation": {        "12.1": {
-            einfach: 'Kontrollieren Sie Backofen, Backbleche und Brotschneidemaschine regelmäßig auf ihren Zustand.',
-            bghw: 'Kontrollieren Sie die Arbeitsgeräte der Backstation gemäß DGUV Vorschrift 3 und der DGUV Regel 108-601 regelmäßig auf ihren ordnungsgemäßen Zustand.',
-            rechtlich: 'Die Arbeitsgeräte an der Backstation (Backofen, Backbleche, Brotschneidemaschine) sind regelmäßig auf ihren ordnungsgemäßen Zustand zu prüfen (DGUV Vorschrift 3). Als Richtwert für ortsfeste Küchen-/Backgeräte gilt eine wiederkehrende Prüfung alle 4 Jahre, für ortsveränderliche Geräte 6–24 Monate (DGUV Vorschrift 3 Anhang 1 Tabelle 1B).'
+            einfach: 'Kontrollieren Sie Backofen, Backbleche und Brotschneidemaschine regelmäßig auf sicheren Zustand. Elektrische Geräte sind entsprechend der festgelegten Prüffristen elektrisch zu prüfen; für Maschinen können zusätzliche Kontrollen oder Prüfungen erforderlich sein.',
+            bghw: 'Stellen Sie für die Arbeitsmittel der Backstation die nach Gefährdungsbeurteilung erforderlichen Kontrollen und Prüfungen sicher. Elektrische Prüfungen richten sich nach DGUV Vorschrift 3; bei Maschinen sind zusätzlich BetrSichV, Einsatzbedingungen und Herstellerangaben zu berücksichtigen.',
+            rechtlich: 'Art, Umfang und Fristen erforderlicher Prüfungen sind abhängig vom jeweiligen Arbeitsmittel festzulegen. Für elektrische Anlagen und Betriebsmittel gilt insbesondere § 5 DGUV Vorschrift 3; für Arbeitsmittel sind zusätzlich die einschlägigen Anforderungen der BetrSichV und die Gefährdungsbeurteilung zu berücksichtigen.'
         },
         "12.2": {
             einfach: 'Beheben Sie ein beschädigtes Handwaschbecken zeitnah.',
@@ -517,9 +517,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Die Zuleitung ist auf Konformität mit DIN VDE 0100 zu prüfen. Die Prüfung der Zuleitung durch eine Elektrofachkraft ist gemäß DGUV Vorschrift 3 i. V. m. DIN VDE 0100-600 vor Erstinbetriebnahme und danach wiederkehrend durchzuführen.'
         },
         "12.5": {
-            einfach: 'Lassen Sie alle Maschinen prüfen und halten Sie die Ergebnisse schriftlich fest.',
-            bghw: 'Lassen Sie alle Maschinen gemäß § 14 BetrSichV und der DGUV Regel 108-601 prüfen und dokumentieren Sie die Ergebnisse.',
-            rechtlich: 'Alle Maschinen sind gemäß § 14 BetrSichV zu prüfen; die Prüfungen sind zu dokumentieren. Maschinen an der Backstation sind gemäß § 14 BetrSichV vor erstmaliger Inbetriebnahme und danach wiederkehrend (Richtwert: jährlich) durch eine befähigte Person zu prüfen.'
+            einfach: 'Legen Sie für die Maschinen fest, welche Kontrollen und Prüfungen für einen sicheren Betrieb erforderlich sind. Führen Sie diese fristgerecht durch und dokumentieren Sie die Prüfungen, soweit dies vorgeschrieben oder erforderlich ist. Festgestellte Mängel sind zu beseitigen.',
+            bghw: 'Ermitteln Sie im Rahmen der Gefährdungsbeurteilung Art, Umfang und Fristen der erforderlichen Kontrollen und Prüfungen von Maschinen und anderen Arbeitsmitteln. Berücksichtigen Sie insbesondere Einsatzbedingungen, mögliche schädigende Einflüsse und Herstellerangaben. Erforderliche Prüfungen sind durch entsprechend qualifizierte Personen durchführen zu lassen.',
+            rechtlich: 'Nach § 3 Abs. 6 BetrSichV hat der Arbeitgeber Art und Umfang erforderlicher Prüfungen von Arbeitsmitteln sowie die Fristen wiederkehrender Prüfungen zu ermitteln und festzulegen, soweit keine konkreten Vorgaben bestehen. Ob eine Prüfung nach § 14 BetrSichV erforderlich ist, richtet sich nach den dort genannten Voraussetzungen; TRBS 1201 konkretisiert die Ermittlung und Durchführung erforderlicher Prüfungen und Kontrollen.'
         },
         "12.6": {
             einfach: 'Kontrollieren Sie, ob alle Schutzvorrichtungen an den Maschinen vorhanden und funktionsfähig sind.',
@@ -537,9 +537,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Backhandschuhe sind regelmäßig auf Verschleiß und ausreichende Schutzlänge (Stulpe) zu prüfen (PSA-Benutzungsverordnung). Backhandschuhe sind gemäß PSA-Benutzungsverordnung regelmäßig auf Hitzebeständigkeit und Unversehrtheit zu prüfen und bei Verschleiß unverzüglich zu ersetzen.'
         },
         "12.9": {
-            einfach: 'Warten Sie Heißtheken und Fritteusen regelmäßig.',
-            bghw: 'Warten Sie Heißgeräte (Heißtheken, Fritteusen) gemäß DGUV Vorschrift 3 und der DGUV Regel 108-601 regelmäßig und lassen Sie sie technisch prüfen.',
-            rechtlich: 'Heißgeräte sind regelmäßig technisch zu warten und auf einwandfreien Zustand zu prüfen (DGUV Vorschrift 3). Als Richtwert gilt eine wiederkehrende Prüfung ortsveränderlicher Heißgeräte alle 6–24 Monate gemäß DGUV Vorschrift 3.'
+            einfach: 'Warten und kontrollieren Sie Heißtheken und Fritteusen entsprechend den Herstellerangaben und lassen Sie erforderliche Prüfungen in den festgelegten Fristen durchführen.',
+            bghw: 'Stellen Sie Wartung, Kontrollen und erforderliche Prüfungen von Heißtheken und Fritteusen entsprechend Gefährdungsbeurteilung, Herstellerangaben und – bei elektrischen Geräten – DGUV Vorschrift 3 sicher.',
+            rechtlich: 'Die erforderlichen Wartungs-, Kontroll- und Prüffristen sind abhängig von Bauart, Einsatzbedingungen und Gefährdungsbeurteilung festzulegen. Für elektrische Anlagen und Betriebsmittel ist insbesondere § 5 DGUV Vorschrift 3 zu beachten; eine pauschale Prüffrist von 6 bis 24 Monaten gilt nicht für jedes Heißgerät.'
         },
         "12.10": {
             einfach: 'Wenn die Brotschneidemaschine defekt ist: sofort ausstecken, ein Warnschild dranhängen und einen Elektriker rufen.',
@@ -558,14 +558,14 @@ const MEASURES_TEXT = {
             rechtlich: 'Hautschutz- und Hautpflegeprodukte sind gemäß TRGS 401 zur Verfügung zu stellen. Hautschutz-, Hautreinigungs- und Hautpflegemittel sind gemäß TRGS 401 Nr. 6 als „Drei-Stufen-Plan“ bereitzustellen.'
         },
         "13.3": {
-            einfach: 'Kontrollieren Sie die Geräte im Servicebereich regelmäßig auf ihren Zustand.',
-            bghw: 'Kontrollieren Sie die Arbeitsgeräte im Servicebereich gemäß DGUV Vorschrift 3 und der DGUV Regel 108-601 regelmäßig auf ihren ordnungsgemäßen Zustand.',
-            rechtlich: 'Die Arbeitsgeräte im Servicebereich sind regelmäßig auf ihren ordnungsgemäßen Zustand zu prüfen (DGUV Vorschrift 3). Als Richtwert gilt eine Prüfung ortsveränderlicher Geräte alle 6–24 Monate gemäß DGUV Vorschrift 3 Anhang 1 Tabelle 1B.'
+            einfach: 'Kontrollieren Sie die Geräte im Servicebereich regelmäßig auf sicheren Zustand und lassen Sie erforderliche Prüfungen in den festgelegten Fristen durchführen.',
+            bghw: 'Stellen Sie die erforderlichen Kontrollen und Prüfungen der Arbeitsmittel im Servicebereich entsprechend Gefährdungsbeurteilung, Einsatzbedingungen und Herstellerangaben sicher. Für elektrische Geräte ist DGUV Vorschrift 3 zu beachten.',
+            rechtlich: 'Art, Umfang und Fristen erforderlicher Prüfungen richten sich nach dem jeweiligen Arbeitsmittel und den Einsatzbedingungen. Elektrische Anlagen und Betriebsmittel sind nach § 5 DGUV Vorschrift 3 in den festgelegten Fristen auf ordnungsgemäßen Zustand zu prüfen.'
         },
         "13.4": {
-            einfach: 'Prüfen Sie, ob aufgeklappte Thekenscheiben von selbst oben bleiben.',
-            bghw: 'Prüfen Sie gemäß § 4 BetrSichV und der DGUV Regel 108-601, dass aufklappbare Thekenscheiben in geöffneter Stellung sicher und selbstständig stehen bleiben.',
-            rechtlich: 'Aufklappbare Thekenscheiben müssen gemäß § 4 BetrSichV in der oberen Stellung sicher und selbstständig verharren. Die Standsicherheit aufklappbarer Thekenscheiben in geöffneter Stellung ist Bestandteil der Prüfung nach § 4 BetrSichV (Schutz vor Herabfallen/Quetschung).'
+            einfach: 'Stellen Sie sicher, dass aufklappbare Thekenscheiben in geöffneter Stellung sicher gehalten werden und nicht unbeabsichtigt herunterfallen oder zuklappen können. Beschädigte Halterungen, Scharniere oder Unterstützungseinrichtungen sind instand zu setzen.',
+            bghw: 'Kontrollieren Sie aufklappbare Thekenscheiben und deren Halte-, Scharnier- und Unterstützungseinrichtungen auf sicheren Zustand und Funktion. Geöffnete Scheiben müssen zuverlässig gehalten werden; Gefährdungen durch Herabfallen, unbeabsichtigtes Schließen, Quetschen oder Einklemmen sind zu vermeiden.',
+            rechtlich: 'Gefährdungen durch bewegliche Teile, Quetsch- und Scherstellen sowie unbeabsichtigte Bewegungen sind im Rahmen der Gefährdungsbeurteilung zu berücksichtigen und durch geeignete Schutzmaßnahmen zu vermeiden. Soweit die Theke bzw. ihre Einrichtungen Arbeitsmittel im Sinne der BetrSichV sind, sind die Anforderungen der BetrSichV einschließlich erforderlicher Kontrollen und gegebenenfalls Prüfungen anzuwenden.'
         },
         "13.5": {
             einfach: 'Kleben Sie Markierungen in Augenhöhe an Glastüren und Glaswände.',
@@ -588,9 +588,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Zur sicheren Aufbewahrung von Messern sind Messerhalter gemäß der Gefährdungsbeurteilung nach § 5 ArbSchG zu verwenden. Eine sichere Aufbewahrung (Messerhalter, Klingenschutz) verhindert Schnittverletzungen beim Greifen in Schubladen oder Spülbecken.'
         },
         "13.9": {
-            einfach: 'Kontrollieren Sie die Geräte im Convenience-Bereich regelmäßig.',
-            bghw: 'Kontrollieren Sie Convenience-Geräte gemäß DGUV Vorschrift 3 und der DGUV Regel 108-601 regelmäßig auf ihren ordnungsgemäßen Zustand.',
-            rechtlich: 'Convenience-Geräte sind regelmäßig auf ihren ordnungsgemäßen Zustand zu prüfen (DGUV Vorschrift 3). Als Richtwert gilt eine Prüfung ortsveränderlicher Convenience-Geräte alle 6–24 Monate gemäß DGUV Vorschrift 3.'
+            einfach: 'Kontrollieren Sie die Geräte im Convenience-Bereich regelmäßig auf sicheren Zustand und lassen Sie erforderliche Prüfungen in den festgelegten Fristen durchführen.',
+            bghw: 'Stellen Sie die erforderlichen Kontrollen und Prüfungen der Convenience-Geräte entsprechend Gefährdungsbeurteilung, Einsatzbedingungen und Herstellerangaben sicher. Für elektrische Geräte ist DGUV Vorschrift 3 zu beachten.',
+            rechtlich: 'Art, Umfang und Fristen erforderlicher Prüfungen richten sich nach dem jeweiligen Arbeitsmittel und den Einsatzbedingungen. Elektrische Anlagen und Betriebsmittel sind nach § 5 DGUV Vorschrift 3 in den festgelegten Fristen auf ordnungsgemäßen Zustand zu prüfen.'
         },
         "13.10": {
             einfach: 'Sorgen Sie für ausreichend Licht im Servicebereich.',
@@ -739,14 +739,14 @@ const MEASURES_TEXT = {
             rechtlich: 'Sicherheitsbeauftragte sind nach § 22 SGB VII unter den dort genannten Voraussetzungen zu bestellen; Auswahl, Aufgaben und erforderliche Qualifizierung sind betrieblich festzulegen. Nach § 22 Abs. 1 SGB VII sind Sicherheitsbeauftragte zu bestellen, wenn dies aufgrund der Zahl der Beschäftigten, der Arbeitsbedingungen oder der Unfall- und Gesundheitsgefahren erforderlich ist; im Einzelhandel wird i. d. R. ab 21 Beschäftigten eine Bestellung erwartet.'
         },
         "19.3": {
-            einfach: 'Sorgen Sie dafür, dass immer mindestens ein ausgebildeter Brandschutzhelfer im Laden ist.',
-            bghw: 'Stellen Sie gemäß DGUV Information 205-023 und der DGUV Regel 108-601 die ständige Anwesenheit eines Brandschutzhelfers während der Öffnungszeiten sicher.',
-            rechtlich: 'Es ist eine ausreichende Zahl von Brandschutzhelferinnen und Brandschutzhelfern zu benennen und auszubilden; die erforderliche Anzahl und Verfügbarkeit ist aus der Gefährdungsbeurteilung und ASR A2.2 abzuleiten (in der Regel mindestens 5 % der Beschäftigten, bei erhöhter Brandgefährdung mehr). Als grober Richtwert der DGUV gilt mindestens 5 % der Beschäftigten als Brandschutzhelfer, bei erhöhter Brandgefährdung oder komplexer Betriebsstruktur entsprechend mehr; ausschlaggebend ist die Gefährdungsbeurteilung.'
+            einfach: 'Sorgen Sie für eine ausreichende Anzahl ausgebildeter Brandschutzhelfer. In der Regel sind 5 % der Beschäftigten ausreichend. Berücksichtigen Sie bei der Planung insbesondere Schichtbetrieb, Urlaub, Krankheit, die Größe des Marktes und eine gegebenenfalls erhöhte Brandgefährdung.',
+            bghw: 'Ermitteln Sie die erforderliche Anzahl der Brandschutzhelfer anhand der Gefährdungsbeurteilung. Nach ASR A2.2 ist ein Anteil von 5 % der Beschäftigten in der Regel ausreichend. Schichtbetrieb und Abwesenheiten sowie besondere betriebliche Verhältnisse sind bei der erforderlichen Anzahl zu berücksichtigen.',
+            rechtlich: 'Nach ASR A2.2 Abschnitt 7.3 hat der Arbeitgeber eine ausreichende Anzahl Beschäftigter durch Unterweisung und Übung im Umgang mit Feuerlöscheinrichtungen zur Bekämpfung von Entstehungsbränden vertraut zu machen. Die Anzahl ergibt sich aus der Gefährdungsbeurteilung; 5 % der Beschäftigten sind in der Regel ausreichend. Schichtbetrieb und Abwesenheiten sind zu berücksichtigen.'
         },
         "19.4": {
-            einfach: 'Führen Sie mindestens alle 6 Monate eine Schulung zum sicheren Umgang mit Bargeld durch.',
-            bghw: 'Führen Sie die Unterweisung zum Umgang mit Zahlungsmitteln gemäß § 12 ArbSchG und der DGUV Regel 108-601 mindestens halbjährlich durch.',
-            rechtlich: 'Die Unterweisung zum Umgang mit Zahlungsmitteln ist nach § 12 ArbSchG auf Grundlage der Gefährdungsbeurteilung in angemessenen Abständen und bei maßgeblichen Änderungen zu wiederholen. Ein pauschales halbjährliches Intervall ist nicht allgemein gesetzlich vorgegeben. Ein pauschales halbjährliches Intervall ist zwar nicht gesetzlich zwingend, hat sich aber in der Praxis der Überfallprävention (DGUV Vorschrift 25) als angemessen etabliert.'
+            einfach: 'Unterweisen Sie Beschäftigte, die mit Bargeld umgehen oder von einem Überfall betroffen sein können, mindestens alle sechs Monate zur Überfallprävention und dokumentieren Sie die Unterweisung.',
+            bghw: 'Führen und dokumentieren Sie die Unterweisung zur Überfallprävention mindestens halbjährlich gemäß § 9 Abs. 1 DGUV Vorschrift 25. Für Verkaufsstellen sind ergänzend die Konkretisierungen der DGUV Regel 108-010 „Überfallprävention in Verkaufsstellen“ zu berücksichtigen.',
+            rechtlich: 'Nach § 9 Abs. 1 DGUV Vorschrift 25 sind Versicherte, die Umgang mit Bargeld haben oder von einem Überfall betroffen sein können, mindestens halbjährlich sowie bei Bedarf zu unterweisen. Für Verkaufsstellen konkretisiert DGUV Regel 108-010 die Anforderungen zur Überfallprävention.'
         },
         "19.5": {
             einfach: 'Halten Sie alle Unterweisungen schriftlich fest.',
@@ -759,9 +759,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Aktuelle Änderungen in den betrieblichen Abläufen oder neue Sicherheitstechniken sind bei der Unterweisung gemäß § 12 ArbSchG zu berücksichtigen. Änderungen sind unverzüglich, spätestens bei der nächsten turnusmäßigen Unterweisung, zu berücksichtigen (§ 12 Abs. 1 ArbSchG).'
         },
         "19.7": {
-            einfach: 'Erstellen und aktualisieren Sie die Gefährdungsbeurteilung für Ihren Markt.',
-            bghw: 'Erstellen und aktualisieren Sie die Gefährdungsbeurteilung gemäß § 5 ArbSchG und der DGUV Regel 108-601 regelmäßig.',
-            rechtlich: 'Die Gefährdungsbeurteilung (GBO) ist gemäß § 5 ArbSchG zu erstellen und auf dem aktuellen Stand zu halten. Die Gefährdungsbeurteilung ist gemäß § 3 Abs. 1 BetrSichV bzw. § 5 ArbSchG bei Bedarf, mindestens aber bei wesentlichen Änderungen der Arbeitsbedingungen, zu aktualisieren.'
+            einfach: 'Erstellen Sie die Gefährdungsbeurteilung für den Markt und halten Sie sie aktuell. Überprüfen und aktualisieren Sie sie insbesondere bei Änderungen der Arbeitsbedingungen, neuen Gefährdungen oder wenn die Wirksamkeitskontrolle Anpassungsbedarf zeigt.',
+            bghw: 'Erstellen und dokumentieren Sie die Gefährdungsbeurteilung gemäß § 5 ArbSchG und § 3 DGUV Vorschrift 1. Überprüfen Sie sie insbesondere bei Änderungen der betrieblichen Gegebenheiten und passen Sie Maßnahmen bei Bedarf an.',
+            rechtlich: 'Nach § 5 ArbSchG und § 3 DGUV Vorschrift 1 sind die Gefährdungen zu beurteilen und die erforderlichen Maßnahmen festzulegen. Nach § 3 Abs. 2 DGUV Vorschrift 1 ist die Gefährdungsbeurteilung insbesondere zu überprüfen, wenn sich betriebliche Gegebenheiten hinsichtlich Sicherheit und Gesundheitsschutz verändert haben; eine pauschale jährliche Neuerstellung ist nicht vorgeschrieben.'
         }
     },
     "Psychische Belastung": {        "20.1": {
@@ -790,14 +790,14 @@ const MEASURES_TEXT = {
             rechtlich: 'Neue Beschäftigte sind vor Aufnahme der Tätigkeit und bei relevanten Änderungen tätigkeitsbezogen zu unterweisen (§ 12 ArbSchG); die Einarbeitung ist entsprechend der Gefährdungsbeurteilung zu organisieren. Eine strukturierte Einarbeitung ist als organisatorische Maßnahme im Sinne der Gefährdungsbeurteilung psychischer Belastung (§ 5 Abs. 3 Nr. 6 ArbSchG) zu werten, insbesondere zur Vermeidung von Überforderung.'
         },
         "20.6": {
-            einfach: 'Führen Sie eine Unterweisung zu Brand- und Arbeitsschutz durch.',
-            bghw: 'Führen Sie die Unterweisung zu Brand- und Arbeitsschutz gemäß § 12 ArbSchG und der DGUV Regel 108-601 regelmäßig durch.',
-            rechtlich: 'Eine Unterweisung zum Thema Brand- und Arbeitsschutz ist gemäß § 12 ArbSchG durchzuführen. Die Unterweisung ist gemäß § 12 ArbSchG mindestens jährlich zu wiederholen.'
+            einfach: 'Unterweisen Sie die Beschäftigten vor Aufnahme der Tätigkeit und danach entsprechend den Gefährdungen und betrieblichen Erfordernissen. Erforderliche Wiederholungen müssen nach DGUV Vorschrift 1 mindestens einmal jährlich erfolgen.',
+            bghw: 'Führen Sie die erforderlichen Unterweisungen auf Grundlage der Gefährdungsbeurteilung durch. Nach § 4 Abs. 1 DGUV Vorschrift 1 müssen Unterweisungen erforderlichenfalls wiederholt werden, mindestens jedoch einmal jährlich. Anlassbezogene oder gefahrenspezifische Unterweisungen können zusätzlich erforderlich sein.',
+            rechtlich: 'Nach § 12 ArbSchG sind Beschäftigte ausreichend und angemessen zu unterweisen. § 4 Abs. 1 DGUV Vorschrift 1 konkretisiert die Wiederholung: Die Unterweisung ist erforderlichenfalls zu wiederholen, mindestens aber einmal jährlich. Inhalt und Zeitpunkt richten sich zusätzlich nach den bestehenden Gefährdungen und betrieblichen Anlässen.'
         },
         "20.7": {
-            einfach: 'Richten Sie ein schwarzes Brett im Sozialraum oder Kassenbüro ein.',
-            bghw: 'Richten Sie gemäß der DGUV Regel 108-601 „Branche Einzelhandel“ zur innerbetrieblichen Kommunikation ein schwarzes Brett im Sozialraum oder Kassenbüro ein.',
-            rechtlich: 'Ein Aushang (schwarzes Brett) ist im Sozialraum oder Kassenbüro zur innerbetrieblichen Information vorzuhalten. Ein Aushang zur innerbetrieblichen Kommunikation dient der Umsetzung der Beteiligungs- und Informationspflichten nach § 3 ArbSchG.'
+            einfach: 'Stellen Sie sicher, dass vorgeschriebene und für die Beschäftigten erforderliche Informationen gut zugänglich sind. Ein schwarzes Brett kann dafür genutzt werden, ist aber nicht allgemein gesetzlich vorgeschrieben.',
+            bghw: 'Organisieren Sie die innerbetriebliche Information so, dass erforderliche Arbeitsschutzinformationen und vorgeschriebene Aushänge für Beschäftigte zugänglich sind. Ein schwarzes Brett im Sozialraum oder Kassenbüro ist eine mögliche organisatorische Lösung, aber keine allgemeine Pflicht aus § 3 ArbSchG.',
+            rechtlich: 'Arbeitsschutzrechtliche Informations-, Unterweisungs- und gegebenenfalls Aushangpflichten sind zu erfüllen. § 3 ArbSchG schreibt jedoch kein bestimmtes schwarzes Brett im Sozialraum oder Kassenbüro vor; die geeignete Form der innerbetrieblichen Information ist betrieblich festzulegen.'
         },
         "20.8": {
             einfach: 'Erklären Sie Entscheidungen offen und nachvollziehbar.',
