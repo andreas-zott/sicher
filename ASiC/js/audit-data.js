@@ -8,12 +8,12 @@ const AUDIT_CATEGORIES = [
             { id: "1.3", text: "Wurden die Automatiktüren gemäß den geltenden Regelwerken geprüft und befinden sich diese in einem ordnungsgemäßen Zustand?" },
             { id: "1.4", text: "Ist die Aufzugsanlage geprüft und in einem ordnungsgemäßen Zustand (ohne sichtbare Beschädigungen und mit funktionsfähigen Schutzeinrichtungen)?" },
             { id: "1.6", text: "Werden für Tätigkeiten in der Höhe (z. B. in Lager oder Verkaufsraum) geeignete und geprüfte Aufstiegshilfen (z. B. Trittstufen, Rolltritte/Elefantenfüße) in ausreichender Zahl bereitgestellt und bestimmungsgemäß benutzt?" },
-            { id: "1.7", text: "Werden Leitern und Tritte vor der Verwendung auf erkennbare Mängel kontrolliert und wiederkehrend durch eine hierfür geeignete bzw. befähigte Person geprüft, wobei die BGHW mindestens eine jährliche Prüfung empfiehlt?" },
+            { id: "1.7", text: "Sind die Leitern geprüft gemäß DGUV Information 208-016 Leitern und Tritte?" },
             { id: "1.8", text: "Werden aus dem Ordersatz geeignete Sicherheitsmesser verwendet?" },
             { id: "1.9", text: "Sind die Verkehrswege so beschaffen, dass kein Unfallrisiko durch Stolpern, Ausrutschen oder Umknicken besteht?" },
             { id: "1.10", text: "Sind die Treppen unbeschädigt und frei von Gegenständen?" },
             { id: "1.11", text: "Sind Betriebsanweisungen gut zugänglich und werden Sicherheitsanweisungen eingehalten?" },
-            { id: "1.12", text: "Ist die Beleuchtung in den Verkaufs- und Lagerbereichen entsprechend der jeweiligen Tätigkeit und Sehaufgabe gemäß ASR A3.4 ausreichend, funktionsfähig und so beschaffen, dass Gefahrenstellen und relevante Produktinformationen sicher erkannt werden können?" },
+            { id: "1.12", text: "Ist die Beleuchtung in den Verkaufs- und Lagerbereichen gemäß ASR A3.4 ausreichend dimensioniert (mind. 300 Lux im Verkaufsraum), voll funktionsfähig und so beschaffen, dass Gefahrenhinweise auf Produkten sowie Leckagen in den Regalen jederzeit zweifelsfrei erkennbar sind?" },
             { id: "1.13", text: "Sind die Schnelllauftore gemäß den Herstellervorgaben und gesetzlichen Fristen geprüft sowie technisch einwandfrei?" },
             { id: "1.14", text: "Sind die Rolltore aktuell geprüft und funktionieren alle Schutzeinrichtungen (z. B. Absturzsicherung, Einzugsschutz) einwandfrei?" }
         ]
@@ -56,7 +56,7 @@ const AUDIT_CATEGORIES = [
             { id: "4.1", text: "Erfüllen die Standorte der Erste-Hilfe-Koffer die Anforderungen an Sichtbarkeit, Erreichbarkeit und Norm-Kennzeichnung gemäß DGUV?" },
             { id: "4.2", text: "Ist das Erste-Hilfe-Material an allen Standorten in vollständigem Zustand und ist das Verfallsdatum der sterilen Inhalte noch nicht überschritten?" },
             { id: "4.3", text: "Wird die Dokumentation von Erste-Hilfe-Leistungen ordnungsgemäß geführt?" },
-            { id: "4.4", text: "Steht während der Arbeitszeit die nach § 26 DGUV Vorschrift 1 erforderliche Anzahl ausgebildeter Ersthelfer unter Berücksichtigung der jeweils anwesenden Versicherten zur Verfügung?" },
+            { id: "4.4", text: "Ist während der gesamten Öffnungszeit die erforderliche Anzahl an ausgebildeten Ersthelfern gemäß DGUV Vorschrift 1 anwesend?" },
             { id: "4.5", text: "Ist eine Notrufnummer ausgehängt?" },
             { id: "4.6", text: "Sind Erste-Hilfe-Anweisungen vorhanden?" }
         ]
@@ -138,7 +138,7 @@ const AUDIT_CATEGORIES = [
         id: "arbeitsmedizin",
         name: "Arbeitsmedizin",
         items: [
-            { id: "11.1", text: "Wird die nach ArbMedVV erforderliche arbeitsmedizinische Pflichtvorsorge veranlasst, Angebotsvorsorge angeboten und Wunschvorsorge ermöglicht?" },
+            { id: "11.1", text: "Wird den Beschäftigten arbeitsmedizinische Vorsorge angeboten?" },
             { id: "11.2", text: "Erfolgte im laufenden Berichtszeitraum eine arbeitsmedizinische Betreuung (z. B. Begehung oder Sprechstunde) bzw. ist diese für das aktuelle Kalenderjahr fest eingeplant?" },
             { id: "11.3", text: "Erfolgten arbeitsmedizinische Beratungen für Beschäftigte oder Führungskräfte?" },
             { id: "11.4", text: "Sind Maßnahmen gegen Hauterkrankungen getroffen?" },
@@ -154,7 +154,7 @@ const AUDIT_CATEGORIES = [
             { id: "12.2", text: "Ist das freistehende Handwaschbecken ohne Beschädigungen?" },
             { id: "12.3", text: "Sind die Elektroleitungen intakt und bilden keine Stolperstellen?" },
             { id: "12.4", text: "Entspricht die Zuleitung der VDE-Norm?" },
-            { id: "12.5", text: "Sind für die Maschinen die nach Gefährdungsbeurteilung erforderlichen Kontrollen und Prüfungen festgelegt, fristgerecht durchgeführt und – soweit erforderlich – dokumentiert?" },
+            { id: "12.5", text: "Sind alle Maschinen geprüft und dokumentiert?" },
             { id: "12.6", text: "Sind Schutzeinrichtungen vorhanden und funktionsfähig?" },
             { id: "12.7", text: "Sind Betriebsanweisungen ausgehaengt?" },
             { id: "12.8", text: "Ist der Backhandschuh für die Backstation in einem ordnungsgemäßen Zustand (kein Verschleiß) und besitzt eine lange Stulpe?" },
@@ -195,7 +195,7 @@ const AUDIT_CATEGORIES = [
         name: "Gefahrstoffe",
         items: [
             { id: "15.1", text: "Werden Gefahrstoffe unter strikter Beachtung der Zusammenlagerungsverbote nach TRGS 510 (Abschnitt 7 und Anlage 2) so gelagert, dass gefährliche Wechselwirkungen zwischen verschiedenen Stoffgruppen ausgeschlossen sind?" },
-            { id: "15.2", text: "Wird die nach Gefährdungsbeurteilung und Betriebsanweisung erforderliche persönliche Schutzausrüstung für Tätigkeiten mit Gefahrstoffen geeignet ausgewählt und zur Verfügung gestellt?" },
+            { id: "15.2", text: "Wird die passende persönliche Schutzausrüstung (z. B. Schutzbrille, Handschuhe) für Tätigkeiten mit Gefahrstoffen zur Verfügung gestellt?" },
             { id: "15.3", text: "Ist die in den Betriebsanweisungen geforderte Persönliche Schutzausrüstung in unmittelbarer Nähe und einsatzbereit vorhanden?" },
             { id: "15.4", text: "Sind Sicherheitsdatenblätter verfügbar?" },
             { id: "15.5", text: "Sind Mitarbeiter unterwiesen?" }
@@ -239,8 +239,8 @@ const AUDIT_CATEGORIES = [
         items: [
             { id: "19.1", text: "Wird die Dokumentation von Erste-Hilfe-Leistungen ordnungsgemäß geführt und aufbewahrt?" },
             { id: "19.2", text: "Ist ein Sicherheitsbeauftragter ausgebildet und bestellt?" },
-            { id: "19.3", text: "Steht eine ausreichende Anzahl ausgebildeter Brandschutzhelfer entsprechend der Gefährdungsbeurteilung und ASR A2.2 zur Verfügung, wobei Schichtbetrieb und Abwesenheiten berücksichtigt sind?" },
-            { id: "19.4", text: "Wurden Beschäftigte, die Umgang mit Bargeld haben oder von einem Überfall betroffen sein können, innerhalb der letzten sechs Monate zur Überfallprävention unterwiesen?" },
+            { id: "19.3", text: "Ist während der gesamten Ladenöffnungszeit mindestens ein Mitarbeiter mit der Qualifikation als Brandschutzhelfer anwesend?" },
+            { id: "19.4", text: "Erfolgte die letzte Unterweisung zum Umgang mit Zahlungsmitteln innerhalb der letzten 6 Monate?" },
             { id: "19.5", text: "Sind Unterweisungen dokumentiert?" },
             { id: "19.6", text: "Wurden bei der Unterweisung aktuelle Änderungen in den betrieblichen Abläufen oder neue Sicherheitstechniken berücksichtigt?" },
             { id: "19.7", text: "Wurde die Gefährdungsbeurteilung (GBO) erstellt und ist sie auf dem aktuellen Stand?" }
