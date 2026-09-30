@@ -306,5 +306,28 @@ const AUDIT_CATEGORIES = [
         { id: "22.9", text: "Ist geregelt, wie bei einer Störung oder einem Einschluss vorzugehen ist und sind die zuständigen Ansprechpartner bekannt?" }
     ]
 }
+,
+{
+    id: "fluessiggas",
+    name: "Flüssiggasflaschen – Lagerung und Verkauf",
+    items: [
+        { id: "23.1", text: "Ist die Lagerung und Abgabe von Flüssiggasflaschen in der Gefährdungsbeurteilung berücksichtigt und sind die Verantwortlichkeiten festgelegt?" },
+        { id: "23.2", text: "Ist die maximal vorhandene Lagermenge an Flüssiggas (volle, teilentleerte und zurückgegebene Flaschen) bekannt und wird sie eingehalten?" },
+        { id: "23.3", text: "Werden Flüssiggasflaschen stehend und gegen Umfallen oder Herabfallen gesichert gelagert?" },
+        { id: "23.4", text: "Sind die Flaschenventile gegen Beschädigung geschützt und werden beschädigte oder auffällige Flaschen unverzüglich ausgesondert?" },
+        { id: "23.5", text: "Ist der Lagerbereich ausreichend belüftet und so gestaltet, dass sich austretendes Flüssiggas nicht gefährlich ansammeln kann?" },
+        { id: "23.6", text: "Sind im relevanten Gefahrenbereich Öffnungen zu tiefer gelegenen Räumen, Gruben, Schächte, Kanaleinläufe und vergleichbare Vertiefungen vermieden bzw. ausreichend berücksichtigt?" },
+        { id: "23.7", text: "Ist das Flüssiggaslager gegen unbefugten Zugriff gesichert und vor mechanischer Beschädigung, insbesondere durch Fahrzeuge oder Flurförderzeuge, geschützt?" },
+        { id: "23.8", text: "Sind Zündquellen im gefährdeten Bereich ausgeschlossen und erforderliche Verbots- und Warnkennzeichnungen gut sichtbar angebracht?" },
+        { id: "23.9", text: "Wird der Lagerbereich frei von unnötigen Brandlasten gehalten und werden Flucht-, Rettungs- und Verkehrswege nicht beeinträchtigt?" },
+        { id: "23.10", text: "Werden Flüssiggasflaschen vor unzulässiger äußerer Wärmeeinwirkung geschützt?" },
+        { id: "23.11", text: "Ist die Annahme zurückgegebener bzw. teilentleerter Flüssiggasflaschen geregelt und werden diese zeitnah in den vorgesehenen Lagerbereich gebracht?" },
+        { id: "23.12", text: "Ist festgelegt, wie mit undichten oder beschädigten Flüssiggasflaschen umzugehen ist, und sind die Beschäftigten hierzu unterwiesen?" },
+        { id: "23.13", text: "Wird bei zurückgegebenen bzw. teilentleerten Flaschen die Dichtheit des Flaschenventils entsprechend der Gefährdungsbeurteilung kontrolliert, bevor sie wieder eingelagert werden?" },
+        { id: "23.14", text: "Ist die Ausgabe an Kunden so organisiert, dass eine unkontrollierte Selbstbedienung und ein unnötiges Bereithalten von Flüssiggasflaschen im Verkaufsraum vermieden werden?" },
+        { id: "23.15", text: "Sind Betriebsanweisung, Unterweisungen sowie erforderliche Prüf- und Kontrollnachweise für Lagerung und Umgang mit Flüssiggasflaschen vorhanden und aktuell?" },
+        { id: "23.16", text: "Sind geeignete Notfallmaßnahmen für Gasaustritt und Brand festgelegt, bekannt und sind erforderliche Feuerlöscheinrichtungen frei zugänglich?" }
+    ]
+}
 
 ];

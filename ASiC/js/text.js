@@ -1,5 +1,5 @@
 // ===== Vordefinierte Maßnahmen-Texte je Prüfpunkt, in drei Sprachstilen =====
-// Fachliche Überarbeitung: 25.08.2026. Regelwerksbezüge wurden gegen aktuelle BGHW/DGUV-, BAuA- und Bundesrechtsquellen abgeglichen.
+// Fachliche Überarbeitung: 30.09.2026. Regelwerksbezüge wurden gegen aktuelle BGHW/DGUV-, BAuA- und Bundesrechtsquellen abgeglichen.
 // Detailüberarbeitung (2. Stufe): 25.08.2026 – jeder einzelne Prüfpunkt wurde individuell um konkrete Fristen/Intervalle,
 // präzisere Paragraphen-/Absatzangaben und zusätzliche branchenspezifische DGUV-/DIN-Einzelverweise ergänzt (kein pauschaler
 // Kategorietext). Recherchequellen u. a.: BetrSichV (Gesetze-im-Internet), ASR A2.2/A2.3/A3.4 (BAuA), DIN 14406-4, DIN EN 15635,
@@ -12,7 +12,7 @@
 // rechtlich  = konkrete gesetzliche/technische Rechtsgrundlagen; technische Regeln nur dort,
 //              wo sie die gesetzlichen Schutzziele konkretisieren.
 //
-// Rechts-/Regelwerksstand bei der Überarbeitung: 25.08.2026.
+// Rechts-/Regelwerksstand bei der Überarbeitung: 30.09.2026.
 // Verifiziert wurden insbesondere:
 // - BGHW/DGUV Regel 108-601 "Branche Einzelhandel"
 // - DGUV Vorschrift 25 "Überfallprävention" und DGUV Regel 108-010
@@ -47,6 +47,8 @@ const MEASURE_SOURCES = {
         'DGUV Information 208-016 – Handlungsanleitung für den Umgang mit Leitern und Tritten',
         'DGUV Information 208-061 – Lagereinrichtungen und Ladungsträger',
         'DGUV Regel 110-008 – Betreiben von Kälteanlagen, Wärmepumpen und Kühleinrichtungen mit Kohlendioxid',
+        'DGUV Regel 110-010 – Verwendung von Flüssiggas (aktualisierte Fassung November 2024)',
+        'DGUV Regel 108-601 – Branche Einzelhandel (insbesondere Organisation der Abgabe/Rücknahme von Flüssiggasflaschen)',
         'TRBS 3121 – Betrieb von Aufzugsanlagen',
         'DIN 14406-4 – Tragbare Feuerlöscher, Instandhaltung',
         'DIN EN 15635 – Ortsfeste Regalsysteme aus Stahl, Nutzung und Instandhaltung',
@@ -82,8 +84,8 @@ const MEASURES_TEXT = {
 
     "Gesamtmarkt": {        "1.1": {
             einfach: 'Achten Sie darauf, dass alle Mitarbeitenden festes, vorne geschlossenes und rutschfestes Schuhwerk tragen.',
-            bghw: 'Setzen Sie die Vorgaben zu sicherem Schuhwerk gemäß § 5 ArbSchG (Gefährdungsbeurteilung), DGUV Vorschrift 1 und DGUV Regel 108-601 „Branche Einzelhandel“ um: festes, im Zehenbereich geschlossenes und rutschhemmendes Schuhwerk. Maßgeblich sind mind. die Rutschhemmklassen SRA/SRB nach DIN EN ISO 20345/20347.',
-            rechtlich: 'Gemäß Gefährdungsbeurteilung und DGUV Vorschrift 1 ist sicherzustellen, dass alle Beschäftigten geeignetes, festes, geschlossenes und rutschhemmendes Schuhwerk tragen. Die Einhaltung ist regelmäßig zu kontrollieren. Die PSA-Kategorie ist anhand der Gefährdungsbeurteilung festzulegen (i. d. R. Rutschhemmklasse SRA/SRB nach DIN EN ISO 20345/20347); die Kontrolle ist im Rahmen der jährlichen Unterweisung nach § 12 ArbSchG zu dokumentieren.'
+            bghw: 'Setzen Sie die Vorgaben zu sicherem Schuhwerk gemäß § 5 ArbSchG (Gefährdungsbeurteilung), DGUV Vorschrift 1 und DGUV Regel 108-601 „Branche Einzelhandel“ um: festes, im Zehenbereich geschlossenes und rutschhemmendes Schuhwerk. Die erforderliche Rutschhemmung ist anhand der Gefährdungsbeurteilung und der aktuellen Kennzeichnung nach DIN EN ISO 20345/20347 auszuwählen; die früheren Zusatzkennzeichnungen SRA/SRB/SRC werden in den aktuellen Normausgaben nicht mehr verwendet.',
+            rechtlich: 'Gemäß Gefährdungsbeurteilung und DGUV Vorschrift 1 ist sicherzustellen, dass alle Beschäftigten geeignetes, festes, geschlossenes und rutschhemmendes Schuhwerk tragen. Die Einhaltung ist regelmäßig zu kontrollieren. Die erforderliche Ausführung und Rutschhemmung des Schuhwerks ist anhand der Gefährdungsbeurteilung und der aktuellen Kennzeichnung nach DIN EN ISO 20345/20347 festzulegen; die früheren Zusatzkennzeichnungen SRA/SRB/SRC sind nicht mehr aktuell; die Kontrolle ist im Rahmen der jährlichen Unterweisung nach § 12 ArbSchG zu dokumentieren.'
         },
         "1.2": {
             einfach: 'Weisen Sie Ihre Mitarbeitenden regelmäßig ein, wie sie Hubwagen & Co. sicher benutzen: Schutzausrüstung tragen, Lasten nicht überladen, niemanden mitfahren lassen. Nur volljährige Beschäftigte mit Fahrauftrag dürfen mitfahrbare Geräte führen.',
@@ -127,8 +129,8 @@ const MEASURES_TEXT = {
         },
         "1.11": {
             einfach: 'Hängen Sie Betriebsanweisungen gut sichtbar auf und achten Sie darauf, dass sie auch befolgt werden.',
-            bghw: 'Machen Sie Betriebsanweisungen gemäß § 14 GefStoffV bzw. § 4 BetrSichV und der DGUV Regel 108-601 jederzeit zugänglich und kontrollieren Sie die Einhaltung der Sicherheitsanweisungen.',
-            rechtlich: 'Betriebsanweisungen sind gemäß § 14 GefStoffV bzw. § 4 BetrSichV aktuell, zugänglich und für Beschäftigte verständlich bereitzustellen. Betriebsanweisungen sind in einer für die Beschäftigten verständlichen Form und Sprache abzufassen (§ 14 Abs. 1 GefStoffV) und regelmäßig auf Aktualität zu prüfen.'
+            bghw: 'Machen Sie Betriebsanweisungen gemäß § 14 GefStoffV bzw. § 12 Abs. 2 BetrSichV und der DGUV Regel 108-601 jederzeit zugänglich und kontrollieren Sie die Einhaltung der Sicherheitsanweisungen.',
+            rechtlich: 'Betriebsanweisungen sind gemäß § 14 GefStoffV bzw. § 12 Abs. 2 BetrSichV aktuell, zugänglich und für Beschäftigte verständlich bereitzustellen. Betriebsanweisungen sind in einer für die Beschäftigten verständlichen Form und Sprache abzufassen (§ 14 Abs. 1 GefStoffV) und regelmäßig auf Aktualität zu prüfen.'
         },
         "1.12": {
             einfach: 'Sorgen Sie für ausreichend helles Licht in Verkauf und Lager, damit Gefahrenhinweise und Flüssigkeiten im Regal gut zu erkennen sind.',
@@ -157,9 +159,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Feuerlöscher und Wandhydranten sind gemäß ASR A2.2 jederzeit frei zugänglich zu halten und nach ASR A1.3 zu kennzeichnen. Freihaltung und Kennzeichnung sind nach ASR A2.2 i. V. m. ASR A1.3 (Sicherheitskennzeichnung) sicherzustellen.'
         },
         "2.3": {
-            einfach: 'Kontrollieren Sie regelmäßig, ob die Plomben an den Wandhydranten unversehrt sind. Zusätzlich zur Sichtkontrolle ist eine technische Prüfung der Wandhydranten mindestens jährlich vorgeschrieben.',
-            bghw: 'Kontrollieren Sie die Prüfsiegel der Wandhydranten im Rahmen der gemäß der DGUV Regel 108-601 „Branche Einzelhandel“ durchgeführten Brandschutzbegehung regelmäßig auf Unversehrtheit. Wandhydranten sind zusätzlich zur Plombenkontrolle gemäß DIN 1988-600 mindestens jährlich technisch zu prüfen.',
-            rechtlich: 'Wandhydranten sind entsprechend den festgelegten Prüf- und Wartungsanforderungen zu kontrollieren; die Prüfung ist nachvollziehbar zu dokumentieren. ASR A2.2 enthält die Anforderungen an die Bereitstellung und Instandhaltung der Einrichtungen zur Brandbekämpfung. Wandhydranten sind gemäß DIN 1988-600 mindestens jährlich einer technischen Prüfung zu unterziehen; die Sichtkontrolle der Plomben erfolgt ergänzend im Rahmen der betrieblichen Brandschutzbegehung.'
+            einfach: 'Kontrollieren Sie Wandhydranten regelmäßig auf Zugänglichkeit, erkennbare Schäden und unversehrte Kennzeichnungen. Lassen Sie Wartung und Prüfung in den für die konkrete Anlage festgelegten Intervallen durch Fachkundige durchführen.',
+            bghw: 'Kontrollieren Sie Wandhydranten im Rahmen der betrieblichen Brandschutzkontrollen auf Zugänglichkeit, erkennbare Schäden und Kennzeichnung. Wartung und Prüfung sind nach ASR A2.2 sowie den für die konkrete Anlage einschlägigen technischen Regeln, insbesondere DIN 14462 und Herstellerangaben, festzulegen und zu dokumentieren.',
+            rechtlich: 'Wandhydranten sind als Einrichtungen zur Brandbekämpfung funktionsfähig und zugänglich zu halten. Art und Frist von Inspektion, Wartung und Prüfung richten sich nach ASR A2.2, der konkreten Anlagenausführung, den einschlägigen technischen Regeln (insbesondere DIN 14462) und Herstellerangaben; die Durchführung ist nachvollziehbar zu dokumentieren.'
         },
         "2.4": {
             einfach: 'Stellen Sie nichts vor Brandschutztüren und blockieren Sie sie nicht.',
@@ -182,9 +184,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Ein aktueller Flucht- und Rettungsplan ist gemäß ASR A2.3 zu erstellen und an geeigneten Stellen gut sichtbar auszuhängen. Der Flucht- und Rettungsplan ist gemäß ASR A2.3 Anlage 1 nach DIN ISO 23601 zu gestalten und bei baulichen oder organisatorischen Änderungen zu aktualisieren.'
         },
         "2.8": {
-            einfach: 'Prüfen Sie regelmäßig, ob die Notbeleuchtung noch funktioniert. Notwendig sind: wöchentlicher Funktionstest, jährlicher Volltest der gesamten Betriebsdauer und alle drei Jahre eine Prüfung durch einen Sachverständigen.',
-            bghw: 'Prüfen Sie die Sicherheits- und Notbeleuchtung gemäß ASR A3.4 und der DGUV Regel 108-601 in regelmäßigen Intervallen (in der Regel jährlich) auf Funktion. Erforderlich sind: wöchentlicher Funktionstest, jährlicher Volltest (Bemessungsbetriebsdauer) sowie eine Sachverständigenprüfung alle drei Jahre gemäß DIN V VDE V 0108-100 / DIN EN 50172.',
-            rechtlich: 'Die Sicherheits- und Notbeleuchtung ist gemäß ASR A2.3 und den einschlägigen elektrotechnischen Regeln regelmäßig auf Funktionsfähigkeit zu prüfen. Die Sicherheits- und Notbeleuchtung ist gemäß DIN V VDE V 0108-100 / DIN EN 50172 wöchentlich (Funktionstest), jährlich (Volltest der Bemessungsbetriebsdauer) sowie alle drei Jahre durch einen Sachverständigen zu prüfen; ein Prüfbuch ist mindestens vier Jahre aufzubewahren.'
+            einfach: 'Prüfen und dokumentieren Sie die Sicherheits- und Notbeleuchtung in den für Ihre Anlage festgelegten Intervallen. Beachten Sie dabei Herstellerangaben, Prüfbuch und die einschlägigen elektrotechnischen Regeln.',
+            bghw: 'Stellen Sie die regelmäßige Prüfung der Sicherheits- und Notbeleuchtung gemäß ASR A3.4 und den einschlägigen elektrotechnischen Regeln sicher. Prüfart und Intervalle sind passend zur vorhandenen Anlage, deren Betriebsart, Herstellerangaben und Prüfbuch festzulegen und zu dokumentieren.',
+            rechtlich: 'Sicherheitsbeleuchtung ist entsprechend ArbStättV/ASR A3.4 und den für die konkrete Anlage einschlägigen elektrotechnischen Regeln funktionsfähig zu halten und regelmäßig zu prüfen. Prüfart, Prüffrist und Dokumentation sind anhand der konkreten Anlage, Betriebsart, Herstellerangaben und einschlägigen Normen festzulegen; pauschale Intervalle oder eine allgemeine dreijährliche Sachverständigenpflicht gelten nicht für jede Anlage.'
         },
         "2.9": {
             einfach: 'Halten Sie Fluchtwege und Notausgänge komplett frei – innen wie außen.',
@@ -233,9 +235,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Kaffeemaschine und andere hitzeentwickelnde Geräte sind auf Grundlage der Gefährdungsbeurteilung und der Anforderungen an den Brandschutz so aufzustellen und zu betreiben, dass Brandgefährdungen vermieden werden (§§ 3, 4 ArbSchG; § 4 ArbStättV; ASR A2.2). Der erforderliche Sicherheitsabstand zu brennbaren Materialien richtet sich nach Herstellerangaben und der Gefährdungsbeurteilung (§ 5 ArbSchG).'
         },
         "3.3": {
-            einfach: 'Lassen Sie Kabel, Steckdosen und Geräte regelmäßig auf Sicherheit prüfen. Als Richtwert gilt: alle 6 bis 24 Monate, je nach Beanspruchung.',
-            bghw: 'Prüfen Sie ortsveränderliche elektrische Betriebsmittel gemäß DGUV Vorschrift 3 und der DGUV Regel 108-601 in angemessenen Intervallen. Als Richtwert nach DGUV Vorschrift 3 Anhang 1 Tabelle 1B gilt: ortsveränderliche Betriebsmittel alle 6–24 Monate, abhängig von Nutzungsintensität und Fehlerquote (< 2 %).',
-            rechtlich: 'Ortsveränderliche elektrische Betriebsmittel sind gemäß DGUV Vorschrift 3 in angemessenen Zeitabständen zu prüfen. Ortsveränderliche elektrische Betriebsmittel sind gemäß DGUV Vorschrift 3 Anhang 1 Tabelle 1B als Richtwert alle 6 bis 24 Monate zu prüfen; die konkrete Frist ist anhand der Gefährdungsbeurteilung nach § 3 BetrSichV festzulegen und bei einer Fehlerquote über 2 % zu verkürzen.'
+            einfach: 'Lassen Sie Kabel, Steckdosen und Geräte regelmäßig auf Sicherheit prüfen. Als Ausgangswert gelten häufig 6 Monate; bei nachgewiesen niedriger Fehlerquote kann die Prüffrist je nach Einsatzbereich verlängert werden.',
+            bghw: 'Prüfen Sie ortsveränderliche elektrische Betriebsmittel gemäß DGUV Vorschrift 3 und der DGUV Regel 108-601 in angemessenen Intervallen. Als bewährter Richtwert gilt zunächst eine Prüffrist von 6 Monaten; bei einer Fehlerquote unter 2 % kann sie abhängig vom Einsatzbereich angemessen verlängert werden (z. B. außerhalb von Büros bis 1 Jahr, in Büros bis 2 Jahre).',
+            rechtlich: 'Ortsveränderliche elektrische Betriebsmittel sind gemäß DGUV Vorschrift 3 in angemessenen Zeitabständen zu prüfen. Für ortsveränderliche elektrische Betriebsmittel gilt nach den Durchführungsanweisungen zur DGUV Vorschrift 3 als bewährter Ausgangswert eine Prüffrist von 6 Monaten. Bei einer Fehlerquote unter 2 % kann die Frist abhängig vom Einsatzbereich angemessen verlängert werden (außerhalb von Büros bis 1 Jahr, in Büros bis 2 Jahre). Die konkrete Prüffrist ist anhand der Gefährdungsbeurteilung festzulegen.'
         },
         "3.4": {
             einfach: 'Halten Sie den Pausenraum frei von Lagergut, damit er wirklich der Erholung dient.',
@@ -285,9 +287,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Von der Decke geführte Leitungen und Steckverbindungen sind durch geeignete mechanische Zugentlastungen so zu sichern, dass keine Zugkräfte auf die elektrischen Kontaktstellen wirken (DGUV Vorschrift 3). Zugentlastungen sind so zu bemessen, dass keine mechanische Zugkraft auf Steckverbindungen und Anschlussklemmen übertragen wird (DGUV Vorschrift 3, DIN VDE 0100-520).'
         },
         "5.3": {
-            einfach: 'Prüfen Sie Steckdosen und Kabel regelmäßig auf Schäden. Als Richtwert gilt: alle 6 bis 24 Monate, je nach Beanspruchung.',
-            bghw: 'Kontrollieren Sie Steckdosen und Kabel gemäß DGUV Vorschrift 3 in den von der DGUV Regel 108-601 „Branche Einzelhandel“ empfohlenen Intervallen (ortsveränderliche Betriebsmittel in der Regel jährlich). Als Richtwert nach DGUV Vorschrift 3 Anhang 1 Tabelle 1B gilt: 6–24 Monate für ortsveränderliche Betriebsmittel, 4 Jahre für ortsfeste Anlagen.',
-            rechtlich: 'Steckdosen und Kabel sind regelmäßig auf ihren ordnungsgemäßen Zustand zu prüfen (DGUV Vorschrift 3). Prüffristen richten sich nach DGUV Vorschrift 3 Anhang 1 Tabelle 1B: als Richtwert 6–24 Monate für ortsveränderliche Betriebsmittel und bis zu 4 Jahre für ortsfeste Anlagen; maßgeblich ist die anhand der Gefährdungsbeurteilung (§ 3 BetrSichV) ermittelte Fehlerquote (Verlängerung nur bei < 2 % Fehlerquote).'
+            einfach: 'Prüfen Sie Steckdosen und Kabel regelmäßig auf Schäden. Als Ausgangswert gelten häufig 6 Monate; bei nachgewiesen niedriger Fehlerquote kann die Prüffrist je nach Einsatzbereich verlängert werden.',
+            bghw: 'Kontrollieren Sie Steckdosen und Kabel gemäß DGUV Vorschrift 3 in den von der DGUV Regel 108-601 „Branche Einzelhandel“ empfohlenen Intervallen (ortsveränderliche Betriebsmittel in der Regel jährlich). Für ortsveränderliche Betriebsmittel gilt als bewährter Ausgangswert 6 Monate; bei einer Fehlerquote unter 2 % kann abhängig vom Einsatzbereich auf bis zu 1 Jahr bzw. in Büros bis zu 2 Jahre verlängert werden. Für ortsfeste elektrische Betriebsmittel gilt regelmäßig ein Richtwert von 4 Jahren.',
+            rechtlich: 'Steckdosen und Kabel sind regelmäßig auf ihren ordnungsgemäßen Zustand zu prüfen (DGUV Vorschrift 3). Für ortsveränderliche Betriebsmittel gilt als bewährter Ausgangswert eine Prüffrist von 6 Monaten; bei einer Fehlerquote unter 2 % kann sie abhängig vom Einsatzbereich auf bis zu 1 Jahr bzw. in Büros bis zu 2 Jahre verlängert werden. Für ortsfeste elektrische Betriebsmittel gilt regelmäßig ein Richtwert von 4 Jahren. Die konkrete Prüffrist ist anhand der Gefährdungsbeurteilung festzulegen.'
         },
         "5.4": {
             einfach: 'Lassen Sie Kabelverbindungen nicht offen auf dem Boden liegen, z. B. unter Kühltruhen.',
@@ -355,7 +357,7 @@ const MEASURES_TEXT = {
     "Lager und Regale": {        "8.1": {
             einfach: 'Lassen Sie den elektrischen Hubwagen regelmäßig prüfen und beheben Sie Schäden sofort.',
             bghw: 'Lassen Sie den elektrischen Hubwagen gemäß DGUV Vorschrift 68 und der DGUV Regel 108-601 regelmäßig prüfen.',
-            rechtlich: 'Der elektrische Hubwagen ist gemäß DGUV Vorschrift 68 wiederkehrend zu prüfen; Schutzeinrichtungen müssen funktionsfähig sein. Der elektrische Hubwagen ist gemäß § 37 Abs. 2 DGUV Vorschrift 68 mindestens jährlich durch eine befähigte Person zu prüfen; das Ergebnis ist in einem Prüfbuch zu dokumentieren.'
+            rechtlich: 'Der elektrische Hubwagen ist gemäß DGUV Vorschrift 68 wiederkehrend zu prüfen; Schutzeinrichtungen müssen funktionsfähig sein. Der elektrische Hubwagen ist gemäß § 37 Abs. 1 DGUV Vorschrift 68 in Abständen von längstens einem Jahr durch eine befähigte Person zu prüfen; das Ergebnis ist in einem Prüfbuch zu dokumentieren.'
         },
         "8.2": {
             einfach: 'Kontrollieren Sie den Gabelhubwagen regelmäßig auf Schäden.',
@@ -390,12 +392,12 @@ const MEASURES_TEXT = {
         "8.8": {
             einfach: 'Lassen Sie die Müll-/Papierpresse regelmäßig prüfen.',
             bghw: 'Lassen Sie die Müll-/Papierpresse gemäß § 14 BetrSichV und der DGUV Regel 108-601 regelmäßig prüfen.',
-            rechtlich: 'Die Müll-/Papierpresse ist gemäß § 14 BetrSichV wiederkehrend durch eine befähigte Person zu prüfen. Die Müll-/Papierpresse ist gemäß § 14 BetrSichV vor erstmaliger Inbetriebnahme und danach wiederkehrend, als Richtwert mindestens jährlich, durch eine befähigte Person zu prüfen.'
+            rechtlich: 'Die Müll-/Papierpresse ist gemäß § 14 BetrSichV wiederkehrend durch eine befähigte Person zu prüfen. Ob und in welchen Fristen eine Prüfung durch eine zur Prüfung befähigte Person erforderlich ist, ist nach §§ 3 und 14 BetrSichV anhand der Montagebedingungen und schädigenden Einflüsse festzulegen; Herstellerangaben sind zu berücksichtigen. Eine pauschale gesetzliche Jahresfrist besteht für Maschinen nicht.'
         },
         "8.9": {
             einfach: 'Kontrollieren Sie die Presse auf Schäden, funktionierende Schutzeinrichtungen und festen Stand.',
             bghw: 'Kontrollieren Sie die Müll-/Papierpresse gemäß DGUV Vorschrift 1 und DGUV Regel 108-601 „Branche Einzelhandel“ auf Beschädigungen, intakte Schutzeinrichtungen und festen Stand.',
-            rechtlich: 'Die Müll-/Papierpresse muss frei von Beschädigungen sein, über intakte Schutzeinrichtungen verfügen und sicher/standfest aufgestellt sein. Die Standsicherheit ist gemäß § 14 BetrSichV Bestandteil der wiederkehrenden Prüfung durch eine befähigte Person.'
+            rechtlich: 'Die Müll-/Papierpresse muss frei von Beschädigungen sein, über intakte Schutzeinrichtungen verfügen und sicher/standfest aufgestellt sein. Die Standsicherheit ist im Rahmen der Gefährdungsbeurteilung und der erforderlichen Kontrollen bzw. Prüfungen nach BetrSichV zu berücksichtigen; eine wiederkehrende Prüfung nach § 14 BetrSichV ist erforderlich, soweit die dort genannten Voraussetzungen vorliegen.'
         },
         "8.10": {
             einfach: 'Halten Sie die Wege im Lager frei von Stolperfallen.',
@@ -406,7 +408,7 @@ const MEASURES_TEXT = {
     "Leergut": {        "9.1": {
             einfach: 'Kontrollieren Sie die Annahmegeräte der Leergutrücknahme regelmäßig und beheben oder ersetzen Sie beschädigte Geräte sofort – achten Sie besonders auf Glasscherben und intakte Schutzvorrichtungen.',
             bghw: 'Kontrollieren und warten Sie die Annahmegeräte der Leergutrücknahme gemäß DGUV Vorschrift 1 und DGUV Regel 108-601 „Branche Einzelhandel“ regelmäßig; setzen Sie beschädigte oder defekte Geräte unverzüglich instand oder außer Betrieb und beseitigen Sie Glasbruch umgehend.',
-            rechtlich: 'Die Annahmegeräte der Leergutrücknahme sind regelmäßig auf Beschädigungen, Glasscherben und funktionierende Schutzeinrichtungen zu kontrollieren; defekte Geräte sind unverzüglich instand zu setzen oder außer Betrieb zu nehmen. Schutzeinrichtungen an Leergutautomaten unterliegen als Arbeitsmittel der Prüfpflicht nach § 3 BetrSichV; Glasbruch ist als Sofortmaßnahme zu entfernen (Schnittgefahr).'
+            rechtlich: 'Die Annahmegeräte der Leergutrücknahme sind regelmäßig auf Beschädigungen, Glasscherben und funktionierende Schutzeinrichtungen zu kontrollieren; defekte Geräte sind unverzüglich instand zu setzen oder außer Betrieb zu nehmen. Schutzeinrichtungen an Leergutautomaten sind nach § 4 Abs. 5 BetrSichV regelmäßig auf ihre Funktionsfähigkeit zu kontrollieren; erforderliche Prüfungen und Prüffristen sind nach Gefährdungsbeurteilung festzulegen; Glasbruch ist als Sofortmaßnahme zu entfernen (Schnittgefahr).'
         },
         "9.2": {
             einfach: 'Weisen Sie Ihre Mitarbeitenden an, die Rollbahnen nicht zu betreten.',
@@ -499,7 +501,7 @@ const MEASURES_TEXT = {
     "Backstation": {        "12.1": {
             einfach: 'Kontrollieren Sie Backofen, Backbleche und Brotschneidemaschine regelmäßig auf ihren Zustand.',
             bghw: 'Kontrollieren Sie die Arbeitsgeräte der Backstation gemäß DGUV Vorschrift 3 und der DGUV Regel 108-601 regelmäßig auf ihren ordnungsgemäßen Zustand.',
-            rechtlich: 'Die Arbeitsgeräte an der Backstation (Backofen, Backbleche, Brotschneidemaschine) sind regelmäßig auf ihren ordnungsgemäßen Zustand zu prüfen (DGUV Vorschrift 3). Als Richtwert für ortsfeste Küchen-/Backgeräte gilt eine wiederkehrende Prüfung alle 4 Jahre, für ortsveränderliche Geräte 6–24 Monate (DGUV Vorschrift 3 Anhang 1 Tabelle 1B).'
+            rechtlich: 'Die Arbeitsgeräte an der Backstation (Backofen, Backbleche, Brotschneidemaschine) sind regelmäßig auf ihren ordnungsgemäßen Zustand zu prüfen (DGUV Vorschrift 3). Für ortsfeste elektrische Betriebsmittel gilt regelmäßig ein Richtwert von 4 Jahren. Bei ortsveränderlichen Geräten gilt als bewährter Ausgangswert 6 Monate; bei einer Fehlerquote unter 2 % kann die Frist abhängig vom Einsatzbereich angemessen verlängert werden.'
         },
         "12.2": {
             einfach: 'Beheben Sie ein beschädigtes Handwaschbecken zeitnah.',
@@ -519,17 +521,17 @@ const MEASURES_TEXT = {
         "12.5": {
             einfach: 'Lassen Sie alle Maschinen prüfen und halten Sie die Ergebnisse schriftlich fest.',
             bghw: 'Lassen Sie alle Maschinen gemäß § 14 BetrSichV und der DGUV Regel 108-601 prüfen und dokumentieren Sie die Ergebnisse.',
-            rechtlich: 'Alle Maschinen sind gemäß § 14 BetrSichV zu prüfen; die Prüfungen sind zu dokumentieren. Maschinen an der Backstation sind gemäß § 14 BetrSichV vor erstmaliger Inbetriebnahme und danach wiederkehrend (Richtwert: jährlich) durch eine befähigte Person zu prüfen.'
+            rechtlich: 'Für Maschinen ist anhand der Gefährdungsbeurteilung zu bestimmen, welche Kontrollen und Prüfungen erforderlich sind. Prüfungen nach § 14 BetrSichV sind insbesondere bei montageabhängiger Sicherheit, schädigenden Einflüssen, prüfpflichtigen Änderungen oder außergewöhnlichen Ereignissen erforderlich; die Fristen werden nach § 3 Abs. 6 BetrSichV festgelegt. Eine allgemeine gesetzliche Jahresfrist für Maschinen besteht nicht.'
         },
         "12.6": {
             einfach: 'Kontrollieren Sie, ob alle Schutzvorrichtungen an den Maschinen vorhanden und funktionsfähig sind.',
             bghw: 'Kontrollieren Sie Schutzeinrichtungen an Backstationsmaschinen gemäß § 4 BetrSichV und der DGUV Regel 108-601 regelmäßig auf Vorhandensein und Funktion.',
-            rechtlich: 'Schutzeinrichtungen müssen entsprechend der Gefährdungsbeurteilung sicher vorhanden und funktionsfähig sein; die regelmäßige Funktionskontrolle ist nach § 4 Abs. 5 BetrSichV sicherzustellen. Die regelmäßige Funktionskontrolle ist gemäß § 4 Abs. 5 BetrSichV mindestens im Rahmen jeder wiederkehrenden Prüfung sicherzustellen.'
+            rechtlich: 'Schutzeinrichtungen müssen entsprechend der Gefährdungsbeurteilung sicher vorhanden und funktionsfähig sein; die regelmäßige Funktionskontrolle ist nach § 4 Abs. 5 BetrSichV sicherzustellen. Schutz- und Sicherheitseinrichtungen sind nach § 4 Abs. 5 BetrSichV regelmäßig auf ihre Funktionsfähigkeit zu kontrollieren; Art und Intervall sind anhand der Gefährdungsbeurteilung festzulegen.'
         },
         "12.7": {
             einfach: 'Hängen Sie die Betriebsanweisungen für die Backstation gut sichtbar auf.',
-            bghw: 'Hängen Sie Betriebsanweisungen für die Backstation gemäß § 14 GefStoffV, § 4 BetrSichV und der DGUV Regel 108-601 gut sichtbar aus.',
-            rechtlich: 'Betriebsanweisungen sind gemäß § 14 GefStoffV bzw. § 4 BetrSichV gut sichtbar auszuhängen. Betriebsanweisungen sind gemäß § 14 Abs. 1 GefStoffV bzw. § 4 BetrSichV verständlich und in der jeweiligen Landessprache der Beschäftigten abzufassen.'
+            bghw: 'Hängen Sie Betriebsanweisungen für die Backstation gemäß § 14 GefStoffV bzw. § 12 Abs. 2 BetrSichV und der DGUV Regel 108-601 gut sichtbar aus.',
+            rechtlich: 'Betriebsanweisungen sind gemäß § 14 GefStoffV bzw. § 12 Abs. 2 BetrSichV gut sichtbar auszuhängen. Betriebsanweisungen sind gemäß § 14 Abs. 1 GefStoffV bzw. § 12 Abs. 2 BetrSichV verständlich und in der jeweiligen Landessprache der Beschäftigten abzufassen.'
         },
         "12.8": {
             einfach: 'Prüfen Sie den Backhandschuh auf Verschleiß und tauschen Sie ihn bei Bedarf aus.',
@@ -539,7 +541,7 @@ const MEASURES_TEXT = {
         "12.9": {
             einfach: 'Warten Sie Heißtheken und Fritteusen regelmäßig.',
             bghw: 'Warten Sie Heißgeräte (Heißtheken, Fritteusen) gemäß DGUV Vorschrift 3 und der DGUV Regel 108-601 regelmäßig und lassen Sie sie technisch prüfen.',
-            rechtlich: 'Heißgeräte sind regelmäßig technisch zu warten und auf einwandfreien Zustand zu prüfen (DGUV Vorschrift 3). Als Richtwert gilt eine wiederkehrende Prüfung ortsveränderlicher Heißgeräte alle 6–24 Monate gemäß DGUV Vorschrift 3.'
+            rechtlich: 'Heißgeräte sind regelmäßig technisch zu warten und auf einwandfreien Zustand zu prüfen (DGUV Vorschrift 3). Für ortsveränderliche elektrische Heißgeräte gilt als bewährter Ausgangswert eine Prüffrist von 6 Monaten; eine Verlängerung ist bei nachgewiesen niedriger Fehlerquote und entsprechendem Einsatzbereich möglich.'
         },
         "12.10": {
             einfach: 'Wenn die Brotschneidemaschine defekt ist: sofort ausstecken, ein Warnschild dranhängen und einen Elektriker rufen.',
@@ -560,7 +562,7 @@ const MEASURES_TEXT = {
         "13.3": {
             einfach: 'Kontrollieren Sie die Geräte im Servicebereich regelmäßig auf ihren Zustand.',
             bghw: 'Kontrollieren Sie die Arbeitsgeräte im Servicebereich gemäß DGUV Vorschrift 3 und der DGUV Regel 108-601 regelmäßig auf ihren ordnungsgemäßen Zustand.',
-            rechtlich: 'Die Arbeitsgeräte im Servicebereich sind regelmäßig auf ihren ordnungsgemäßen Zustand zu prüfen (DGUV Vorschrift 3). Als Richtwert gilt eine Prüfung ortsveränderlicher Geräte alle 6–24 Monate gemäß DGUV Vorschrift 3 Anhang 1 Tabelle 1B.'
+            rechtlich: 'Die Arbeitsgeräte im Servicebereich sind regelmäßig auf ihren ordnungsgemäßen Zustand zu prüfen (DGUV Vorschrift 3). Für ortsveränderliche elektrische Geräte gilt als bewährter Ausgangswert eine Prüffrist von 6 Monaten; eine Verlängerung ist bei nachgewiesen niedriger Fehlerquote und entsprechendem Einsatzbereich möglich.'
         },
         "13.4": {
             einfach: 'Prüfen Sie, ob aufgeklappte Thekenscheiben von selbst oben bleiben.',
@@ -590,7 +592,7 @@ const MEASURES_TEXT = {
         "13.9": {
             einfach: 'Kontrollieren Sie die Geräte im Convenience-Bereich regelmäßig.',
             bghw: 'Kontrollieren Sie Convenience-Geräte gemäß DGUV Vorschrift 3 und der DGUV Regel 108-601 regelmäßig auf ihren ordnungsgemäßen Zustand.',
-            rechtlich: 'Convenience-Geräte sind regelmäßig auf ihren ordnungsgemäßen Zustand zu prüfen (DGUV Vorschrift 3). Als Richtwert gilt eine Prüfung ortsveränderlicher Convenience-Geräte alle 6–24 Monate gemäß DGUV Vorschrift 3.'
+            rechtlich: 'Convenience-Geräte sind regelmäßig auf ihren ordnungsgemäßen Zustand zu prüfen (DGUV Vorschrift 3). Für ortsveränderliche elektrische Convenience-Geräte gilt als bewährter Ausgangswert eine Prüffrist von 6 Monaten; eine Verlängerung ist bei nachgewiesen niedriger Fehlerquote und entsprechendem Einsatzbereich möglich.'
         },
         "13.10": {
             einfach: 'Sorgen Sie für ausreichend Licht im Servicebereich.',
@@ -972,6 +974,91 @@ const MEASURES_TEXT = {
             rechtlich: 'Das Vorgehen bei einer Störung oder einem Einschluss ist gemäß TRBS 3121 schriftlich zu regeln; die zuständigen Ansprechpartner sind bekannt zu machen. Das Vorgehen bei Störung oder Einschluss ist gemäß TRBS 3121 Nr. 4.2 schriftlich zu regeln, inkl. Ansprechpartner und maximaler Reaktionszeit des Notdienstes.'
         }
     },
+
+
+    "Flüssiggasflaschen – Lagerung und Verkauf": {
+        "23.1": {
+            einfach: 'Nehmen Sie Lagerung und Verkauf von Flüssiggasflaschen in die Gefährdungsbeurteilung auf und legen Sie klare Zuständigkeiten fest.',
+            bghw: 'Ergänzen Sie die Gefährdungsbeurteilung nach § 5 ArbSchG/GefStoffV um Lagerung und Abgabe von Flüssiggasflaschen und legen Sie Verantwortlichkeiten gemäß DGUV Regel 110-010 und DGUV Regel 108-601 fest.',
+            rechtlich: 'Gefährdungen durch Lagerung und Abgabe von Flüssiggasflaschen sind nach ArbSchG und GefStoffV zu beurteilen; Schutzmaßnahmen und Verantwortlichkeiten sind zu dokumentieren. DGUV Regel 110-010 und TRGS 510 konkretisieren die Anforderungen.'
+        },
+        "23.2": {
+            einfach: 'Ermitteln und dokumentieren Sie die maximale Lagermenge einschließlich voller, teilentleerter und zurückgegebener Flaschen.',
+            bghw: 'Ermitteln Sie die Nettolagermenge und gleichen Sie sie mit den mengenabhängigen Anforderungen der TRGS 510 Abschnitt 10 und DGUV Regel 110-010 ab.',
+            rechtlich: 'Die Lagermenge ist im Rahmen der Gefährdungsbeurteilung zu ermitteln. Für entzündbare Gase greifen die zusätzlichen Anforderungen der TRGS 510 Abschnitt 10 bei den dort festgelegten Mengenschwellen.'
+        },
+        "23.3": {
+            einfach: 'Lagern Sie Flüssiggasflaschen aufrecht und standsicher; sichern Sie sie gegen Umfallen und Herabfallen.',
+            bghw: 'Flüssiggasflaschen sind gemäß TRGS 510 Abschnitt 10.2 stehend zu lagern und gegen Umfallen oder Herabfallen zu sichern.',
+            rechtlich: 'TRGS 510 Abschnitt 10.2 fordert für LPG-Flaschen stehende Lagerung sowie eine Sicherung der Druckgasbehälter gegen Umfallen oder Herabfallen.'
+        },
+        "23.4": {
+            einfach: 'Schützen Sie die Ventile und sondern Sie beschädigte oder auffällige Flaschen sofort aus.',
+            bghw: 'Stellen Sie den Ventilschutz gemäß TRGS 510 sicher und separieren Sie beschädigte bzw. auffällige Flaschen nach einem festgelegten Verfahren.',
+            rechtlich: 'Nach TRGS 510 Abschnitt 10.2 sind Ventile durch geeignete Schutzeinrichtungen zu schützen. Beschädigte Behälter dürfen nicht regulär weitergelagert oder abgegeben werden.'
+        },
+        "23.5": {
+            einfach: 'Sorgen Sie für ausreichende Lüftung und verhindern Sie gefährliche Gasansammlungen.',
+            bghw: 'Prüfen Sie Lüftung und Lagergestaltung nach TRGS 510 Abschnitt 10.3 und DGUV Regel 110-010; austretendes Flüssiggas darf sich nicht gefährlich ansammeln.',
+            rechtlich: 'Die baulichen und lüftungstechnischen Anforderungen ergeben sich insbesondere aus TRGS 510 Abschnitt 10.3; Flüssiggas ist schwerer als Luft und bei der Gefährdungsbeurteilung entsprechend zu berücksichtigen.'
+        },
+        "23.6": {
+            einfach: 'Halten Sie Bereiche frei von Öffnungen, Schächten und Vertiefungen, in denen sich austretendes Gas sammeln könnte, oder treffen Sie geeignete Schutzmaßnahmen.',
+            bghw: 'Bewerten und sichern Sie Öffnungen zu tiefer gelegenen Bereichen, Gruben, Schächte und Kanaleinläufe im Gefahrenbereich gemäß DGUV Regel 110-010/TRGS 510.',
+            rechtlich: 'Bei Flüssiggas sind wegen seiner höheren Dichte gegenüber Luft tiefer gelegene Bereiche in der Gefährdungsbeurteilung besonders zu berücksichtigen; erforderliche Schutzabstände bzw. Maßnahmen sind nach DGUV Regel 110-010 und TRGS 510 festzulegen.'
+        },
+        "23.7": {
+            einfach: 'Sichern Sie das Lager gegen unbefugten Zugriff und gegen Anfahren oder andere mechanische Beschädigungen.',
+            bghw: 'Sichern Sie den Lagerbereich organisatorisch und baulich gegen Unbefugte sowie gegen Fahrzeug-/Flurförderzeuganprall gemäß TRGS 510 und Gefährdungsbeurteilung.',
+            rechtlich: 'TRGS 510 verlangt geeignete organisatorische und bauliche Schutzmaßnahmen. Art und Umfang des Zugangs- und Anfahrschutzes sind anhand der Gefährdungsbeurteilung festzulegen.'
+        },
+        "23.8": {
+            einfach: 'Entfernen Sie Zündquellen aus gefährdeten Bereichen und bringen Sie die erforderlichen Warn- und Verbotszeichen gut sichtbar an.',
+            bghw: 'Setzen Sie den Brand- und Explosionsschutz nach GefStoffV, TRGS 510 und DGUV Regel 110-010 um; Zündquellen vermeiden und Kennzeichnung festlegen.',
+            rechtlich: 'GefStoffV und TRGS 510 verlangen geeignete Brand- und Explosionsschutzmaßnahmen; die DGUV Regel 110-010 konkretisiert dies für Flüssiggas.'
+        },
+        "23.9": {
+            einfach: 'Entfernen Sie unnötige Brandlasten und halten Sie Verkehrs-, Flucht- und Rettungswege vollständig frei.',
+            bghw: 'Halten Sie das Flüssiggaslager frei von vermeidbaren Brandlasten und sichern Sie freie Verkehrs-/Fluchtwege gemäß TRGS 510 sowie ArbStättV/ASR A2.3.',
+            rechtlich: 'Brandschutz- und Lagerorganisation sind nach TRGS 510 festzulegen; Flucht- und Rettungswege müssen nach ArbStättV und ASR A2.3 nutzbar bleiben.'
+        },
+        "23.10": {
+            einfach: 'Schützen Sie die Flaschen vor übermäßiger Erwärmung.',
+            bghw: 'Stellen Sie Flüssiggasflaschen gemäß TRGS 510 Abschnitt 10.2 so auf, dass sie keiner unzulässigen äußeren Wärmeeinwirkung ausgesetzt sind.',
+            rechtlich: 'TRGS 510 Abschnitt 10.2 fordert Schutz vor übermäßiger äußerer Wärmeeinwirkung; die konkrete Aufstellung ist in der Gefährdungsbeurteilung festzulegen.'
+        },
+        "23.11": {
+            einfach: 'Legen Sie einen festen Rückgabeplatz und Ablauf fest und bringen Sie zurückgegebene Flaschen zeitnah ins vorgesehene Lager.',
+            bghw: 'Organisieren Sie Annahme und zeitnahe Verbringung zurückgegebener Flüssiggasflaschen in den vorgesehenen Lagerbereich gemäß DGUV Regel 108-601 und DGUV Regel 110-010.',
+            rechtlich: 'Die Organisation von Annahme, Zwischenhandhabung und Lagerung ist im Rahmen der Gefährdungsbeurteilung festzulegen; DGUV Regel 108-601 enthält branchenspezifische Hinweise für den Einzelhandel.'
+        },
+        "23.12": {
+            einfach: 'Legen Sie fest, was bei Gasgeruch, Undichtheit oder beschädigten Flaschen zu tun ist, und unterweisen Sie die Beschäftigten.',
+            bghw: 'Erstellen Sie ein Verfahren für undichte/beschädigte Flaschen und unterweisen Sie Beschäftigte anhand der Betriebsanweisung nach GefStoffV/TRGS 555 sowie DGUV Regel 110-010.',
+            rechtlich: 'Nach GefStoffV sind Betriebsanweisung und Unterweisung erforderlich; TRGS 555 konkretisiert diese Pflichten. Notfallmaßnahmen sind mit der Gefährdungsbeurteilung abzustimmen.'
+        },
+        "23.13": {
+            einfach: 'Kontrollieren Sie zurückgegebene oder teilentleerte Flaschen nach dem festgelegten Verfahren auf Dichtheit, bevor sie eingelagert werden.',
+            bghw: 'Führen Sie die in der Gefährdungsbeurteilung festgelegte Dichtheitskontrolle zurückgegebener/teilentleerter Flaschen durch, z. B. mit geeignetem schaumbildendem Mittel, und dokumentieren Sie das Verfahren.',
+            rechtlich: 'DGUV Regel 110-010 beschreibt für zurückgeführte bzw. teilentleerte Flaschen den Nachweis der Ventildichtheit, z. B. mit schaumbildendem Mittel, als Grundlage der Gefährdungsbeurteilung.'
+        },
+        "23.14": {
+            einfach: 'Organisieren Sie die Kundenausgabe kontrolliert und vermeiden Sie unnötige Gasflaschen im Verkaufsraum.',
+            bghw: 'Organisieren Sie Ausgabe und Rücknahme gemäß DGUV Regel 108-601 so, dass unkontrollierte Selbstbedienung und unnötiges Bereithalten im Verkaufsraum vermieden werden.',
+            rechtlich: 'Für den Einzelhandel sind die Anforderungen der GefStoffV/TRGS 510 und die branchenspezifischen Hinweise der DGUV Regel 108-601 bei der Organisation von Verkauf und Rücknahme zu berücksichtigen.'
+        },
+        "23.15": {
+            einfach: 'Aktualisieren Sie Betriebsanweisung, Unterweisungsnachweise und erforderliche Kontrollunterlagen.',
+            bghw: 'Halten Sie Betriebsanweisung, Unterweisungen und erforderliche Kontrollen nach GefStoffV, TRGS 555, TRGS 510 und DGUV Regel 110-010 aktuell und nachvollziehbar dokumentiert.',
+            rechtlich: 'GefStoffV und TRGS 555 regeln Betriebsanweisung und Unterweisung; TRGS 510 enthält Anforderungen an Lagerorganisation, Unterweisung sowie Überprüfungen und Kontrollen.'
+        },
+        "23.16": {
+            einfach: 'Legen Sie das Vorgehen bei Gasaustritt und Brand fest und halten Sie geeignete Feuerlöscheinrichtungen frei zugänglich.',
+            bghw: 'Legen Sie Alarmierung und Notfallmaßnahmen für Leckage/Brand gemäß TRGS 510 und DGUV Regel 110-010 fest; halten Sie geeignete Feuerlöscheinrichtungen zugänglich.',
+            rechtlich: 'Notfall-, Alarmierungs- und Brandschutzmaßnahmen sind nach GefStoffV/TRGS 510 anhand der Gefährdungsbeurteilung festzulegen; DGUV Regel 110-010 konkretisiert den sicheren Umgang mit Flüssiggas.'
+        }
+    },
+
 
     default: {
         einfach: 'Legen Sie geeignete Maßnahmen fest, um den Mangel zu beheben, und dokumentieren Sie diese.',

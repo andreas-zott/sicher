@@ -8,8 +8,8 @@ const STORAGE_KEY = 'begehungState';
 
 // Revisionsstand der App/Checkliste (in Fusszeile und PDF sichtbar,
 // bei inhaltlichen Aenderungen an Fragenkatalog/Massnahmen hochzaehlen)
-const APP_REVISION = '1.41';
-const APP_REVISION_DATE = '2026-09-04';
+const APP_REVISION = '1.44';
+const APP_REVISION_DATE = '2026-09-30';
 
 function renderFooterMeta() {
     const el = document.getElementById('footer-version');
@@ -2075,7 +2075,10 @@ const OPTIONAL_CATEGORIES = {
         'Keine Praktikanten/Schüleraushilfen im Markt beschäftigt',
 
     'co2-kuehleinrichtungen':
-        'Keine CO2-Kühleinrichtungen im Markt vorhanden'
+        'Keine CO2-Kühleinrichtungen im Markt vorhanden',
+
+    'fluessiggas':
+        'Keine Lagerung bzw. kein Verkauf von Flüssiggasflaschen im Markt'
 };
 
 // ===== Checkliste rendern (index.html) =====
