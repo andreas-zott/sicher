@@ -47,8 +47,7 @@ const MEASURE_SOURCES = {
         'DGUV Information 208-016 – Handlungsanleitung für den Umgang mit Leitern und Tritten',
         'DGUV Information 208-061 – Lagereinrichtungen und Ladungsträger',
         'DGUV Regel 110-008 – Betreiben von Kälteanlagen, Wärmepumpen und Kühleinrichtungen mit Kohlendioxid',
-        'DGUV Regel 110-010 – Verwendung von Flüssiggas (aktualisierte Fassung November 2024)',
-        'DGUV Regel 108-601 – Branche Einzelhandel (insbesondere Organisation der Abgabe/Rücknahme von Flüssiggasflaschen)',
+        'DGUV Regel 108-601 – Branche Einzelhandel',
         'TRBS 3121 – Betrieb von Aufzugsanlagen',
         'DIN 14406-4 – Tragbare Feuerlöscher, Instandhaltung',
         'DIN EN 15635 – Ortsfeste Regalsysteme aus Stahl, Nutzung und Instandhaltung',
@@ -108,9 +107,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Geeignete und geprüfte Aufstiegshilfen sind bereitzustellen. Die Nutzung hat gemäß DGUV Information 208-016 zu erfolgen. Ungeeignete Aufstiegshilfen wie Kisten, Regale oder Stühle sind zu untersagen; dies ist im Rahmen der Unterweisung nach § 12 ArbSchG zu kontrollieren.'
         },
         "1.7": {
-            einfach: 'Lassen Sie Leitern und Tritte regelmäßig prüfen und sortieren Sie beschädigte sofort aus. Als Richtwert gilt: mindestens einmal jährlich, mit Prüfplakette pro Leiter.',
-            bghw: 'Prüfen Sie Leitern und Tritte gemäß DGUV Information 208-016 und der DGUV Regel 108-601 durch eine befähigte Person in angemessenen Intervallen. Als Richtwert gilt mindestens jährlich (§ 3 Abs. 6 BetrSichV); führen Sie ein Kontrollblatt je Leiter mit Prüfplakette.',
-            rechtlich: 'Leitern und Tritte sind regelmäßig durch befähigte Personen zu prüfen. Beschädigte Leitern sind sofort auszusondern. Art, Umfang und Frist der Prüfung sind anhand der Gefährdungsbeurteilung festzulegen (§ 3 Abs. 6 BetrSichV); als Richtwert gilt mindestens jährlich. Beschädigte Leitern sind sofort der Nutzung zu entziehen (§ 5 BetrSichV).'
+            einfach: "Kontrollieren Sie Leitern und Tritte vor der Verwendung auf erkennbare Mängel und lassen Sie sie wiederkehrend prüfen. Die BGHW empfiehlt mindestens eine jährliche Prüfung. Beschädigte Leitern und Tritte sofort aus der Benutzung nehmen.",
+            bghw: "Leitern und Tritte sind vor der Verwendung auf ordnungsgemäßen Zustand zu kontrollieren und wiederkehrend einer Sicht- und Funktionsprüfung zu unterziehen. Die Prüffrist ist unter Berücksichtigung von Nutzungshäufigkeit, Beanspruchung und bisherigen Mängeln festzulegen. Die BGHW empfiehlt mindestens eine jährliche Prüfung. Eine Prüfplakette kann die Organisation unterstützen, wird hier aber nicht als allgemeine gesetzliche Pflicht dargestellt.",
+            rechtlich: "Art, Umfang und Fristen erforderlicher Prüfungen sind auf Grundlage der Gefährdungsbeurteilung festzulegen. Nach DGUV Information 208-016 richten sich die Zeitabstände insbesondere nach Nutzungshäufigkeit, Beanspruchung sowie Häufigkeit und Schwere festgestellter Mängel; eine mindestens jährliche Prüfung wird empfohlen. Eine pauschale gesetzliche Pflicht zu einer Prüfplakette wird daraus nicht abgeleitet."
         },
         "1.8": {
             einfach: 'Nutzen Sie nur die freigegebenen Sicherheitsmesser aus dem Ordersatz.',
@@ -133,9 +132,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Betriebsanweisungen sind gemäß § 14 GefStoffV bzw. § 12 Abs. 2 BetrSichV aktuell, zugänglich und für Beschäftigte verständlich bereitzustellen. Betriebsanweisungen sind in einer für die Beschäftigten verständlichen Form und Sprache abzufassen (§ 14 Abs. 1 GefStoffV) und regelmäßig auf Aktualität zu prüfen.'
         },
         "1.12": {
-            einfach: 'Sorgen Sie für ausreichend helles Licht in Verkauf und Lager, damit Gefahrenhinweise und Flüssigkeiten im Regal gut zu erkennen sind.',
-            bghw: 'Stellen Sie die Beleuchtung in Verkaufs- und Lagerbereichen gemäß ASR A3.4 entsprechend der ermittelten Beleuchtungsanforderungen und der DGUV Regel 108-601 sicher, damit Gefahrenhinweise und Leckagen zuverlässig erkennbar sind.',
-            rechtlich: 'Die Beleuchtung ist gemäß ASR A3.4 entsprechend der Tätigkeit, Raumgröße und Sehaufgabe ausreichend zu dimensionieren. Gefahrenstellen und Leckagen müssen sicher erkennbar sein. Als Anhaltswert gilt nach ASR A3.4 Anhang 1 für Verkaufsräume üblicherweise mindestens 300 Lux, für Lagerbereiche mindestens 100–200 Lux, je nach Sehaufgabe.'
+            einfach: "Sorgen Sie in Verkaufs- und Lagerbereichen für eine zur Tätigkeit passende, funktionsfähige Beleuchtung, damit Arbeitsbereiche und Gefahrenstellen sicher erkannt werden.",
+            bghw: "Stellen Sie die Beleuchtung nach ASR A3.4 entsprechend der jeweiligen Sehaufgabe und dem Bereich sicher. Prüfen Sie bei Zweifeln die für den konkreten Arbeitsplatz bzw. Tätigkeitsbereich geltenden Mindestwerte des ASR-Anhangs.",
+            rechtlich: "Nach ArbStättV in Verbindung mit ASR A3.4 ist die Beleuchtung entsprechend Tätigkeit, Sehaufgabe und Arbeitsbereich auszulegen. Die erforderlichen Beleuchtungsstärken ergeben sich aus den jeweiligen Tabellen und Randbedingungen der ASR; ein einzelner pauschaler Luxwert ist nicht auf sämtliche Verkaufs- und Lagerbereiche übertragbar."
         },
         "1.13": {
             einfach: 'Lassen Sie das Schnelllauftor umgehend vom Hersteller oder einem Fachmann prüfen und reparieren. Nutzen Sie den Torbereich bis dahin besonders vorsichtig. Kraftbetätigte Tore sind mindestens einmal jährlich sachkundig zu prüfen.',
@@ -261,9 +260,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Die Dokumentation von Erste-Hilfe-Leistungen ist gemäß DGUV Information 204-020 ordnungsgemäß zu führen. Aufzeichnungen über Erste-Hilfe-Leistungen sind gemäß DGUV Information 204-020 mindestens fünf Jahre nach dem Unfalltag aufzubewahren.'
         },
         "4.4": {
-            einfach: 'Stellen Sie sicher, dass während der ganzen Öffnungszeit genug ausgebildete Ersthelfer da sind. Für Handel/Verwaltung gilt: bei 2–20 Beschäftigten mind. 1 Ersthelfer, ab 21 Beschäftigten mind. 10 % der Anwesenden.',
-            bghw: 'Stellen Sie die nach DGUV Vorschrift 1 und der DGUV Regel 108-601 erforderliche Anzahl ausgebildeter Ersthelfer während der gesamten Öffnungszeit sicher. Für Handel und Verwaltung gilt gemäß § 26 DGUV Vorschrift 1: bei 2–20 Beschäftigten mindestens 1 Ersthelfer, bei mehr als 20 Beschäftigten mindestens 10 %.',
-            rechtlich: 'Während der gesamten Öffnungszeit ist die nach DGUV Vorschrift 1 erforderliche Anzahl ausgebildeter Ersthelfer anwesend zu halten. Die Mindestzahl der Ersthelfer ergibt sich aus § 26 Abs. 2 DGUV Vorschrift 1: in Verwaltungs- und Handelsbetrieben bei 2 bis 20 anwesenden Versicherten mindestens 1 Ersthelfer, bei mehr als 20 Versicherten mindestens 10 %; die Anwesenheit ist während der gesamten Öffnungszeit sicherzustellen.'
+            einfach: "Stellen Sie sicher, dass entsprechend der Zahl der anwesenden Beschäftigten genügend ausgebildete Ersthelfer zur Verfügung stehen.",
+            bghw: "Stellen Sie die nach § 26 DGUV Vorschrift 1 erforderliche Zahl von Ersthelfern sicher: bei 2 bis 20 anwesenden Versicherten mindestens eine Person, bei mehr als 20 anwesenden Versicherten in Verwaltungs- und Handelsbetrieben grundsätzlich 5 %. Abwesenheiten und Arbeitszeiten sind organisatorisch zu berücksichtigen.",
+            rechtlich: "Nach § 26 Abs. 1 DGUV Vorschrift 1 müssen bei 2 bis 20 anwesenden Versicherten mindestens ein Ersthelfer und bei mehr als 20 anwesenden Versicherten in Verwaltungs- und Handelsbetrieben grundsätzlich 5 % als Ersthelfer zur Verfügung stehen. Die betriebliche Organisation muss sicherstellen, dass die erforderliche Zahl bei Anwesenheit der Versicherten erreicht wird."
         },
         "4.5": {
             einfach: 'Hängen Sie die Notrufnummer gut sichtbar aus.',
@@ -365,9 +364,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Der Gabelhubwagen ist gemäß § 3 DGUV Vorschrift 1 regelmäßig auf seinen ordnungsgemäßen Zustand zu prüfen. Für handgeführte Flurförderzeuge ist als Richtwert eine jährliche Prüfung durch eine befähigte Person angemessen (§ 3 Abs. 6 BetrSichV).'
         },
         "8.3": {
-            einfach: 'Lassen Sie die Schwerlastregale regelmäßig von einem Fachmann prüfen. Nötig sind eine wöchentliche Sichtkontrolle durch geschultes Personal und eine jährliche Expertenprüfung.',
-            bghw: 'Lassen Sie Schwerlastregale gemäß DGUV Information 208-061 und der DGUV Regel 108-601 regelmäßig durch eine befähigte Person prüfen. Erforderlich sind eine wöchentliche Sichtkontrolle durch unterwiesenes Personal sowie mindestens jährlich eine Experteninspektion durch eine befähigte Person gemäß DIN EN 15635 und § 10 BetrSichV.',
-            rechtlich: 'Schwerlastregale sind gemäß DGUV Information 208-061 regelmäßig durch eine befähigte Person zu prüfen. Regalanlagen sind gemäß DIN EN 15635 i. V. m. § 10 BetrSichV zweistufig zu prüfen: wöchentliche Sichtkontrolle durch unterwiesenes Personal sowie mindestens jährliche Experteninspektion durch eine befähigte Person (Regalinspekteur); Schadensklassen sind nach dem Ampelsystem (grün/orange/rot) zu bewerten und Rot-Befunde sofort zu sperren.'
+            einfach: "Lassen Sie Schwerlastregale regelmäßig kontrollieren und mindestens einmal jährlich fachkundig prüfen. Legen Sie kürzere Sichtkontrollen passend zum Schadensrisiko fest.",
+            bghw: "Organisieren Sie Regalinspektionen nach DGUV Information 208-061 und DGUV Information 208-043: Experteninspektion mindestens alle 12 Monate; zusätzliche Sichtkontrollen in kürzeren, anhand einer Risikoanalyse festgelegten Abständen.",
+            rechtlich: "Für Regalanlagen beschreibt DGUV Information 208-043 in Anlehnung an DIN EN 15635 eine Experteninspektion mindestens alle 12 Monate sowie Inspektionen/Sichtkontrollen in kürzeren Abständen, die anhand der Risikoanalyse durch die lagerverantwortliche Person festzulegen sind. Festgestellte Schäden sind zu bewerten und erforderliche Maßnahmen unverzüglich einzuleiten."
         },
         "8.4": {
             einfach: 'Bringen Sie an den Regalen einen Anfahrschutz an.',
@@ -468,9 +467,9 @@ const MEASURES_TEXT = {
         }
     },
     "Arbeitsmedizin": {        "11.1": {
-            einfach: 'Bieten Sie Ihren Mitarbeitenden die vorgeschriebenen Gesundheitschecks beim Betriebsarzt an.',
-            bghw: 'Bieten Sie arbeitsmedizinische Vorsorge gemäß ArbMedVV und der DGUV Regel 108-601 an.',
-            rechtlich: 'Arbeitsmedizinische Vorsorge ist gemäß ArbMedVV anzubieten bzw. zu veranlassen. Zu unterscheiden sind Pflichtvorsorge (zwingend vor und während der Tätigkeit), Angebotsvorsorge (anzubieten) und Wunschvorsorge (auf Verlangen der Beschäftigten) gemäß §§ 4, 5, 5a ArbMedVV; der konkrete Anlass ergibt sich aus Anhang Teil 1–4 ArbMedVV.'
+            einfach: "Prüfen Sie anhand der Tätigkeiten, welche arbeitsmedizinische Vorsorge erforderlich ist: Pflichtvorsorge veranlassen, Angebotsvorsorge anbieten und Wunschvorsorge ermöglichen.",
+            bghw: "Setzen Sie die arbeitsmedizinische Vorsorge nach ArbMedVV tätigkeitsbezogen um und führen Sie die erforderliche Vorsorgekartei. Unterscheiden Sie Pflicht-, Angebots- und Wunschvorsorge.",
+            rechtlich: "Nach §§ 4, 5 und 5a ArbMedVV sind Pflichtvorsorge, Angebotsvorsorge und Wunschvorsorge zu unterscheiden. Welche Vorsorge erforderlich ist, ergibt sich insbesondere aus dem Anhang der ArbMedVV und der Gefährdungsbeurteilung; Vorsorge ist nicht mit einer Eignungsuntersuchung gleichzusetzen."
         },
         "11.2": {
             einfach: 'Planen Sie regelmäßige Besuche oder Sprechstunden des Betriebsarztes ein.',
@@ -519,9 +518,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Die Zuleitung ist auf Konformität mit DIN VDE 0100 zu prüfen. Die Prüfung der Zuleitung durch eine Elektrofachkraft ist gemäß DGUV Vorschrift 3 i. V. m. DIN VDE 0100-600 vor Erstinbetriebnahme und danach wiederkehrend durchzuführen.'
         },
         "12.5": {
-            einfach: 'Lassen Sie alle Maschinen prüfen und halten Sie die Ergebnisse schriftlich fest.',
-            bghw: 'Lassen Sie alle Maschinen gemäß § 14 BetrSichV und der DGUV Regel 108-601 prüfen und dokumentieren Sie die Ergebnisse.',
-            rechtlich: 'Für Maschinen ist anhand der Gefährdungsbeurteilung zu bestimmen, welche Kontrollen und Prüfungen erforderlich sind. Prüfungen nach § 14 BetrSichV sind insbesondere bei montageabhängiger Sicherheit, schädigenden Einflüssen, prüfpflichtigen Änderungen oder außergewöhnlichen Ereignissen erforderlich; die Fristen werden nach § 3 Abs. 6 BetrSichV festgelegt. Eine allgemeine gesetzliche Jahresfrist für Maschinen besteht nicht.'
+            einfach: "Prüfen Sie für jede Maschine, welche Kontrollen und Prüfungen erforderlich sind, führen Sie diese fristgerecht durch und dokumentieren Sie prüfpflichtige Ergebnisse.",
+            bghw: "Ermitteln Sie für Maschinen anhand der Gefährdungsbeurteilung die erforderlichen Prüfungen und Prüffristen nach BetrSichV; berücksichtigen Sie Herstellerangaben, schädigende Einflüsse, Änderungen und außergewöhnliche Ereignisse.",
+            rechtlich: "Eine pauschale jährliche Prüfpflicht für jede Maschine besteht nach BetrSichV nicht. Nach § 14 BetrSichV sind Prüfungen insbesondere bei montageabhängiger Sicherheit, schädigenden Einflüssen, prüfpflichtigen Änderungen oder außergewöhnlichen Ereignissen erforderlich; erforderliche Fristen werden nach § 3 Abs. 6 BetrSichV festgelegt."
         },
         "12.6": {
             einfach: 'Kontrollieren Sie, ob alle Schutzvorrichtungen an den Maschinen vorhanden und funktionsfähig sind.',
@@ -565,9 +564,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Die Arbeitsgeräte im Servicebereich sind regelmäßig auf ihren ordnungsgemäßen Zustand zu prüfen (DGUV Vorschrift 3). Für ortsveränderliche elektrische Geräte gilt als bewährter Ausgangswert eine Prüffrist von 6 Monaten; eine Verlängerung ist bei nachgewiesen niedriger Fehlerquote und entsprechendem Einsatzbereich möglich.'
         },
         "13.4": {
-            einfach: 'Prüfen Sie, ob aufgeklappte Thekenscheiben von selbst oben bleiben.',
-            bghw: 'Prüfen Sie gemäß § 4 BetrSichV und der DGUV Regel 108-601, dass aufklappbare Thekenscheiben in geöffneter Stellung sicher und selbstständig stehen bleiben.',
-            rechtlich: 'Aufklappbare Thekenscheiben müssen gemäß § 4 BetrSichV in der oberen Stellung sicher und selbstständig verharren. Die Standsicherheit aufklappbarer Thekenscheiben in geöffneter Stellung ist Bestandteil der Prüfung nach § 4 BetrSichV (Schutz vor Herabfallen/Quetschung).'
+            einfach: "Stellen Sie sicher, dass aufgeklappte Thekenscheiben sicher in ihrer vorgesehenen Stellung gehalten werden und nicht unbeabsichtigt herabfallen können.",
+            bghw: "Prüfen Sie die sichere Funktion der Halte- bzw. Unterstützungseinrichtungen aufklappbarer Thekenscheiben und beseitigen Sie Quetsch- oder Herabfallgefahren.",
+            rechtlich: "Arbeitsmittel und Einrichtungen müssen so verwendet und instand gehalten werden, dass Gefährdungen durch unbeabsichtigtes Herabfallen oder Quetschen vermieden werden. Die erforderlichen Kontrollen sind anhand der Gefährdungsbeurteilung und Herstellerangaben festzulegen; § 4 BetrSichV begründet hierfür keine eigenständige pauschale Prüfpflicht."
         },
         "13.5": {
             einfach: 'Kleben Sie Markierungen in Augenhöhe an Glastüren und Glaswände.',
@@ -741,14 +740,14 @@ const MEASURES_TEXT = {
             rechtlich: 'Sicherheitsbeauftragte sind nach § 22 SGB VII unter den dort genannten Voraussetzungen zu bestellen; Auswahl, Aufgaben und erforderliche Qualifizierung sind betrieblich festzulegen. Nach § 22 Abs. 1 SGB VII sind Sicherheitsbeauftragte zu bestellen, wenn dies aufgrund der Zahl der Beschäftigten, der Arbeitsbedingungen oder der Unfall- und Gesundheitsgefahren erforderlich ist; im Einzelhandel wird i. d. R. ab 21 Beschäftigten eine Bestellung erwartet.'
         },
         "19.3": {
-            einfach: 'Sorgen Sie dafür, dass immer mindestens ein ausgebildeter Brandschutzhelfer im Laden ist.',
-            bghw: 'Stellen Sie gemäß DGUV Information 205-023 und der DGUV Regel 108-601 die ständige Anwesenheit eines Brandschutzhelfers während der Öffnungszeiten sicher.',
-            rechtlich: 'Es ist eine ausreichende Zahl von Brandschutzhelferinnen und Brandschutzhelfern zu benennen und auszubilden; die erforderliche Anzahl und Verfügbarkeit ist aus der Gefährdungsbeurteilung und ASR A2.2 abzuleiten (in der Regel mindestens 5 % der Beschäftigten, bei erhöhter Brandgefährdung mehr). Als grober Richtwert der DGUV gilt mindestens 5 % der Beschäftigten als Brandschutzhelfer, bei erhöhter Brandgefährdung oder komplexer Betriebsstruktur entsprechend mehr; ausschlaggebend ist die Gefährdungsbeurteilung.'
+            einfach: "Ermitteln Sie die erforderliche Zahl an Brandschutzhelfern und berücksichtigen Sie dabei Arbeitszeiten, Urlaub und Krankheit.",
+            bghw: "Benennen und qualifizieren Sie eine ausreichende Anzahl Brandschutzhelfer nach ASR A2.2. In der Regel sind 5 % der Beschäftigten ausreichend; bei erhöhter Brandgefährdung oder besonderen betrieblichen Bedingungen kann eine größere Zahl erforderlich sein. Schichtbetrieb und Abwesenheiten sind zu berücksichtigen.",
+            rechtlich: "ASR A2.2 Abschnitt 7.3 verlangt eine ausreichende Zahl von Brandschutzhelfern. Ein Anteil von 5 % der Beschäftigten ist in der Regel ausreichend; Gefährdungsbeurteilung, erhöhte Brandgefährdung, viele anwesende Personen, räumliche Ausdehnung sowie Schichtbetrieb und Abwesenheiten können eine höhere Zahl erfordern."
         },
         "19.4": {
-            einfach: 'Führen Sie mindestens alle 6 Monate eine Schulung zum sicheren Umgang mit Bargeld durch.',
-            bghw: 'Führen Sie die Unterweisung zum Umgang mit Zahlungsmitteln gemäß § 12 ArbSchG und der DGUV Regel 108-601 mindestens halbjährlich durch.',
-            rechtlich: 'Die Unterweisung zum Umgang mit Zahlungsmitteln ist nach § 12 ArbSchG auf Grundlage der Gefährdungsbeurteilung in angemessenen Abständen und bei maßgeblichen Änderungen zu wiederholen. Ein pauschales halbjährliches Intervall ist nicht allgemein gesetzlich vorgegeben. Ein pauschales halbjährliches Intervall ist zwar nicht gesetzlich zwingend, hat sich aber in der Praxis der Überfallprävention (DGUV Vorschrift 25) als angemessen etabliert.'
+            einfach: "Unterweisen Sie Beschäftigte, die mit Bargeld umgehen oder von einem Überfall betroffen sein können, mindestens alle sechs Monate zur Überfallprävention und dokumentieren Sie die Unterweisung.",
+            bghw: "Führen und dokumentieren Sie die Unterweisung zur Überfallprävention mindestens halbjährlich gemäß § 9 Abs. 1 DGUV Vorschrift 25. Für Verkaufsstellen sind ergänzend die Konkretisierungen der DGUV Regel 108-010 „Überfallprävention in Verkaufsstellen“ zu berücksichtigen.",
+            rechtlich: "Nach § 9 Abs. 1 DGUV Vorschrift 25 sind Versicherte, die Umgang mit Bargeld haben oder von einem Überfall betroffen sein können, mindestens halbjährlich sowie bei Bedarf zu unterweisen. Für Verkaufsstellen konkretisiert DGUV Regel 108-010 die Anforderungen zur Überfallprävention."
         },
         "19.5": {
             einfach: 'Halten Sie alle Unterweisungen schriftlich fest.',
@@ -974,92 +973,6 @@ const MEASURES_TEXT = {
             rechtlich: 'Das Vorgehen bei einer Störung oder einem Einschluss ist gemäß TRBS 3121 schriftlich zu regeln; die zuständigen Ansprechpartner sind bekannt zu machen. Das Vorgehen bei Störung oder Einschluss ist gemäß TRBS 3121 Nr. 4.2 schriftlich zu regeln, inkl. Ansprechpartner und maximaler Reaktionszeit des Notdienstes.'
         }
     },
-
-
-    "Flüssiggasflaschen – Lagerung und Verkauf": {
-        "23.1": {
-            einfach: 'Nehmen Sie Lagerung und Verkauf von Flüssiggasflaschen in die Gefährdungsbeurteilung auf und legen Sie klare Zuständigkeiten fest.',
-            bghw: 'Ergänzen Sie die Gefährdungsbeurteilung nach § 5 ArbSchG/GefStoffV um Lagerung und Abgabe von Flüssiggasflaschen und legen Sie Verantwortlichkeiten gemäß DGUV Regel 110-010 und DGUV Regel 108-601 fest.',
-            rechtlich: 'Gefährdungen durch Lagerung und Abgabe von Flüssiggasflaschen sind nach ArbSchG und GefStoffV zu beurteilen; Schutzmaßnahmen und Verantwortlichkeiten sind zu dokumentieren. DGUV Regel 110-010 und TRGS 510 konkretisieren die Anforderungen.'
-        },
-        "23.2": {
-            einfach: 'Ermitteln und dokumentieren Sie die maximale Lagermenge einschließlich voller, teilentleerter und zurückgegebener Flaschen.',
-            bghw: 'Ermitteln Sie die Nettolagermenge und gleichen Sie sie mit den mengenabhängigen Anforderungen der TRGS 510 Abschnitt 10 und DGUV Regel 110-010 ab.',
-            rechtlich: 'Die Lagermenge ist im Rahmen der Gefährdungsbeurteilung zu ermitteln. Für entzündbare Gase greifen die zusätzlichen Anforderungen der TRGS 510 Abschnitt 10 bei den dort festgelegten Mengenschwellen.'
-        },
-        "23.3": {
-            einfach: 'Lagern Sie Flüssiggasflaschen aufrecht und standsicher; sichern Sie sie gegen Umfallen und Herabfallen.',
-            bghw: 'Flüssiggasflaschen sind gemäß TRGS 510 Abschnitt 10.2 stehend zu lagern und gegen Umfallen oder Herabfallen zu sichern.',
-            rechtlich: 'TRGS 510 Abschnitt 10.2 fordert für LPG-Flaschen stehende Lagerung sowie eine Sicherung der Druckgasbehälter gegen Umfallen oder Herabfallen.'
-        },
-        "23.4": {
-            einfach: 'Schützen Sie die Ventile und sondern Sie beschädigte oder auffällige Flaschen sofort aus.',
-            bghw: 'Stellen Sie den Ventilschutz gemäß TRGS 510 sicher und separieren Sie beschädigte bzw. auffällige Flaschen nach einem festgelegten Verfahren.',
-            rechtlich: 'Nach TRGS 510 Abschnitt 10.2 sind Ventile durch geeignete Schutzeinrichtungen zu schützen. Beschädigte Behälter dürfen nicht regulär weitergelagert oder abgegeben werden.'
-        },
-        "23.5": {
-            einfach: 'Sorgen Sie für ausreichende Lüftung und verhindern Sie gefährliche Gasansammlungen.',
-            bghw: 'Prüfen Sie Lüftung und Lagergestaltung nach TRGS 510 Abschnitt 10.3 und DGUV Regel 110-010; austretendes Flüssiggas darf sich nicht gefährlich ansammeln.',
-            rechtlich: 'Die baulichen und lüftungstechnischen Anforderungen ergeben sich insbesondere aus TRGS 510 Abschnitt 10.3; Flüssiggas ist schwerer als Luft und bei der Gefährdungsbeurteilung entsprechend zu berücksichtigen.'
-        },
-        "23.6": {
-            einfach: 'Halten Sie Bereiche frei von Öffnungen, Schächten und Vertiefungen, in denen sich austretendes Gas sammeln könnte, oder treffen Sie geeignete Schutzmaßnahmen.',
-            bghw: 'Bewerten und sichern Sie Öffnungen zu tiefer gelegenen Bereichen, Gruben, Schächte und Kanaleinläufe im Gefahrenbereich gemäß DGUV Regel 110-010/TRGS 510.',
-            rechtlich: 'Bei Flüssiggas sind wegen seiner höheren Dichte gegenüber Luft tiefer gelegene Bereiche in der Gefährdungsbeurteilung besonders zu berücksichtigen; erforderliche Schutzabstände bzw. Maßnahmen sind nach DGUV Regel 110-010 und TRGS 510 festzulegen.'
-        },
-        "23.7": {
-            einfach: 'Sichern Sie das Lager gegen unbefugten Zugriff und gegen Anfahren oder andere mechanische Beschädigungen.',
-            bghw: 'Sichern Sie den Lagerbereich organisatorisch und baulich gegen Unbefugte sowie gegen Fahrzeug-/Flurförderzeuganprall gemäß TRGS 510 und Gefährdungsbeurteilung.',
-            rechtlich: 'TRGS 510 verlangt geeignete organisatorische und bauliche Schutzmaßnahmen. Art und Umfang des Zugangs- und Anfahrschutzes sind anhand der Gefährdungsbeurteilung festzulegen.'
-        },
-        "23.8": {
-            einfach: 'Entfernen Sie Zündquellen aus gefährdeten Bereichen und bringen Sie die erforderlichen Warn- und Verbotszeichen gut sichtbar an.',
-            bghw: 'Setzen Sie den Brand- und Explosionsschutz nach GefStoffV, TRGS 510 und DGUV Regel 110-010 um; Zündquellen vermeiden und Kennzeichnung festlegen.',
-            rechtlich: 'GefStoffV und TRGS 510 verlangen geeignete Brand- und Explosionsschutzmaßnahmen; die DGUV Regel 110-010 konkretisiert dies für Flüssiggas.'
-        },
-        "23.9": {
-            einfach: 'Entfernen Sie unnötige Brandlasten und halten Sie Verkehrs-, Flucht- und Rettungswege vollständig frei.',
-            bghw: 'Halten Sie das Flüssiggaslager frei von vermeidbaren Brandlasten und sichern Sie freie Verkehrs-/Fluchtwege gemäß TRGS 510 sowie ArbStättV/ASR A2.3.',
-            rechtlich: 'Brandschutz- und Lagerorganisation sind nach TRGS 510 festzulegen; Flucht- und Rettungswege müssen nach ArbStättV und ASR A2.3 nutzbar bleiben.'
-        },
-        "23.10": {
-            einfach: 'Schützen Sie die Flaschen vor übermäßiger Erwärmung.',
-            bghw: 'Stellen Sie Flüssiggasflaschen gemäß TRGS 510 Abschnitt 10.2 so auf, dass sie keiner unzulässigen äußeren Wärmeeinwirkung ausgesetzt sind.',
-            rechtlich: 'TRGS 510 Abschnitt 10.2 fordert Schutz vor übermäßiger äußerer Wärmeeinwirkung; die konkrete Aufstellung ist in der Gefährdungsbeurteilung festzulegen.'
-        },
-        "23.11": {
-            einfach: 'Legen Sie einen festen Rückgabeplatz und Ablauf fest und bringen Sie zurückgegebene Flaschen zeitnah ins vorgesehene Lager.',
-            bghw: 'Organisieren Sie Annahme und zeitnahe Verbringung zurückgegebener Flüssiggasflaschen in den vorgesehenen Lagerbereich gemäß DGUV Regel 108-601 und DGUV Regel 110-010.',
-            rechtlich: 'Die Organisation von Annahme, Zwischenhandhabung und Lagerung ist im Rahmen der Gefährdungsbeurteilung festzulegen; DGUV Regel 108-601 enthält branchenspezifische Hinweise für den Einzelhandel.'
-        },
-        "23.12": {
-            einfach: 'Legen Sie fest, was bei Gasgeruch, Undichtheit oder beschädigten Flaschen zu tun ist, und unterweisen Sie die Beschäftigten.',
-            bghw: 'Erstellen Sie ein Verfahren für undichte/beschädigte Flaschen und unterweisen Sie Beschäftigte anhand der Betriebsanweisung nach GefStoffV/TRGS 555 sowie DGUV Regel 110-010.',
-            rechtlich: 'Nach GefStoffV sind Betriebsanweisung und Unterweisung erforderlich; TRGS 555 konkretisiert diese Pflichten. Notfallmaßnahmen sind mit der Gefährdungsbeurteilung abzustimmen.'
-        },
-        "23.13": {
-            einfach: 'Kontrollieren Sie zurückgegebene oder teilentleerte Flaschen nach dem festgelegten Verfahren auf Dichtheit, bevor sie eingelagert werden.',
-            bghw: 'Führen Sie die in der Gefährdungsbeurteilung festgelegte Dichtheitskontrolle zurückgegebener/teilentleerter Flaschen durch, z. B. mit geeignetem schaumbildendem Mittel, und dokumentieren Sie das Verfahren.',
-            rechtlich: 'DGUV Regel 110-010 beschreibt für zurückgeführte bzw. teilentleerte Flaschen den Nachweis der Ventildichtheit, z. B. mit schaumbildendem Mittel, als Grundlage der Gefährdungsbeurteilung.'
-        },
-        "23.14": {
-            einfach: 'Organisieren Sie die Kundenausgabe kontrolliert und vermeiden Sie unnötige Gasflaschen im Verkaufsraum.',
-            bghw: 'Organisieren Sie Ausgabe und Rücknahme gemäß DGUV Regel 108-601 so, dass unkontrollierte Selbstbedienung und unnötiges Bereithalten im Verkaufsraum vermieden werden.',
-            rechtlich: 'Für den Einzelhandel sind die Anforderungen der GefStoffV/TRGS 510 und die branchenspezifischen Hinweise der DGUV Regel 108-601 bei der Organisation von Verkauf und Rücknahme zu berücksichtigen.'
-        },
-        "23.15": {
-            einfach: 'Aktualisieren Sie Betriebsanweisung, Unterweisungsnachweise und erforderliche Kontrollunterlagen.',
-            bghw: 'Halten Sie Betriebsanweisung, Unterweisungen und erforderliche Kontrollen nach GefStoffV, TRGS 555, TRGS 510 und DGUV Regel 110-010 aktuell und nachvollziehbar dokumentiert.',
-            rechtlich: 'GefStoffV und TRGS 555 regeln Betriebsanweisung und Unterweisung; TRGS 510 enthält Anforderungen an Lagerorganisation, Unterweisung sowie Überprüfungen und Kontrollen.'
-        },
-        "23.16": {
-            einfach: 'Legen Sie das Vorgehen bei Gasaustritt und Brand fest und halten Sie geeignete Feuerlöscheinrichtungen frei zugänglich.',
-            bghw: 'Legen Sie Alarmierung und Notfallmaßnahmen für Leckage/Brand gemäß TRGS 510 und DGUV Regel 110-010 fest; halten Sie geeignete Feuerlöscheinrichtungen zugänglich.',
-            rechtlich: 'Notfall-, Alarmierungs- und Brandschutzmaßnahmen sind nach GefStoffV/TRGS 510 anhand der Gefährdungsbeurteilung festzulegen; DGUV Regel 110-010 konkretisiert den sicheren Umgang mit Flüssiggas.'
-        }
-    },
-
-
     default: {
         einfach: 'Legen Sie geeignete Maßnahmen fest, um den Mangel zu beheben, und dokumentieren Sie diese.',
         bghw: 'Legen Sie geeignete Maßnahmen zur Mängelbeseitigung gemäß § 3 ArbSchG sowie den Ergebnissen der Gefährdungsbeurteilung und der DGUV Regel 108-601 fest und dokumentieren Sie diese nachvollziehbar.',

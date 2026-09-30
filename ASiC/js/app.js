@@ -8,7 +8,7 @@ const STORAGE_KEY = 'begehungState';
 
 // Revisionsstand der App/Checkliste (in Fusszeile und PDF sichtbar,
 // bei inhaltlichen Aenderungen an Fragenkatalog/Massnahmen hochzaehlen)
-const APP_REVISION = '1.44';
+const APP_REVISION = '1.48';
 const APP_REVISION_DATE = '2026-09-30';
 
 function renderFooterMeta() {
@@ -47,12 +47,14 @@ function defaultState() {
             pruefer: null,
             marktleitung: null
         },
-        notApplicable: {}
+        notApplicable: {},
+        subgroupNotApplicable: {}
     };
 }
 
 let state = defaultState();
 let openCategoryId = null;
+let openSubgroupId = null;
 
 // ===== State laden/speichern =====
 function loadState() {
@@ -66,7 +68,8 @@ function loadState() {
             comments: data.comments || {},
             measures: data.measures || [],
             signatures: { ...defaultState().signatures, ...(data.signatures || {}) },
-            notApplicable: data.notApplicable || {}
+            notApplicable: data.notApplicable || {},
+            subgroupNotApplicable: data.subgroupNotApplicable || {}
         };
     } catch (e) {
         console.error('ASiC Handel: Zustand konnte nicht geladen werden:', e);
@@ -2076,9 +2079,6 @@ const OPTIONAL_CATEGORIES = {
 
     'co2-kuehleinrichtungen':
         'Keine CO2-Kühleinrichtungen im Markt vorhanden',
-
-    'fluessiggas':
-        'Keine Lagerung bzw. kein Verkauf von Flüssiggasflaschen im Markt'
 };
 
 // ===== Checkliste rendern (index.html) =====
@@ -2124,11 +2124,77 @@ function buildChecklistHtml(forceOpenAll) {
                     </label>
                     <span class="toggle-label">${toggleLabel} – alle Fragen automatisch als „N.V." markieren</span>
                 </div>` : ''}
-                ${category.items.map(item => renderItem(item, locked)).join('')}
+                ${renderCategoryItems(category, locked, forceOpenAll)}
             </div>
         </section>`;
 
     }).join('');
+}
+
+function renderCategoryItems(category, categoryLocked, forceOpenAll) {
+    if (!category.subgroups || !category.subgroups.length) {
+        return category.items.map(item => renderItem(item, categoryLocked)).join('');
+    }
+
+    return category.subgroups.map(group => {
+        const groupKey = `${category.id}:${group.id}`;
+        const groupLocked = categoryLocked || !!state.subgroupNotApplicable[groupKey];
+        const groupItems = group.itemIds
+            .map(id => category.items.find(item => item.id === id))
+            .filter(Boolean);
+        const answered = groupItems.filter(item => state.ratings[item.id]).length;
+        const isOpen = forceOpenAll || openSubgroupId === groupKey;
+
+        return `
+        <div class="audit-subgroup ${isOpen ? 'open' : ''}" id="subgroup-${category.id}-${group.id}">
+            <div class="audit-subgroup-header" onclick="toggleSubgroup('${category.id}', '${group.id}', event)">
+                <div class="audit-subgroup-title">
+                    <span class="audit-subgroup-chevron">›</span>
+                    <span>${group.name}</span>
+                </div>
+                <span class="category-count ${answered === groupItems.length ? 'complete' : ''}">${answered} / ${groupItems.length}</span>
+            </div>
+            <div class="audit-subgroup-body">
+                <div class="category-toggle-row subgroup-toggle-row" onclick="event.stopPropagation()">
+                    <label class="toggle-switch">
+                        <input type="checkbox" ${groupLocked ? 'checked' : ''} ${categoryLocked ? 'disabled' : ''}
+                            onchange="toggleSubgroupNotApplicable('${category.id}', '${group.id}', this.checked)">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span class="toggle-label">Dieser Unterbereich trifft nicht zu – Fragen automatisch als „N.V." markieren</span>
+                </div>
+                ${groupItems.map(item => renderItem(item, groupLocked)).join('')}
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function toggleSubgroup(categoryId, subgroupId, event) {
+    if (event) event.stopPropagation();
+    const key = `${categoryId}:${subgroupId}`;
+    openSubgroupId = openSubgroupId === key ? null : key;
+    renderChecklist();
+}
+
+function toggleSubgroupNotApplicable(categoryId, subgroupId, checked) {
+    const key = `${categoryId}:${subgroupId}`;
+    state.subgroupNotApplicable[key] = checked;
+
+    const category = AUDIT_CATEGORIES.find(c => c.id === categoryId);
+    const subgroup = category && category.subgroups
+        ? category.subgroups.find(g => g.id === subgroupId)
+        : null;
+
+    if (checked && category && subgroup) {
+        subgroup.itemIds.forEach(itemId => {
+            state.ratings[itemId] = 'na';
+            delete state.comments[itemId];
+            state.measures = state.measures.filter(m => m.itemId !== itemId);
+        });
+    }
+
+    saveState();
+    renderChecklist();
 }
 
 function renderChecklist() {
@@ -2226,6 +2292,11 @@ function toggleNotApplicable(categoryId, checked) {
         );
 
     if (checked && category) {
+        if (category.subgroups) {
+            category.subgroups.forEach(group => {
+                state.subgroupNotApplicable[`${category.id}:${group.id}`] = true;
+            });
+        }
 
         category.items.forEach(item => {
 
@@ -2238,6 +2309,10 @@ function toggleNotApplicable(categoryId, checked) {
                 state.measures.filter(
                     m => m.itemId !== item.id
                 );
+        });
+    } else if (!checked && category && category.subgroups) {
+        category.subgroups.forEach(group => {
+            delete state.subgroupNotApplicable[`${category.id}:${group.id}`];
         });
     }
 
@@ -2271,6 +2346,17 @@ function setRating(itemId, rating) {
             )
         ) {
             return;
+        }
+    }
+
+    // Schutz fuer einzeln deaktivierte Unterbereiche.
+    for (const category of AUDIT_CATEGORIES) {
+        if (!category.subgroups) continue;
+        for (const group of category.subgroups) {
+            const key = `${category.id}:${group.id}`;
+            if (state.subgroupNotApplicable[key] && group.itemIds.includes(itemId)) {
+                return;
+            }
         }
     }
 
