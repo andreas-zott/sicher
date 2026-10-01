@@ -2137,7 +2137,8 @@ function renderCategoryItems(category, locked, forceOpenAll) {
     return groups.map((group, index) => {
         const key = `${category.id}::${group.name}`;
         const groupOpen = forceOpenAll || openSubgroups.has(key);
-        const groupLocked = locked || !!state.subgroupNotApplicable[key];
+        const showSubgroupToggle = category.id !== 'beleuchtung';
+        const groupLocked = locked || (showSubgroupToggle && !!state.subgroupNotApplicable[key]);
         const answered = group.items.filter(item => state.ratings[item.id]).length;
         const complete = answered === group.items.length;
 
@@ -2152,6 +2153,7 @@ function renderCategoryItems(category, locked, forceOpenAll) {
                 <span class="category-count ${complete ? 'complete' : ''}">${answered} / ${group.items.length}</span>
             </button>
             <div class="audit-subgroup-body">
+                ${showSubgroupToggle ? `
                 <div class="category-toggle-row subgroup-toggle-row" onclick="event.stopPropagation()">
                     <label class="toggle-switch">
                         <input type="checkbox" ${state.subgroupNotApplicable[key] ? 'checked' : ''}
@@ -2160,7 +2162,7 @@ function renderCategoryItems(category, locked, forceOpenAll) {
                         <span class="toggle-slider"></span>
                     </label>
                     <span class="toggle-label">Unterbereich nicht vorhanden / nicht anwendbar – alle Fragen automatisch als „N.V." markieren</span>
-                </div>
+                </div>` : ''}
                 ${group.items.map(item => renderItem(item, groupLocked)).join('')}
             </div>
         </div>`;
