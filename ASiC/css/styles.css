@@ -691,6 +691,58 @@ html.access-locked body > *:not(.access-gate-overlay) {
     display: block;
 }
 
+.audit-subgroup {
+    border-bottom: 1px solid var(--line);
+}
+
+.audit-subgroup:last-child {
+    border-bottom: none;
+}
+
+.audit-subgroup-header {
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    background: var(--paper);
+    color: var(--ink);
+    padding: 0.85rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-align: left;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.audit-subgroup-left {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-width: 0;
+}
+
+.audit-subgroup-chevron {
+    flex-shrink: 0;
+    color: var(--steel);
+    transition: transform 0.2s ease;
+}
+
+.audit-subgroup.open .audit-subgroup-chevron {
+    transform: rotate(90deg);
+}
+
+.audit-subgroup-body {
+    display: none;
+}
+
+.audit-subgroup.open .audit-subgroup-body {
+    display: block;
+}
+
 .category-toggle-row {
     display: flex;
     align-items: center;
