@@ -132,11 +132,6 @@ const MEASURES_TEXT = {
             bghw: 'Machen Sie Betriebsanweisungen gemäß § 14 GefStoffV bzw. § 4 BetrSichV und der DGUV Regel 108-601 jederzeit zugänglich und kontrollieren Sie die Einhaltung der Sicherheitsanweisungen.',
             rechtlich: 'Betriebsanweisungen sind gemäß § 14 GefStoffV bzw. § 4 BetrSichV aktuell, zugänglich und für Beschäftigte verständlich bereitzustellen. Betriebsanweisungen sind in einer für die Beschäftigten verständlichen Form und Sprache abzufassen (§ 14 Abs. 1 GefStoffV) und regelmäßig auf Aktualität zu prüfen.'
         },
-        "1.12": {
-            einfach: 'Sorgen Sie für ausreichende und funktionsfähige Beleuchtung. Im Verkaufsbereich sind nach ASR A3.4 mindestens 300 lx erforderlich, im Kassenbereich und am Packtisch mindestens 500 lx. Für Lagerbereiche richtet sich die erforderliche Beleuchtungsstärke nach der jeweiligen Tätigkeit und Sehaufgabe.',
-            bghw: 'Stellen Sie eine ausreichende Beleuchtung entsprechend ASR A3.4 sicher. Für Verkaufsbereiche gilt ein Mindestwert von 300 lx, für Kassenbereiche und Packtische 500 lx. Lager- und Nebenbereiche sind entsprechend der dort ausgeübten Tätigkeiten und Sehaufgaben zu beleuchten.',
-            rechtlich: 'Nach ArbStättV in Verbindung mit ASR A3.4 sind Arbeitsstätten entsprechend der jeweiligen Tätigkeit ausreichend zu beleuchten. Die ASR A3.4 nennt für Verkaufsbereiche mindestens 300 lx und für Kassenbereiche und Packtische mindestens 500 lx. Für Lagerbereiche sind die jeweils einschlägigen tätigkeitsbezogenen Mindestwerte anzuwenden.'
-        },
         "1.13": {
             einfach: 'Lassen Sie ein mangelhaftes Schnelllauftor umgehend fachkundig prüfen und instand setzen. Kraftbetätigte Tore sind wiederkehrend sicherheitstechnisch zu prüfen; die ASR A1.7 empfiehlt mindestens eine jährliche Prüfung.',
             bghw: 'Veranlassen Sie bei Mängeln Prüfung und Instandsetzung des Schnelllauftors. Nach ASR A1.7 erfolgt die wiederkehrende sicherheitstechnische Prüfung nach den Vorgaben des Herstellers; sie sollte mindestens einmal jährlich durchgeführt werden.',
@@ -468,8 +463,8 @@ const MEASURES_TEXT = {
         }
     },
     "Arbeitsmedizin": {        "11.1": {
-            einfach: 'Bieten Sie Ihren Mitarbeitenden die vorgeschriebenen Gesundheitschecks beim Betriebsarzt an.',
-            bghw: 'Bieten Sie arbeitsmedizinische Vorsorge gemäß ArbMedVV und der DGUV Regel 108-601 an.',
+            einfach: 'Stellen Sie sicher, dass erforderliche Pflichtvorsorge veranlasst, Angebotsvorsorge angeboten und Wunschvorsorge im vorgesehenen Umfang ermöglicht wird.',
+            bghw: 'Stellen Sie die arbeitsmedizinische Vorsorge nach ArbMedVV sicher: Pflichtvorsorge veranlassen, Angebotsvorsorge anbieten und Wunschvorsorge unter den gesetzlichen Voraussetzungen ermöglichen.',
             rechtlich: 'Arbeitsmedizinische Vorsorge ist gemäß ArbMedVV anzubieten bzw. zu veranlassen. Zu unterscheiden sind Pflichtvorsorge (zwingend vor und während der Tätigkeit), Angebotsvorsorge (anzubieten) und Wunschvorsorge (auf Verlangen der Beschäftigten) gemäß §§ 4, 5, 5a ArbMedVV; der konkrete Anlass ergibt sich aus Anhang Teil 1–4 ArbMedVV.'
         },
         "11.2": {
@@ -514,7 +509,7 @@ const MEASURES_TEXT = {
             rechtlich: 'Elektroleitungen sind stolperfrei zu verlegen und auf Unversehrtheit zu prüfen (DGUV Vorschrift 3, ASR A1.5). Kabel sind gemäß ASR A1.5 so zu verlegen, dass keine Stolperstellen entstehen; Kabelbrücken oder Unterflurverlegung sind zu bevorzugen.'
         },
         "12.4": {
-            einfach: 'Lassen Sie prüfen, ob die Stromzuleitung den geltenden Normen entspricht.',
+            einfach: 'Nehmen Sie beschädigte oder offensichtlich ungeeignete Zuleitungen, Stecker und Anschlüsse außer Betrieb und lassen Sie sie fachgerecht instand setzen bzw. prüfen.',
             bghw: 'Lassen Sie die Zuleitung gemäß DIN VDE 0100 und der DGUV Regel 108-601 durch eine Elektrofachkraft prüfen.',
             rechtlich: 'Die Zuleitung ist auf Konformität mit DIN VDE 0100 zu prüfen. Die Prüfung der Zuleitung durch eine Elektrofachkraft ist gemäß DGUV Vorschrift 3 i. V. m. DIN VDE 0100-600 vor Erstinbetriebnahme und danach wiederkehrend durchzuführen.'
         },
@@ -529,9 +524,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Schutzeinrichtungen müssen entsprechend der Gefährdungsbeurteilung sicher vorhanden und funktionsfähig sein; die regelmäßige Funktionskontrolle ist nach § 4 Abs. 5 BetrSichV sicherzustellen. Die regelmäßige Funktionskontrolle ist gemäß § 4 Abs. 5 BetrSichV mindestens im Rahmen jeder wiederkehrenden Prüfung sicherzustellen.'
         },
         "12.7": {
-            einfach: 'Hängen Sie die Betriebsanweisungen für die Backstation gut sichtbar auf.',
-            bghw: 'Hängen Sie Betriebsanweisungen für die Backstation gemäß § 14 GefStoffV, § 4 BetrSichV und der DGUV Regel 108-601 gut sichtbar aus.',
-            rechtlich: 'Betriebsanweisungen sind gemäß § 14 GefStoffV bzw. § 4 BetrSichV gut sichtbar auszuhängen. Betriebsanweisungen sind gemäß § 14 Abs. 1 GefStoffV bzw. § 4 BetrSichV verständlich und in der jeweiligen Landessprache der Beschäftigten abzufassen.'
+            einfach: 'Stellen Sie die erforderlichen Betriebsanweisungen für die Backstation verständlich bereit und sorgen Sie dafür, dass die Beschäftigten darauf zugreifen können.',
+            bghw: 'Stellen Sie erforderliche Betriebsanweisungen für die Backstation nach den jeweils einschlägigen Vorschriften verständlich und für die Beschäftigten zugänglich bereit.',
+            rechtlich: 'Erforderliche Betriebsanweisungen sind nach den jeweils einschlägigen Vorschriften verständlich bereitzustellen und den Beschäftigten zugänglich zu machen. Für Tätigkeiten mit Gefahrstoffen richtet sich die Betriebsanweisung insbesondere nach § 14 GefStoffV; für Arbeitsmittel sind die Gefährdungsbeurteilung, BetrSichV und Herstellerinformationen zu berücksichtigen.'
         },
         "12.8": {
             einfach: 'Prüfen Sie den Backhandschuh auf Verschleiß und tauschen Sie ihn bei Bedarf aus.',
@@ -593,11 +588,6 @@ const MEASURES_TEXT = {
             einfach: 'Kontrollieren Sie die Geräte im Convenience-Bereich regelmäßig auf sicheren Zustand und lassen Sie erforderliche Prüfungen in den festgelegten Fristen durchführen.',
             bghw: 'Stellen Sie die erforderlichen Kontrollen und Prüfungen der Convenience-Geräte entsprechend Gefährdungsbeurteilung, Einsatzbedingungen und Herstellerangaben sicher. Für elektrische Geräte ist DGUV Vorschrift 3 zu beachten.',
             rechtlich: 'Art, Umfang und Fristen erforderlicher Prüfungen richten sich nach dem jeweiligen Arbeitsmittel und den Einsatzbedingungen. Elektrische Anlagen und Betriebsmittel sind nach § 5 DGUV Vorschrift 3 in den festgelegten Fristen auf ordnungsgemäßen Zustand zu prüfen.'
-        },
-        "13.10": {
-            einfach: 'Sorgen Sie für ausreichend Licht im Servicebereich.',
-            bghw: 'Stellen Sie die Beleuchtung im Servicebereich gemäß ASR A3.4 und der DGUV Regel 108-601 sicher.',
-            rechtlich: 'Die Beleuchtung im Servicebereich ist gemäß ASR A3.4 ausreichend sicherzustellen. Als Anhaltswert nach ASR A3.4 gilt für Verkaufs-/Servicebereiche eine Mindestbeleuchtungsstärke von etwa 300 Lux.'
         }
     },
     "Kassenzone": {        "14.1": {
@@ -634,7 +624,7 @@ const MEASURES_TEXT = {
     "Gefahrstoffe": {        "15.1": {
             einfach: 'Lagern Sie Gefahrstoffe so, dass sich unterschiedliche Stoffe nicht gefährlich vermischen können.',
             bghw: 'Beachten Sie die Zusammenlagerungsverbote nach TRGS 510 und der DGUV Regel 108-601 konsequent.',
-            rechtlich: 'Gefahrstoffe sind unter strikter Beachtung der Zusammenlagerungsverbote nach TRGS 510 (Abschnitt 7 und Anlage 2) zu lagern, sodass gefährliche Wechselwirkungen ausgeschlossen sind. Die Zusammenlagerungsverbote und -beschränkungen ergeben sich aus TRGS 510 Abschnitt 7 i. V. m. Anlage 1 (Zusammenlagerungstabelle).'
+            rechtlich: 'Gefahrstoffe sind nach den Zusammenlagerungsregeln der TRGS 510 zu lagern. Maßgeblich sind insbesondere Abschnitt 13 zur Zusammen-, Getrennt- und Separatlagerung sowie Anhang 2 zur Zuordnung der Lagerklassen; gefährliche Wechselwirkungen sind zu vermeiden.'
         },
         "15.2": {
             einfach: 'Stellen Sie Schutzbrille und Handschuhe für den Umgang mit Gefahrstoffen bereit.',
@@ -1098,6 +1088,24 @@ const MEASURES_TEXT = {
         }
     },
 
+    "Beleuchtung": {
+        "24.1": {
+            einfach: 'Sorgen Sie im Verkaufsraum für eine gleichmäßige, funktionsfähige Beleuchtung. Dunkle Bereiche und störende Blendung sind zu beseitigen; im Verkaufsbereich sind nach ASR A3.4 mindestens 300 lx erforderlich.',
+            bghw: 'Stellen Sie im Verkaufsraum eine ausreichende und gleichmäßige Beleuchtung sicher. Nach ASR A3.4 beträgt die Mindestbeleuchtungsstärke im Verkaufsbereich 300 lx. Defekte Leuchten, auffällige Dunkelzonen und störende Blendung sind zu beseitigen.',
+            rechtlich: 'Nach ArbStättV in Verbindung mit ASR A3.4 ist der Verkaufsbereich ausreichend zu beleuchten. ASR A3.4 nennt für Verkaufsbereiche eine Mindestbeleuchtungsstärke von 300 lx; die Beleuchtung ist so auszulegen und instand zu halten, dass Sicherheit und Gesundheit der Beschäftigten gewährleistet sind.'
+        },
+        "24.2": {
+            einfach: 'Sorgen Sie im Lager für ausreichendes und funktionsfähiges Licht. Die erforderliche Helligkeit richtet sich danach, ob dort nur gelagert, Ware gesucht, gelesen oder verpackt wird.',
+            bghw: 'Stellen Sie die Lagerbeleuchtung entsprechend der tatsächlichen Tätigkeit und Sehaufgabe sicher. ASR A3.4 unterscheidet bei Lagerräumen unter anderem zwischen gleichartigem bzw. großteiligem Lagergut, Suchaufgaben, Leseaufgaben sowie Versand- und Verpackungsbereichen.',
+            rechtlich: 'Nach ArbStättV in Verbindung mit ASR A3.4 ist die Beleuchtungsstärke im Lager tätigkeitsbezogen festzulegen. ASR A3.4 nennt beispielsweise 50 lx für Lagerräume mit gleichartigem oder großteiligem Lagergut, 100 lx bei Suchaufgaben, 200 lx bei Leseaufgaben und 300 lx für Versand- und Verpackungsbereiche.'
+        },
+        "24.3": {
+            einfach: 'Sorgen Sie im Servicebereich für ausreichendes, funktionsfähiges und möglichst blendfreies Licht, damit die dortigen Arbeiten sicher ausgeführt werden können.',
+            bghw: 'Stellen Sie im Servicebereich eine ausreichende Beleuchtung entsprechend den dort tatsächlich ausgeführten Tätigkeiten und Sehaufgaben sicher. Defekte Leuchten, auffällige Dunkelzonen und störende Blendung sind zu beseitigen.',
+            rechtlich: 'Nach ArbStättV in Verbindung mit ASR A3.4 muss die Beleuchtung den jeweiligen Tätigkeiten und Sehaufgaben entsprechen. Der konkret erforderliche Mindestwert richtet sich nach der tatsächlichen Nutzung des Servicebereichs; eine pauschale Zuordnung zu einem einzelnen Tabellenwert ist ohne nähere Tätigkeitsbestimmung nicht sachgerecht.'
+        }
+    },
+
     default: {
         einfach: 'Legen Sie geeignete Maßnahmen fest, um den Mangel zu beheben, und dokumentieren Sie diese.',
         bghw: 'Legen Sie geeignete Maßnahmen zur Mängelbeseitigung gemäß § 3 ArbSchG sowie den Ergebnissen der Gefährdungsbeurteilung und der DGUV Regel 108-601 fest und dokumentieren Sie diese nachvollziehbar.',
@@ -1119,7 +1127,7 @@ const MEASURES_BY_ID = (() => {
 })();
 
 // Aktuell gewaehlter Sprachstil (wird von der App per Umschalter gesetzt und in localStorage gemerkt).
-let MEASURE_STYLE = localStorage.getItem('measureStyle') || 'bghw';
+let MEASURE_STYLE = localStorage.getItem('measureStyle') || 'einfach';
 
 function setMeasureStyle(style) {
     if (['einfach', 'bghw', 'rechtlich'].indexOf(style) === -1) return;

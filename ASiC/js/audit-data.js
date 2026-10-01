@@ -13,7 +13,6 @@ const AUDIT_CATEGORIES = [
             { id: "1.9", text: "Sind die Verkehrswege so beschaffen, dass kein Unfallrisiko durch Stolpern, Ausrutschen oder Umknicken besteht?" },
             { id: "1.10", text: "Sind die Treppen unbeschädigt und frei von Gegenständen?" },
             { id: "1.11", text: "Sind Betriebsanweisungen gut zugänglich und werden Sicherheitsanweisungen eingehalten?" },
-            { id: "1.12", text: "Ist die Beleuchtung in den Verkaufs- und Lagerbereichen gemäß ASR A3.4 ausreichend dimensioniert (mind. 300 Lux im Verkaufsraum), voll funktionsfähig und so beschaffen, dass Gefahrenhinweise auf Produkten sowie Leckagen in den Regalen jederzeit zweifelsfrei erkennbar sind?" },
             { id: "1.13", text: "Sind die Schnelllauftore gemäß den Herstellervorgaben und den Anforderungen der ASR A1.7 wiederkehrend geprüft sowie technisch einwandfrei?" },
             { id: "1.14", text: "Sind die Rolltore aktuell geprüft und funktionieren alle Schutzeinrichtungen (z. B. Absturzsicherung, Einzugsschutz) einwandfrei?" }
         ]
@@ -138,7 +137,7 @@ const AUDIT_CATEGORIES = [
         id: "arbeitsmedizin",
         name: "Arbeitsmedizin",
         items: [
-            { id: "11.1", text: "Wird den Beschäftigten arbeitsmedizinische Vorsorge angeboten?" },
+            { id: "11.1", text: "Werden die nach der Gefährdungsbeurteilung erforderlichen Pflicht- und Angebotsvorsorgen veranlasst bzw. angeboten und wird den Beschäftigten Wunschvorsorge ermöglicht?" },
             { id: "11.2", text: "Erfolgte im laufenden Berichtszeitraum eine arbeitsmedizinische Betreuung (z. B. Begehung oder Sprechstunde) bzw. ist diese für das aktuelle Kalenderjahr fest eingeplant?" },
             { id: "11.3", text: "Erfolgten arbeitsmedizinische Beratungen für Beschäftigte oder Führungskräfte?" },
             { id: "11.4", text: "Sind Maßnahmen gegen Hauterkrankungen getroffen?" },
@@ -153,10 +152,10 @@ const AUDIT_CATEGORIES = [
             { id: "12.1", text: "Sind die Arbeitsgeräte an der Backstation (Backofen, Backbleche, Brotschneidemaschine) in einem ordnungsgemäßen Zustand?" },
             { id: "12.2", text: "Ist das freistehende Handwaschbecken ohne Beschädigungen?" },
             { id: "12.3", text: "Sind die Elektroleitungen intakt und bilden keine Stolperstellen?" },
-            { id: "12.4", text: "Entspricht die Zuleitung der VDE-Norm?" },
+            { id: "12.4", text: "Sind Zuleitungen, Stecker und Anschlüsse der Backstation ohne erkennbare Beschädigungen und für die eingesetzten Geräte geeignet?" },
             { id: "12.5", text: "Sind alle Maschinen geprüft und dokumentiert?" },
             { id: "12.6", text: "Sind Schutzeinrichtungen vorhanden und funktionsfähig?" },
-            { id: "12.7", text: "Sind Betriebsanweisungen ausgehaengt?" },
+            { id: "12.7", text: "Sind die erforderlichen Betriebsanweisungen für die Backstation vorhanden und für die Beschäftigten gut zugänglich?" },
             { id: "12.8", text: "Ist der Backhandschuh für die Backstation in einem ordnungsgemäßen Zustand (kein Verschleiß) und besitzt eine lange Stulpe?" },
             { id: "12.9", text: "Sind alle Heißgeräte (z. B. Heißtheken, Fritteusen) in technisch einwandfreiem Zustand?" },
             { id: "12.10", text: "Ist die Brotschneidemaschine aktuell geprüft und inklusive aller Schutzeinrichtungen in einwandfreiem Zustand?" }
@@ -174,8 +173,7 @@ const AUDIT_CATEGORIES = [
             { id: "13.6", text: "Werden Schneidbretter und Messer regelmäßig gereinigt und farbcodiert verwendet?" },
             { id: "13.7", text: "Werden Schneidbretter mit Messereinschub verwendet?" },
             { id: "13.8", text: "Werden Messerhalter verwendet?" },
-            { id: "13.9", text: "Sind die Convenience-Geräte in einem ordnungsgemäßen Zustand?" },
-            { id: "13.10", text: "Ist die Beleuchtung ausreichend im Servicebereich?" }
+            { id: "13.9", text: "Sind die Convenience-Geräte in einem ordnungsgemäßen Zustand?" }
         ]
     },
     {
@@ -194,7 +192,7 @@ const AUDIT_CATEGORIES = [
         id: "gefahrstoffe",
         name: "Gefahrstoffe",
         items: [
-            { id: "15.1", text: "Werden Gefahrstoffe unter strikter Beachtung der Zusammenlagerungsverbote nach TRGS 510 (Abschnitt 7 und Anlage 2) so gelagert, dass gefährliche Wechselwirkungen zwischen verschiedenen Stoffgruppen ausgeschlossen sind?" },
+            { id: "15.1", text: "Werden Gefahrstoffe unter Beachtung der Zusammenlagerungsregeln nach TRGS 510, insbesondere Abschnitt 13 und Anhang 2, so gelagert, dass gefährliche Wechselwirkungen zwischen verschiedenen Stoffgruppen vermieden werden?" },
             { id: "15.2", text: "Wird die passende persönliche Schutzausrüstung (z. B. Schutzbrille, Handschuhe) für Tätigkeiten mit Gefahrstoffen zur Verfügung gestellt?" },
             { id: "15.3", text: "Ist die in den Betriebsanweisungen geforderte Persönliche Schutzausrüstung in unmittelbarer Nähe und einsatzbereit vorhanden?" },
             { id: "15.4", text: "Sind Sicherheitsdatenblätter verfügbar?" },
@@ -334,6 +332,16 @@ const AUDIT_CATEGORIES = [
             { id: "23.22", group: "Organisation, Unterweisung und PSA", text: "Werden die Unterweisungen dokumentiert?" },
             { id: "23.23", group: "Organisation, Unterweisung und PSA", text: "Tragen Beschäftigte bei der Handhabung den anhand der Gefährdungsbeurteilung erforderlichen Fuß- und Handschutz?" },
             { id: "23.24", group: "Organisation, Unterweisung und PSA", text: "Ist die Gefährdungsbeurteilung für Lagerung, Ausgabe, Rücknahme und innerbetrieblichen Transport der Flüssiggasflaschen aktuell?" }
+        ]
+    }
+    ,
+    {
+        id: "beleuchtung",
+        name: "Beleuchtung",
+        items: [
+            { id: "24.1", group: "Verkaufsraum", text: "Ist die Beleuchtung im Verkaufsraum ausreichend, funktionsfähig und ohne auffällige dunkle Bereiche oder störende Blendung (ASR A3.4: mindestens 300 lx im Verkaufsbereich)?" },
+            { id: "24.2", group: "Lager", text: "Ist die Beleuchtung im Lager ausreichend, funktionsfähig und für die dort ausgeführten Tätigkeiten und Sehaufgaben geeignet?" },
+            { id: "24.3", group: "Servicebereich", text: "Ist die Beleuchtung im Servicebereich ausreichend, funktionsfähig und für die dort ausgeführten Tätigkeiten und Sehaufgaben geeignet?" }
         ]
     }
 
