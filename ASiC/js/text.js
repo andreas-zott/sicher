@@ -1,5 +1,5 @@
 // ===== Vordefinierte Maßnahmen-Texte je Prüfpunkt, in drei Sprachstilen =====
-// Fachliche Überarbeitung: 25.08.2026. Regelwerksbezüge wurden gegen aktuelle BGHW/DGUV-, BAuA- und Bundesrechtsquellen abgeglichen.
+// Fachliche Überarbeitung: 01.10.2026. Vollprüfung der Maßnahmentexte gegen aktuelle BGHW/DGUV-, BAuA- und Bundesrechtsquellen; feste Fristen und Pflichtaussagen wurden besonders geprüft.
 // Detailüberarbeitung (2. Stufe): 25.08.2026 – jeder einzelne Prüfpunkt wurde individuell um konkrete Fristen/Intervalle,
 // präzisere Paragraphen-/Absatzangaben und zusätzliche branchenspezifische DGUV-/DIN-Einzelverweise ergänzt (kein pauschaler
 // Kategorietext). Recherchequellen u. a.: BetrSichV (Gesetze-im-Internet), ASR A2.2/A2.3/A3.4 (BAuA), DIN 14406-4, DIN EN 15635,
@@ -12,7 +12,7 @@
 // rechtlich  = konkrete gesetzliche/technische Rechtsgrundlagen; technische Regeln nur dort,
 //              wo sie die gesetzlichen Schutzziele konkretisieren.
 //
-// Rechts-/Regelwerksstand bei der Überarbeitung: 25.08.2026.
+// Rechts-/Regelwerksstand bei der Überarbeitung: 01.10.2026.
 // Verifiziert wurden insbesondere:
 // - BGHW/DGUV Regel 108-601 "Branche Einzelhandel"
 // - DGUV Vorschrift 25 "Überfallprävention" und DGUV Regel 108-010
@@ -36,9 +36,11 @@
 const MEASURE_SOURCES = {
     bghw: [
         'DGUV Regel 108-601 – Branche Einzelhandel',
+        'DGUV Regel 110-010 – Verwendung von Flüssiggas',
         'DGUV Vorschrift 25 – Überfallprävention',
         'DGUV Regel 108-010 – Überfallprävention in Verkaufsstellen',
         'DGUV Vorschrift 1 – Grundsätze der Prävention',
+        'DGUV Regel 100-001 – Grundsätze der Prävention (Konkretisierung der DGUV Vorschrift 1, Ausgabe 06/2025)',
         'DGUV Vorschrift 2 – Betriebsärzte und Fachkräfte für Arbeitssicherheit',
         'DGUV Vorschrift 3 – Elektrische Anlagen und Betriebsmittel',
         'DGUV Vorschrift 68 – Flurförderzeuge',
@@ -53,7 +55,7 @@ const MEASURE_SOURCES = {
         'DIN V VDE V 0108-100 / DIN EN 50172 – Sicherheitsbeleuchtungsanlagen',
         'DIN 18040-1 – Barrierefreies Bauen, öffentlich zugängliche Gebäude',
         'DIN 18650-2 / DIN EN 13241 – Kraftbetätigte Türen und Tore, Prüfung',
-        'DIN VDE 0834 – Anlagen für Ruf- und Zeitmesssysteme in Krankenhäusern/barrierefreien Anlagen'
+        'DIN VDE 0834 – Rufanlagen, soweit für die konkret installierte Anlage einschlägig'
     ],
     rechtsquellen: [
         'ArbSchG – insbesondere §§ 3, 4, 5, 5a, 6, 10, 12',
@@ -86,7 +88,7 @@ const MEASURES_TEXT = {
             rechtlich: 'Die Auswahl erforderlichen Fußschutzes erfolgt auf Grundlage der Gefährdungsbeurteilung. Anforderungen an Sicherheitsschuhe und deren Rutschhemmung werden insbesondere durch die jeweils einschlägigen Produktnormen und die DGUV Regel 112-191 konkretisiert. Die früheren Kennzeichnungen SRA, SRB und SRC sind für neu ausgewählten Fußschutz nicht als aktuelle Anforderung anzusetzen.'
         },
         "1.2": {
-            einfach: 'Weisen Sie Ihre Mitarbeitenden regelmäßig ein, wie sie Hubwagen & Co. sicher benutzen: Schutzausrüstung tragen, Lasten nicht überladen, niemanden mitfahren lassen. Nur volljährige Beschäftigte mit Fahrauftrag dürfen mitfahrbare Geräte führen.',
+            einfach: 'Unterweisen Sie die Beschäftigten im sicheren Umgang mit Flurförderzeugen und Hubwagen. Beachten Sie Traglasten, erforderliche Schutzausrüstung und das Verbot unzulässiger Personenmitnahme. Mitfahrbare Flurförderzeuge dürfen nur von geeigneten, mindestens 18 Jahre alten und schriftlich beauftragten Personen geführt werden.',
             bghw: 'Führen Sie regelmäßige Unterweisungen zum sicheren Umgang mit Flurförderfahrzeugen gemäß DGUV Vorschrift 68 und der DGUV Regel 108-601 durch, inkl. PSA-Pflicht, zulässiger Traglasten und Verbot der Personenmitnahme. Für mitfahrbare Flurförderzeuge ist ein schriftlicher Fahrauftrag zu erteilen; Mindestalter 18 Jahre (§ 7 DGUV Vorschrift 68).',
             rechtlich: 'Beschäftigte sind regelmäßig anhand der Betriebsanweisung zum sicheren Umgang mit Flurförderfahrzeugen zu unterweisen. PSA-Pflicht, Traglastbegrenzungen und das Verbot der Personenmitnahme sind konsequent einzuhalten. Fahrer mitfahrbarer Flurförderzeuge müssen mindestens 18 Jahre alt, körperlich/geistig geeignet und schriftlich beauftragt sein (§ 7 DGUV Vorschrift 68); die Unterweisung ist mindestens jährlich zu wiederholen (§ 4 Abs. 3 DGUV Vorschrift 68).'
         },
@@ -106,8 +108,8 @@ const MEASURES_TEXT = {
             rechtlich: 'Geeignete und geprüfte Aufstiegshilfen sind bereitzustellen. Die Nutzung hat gemäß DGUV Information 208-016 zu erfolgen. Ungeeignete Aufstiegshilfen wie Kisten, Regale oder Stühle sind zu untersagen; dies ist im Rahmen der Unterweisung nach § 12 ArbSchG zu kontrollieren.'
         },
         "1.7": {
-            einfach: 'Kontrollieren Sie Leitern und Tritte vor der Verwendung auf erkennbare Mängel und lassen Sie sie wiederkehrend prüfen. Die BGHW empfiehlt mindestens eine jährliche Prüfung. Beschädigte Leitern und Tritte sofort aus der Benutzung nehmen.',
-            bghw: 'Leitern und Tritte sind vor der Verwendung auf ordnungsgemäßen Zustand zu kontrollieren und wiederkehrend einer Sicht- und Funktionsprüfung zu unterziehen. Die Prüffrist ist unter Berücksichtigung von Nutzungshäufigkeit, Beanspruchung und bisherigen Mängeln festzulegen. Die BGHW empfiehlt mindestens eine jährliche Prüfung. Eine Prüfplakette kann die Organisation unterstützen, wird hier aber nicht als allgemeine gesetzliche Pflicht dargestellt.',
+            einfach: 'Kontrollieren Sie Leitern und Tritte vor der Verwendung auf erkennbare Mängel und lassen Sie sie wiederkehrend prüfen. Die DGUV Information 208-016 empfiehlt mindestens eine jährliche Prüfung. Beschädigte Leitern und Tritte sofort aus der Benutzung nehmen.',
+            bghw: 'Leitern und Tritte sind vor der Verwendung auf ordnungsgemäßen Zustand zu kontrollieren und wiederkehrend einer Sicht- und Funktionsprüfung zu unterziehen. Die Prüffrist ist unter Berücksichtigung von Nutzungshäufigkeit, Beanspruchung und bisherigen Mängeln festzulegen. Die DGUV Information 208-016 empfiehlt mindestens eine jährliche Prüfung. Eine Prüfplakette kann die Organisation unterstützen, wird hier aber nicht als allgemeine gesetzliche Pflicht dargestellt.',
             rechtlich: 'Art, Umfang und Fristen erforderlicher Prüfungen sind auf Grundlage der Gefährdungsbeurteilung festzulegen. Nach DGUV Information 208-016 richten sich die Zeitabstände insbesondere nach Nutzungshäufigkeit, Beanspruchung sowie Häufigkeit und Schwere festgestellter Mängel; eine mindestens jährliche Prüfung wird empfohlen. Eine pauschale gesetzliche Pflicht zu einer Prüfplakette wird daraus nicht abgeleitet.'
         },
         "1.8": {
@@ -147,9 +149,9 @@ const MEASURES_TEXT = {
         }
     },
     "Brandschutz": {        "2.1": {
-            einfach: 'Lassen Sie die Feuerlöscher regelmäßig prüfen und halten Sie die Fristen ein. Die Prüfung ist gesetzlich mindestens alle zwei Jahre Pflicht.',
-            bghw: 'Lassen Sie die Feuerlöscheinrichtungen entsprechend der DGUV Regel 108-601 „Branche Einzelhandel“ zu ASR A2.2 durch eine befähigte Person prüfen und die Prüffristen dokumentieren. Die Prüffrist beträgt gemäß ASR A2.2 Nr. 7.4 i. V. m. DIN 14406-4 höchstens zwei Jahre; kürzere Herstellerfristen sind zu beachten.',
-            rechtlich: 'Feuerlöscher sind gemäß ASR A2.2 i. V. m. § 4 ArbStättV regelmäßig (in der Regel alle zwei Jahre) durch eine befähigte Person zu prüfen; die Prüfung ist zu dokumentieren. Tragbare Feuerlöscher sind gemäß ASR A2.2 Nr. 7.4 i. V. m. DIN 14406-4 spätestens alle zwei Jahre durch eine sachkundige Person zu warten; das Ergebnis ist durch Instandhaltungsnachweis/Prüfplakette zu dokumentieren. Bei starker Beanspruchung sind kürzere Intervalle festzulegen.'
+            einfach: 'Lassen Sie die Feuerlöscher regelmäßig warten und prüfen. Als Regelfrist für die Wartung gelten zwei Jahre; abweichende Herstellerangaben und besondere Beanspruchungen sind zu berücksichtigen.',
+            bghw: 'Lassen Sie Feuerlöscher nach ASR A2.2 Abschnitt 7.4 regelmäßig fachkundig warten und die Funktionsfähigkeit prüfen. Für Feuerlöscher gilt grundsätzlich eine zweijährige Wartungsfrist; vom Hersteller zugelassene längere Fristen können berücksichtigt werden, kürzere Herstellerfristen und stärkere Beanspruchungen erfordern entsprechend kürzere Abstände.',
+            rechtlich: '§ 4 Abs. 3 ArbStättV verlangt die Instandhaltung und regelmäßige Funktionsprüfung von Feuerlöscheinrichtungen. ASR A2.2 Abschnitt 7.4 konkretisiert dies: Feuerlöscher sind grundsätzlich alle zwei Jahre durch einen Fachkundigen zu warten. Vom Hersteller zugelassene längere Fristen können herangezogen werden; kürzere Herstellerfristen sowie bei starker Beanspruchung erforderliche kürzere Abstände sind zu beachten. Die Ergebnisse sind zu dokumentieren.'
         },
         "2.2": {
             einfach: 'Stellen Sie nichts vor die Feuerlöscher und Wandhydranten.',
@@ -223,9 +225,9 @@ const MEASURES_TEXT = {
         }
     },
     "Sozialräume": {        "3.1": {
-            einfach: 'Hängen Sie die vorgeschriebenen Gesetze und die Brandschutzordnung im Sozialraum aus.',
-            bghw: 'Hängen Sie die aushangpflichtigen Gesetze, Unfallverhütungsvorschriften und die Brandschutzordnung Teil A gemäß DGUV Vorschrift 1 und den jeweils einschlägigen Aushang- und Brandschutzvorgaben und der DGUV Regel 108-601 im Sozialbereich aus.',
-            rechtlich: 'Die aushangpflichtigen Gesetze, Unfallverhütungsvorschriften sowie die Brandschutzordnung Teil A sind im Sozialbereich gut sichtbar auszuhängen (DGUV Vorschrift 1 und den jeweils einschlägigen Aushang- und Brandschutzvorgaben). Die Aushangpflicht ergibt sich u. a. aus § 22 DGUV Vorschrift 1 sowie ArbSchG, ArbZG und MuSchG; die Brandschutzordnung Teil A ist nach DIN 14096 auszuhängen.'
+            einfach: 'Stellen Sie sicher, dass die für Ihren Betrieb vorgeschriebenen Gesetze, Unfallverhütungsvorschriften und betrieblichen Informationen für Beschäftigte zugänglich sind. Eine Brandschutzordnung Teil A ist dort auszuhängen, wo sie aufgrund des Brandschutzkonzepts bzw. der betrieblichen Festlegung erforderlich ist.',
+            bghw: 'Machen Sie die einschlägigen Arbeitsschutzvorschriften und betrieblichen Sicherheitsinformationen für Beschäftigte zugänglich. Aushänge und eine Brandschutzordnung sind nach den jeweils für den Betrieb geltenden Vorgaben zu organisieren.',
+            rechtlich: 'Die Pflicht zur Bekanntmachung oder Zugänglichmachung ergibt sich jeweils aus der einschlägigen Vorschrift; sie besteht nicht pauschal für jedes Arbeitsschutzgesetz in derselben Form. Die Brandschutzordnung nach DIN 14096 ist umzusetzen, wenn sie aufgrund baurechtlicher, behördlicher oder betrieblicher Brandschutzvorgaben vorgesehen ist.'
         },
         "3.2": {
             einfach: 'Stellen Sie Kaffeemaschine und andere heiße Geräte auf eine feuerfeste Unterlage.',
@@ -673,7 +675,7 @@ const MEASURES_TEXT = {
         "16.4": {
             einfach: 'Führen Sie mit neuen Mitarbeitenden vor dem ersten Arbeitstag eine Einweisung zu Arbeitssicherheit und Brandschutz durch.',
             bghw: 'Unterweisen Sie neue Beschäftigte vor Tätigkeitsaufnahme gemäß § 12 ArbSchG und der DGUV Regel 108-601 zu Arbeitssicherheit, Brandschutz und betrieblichen Gefährdungen.',
-            rechtlich: 'Neue Beschäftigte sind vor Tätigkeitsaufnahme zu Arbeitssicherheit, Brandschutz und betrieblichen Gefährdungen gemäß § 12 ArbSchG zu unterweisen. Die Einweisung ist gemäß § 12 ArbSchG vor Aufnahme der Tätigkeit durchzuführen und deren Inhalt zu dokumentieren.'
+            rechtlich: 'Neue Beschäftigte sind nach § 12 ArbSchG bei der Einstellung vor Aufnahme der Tätigkeit arbeitsplatz- und aufgabenbezogen zu Sicherheit und Gesundheitsschutz zu unterweisen. § 4 Abs. 1 DGUV Vorschrift 1 verlangt zusätzlich die Dokumentation der Unterweisung und eine erforderlichenfalls wiederholte, mindestens jährliche Unterweisung; spezielle Vorschriften können kürzere Intervalle vorgeben.'
         },
         "16.5": {
             einfach: 'Achten Sie darauf, dass der Boden im Büro sauber, unbeschädigt und frei von Stolperfallen ist.',
@@ -692,9 +694,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Der Alarm ist gemäß DIN 18040-1 an eine ständig besetzte Stelle weiterzuleiten. Die ständig besetzte Stelle ist gemäß DIN 18040-1 so zu organisieren, dass eine Reaktion auf den Alarm jederzeit, auch außerhalb der Kernöffnungszeiten, sichergestellt ist.'
         },
         "17.3": {
-            einfach: 'Testen Sie die Notrufschnüre regelmäßig, mindestens einmal im Monat.',
-            bghw: 'Prüfen Sie Zugschnüre und Signalgeber gemäß DIN VDE 0834 und der DGUV Regel 108-601 mindestens monatlich auf Funktion.',
-            rechtlich: 'Prüfen Sie die Zugschnüre und Signalgeber gemäß DIN VDE 0834 regelmäßig, mindestens jedoch monatlich, auf ihre einwandfreie Funktion und dokumentieren Sie die Ergebnisse nachvollziehbar. Die monatliche Funktionsprüfung von Zugschnur und Signalgeber gemäß DIN VDE 0834-1 ist zu protokollieren (Datum, Prüfer, Ergebnis).'
+            einfach: 'Testen Sie die Notrufeinrichtung des barrierefreien WCs regelmäßig und nach den für die eingebaute Anlage geltenden Vorgaben. Halten Sie die festgelegten Prüfungen nachvollziehbar fest.',
+            bghw: 'Prüfen Sie die Notrufeinrichtung des barrierefreien WCs in den anhand von Herstellerangaben, Gefährdungsbeurteilung und den für die konkrete Rufanlage geltenden technischen Regeln festgelegten Abständen. Eine pauschale Monatsfrist wird ohne Nachweis für die konkrete Anlage nicht vorgegeben.',
+            rechtlich: 'Die Notrufeinrichtung ist funktionsfähig zu halten und in geeigneten Abständen zu kontrollieren. Prüfart und Prüffrist sind anhand der konkreten Anlage, der Herstellerangaben und der einschlägigen technischen Regeln festzulegen. DIN VDE 0834 darf nur herangezogen werden, wenn sie für die tatsächlich installierte Rufanlage anwendbar ist; eine allgemeine monatliche Prüffrist für jedes barrierefreie WC wird hier nicht unterstellt.'
         },
         "17.4": {
             einfach: 'Erklären Sie den Mitarbeitenden, was bei einem Alarm zu tun ist.',
@@ -749,9 +751,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Nach § 9 Abs. 1 DGUV Vorschrift 25 sind Versicherte, die Umgang mit Bargeld haben oder von einem Überfall betroffen sein können, mindestens halbjährlich sowie bei Bedarf zu unterweisen. Für Verkaufsstellen konkretisiert DGUV Regel 108-010 die Anforderungen zur Überfallprävention.'
         },
         "19.5": {
-            einfach: 'Halten Sie alle Unterweisungen schriftlich fest.',
-            bghw: 'Dokumentieren Sie alle Unterweisungen gemäß § 12 ArbSchG und der DGUV Regel 108-601 nachvollziehbar und vollständig.',
-            rechtlich: 'Die Durchführung der Unterweisung ist nachvollziehbar zu dokumentieren; Inhalt, Zeitpunkt und Teilnehmer sollten aus dem Nachweis hervorgehen. Der Nachweis sollte Datum, Thema, Inhalt, Namen der Teilnehmer und deren Unterschrift enthalten (§ 12 ArbSchG).'
+            einfach: 'Dokumentieren Sie jede durchgeführte Unterweisung so, dass Zeitpunkt, Thema und unterwiesene Personen nachvollziehbar sind. Eine Unterschrift ist nur dann zwingend, wenn eine spezielle Vorschrift sie verlangt.',
+            bghw: 'Dokumentieren Sie Unterweisungen nach § 4 Abs. 1 DGUV Vorschrift 1 nachvollziehbar. Die DGUV Regel 100-001 erläutert, dass die DGUV Vorschrift 1 keine bestimmte Form und grundsätzlich keine Unterschrift vorgibt; spezielle Vorschriften können zusätzliche Dokumentations- oder Unterschriftsanforderungen enthalten.',
+            rechtlich: '§ 4 Abs. 1 DGUV Vorschrift 1 verlangt die Dokumentation der Unterweisung. Nach DGUV Regel 100-001 ist dafür keine bestimmte Form vorgeschrieben; eine allgemeine Unterschriftspflicht ergibt sich aus der DGUV Vorschrift 1 nicht. Datum, Anlass bzw. Thema und die unterwiesenen Personen sollten für einen belastbaren Nachweis erkennbar sein. Spezielle Vorschriften, z. B. § 14 GefStoffV, können ausdrücklich eine schriftliche Dokumentation und Unterschrift verlangen.'
         },
         "19.6": {
             einfach: 'Beziehen Sie neue Abläufe oder Sicherheitstechniken in die nächste Schulung mit ein.',
@@ -780,8 +782,8 @@ const MEASURES_TEXT = {
             rechtlich: 'Arbeitszeit und Überstunden sind unter Beachtung des Arbeitszeitgesetzes und der Gefährdungsbeurteilung zu gestalten; insbesondere sind die Höchstarbeitszeiten und Ruhezeiten nach dem ArbZG einzuhalten (§§ 3, 5 ArbSchG; ArbZG). Die Höchstarbeitszeit beträgt gemäß § 3 ArbZG grundsätzlich 8 Stunden werktäglich (Verlängerung auf bis zu 10 Stunden nur bei Ausgleich innerhalb von 6 Kalendermonaten); die Ruhezeit zwischen zwei Arbeitstagen muss gemäß § 5 ArbZG mindestens 11 Stunden betragen.'
         },
         "20.4": {
-            einfach: 'Führen Sie regelmäßige Teambesprechungen durch.',
-            bghw: 'Führen Sie regelmäßige Teambesprechungen gemäß § 3 ArbSchG sowie den Ergebnissen der Gefährdungsbeurteilung und der DGUV Regel 108-601 zur betrieblichen Organisation durch.',
+            einfach: 'Nutzen Sie Teambesprechungen, wenn sie helfen, Arbeitsabläufe, Belastungen oder notwendige Verbesserungen gemeinsam zu klären.',
+            bghw: 'Nutzen Sie Teambesprechungen als mögliche organisatorische Maßnahme, wenn dies aus Arbeitsorganisation, Kommunikation oder der Gefährdungsbeurteilung sinnvoll ist. DGUV Regel 108-601 unterstützt eine geeignete betriebliche Organisation, schreibt aber keine feste Besprechungsform vor.',
             rechtlich: 'Regelmäßige Teambesprechungen können als organisatorische Maßnahme zur Umsetzung der Gefährdungsbeurteilung, Unterweisung und Kommunikation eingesetzt werden; § 3 ArbSchG schreibt jedoch keine bestimmte Besprechungsform vor. Regelmäßige Teambesprechungen sind eine anerkannte organisatorische Maßnahme im Rahmen der Gefährdungsbeurteilung psychischer Belastung nach § 5 Abs. 3 Nr. 6 ArbSchG.'
         },
         "20.5": {
@@ -790,9 +792,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Neue Beschäftigte sind vor Aufnahme der Tätigkeit und bei relevanten Änderungen tätigkeitsbezogen zu unterweisen (§ 12 ArbSchG); die Einarbeitung ist entsprechend der Gefährdungsbeurteilung zu organisieren. Eine strukturierte Einarbeitung ist als organisatorische Maßnahme im Sinne der Gefährdungsbeurteilung psychischer Belastung (§ 5 Abs. 3 Nr. 6 ArbSchG) zu werten, insbesondere zur Vermeidung von Überforderung.'
         },
         "20.6": {
-            einfach: 'Unterweisen Sie die Beschäftigten vor Aufnahme der Tätigkeit und danach entsprechend den Gefährdungen und betrieblichen Erfordernissen. Erforderliche Wiederholungen müssen nach DGUV Vorschrift 1 mindestens einmal jährlich erfolgen.',
-            bghw: 'Führen Sie die erforderlichen Unterweisungen auf Grundlage der Gefährdungsbeurteilung durch. Nach § 4 Abs. 1 DGUV Vorschrift 1 müssen Unterweisungen erforderlichenfalls wiederholt werden, mindestens jedoch einmal jährlich. Anlassbezogene oder gefahrenspezifische Unterweisungen können zusätzlich erforderlich sein.',
-            rechtlich: 'Nach § 12 ArbSchG sind Beschäftigte ausreichend und angemessen zu unterweisen. § 4 Abs. 1 DGUV Vorschrift 1 konkretisiert die Wiederholung: Die Unterweisung ist erforderlichenfalls zu wiederholen, mindestens aber einmal jährlich. Inhalt und Zeitpunkt richten sich zusätzlich nach den bestehenden Gefährdungen und betrieblichen Anlässen.'
+            einfach: 'Unterweisen Sie Beschäftigte passend zu ihrer Tätigkeit und den vorhandenen Gefährdungen. Eine Unterweisung ist insbesondere bei Arbeitsbeginn und bei relevanten Änderungen erforderlich. Wiederholungen erfolgen bei Bedarf und mindestens einmal jährlich; einzelne Vorschriften können kürzere Fristen verlangen.',
+            bghw: 'Führen Sie Unterweisungen tätigkeits- und gefährdungsbezogen durch. § 4 Abs. 1 DGUV Vorschrift 1 verlangt erforderlichenfalls Wiederholungen, mindestens jedoch einmal jährlich. Die DGUV Regel 100-001 stellt klar, dass dies nicht als eine einzige jährliche Gesamtunterweisung zu verstehen ist; Einstellungs-, Änderungs-, Anlass- und spezielle Fachunterweisungen sind entsprechend den jeweiligen Gefährdungen durchzuführen.',
+            rechtlich: 'Nach § 12 ArbSchG muss die Unterweisung arbeitsplatz- bzw. aufgabenbezogen erfolgen, insbesondere bei Einstellung, Aufgabenänderungen sowie vor Einführung neuer Arbeitsmittel oder Technologien. § 4 Abs. 1 DGUV Vorschrift 1 verlangt erforderlichenfalls Wiederholungen, mindestens einmal jährlich, und deren Dokumentation. Spezielle Vorschriften können zusätzliche Anlässe oder kürzere Intervalle festlegen.'
         },
         "20.7": {
             einfach: 'Stellen Sie sicher, dass vorgeschriebene und für die Beschäftigten erforderliche Informationen gut zugänglich sind. Ein schwarzes Brett kann dafür genutzt werden, ist aber nicht allgemein gesetzlich vorgeschrieben.',
@@ -800,13 +802,13 @@ const MEASURES_TEXT = {
             rechtlich: 'Arbeitsschutzrechtliche Informations-, Unterweisungs- und gegebenenfalls Aushangpflichten sind zu erfüllen. § 3 ArbSchG schreibt jedoch kein bestimmtes schwarzes Brett im Sozialraum oder Kassenbüro vor; die geeignete Form der innerbetrieblichen Information ist betrieblich festzulegen.'
         },
         "20.8": {
-            einfach: 'Erklären Sie Entscheidungen offen und nachvollziehbar.',
-            bghw: 'Kommunizieren Sie Entscheidungen gemäß § 3 ArbSchG sowie den Ergebnissen der Gefährdungsbeurteilung und der DGUV Regel 108-601 zu psychischer Gesundheit transparent.',
-            rechtlich: 'Betriebliche Entscheidungen sind den Beschäftigten im Rahmen der arbeitgeberseitigen Fürsorgepflicht (§ 618 BGB, § 3 ArbSchG) transparent zu erläutern. Transparente Kommunikation ist Ausdruck der arbeitgeberseitigen Fürsorgepflicht nach § 618 BGB und trägt zur Reduzierung psychischer Fehlbelastung bei.'
+            einfach: 'Kommunizieren Sie wichtige betriebliche Entscheidungen verständlich und nachvollziehbar, besonders wenn sie Arbeitsabläufe oder Belastungen verändern.',
+            bghw: 'Gestalten Sie die Kommunikation bei Veränderungen so, dass Beschäftigte die für ihre Arbeit relevanten Informationen erhalten. Transparente Kommunikation kann eine geeignete organisatorische Maßnahme sein; Art und Umfang richten sich nach der betrieblichen Situation und Gefährdungsbeurteilung.',
+            rechtlich: 'ArbSchG und BGB schreiben keine allgemeine Pflicht vor, jede betriebliche Entscheidung in einer bestimmten Form transparent zu erläutern. Soweit Veränderungen Sicherheit, Gesundheit oder Arbeitsbedingungen betreffen, sind die einschlägigen Informations-, Unterweisungs- und Beteiligungspflichten zu erfüllen; geeignete Kommunikation kann zudem eine Maßnahme aus der Gefährdungsbeurteilung sein.'
         },
         "20.9": {
-            einfach: 'Loben Sie gute Leistungen.',
-            bghw: 'Geben Sie gemäß § 3 ArbSchG sowie den Ergebnissen der Gefährdungsbeurteilung und der DGUV Regel 108-601 regelmäßig positives Feedback bei guter Leistung.',
+            einfach: 'Geben Sie angemessenes und respektvolles Feedback. Positives Feedback kann zu einer guten Zusammenarbeit beitragen.',
+            bghw: 'Berücksichtigen Sie Führungsverhalten und soziale Beziehungen bei der Gestaltung gesunder Arbeitsbedingungen. Positives Feedback kann dabei eine sinnvolle Maßnahme sein, ist aber keine eigenständige Pflicht aus der DGUV Regel 108-601.',
             rechtlich: 'Positives Feedback kann eine geeignete organisatorische Maßnahme gegen psychische Belastungen sein; eine ausdrückliche gesetzliche Pflicht zu Lob besteht nicht. Maßgeblich ist die Gefährdungsbeurteilung psychischer Belastungen nach § 5 ArbSchG. Positives Feedback ist eine anerkannte Maßnahme im Handlungsfeld „Führung“ der Gefährdungsbeurteilung psychischer Belastung nach § 5 Abs. 3 Nr. 6 ArbSchG.'
         },
         "20.10": {
@@ -815,9 +817,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Führen Sie Kritikgespräche sachlich, fair und respektvoll. Die konkrete Ausgestaltung ist Bestandteil einer geeigneten betrieblichen Organisation und Führungskultur. Konstruktive Kritikkultur zählt zu den organisatorischen Maßnahmen der Gefährdungsbeurteilung psychischer Belastung; § 75 BetrVG verpflichtet zusätzlich zur fairen, gleichbehandelnden Behandlung der Beschäftigten.'
         },
         "20.11": {
-            einfach: 'Hängen Sie Infos zur Suchtprävention aus.',
-            bghw: 'Hängen Sie Informationen zur Suchtprävention gemäß § 3 ArbSchG sowie den Ergebnissen der Gefährdungsbeurteilung und der DGUV Regel 108-601 gut sichtbar aus.',
-            rechtlich: 'Stellen Sie einen gut sichtbaren Aushang mit Informationen zur Suchtprävention bereit und verweisen Sie auf innerbetriebliche Hilfsangebote (§ 3 ArbSchG). Suchtprävention ist Bestandteil der allgemeinen Fürsorgepflicht nach § 3 ArbSchG; Hinweise auf innerbetriebliche und externe Beratungsangebote (z. B. Suchtberatungsstellen) sollten enthalten sein.'
+            einfach: 'Machen Sie bei erkennbarem Bedarf Informationen und Ansprechstellen zur Suchtprävention gut zugänglich. Ein bestimmter Aushang ist nicht allgemein vorgeschrieben.',
+            bghw: 'Berücksichtigen Sie Suchtgefährdungen und betriebliche Unterstützungsangebote, soweit dies für den Betrieb relevant ist. Informationen können z. B. über Aushang, Intranet oder direkte Ansprechstellen zugänglich gemacht werden; die DGUV Regel 108-601 schreibt keinen bestimmten Aushang vor.',
+            rechtlich: '§ 3 ArbSchG schreibt keinen bestimmten Aushang zur Suchtprävention vor. Ergibt die Gefährdungsbeurteilung Handlungsbedarf, sind geeignete organisatorische Schutz- und Unterstützungsmaßnahmen festzulegen. Die konkrete Informationsform ist betrieblich zu bestimmen.'
         },
         "20.12": {
             einfach: 'Bieten Sie erkrankten Mitarbeitenden Unterstützung bei der Rückkehr an den Arbeitsplatz.',
@@ -825,19 +827,19 @@ const MEASURES_TEXT = {
             rechtlich: 'Ein betriebliches Eingliederungsmanagement ist nach § 167 Abs. 2 SGB IX anzubieten, wenn Beschäftigte innerhalb eines Jahres länger als sechs Wochen ununterbrochen oder wiederholt arbeitsunfähig sind. Das BEM-Gespräch ist den Beschäftigten anzubieten; die Teilnahme ist freiwillig, die Nichtteilnahme darf keine Nachteile zur Folge haben.'
         },
         "20.13": {
-            einfach: 'Vermeiden Sie, dass Mitarbeitende allein arbeiten, wo es sich vermeiden lässt.',
-            bghw: 'Vermeiden Sie Alleinarbeit im Rahmen der Gefährdungsbeurteilung nach § 5 ArbSchG und der DGUV Regel 108-601, insbesondere bei erhöhtem Überfallrisiko.',
-            rechtlich: 'Alleinarbeit ist im Rahmen der Gefährdungsbeurteilung nach § 5 ArbSchG möglichst zu vermeiden. Bei erhöhtem Überfall- oder Gewaltrisiko sind ergänzend die Vorgaben der DGUV Vorschrift 25 „Überfallprävention“ zu Alleinarbeit zu berücksichtigen.'
+            einfach: 'Prüfen Sie bei Alleinarbeit, welche Gefährdungen bestehen und welche Schutzmaßnahmen erforderlich sind. Bei erhöhtem Überfall- oder Gewaltrisiko müssen die besonderen Vorgaben zur Überfallprävention berücksichtigt werden.',
+            bghw: 'Bewerten Sie Alleinarbeit in der Gefährdungsbeurteilung und legen Sie geeignete Schutzmaßnahmen fest. Für Verkaufsstellen mit Überfallgefährdung sind zusätzlich DGUV Vorschrift 25 und DGUV Regel 108-010 maßgeblich; ein pauschales Verbot jeder Alleinarbeit besteht daraus nicht.',
+            rechtlich: 'Alleinarbeit ist nach § 5 ArbSchG anhand der konkreten Gefährdungen zu beurteilen; daraus folgt kein allgemeines Verbot. Soweit Beschäftigte mit Bargeld umgehen oder von einem Überfall betroffen sein können, sind zusätzlich die für die Verkaufsstelle geltenden Anforderungen der DGUV Vorschrift 25 und deren Konkretisierung durch DGUV Regel 108-010 umzusetzen.'
         },
         "20.14": {
-            einfach: 'Sorgen Sie für Unterstützung, falls jemand einen Überfall erlebt hat.',
-            bghw: 'Organisieren Sie die Betreuung nach einem Überfall gemäß § 3 ArbSchG sowie den Ergebnissen der Gefährdungsbeurteilung und der DGUV Regel 108-601 (z. B. Nachsorge, psychologische Erstbetreuung).',
-            rechtlich: 'Maßnahmen zur Betreuung von Beschäftigten nach Überfall- oder Gewaltvorfällen sind gemäß § 3 ArbSchG organisatorisch sicherzustellen. Psychologische Erstbetreuung nach traumatisierenden Ereignissen (z. B. Raubüberfall) ist als Maßnahme der Gefährdungsbeurteilung nach § 3 ArbSchG sowie DGUV Vorschrift 25 zu organisieren; die gesetzliche Unfallversicherung übernimmt ggf. die Kosten der Traumanachsorge.'
+            einfach: 'Legen Sie vorab fest, wie Beschäftigte nach einem Überfall oder Überfallversuch sofort unterstützt und betreut werden.',
+            bghw: 'Legen Sie im Notfallplan die unmittelbare Betreuung von Überfallbetroffenen fest. DGUV Vorschrift 25 § 20 und DGUV Regel 108-010 verlangen, dass auch nach einem versuchten Überfall geeignete Betreuungs- und Meldewege vorbereitet sind.',
+            rechtlich: '§ 20 Abs. 1 DGUV Vorschrift 25 verlangt im Rahmen der Notfallplanung Festlegungen zu den Maßnahmen unmittelbar nach einem Überfall; dazu gehört die angemessene Betreuung der betroffenen Versicherten. DGUV Regel 108-010 konkretisiert dies für Verkaufsstellen und bezieht auch versuchte Überfälle bzw. Bedrohungssituationen ein.'
         },
         "20.15": {
-            einfach: 'Bieten Sie Schulungen an, wie man in gefährlichen Situationen reagiert.',
-            bghw: 'Bieten Sie Schulungen zum Umgang mit aggressiven oder gewalttätigen Situationen gemäß § 3 ArbSchG sowie den Ergebnissen der Gefährdungsbeurteilung und der DGUV Regel 108-601 an.',
-            rechtlich: 'Schulungen zum Umgang mit aggressiven oder gewalttätigen Situationen sind gemäß § 3 ArbSchG anzubieten. Deeskalationsschulungen sind eine anerkannte Präventionsmaßnahme im Rahmen der DGUV Vorschrift 25 „Überfallprävention“ und der Gefährdungsbeurteilung nach § 3 ArbSchG.'
+            einfach: 'Unterweisen Sie Beschäftigte passend zu den festgestellten Gewalt- und Überfallrisiken und üben Sie das sichere Verhalten, wenn dies für die Tätigkeit erforderlich ist.',
+            bghw: 'Leiten Sie Schulungs- und Unterweisungsinhalte zu Aggression, Gewalt und Überfällen aus der Gefährdungsbeurteilung ab. Für überfallgefährdete Verkaufsstellen sind insbesondere DGUV Vorschrift 25 und DGUV Regel 108-010 zu berücksichtigen.',
+            rechtlich: 'Aus § 3 ArbSchG folgt keine pauschale Pflicht zu einer bestimmten Deeskalationsschulung. Ergeben sich aus der Gefährdungsbeurteilung relevante Gewalt- oder Überfallgefährdungen, sind geeignete Schutzmaßnahmen sowie die erforderlichen Unterweisungen festzulegen. Für Beschäftigte mit Bargeldumgang oder möglicher Überfallbetroffenheit gelten zusätzlich die Unterweisungsvorgaben der DGUV Vorschrift 25.'
         },
         "20.16": {
             einfach: 'Hören Sie auf Vorschläge Ihrer Mitarbeitenden und beziehen Sie sie ein.',
@@ -845,30 +847,30 @@ const MEASURES_TEXT = {
             rechtlich: 'Beschäftigte sind im Rahmen der einschlägigen Beteiligungsrechte und der betrieblichen Organisation angemessen einzubeziehen; konkrete Beteiligungsrechte können sich insbesondere aus dem BetrVG ergeben. Beteiligungsrechte der Beschäftigten ergeben sich insbesondere aus § 81 BetrVG (Unterrichtungs- und Erörterungsrecht) sowie ggf. betrieblichen Vorschlagswesen-Regelungen.'
         },
         "20.17": {
-            einfach: 'Bieten Sie Ihren Mitarbeitenden Weiterbildungen an.',
-            bghw: 'Schaffen Sie Weiterbildungsangebote gemäß § 82 BetrVG und der DGUV Regel 108-601 „Branche Einzelhandel“.',
+            einfach: 'Prüfen Sie, welche Qualifikationen für die jeweiligen Aufgaben erforderlich sind, und ermöglichen Sie passende Schulungen oder Weiterbildungen, wenn dafür Bedarf besteht.',
+            bghw: 'Stellen Sie sicher, dass Beschäftigte für ihre Aufgaben ausreichend qualifiziert und unterwiesen sind. Darüber hinausgehende Weiterbildung richtet sich nach betrieblichem und individuellem Bedarf; § 82 BetrVG begründet keine allgemeine arbeitsschutzrechtliche Weiterbildungspflicht.',
             rechtlich: 'Weiterbildungsmaßnahmen sind entsprechend dem betrieblichen Bedarf und den festgestellten Qualifikationsanforderungen zu planen. § 82 BetrVG regelt insbesondere das Gespräch über berufliche Entwicklung und Weiterbildung und begründet nicht pauschal eine allgemeine Schulungspflicht. § 82 Abs. 2 BetrVG begründet einen Anspruch auf ein Gespräch über die berufliche Entwicklung; eine allgemeine Fortbildungspflicht des Arbeitgebers besteht daraus nicht.'
         }
     },
     "Kundenaufzug": {        "21.1": {
-            einfach: 'Beheben Sie äußere Schäden an Kabine, Türen, Boden oder Beleuchtung des Kundenaufzugs umgehend und lassen Sie eine fehlende oder unleserliche Tragfähigkeitsangabe erneuern.',
-            bghw: 'Veranlassen Sie die Instandsetzung äußerer Schäden am Kundenaufzug gemäß TRBS 3121 sowie der DGUV Regel 108-601 umgehend und stellen Sie eine gut lesbare Tragfähigkeitsangabe sicher.',
-            rechtlich: 'Äußere Schäden an Kabine, Türen, Boden oder Beleuchtung des Kundenaufzugs sind unverzüglich zu beseitigen; die zulässige Tragfähigkeit ist gemäß BetrSichV deutlich sichtbar anzugeben. Die Tragfähigkeitsangabe ist gemäß Aufzugsrichtlinie 2014/33/EU i. V. m. BetrSichV dauerhaft und gut lesbar anzubringen.'
+            einfach: 'Beheben Sie sichtbare Schäden am Kundenaufzug und sorgen Sie dafür, dass vorgeschriebene Angaben wie die Tragfähigkeit gut lesbar sind.',
+            bghw: 'Veranlassen Sie die Beseitigung sichtbarer Mängel am Kundenaufzug und halten Sie die erforderlichen Kennzeichnungen gut lesbar. Berücksichtigen Sie dabei BetrSichV Anhang 1 Nr. 4 und die branchenspezifischen Hinweise der DGUV Regel 108-601.',
+            rechtlich: 'Aufzugsanlagen sind sicher zu betreiben und regelmäßig auf offensichtliche Mängel zu kontrollieren (BetrSichV Anhang 1 Nr. 4.6). Erkennbare sicherheitsrelevante Mängel sind zu bewerten und erforderliche Maßnahmen unverzüglich einzuleiten; erforderliche Kennzeichnungen müssen lesbar sein.'
         },
         "21.2": {
-            einfach: 'Lassen Sie defekte Aufzugstüren, Lichtschranken oder Türsensoren sofort reparieren und halten Sie die Zugänge frei von Stolperstellen.',
-            bghw: 'Veranlassen Sie die Instandsetzung von Aufzugstüren, Lichtschranken und Türsensoren gemäß TRBS 3121 sowie der DGUV Regel 108-601 unverzüglich und beseitigen Sie Stolperstellen im Zugangsbereich.',
-            rechtlich: 'Defekte Aufzugstüren, Lichtschranken oder Türsensoren sind unverzüglich instand zu setzen; die Zugänge sind gemäß ASR A1.5 frei von Stolperstellen zu halten. Lichtschranken/Türsensoren unterliegen als Sicherheitsbauteile der Aufzugsrichtlinie 2014/33/EU der regelmäßigen Funktionsprüfung im Rahmen der Wartung.'
+            einfach: 'Lassen Sie defekte Aufzugstüren, Lichtschranken oder Türsensoren umgehend fachgerecht reparieren und halten Sie den Zugangsbereich sicher und frei.',
+            bghw: 'Nehmen Sie Mängel an Türen und Schutzeinrichtungen ernst und veranlassen Sie eine fachgerechte Instandsetzung. Zugänge sind entsprechend den Arbeitsstättenanforderungen sicher und frei von Stolperstellen zu halten.',
+            rechtlich: 'Der Betreiber hat die Aufzugsanlage regelmäßig auf offensichtliche sicherheitsrelevante Mängel zu kontrollieren (BetrSichV Anhang 1 Nr. 4.6) und erforderliche Instandhaltungsmaßnahmen nach § 10 BetrSichV zu treffen. Verkehrs- und Zugangsbereiche sind sicher zu halten.'
         },
         "21.3": {
-            einfach: 'Lassen Sie defekte Bedientasten, die Notruftaste oder die Etagenanzeige umgehend reparieren und sorgen Sie für verständliche Beschriftung.',
-            bghw: 'Veranlassen Sie die Instandsetzung von Bedientasten, Notruftaste und Etagenanzeige gemäß TRBS 3121 sowie der DGUV Regel 108-601 und stellen Sie eine verständliche Beschriftung sicher.',
-            rechtlich: 'Bedientasten, Notruftaste sowie Etagen- bzw. Fahrtrichtungsanzeige sind funktionsfähig zu halten und verständlich zu beschriften. Notruftaste und Etagenanzeige sind Bestandteil der Sicherheitsausrüstung nach EN 81-28 (Notrufsystem) und im Rahmen der Wartung zu prüfen.'
+            einfach: 'Lassen Sie defekte Bedientasten, Anzeigen oder die Notrufeinrichtung umgehend fachgerecht instand setzen.',
+            bghw: 'Stellen Sie die Funktionsfähigkeit der Bedienelemente und insbesondere der Notrufeinrichtung sicher. Mängel sind fachgerecht zu beseitigen; die Anforderungen an das Notrufsystem richten sich nach der konkreten Aufzugsanlage.',
+            rechtlich: 'Für die von BetrSichV Anhang 1 Nr. 4.1 erfassten Aufzugsanlagen muss im Fahrkorb ein wirksames Zweiwege-Kommunikationssystem vorhanden sein, über das ein Notdienst ständig erreicht werden kann. Erkannte Mängel an Bedienelementen oder Sicherheitseinrichtungen sind im Rahmen der Instandhaltung zu beseitigen.'
         },
         "21.4": {
-            einfach: 'Lassen Sie die Notrufeinrichtung reparieren und schulen Sie das Personal, wie es sich bei eingeschlossenen Kunden verhält.',
-            bghw: 'Veranlassen Sie die Instandsetzung der Notrufeinrichtung gemäß TRBS 3121 sowie der DGUV Regel 108-601 und unterweisen Sie das Personal zum Verhalten bei eingeschlossenen Personen.',
-            rechtlich: 'Eine funktionsfähige Notrufeinrichtung ist sicherzustellen; das Personal ist gemäß § 12 ArbSchG zum Verhalten bei eingeschlossenen Personen zu unterweisen. Eine eigenständige Befreiung durch Personal ist zu unterlassen. Eine eigenständige Befreiung eingeschlossener Personen durch nicht befähigtes Personal ist wegen erheblicher Verletzungsgefahr zu unterlassen (TRBS 3121 Nr. 4.2).'
+            einfach: 'Sorgen Sie dafür, dass der Aufzugsnotruf funktioniert und der zuständige Notdienst ständig erreichbar ist. Beschäftigte müssen wissen, wie sie bei einem Einschluss unterstützen und Hilfe organisieren.',
+            bghw: 'Stellen Sie das wirksame Zweiwege-Kommunikationssystem zum Notdienst sicher und unterweisen Sie zuständige Beschäftigte über ihre Aufgaben im Notfall. Befreiungen dürfen nur durch hierfür vorgesehene und geeignete Personen erfolgen.',
+            rechtlich: 'BetrSichV Anhang 1 Nr. 4.1 verlangt bei den dort genannten Aufzugsanlagen ein wirksames Zweiwege-Kommunikationssystem, über das ein Notdienst ständig erreichbar ist. Der Notfallplan muss u. a. die Personen benennen, die eine Befreiung Eingeschlossener vornehmen können; andere Beschäftigte dürfen daraus nicht eigenmächtig eine technische Befreiung ableiten.'
         },
         "21.5": {
             einfach: 'Holen Sie die fällige Aufzugsprüfung nach, beheben Sie offene Mängel aus dem letzten Prüfbericht und legen Sie die Prüfbescheinigung vor. Die Hauptprüfung durch eine zugelassene Überwachungsstelle (ZÜS) ist gesetzlich spätestens alle zwei Jahre Pflicht.',
@@ -886,50 +888,50 @@ const MEASURES_TEXT = {
             rechtlich: 'Die Eignung des Aufzugs für die vorgesehene Kundennutzung, einschließlich Einkaufswagen und mobilitätseingeschränkter Personen, ist sicherzustellen; Hinweise bei Störungen sind verständlich anzubringen. Barrierefreiheit richtet sich nach DIN 18040-1 (Kabinenmaße, Bedienelemente in Greifhöhe, taktile/akustische Signale).'
         },
         "21.8": {
-            einfach: 'Legen Sie schriftlich fest, wer im Notfall für die Befreiung eingeschlossener Personen zuständig ist, hinterlegen Sie eine Notbefreiungsanleitung vor Ort und beim Notdienst, schulen Sie das Personal in Erstmaßnahmen (Beruhigung, Zugang, Feuerwehr-Einweisung) und sorgen Sie für einen Ersatz-Notdienst, falls der reguläre ausfällt.',
-            bghw: 'Regeln und dokumentieren Sie die Zuständigkeit für die Notbefreiung sowie die Alarmierungskette gemäß TRBS 3121 sowie der DGUV Regel 108-601, hinterlegen Sie die Notbefreiungsanleitung vor Ort und beim Notdienst, schulen Sie das Personal in Erstmaßnahmen und stellen Sie eine redundante Notdienst-Absicherung sicher.',
-            rechtlich: 'Die Zuständigkeit für die Notbefreiung (intern/extern/kombiniert) sowie die Alarmierungskette (Notdienst → Objektpersonal → ggf. Feuerwehr) sind gemäß TRBS 3121 schriftlich zu regeln und zu dokumentieren; eine Notbefreiungsanleitung ist vor Ort und beim Notdienst vorzuhalten. Das Personal ist gemäß § 12 ArbSchG in Erstmaßnahmen zu schulen; eine Redundanz für den Ausfall des externen Dienstes ist sicherzustellen. Nach TRBS 3121 Nr. 4.2 muss die Notbefreiung innerhalb einer angemessenen Frist (Praxisorientierung: i. d. R. innerhalb von 30 Minuten) sichergestellt sein.'
+            einfach: 'Halten Sie einen aktuellen Notfallplan für den Aufzug bereit. Darin müssen Zuständigkeiten, Erreichbarkeit des Notdienstes und die Befreiung eingeschlossener Personen klar geregelt sein.',
+            bghw: 'Erstellen und pflegen Sie den Notfallplan für die Aufzugsanlage. Er muss insbesondere Standort, verantwortliche Stelle, Zugangsberechtigte, Personen für die Befreiung, Erste-Hilfe-Kontakte, den voraussichtlichen Beginn der Befreiung und die Notbefreiungsanleitung abdecken.',
+            rechtlich: 'Nach BetrSichV Anhang 1 Nr. 4.1 ist für die dort erfassten Aufzugsanlagen ein Notfallplan anzufertigen und dem Notdienst vor der Inbetriebnahme zur Verfügung zu stellen. Der vorgeschriebene Mindestinhalt umfasst Standort, verantwortlichen Arbeitgeber, Zugangsberechtigte, Personen für die Befreiung, Erste-Hilfe-Kontakte, Angaben zum voraussichtlichen Beginn der Befreiung und die Notbefreiungsanleitung. Eine pauschale 30-Minuten-Frist oder generelle Pflicht zu einem zweiten Notdienst wird daraus nicht abgeleitet.'
         },
         "21.9": {
-            einfach: 'Erstellen Sie eine schriftliche Alarmierungskette für Aufzugsstörungen und eingeschlossene Personen und machen Sie sie allen Beteiligten bekannt.',
-            bghw: 'Dokumentieren Sie die Alarmierungs- und Eskalationskette für Aufzugsstörungen gemäß TRBS 3121 sowie der DGUV Regel 108-601 und stellen Sie deren Bekanntheit beim zuständigen Personal sicher.',
-            rechtlich: 'Eine dokumentierte Alarmierungs- und Eskalationskette für Aufzugsstörungen bzw. eingeschlossene Personen ist gemäß TRBS 3121 zu erstellen und dem zuständigen Personal bekannt zu machen. Die Alarmierungskette ist gemäß TRBS 3121 Nr. 4.2 schriftlich zu regeln und beim Notdienst sowie am Aufzug selbst (Notrufsystem nach EN 81-28) zu hinterlegen.'
+            einfach: 'Sorgen Sie dafür, dass bei einer Aufzugsstörung sofort klar ist, wie der Notdienst erreicht wird und wer vor Ort welche Aufgabe übernimmt.',
+            bghw: 'Organisieren Sie die Alarmierung anhand des Notfallplans und stellen Sie sicher, dass der Notdienst auf einen Notruf unverzüglich angemessen reagieren und sachgerechte Hilfemaßnahmen einleiten kann.',
+            rechtlich: 'BetrSichV Anhang 1 Nr. 4.1 verlangt ein wirksames Zweiwege-Kommunikationssystem zum ständig erreichbaren Notdienst und einen Notfallplan. Die innerbetriebliche Alarmierungsorganisation ist daran auszurichten; eine darüber hinausgehende starre Form der Alarmierungskette wird nicht pauschal vorgeschrieben.'
         },
         "21.10": {
-            einfach: 'Halten Sie die Kontaktdaten des Aufzugsnotdienstes aktuell und sorgen Sie dafür, dass das Personal jederzeit darauf zugreifen kann.',
-            bghw: 'Stellen Sie die jederzeitige Verfügbarkeit aktueller Kontaktdaten des Aufzugsnotdienstes für das Objektpersonal gemäß TRBS 3121 sowie der DGUV Regel 108-601 sicher.',
-            rechtlich: 'Die Kontaktdaten des zuständigen Aufzugsnotdienstes sind aktuell zu halten und dem Objektpersonal jederzeit zugänglich zu machen. Die Erreichbarkeit der Kontaktdaten (z. B. am Notruf-Display, im Marktleiterbüro) ist gemäß TRBS 3121 sicherzustellen.'
+            einfach: 'Halten Sie die Kontaktdaten und Zuständigkeiten für den Aufzugsnotfall aktuell und für das zuständige Personal schnell verfügbar.',
+            bghw: 'Pflegen Sie die für den Notfallplan und die betriebliche Organisation erforderlichen Kontaktdaten und Zuständigkeiten und stellen Sie deren Verfügbarkeit sicher.',
+            rechtlich: 'Die im Notfallplan nach BetrSichV Anhang 1 Nr. 4.1 erforderlichen Angaben und Kontakte müssen für eine wirksame Notfallorganisation aktuell sein. Entscheidend ist, dass der vorgeschriebene Notdienst über das Zweiwege-Kommunikationssystem ständig erreichbar ist.'
         },
         "21.11": {
-            einfach: 'Legen Sie eine Notbefreiungsanleitung bzw. eine schriftliche Vorgehensweise für den Störungsfall vor Ort bereit.',
-            bghw: 'Hinterlegen Sie eine Notbefreiungsanleitung bzw. dokumentierte Vorgehensweise für den Störungsfall gemäß TRBS 3121 sowie der DGUV Regel 108-601 vor Ort.',
-            rechtlich: 'Eine Notbefreiungsanleitung bzw. dokumentierte Vorgehensweise für den Störungsfall ist gemäß TRBS 3121 vor Ort bereitzuhalten. Die Notbefreiungsanleitung sollte mindestens die Schritte zur Kontaktaufnahme, Beruhigung eingeschlossener Personen und Alarmierung der Feuerwehr enthalten (TRBS 3121).'
+            einfach: 'Halten Sie die vorgeschriebene Notbefreiungsanleitung in unmittelbarer Nähe der Aufzugsanlage bereit.',
+            bghw: 'Stellen Sie die Notbefreiungsanleitung und die zur Befreiung erforderlichen Einrichtungen in unmittelbarer Nähe der Anlage bereit und berücksichtigen Sie sie im Notfallplan.',
+            rechtlich: 'BetrSichV Anhang 1 Nr. 4.1 verlangt, dass Notbefreiungsanleitung und die zur Befreiung Eingeschlossener erforderlichen Einrichtungen vor der Inbetriebnahme in unmittelbarer Nähe der Anlage bereitgestellt werden. Der Notfallplan ist dem Notdienst zur Verfügung zu stellen.'
         },
         "21.12": {
-            einfach: 'Legen Sie fest, wie das Personal im Notfall die Einsatzkräfte bzw. den Aufzugsnotdienst zum betroffenen Aufzug einweist.',
-            bghw: 'Regeln Sie die Einweisung der Einsatzkräfte bzw. des Aufzugsnotdienstes zum betroffenen Aufzug durch das Objektpersonal gemäß TRBS 3121 sowie der DGUV Regel 108-601 „Branche Einzelhandel“.',
-            rechtlich: 'Es ist zu regeln, wie das Objektpersonal im Notfall die Einsatzkräfte bzw. den Aufzugsnotdienst zum betroffenen Aufzug einweist. Die Einweisung der Einsatzkräfte umfasst insbesondere die eindeutige Standortangabe des betroffenen Aufzugs und den Zugang zum Maschinenraum bzw. Schachtzugang gemäß TRBS 3121.'
+            einfach: 'Legen Sie organisatorisch fest, wie Notdienst oder Einsatzkräfte im Ereignisfall schnell zur richtigen Aufzugsanlage gelangen.',
+            bghw: 'Ergänzen Sie die betriebliche Notfallorganisation so, dass Notdienst und Einsatzkräfte den Standort und die erforderlichen Zugänge ohne Verzögerung erreichen können.',
+            rechtlich: 'Der Notfallplan nach BetrSichV Anhang 1 Nr. 4.1 muss den Standort der Aufzugsanlage sowie Angaben zu Personen enthalten, die Zugang zu allen Einrichtungen der Anlage haben. Daraus ist eine geeignete betriebliche Einweisung der Hilfeleistenden zu organisieren.'
         },
         "21.13": {
-            einfach: 'Schulen Sie das zuständige Personal in den Erstmaßnahmen bei eingeschlossenen Personen.',
-            bghw: 'Unterweisen Sie das zuständige Personal in den erforderlichen Erstmaßnahmen bei eingeschlossenen Personen gemäß § 12 ArbSchG, TRBS 3121 und der DGUV Regel 108-601 „Branche Einzelhandel“.',
-            rechtlich: 'Das zuständige Personal ist gemäß § 12 ArbSchG in den erforderlichen Erstmaßnahmen bei eingeschlossenen Personen zu unterweisen. Die Unterweisung ist gemäß § 12 ArbSchG mindestens jährlich zu wiederholen und praxisnah (z. B. anhand einer Checkliste) zu gestalten.'
+            einfach: 'Unterweisen Sie die zuständigen Beschäftigten über ihre Aufgaben bei einer Aufzugsstörung und bei eingeschlossenen Personen. Wiederholen Sie die Unterweisung mindestens jährlich und zusätzlich bei Bedarf.',
+            bghw: 'Unterweisen Sie zuständige Beschäftigte arbeitsplatz- und aufgabenbezogen über die Notfallorganisation. Die Wiederholung erfolgt nach DGUV Vorschrift 1 § 4 erforderlichenfalls, mindestens jedoch einmal jährlich, sowie bei relevanten Änderungen oder Anlässen.',
+            rechtlich: '§ 12 ArbSchG verlangt eine angemessene, arbeitsplatz- bzw. aufgabenbezogene Unterweisung und erforderlichenfalls regelmäßige Wiederholung. Ergänzend verlangt § 4 DGUV Vorschrift 1 eine erforderlichenfalls wiederholte, mindestens jährliche Unterweisung und deren Dokumentation. Inhaltlich ist die konkrete Notfallorganisation der Aufzugsanlage zugrunde zu legen.'
         },
         "21.14": {
-            einfach: 'Stellen Sie sicher, dass eingeschlossene Personen bis zum Eintreffen des Fachpersonals betreut und beruhigt werden.',
-            bghw: 'Stellen Sie eine angemessene Betreuung und Beruhigung eingeschlossener Personen bis zum Eintreffen des zuständigen Fachpersonals gemäß TRBS 3121 sowie der DGUV Regel 108-601 sicher.',
-            rechtlich: 'Es ist sicherzustellen, dass eingeschlossene Personen bis zum Eintreffen des zuständigen Fachpersonals angemessen betreut und beruhigt werden. Die Betreuung eingeschlossener Personen ist Bestandteil der Fürsorgepflicht nach § 618 BGB und TRBS 3121.'
+            einfach: 'Halten Sie Kontakt zu eingeschlossenen Personen und sorgen Sie dafür, dass der Notdienst unverzüglich die erforderliche Hilfe einleitet.',
+            bghw: 'Organisieren Sie die Betreuung Eingeschlossener als Teil der Notfallmaßnahmen und stellen Sie sicher, dass der ständig erreichbare Notdienst unverzüglich angemessen reagieren kann.',
+            rechtlich: 'BetrSichV Anhang 1 Nr. 4.1 verlangt ein wirksames Zweiwege-Kommunikationssystem und eine Organisation, durch die der Notdienst auf Notrufe unverzüglich angemessen reagieren und umgehend sachgerechte Hilfemaßnahmen einleiten kann. Die konkrete Betreuung ist hieran auszurichten.'
         },
         "21.15": {
-            einfach: 'Legen Sie eine Vertretungsregelung fest, falls der Aufzugsnotdienst einmal nicht erreichbar ist.',
-            bghw: 'Richten Sie eine Vertretungs- bzw. Redundanzregelung für den Ausfall des zuständigen Aufzugsnotdienstes gemäß TRBS 3121 sowie der DGUV Regel 108-601 ein.',
-            rechtlich: 'Für den Fall der Nichterreichbarkeit des zuständigen Aufzugsnotdienstes ist eine Vertretungs- bzw. Redundanzregelung vorzuhalten. Eine Vertretungsregelung stellt sicher, dass die Notbefreiungsfrist gemäß TRBS 3121 auch bei Ausfall des regulären Dienstleisters eingehalten werden kann.'
+            einfach: 'Prüfen Sie, ob die Notfallorganisation auch bei Ausfällen zuverlässig funktioniert. Entscheidend ist, dass der vorgeschriebene Notdienst ständig erreichbar bleibt.',
+            bghw: 'Gestalten Sie die Notfallorganisation so robust, dass die ständige Erreichbarkeit des erforderlichen Notdienstes und eine sachgerechte Hilfe auch bei organisatorischen Störungen gewährleistet bleiben.',
+            rechtlich: 'BetrSichV Anhang 1 Nr. 4.1 verlangt die ständige Erreichbarkeit eines Notdienstes über das Zweiwege-Kommunikationssystem. Wie der Betreiber diese Verfügbarkeit organisatorisch absichert, ist festzulegen; eine eigenständige gesetzliche Pflicht zu einem bestimmten zweiten oder Ersatz-Notdienst wird hier nicht behauptet.'
         }
     },
     "Lastenaufzug": {        "22.1": {
-            einfach: 'Beheben Sie äußere Schäden an Kabine, Türen, Boden, Beleuchtung oder Bedienelementen des Lastenaufzugs umgehend.',
-            bghw: 'Veranlassen Sie die Instandsetzung äußerer Schäden am Lastenaufzug gemäß TRBS 3121 sowie der DGUV Regel 108-601 umgehend.',
-            rechtlich: 'Äußere Schäden an Kabine, Türen, Boden, Beleuchtung oder Bedienelementen des Lastenaufzugs sind unverzüglich zu beseitigen. Äußere Schäden sind unverzüglich zu beseitigen, da sie auf zugrunde liegende technische Mängel hindeuten können (TRBS 3121).'
+            einfach: 'Beheben Sie sichtbare Schäden am Lastenaufzug und lassen Sie sicherheitsrelevante Mängel fachgerecht instand setzen.',
+            bghw: 'Kontrollieren Sie die Aufzugsanlage regelmäßig auf offensichtliche Mängel und veranlassen Sie bei sicherheitsrelevanten Feststellungen die erforderliche Instandhaltung.',
+            rechtlich: 'BetrSichV Anhang 1 Nr. 4.6 verlangt regelmäßige Kontrollen auf offensichtliche Mängel, die die sichere Verwendung beeinträchtigen können. Erforderliche Instandhaltungsmaßnahmen sind nach § 10 BetrSichV zu treffen.'
         },
         "22.2": {
             einfach: 'Bringen Sie eine gut sichtbare Tragfähigkeitsangabe an und weisen Sie das Personal auf die zulässige Beladung hin.',
@@ -937,9 +939,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Die zulässige Tragfähigkeit ist gemäß BetrSichV deutlich sichtbar anzugeben; eine Überladung oder unsachgemäße Beladung ist zu unterbinden. Die Tragfähigkeitsangabe ist gemäß Maschinenrichtlinie 2006/42/EG bzw. Aufzugsrichtlinie 2014/33/EU sowie BetrSichV dauerhaft und gut lesbar am Aufzug anzubringen.'
         },
         "22.3": {
-            einfach: 'Lassen Sie defekte Aufzugstüren oder Türsicherungen sofort reparieren und beseitigen Sie Quetsch- oder Absturzgefahren.',
-            bghw: 'Veranlassen Sie die Instandsetzung von Aufzugstüren und Türsicherungen gemäß TRBS 3121 sowie der DGUV Regel 108-601 und beseitigen Sie erkannte Quetsch- oder Absturzgefahren.',
-            rechtlich: 'Defekte Aufzugstüren oder Türsicherungen sind unverzüglich instand zu setzen; Quetsch- oder Absturzgefahren sind zu beseitigen. Türsicherungen sind sicherheitsrelevante Bauteile nach Aufzugsrichtlinie 2014/33/EU und unverzüglich instand zu setzen.'
+            einfach: 'Lassen Sie defekte Aufzugstüren oder Türsicherungen umgehend fachgerecht instand setzen und nehmen Sie die Anlage bei einer unmittelbaren Gefahr nicht weiter in Betrieb.',
+            bghw: 'Veranlassen Sie bei Mängeln an Türen oder Sicherheitseinrichtungen eine fachgerechte Bewertung und Instandsetzung. Bei nicht sicherer Verwendung ist die Anlage bis zur Beseitigung des Mangels entsprechend zu sichern.',
+            rechtlich: 'Der Betreiber muss die Aufzugsanlage regelmäßig auf offensichtliche sicherheitsrelevante Mängel kontrollieren (BetrSichV Anhang 1 Nr. 4.6) und erforderliche Instandhaltungsmaßnahmen nach § 10 BetrSichV treffen. Die weitere Verwendung ist nur zulässig, wenn sie sicher erfolgen kann.'
         },
         "22.4": {
             einfach: 'Räumen Sie Waren, Paletten und sonstige Hindernisse vor den Aufzugstüren weg.',
@@ -952,9 +954,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Der Lastenaufzug ist bestimmungsgemäß zu verwenden; erforderliche Hinweise bzw. Verbote zur Personenbeförderung sind gut sichtbar anzubringen. Ein Lastenaufzug ohne Personenbeförderungszulassung darf gemäß Aufzugsrichtlinie 2014/33/EU nicht zur Personenbeförderung genutzt werden; entsprechende Verbotsschilder sind anzubringen.'
         },
         "22.6": {
-            einfach: 'Lassen Sie defekte Bedienelemente, Anzeigen oder Sicherheitseinrichtungen reparieren und sorgen Sie für eindeutige Kennzeichnung.',
-            bghw: 'Veranlassen Sie die Instandsetzung von Bedienelementen, Anzeigen und Sicherheitseinrichtungen gemäß TRBS 3121 sowie der DGUV Regel 108-601 und stellen Sie eine eindeutige Kennzeichnung sicher.',
-            rechtlich: 'Bedienelemente, Anzeigen und Sicherheitseinrichtungen sind funktionsfähig zu halten und eindeutig zu kennzeichnen. Bedienelemente und Sicherheitseinrichtungen sind Bestandteil der wiederkehrenden Prüfung nach § 16 BetrSichV.'
+            einfach: 'Lassen Sie defekte Bedienelemente, Anzeigen oder Sicherheitseinrichtungen fachgerecht instand setzen.',
+            bghw: 'Halten Sie Bedienelemente und Sicherheitseinrichtungen funktionsfähig und berücksichtigen Sie festgestellte Mängel bei Kontrolle, Instandhaltung und den vorgeschriebenen Prüfungen.',
+            rechtlich: 'Aufzugsanlagen sind regelmäßig auf offensichtliche Mängel zu kontrollieren und instand zu halten (BetrSichV Anhang 1 Nr. 4.2 und 4.6). Zusätzlich gelten die wiederkehrenden Prüfungen nach § 16 BetrSichV für die hiervon erfassten Anlagen.'
         },
         "22.7": {
             einfach: 'Holen Sie die fällige Prüfung nach und beheben Sie offene Mängel aus dem letzten Prüfbericht. Die Hauptprüfung durch eine zugelassene Überwachungsstelle (ZÜS) ist gesetzlich spätestens alle zwei Jahre Pflicht.',
@@ -962,14 +964,137 @@ const MEASURES_TEXT = {
             rechtlich: 'Die wiederkehrende Prüfung des Lastenaufzugs ist gemäß § 16 BetrSichV durch eine zugelassene Überwachungsstelle (ZÜS) fristgerecht durchzuführen; festgestellte Mängel sind vollständig abzuarbeiten. Die vom Arbeitgeber nach § 3 Abs. 6 BetrSichV festzulegende Prüffrist der ZÜS-Hauptprüfung darf gemäß Anhang 2 Abschnitt 2 Nr. 4.1 BetrSichV zwei Jahre nicht überschreiten.'
         },
         "22.8": {
-            einfach: 'Unterweisen Sie die zuständigen Beschäftigten in der sicheren Bedienung und Beladung des Lastenaufzugs.',
-            bghw: 'Unterweisen Sie die zuständigen Beschäftigten gemäß § 12 ArbSchG und der DGUV Regel 108-601 in der sicheren Bedienung und Beladung.',
-            rechtlich: 'Beschäftigte dürfen den Lastenaufzug nur bestimmungsgemäß und entsprechend der Gefährdungsbeurteilung sowie der Betriebsanweisung bedienen; sie sind vor Aufnahme der Tätigkeit und danach erforderlichenfalls gemäß § 12 ArbSchG zu unterweisen. Die Unterweisung ist gemäß § 12 ArbSchG vor erstmaliger Bedienung und danach regelmäßig, mindestens jährlich, zu wiederholen.'
+            einfach: 'Unterweisen Sie die zuständigen Beschäftigten vor der Bedienung in der sicheren und bestimmungsgemäßen Nutzung und wiederholen Sie die Unterweisung mindestens jährlich sowie bei Bedarf.',
+            bghw: 'Unterweisen Sie zuständige Beschäftigte arbeitsplatz- und aufgabenbezogen zur sicheren Bedienung und Beladung. Die Wiederholung erfolgt nach DGUV Vorschrift 1 § 4 erforderlichenfalls, mindestens jedoch jährlich, sowie anlassbezogen.',
+            rechtlich: '§ 12 ArbSchG verlangt eine angemessene Unterweisung vor Aufnahme bzw. bei Änderungen der Tätigkeit und eine an die Gefährdungsentwicklung angepasste, erforderlichenfalls regelmäßige Wiederholung. Ergänzend verlangt § 4 DGUV Vorschrift 1 eine erforderlichenfalls wiederholte, mindestens jährliche Unterweisung und deren Dokumentation.'
         },
         "22.9": {
-            einfach: 'Legen Sie schriftlich fest, wie bei einer Störung oder einem Einschluss vorzugehen ist, und machen Sie die Ansprechpartner bekannt.',
-            bghw: 'Regeln Sie das Vorgehen bei Störung oder Einschluss gemäß TRBS 3121 sowie der DGUV Regel 108-601 und benennen Sie die zuständigen Ansprechpartner.',
-            rechtlich: 'Das Vorgehen bei einer Störung oder einem Einschluss ist gemäß TRBS 3121 schriftlich zu regeln; die zuständigen Ansprechpartner sind bekannt zu machen. Das Vorgehen bei Störung oder Einschluss ist gemäß TRBS 3121 Nr. 4.2 schriftlich zu regeln, inkl. Ansprechpartner und maximaler Reaktionszeit des Notdienstes.'
+            einfach: 'Legen Sie für Störungen oder einen möglichen Einschluss fest, wie Hilfe gerufen wird, wer zuständig ist und welche Informationen benötigt werden.',
+            bghw: 'Richten Sie die Notfallorganisation nach den für die konkrete Aufzugsanlage geltenden Anforderungen aus. Ist ein Einschluss möglich, müssen Hilfeherbeirufung, Notfallplan und Notbefreiungsorganisation entsprechend BetrSichV Anhang 1 Nr. 4.1 sichergestellt sein.',
+            rechtlich: 'Für Aufzugsanlagen, in denen Personen eingeschlossen werden können, gelten die Notfallanforderungen aus BetrSichV Anhang 1 Nr. 4.1 entsprechend. Dazu gehören je nach Anlagenart insbesondere die Möglichkeit, Hilfe herbeizurufen, der Notfallplan und die Notbefreiungsanleitung. Eine pauschale Bezugnahme auf eine bestimmte Reaktionszeit der alten TRBS 3121 wird vermieden.'
+        }
+    },
+
+    "Flüssiggasflaschen": {
+        "23.1": {
+            einfach: 'Lagern Sie Flüssiggasflaschen vorzugsweise im Freien in einem geeigneten Lagerbereich.',
+            bghw: 'Bevorzugen Sie gemäß DGUV Regel 110-010 die Lagerung von Flüssiggasflaschen im Freien gegenüber der Lagerung in Räumen.',
+            rechtlich: 'Die Lagerung ist anhand der Gefährdungsbeurteilung nach GefStoffV und TRGS 510 festzulegen. DGUV Regel 110-010 konkretisiert, dass die Lagerung im Freien erfahrungsgemäß vorzuziehen ist.'
+        },
+        "23.2": {
+            einfach: 'Ermitteln Sie Anzahl und Gesamtmenge der gelagerten Flüssiggasflaschen und legen Sie danach die erforderlichen Schutzmaßnahmen fest.',
+            bghw: 'Ordnen Sie die Lagermenge nach DGUV Regel 110-010 dem zutreffenden Mengenbereich zu: eine Flasche bzw. maximal 50 kg, mehr als eine Flasche oder mehr als 50 kg bis 200 kg sowie über 200 kg.',
+            rechtlich: 'DGUV Regel 110-010 Tabelle 7 staffelt die Schutzmaßnahmen nach der Lagermenge. Beim Überschreiten einer der jeweiligen Mengenschwellen sind die weitergehenden Schutzmaßnahmen anzuwenden.'
+        },
+        "23.3": {
+            einfach: 'Richten Sie bei mehr als einer Flasche oder mehr als 50 kg Flüssiggas einen geeigneten Lagerbereich mit den erforderlichen zusätzlichen Schutzmaßnahmen ein.',
+            bghw: 'Bei mehr als einer Flüssiggasflasche oder mehr als 50 kg sind nach DGUV Regel 110-010 die weitergehenden Anforderungen an ein Flüssiggaslager zu berücksichtigen.',
+            rechtlich: 'DGUV Regel 110-010 fordert bei mehr als einer Flasche oder mehr als 50 kg Flüssiggas weitergehende Schutzmaßnahmen; die konkrete Ausführung richtet sich zusätzlich nach GefStoffV und TRGS 510.'
+        },
+        "23.4": {
+            einfach: 'Lagern Sie Flüssiggasflaschen stehend und sichern Sie sie zuverlässig gegen Umfallen und Herabfallen.',
+            bghw: 'Lagern Sie LPG-Flaschen entsprechend TRGS 510 stehend und sichern Sie Druckgasbehälter gegen Umfallen oder Herabfallen.',
+            rechtlich: 'TRGS 510 Abschnitt 10.2 verlangt die Sicherung von Druckgasbehältern gegen Umfallen oder Herabfallen und bestimmt, dass Flüssiggasflaschen stehend zu lagern sind.'
+        },
+        "23.5": {
+            einfach: 'Sichern Sie den Lagerbereich gegen den Zugriff unbefugter Personen.',
+            bghw: 'Beschränken Sie den Zugang zum Flüssiggaslager entsprechend Gefährdungsbeurteilung, TRGS 510 und DGUV Regel 110-010 auf befugte Personen.',
+            rechtlich: 'Die organisatorischen Schutzmaßnahmen für die Lagerung von Gasen unter Druck sind nach GefStoffV und TRGS 510 festzulegen; der Lagerbereich ist gegen unbefugten Zugriff zu sichern, soweit dies aufgrund der Gefährdung erforderlich ist.'
+        },
+        "23.6": {
+            einfach: 'Schützen Sie die Flaschen vor unzulässiger Erwärmung und halten Sie die für den Lagerort erforderlichen Schutzmaßnahmen ein.',
+            bghw: 'Schützen Sie Druckgasbehälter entsprechend TRGS 510 vor übermäßiger äußerer Wärmeeinwirkung und berücksichtigen Sie die für Lagerort und Lagermenge erforderlichen Schutzmaßnahmen.',
+            rechtlich: 'TRGS 510 Abschnitt 10.2 fordert Schutz vor übermäßiger äußerer Wärmeeinwirkung; weitere Abstände und Schutzmaßnahmen sind anhand von Lagerart, Lagermenge und Gefährdungsbeurteilung festzulegen.'
+        },
+        "23.7": {
+            einfach: 'Schließen Sie die Flaschenventile und schützen Sie sie gegen Beschädigung.',
+            bghw: 'Sorgen Sie dafür, dass Ventile geschlossen und mit einer geeigneten Schutzeinrichtung, z. B. Schutzkappe oder Schutzkragen, gegen Beschädigung geschützt sind.',
+            rechtlich: 'TRGS 510 Abschnitt 10.2 fordert den Schutz der Ventile von Druckgasbehältern durch geeignete Schutzeinrichtungen; die sichere Lagerung ist nach GefStoffV zu gewährleisten.'
+        },
+        "23.8": {
+            einfach: 'Kontrollieren Sie insbesondere teilentleerte Rückgabeflaschen vor der Rückführung ins Lager auf Ventildichtheit, z. B. mit geeignetem Lecksuchmittel.',
+            bghw: 'Führen Sie die in DGUV Regel 110-010 beschriebene Dichtheitskontrolle des Flaschenventils vor der Rückführung teilentleerter Flaschen in das Lager durch.',
+            rechtlich: 'DGUV Regel 110-010 Abschnitt 5.1.19 beschreibt den Dichtheitsnachweis der Flaschenventile, z. B. mit schaumbildenden Mitteln, ausdrücklich auch für teilentleerte Flaschen vor der Rückführung in das Lager.'
+        },
+        "23.9": {
+            einfach: 'Nehmen Sie beschädigte, undichte oder auffällige Flaschen aus dem normalen Ablauf und sichern Sie sie nach dem festgelegten Notfallverfahren.',
+            bghw: 'Legen Sie für undichte oder beschädigte Flüssiggasflaschen geeignete Maßnahmen nach Gefährdungsbeurteilung und DGUV Regel 110-010 fest; behandeln Sie solche Flaschen nicht wie unauffälliges Lagergut.',
+            rechtlich: 'Bei erkennbaren Schäden oder Undichtheiten sind unverzüglich die aus der Gefährdungsbeurteilung nach GefStoffV abgeleiteten Schutz- und Notfallmaßnahmen anzuwenden.'
+        },
+        "23.10": {
+            einfach: 'Sorgen Sie dafür, dass Kennzeichnungen lesbar bleiben und Inhalt sowie Gefahren eindeutig erkennbar sind.',
+            bghw: 'Kontrollieren Sie die gefahrstoffrechtliche Kennzeichnung der Flüssiggasflaschen auf Erkennbarkeit und berücksichtigen Sie beschädigte oder unklare Kennzeichnungen bei der Annahme und Lagerung.',
+            rechtlich: 'Die gefahrstoffrechtliche Kennzeichnung muss die sichere Identifikation des Gefahrstoffs und seiner Gefahren ermöglichen; maßgeblich sind insbesondere GefStoffV und CLP-Verordnung.'
+        },
+        "23.11": {
+            einfach: 'Legen Sie einen sicheren Ablauf für die Ausgabe der Flaschen an Kundinnen und Kunden fest.',
+            bghw: 'Regeln Sie Ausgabe und Bereitstellung von Flüssiggasflaschen so, dass Lager- und Transportanforderungen der DGUV Regel 108-601, DGUV Regel 110-010 und TRGS 510 eingehalten werden.',
+            rechtlich: 'Ausgabe und Bereitstellung sind in der Gefährdungsbeurteilung zu berücksichtigen und entsprechend GefStoffV/TRGS 510 sicher zu organisieren.'
+        },
+        "23.12": {
+            einfach: 'Legen Sie einen sicheren Ablauf für die Rücknahme leerer und teilentleerter Flaschen fest.',
+            bghw: 'Regeln Sie die Rücknahme einschließlich Ventilkontrolle, Umgang mit auffälligen Flaschen und Weitertransport in den Lagerbereich.',
+            rechtlich: 'Die Rücknahme ist als Tätigkeit mit Gefahrstoffen in der Gefährdungsbeurteilung zu berücksichtigen; erforderliche Schutzmaßnahmen ergeben sich aus GefStoffV, TRGS 510 und DGUV Regel 110-010.'
+        },
+        "23.13": {
+            einfach: 'Bringen Sie zurückgenommene Flaschen ohne unnötige Zwischenlagerung in den vorgesehenen Lagerbereich.',
+            bghw: 'Organisieren Sie den zeitnahen innerbetrieblichen Transport zurückgenommener Flüssiggasflaschen in den vorgesehenen Lagerbereich.',
+            rechtlich: 'Ein- und Auslagern sowie innerbetrieblicher Transport sind nach DGUV Regel 110-010 Bestandteil der bei der Lagerung zu berücksichtigenden Tätigkeiten und in der Gefährdungsbeurteilung zu erfassen.'
+        },
+        "23.14": {
+            einfach: 'Stellen Sie Flüssiggasflaschen nicht auf Verkehrs- oder Fluchtwegen ab und vermeiden Sie eine unzulässige Lagerung im Verkaufsraum.',
+            bghw: 'Halten Sie Verkehrs- und Fluchtwege frei und organisieren Sie Bereitstellung bzw. Lagerung von Flüssiggasflaschen nur in dafür geeigneten Bereichen.',
+            rechtlich: 'Verkehrs- und Fluchtwege sind nach ArbStättV/ASR freizuhalten. Ob eine Bereitstellung oder Lagerung von Flüssiggasflaschen in Räumen zulässig ist, richtet sich zusätzlich nach GefStoffV und TRGS 510.'
+        },
+        "23.15": {
+            einfach: 'Verwenden Sie geeignete Transporthilfen und sichern Sie die Flaschen beim Transport gegen Umfallen oder Herabfallen.',
+            bghw: 'Stellen Sie geeignete Transporthilfen bereit und berücksichtigen Sie beim innerbetrieblichen Transport die Schutzmaßnahmen der DGUV Regel 108-601 und DGUV Regel 110-010.',
+            rechtlich: 'Der innerbetriebliche Transport ist in der Gefährdungsbeurteilung zu berücksichtigen; Druckgasbehälter sind gegen mechanische Gefährdungen, insbesondere Umfallen und Herabfallen, zu sichern.'
+        },
+        "23.16": {
+            einfach: 'Halten Sie wirksame Zündquellen vom gefährdeten Bereich fern und setzen Sie die festgelegten Brand- und Explosionsschutzmaßnahmen um.',
+            bghw: 'Bewerten Sie mögliche Gefahrenbereiche und vermeiden Sie wirksame Zündquellen entsprechend DGUV Regel 110-010 und TRGS 510.',
+            rechtlich: 'Brand- und Explosionsgefährdungen sind nach GefStoffV zu beurteilen. TRGS 510 und DGUV Regel 110-010 konkretisieren die erforderlichen Schutzmaßnahmen bei der Lagerung entzündbarer Gase.'
+        },
+        "23.17": {
+            einfach: 'Bringen Sie die aufgrund der Gefährdungsbeurteilung erforderlichen Warn-, Verbots- und Sicherheitskennzeichnungen gut sichtbar an.',
+            bghw: 'Kennzeichnen Sie den Lagerbereich entsprechend Gefährdungsbeurteilung, ASR A1.3 und den gefahrstoffrechtlichen Anforderungen.',
+            rechtlich: 'Erforderliche Sicherheitskennzeichnungen ergeben sich aus Gefährdungsbeurteilung, GefStoffV und ASR A1.3; Art und Umfang sind vom konkreten Lagerbereich und den Gefährdungen abhängig.'
+        },
+        "23.18": {
+            einfach: 'Nehmen Sie das Flüssiggaslager in die vorhandenen Brandschutz-, Feuerwehr- und Notfallunterlagen auf.',
+            bghw: 'Berücksichtigen Sie das Flüssiggaslager entsprechend DGUV Regel 108-601 in vorhandenen Feuerwehrplänen und passen Sie betriebliche Brandschutz- und Notfallunterlagen an.',
+            rechtlich: 'Gefahrstofflager und daraus resultierende Notfallmaßnahmen sind in der betrieblichen Gefahrenabwehr zu berücksichtigen. DGUV Regel 108-601 konkretisiert dies für Flüssiggaslager im Einzelhandel.'
+        },
+        "23.19": {
+            einfach: 'Legen Sie fest, wie bei Gasgeruch, Undichtheit oder Brand alarmiert und gehandelt wird, und machen Sie den Ablauf den Beschäftigten bekannt.',
+            bghw: 'Regeln Sie Alarmierung und Verhalten bei Gasaustritt oder Brand in Betriebsanweisung und Notfallorganisation und unterweisen Sie die betroffenen Beschäftigten.',
+            rechtlich: 'Nach GefStoffV sind geeignete Maßnahmen für Betriebsstörungen, Unfälle und Notfälle festzulegen; Beschäftigte sind über die erforderlichen Verhaltensweisen zu informieren und zu unterweisen.'
+        },
+        "23.20": {
+            einfach: 'Erstellen Sie eine aktuelle, verständliche Betriebsanweisung für den Umgang mit Flüssiggasflaschen.',
+            bghw: 'Erstellen Sie gemäß GefStoffV und DGUV Regel 108-601 eine arbeitsbereichs- und tätigkeitsbezogene Betriebsanweisung für Lagerung, Ausgabe, Rücknahme und Transport.',
+            rechtlich: 'Nach § 14 GefStoffV ist eine schriftliche Betriebsanweisung in verständlicher Form und Sprache zugänglich zu machen, wenn Beschäftigte Tätigkeiten mit Gefahrstoffen ausüben.'
+        },
+        "23.21": {
+            einfach: 'Unterweisen Sie die betroffenen Beschäftigten vor der ersten Tätigkeit und danach mindestens einmal jährlich.',
+            bghw: 'Unterweisen Sie Beschäftigte anhand der Betriebsanweisung vor Aufnahme der Tätigkeit und danach mindestens jährlich über Gefährdungen und Schutzmaßnahmen beim Umgang mit Flüssiggasflaschen.',
+            rechtlich: '§ 14 GefStoffV verlangt eine arbeitsplatzbezogene Unterweisung vor Aufnahme der Beschäftigung und danach mindestens jährlich; Inhalt und Zeitpunkt der Unterweisung sind schriftlich festzuhalten.'
+        },
+        "23.22": {
+            einfach: 'Dokumentieren Sie Inhalt und Zeitpunkt der Unterweisung.',
+            bghw: 'Dokumentieren Sie die Gefahrstoffunterweisung nachvollziehbar mit Inhalt und Zeitpunkt.',
+            rechtlich: 'Nach § 14 GefStoffV sind Inhalt und Zeitpunkt der Unterweisung schriftlich festzuhalten und von den Unterwiesenen durch Unterschrift zu bestätigen.'
+        },
+        "23.23": {
+            einfach: 'Stellen Sie den anhand der Gefährdungsbeurteilung erforderlichen Fuß- und Handschutz bereit und sorgen Sie für dessen Benutzung.',
+            bghw: 'Legen Sie geeigneten Fuß- und Handschutz anhand der Gefährdungsbeurteilung fest. DGUV Regel 108-601 nennt bei der Handhabung von Flüssiggasflaschen insbesondere Sicherheitsschuhe und geeigneten Handschutz.',
+            rechtlich: 'Erforderliche persönliche Schutzausrüstung ist auf Grundlage der Gefährdungsbeurteilung nach ArbSchG/GefStoffV und PSA-Benutzungsverordnung auszuwählen, bereitzustellen und bestimmungsgemäß zu benutzen.'
+        },
+        "23.24": {
+            einfach: 'Aktualisieren Sie die Gefährdungsbeurteilung für Lagerung, Ausgabe, Rücknahme und Transport der Flüssiggasflaschen.',
+            bghw: 'Erfassen Sie sämtliche Tätigkeiten mit Flüssiggasflaschen in der Gefährdungsbeurteilung und berücksichtigen Sie dabei Lagerort, Lagermenge, Rücknahme, Dichtheit, Transport sowie Brand- und Explosionsgefährdungen.',
+            rechtlich: 'Nach § 5 ArbSchG und § 6 GefStoffV sind die Gefährdungen zu ermitteln und zu beurteilen. Die Schutzmaßnahmen sind entsprechend GefStoffV und den einschlägigen Technischen Regeln, insbesondere TRGS 510, festzulegen und aktuell zu halten.'
         }
     },
 
