@@ -2181,12 +2181,19 @@ function toggleSubgroupByIndex(categoryId, groupIndex) {
     if (!groupName) return;
 
     const key = `${categoryId}::${groupName}`;
+    const categoryElement = document.getElementById(`cat-${categoryId}`);
+    const subgroupElements = categoryElement
+        ? categoryElement.querySelectorAll('.audit-subgroup')
+        : [];
+    const subgroupElement = subgroupElements[groupIndex];
+
     if (openSubgroups.has(key)) {
         openSubgroups.delete(key);
+        if (subgroupElement) subgroupElement.classList.remove('open');
     } else {
         openSubgroups.add(key);
+        if (subgroupElement) subgroupElement.classList.add('open');
     }
-    renderChecklist();
 }
 
 function buildChecklistHtml(forceOpenAll) {
