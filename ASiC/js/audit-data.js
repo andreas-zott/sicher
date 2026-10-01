@@ -14,7 +14,7 @@ const AUDIT_CATEGORIES = [
             { id: "1.10", text: "Sind die Treppen unbeschädigt und frei von Gegenständen?" },
             { id: "1.11", text: "Sind Betriebsanweisungen gut zugänglich und werden Sicherheitsanweisungen eingehalten?" },
             { id: "1.12", text: "Ist die Beleuchtung in den Verkaufs- und Lagerbereichen gemäß ASR A3.4 ausreichend dimensioniert (mind. 300 Lux im Verkaufsraum), voll funktionsfähig und so beschaffen, dass Gefahrenhinweise auf Produkten sowie Leckagen in den Regalen jederzeit zweifelsfrei erkennbar sind?" },
-            { id: "1.13", text: "Sind die Schnelllauftore gemäß den Herstellervorgaben und gesetzlichen Fristen geprüft sowie technisch einwandfrei?" },
+            { id: "1.13", text: "Sind die Schnelllauftore gemäß den Herstellervorgaben und den Anforderungen der ASR A1.7 wiederkehrend geprüft sowie technisch einwandfrei?" },
             { id: "1.14", text: "Sind die Rolltore aktuell geprüft und funktionieren alle Schutzeinrichtungen (z. B. Absturzsicherung, Einzugsschutz) einwandfrei?" }
         ]
     },
@@ -43,7 +43,7 @@ const AUDIT_CATEGORIES = [
         id: "sozialräume",
         name: "Sozialräume",
         items: [
-            { id: "3.1", text: "Hängen im Sozialbereich die aktuellen aushangpflichtigen Gesetze, Unfallverhütungsvorschriften sowie die Brandschutzordnung Teil A aus?" },
+            { id: "3.1", text: "Sind die für den Betrieb vorgeschriebenen Arbeitsschutzvorschriften und betrieblichen Sicherheitsinformationen für die Beschäftigten zugänglich und ist eine Brandschutzordnung Teil A vorhanden bzw. ausgehängt, soweit sie für den Betrieb vorgeschrieben ist?" },
             { id: "3.2", text: "Sind die Kaffeemaschine und andere hitzeentwickelnde Geräte auf einer nicht brennbaren Unterlage abgestellt?" },
             { id: "3.3", text: "Werden ortsveränderliche elektrische Betriebsmittel (z. B. Leitungen, Steckverbindungen, Leuchten, Geräte) in angemessenen Zeitabständen geprüft?" },
             { id: "3.4", text: "Dient der Pausenraum primär der Erholung der Beschäftigten und ist er frei von größeren Mengen an betrieblichem Lagergut (z. B. Archivboxen)?" }
@@ -239,7 +239,7 @@ const AUDIT_CATEGORIES = [
         items: [
             { id: "19.1", text: "Wird die Dokumentation von Erste-Hilfe-Leistungen ordnungsgemäß geführt und aufbewahrt?" },
             { id: "19.2", text: "Ist ein Sicherheitsbeauftragter ausgebildet und bestellt?" },
-            { id: "19.3", text: "Ist während der gesamten Ladenöffnungszeit mindestens ein Mitarbeiter mit der Qualifikation als Brandschutzhelfer anwesend?" },
+            { id: "19.3", text: "Ist anhand der Gefährdungsbeurteilung eine ausreichende Anzahl ausgebildeter Brandschutzhelfer sichergestellt und werden Schichtbetrieb sowie Abwesenheiten berücksichtigt?" },
             { id: "19.4", text: "Erfolgte die letzte Unterweisung zum Umgang mit Zahlungsmitteln innerhalb der letzten 6 Monate?" },
             { id: "19.5", text: "Sind Unterweisungen dokumentiert?" },
             { id: "19.6", text: "Wurden bei der Unterweisung aktuelle Änderungen in den betrieblichen Abläufen oder neue Sicherheitstechniken berücksichtigt?" },
@@ -262,7 +262,7 @@ const AUDIT_CATEGORIES = [
             { id: "20.10", text: "Wird konstruktive Kritik geübt?" },
             { id: "20.11", text: "Gibt es einen Aushang zur Information über die Suchtprävention?" },
             { id: "20.12", text: "Ist ein betriebliches Wiedereingliederungsmanagement implementiert?" },
-            { id: "20.13", text: "Wird Alleinarbeit vermieden?" },
+            { id: "20.13", text: "Ist Alleinarbeit in der Gefährdungsbeurteilung berücksichtigt und sind abhängig von den konkreten Gefährdungen geeignete Schutzmaßnahmen festgelegt?" },
             { id: "20.14", text: "Ist die Betreuung nach einem Überfall organisiert?" },
             { id: "20.15", text: "Werden Schulungen für den Umgang mit gewalttätigen Situationen ermöglicht?" },
             { id: "20.16", text: "Beziehen Sie Mitarbeiteranregungen in die Entscheidungsprozesse mit ein?" },
@@ -288,7 +288,7 @@ const AUDIT_CATEGORIES = [
         { id: "21.12", text: "Ist geregelt, wie das Objektpersonal im Notfall die Einsatzkräfte bzw. den Aufzugsnotdienst zum betroffenen Aufzug einweist?" },
         { id: "21.13", text: "Ist das zuständige Personal für die erforderlichen Erstmaßnahmen bei eingeschlossenen Personen unterwiesen bzw. geschult?" },
         { id: "21.14", text: "Ist sichergestellt, dass eingeschlossene Personen bis zum Eintreffen des zuständigen Fachpersonals angemessen betreut und beruhigt werden?" },
-        { id: "21.15", text: "Ist eine Vertretungs- bzw. Redundanzregelung vorhanden, falls der zuständige externe Aufzugsnotdienst nicht erreichbar oder nicht verfügbar ist?" }
+        { id: "21.15", text: "Ist organisatorisch sichergestellt, dass der vorgeschriebene Aufzugsnotdienst über das Zweiwege-Kommunikationssystem ständig erreichbar bleibt und bei Ausfällen weiterhin sachgerechte Hilfe gewährleistet ist?" }
     ]
 },
 {
@@ -305,6 +305,36 @@ const AUDIT_CATEGORIES = [
         { id: "22.8", text: "Sind die zuständigen Beschäftigten für die sichere Bedienung und Beladung des Lastenaufzugs unterwiesen?" },
         { id: "22.9", text: "Ist geregelt, wie bei einer Störung oder einem Einschluss vorzugehen ist und sind die zuständigen Ansprechpartner bekannt?" }
     ]
-}
+},
+    {
+        id: "fluessiggasflaschen",
+        name: "Flüssiggasflaschen",
+        items: [
+            { id: "23.1", group: "Lagerung und Lagerbereich", text: "Werden Flüssiggasflaschen vorzugsweise im Freien bzw. in einem dafür geeigneten Lagerbereich aufbewahrt?" },
+            { id: "23.2", group: "Lagerung und Lagerbereich", text: "Ist anhand der vorhandenen Anzahl und Gesamtmenge der Flüssiggasflaschen geprüft, welche mengenabhängigen Schutzmaßnahmen erforderlich sind?" },
+            { id: "23.3", group: "Lagerung und Lagerbereich", text: "Werden bei mehr als einer Flüssiggasflasche oder mehr als 50 kg Flüssiggas die weitergehenden Anforderungen an ein Flüssiggaslager berücksichtigt?" },
+            { id: "23.4", group: "Lagerung und Lagerbereich", text: "Werden Flüssiggasflaschen stehend gelagert und sind sie gegen Umfallen oder Herabfallen gesichert?" },
+            { id: "23.5", group: "Lagerung und Lagerbereich", text: "Ist der Lagerbereich gegen unbefugten Zugriff geschützt?" },
+            { id: "23.6", group: "Lagerung und Lagerbereich", text: "Sind die Flüssiggasflaschen vor unzulässiger Wärmeeinwirkung geschützt und werden die erforderlichen Abstände bzw. Schutzmaßnahmen eingehalten?" },
+            { id: "23.7", group: "Flaschenzustand und Dichtheit", text: "Sind die Flaschenventile geschlossen und gegen Beschädigung geschützt?" },
+            { id: "23.8", group: "Flaschenzustand und Dichtheit", text: "Werden zurückgenommene bzw. teilentleerte Flüssiggasflaschen vor der Rückführung in das Lager auf Ventildichtheit kontrolliert?" },
+            { id: "23.9", group: "Flaschenzustand und Dichtheit", text: "Werden beschädigte, undichte oder sonst auffällige Flüssiggasflaschen sofort ausgesondert und sicher behandelt?" },
+            { id: "23.10", group: "Flaschenzustand und Dichtheit", text: "Sind Flüssiggasflaschen und ihre Kennzeichnungen so beschaffen, dass Inhalt und Gefahren eindeutig erkennbar sind?" },
+            { id: "23.11", group: "Ausgabe, Rücknahme und Transport", text: "Ist die Ausgabe von Flüssiggasflaschen an Kundinnen und Kunden organisatorisch geregelt?" },
+            { id: "23.12", group: "Ausgabe, Rücknahme und Transport", text: "Ist die Rücknahme von leeren bzw. teilentleerten Flüssiggasflaschen organisatorisch geregelt?" },
+            { id: "23.13", group: "Ausgabe, Rücknahme und Transport", text: "Werden zurückgenommene Flüssiggasflaschen zeitnah in den vorgesehenen Lagerbereich gebracht?" },
+            { id: "23.14", group: "Ausgabe, Rücknahme und Transport", text: "Wird vermieden, Flüssiggasflaschen unzulässig im Verkaufsraum oder auf Verkehrs- und Fluchtwegen abzustellen oder zu lagern?" },
+            { id: "23.15", group: "Ausgabe, Rücknahme und Transport", text: "Stehen für den innerbetrieblichen Transport geeignete Transporthilfen zur Verfügung und werden die Flaschen gegen Umfallen bzw. Herabfallen gesichert?" },
+            { id: "23.16", group: "Brand- und Explosionsschutz", text: "Ist der Lagerbereich frei von wirksamen Zündquellen und werden Brand- und Explosionsgefährdungen berücksichtigt?" },
+            { id: "23.17", group: "Brand- und Explosionsschutz", text: "Sind die aufgrund der Gefährdungsbeurteilung erforderlichen Sicherheits- und Verbotskennzeichnungen am Lagerbereich vorhanden und gut sichtbar?" },
+            { id: "23.18", group: "Brand- und Explosionsschutz", text: "Ist der Flüssiggas-Lagerbereich in vorhandenen Feuerwehrplänen sowie den betrieblichen Brandschutz- und Notfallunterlagen berücksichtigt?" },
+            { id: "23.19", group: "Brand- und Explosionsschutz", text: "Sind für den Brand- oder Gasaustrittsfall geeignete Alarmierungs- und Verhaltensmaßnahmen festgelegt und den betroffenen Beschäftigten bekannt?" },
+            { id: "23.20", group: "Organisation, Unterweisung und PSA", text: "Liegt für den Umgang mit Flüssiggasflaschen eine aktuelle Betriebsanweisung vor?" },
+            { id: "23.21", group: "Organisation, Unterweisung und PSA", text: "Werden Beschäftigte vor Aufnahme der Tätigkeit und danach mindestens jährlich über Gefährdungen und Schutzmaßnahmen beim Umgang mit Flüssiggasflaschen unterwiesen?" },
+            { id: "23.22", group: "Organisation, Unterweisung und PSA", text: "Werden die Unterweisungen dokumentiert?" },
+            { id: "23.23", group: "Organisation, Unterweisung und PSA", text: "Tragen Beschäftigte bei der Handhabung den anhand der Gefährdungsbeurteilung erforderlichen Fuß- und Handschutz?" },
+            { id: "23.24", group: "Organisation, Unterweisung und PSA", text: "Ist die Gefährdungsbeurteilung für Lagerung, Ausgabe, Rücknahme und innerbetrieblichen Transport der Flüssiggasflaschen aktuell?" }
+        ]
+    }
 
 ];

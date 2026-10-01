@@ -47,12 +47,14 @@ function defaultState() {
             pruefer: null,
             marktleitung: null
         },
-        notApplicable: {}
+        notApplicable: {},
+        subgroupNotApplicable: {}
     };
 }
 
 let state = defaultState();
 let openCategoryId = null;
+const openSubgroups = new Set();
 
 // ===== State laden/speichern =====
 function loadState() {
@@ -66,7 +68,8 @@ function loadState() {
             comments: data.comments || {},
             measures: data.measures || [],
             signatures: { ...defaultState().signatures, ...(data.signatures || {}) },
-            notApplicable: data.notApplicable || {}
+            notApplicable: data.notApplicable || {},
+            subgroupNotApplicable: data.subgroupNotApplicable || {}
         };
     } catch (e) {
         console.error('ASiC Handel: Zustand konnte nicht geladen werden:', e);
@@ -2075,12 +2078,117 @@ const OPTIONAL_CATEGORIES = {
         'Keine Praktikanten/Schüleraushilfen im Markt beschäftigt',
 
     'co2-kuehleinrichtungen':
-        'Keine CO2-Kühleinrichtungen im Markt vorhanden'
+        'Keine CO2-Kühleinrichtungen im Markt vorhanden',
+
+    'fluessiggasflaschen':
+        'Keine Flüssiggasflaschen im Markt vorhanden'
 };
 
 // ===== Checkliste rendern (index.html) =====
 // buildChecklistHtml() erzeugt das HTML separat, damit es auch fuer den
 // Druck-Container auf der Maßnahmen-Seite wiederverwendet werden kann.
+function toggleSubgroupNotApplicable(categoryId, groupIndex, checked) {
+    const category = AUDIT_CATEGORIES.find(c => c.id === categoryId);
+    if (!category) return;
+
+    const groupNames = [];
+    category.items.forEach(item => {
+        const name = item.group || 'Weitere Prüfpunkte';
+        if (!groupNames.includes(name)) groupNames.push(name);
+    });
+
+    const groupName = groupNames[groupIndex];
+    if (!groupName) return;
+
+    const key = `${categoryId}::${groupName}`;
+    state.subgroupNotApplicable[key] = checked;
+
+    if (checked) {
+        category.items
+            .filter(item => (item.group || 'Weitere Prüfpunkte') === groupName)
+            .forEach(item => {
+                state.ratings[item.id] = 'na';
+                delete state.comments[item.id];
+                state.measures = state.measures.filter(m => m.itemId !== item.id);
+            });
+    }
+
+    saveState();
+    renderChecklist();
+}
+
+function renderCategoryItems(category, locked, forceOpenAll) {
+    const hasGroups = category.items.some(item => item.group);
+    if (!hasGroups) {
+        return category.items.map(item => renderItem(item, locked)).join('');
+    }
+
+    const groups = [];
+    category.items.forEach(item => {
+        const name = item.group || 'Weitere Prüfpunkte';
+        let group = groups.find(g => g.name === name);
+        if (!group) {
+            group = { name, items: [] };
+            groups.push(group);
+        }
+        group.items.push(item);
+    });
+
+    return groups.map((group, index) => {
+        const key = `${category.id}::${group.name}`;
+        const groupOpen = forceOpenAll || openSubgroups.has(key);
+        const groupLocked = locked || !!state.subgroupNotApplicable[key];
+        const answered = group.items.filter(item => state.ratings[item.id]).length;
+        const complete = answered === group.items.length;
+
+        return `
+        <div class="audit-subgroup ${groupOpen ? 'open' : ''}">
+            <button type="button" class="audit-subgroup-header"
+                onclick="toggleSubgroupByIndex('${category.id}', ${index})">
+                <span class="audit-subgroup-left">
+                    <svg class="audit-subgroup-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                    <span>${group.name}</span>
+                </span>
+                <span class="category-count ${complete ? 'complete' : ''}">${answered} / ${group.items.length}</span>
+            </button>
+            <div class="audit-subgroup-body">
+                <div class="category-toggle-row subgroup-toggle-row" onclick="event.stopPropagation()">
+                    <label class="toggle-switch">
+                        <input type="checkbox" ${state.subgroupNotApplicable[key] ? 'checked' : ''}
+                            ${locked ? 'disabled' : ''}
+                            onchange="toggleSubgroupNotApplicable('${category.id}', ${index}, this.checked)">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span class="toggle-label">Unterbereich nicht vorhanden / nicht anwendbar – alle Fragen automatisch als „N.V." markieren</span>
+                </div>
+                ${group.items.map(item => renderItem(item, groupLocked)).join('')}
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function toggleSubgroupByIndex(categoryId, groupIndex) {
+    const category = AUDIT_CATEGORIES.find(c => c.id === categoryId);
+    if (!category) return;
+
+    const groupNames = [];
+    category.items.forEach(item => {
+        const name = item.group || 'Weitere Prüfpunkte';
+        if (!groupNames.includes(name)) groupNames.push(name);
+    });
+
+    const groupName = groupNames[groupIndex];
+    if (!groupName) return;
+
+    const key = `${categoryId}::${groupName}`;
+    if (openSubgroups.has(key)) {
+        openSubgroups.delete(key);
+    } else {
+        openSubgroups.add(key);
+    }
+    renderChecklist();
+}
+
 function buildChecklistHtml(forceOpenAll) {
     return AUDIT_CATEGORIES.map(category => {
 
@@ -2121,7 +2229,7 @@ function buildChecklistHtml(forceOpenAll) {
                     </label>
                     <span class="toggle-label">${toggleLabel} – alle Fragen automatisch als „N.V." markieren</span>
                 </div>` : ''}
-                ${category.items.map(item => renderItem(item, locked)).join('')}
+                ${renderCategoryItems(category, locked, forceOpenAll)}
             </div>
         </section>`;
 
@@ -2265,6 +2373,28 @@ function setRating(itemId, rating) {
             category &&
             category.items.some(
                 i => i.id === itemId
+            )
+        ) {
+            return;
+        }
+    }
+
+    // Schutz auch fuer einzeln auf N.V. geschaltete Unterbereiche.
+    for (const key in state.subgroupNotApplicable) {
+        if (!state.subgroupNotApplicable[key]) continue;
+
+        const separator = key.indexOf('::');
+        if (separator === -1) continue;
+
+        const categoryId = key.slice(0, separator);
+        const groupName = key.slice(separator + 2);
+        const category = AUDIT_CATEGORIES.find(c => c.id === categoryId);
+
+        if (
+            category &&
+            category.items.some(
+                item => item.id === itemId &&
+                (item.group || 'Weitere Prüfpunkte') === groupName
             )
         ) {
             return;
