@@ -3,7 +3,7 @@
 // ==========================================================================
 // Offline-Unterstützung für die ASiC-Handel-App.
 //
-// SERVICE-WORKER-VERSION: 1.59
+// SERVICE-WORKER-VERSION: 2.0.3
 //
 // Bei einer neuen technischen Version:
 //   1. Alle precachten App-Dateien werden neu vom Server geladen.
@@ -19,7 +19,7 @@
 //   - Fotos
 // ==========================================================================
 
-const CACHE_NAME = 'asic-handel-v1.60';
+const CACHE_NAME = 'asic-handel-v2.0.5';
 
 
 // ==========================================================================
@@ -52,6 +52,9 @@ const PRECACHE_URLS = [
     './css/gbo.css',
 
     './js/app.js',
+    './js/market-store.js',
+    './js/market-ui.js',
+    './js/gbo-v2.js',
     './js/gbo-data.js',
     './js/gbo.js',
     './js/access-gate.js',
