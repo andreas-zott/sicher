@@ -8,7 +8,7 @@ const STORAGE_KEY = 'begehungState';
 
 // Revisionsstand der App/Checkliste (in Fusszeile und PDF sichtbar,
 // bei inhaltlichen Aenderungen an Fragenkatalog/Massnahmen hochzaehlen)
-const APP_REVISION = '1.41';
+const APP_REVISION = '2.0';
 const APP_REVISION_DATE = '2026-10-01';
 
 function renderFooterMeta() {
@@ -260,17 +260,13 @@ function withNasAuthHeaders(options) {
 
 async function saveStateToSynology() {
     try {
-        const res = await fetch(nasUrl('save.php'), withNasAuthHeaders({
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            cache: 'no-store',
-            body: JSON.stringify(state)
-        }));
-        const result = await parseJsonResponse(res);
-        if (!res.ok || !result.ok) {
-            throw new Error(result.message || `Fehler beim Speichern (HTTP ${res.status}).`);
+        saveState();
+        if (window.ASiCMarket) {
+            const result = await ASiCMarket.saveServer();
+            showToast('Markt auf NAS gespeichert: ' + (result.fileName || 'OK'));
+            return;
         }
-        showToast('Auf NAS gespeichert: ' + result.fileName);
+        throw new Error('Markt-Speichermodul nicht geladen.');
     } catch (err) {
         console.error('NAS-Speichern fehlgeschlagen:', err);
         showToast('NAS-Speichern fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
@@ -305,6 +301,15 @@ async function loadStateFromSynology(filename) {
     const result = await parseJsonResponse(res);
     if (!res.ok) {
         throw new Error((result && result.message) || `Fehler beim Laden (HTTP ${res.status}).`);
+    }
+
+    if (window.ASiCMarket && ASiCMarket.isContainer(result)) {
+        ASiCMarket.apply(result, 'all');
+        loadState();
+        if (typeof renderChecklist === 'function') renderChecklist();
+        renderCompanyInfoStrip();
+        showToast('Markt-Datensatz vom NAS geladen');
+        return;
     }
 
     // Defensiv mit defaultState() zusammenfuehren, aehnlich wie beim JSON-Import,
