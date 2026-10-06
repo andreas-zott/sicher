@@ -1880,3 +1880,95 @@ a.btn {
         break-inside: avoid;
     }
 }
+/* ========================================================================== 
+   iPhone / schmale Smartphones – kompakte untere Aktionsleiste
+   Ausnahmebedienung: Desktop und iPad bleiben unverändert.
+   ========================================================================== */
+@media (max-width: 520px) {
+    /* Eine gemeinsame Zeile statt einer hoch bauenden mehrzeiligen Leiste. */
+    .action-bar {
+        padding: 0.42rem 0.5rem calc(0.42rem + env(safe-area-inset-bottom));
+    }
+
+    .action-bar-inner {
+        max-width: none;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        gap: 0.22rem;
+        overflow: visible;
+    }
+
+    .action-bar-group,
+    .action-bar-group-style {
+        width: auto;
+        flex: 0 0 auto;
+        flex-wrap: nowrap;
+        gap: 0.2rem;
+        justify-content: flex-start;
+    }
+
+    .action-bar .btn-small {
+        height: 34px;
+        padding: 0 0.46rem;
+        font-size: 0.72rem;
+        white-space: nowrap;
+    }
+
+    .action-bar .style-switch {
+        display: flex;
+        flex-wrap: nowrap;
+    }
+
+    .action-bar .style-btn {
+        height: 34px;
+        padding: 0 0.38rem;
+        font-size: 0.66rem;
+        white-space: nowrap;
+    }
+
+    /* Dropdowns bleiben dicht an der Leiste und passen auch auf kleine iPhones. */
+    .action-bar .menu-dropdown-panel {
+        bottom: calc(100% + 0.35rem);
+        max-height: min(62vh, 430px);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #file-menu-panel {
+        left: 0;
+        right: auto;
+    }
+
+    #export-menu-panel {
+        left: auto;
+        right: 0;
+    }
+
+    /* Inhalt endet sicher oberhalb der Leiste inkl. iPhone-Home-Indikator. */
+    body {
+        padding-bottom: calc(5rem + env(safe-area-inset-bottom));
+    }
+}
+
+/* iPhone: Menüs fast wie im ursprünglichen Layout.
+   Nur Höhe/Position so begrenzen, dass sie oberhalb der Leiste bleiben. */
+@media (max-width: 520px) {
+    .action-bar .menu-dropdown-panel {
+        position: absolute;
+        bottom: calc(100% + 0.35rem);
+        max-height: min(62vh, 430px);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        z-index: 1000;
+    }
+
+    .action-bar #file-menu-panel {
+        left: 0;
+        right: auto;
+    }
+
+    .action-bar #export-menu-panel {
+        left: auto;
+        right: 0;
+    }
+}

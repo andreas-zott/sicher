@@ -53,4 +53,234 @@
 @media(max-width:700px){.gbo-v2-actions{justify-content:flex-start}.gbo-v2-map{grid-template-columns:1fr}.gbo-doc-primary .gbo-btn{width:auto}.gbo-v2-finding .gbo-btn{width:auto}}
 
 /* SW v2.0.6 – thematische Auswahlgruppen */
-.gbo-select-groups{display:grid;gap:16px;margin-top:12px}.gbo-selector-group{border:1px solid #dfe3e7;border-radius:10px;background:#fafbfc;padding:12px}.gbo-selector-group-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 2px 9px;border-bottom:1px solid #e6e9ec;margin-bottom:10px}.gbo-selector-group-head>div:first-child{display:flex;flex-direction:column;gap:2px}.gbo-selector-group-head strong{font-size:15px}.gbo-selector-group-head small{font-size:11px;color:#68727c}.gbo-selector-group .gbo-select-grid{margin:0}@media(max-width:650px){.gbo-selector-group-head{align-items:flex-start;flex-direction:column}}
+.gbo-select-groups{display:grid;gap:16px;margin-top:12px}.gbo-selector-group{border:1px solid #dfe3e7;border-radius:10px;background:#fafbfc;padding:12px}.gbo-selector-group-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 2px 9px;border-bottom:1px solid #e6e9ec;margin-bottom:10px}.gbo-selector-group-head>div:first-child{display:flex;flex-direction:column;gap:2px}.gbo-selector-group-head strong{font-size:15px}.gbo-selector-group-head small{font-size:11px;color:#68727c}.gbo-selector-actions{display:flex;gap:5px;flex:0 0 auto}.gbo-mini-btn{border:1px solid #cbd1d6;background:#fff;border-radius:6px;padding:4px 8px;font:600 11px/1.2 Arial,sans-serif;cursor:pointer}.gbo-mini-btn:hover{background:#f0f2f4}.gbo-selector-group .gbo-select-grid{margin:0}@media(max-width:650px){.gbo-selector-group-head{align-items:flex-start;flex-direction:column}.gbo-selector-actions{align-self:flex-end}}
+
+
+/* v2.0.8 – Typografie an den Prüfkatalog angeglichen */
+.gbo-page {
+    font-family: var(--font-body);
+    color: var(--ink);
+    line-height: 1.5;
+}
+.gbo-page h1,
+.gbo-page h2,
+.gbo-page h3,
+.gbo-page h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+}
+.gbo-page p,
+.gbo-page label,
+.gbo-page input,
+.gbo-page select,
+.gbo-page textarea,
+.gbo-page button {
+    font-family: inherit;
+}
+.gbo-card-intro,
+.gbo-head p,
+.gbo-explain,
+.gbo-empty,
+.gbo-note,
+.gbo-placeholder {
+    line-height: 1.5;
+}
+.gbo-qtext {
+    font-size: 0.92rem;
+    font-weight: 600;
+    line-height: 1.5;
+}
+.gbo-qmeta,
+.gbo-source,
+.gbo-kicker {
+    font-family: var(--font-display);
+}
+.gbo-selector-group-head strong,
+.gbo-overview-group > summary strong,
+.gbo-module > summary,
+.gbo-subgroup > summary {
+    font-family: var(--font-display);
+}
+.gbo-mini-btn {
+    font-family: inherit;
+}
+
+
+/* v2.0.10 – iPhone-Bedienung wie im Prüfkatalog
+   Nur schmale Displays <=520px. Desktop/iPad bleiben unverändert. */
+@media (max-width: 520px) {
+    .gbo-page {
+        padding-left: .65rem;
+        padding-right: .65rem;
+        overflow-x: hidden;
+    }
+    .gbo-hero,
+    .gbo-card {
+        border-radius: 10px;
+    }
+    .gbo-hero {
+        padding: 1rem .9rem;
+    }
+    .gbo-hero h1 {
+        font-size: 1.35rem;
+        line-height: 1.2;
+    }
+    .gbo-hero p,
+    .gbo-card-intro,
+    .gbo-head p,
+    .gbo-note,
+    .gbo-explain {
+        font-size: .82rem;
+    }
+    .gbo-card {
+        padding: .9rem;
+        margin-bottom: .8rem;
+    }
+    .gbo-card h2 {
+        font-size: 1rem;
+        line-height: 1.25;
+    }
+    .gbo-grid {
+        grid-template-columns: 1fr !important;
+        gap: .65rem;
+    }
+    .gbo-wide {
+        grid-column: auto !important;
+    }
+    .gbo-head {
+        gap: .65rem;
+    }
+    .gbo-head > .gbo-btn,
+    .gbo-inline-actions .gbo-btn,
+    .gbo-doc-primary .gbo-btn,
+    .gbo-doc-secondary .gbo-btn {
+        min-height: 42px;
+    }
+    .gbo-inline-actions,
+    .gbo-doc-actions,
+    .gbo-v2-actions {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .gbo-inline-actions .gbo-btn,
+    .gbo-doc-actions .gbo-btn,
+    .gbo-doc-actions a.gbo-btn,
+    .gbo-v2-actions .gbo-btn {
+        width: 100%;
+        justify-content: center;
+        box-sizing: border-box;
+    }
+    .gbo-v2-map {
+        grid-template-columns: 1fr !important;
+        gap: 8px;
+    }
+    .gbo-v2-map select,
+    .gbo-page input,
+    .gbo-page select,
+    .gbo-page textarea {
+        min-height: 42px;
+        box-sizing: border-box;
+        width: 100%;
+        font-size: 16px; /* iOS: verhindert automatisches Zoom bei Formularfeldern */
+    }
+    .gbo-page textarea {
+        min-height: 90px;
+    }
+    .gbo-overview-group > summary,
+    .gbo-module > summary,
+    .gbo-subgroup > summary {
+        padding: 12px 11px;
+        gap: 10px;
+    }
+    .gbo-overview-progress {
+        min-width: 82px;
+        font-size: .68rem;
+    }
+    .gbo-overview-progress i {
+        width: 82px;
+    }
+    .gbo-overview-body {
+        padding: 2px 5px 8px;
+    }
+    .gbo-subbody .gbo-question,
+    .gbo-subbody .gbo-question:first-child {
+        padding-left: 9px;
+        padding-right: 9px;
+    }
+    .gbo-question,
+    .gbo-qtext {
+        font-size: .88rem;
+        line-height: 1.45;
+    }
+    .gbo-question .gbo-answer-grid,
+    .gbo-answer-grid {
+        grid-template-columns: 1fr !important;
+    }
+    .gbo-answer-grid button,
+    .gbo-answer-grid label {
+        min-height: 42px;
+    }
+    .gbo-selector-group {
+        padding: 9px;
+    }
+    .gbo-selector-group-head {
+        gap: 7px;
+    }
+    .gbo-selector-group-head strong {
+        font-size: .9rem;
+    }
+    .gbo-select-grid {
+        grid-template-columns: 1fr !important;
+    }
+    .gbo-mini-btn {
+        min-height: 38px;
+        font-size: .75rem;
+        padding: 7px 9px;
+    }
+    .gbo-v2-finding {
+        gap: .65rem;
+        padding: .8rem 0;
+    }
+    .gbo-v2-finding .gbo-btn,
+    .gbo-v2-finding .gbo-link-btn {
+        min-height: 42px;
+    }
+    .gbo-linked-note {
+        font-size: .8rem;
+        line-height: 1.45;
+    }
+    .gbo-progress {
+        margin-top: .7rem;
+    }
+    .app-header-inner {
+        flex-wrap: wrap;
+    }
+    .app-nav {
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .app-nav::-webkit-scrollbar {
+        display: none;
+    }
+    .app-nav a {
+        min-height: 40px;
+        display: inline-flex;
+        align-items: center;
+        white-space: nowrap;
+    }
+    .app-footer-links {
+        flex-wrap: wrap;
+        gap: .5rem .9rem;
+        justify-content: center;
+    }
+    .doku-table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
