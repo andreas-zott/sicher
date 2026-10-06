@@ -82,7 +82,7 @@ window.GBO_DATA = {
       "sozial",
       "Sozialräume",
       "Umkleide, Wasch-/Sanitärbereiche",
-      "14 Vertiefungsfragen"
+      "19 Vertiefungsfragen"
     ],
     [
       "co2",
@@ -3192,6 +3192,31 @@ window.GBO_DATA = {
         "SOZ-14",
         "Zugang",
         "Sind Sozialräume sicher erreichbar?"
+      ],
+      [
+        "SOZ-15",
+        "Barrierefreies WC – Notruf",
+        "Ist die Notrufschnur eines erforderlichen barrierefreien WCs nach einem Sturz erreichbar angeordnet?"
+      ],
+      [
+        "SOZ-16",
+        "Barrierefreies WC – Alarmweiterleitung",
+        "Wird der Notruf eines erforderlichen barrierefreien WCs an eine ständig besetzte bzw. erreichbare Stelle weitergeleitet?"
+      ],
+      [
+        "SOZ-17",
+        "Barrierefreies WC – Funktionsprüfung",
+        "Werden Notrufschnur und Signalgeber des erforderlichen barrierefreien WCs regelmäßig auf Funktion geprüft?"
+      ],
+      [
+        "SOZ-18",
+        "Barrierefreies WC – Unterweisung",
+        "Sind die Beschäftigten über das Verhalten bei einem Alarm des barrierefreien WCs unterwiesen?"
+      ],
+      [
+        "SOZ-19",
+        "Barrierefreies WC – Notentriegelung",
+        "Ist sichergestellt, dass die Tür eines erforderlichen barrierefreien WCs im Notfall von außen entriegelt werden kann?"
       ]
     ],
     "aufschnitt": [
