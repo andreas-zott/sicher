@@ -5529,6 +5529,158 @@ window.GBO_DATA = {
         "Abschluss / Rückmeldung",
         "Werden nach Abschluss relevante Mängel, Änderungen, Restgefahren oder erforderliche Folgemaßnahmen an den Betrieb zurückgemeldet und dokumentiert?"
       ]
+    ],
+    "psychische_belastungen": [
+      [
+        "PSY-01",
+        "Arbeitsmenge",
+        "Ist die Arbeitsmenge unter den üblichen und saisonalen Bedingungen so organisiert, dass sie innerhalb der vorgesehenen Arbeitszeit bewältigt werden kann?"
+      ],
+      [
+        "PSY-02",
+        "Personaleinsatz",
+        "Ist der Personaleinsatz so geplant, dass vorhersehbare Belastungsspitzen und Ausfälle angemessen berücksichtigt werden?"
+      ],
+      [
+        "PSY-03",
+        "Aufgabenpriorisierung",
+        "Sind bei hoher Arbeitsbelastung klare Prioritäten für die wichtigsten Arbeitsaufgaben festgelegt?"
+      ],
+      [
+        "PSY-04",
+        "Vertretungsregelungen",
+        "Sind Vertretungen bei Ausfällen eindeutig geregelt und den Beschäftigten bekannt?"
+      ],
+      [
+        "PSY-05",
+        "Informationsfluss",
+        "Werden wichtige Änderungen, Aufgaben und betriebliche Informationen rechtzeitig und vollständig weitergegeben?"
+      ],
+      [
+        "PSY-06",
+        "Arbeitsunterbrechungen",
+        "Sind häufige Arbeitsunterbrechungen und ungeplante Störungen soweit möglich organisatorisch reduziert?"
+      ],
+      [
+        "PSY-07",
+        "Veränderungen",
+        "Werden organisatorische Veränderungen und neue Arbeitsverfahren frühzeitig und nachvollziehbar kommuniziert?"
+      ],
+      [
+        "PSY-08",
+        "Belastungsspitzen",
+        "Werden saisonale Belastungsspitzen, Aktionen und Inventuren frühzeitig vorbereitet?"
+      ],
+      [
+        "PSY-09",
+        "Arbeitszeit",
+        "Werden überlange Arbeitszeiten und regelmäßig anfallende Überstunden vermieden bzw. ausgewertet?"
+      ],
+      [
+        "PSY-10",
+        "Dienstplan",
+        "Werden Dienstpläne möglichst verlässlich und mit ausreichender Vorlaufzeit erstellt?"
+      ],
+      [
+        "PSY-11",
+        "Pausen",
+        "Ist organisatorisch sichergestellt, dass die vorgesehenen Pausen tatsächlich genommen werden können?"
+      ],
+      [
+        "PSY-12",
+        "Schichtarbeit",
+        "Ist die Gestaltung von Früh-, Spät- und Wechselschichten unter Berücksichtigung ausreichender Erholungszeiten angemessen?"
+      ],
+      [
+        "PSY-13",
+        "Planbarkeit",
+        "Sind Arbeitszeiten und kurzfristige Änderungen für die Beschäftigten möglichst planbar und nachvollziehbar?"
+      ],
+      [
+        "PSY-14",
+        "Teamkommunikation",
+        "Sind regelmäßige und geeignete Möglichkeiten für Teamabsprachen und Schichtübergaben vorhanden?"
+      ],
+      [
+        "PSY-15",
+        "Konflikte",
+        "Gibt es ein nachvollziehbares Verfahren, um Konflikte im Team frühzeitig anzusprechen und zu bearbeiten?"
+      ],
+      [
+        "PSY-16",
+        "Unterstützung",
+        "Ist bei hoher Arbeitsbelastung oder schwierigen Arbeitssituationen ausreichende Unterstützung im Team organisiert?"
+      ],
+      [
+        "PSY-17",
+        "Wertschätzung",
+        "Ist eine sachliche und wertschätzende Feedback- und Kommunikationskultur erkennbar?"
+      ],
+      [
+        "PSY-18",
+        "Mobbing / Diskriminierung",
+        "Sind Ansprechstellen und betriebliche Verfahren für Beschwerden über Mobbing, Diskriminierung oder respektloses Verhalten bekannt?"
+      ],
+      [
+        "PSY-19",
+        "Arbeitsanweisungen",
+        "Sind Arbeitsanweisungen vollständig, verständlich und bei Änderungen nachvollziehbar aktualisiert?"
+      ],
+      [
+        "PSY-20",
+        "Führungsunterstützung",
+        "Können Beschäftigte bei Problemen, Überlastung oder Unsicherheiten zeitnah Unterstützung durch Führungskräfte erhalten?"
+      ],
+      [
+        "PSY-21",
+        "Zielvorgaben",
+        "Sind Arbeits- und Leistungsziele unter den vorhandenen personellen und organisatorischen Bedingungen realistisch?"
+      ],
+      [
+        "PSY-22",
+        "Entscheidungsspielräume",
+        "Sind für typische Kundensituationen angemessene Zuständigkeiten und Entscheidungsspielräume festgelegt?"
+      ],
+      [
+        "PSY-23",
+        "Kundenkonflikte",
+        "Sind Beschäftigte auf den Umgang mit aggressivem, beleidigendem oder konfliktreichem Kundenverhalten vorbereitet?"
+      ],
+      [
+        "PSY-24",
+        "Reklamationen",
+        "Sind Zuständigkeiten und Unterstützung bei schwierigen Reklamationen klar geregelt?"
+      ],
+      [
+        "PSY-25",
+        "Bedrohungen / Gewalt",
+        "Sind Maßnahmen zum Schutz bei Bedrohungen, Gewalt, Überfällen und vergleichbaren Ereignissen festgelegt und bekannt?"
+      ],
+      [
+        "PSY-26",
+        "Nachsorge",
+        "Ist nach besonders belastenden Ereignissen eine geeignete Nachsorge und Unterstützung der betroffenen Beschäftigten vorgesehen?"
+      ],
+      [
+        "PSY-27",
+        "Lärm und Störungen",
+        "Werden vermeidbare Lärmquellen und störende Arbeitsunterbrechungen erkannt und soweit möglich reduziert?"
+      ],
+      [
+        "PSY-28",
+        "Arbeitsumgebung",
+        "Ermöglicht die Arbeitsumgebung konzentriertes und störungsarmes Arbeiten?"
+      ],
+      [
+        "PSY-29",
+        "Erholung / Rückzug",
+        "Stehen geeignete Möglichkeiten für Pausen und kurzfristige Erholung von belastenden Arbeitssituationen zur Verfügung?"
+      ],
+      [
+        "PSY-30",
+        "Alleinarbeit",
+        "Ist bei Alleinarbeit die erforderliche Unterstützung bzw. Notfallorganisation anhand der tatsächlichen Gefährdung geregelt?"
+      ]
     ]
   },
   "generalTopics": [
@@ -5746,6 +5898,11 @@ window.GBO_DATA = {
       "nichtraucher",
       "Nichtraucherschutz",
       "Schutz der Beschäftigten vor Tabakrauch"
+    ],
+    [
+      "psychische_belastungen",
+      "Psychische Belastungen",
+      "Arbeitsorganisation, Arbeitszeit, soziale Beziehungen, Führung und emotionale Anforderungen"
     ]
   ]
 };
