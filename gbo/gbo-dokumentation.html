@@ -1,12 +1,423 @@
-<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Technische Dokumentation GBO – ASiC Handel</title><link rel="stylesheet" href="css/styles.css"><script src="js/access-gate.js"></script><style>
-.doku-hero{background:linear-gradient(135deg,var(--brand-red) 0%,var(--brand-red-dark) 100%);border-radius:var(--radius);padding:1.75rem 1.5rem;color:#fff;margin-bottom:1.5rem;box-shadow:var(--shadow)}.doku-hero-badge{display:inline-block;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.5);border-radius:999px;padding:.25rem .9rem;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.9rem}.doku-hero h1{font-size:1.7rem;color:#fff;margin-bottom:.3rem}.doku-hero p{opacity:.92;font-size:.95rem}.doku-meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.75rem;margin-top:1.25rem}.doku-meta-item{background:rgba(255,255,255,.12);border-radius:var(--radius-sm);padding:.6rem .85rem}.doku-meta-label{font-size:.68rem;text-transform:uppercase;opacity:.8}.doku-meta-value{font-weight:700;font-size:.92rem;margin-top:.15rem}.doku-toc{display:flex;flex-wrap:wrap;gap:.4rem 1.25rem;font-size:.85rem;margin-bottom:1.75rem;padding:.9rem 1.1rem;background:var(--paper-raised);border-radius:var(--radius-sm);border:1px solid var(--line)}.doku-toc a{text-decoration:none;color:var(--ink-soft);border-bottom:1px dotted var(--steel-light)}.doku-section{margin-bottom:2rem}.doku-section h2{font-size:1.15rem;color:var(--ink);border-bottom:2px solid var(--brand-red);padding-bottom:.4rem;margin-bottom:1rem}.doku-card{padding:1.1rem 1.25rem;margin-bottom:.9rem}.doku-box{border-left:3px solid var(--brand-red);background:var(--brand-red-tint);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:.85rem 1.1rem;margin-bottom:.9rem;font-size:.88rem}.doku-box-title{font-weight:700;color:var(--brand-red-dark);margin-bottom:.3rem}.doku-table{width:100%;border-collapse:collapse;font-size:.86rem}.doku-table th{background:var(--brand-red-dark);color:#fff;text-align:left;padding:.55rem .7rem}.doku-table td{padding:.5rem .7rem;border-bottom:1px solid var(--line);vertical-align:top}.doku-table tr:nth-child(even) td{background:var(--paper-raised)}
-.app-footer-meta{text-align:center;margin-top:.8rem;font-size:.78rem;color:var(--ink-soft);line-height:1.55}</style></head><body><header class="app-header"><div class="hazard-strip"></div><div class="app-header-inner"><div class="brand"><span class="brand-title">ASiC Handel</span><span class="brand-tag">GBO</span><span class="brand-subtitle">„Gefährdungen systematisch beurteilen.“</span></div><nav class="app-nav"><a href="index.html">Prüfkatalog</a><a href="gbo.html">Gefährdungsbeurteilung</a><a href="gbo-hilfe.html">FAQ GBO</a></nav></div></header><main class="page"><div class="doku-hero"><div class="doku-hero-badge">Technische Dokumentation · GBO</div><h1>Gefährdungsbeurteilung</h1><p>Aufbau, Datenmodell, Bewertungslogik, Dokumentation und technischer Versionsstand.</p><div class="doku-meta-grid"><div class="doku-meta-item"><div class="doku-meta-label">App</div><div class="doku-meta-value">ASiC Handel Rev. 2.0</div></div><div class="doku-meta-item"><div class="doku-meta-label">Stand</div><div class="doku-meta-value">9.10.2026</div></div><div class="doku-meta-item"><div class="doku-meta-label">GBO-Daten</div><div class="doku-meta-value">1045 Fragen · 1045 eindeutige Fragen-IDs</div></div><div class="doku-meta-item"><div class="doku-meta-label">Service Worker</div><div class="doku-meta-value">v2.0.20</div></div></div></div><div class="doku-toc"><a href="#architektur">Architektur</a><a href="#struktur">Struktur</a><a href="#bewertung">Bewertung</a><a href="#prozess">GBO-Prozess</a><a href="#daten">Daten</a><a href="#iphone">iPhone</a><a href="#druck">Druck</a><a href="#quellen">Quellen</a><a href="#version">Version</a><a href="#v220-fotos">Statistik & Bildbelege</a></div>
-<section class="doku-section" id="architektur"><h2>Architektur</h2><div class="card doku-card"><p>Die GBO bleibt innerhalb von ASiC Handel ein eigenständiger Teilstand. GBO- und Begehungsdaten werden lokal getrennt gehalten; die gemeinsame Markt-Sicherung bzw. Server-Speicherung fasst beide Teilstände in einem ASiC-Marktcontainer zusammen, ohne sie inhaltlich zu vermischen.</p></div><div class="doku-box"><div class="doku-box-title">Datenstand</div>1045 GBO-Fragen mit 1045 eindeutigen Fragen-IDs in 92 Modulen. Die Zahlen beziehen sich auf die ausgelieferte Datendatei.</div></section>
-<section class="doku-section" id="struktur"><h2>Struktur</h2><div class="card doku-card"><table class="doku-table"><tr><th>Ebene</th><th>Funktion</th></tr><tr><td>Betriebsdaten</td><td>Marktnummer, Anschrift, Datum, Prüfer, Marktleitung und Teilnehmer.</td></tr><tr><td>Allgemeine GBO</td><td>Betriebsübergreifende Hauptthemen.</td></tr><tr><td>Arbeitsbereiche</td><td>Tätigkeits- und bereichsbezogene Gefährdungen.</td></tr><tr><td>Maschinen</td><td>Technische Tiefenmodule über Betriebsphasen hinweg.</td></tr><tr><td>Maßnahmen</td><td>Verantwortung, Frist, Umsetzung und Wirksamkeitskontrolle.</td></tr></table><p><b>Darstellung ab v1.57:</b> Gesamtgruppe → Bereich/Modul → Untergruppe → Frage. Sieben fachliche Gesamtgruppen ordnen alle 92 Module genau einmal ein. Die Gruppierung verändert weder Frage-IDs noch gespeicherte Bewertungen.</p></div></section>
-<section class="doku-section" id="bewertung"><h2>Bewertungs- und Fortschrittslogik</h2><div class="card doku-card"><p>Bewertungen: <b>Ausreichend geschützt</b>, <b>Handlungsbedarf</b>, <b>Beratungs-/Vertiefungsbedarf</b> und <b>Nicht zutreffend</b>.</p><p>Der Fortschritt berechnet sich ausschließlich aus Fragen der aktivierten Module. Jede gesetzte Bewertung zählt als beantwortet.</p><p>Bei Handlungsbedarf wird ein kompakter Quellenhinweis mit kleiner Erläuterung eingeblendet und in der Gesamt-GBO mit ausgegeben.</p></div></section>
-<section class="doku-section" id="prozess"><h2>Fachlicher GBO-Prozess</h2><div class="card doku-card"><ol><li>Arbeitsbereiche und Tätigkeiten ermitteln</li><li>Gefährdungen ermitteln</li><li>Gefährdungen beurteilen</li><li>Arbeitsschutzmaßnahmen festlegen</li><li>Maßnahmen umsetzen</li><li>Wirksamkeit überprüfen</li><li>Gefährdungsbeurteilung fortschreiben</li></ol><p>Die App unterstützt diesen Ablauf durch Bereichsauswahl, Bewertung, Maßnahmenfelder, Verantwortlichkeit/Frist, Umsetzungsstatus und Wirksamkeitskontrolle.</p></div></section>
-<section class="doku-section" id="bedienung-204"><h2>Bedienfunktionen ab Version 2.0.4</h2><div class="card doku-card"><p><strong>Begehung → GBO:</strong> Ein Mangel aus der aktuell geladenen Begehung kann einem GBO-Modul und anschließend einer konkreten GBO-Frage zugeordnet werden. Nach dem Vormerken stehen die Funktionen <b>GBO öffnen</b>, <b>Ändern</b> und <b>Lösen</b> zur Verfügung. Beim Öffnen wird die verknüpfte Frage aufgerufen und der ursprüngliche Begehungsbefund als Herkunftshinweis angezeigt. Die GBO-Bewertung bleibt eine eigenständige fachliche Entscheidung und wird durch die Verknüpfung nicht gesetzt.</p><p><strong>Betriebsdaten übernehmen:</strong> Die Funktion übernimmt vorhandene passende Angaben aus der Begehung in die GBO. Dazu gehören – soweit in der Begehung vorhanden – Marktnummer, Anschrift, Datum, Prüfer, Marktleitung und Teilnehmer. Leere Quellfelder überschreiben keine bereits vorhandenen GBO-Angaben. Das Begehungsfeld <code>companyInfo.datum</code> wird dem GBO-Feld <code>meta.date</code> zugeordnet.</p><p><strong>GBO zurücksetzen:</strong> Vor dem Löschen erscheint eine Sicherheitsabfrage. Bestätigt der Benutzer den Vorgang, werden der GBO-Teilstand einschließlich Auswahl, Bewertungen/Antworten, Maßnahmen- und Wirksamkeitsdaten sowie Begehungs-Vormerkungen zurückgesetzt. Die Begehung und die zentralen NAS-/Servereinstellungen bleiben erhalten.</p><p><strong>Bedienoberfläche:</strong> Die Aktionsschaltflächen der GBO sind ab diesem Stand kompakter gestaltet, damit Fragen, Befunde und Bearbeitungsinhalte mehr Raum erhalten.</p></div></section><section class="doku-section" id="iphone"><h2>Mobile Bedienung / iPhone</h2><div class="card doku-card"><p>Ab v2.0.13 ist die GBO auf schmalen Displays bis 520&nbsp;px speziell auf die Bedienlogik des Prüfkatalogs abgestimmt. Die Anpassung betrifft ausschließlich Darstellung und Touch-Bedienung; Datenmodell, Frage-IDs, Bewertungen und Verknüpfungen bleiben unverändert.</p><table class="doku-table"><tr><th>Bereich</th><th>Mobile Umsetzung</th></tr><tr><td>Navigation</td><td>Horizontal wischbare obere Navigation; kein horizontaler Seitenüberlauf.</td></tr><tr><td>Betriebsdaten</td><td>Einspaltige Eingabe; iOS-taugliche 16-px-Formularschrift gegen ungewolltes Safari-Zoom.</td></tr><tr><td>Auswahl</td><td>Module und Auswahlgruppen werden einspaltig und mit größeren Touch-Flächen dargestellt.</td></tr><tr><td>Bewertung</td><td>Antwortmöglichkeiten werden auf kleinen Displays untereinander angeordnet.</td></tr><tr><td>Maßnahmen / Aktionen</td><td>Schaltflächen werden untereinander angeordnet und auf mindestens 42 px Touch-Höhe gebracht.</td></tr><tr><td>Begehung ↔ GBO</td><td>Zuordnung, Herkunftshinweis und Aktionen bleiben vollständig erreichbar.</td></tr><tr><td>Druck / Sicherung</td><td>Aktionsschaltflächen werden auf die verfügbare Breite gebracht; Druck und JSON-Sicherung bleiben unverändert.</td></tr></table></div></section><section class="doku-section" id="daten"><h2>Datensicherung</h2><div class="card doku-card"><p>Die JSON-Sicherung enthält den vollständigen GBO-Zustand und kann wieder eingelesen werden. Dateinamensschema:</p><p><code>GBO_Sicherung_Markt_[Marktnummer]_[Datum].json</code></p><p>Das Datum wird aus den Betriebsdaten übernommen und für den Dateinamen in <code>JJJJ-MM-TT</code> normalisiert.</p></div></section>
-<section class="doku-section" id="druck"><h2>Druck und PDF</h2><div class="card doku-card"><p>Gesamt-GBO und Maßnahmenliste verwenden einen einheitlichen roten Dokumentkopf im Stil der Begehung. Betriebsdaten und GBO-Fortschritt werden automatisch übernommen. Die Browser-Druckfunktion ermöglicht die Ausgabe auf Papier oder als PDF.</p></div></section>
-<section class="doku-section" id="vertiefung"><h2>Fachlicher Ausbau vor Version 2.0</h2><div class="card doku-card"><p>Der Fragenbestand wurde gezielt bei vier Querschnittsthemen vertieft. Bestehende Frage-IDs wurden nicht verändert.</p><ul><li><b>Hautschutz:</b> Feuchtarbeit, hautgefährdende Stoffe, Maßnahmenhierarchie, Handschuhmanagement und Wirksamkeitskontrolle.</li><li><b>Reinigung:</b> konkrete Formulierungen zu Gefahrstofforganisation, Dosierung, Vermischung, Exposition, Lagerung sowie zusätzliche Fragen zu Rutschgefahr, Arbeitsorganisation, Entsorgung, Reinigungsmaschinen und Wirksamkeitskontrolle.</li><li><b>Putz-/Reinigungsmaschinen:</b> eigenes 20-Fragen-Arbeitsmittelmodul von bestimmungsgemäßer Verwendung bis Mängel/Außerbetriebnahme.</li><li><b>Fremdfirmen/Dienstleister:</b> eigenes 15-Fragen-Organisationsmodul zu Gefährdungsaustausch, Abstimmung, Zutritt, Qualifikation, Arbeitsmitteln, besonderen Gefahren, Koordination und Notfallorganisation.</li></ul></div></section><section class="doku-section" id="quellen"><h2>Quellennachweis – detaillierte fachliche Grundlage</h2><div class="card doku-card"><p>Die folgende Matrix dokumentiert, welche offiziellen Quellen für welche GBO-Themen herangezogen werden. Sie ist ein Quellen- und Orientierungsnachweis, keine Zertifizierung der Anwendung. Bei Abweichungen ist die jeweils geltende Rechtslage bzw. der aktuelle Regelstand maßgeblich.</p><table class="doku-table"><tr><th>Quelle</th><th>Stand / Bereich</th><th>Verwendung in ASiC Handel GBO</th></tr><tr><td>ArbSchG §§ 5, 6</td><td>Gefährdungsbeurteilung / Dokumentation</td><td>Grundstruktur der GBO, Ermittlung von Gefährdungen, Maßnahmen und Dokumentation.</td></tr><tr><td>ArbSchG § 8</td><td>Zusammenarbeit mehrerer Arbeitgeber</td><td>Fremdfirmen, Informationsaustausch und Koordination.</td></tr><tr><td>ArbStättV §§ 3, 3a, 6 + Anhang</td><td>Arbeitsstätten</td><td>Arbeitsräume, Sanitärräume, Barrierefreiheit, Unterweisung und Dokumentation.</td></tr><tr><td>ASR V3</td><td>Gefährdungsbeurteilung</td><td>Methodische Struktur der Beurteilung von Arbeitsstätten.</td></tr><tr><td>ASR V3a.2</td><td>Barrierefreie Arbeitsstätten; zuletzt geändert 2025</td><td>Barrierefreie Gestaltung, insbesondere bei erforderlichen Sanitär- und Verkehrsbereichen.</td></tr><tr><td>ASR A1.2 / A1.5 / A1.7 / A1.8</td><td>Raum, Boden, Türen/Tore, Verkehrswege</td><td>Arbeitsplatzgestaltung, Stolper-/Rutschgefahren, Türen/Tore und Verkehrswege.</td></tr><tr><td>ASR A2.1 / A2.2 / A2.3</td><td>Absturz, Brandschutz, Fluchtwege</td><td>Schutz vor Absturz/Herabfallen, Feuerlöscher, Brandschutzhelfer, Flucht- und Rettungswege.</td></tr><tr><td>ASR A3.4</td><td>Beleuchtung</td><td>Beleuchtung in Verkaufs-, Arbeits-, Lager- und Verkehrsbereichen nach Sehaufgabe.</td></tr><tr><td>ASR A4.1 / A4.2 / A4.3</td><td>Sanitär, Pausen, Erste Hilfe</td><td>Sanitärräume einschließlich barrierebezogener Aspekte, Pausenbereiche und Erste Hilfe.</td></tr><tr><td>DGUV Vorschrift 1 / DGUV Regel 100-001</td><td>Grundsätze der Prävention</td><td>Unterweisung, Organisation, Erste Hilfe und allgemeine Präventionspflichten.</td></tr><tr><td>DGUV Regel 108-601</td><td>Branche Einzelhandel</td><td>Branchenspezifische Gefährdungen im Verkauf, Lager, Warenannahme und Nebentätigkeiten.</td></tr><tr><td>DGUV Information 208-043</td><td>Sicherheit von Regalen</td><td>Lagerregale, Schäden, Tragfähigkeit, Prüfung und Dokumentation.</td></tr><tr><td>DGUV Vorschrift 68</td><td>Flurförderzeuge</td><td>Hubwagen/Stapler, sichere Verwendung und Prüfungen.</td></tr><tr><td>DGUV Vorschrift 3</td><td>Elektrische Anlagen/Betriebsmittel</td><td>Elektrische Sicherheit und Prüfungen.</td></tr><tr><td>DGUV Vorschrift 25 / DGUV Regel 108-010</td><td>Überfallprävention</td><td>Kassenzone, Bargeld, Verkaufsstellen und Nachsorge.</td></tr><tr><td>BetrSichV §§ 3, 13 + Anhang 2 Abschnitt 2</td><td>Arbeitsmittel / Aufzüge</td><td>Arbeitsmittel-Gefährdungsbeurteilung, Zusammenarbeit und Aufzugsprüfungen; Lasten-/Kundenaufzüge werden fachlich getrennt betrachtet.</td></tr><tr><td>TRBS 1111</td><td>Arbeitsmittel-Gefährdungsbeurteilung</td><td>Maschinenmodule über Vorbereitung, Betrieb, Störung, Reinigung, Instandhaltung und Prüfung.</td></tr><tr><td>TRBS 1112</td><td>Instandhaltung</td><td>Sichere Instandhaltung und Fremdfirmenarbeiten.</td></tr><tr><td>GefStoffV §§ 6, 14, 15</td><td>Gefahrstoffe</td><td>Gefährdungsbeurteilung, Betriebsanweisung, Unterweisung und Zusammenarbeit.</td></tr><tr><td>TRGS 401</td><td>Hautkontakt / Feuchtarbeit</td><td>Hautschutz, Tätigkeitsbezug und Schutzmaßnahmenhierarchie.</td></tr><tr><td>TRGS 510</td><td>Lagerung in ortsbeweglichen Behältern</td><td>Gefahrstofflagerung und Zusammenlagerung.</td></tr><tr><td>DGUV Regel 112-191</td><td>Fuß- und Knieschutz, Ausgabe 12/2025</td><td>Auswahl und Benutzung von Sicherheitsschuhen und Knieschutz.</td></tr><tr><td>DGUV Regel 110-011</td><td>Fleischwirtschaft – Handwerk, Ausgabe 08/2025</td><td>Fleisch-/Lebensmittelbereiche und branchenspezifische Arbeitsmittel-/Tätigkeitsgefahren.</td></table><p><b>Ergänzende technische Normen:</b> Soweit eine konkrete Frage eine Norm voraussetzt, wird diese als technische Referenz kenntlich gemacht, z.&nbsp;B. DIN EN 15635 für Regale oder DIN 14462:2023-07 für Wandhydranten. Normtexte werden nicht als Ersatz für die gesetzliche Gefährdungsbeurteilung verwendet.</p></div><div class="doku-box"><div class="doku-box-title">Offizielle Fundstellen</div><ul><li>Gesetze im Internet – Bundesrecht</li><li>BAuA – Technische Regeln für Arbeitsstätten und Betriebssicherheit</li><li>DGUV Publikationen – Vorschriften, Regeln und Informationen</li><li>BGHW – branchenspezifische Handlungshilfen und Gefährdungsbeurteilung</li></ul></div></section>
-<section class="doku-section" id="psych-datenmodell"><h2>Technischer Ausbau: Psychische Belastungen</h2><div class="card doku-card"><p>Das Modul <code>psychische_belastungen</code> ist als eigenständiges GBO-Modul in den bestehenden Datenbestand integriert. Die Fragen verwenden eigene eindeutige IDs <code>PSY-01</code> bis <code>PSY-30</code>. Dadurch bleiben vorhandene Frage-IDs, Antworten und Verknüpfungen unverändert.</p><table class="doku-table"><tr><th>Element</th><th>Technische Funktion</th></tr><tr><td>Bewertung</td><td>Verwendet die bestehende vierstufige GBO-Statuslogik.</td></tr><tr><td>Rechts-/Quellenhinweis</td><td>Wird je Frage aus der psychischen Fachkonfiguration ausgegeben.</td></tr><tr><td>Maßnahmenvorschläge</td><td>Mehrfachauswahl je psychischer Frage; Auswahl wird im Antwortobjekt gespeichert.</td></tr><tr><td>Sonstige Maßnahme</td><td>Freitextfeld für betriebsindividuelle Maßnahmen.</td></tr><tr><td>U-Kennzeichnung</td><td>Metadatenkennzeichen für Fragen mit Unterweisungsbezug.</td></tr><tr><td>Verantwortung/Frist</td><td>Gemeinsame bestehende GBO-Felder.</td></tr><tr><td>Umsetzung/Wirksamkeit</td><td>Umsetzungsdatum, Prüfdatum, Prüfer und Wirksamkeitsstatus.</td></tr><tr><td>Foto-/Dateianhang (Kamera- oder Dateiauswahl)</td><td>Optionaler Referenztext zur Dokumentation; keine automatische personenbezogene Datenerfassung.</td></tr></table><p>Die Maßnahmenauswahl verändert die Bewertung nicht automatisch. Ebenso wird aus einer Begehungsverknüpfung keine automatische GBO-Bewertung erzeugt.</p></div></section><section class="doku-section" id="psych-fachkonzept"><h2>Fachliches Konzept psychischer Belastungen</h2><div class="card doku-card"><p>Übernommen wurden insbesondere die Themenfelder Arbeitsinhalt/Arbeitsaufgabe, Arbeitsorganisation, Arbeitszeit, soziale Beziehungen und Kommunikation, Führung, Kundenkontakt/emotionale Anforderungen, Arbeitsumgebung sowie besondere Belastungssituationen. Die Vorlage dient dabei als fachliche Strukturquelle; ihr Punktesystem und ihre Ampelmatrix sind nicht Bestandteil der ASiC-Handel-GBO.</p><p>Die Fragen betrachten Arbeitsbedingungen und organisatorische Faktoren. Es werden keine Diagnosen, psychischen Erkrankungen oder Persönlichkeitsbewertungen erhoben.</p></div></section><section class="doku-section" id="version"><h2>Versionsprinzip</h2><div class="card doku-card"><p>Dieser GBO-Stand ist <b>Rev. 2.0 · Stand 9.10.2026</b>. Der zugehörige Service Worker verwendet <b>v2.0.20</b>.</p></div></section><section class="doku-section" id="version-2"><h2>Version 2.0 – Marktcontainer und Integration</h2><div class="card doku-card"><p><strong>Gemeinsamer Marktcontainer:</strong> Begehung und GBO werden bei der Gesamtsicherung bzw. Server-Speicherung gemeinsam übertragen, bleiben jedoch als getrennte Teilstände gespeichert. Eine neue Begehung setzt die GBO nicht zurück.</p><p><strong>Abwärtskompatibilität:</strong> bisherige Einzel-Sicherungen der Begehung und der GBO bleiben einlesbar. Das neue Format ist als ASiC-Marktcontainer mit Formatversion 2 gekennzeichnet.</p><p><strong>Begehungsbefunde:</strong> Mängel aus der aktuell geladenen Begehung können einem GBO-Modul und einer konkreten GBO-Frage zugeordnet werden. Nach dem Vormerken kann die GBO-Frage direkt geöffnet, die Zuordnung geändert oder gelöst werden. Der ursprüngliche Begehungsbefund wird an der GBO-Frage angezeigt; eine GBO-Bewertung wird nicht automatisch gesetzt.</p><p><strong>NAS / anderer Server:</strong> beide Module verwenden dieselbe in den Einstellungen hinterlegte Server-Basis-Adresse und denselben optionalen Zugriffsschlüssel.</p></div></section>
-<section class="doku-section"><h2>Auswahlbereiche ab SW v2.0.6</h2><div class="card doku-card"><p>Die Auswahl in <b>Allgemeine GBO</b>, <b>Arbeitsbereiche &amp; Tätigkeiten</b> und <b>Maschinen &amp; technische Anlagen</b> ist thematisch gruppiert. Die Gruppen dienen der Übersicht; Modul-IDs, Fragen und bestehende Bewertungen bleiben unverändert. Es gibt keine Sammelaktionen „Alle/Keine“ innerhalb der Themenblöcke.</p></div></section><section class="doku-section" id="psychische-belastungen"><h2>Psychische Belastungen</h2><div class="card doku-card"><p>Der Stand v2.0.13 ergänzt ein eigenes GBO-Hauptmodul für psychische Belastungen im Einzelhandel. Inhaltlich wurden ausgewählte Themen aus der bereitgestellten Gefährdungsbeurteilung psychischer Belastungen übernommen und in die bestehende GBO-Bewertungslogik integriert.</p><p>Enthalten sind insbesondere Arbeitsmenge und Personaleinsatz, Arbeitsorganisation, Arbeitszeit und Pausen, Kommunikation und Konflikte, Führung und Entscheidungsspielräume, Kundenkontakt und Bedrohungssituationen sowie störende Arbeitsumgebungsbedingungen und Erholungsmöglichkeiten.</p><p>Das Punktesystem und die Ampelmatrix der Vorlage werden nicht übernommen. Die bestehende Bewertung <b>Ausreichend geschützt / Handlungsbedarf / Beratungs-/Vertiefungsbedarf / Nicht zutreffend</b> bleibt maßgeblich.</p><p><b>Übernommene Bedien- und Dokumentationsprinzipien:</b> Bei den psychischen Belastungsfragen werden – soweit fachlich passend – die Rechts-/Quellenbasis direkt an der Frage, auswählbare mögliche Maßnahmen, eine Kennzeichnung von Unterweisungsthemen (<b>U</b>), eine freie „Sonstige Maßnahme“, Verantwortlicher, Frist, Umsetzung und Wirksamkeitsprüfung sowie ein optionaler Foto-/Dateianhang (Kamera- oder Dateiauswahl) angeboten. Ausgewählte Maßnahmen werden als strukturierte Daten gespeichert und können in der GBO-Dokumentation berücksichtigt werden.</p><p><b>Maßnahmenplan:</b> Die zentrale GBO-Maßnahmenübersicht bleibt der gemeinsame Ort für offene Maßnahmen. Die psychischen Belastungsfragen liefern dafür dieselben Verantwortungs-, Frist- und Wirksamkeitsfelder wie die übrigen GBO-Fragen.</p></div></section><section><h2>GBO-Arbeitsbereiche, Statistik, TOP-Hinweise und Bildbelege (Version 2.0.20)</h2><p>Die GBO-Oberfläche ist über interne Menüpunkte in Übersicht/Statistik, Betriebsdaten, Vorbereitung, Gefährdungsbeurteilung, Begehungshinweise, Bildbelege und Dokumentation gegliedert. Die Statistik wird aus den ausgewählten Modulen und gespeicherten Bewertungen berechnet. Überfällige Fristen sind offene Fälle mit einem Fristdatum vor dem aktuellen Datum und ohne dokumentiertes Umsetzungsdatum.</p><p>Die Erläuterungen zu Bewertungen enthalten themenbezogene Hinweise zu technischen, organisatorischen und personenbezogenen Maßnahmen sowie zur Wirksamkeitsprüfung. Das Feld „Verantwortlich“ wird bei Handlungs- oder Beratungsbedarf mit „Marktleitung / Verantwortlich“ vorbelegt, sofern noch keine andere Person eingetragen ist.</p></section><section class="doku-section" id="v220-fotos"><h2>Version 2.0.20 – Statistik und Bildbeleg-Übersicht</h2><div class="card doku-card"><p><b>Statistik:</b> Die Zählung basiert auf den Fragen der aktivierten Module. Die Anzahl „Noch nicht bewertet“ wird unabhängig als Anzahl der Fragen ohne Status berechnet. Ein zuvor fehlerhaft verwendeter, nicht definierter Zähler wurde entfernt. Fristen werden mit dem lokalen Kalenderdatum verglichen; als überfällig gelten Handlungs- oder Beratungsfälle mit abgelaufener Frist und ohne Umsetzungsdatum.</p><p><b>Bildbelege:</b> Die neue Menüansicht liest alle gespeicherten GBO-Antworten mit eingebetteten Bilddaten aus, unabhängig davon, ob das zugehörige Modul aktuell ausgewählt ist. Karten zeigen Vorschaubild, Modul, Fragen-ID, Themenbereich, Frage und optionalen Foto-/Dokumentenbezug. Das Vorschaubild kann zur größeren Ansicht geöffnet werden. Das Entfernen eines Bildes aus der Galerie entfernt es aus dem zugehörigen GBO-Antwortobjekt.</p><p><b>Speicherung:</b> Bilddaten werden als Data URL im GBO-Antwortobjekt gehalten und dadurch in die JSON-Sicherung aufgenommen. Die Galerie erzeugt keine zusätzlichen Bildkopien und nutzt dieselben gespeicherten Bilddaten.</p><p><b>Cache:</b> Service-Worker-Cache und Versionskennung werden auf 2.0.20 angehoben, damit Clients nicht unbeabsichtigt die fehlerhafte Statistikversion aus dem vorherigen Cache weiterverwenden.</p></div></section></main><footer class="app-footer"><div class="app-footer-links"><a href="gbo.html">Gefährdungsbeurteilung</a><a href="gbo-hilfe.html">FAQ GBO</a><a href="gbo-dokumentation.html">Technische Dokumentation GBO</a><a href="hilfe.html">FAQ Begehung</a></div><div class="app-footer-meta"><div>Rev. 2.0 · Stand 9.10.2026</div><div>© <span class="js-current-year">2026</span> Andreas Zott – Alle Rechte vorbehalten</div></div></footer><script>document.querySelectorAll('.js-current-year').forEach(el=>el.textContent=new Date().getFullYear());</script><section><h2>Foto-Vorschau in der GBO</h2><p>Nach dem Hinzufügen eines Fotos wird unter dem Feld „Foto-/Anhangbezug“ eine verkleinerte Vorschau angezeigt. Die Vorschau verwendet dieselben komprimierten Bilddaten, die im GBO-Datenbestand und beim JSON-Export gespeichert werden. Nach einem JSON-Import wird die Vorschau aus den gespeicherten Bilddaten erneut aufgebaut.</p></section></body></html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Technische Dokumentation GBO – ASiC Handel</title>
+<link href="css/styles.css" rel="stylesheet"/>
+<script src="js/access-gate.js"></script>
+<style>
+/* Kopfbereich */
+.doku-hero{background:linear-gradient(135deg,var(--brand-red) 0%,var(--brand-red-dark) 100%);border-radius:var(--radius);padding:1.75rem 1.5rem;color:#fff;margin-bottom:1.5rem;box-shadow:var(--shadow)}
+.doku-hero-badge{display:inline-block;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.5);border-radius:999px;padding:.25rem .9rem;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.9rem}
+.doku-hero h1{font-size:1.7rem;color:#fff;margin-bottom:.3rem}
+.doku-hero p{opacity:.92;font-size:.95rem}
+.doku-meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.75rem;margin-top:1.25rem}
+.doku-meta-item{background:rgba(255,255,255,.12);border-radius:var(--radius-sm);padding:.6rem .85rem}
+.doku-meta-label{font-size:.68rem;text-transform:uppercase;opacity:.8}
+.doku-meta-value{font-weight:700;font-size:.92rem;margin-top:.15rem}
+
+/* Inhaltsverzeichnis */
+.doku-toc{display:flex;flex-wrap:wrap;gap:.4rem 1.25rem;font-size:.85rem;margin-bottom:1.75rem;padding:.9rem 1.1rem;background:var(--paper-raised);border-radius:var(--radius-sm);border:1px solid var(--line)}
+.doku-toc a{text-decoration:none;color:var(--ink-soft);border-bottom:1px dotted var(--steel-light)}
+
+/* Abschnitte: immer Überschrift, Einleitung, Karte */
+.doku-section{margin-bottom:2rem;scroll-margin-top:1rem}
+.doku-section h2{font-size:1.15rem;color:var(--ink);border-bottom:2px solid var(--brand-red);padding-bottom:.4rem;margin-bottom:1rem}
+.doku-lead{font-size:.92rem;color:var(--ink-soft);margin:0 0 .9rem}
+.doku-card{padding:1.1rem 1.25rem;margin-bottom:.9rem}
+.doku-card h3{font-size:1rem;margin:1.2rem 0 .55rem;color:var(--ink)}
+.doku-card h3:first-child{margin-top:0}
+.doku-card p{margin:0 0 .7rem}
+.doku-card p:last-child{margin-bottom:0}
+.doku-card ul,.doku-card ol{padding-left:1.25rem;margin:.5rem 0 .8rem}
+.doku-card li{margin:.3rem 0}
+
+/* Hinweisbox */
+.doku-box{border-left:3px solid var(--brand-red);background:var(--brand-red-tint);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:.85rem 1.1rem;margin:.4rem 0 .9rem;font-size:.88rem}
+.doku-box-title{font-weight:700;color:var(--brand-red-dark);margin-bottom:.3rem}
+.doku-box p:last-child{margin-bottom:0}
+
+/* Tabellen */
+.doku-table-wrap{overflow-x:auto;margin:.4rem 0 .9rem}
+.doku-table{width:100%;border-collapse:collapse;font-size:.86rem}
+.doku-table th{background:var(--brand-red-dark);color:#fff;text-align:left;padding:.55rem .7rem}
+.doku-table td{padding:.5rem .7rem;border-bottom:1px solid var(--line);vertical-align:top}
+.doku-table tr:nth-child(even) td{background:var(--paper-raised)}
+.doku-table td:first-child{font-weight:600}
+
+.app-footer-meta{text-align:center;margin-top:.8rem;font-size:.78rem;color:var(--ink-soft);line-height:1.55}
+@media(max-width:600px){.doku-toc{gap:.55rem .85rem;padding:.8rem}.doku-card{padding:.9rem 1rem}.doku-hero{padding:1.25rem 1rem}}
+</style>
+</head>
+<body>
+<header class="app-header">
+  <div class="hazard-strip"></div>
+  <div class="app-header-inner">
+    <div class="brand"><span class="brand-title">ASiC Handel</span><span class="brand-tag">GBO</span><span class="brand-subtitle">„Gefährdungen systematisch beurteilen.“</span></div>
+    <nav class="app-nav"><a href="index.html">Prüfkatalog</a><a href="gbo.html">Gefährdungsbeurteilung</a><a href="gbo-hilfe.html">FAQ GBO</a></nav>
+  </div>
+</header>
+
+<main class="page">
+
+<div class="doku-hero">
+  <div class="doku-hero-badge">Technische Dokumentation · GBO</div>
+  <h1>Gefährdungsbeurteilung</h1>
+  <p>Aufbau, Datenhaltung, Bewertungslogik, Funktionen und fachliche Quellen der GBO in ASiC Handel.</p>
+  <div class="doku-meta-grid">
+    <div class="doku-meta-item"><div class="doku-meta-label">App</div><div class="doku-meta-value">ASiC Handel Rev. 2.0</div></div>
+    <div class="doku-meta-item"><div class="doku-meta-label">Stand</div><div class="doku-meta-value">9.10.2026</div></div>
+    <div class="doku-meta-item"><div class="doku-meta-label">GBO-Daten</div><div class="doku-meta-value">1045 Fragen · 92 Module</div></div>
+    <div class="doku-meta-item"><div class="doku-meta-label">Service Worker</div><div class="doku-meta-value">v2.0.20</div></div>
+  </div>
+</div>
+
+<nav class="doku-toc" aria-label="Inhaltsverzeichnis">
+  <a href="#architektur">1 Architektur</a>
+  <a href="#datenmodell">2 Datenmodell</a>
+  <a href="#bewertung">3 Bewertungslogik</a>
+  <a href="#prozess">4 Arbeitsablauf</a>
+  <a href="#massnahmen">5 Maßnahmen</a>
+  <a href="#psychisch">6 Psychische Belastungen</a>
+  <a href="#statistik">7 Statistik &amp; Fristen</a>
+  <a href="#bildbelege">8 Bildbelege</a>
+  <a href="#begehung">9 Integration Begehung</a>
+  <a href="#oberflaeche">10 Menüs &amp; Oberfläche</a>
+  <a href="#mobil">11 Mobile Bedienung</a>
+  <a href="#sicherung">12 Sicherung</a>
+  <a href="#druck">13 Druck/PDF</a>
+  <a href="#fragenbestand">14 Fragenbestand</a>
+  <a href="#quellen">15 Quellen</a>
+  <a href="#systemstand">16 Systemstand</a>
+</nav>
+
+<!-- 1 -->
+<section class="doku-section" id="architektur">
+  <h2>1. Architektur und Datenstand</h2>
+  <p class="doku-lead">Die GBO ist innerhalb von ASiC Handel ein eigenständiger Teilstand und wird getrennt von der Begehung gehalten.</p>
+  <div class="card doku-card">
+    <div class="doku-table-wrap"><table class="doku-table">
+      <tr><th>Baustein</th><th>Beschreibung</th></tr>
+      <tr><td>GBO-Teilstand</td><td>Betriebsdaten, Modulauswahl, Bewertungen/Antworten, Maßnahmen- und Wirksamkeitsdaten, Bildbelege und Begehungs-Vormerkungen. Lokale Speicherung im Browser.</td></tr>
+      <tr><td>Begehungs-Teilstand</td><td>Daten des Prüfkatalogs. Bleibt von der GBO getrennt; eine neue Begehung setzt die GBO nicht zurück.</td></tr>
+      <tr><td>ASiC-Marktcontainer</td><td>Fasst beide Teilstände für die gemeinsame Sicherung bzw. Server-Speicherung zusammen, ohne sie inhaltlich zu vermischen. Formatversion 2.</td></tr>
+      <tr><td>Server / NAS</td><td>Beide Bereiche verwenden dieselbe in den Einstellungen hinterlegte Server-Basis-Adresse und denselben optionalen Zugriffsschlüssel.</td></tr>
+    </table></div>
+    <div class="doku-box"><div class="doku-box-title">Datenstand</div>1045 GBO-Fragen mit 1045 eindeutigen Fragen-IDs in 92 Modulen. Die Zahlen beziehen sich auf die ausgelieferte Datendatei.</div>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="doku-section" id="datenmodell">
+  <h2>2. Datenmodell</h2>
+  <p class="doku-lead">Fachliche Ebenen der GBO und ihre Darstellung in der Oberfläche.</p>
+  <div class="card doku-card">
+    <h3>Ebenen</h3>
+    <div class="doku-table-wrap"><table class="doku-table">
+      <tr><th>Ebene</th><th>Funktion</th></tr>
+      <tr><td>Betriebsdaten</td><td>Marktnummer, Anschrift, Datum, Prüfer, Marktleitung und Teilnehmer.</td></tr>
+      <tr><td>Allgemeine GBO</td><td>Betriebsübergreifende Hauptthemen.</td></tr>
+      <tr><td>Arbeitsbereiche</td><td>Tätigkeits- und bereichsbezogene Gefährdungen.</td></tr>
+      <tr><td>Maschinen</td><td>Technische Tiefenmodule über alle Betriebsphasen hinweg.</td></tr>
+      <tr><td>Maßnahmen</td><td>Verantwortung, Frist, Umsetzung und Wirksamkeitskontrolle.</td></tr>
+    </table></div>
+
+    <h3>Darstellung der Fragen</h3>
+    <p>Die Oberfläche gliedert vierstufig: <b>Gesamtgruppe → Bereich/Modul → Untergruppe → Frage</b>. Sieben fachliche Gesamtgruppen ordnen alle 92 Module genau einmal ein:</p>
+    <ul>
+      <li>Organisation und Arbeitsschutz</li>
+      <li>Arbeitsstätte und allgemeine Gefährdungen</li>
+      <li>Verkauf und Kundenbereiche</li>
+      <li>Lager, Warenannahme und Logistik</li>
+      <li>Lebensmittelbereiche</li>
+      <li>Maschinen und Arbeitsmittel</li>
+      <li>Gefahrstoffe, Reinigung und besondere Gefährdungen</li>
+    </ul>
+    <p>Die Gruppierung verändert weder Frage-IDs noch gespeicherte Bewertungen. Gesamtgruppen, Bereiche und Untergruppen zeigen ihren Bearbeitungsstand an; beim Bewerten bleibt die geöffnete Ebenenkette erhalten.</p>
+  </div>
+</section>
+
+<!-- 3 -->
+<section class="doku-section" id="bewertung">
+  <h2>3. Bewertungs- und Fortschrittslogik</h2>
+  <p class="doku-lead">Jede Frage wird mit genau einer von vier Bewertungen beurteilt.</p>
+  <div class="card doku-card">
+    <div class="doku-table-wrap"><table class="doku-table">
+      <tr><th>Bewertung</th><th>Bedeutung und Verhalten</th></tr>
+      <tr><td>Ausreichend geschützt</td><td>Vorhandene Schutzmaßnahmen werden als ausreichend beurteilt.</td></tr>
+      <tr><td>Handlungsbedarf</td><td>Zusätzliche Maßnahmen sind erforderlich. Es werden ein kompakter Quellenhinweis mit kleiner Erläuterung und die Maßnahmenfelder eingeblendet; der Quellenhinweis wird in der Gesamt-GBO mit ausgegeben.</td></tr>
+      <tr><td>Beratungs-/Vertiefungsbedarf</td><td>Weitere fachliche Klärung oder Unterlagen sind erforderlich. Die Maßnahmenfelder stehen ebenfalls zur Verfügung.</td></tr>
+      <tr><td>Nicht zutreffend</td><td>Die Gefährdung bzw. Tätigkeit ist im betrachteten Betrieb nicht vorhanden.</td></tr>
+    </table></div>
+    <h3>Fortschritt</h3>
+    <p>Der Fortschritt berechnet sich ausschließlich aus Fragen der aktivierten Module. Jede gesetzte Bewertung – auch „Nicht zutreffend“ – zählt als beantwortet.</p>
+    <div class="doku-box"><div class="doku-box-title">Grundsatz</div>Bewertungen werden ausschließlich von Benutzern gesetzt. Weder die Auswahl von Maßnahmen noch eine Verknüpfung mit einem Begehungsbefund erzeugt automatisch eine Bewertung.</div>
+  </div>
+</section>
+
+<!-- 4 -->
+<section class="doku-section" id="prozess">
+  <h2>4. Fachlicher GBO-Prozess</h2>
+  <p class="doku-lead">Die App folgt dem sieben­stufigen Ablauf einer Gefährdungsbeurteilung.</p>
+  <div class="card doku-card">
+    <ol>
+      <li>Arbeitsbereiche und Tätigkeiten ermitteln</li>
+      <li>Gefährdungen ermitteln</li>
+      <li>Gefährdungen beurteilen</li>
+      <li>Arbeitsschutzmaßnahmen festlegen</li>
+      <li>Maßnahmen umsetzen</li>
+      <li>Wirksamkeit überprüfen</li>
+      <li>Gefährdungsbeurteilung fortschreiben</li>
+    </ol>
+    <p>Unterstützt wird dieser Ablauf durch Bereichsauswahl, Bewertung, Maßnahmenfelder, Verantwortlichkeit/Frist, Umsetzungsstatus und Wirksamkeitskontrolle.</p>
+  </div>
+</section>
+
+<!-- 5 -->
+<section class="doku-section" id="massnahmen">
+  <h2>5. Maßnahmen, Verantwortlichkeit und TOP-Hinweise</h2>
+  <p class="doku-lead">Bei Handlungs- oder Beratungsbedarf werden Maßnahmen strukturiert an der jeweiligen Frage gespeichert.</p>
+  <div class="card doku-card">
+    <h3>Maßnahmenfelder</h3>
+    <div class="doku-table-wrap"><table class="doku-table">
+      <tr><th>Feld</th><th>Inhalt</th></tr>
+      <tr><td>Feststellung / Gefährdung</td><td>Beschreibung des festgestellten Sachverhalts.</td></tr>
+      <tr><td>Vorhandene Schutzmaßnahmen</td><td>Bereits wirksame Maßnahmen.</td></tr>
+      <tr><td>Zusätzliche Maßnahme</td><td>Konkret festgelegte weitere Maßnahme.</td></tr>
+      <tr><td>Verantwortlich</td><td>Zuständige Person (siehe Vorbelegung).</td></tr>
+      <tr><td>Frist</td><td>Zieldatum der Umsetzung.</td></tr>
+      <tr><td>Umsetzung</td><td>Umsetzungsdatum bzw. -status.</td></tr>
+      <tr><td>Wirksamkeitskontrolle</td><td>Prüfdatum, Prüfer und Ergebnis.</td></tr>
+    </table></div>
+
+    <h3>Vorbelegung „Verantwortlich“</h3>
+    <p>Das Feld wird mit „Marktleitung / Verantwortlich“ aus den Betriebsdaten vorbelegt, sofern noch kein eigener Wert vorhanden ist. Abweichende Verantwortliche bleiben erhalten. Die Vorbelegung ist eine Arbeitshilfe und ersetzt nicht die betriebliche Festlegung der zuständigen Person.</p>
+
+    <h3>TOP-Hinweise</h3>
+    <p>Die Erläuterungen enthalten gefährdungsbezogene Ansatzpunkte für technische (T), organisatorische (O) und personenbezogene (P) Maßnahmen sowie Hinweise zur Wirksamkeitskontrolle. Es sind keine automatisch generierten Risikowerte; sie ersetzen keine Einzelfallbeurteilung.</p>
+
+    <h3>Maßnahmenplan</h3>
+    <p>Alle Maßnahmenangaben – einschließlich der ausgewählten Maßnahmenvorschläge der psychischen Belastungen – werden strukturiert gespeichert und in der Maßnahmenliste sowie der Gesamt-GBO berücksichtigt. Eine pauschale jährliche Neubewertung aller Gefährdungsbeurteilungen wird daraus nicht abgeleitet.</p>
+  </div>
+</section>
+
+<!-- 6 -->
+<section class="doku-section" id="psychisch">
+  <h2>6. Psychische Belastungen</h2>
+  <p class="doku-lead">Das Modul <code>psychische_belastungen</code> ist ein eigenständiges GBO-Modul im bestehenden Datenbestand.</p>
+  <div class="card doku-card">
+    <h3>Technischer Aufbau</h3>
+    <p>Die Fragen verwenden eigene, eindeutige IDs <code>PSY-01</code> bis <code>PSY-30</code>. Vorhandene Frage-IDs, Antworten und Verknüpfungen bleiben dadurch unverändert.</p>
+    <div class="doku-table-wrap"><table class="doku-table">
+      <tr><th>Element</th><th>Technische Funktion</th></tr>
+      <tr><td>Bewertung</td><td>Verwendet die bestehende vierstufige GBO-Statuslogik.</td></tr>
+      <tr><td>Rechts-/Quellenhinweis</td><td>Wird je Frage aus der psychischen Fachkonfiguration direkt an der Frage ausgegeben.</td></tr>
+      <tr><td>Maßnahmenvorschläge</td><td>Mehrfachauswahl je Frage; die Auswahl wird im Antwortobjekt gespeichert.</td></tr>
+      <tr><td>Sonstige Maßnahme</td><td>Freitextfeld für betriebsindividuelle Maßnahmen.</td></tr>
+      <tr><td>U-Kennzeichnung</td><td>Metadatenkennzeichen für Fragen mit Unterweisungsbezug; reine Bedienhilfe, keine gesetzliche Aussage.</td></tr>
+      <tr><td>Verantwortung / Frist</td><td>Gemeinsame GBO-Felder.</td></tr>
+      <tr><td>Umsetzung / Wirksamkeit</td><td>Umsetzungsdatum, Prüfdatum, Prüfer und Wirksamkeitsstatus.</td></tr>
+      <tr><td>Foto-/Anhangbezug</td><td>Optionaler Bezugstext sowie Bildanhang über Kamera- oder Dateiauswahl (siehe Abschnitt 8). Keine automatische personenbezogene Datenerfassung.</td></tr>
+    </table></div>
+
+    <h3>Fachliches Konzept</h3>
+    <p>Die Themenfelder sind Arbeitsinhalt/Arbeitsaufgabe, Arbeitsorganisation, Arbeitszeit, soziale Beziehungen und Kommunikation, Führung, Kundenkontakt/emotionale Anforderungen, Arbeitsumgebung sowie besondere Belastungssituationen. Die zugrunde liegende Vorlage dient als fachliche Strukturquelle; ihr Punktesystem und ihre Ampelmatrix sind nicht Bestandteil der GBO.</p>
+    <div class="doku-box"><div class="doku-box-title">Abgrenzung</div>Die Fragen betrachten Arbeitsbedingungen und organisatorische Faktoren. Es werden keine Diagnosen, psychischen Erkrankungen oder Persönlichkeitsbewertungen erhoben.</div>
+  </div>
+</section>
+
+<!-- 7 -->
+<section class="doku-section" id="statistik">
+  <h2>7. Statistik und Fristberechnung</h2>
+  <p class="doku-lead">Die Übersicht ist eine Arbeitshilfe und ersetzt keine fachliche Prüfung.</p>
+  <div class="card doku-card">
+    <h3>Statusgruppen</h3>
+    <p>Die Statistik zählt die Bewertungen der aktuell aktivierten Module in fünf getrennten Gruppen: ausreichend geschützt, Handlungsbedarf, Beratungs-/Vertiefungsbedarf, nicht zutreffend und noch nicht bewertet. Eine Frage mit gesetztem Status gilt als bewertet.</p>
+    <h3>Überfällige Maßnahmen</h3>
+    <p>Eine Maßnahme wird als überfällig gezählt, wenn ein gültiges Fristdatum vor dem lokalen Kalenderdatum liegt und kein Umsetzungsdatum gespeichert ist. Ein Fristdatum allein ist kein Umsetzungsnachweis; die Anzeige muss mit dem tatsächlichen Maßnahmenstand abgeglichen werden.</p>
+  </div>
+</section>
+
+<!-- 8 -->
+<section class="doku-section" id="bildbelege">
+  <h2>8. Bildbelege</h2>
+  <p class="doku-lead">Fotos werden direkt an der jeweiligen GBO-Frage dokumentiert.</p>
+  <div class="card doku-card">
+    <h3>Aufnahme und Speicherung</h3>
+    <p>An der Frage stehen die Schaltflächen <b>Kamera</b> und <b>Datei auswählen</b> sowie <b>Entfernen</b> zur Verfügung; es können ausschließlich Bilder angehängt werden. Jedes Bild wird auf maximal 1024 Pixel Kantenlänge und JPEG-Qualität 62 % verkleinert, entsprechend dem Prüfkatalog.</p>
+    <p>Das komprimierte Bild wird als eingebettete Data URL im Antwortobjekt der zugehörigen Frage gespeichert. Es liegt damit im lokalen GBO-Datenbestand, wird in die JSON-Sicherung aufgenommen und beim Import zusammen mit dem Antwortobjekt wiederhergestellt.</p>
+    <h3>Menüansicht „Bildbelege“</h3>
+    <p>Die Ansicht durchsucht alle gespeicherten GBO-Antworten nach eingebetteten Bilddaten – unabhängig davon, ob das zugehörige Modul derzeit aktiviert ist. Jede Bildkarte zeigt Modul, Themenbereich, Fragen-ID und Fragetext; ein vorhandener Foto-/Anhangbezug wird ergänzend ausgegeben.</p>
+    <p>Das Öffnen einer Vorschau ändert den Datenbestand nicht. Das Entfernen eines Bildes verändert das zugehörige Antwortobjekt und wirkt sich auf die nächste Sicherung aus.</p>
+    <div class="doku-box"><div class="doku-box-title">Datenschutz</div>Es sollen keine unnötigen personenbezogenen oder besonders sensiblen Angaben aufgenommen werden.</div>
+  </div>
+</section>
+
+<!-- 9 -->
+<section class="doku-section" id="begehung">
+  <h2>9. Integration mit der Begehung</h2>
+  <p class="doku-lead">Begehung und GBO bleiben getrennte Teilstände; es gibt zwei definierte Verbindungen.</p>
+  <div class="card doku-card">
+    <h3>Begehungsbefund → GBO-Frage</h3>
+    <p>Ein Mangel aus der aktuell geladenen Begehung wird zunächst einem GBO-Modul und anschließend einer konkreten GBO-Frage zugeordnet. Nach dem Vormerken stehen drei Funktionen zur Verfügung:</p>
+    <ul>
+      <li><b>GBO öffnen:</b> ruft die verknüpfte Frage auf und zeigt den ursprünglichen Begehungsbefund als Herkunftshinweis.</li>
+      <li><b>Ändern:</b> ändert die Zuordnung.</li>
+      <li><b>Lösen:</b> hebt die Zuordnung auf.</li>
+    </ul>
+    <p>Die GBO-Bewertung bleibt eine eigenständige fachliche Entscheidung und wird durch die Verknüpfung nicht gesetzt.</p>
+
+    <h3>Betriebsdaten übernehmen</h3>
+    <p>Die Funktion überträgt vorhandene passende Angaben aus der Begehung in die GBO: Marktnummer, Anschrift, Datum, Prüfer, Marktleitung und Teilnehmer. Leere Quellfelder überschreiben keine bereits vorhandenen GBO-Angaben. Das Begehungsfeld <code>companyInfo.datum</code> wird dem GBO-Feld <code>meta.date</code> zugeordnet.</p>
+  </div>
+</section>
+
+<!-- 10 -->
+<section class="doku-section" id="oberflaeche">
+  <h2>10. Menüstruktur und Bedienoberfläche</h2>
+  <p class="doku-lead">Die Oberfläche trennt die Vorbereitung des Beurteilungsumfangs von der eigentlichen Bewertung.</p>
+  <div class="card doku-card">
+    <div class="doku-table-wrap"><table class="doku-table">
+      <tr><th>Menü</th><th>Funktion</th></tr>
+      <tr><td>Übersicht – Statistik &amp; Fristen</td><td>Statuszahlen, offene Fälle und überfällige Maßnahmen.</td></tr>
+      <tr><td>Betriebsdaten</td><td>Stammdaten und „Marktleitung / Verantwortlich“.</td></tr>
+      <tr><td>GBO vorbereiten</td><td>Auswahl der aktiven Hauptthemen, Arbeitsbereiche und Maschinen.</td></tr>
+      <tr><td>Gefährdungen beurteilen</td><td>Bewertung der Fragen und Dokumentation von Maßnahmen.</td></tr>
+      <tr><td>Hinweise aus Begehungen</td><td>Zuordnung von Begehungsbefunden zu GBO-Fragen.</td></tr>
+      <tr><td>Bildbelege</td><td>Sammelansicht aller gespeicherten Fotos.</td></tr>
+      <tr><td>Dokumentation</td><td>JSON-Sicherung/-Import sowie Ausgabe von Gesamt-GBO und Maßnahmenliste.</td></tr>
+    </table></div>
+    <p>Die Menütrennung ändert weder Frage-IDs noch den Grundsatz, dass Begehungshinweise keine automatische GBO-Bewertung auslösen. Die Aktionsschaltflächen sind kompakt gestaltet, damit Fragen, Befunde und Bearbeitungsinhalte mehr Raum erhalten.</p>
+  </div>
+</section>
+
+<!-- 11 -->
+<section class="doku-section" id="mobil">
+  <h2>11. Mobile Bedienung (iPhone)</h2>
+  <p class="doku-lead">Auf schmalen Displays bis 520 px ist die GBO auf Touch-Bedienung abgestimmt. Datenmodell, Frage-IDs, Bewertungen und Verknüpfungen bleiben davon unberührt.</p>
+  <div class="card doku-card">
+    <div class="doku-table-wrap"><table class="doku-table">
+      <tr><th>Bereich</th><th>Mobile Umsetzung</th></tr>
+      <tr><td>Navigation</td><td>Horizontal wischbare obere Navigation; kein horizontaler Seitenüberlauf.</td></tr>
+      <tr><td>Betriebsdaten</td><td>Einspaltige Eingabe; Formularschrift 16 px, damit Safari nicht ungewollt zoomt.</td></tr>
+      <tr><td>Auswahl</td><td>Module und Auswahlgruppen einspaltig mit größeren Touch-Flächen.</td></tr>
+      <tr><td>Bewertung</td><td>Antwortmöglichkeiten untereinander angeordnet.</td></tr>
+      <tr><td>Maßnahmen / Aktionen</td><td>Schaltflächen untereinander, mindestens 42 px Touch-Höhe.</td></tr>
+      <tr><td>Begehung ↔ GBO</td><td>Zuordnung, Herkunftshinweis und Aktionen vollständig erreichbar.</td></tr>
+      <tr><td>Sicherung / Druck</td><td>Aktionsschaltflächen füllen die verfügbare Breite; Druck und JSON-Sicherung arbeiten unverändert.</td></tr>
+    </table></div>
+  </div>
+</section>
+
+<!-- 12 -->
+<section class="doku-section" id="sicherung">
+  <h2>12. Datensicherung, Marktcontainer und Zurücksetzen</h2>
+  <p class="doku-lead">Die GBO kann einzeln oder gemeinsam mit der Begehung gesichert werden.</p>
+  <div class="card doku-card">
+    <h3>JSON-Sicherung</h3>
+    <p>Die JSON-Sicherung enthält den vollständigen GBO-Zustand einschließlich Bildbelegen und kann wieder eingelesen werden.</p>
+    <p>Dateinamensschema: <code>GBO_Sicherung_Markt_[Marktnummer]_[Datum].json</code></p>
+    <p>Marktnummer und Datum stammen aus den Betriebsdaten; das Datum wird für den Dateinamen in <code>JJJJ-MM-TT</code> normalisiert.</p>
+
+    <h3>Marktcontainer und Server</h3>
+    <p>Bei der Gesamtsicherung bzw. Server-Speicherung werden Begehung und GBO gemeinsam im ASiC-Marktcontainer (Formatversion 2) übertragen, bleiben aber getrennte Teilstände. Einzel-Sicherungen der Begehung und der GBO bleiben einlesbar.</p>
+
+    <h3>GBO zurücksetzen</h3>
+    <p>Vor dem Löschen erscheint eine Sicherheitsabfrage. Nach Bestätigung werden Auswahl, Bewertungen/Antworten, Maßnahmen- und Wirksamkeitsdaten sowie Begehungs-Vormerkungen zurückgesetzt. Die Begehung und die zentralen NAS-/Servereinstellungen bleiben erhalten.</p>
+  </div>
+</section>
+
+<!-- 13 -->
+<section class="doku-section" id="druck">
+  <h2>13. Druck und PDF</h2>
+  <p class="doku-lead">Zwei Ausgaben stehen zur Verfügung: Gesamt-GBO und Maßnahmenliste.</p>
+  <div class="card doku-card">
+    <p>Beide verwenden denselben roten Dokumentkopf im Stil der Begehung. Betriebsdaten und GBO-Fortschritt werden automatisch übernommen. Über die Browser-Druckfunktion erfolgt die Ausgabe auf Papier oder als PDF.</p>
+  </div>
+</section>
+
+<!-- 14 -->
+<section class="doku-section" id="fragenbestand">
+  <h2>14. Vertiefte Querschnittsthemen im Fragenbestand</h2>
+  <p class="doku-lead">Vier Themen sind besonders ausführlich abgebildet.</p>
+  <div class="card doku-card">
+    <div class="doku-table-wrap"><table class="doku-table">
+      <tr><th>Thema</th><th>Inhalt</th></tr>
+      <tr><td>Hautschutz</td><td>Feuchtarbeit, hautgefährdende Stoffe, Maßnahmenhierarchie, Handschuhmanagement und Wirksamkeitskontrolle.</td></tr>
+      <tr><td>Reinigung</td><td>Gefahrstofforganisation, Dosierung, Vermischung, Exposition, Lagerung, Rutschgefahr, Arbeitsorganisation, Entsorgung, Reinigungsmaschinen und Wirksamkeitskontrolle.</td></tr>
+      <tr><td>Putz-/Reinigungsmaschinen</td><td>Eigenes Arbeitsmittelmodul mit 20 Fragen von der bestimmungsgemäßen Verwendung bis zu Mängeln und Außerbetriebnahme.</td></tr>
+      <tr><td>Fremdfirmen / Dienstleister</td><td>Eigenes Organisationsmodul mit 15 Fragen zu Gefährdungsaustausch, Abstimmung, Zutritt, Qualifikation, Arbeitsmitteln, besonderen Gefahren, Koordination und Notfallorganisation.</td></tr>
+    </table></div>
+  </div>
+</section>
+
+<!-- 15 -->
+<section class="doku-section" id="quellen">
+  <h2>15. Quellennachweis</h2>
+  <p class="doku-lead">Die Matrix zeigt, welche Quellen für welche GBO-Themen herangezogen werden. Sie ist ein Orientierungsnachweis, keine Zertifizierung der Anwendung. Maßgeblich ist die jeweils geltende Rechtslage bzw. der aktuelle Regelstand.</p>
+  <div class="card doku-card">
+    <div class="doku-table-wrap"><table class="doku-table">
+      <tr><th>Quelle</th><th>Stand / Bereich</th><th>Verwendung in der GBO</th></tr>
+      <tr><td>ArbSchG §§ 5, 6</td><td>Gefährdungsbeurteilung / Dokumentation</td><td>Grundstruktur der GBO, Ermittlung von Gefährdungen, Maßnahmen und Dokumentation.</td></tr>
+      <tr><td>ArbSchG § 8</td><td>Zusammenarbeit mehrerer Arbeitgeber</td><td>Fremdfirmen, Informationsaustausch und Koordination.</td></tr>
+      <tr><td>ArbStättV §§ 3, 3a, 6 + Anhang</td><td>Arbeitsstätten</td><td>Arbeitsräume, Sanitärräume, Barrierefreiheit, Unterweisung und Dokumentation.</td></tr>
+      <tr><td>ASR V3</td><td>Gefährdungsbeurteilung</td><td>Methodische Struktur der Beurteilung von Arbeitsstätten.</td></tr>
+      <tr><td>ASR V3a.2</td><td>Barrierefreie Arbeitsstätten; zuletzt geändert 2025</td><td>Barrierefreie Gestaltung, insbesondere bei erforderlichen Sanitär- und Verkehrsbereichen.</td></tr>
+      <tr><td>ASR A1.2 / A1.5 / A1.7 / A1.8</td><td>Raum, Boden, Türen/Tore, Verkehrswege</td><td>Arbeitsplatzgestaltung, Stolper-/Rutschgefahren, Türen/Tore und Verkehrswege.</td></tr>
+      <tr><td>ASR A2.1 / A2.2 / A2.3</td><td>Absturz, Brandschutz, Fluchtwege</td><td>Schutz vor Absturz/Herabfallen, Feuerlöscher, Brandschutzhelfer, Flucht- und Rettungswege.</td></tr>
+      <tr><td>ASR A3.4</td><td>Beleuchtung</td><td>Beleuchtung in Verkaufs-, Arbeits-, Lager- und Verkehrsbereichen nach Sehaufgabe.</td></tr>
+      <tr><td>ASR A4.1 / A4.2 / A4.3</td><td>Sanitär, Pausen, Erste Hilfe</td><td>Sanitärräume einschließlich barrierebezogener Aspekte, Pausenbereiche und Erste Hilfe.</td></tr>
+      <tr><td>DGUV Vorschrift 1 / DGUV Regel 100-001</td><td>Grundsätze der Prävention</td><td>Unterweisung, Organisation, Erste Hilfe und allgemeine Präventionspflichten.</td></tr>
+      <tr><td>DGUV Regel 108-601</td><td>Branche Einzelhandel</td><td>Branchenspezifische Gefährdungen im Verkauf, Lager, Warenannahme und bei Nebentätigkeiten.</td></tr>
+      <tr><td>DGUV Information 208-043</td><td>Sicherheit von Regalen</td><td>Lagerregale, Schäden, Tragfähigkeit, Prüfung und Dokumentation.</td></tr>
+      <tr><td>DGUV Vorschrift 68</td><td>Flurförderzeuge</td><td>Hubwagen/Stapler, sichere Verwendung und Prüfungen.</td></tr>
+      <tr><td>DGUV Vorschrift 3</td><td>Elektrische Anlagen/Betriebsmittel</td><td>Elektrische Sicherheit und Prüfungen.</td></tr>
+      <tr><td>DGUV Vorschrift 25 / DGUV Regel 108-010</td><td>Überfallprävention</td><td>Kassenzone, Bargeld, Verkaufsstellen und Nachsorge.</td></tr>
+      <tr><td>BetrSichV §§ 3, 13 + Anhang 2 Abschnitt 2</td><td>Arbeitsmittel / Aufzüge</td><td>Arbeitsmittel-Gefährdungsbeurteilung, Zusammenarbeit und Aufzugsprüfungen; Lasten- und Kundenaufzüge werden fachlich getrennt betrachtet.</td></tr>
+      <tr><td>TRBS 1111</td><td>Arbeitsmittel-Gefährdungsbeurteilung</td><td>Maschinenmodule über Vorbereitung, Betrieb, Störung, Reinigung, Instandhaltung und Prüfung.</td></tr>
+      <tr><td>TRBS 1112</td><td>Instandhaltung</td><td>Sichere Instandhaltung und Fremdfirmenarbeiten.</td></tr>
+      <tr><td>GefStoffV §§ 6, 14, 15</td><td>Gefahrstoffe</td><td>Gefährdungsbeurteilung, Betriebsanweisung, Unterweisung und Zusammenarbeit.</td></tr>
+      <tr><td>TRGS 401</td><td>Hautkontakt / Feuchtarbeit</td><td>Hautschutz, Tätigkeitsbezug und Schutzmaßnahmenhierarchie.</td></tr>
+      <tr><td>TRGS 510</td><td>Lagerung in ortsbeweglichen Behältern</td><td>Gefahrstofflagerung und Zusammenlagerung.</td></tr>
+      <tr><td>DGUV Regel 112-191</td><td>Fuß- und Knieschutz, Ausgabe 12/2025</td><td>Auswahl und Benutzung von Sicherheitsschuhen und Knieschutz.</td></tr>
+      <tr><td>DGUV Regel 110-011</td><td>Fleischwirtschaft – Handwerk, Ausgabe 08/2025</td><td>Fleisch-/Lebensmittelbereiche und branchenspezifische Arbeitsmittel- und Tätigkeitsgefahren.</td></tr>
+      <tr><td>ArbSchG, DGUV Vorschrift 1, DGUV Information 206-007, GDA-Leitlinie „Gefährdungsbeurteilung psychischer Belastung“, BGHW-Handlungshilfe „Psychische Belastungen im Handel“, ArbStättV, ASR, DIN EN ISO 10075, BetrVG</td><td>Psychische Belastungen</td><td>Fachliche Grundlage des Moduls; BetrVG, soweit für Beteiligung/Organisation relevant. Keine Übernahme einer Punktbewertung.</td></tr>
+    </table></div>
+    <p><b>Ergänzende technische Normen:</b> Soweit eine konkrete Frage eine Norm voraussetzt, wird diese als technische Referenz kenntlich gemacht, z. B. DIN EN 15635 für Regale oder DIN 14462:2023-07 für Wandhydranten. Normen ersetzen nicht die Gefährdungsbeurteilung.</p>
+    <div class="doku-box">
+      <div class="doku-box-title">Offizielle Fundstellen</div>
+      <ul>
+        <li>Gesetze im Internet – Bundesrecht</li>
+        <li>BAuA – Technische Regeln für Arbeitsstätten und Betriebssicherheit</li>
+        <li>DGUV Publikationen – Vorschriften, Regeln und Informationen</li>
+        <li>BGHW – branchenspezifische Handlungshilfen und Gefährdungsbeurteilung</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 16 -->
+<section class="doku-section" id="systemstand">
+  <h2>16. Systemstand</h2>
+  <div class="card doku-card">
+    <div class="doku-table-wrap"><table class="doku-table">
+      <tr><th>Merkmal</th><th>Wert</th></tr>
+      <tr><td>Anwendung</td><td>ASiC Handel · Rev. 2.0</td></tr>
+      <tr><td>Stand</td><td>9.10.2026</td></tr>
+      <tr><td>Service Worker</td><td>v2.0.20</td></tr>
+      <tr><td>Fragenbestand</td><td>1045 Fragen, 1045 eindeutige Fragen-IDs, 92 Module</td></tr>
+      <tr><td>Sicherungsformat</td><td>GBO-JSON; ASiC-Marktcontainer Formatversion 2</td></tr>
+    </table></div>
+  </div>
+</section>
+
+</main>
+
+<footer class="app-footer">
+  <div class="app-footer-links"><a href="gbo.html">Gefährdungsbeurteilung</a><a href="gbo-hilfe.html">FAQ GBO</a><a href="gbo-dokumentation.html">Technische Dokumentation GBO</a><a href="hilfe.html">FAQ Begehung</a></div>
+  <div class="app-footer-meta"><div>Rev. 2.0 · Stand 9.10.2026</div><div>© <span class="js-current-year">2026</span> Andreas Zott – Alle Rechte vorbehalten</div></div>
+</footer>
+<script>document.querySelectorAll('.js-current-year').forEach(el=>el.textContent=new Date().getFullYear());</script>
+</body>
+</html>
