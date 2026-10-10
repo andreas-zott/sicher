@@ -425,3 +425,78 @@
 @media (max-width: 720px) {
     .gbo-output-grid { grid-template-columns: 1fr; }
 }
+
+/* Risikobewertung und Fortschreibung */
+.gbo-risk{margin:0 0 .9rem;padding:.9rem 1rem;border:1px solid var(--line,#d7dcdf);border-radius:var(--radius-sm,8px);background:#fafbfc}
+.gbo-risk-head{display:flex;flex-wrap:wrap;gap:.3rem .8rem;align-items:baseline;margin-bottom:.6rem}
+.gbo-risk-head span{font-size:.8rem;color:var(--ink-soft,#3d484f)}
+.gbo-risk-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem}
+.gbo-risk-col{padding:.7rem .8rem;border:1px solid var(--line,#d7dcdf);border-radius:var(--radius-sm,8px);background:#fff}
+.gbo-risk-col h4{margin:0 0 .5rem;font-size:.95rem}
+.gbo-risk-col h4 small{display:block;font-weight:400;color:var(--ink-soft,#3d484f);font-size:.78rem}
+.gbo-risk label,.gbo-review-form label{display:flex;flex-direction:column;gap:.2rem;font-size:.8rem;font-weight:600;margin-bottom:.45rem}
+.gbo-risk select,.gbo-risk input{font:inherit;font-weight:400;padding:.4rem .5rem;border:1px solid var(--line,#c4cbd0);border-radius:6px;background:#fff;min-height:40px}
+.gbo-risk-result{display:flex;align-items:center;gap:.5rem;margin-top:.3rem}
+.gbo-risk-score{font-size:1.5rem;font-weight:700}
+.gbo-risk-chip{display:inline-block;padding:.15rem .55rem;border-radius:999px;font-size:.78rem;font-weight:700;background:#e6e9ed;color:#263746}
+.gbo-risk-chip.is-low{background:#dff2e3;color:#1c5a2e}.gbo-risk-chip.is-mid{background:#fdf1c9;color:#6b5200}.gbo-risk-chip.is-high{background:#fde0cc;color:#8a3a00}.gbo-risk-chip.is-top{background:#f8d3d8;color:#8e0a1c}
+.gbo-risk-hints{margin:.6rem 0 0}.gbo-risk-hint{margin:.25rem 0;font-size:.82rem;color:var(--ink-soft,#3d484f)}.gbo-risk-hint.warn{color:#8e0a1c;font-weight:600}.gbo-risk-hint.ok{color:#1c5a2e;font-weight:600}
+.gbo-risk-eff{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.6rem;align-items:end;margin-top:.7rem}.gbo-risk-eff>b{grid-column:1/-1}
+.gbo-risk-help{margin-top:.6rem;font-size:.82rem}.gbo-risk-help summary{cursor:pointer;font-weight:600}
+.gbo-risk-scale{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem;margin-top:.5rem}.gbo-risk-scale ul{margin:.3rem 0 0;padding-left:1.1rem}
+.gbo-risk-mini{margin-left:auto;font-size:.75rem;font-weight:600;white-space:nowrap}
+.gbo-risk-mini i{font-style:normal;display:inline-block;min-width:1.5em;text-align:center;padding:.05rem .3rem;border-radius:5px;background:#e6e9ed}
+.gbo-risk-mini i.is-low{background:#dff2e3}.gbo-risk-mini i.is-mid{background:#fdf1c9}.gbo-risk-mini i.is-high{background:#fde0cc}.gbo-risk-mini i.is-top{background:#f8d3d8}
+.gbo-module>summary{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+.gbo-risk-overview{margin-top:1.4rem}
+.gbo-risk-matrix{border-collapse:collapse;width:100%;max-width:640px;margin:.8rem 0;font-size:.8rem}
+.gbo-risk-matrix caption{caption-side:top;text-align:left;font-weight:600;margin-bottom:.3rem}
+.gbo-risk-matrix th,.gbo-risk-matrix td{border:1px solid #fff;padding:.4rem .5rem;text-align:center}
+.gbo-risk-matrix thead th,.gbo-risk-matrix tbody th{background:#eef1f3;font-weight:600}
+.gbo-risk-matrix td b{display:block;font-size:1.1rem}.gbo-risk-matrix td small{color:rgba(0,0,0,.45);font-size:.7rem}
+.gbo-risk-matrix td.is-low{background:#dff2e3}.gbo-risk-matrix td.is-mid{background:#fdf1c9}.gbo-risk-matrix td.is-high{background:#fde0cc}.gbo-risk-matrix td.is-top{background:#f8d3d8}
+.gbo-stat-card.is-mid{border-left-color:#d9a400}
+.gbo-review-status{display:flex;flex-direction:column;gap:.15rem;padding:.7rem .9rem;border-left:4px solid #9aa5ad;background:#f3f5f7;margin:.6rem 0}
+.gbo-review-status.ok{border-left-color:#2e8b4e;background:#eaf6ee}.gbo-review-status.warn{border-left-color:#d9a400;background:#fdf6dc}.gbo-review-status.late{border-left-color:#cc071e;background:#fbeaec}
+.gbo-review-form{margin:.6rem 0}.gbo-review-form .wide{grid-column:1/-1}
+@media (max-width:720px){.gbo-risk-grid,.gbo-risk-scale{grid-template-columns:1fr}.gbo-risk-eff{grid-template-columns:1fr}}
+
+/* Quellenhinweise je Frage (Rev. 2.0.29) */
+.gbo-src-list{margin:4px 0 6px 18px;padding:0;font-size:.76rem;line-height:1.42;color:#5e6570}
+.gbo-src-list li{margin:2px 0}
+.gbo-src-list b{color:#7a1426}
+.gbo-src-check{font-style:normal;font-weight:700;font-size:.68rem;color:#8a5a00;background:#fff3cd;border-radius:4px;padding:1px 5px;margin-left:3px;white-space:nowrap}
+@media print{.gbo-src-check{background:none;border:1px solid #999;color:#333}}
+
+/* Einzelgefährdungen je Modul (Rev. 2.0.30) */
+.gbo-risk-items{margin:12px 0;border:1px solid var(--gbo-line,#d5dae0);border-radius:8px;padding:8px 12px;background:#fff}
+.gbo-risk-items>summary{cursor:pointer;font-weight:600;padding:6px 0;min-height:44px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.gbo-risk-items>summary small{font-weight:400;color:#5b6570}
+.gbo-risk-item{border-top:1px solid #e3e7ec;padding:10px 0;display:grid;gap:8px}
+.gbo-risk-item-top{display:flex;gap:8px;align-items:center}
+.gbo-risk-item-top input{flex:1 1 auto;min-width:0}
+.gbo-risk-item-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.gbo-risk-item label{display:grid;gap:3px;font-size:.85rem}
+.gbo-risk-item select,.gbo-risk-item input{width:100%;min-height:40px;box-sizing:border-box}
+.gbo-risk-item-res{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:.85rem}
+.gbo-risk-derived{font-size:.85rem;color:#5b6570;margin:6px 0}
+.gbo-risk-derived:empty{display:none}
+@media (min-width:700px){.gbo-risk-item-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+/* Fristüberwachung (Rev. 2.0.30) */
+.gbo-frist-banner{margin:10px 16px;padding:10px 14px;border-radius:8px;background:#fdecea;border:1px solid #e8a39b;color:#8a1c12;font-weight:600}
+
+/* Unterschriftenfelder (Rev. 2.0.31) */
+.gbo-sig-section{margin:16px 0;padding:12px 14px;border:1px solid var(--gbo-line,#d5dae0);border-radius:10px;background:#fff}
+.gbo-sig-grid{display:grid;gap:16px}
+.gbo-sig h4{margin:0 0 8px}
+.gbo-sig-row{display:grid;grid-template-columns:2fr 1fr;gap:10px;margin-bottom:8px}
+.gbo-sig-row label{display:grid;gap:3px;font-size:.85rem}
+.gbo-sig-row input{min-height:40px;box-sizing:border-box;width:100%}
+.gbo-sig-pad{position:relative;border:2px dashed #9aa5b1;border-radius:8px;background:#fafbfc;aspect-ratio:3/1;max-width:600px}
+.gbo-sig-pad canvas{width:100%;height:100%;display:block;touch-action:none;cursor:crosshair}
+.gbo-sig-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#9aa5b1;pointer-events:none;font-size:.95rem}
+.gbo-sig-state{font-size:.85rem;color:#5b6570;align-self:center}
+@media (min-width:900px){.gbo-sig-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.gbo-sig-row{grid-template-columns:1fr}}
+.gbo-sig-hint[hidden]{display:none}
