@@ -1,0 +1,348 @@
+const AUDIT_CATEGORIES = [
+    {
+        id: "gesamtmarkt",
+        name: "Gesamtmarkt",
+        items: [
+            { id: "1.1", text: "Entspricht das getragene Schuhwerk aller im Bereich tätigen Personen den Anforderungen der Gefährdungsbeurteilung (fest, im Zehenbereich geschlossen, flach und rutschhemmend)?" },
+            { id: "1.2", text: "Beachten die Mitarbeitenden die Betriebsanweisung für Flurförderfahrzeuge insbes. PSA-Pflicht, Traglasten, Verbot der Personenmitnahme?" },
+            { id: "1.3", text: "Wurden die Automatiktüren gemäß den geltenden Regelwerken geprüft und befinden sich diese in einem ordnungsgemäßen Zustand?" },
+            { id: "1.4", text: "Ist die Aufzugsanlage geprüft und in einem ordnungsgemäßen Zustand (ohne sichtbare Beschädigungen und mit funktionsfähigen Schutzeinrichtungen)?" },
+            { id: "1.6", text: "Werden für Tätigkeiten in der Höhe (z. B. in Lager oder Verkaufsraum) geeignete und geprüfte Aufstiegshilfen (z. B. Trittstufen, Rolltritte/Elefantenfüße) in ausreichender Zahl bereitgestellt und bestimmungsgemäß benutzt?" },
+            { id: "1.7", text: "Sind die Leitern geprüft gemäß DGUV Information 208-016 Leitern und Tritte?" },
+            { id: "1.8", text: "Werden aus dem Ordersatz geeignete Sicherheitsmesser verwendet?" },
+            { id: "1.9", text: "Sind die Verkehrswege so beschaffen, dass kein Unfallrisiko durch Stolpern, Ausrutschen oder Umknicken besteht?" },
+            { id: "1.10", text: "Sind die Treppen unbeschädigt und frei von Gegenständen?" },
+            { id: "1.11", text: "Sind Betriebsanweisungen gut zugänglich und werden Sicherheitsanweisungen eingehalten?" },
+            { id: "1.13", text: "Sind die Schnelllauftore gemäß den Herstellervorgaben und den Anforderungen der ASR A1.7 wiederkehrend geprüft sowie technisch einwandfrei?" },
+            { id: "1.14", text: "Sind die Rolltore aktuell geprüft und funktionieren alle Schutzeinrichtungen (z. B. Absturzsicherung, Einzugsschutz) einwandfrei?" }
+        ]
+    },
+    {
+        id: "brandschutz",
+        name: "Brandschutz",
+        items: [
+            { id: "2.1", text: "Sind die Feuerlöscheinrichtungen geprüft, und werden die Prüffristen eingehalten?" },
+            { id: "2.2", text: "Sind die Feuerlöscheinrichtungen frei zugänglich und nicht durch Ware, Displays oder sonstige Gegenstände blockiert?" },
+            { id: "2.3", text: "Sind die Prüfsiegel auf den Wandhydranten unbeschädigt?" },
+            { id: "2.4", text: "Sind die Brandschutztüren frei von Zugestellungen und wird ihre Funktion nicht gestört?" },
+            { id: "2.5", text: "Sind die Türhaltevorrichtungen und der Schließfolgeregler des Feuerschutzabschlusses in Ordnung?" },
+            { id: "2.6", text: "Sind die Brandschutztüren ohne Beschädigungen?" },
+            { id: "2.7", text: "Ist ein aktueller Flucht- und Rettungsplan vorhanden?" },
+            { id: "2.8", text: "Ist die Notausgangsbeleuchtung ohne Defekte?" },
+            { id: "2.9", text: "Sind alle Flucht- und Rettungswege sowie Notausgänge in ihrer gesamten Breite ständig freigehalten und im Außenbereich nicht durch Fahrzeuge oder Lagergut blockiert?" },
+            { id: "2.10", text: "Sind alle Notausgänge und -ausstiege jederzeit ohne fremde Hilfsmittel von innen leicht zu öffnen und ist die Bedienbarkeit der Beschläge sichergestellt?" },
+            { id: "2.11", text: "Führen die Notausgänge in sichere Bereiche?" },
+            { id: "2.12", text: "Ist die Brandmeldeanlage funktionsfähig?" },
+            { id: "2.13", text: "Wird die Einfüllöffnung des Presscontainers nach Ladenschluss bzw. Betriebsende konsequent mechanisch verschlossen und gegen unbefugte Nutzung gesichert?" },
+            { id: "2.14", text: "Sind die Technik- und Heizräume frei von brennbaren Materialien (z. B. Kisten, Kartons)?" },
+            { id: "2.15", text: "Sind die Technik- und Heizräume frei von Lagernutzung?" }
+        ]
+    },
+    {
+        id: "sozialräume",
+        name: "Sozialräume",
+        items: [
+            { id: "3.1", text: "Sind die für den Betrieb vorgeschriebenen Arbeitsschutzvorschriften und betrieblichen Sicherheitsinformationen für die Beschäftigten zugänglich und ist eine Brandschutzordnung Teil A vorhanden bzw. ausgehängt, soweit sie für den Betrieb vorgeschrieben ist?" },
+            { id: "3.2", text: "Sind die Kaffeemaschine und andere hitzeentwickelnde Geräte auf einer nicht brennbaren Unterlage abgestellt?" },
+            { id: "3.3", text: "Werden ortsveränderliche elektrische Betriebsmittel (z. B. Leitungen, Steckverbindungen, Leuchten, Geräte) in angemessenen Zeitabständen geprüft?" },
+            { id: "3.4", text: "Dient der Pausenraum primär der Erholung der Beschäftigten und ist er frei von größeren Mengen an betrieblichem Lagergut (z. B. Archivboxen)?" }
+        ]
+    },
+    {
+        id: "erstehilfe",
+        name: "Erste Hilfe",
+        items: [
+            { id: "4.1", text: "Erfüllen die Standorte der Erste-Hilfe-Koffer die Anforderungen an Sichtbarkeit, Erreichbarkeit und Norm-Kennzeichnung gemäß DGUV?" },
+            { id: "4.2", text: "Ist das Erste-Hilfe-Material an allen Standorten in vollständigem Zustand und ist das Verfallsdatum der sterilen Inhalte noch nicht überschritten?" },
+            { id: "4.3", text: "Wird die Dokumentation von Erste-Hilfe-Leistungen ordnungsgemäß geführt?" },
+            { id: "4.4", text: "Ist während der gesamten Öffnungszeit die erforderliche Anzahl an ausgebildeten Ersthelfern gemäß DGUV Vorschrift 1 anwesend?" },
+            { id: "4.5", text: "Ist eine Notrufnummer ausgehängt?" },
+            { id: "4.6", text: "Sind Erste-Hilfe-Anweisungen vorhanden?" }
+        ]
+    },
+    {
+        id: "elektrisch",
+        name: "Elektrische Sicherheit",
+        items: [
+            { id: "5.1", text: "Sind zur Zeit der Begehung keine sichtbaren Beschädigungen an Schaltern und Steckdosen vorhanden?" },
+            { id: "5.2", text: "Sind von der Decke geführte Leitungen und Steckverbindungen durch geeignete mechanische Zugentlastungen (z. B. Stahlseile, Ketten oder spezielle Klemmvorrichtungen) so gesichert, dass keine Zugkräfte auf die elektrischen Kontaktstellen wirken?" },
+            { id: "5.3", text: "Sind Steckdosen und Kabel in einwandfreiem Zustand?" },
+            { id: "5.4", text: "Elektrische Steckverbindungen liegen nicht ungeschützt auf dem Boden, insbesondere in Bereichen (z. B. unter Kühl- oder Tiefkühltruhen)?" },
+            { id: "5.5", text: "Sind provisorische Installationen vermieden?" }
+        ]
+    },
+    {
+        id: "co2-kuehleinrichtungen",
+        name: "CO2 Kühleinrichtungen",
+        items: [
+            { id: "6.1", text: "Wurden Personen, die sich im Bereich von Kühlanlagen oder Kühlhäusern aufhalten, unterwiesen?" },
+            { id: "6.2", text: "Ist die Notentriegelung vorhanden und in Ordnung?" },
+            { id: "6.3", text: "Sind die Sensoren nicht mit Material oder sonstigen Gegenständen verstellt?" },
+            { id: "6.4", text: "Funktioniert die Beleuchtung einwandfrei?" },
+            { id: "6.5", text: "Sind alle Sicherheitsvorrichtungen (Alarmleuchten, Kennzeichnungen, Kühlhaustüren) intakt?" }
+        ]
+    },
+    {
+        id: "kühlhaus",
+        name: "Kühlhaus",
+        items: [
+            { id: "7.1", text: "Ist an allen Beleuchtungen in den Kühlhäusern die Überwurfkappe (Schutzkappe/Schutzglas) montiert?" },
+            { id: "7.2", text: "Ist die Notentriegelung vorhanden und in Ordnung?" },
+            { id: "7.3", text: "Sind die Kühlhaustüren von innen mit dem Rettungswegschild ISO 7010 gekennzeichnet?" },
+            { id: "7.4", text: "Funktioniert die Beleuchtung einwandfrei?" },
+            { id: "7.5", text: "Ist die Notruf-Funktion (wenn vorhanden) in Ordnung und ohne Beschädigungen?" }
+        ]
+    },
+    {
+        id: "lager",
+        name: "Lager und Regale",
+        items: [
+            { id: "8.1", text: "Ist der elektrische Hubwagen geprüft und in einem ordnungsgemäßen Zustand (keine sichtbaren Beschädigungen, funktionsfähige Schutzeinrichtungen)?" },
+            { id: "8.2", text: "Ist der Gabelhubwagen in einem ordnungsgemäßen Zustand ohne sichtbare Beschädigungen?" },
+            { id: "8.3", text: "Sind die Schwerlastregale geprüft?" },
+            { id: "8.4", text: "Ist der Anfahrschutz vorhanden?" },
+            { id: "8.5", text: "Ist die Traglastangabe an den Schwerlastregalen vorhanden?" },
+            { id: "8.6", text: "Befindet sich eine Absturzsicherung an der Rampe?" },
+            { id: "8.7", text: "Ist die Absturzsicherung in einem ordnungsgemäßen Zustand (ohne sichtbare Beschädigungen und mit Kennzeichnung)?" },
+            { id: "8.8", text: "Ist die Müll-/Papierpresse geprüft?" },
+            { id: "8.9", text: "Ist die Müll-/Papierpresse in einem ordnungsgemäßen Zustand (keine sichtbaren Beschädigungen, intakte Schutzeinrichtungen, fester Stand)?" },
+            { id: "8.10", text: "Sind die Verkehrswege so beschaffen, dass kein Risiko zum Stolpern, Ausrutschen oder Umknicken besteht?" }
+        ]
+    },
+    {
+        id: "leergut",
+        name: "Leergut",
+        items: [
+            { id: "9.1", text: "Sind die Annahmegeräte der Leergutrücknahme unbeschädigt und funktionstüchtig – inklusive intakter Schutzeinrichtungen, gesicherter Einzugsstellen und ohne Glasscherben?" },
+            { id: "9.2", text: "Werden Rollbahnen nicht betreten?" },
+            { id: "9.3", text: "Sind beschädigte Paletten/Kisten aussortiert?" },
+            { id: "9.4", text: "Werden Lasten sicher aufgenommen und transportiert?" },
+            { id: "9.5", text: "Wird die PSA zur Verfügung gestellt und getragen?" },
+            { id: "9.6", text: "Werden Abfälle und Bruchmaterial ordnungsgemäß entsorgt?" },
+            { id: "9.7", text: "Werden Stapelhöhen eingehalten?" },
+            { id: "9.8", text: "Ist die Lagerfläche sauber und rutschfrei?" },
+            { id: "9.9", text: "Beträgt die lichte Breite des Wartungsganges zwischen Rollbahn und Wand durchgehend mindestens 0,60 m (an Engstellen kurzzeitig 0,50 m)?" }
+        ]
+    },
+    {
+        id: "praktikanten",
+        name: "Praktikanten",
+        items: [
+            { id: "10.1", text: "Wurde die Unterweisung von Praktikanten und Schüleraushilfen durchgeführt?" },
+            { id: "10.2", text: "Wurde die Unterweisung schriftlich dokumentiert?" },
+            { id: "10.3", text: "Haben die Personen die Inhalte der Unterweisung verstanden?" }
+        ]
+    },
+    {
+        id: "arbeitsmedizin",
+        name: "Arbeitsmedizin",
+        items: [
+            { id: "11.1", text: "Werden die nach der Gefährdungsbeurteilung erforderlichen Pflicht- und Angebotsvorsorgen veranlasst bzw. angeboten und wird den Beschäftigten Wunschvorsorge ermöglicht?" },
+            { id: "11.2", text: "Erfolgte im laufenden Berichtszeitraum eine arbeitsmedizinische Betreuung (z. B. Begehung oder Sprechstunde) bzw. ist diese für das aktuelle Kalenderjahr fest eingeplant?" },
+            { id: "11.3", text: "Erfolgten arbeitsmedizinische Beratungen für Beschäftigte oder Führungskräfte?" },
+            { id: "11.4", text: "Sind Maßnahmen gegen Hauterkrankungen getroffen?" },
+            { id: "11.5", text: "Werden Berichte und Empfehlungen des Betriebsarztes dokumentiert und umgesetzt?" },
+            { id: "11.6", text: "Sind sanitäre Anlagen und Pausenräume sauber, funktionsfähig und ausreichend mit Hygieneartikeln bestückt?" }
+        ]
+    },
+    {
+        id: "backstation",
+        name: "Backstation",
+        items: [
+            { id: "12.1", text: "Sind die Arbeitsgeräte an der Backstation (Backofen, Backbleche, Brotschneidemaschine) in einem ordnungsgemäßen Zustand?" },
+            { id: "12.2", text: "Ist das freistehende Handwaschbecken ohne Beschädigungen?" },
+            { id: "12.3", text: "Sind die Elektroleitungen intakt und bilden keine Stolperstellen?" },
+            { id: "12.4", text: "Sind Zuleitungen, Stecker und Anschlüsse der Backstation ohne erkennbare Beschädigungen und für die eingesetzten Geräte geeignet?" },
+            { id: "12.5", text: "Sind alle Maschinen geprüft und dokumentiert?" },
+            { id: "12.6", text: "Sind Schutzeinrichtungen vorhanden und funktionsfähig?" },
+            { id: "12.7", text: "Sind die erforderlichen Betriebsanweisungen für die Backstation vorhanden und für die Beschäftigten gut zugänglich?" },
+            { id: "12.8", text: "Ist der Backhandschuh für die Backstation in einem ordnungsgemäßen Zustand (kein Verschleiß) und besitzt eine lange Stulpe?" },
+            { id: "12.9", text: "Sind alle Heißgeräte (z. B. Heißtheken, Fritteusen) in technisch einwandfreiem Zustand?" },
+            { id: "12.10", text: "Ist die Brotschneidemaschine aktuell geprüft und inklusive aller Schutzeinrichtungen in einwandfreiem Zustand?" }
+        ]
+    },
+    {
+        id: "serviceabteilung",
+        name: "Serviceabteilung",
+        items: [
+            { id: "13.1", text: "Hängt an den Waschplätzen ein aktueller, auf die Gefährdungsbeurteilung abgestimmter Hautschutzplan gut sichtbar aus?" },
+            { id: "13.2", text: "Werden Hautschutz- und Hautpflegeprodukte zur Verfügung gestellt?" },
+            { id: "13.3", text: "Sind die Arbeitsgeräte im Servicebereich in einem ordnungsgemäßen Zustand?" },
+            { id: "13.4", text: "Bleiben die aufklappbaren Thekenscheiben in der oberen Stellung sicher und selbstständig stehen?" },
+            { id: "13.5", text: "Sind die Glastüren und Glaswände in Augenhöhe gekennzeichnet?" },
+            { id: "13.6", text: "Werden Schneidbretter und Messer regelmäßig gereinigt und farbcodiert verwendet?" },
+            { id: "13.7", text: "Werden Schneidbretter mit Messereinschub verwendet?" },
+            { id: "13.8", text: "Werden Messerhalter verwendet?" },
+            { id: "13.9", text: "Sind die Convenience-Geräte in einem ordnungsgemäßen Zustand?" }
+        ]
+    },
+    {
+        id: "kassenzone",
+        name: "Kassenzone",
+        items: [
+            { id: "14.1", text: "Ist der Fußraum frei von Gegenständen?" },
+            { id: "14.2", text: "Ist der Fußboden im Kassenbereich in einem ordnungsgemäßen Zustand (ohne sichtbare Beschädigungen)?" },
+            { id: "14.3", text: "Sind die serienmäßig eingebauten Heizgeräte im Kassenraum nicht durch brennbares Material zugestellt?" },
+            { id: "14.4", text: "Sind die Kassenstühle in einem funktionsfähigen Zustand?" },
+            { id: "14.5", text: "Ist das Transportband unbeschädigt und weist keine Lücke von über 5 mm auf?" },
+            { id: "14.6", text: "Sind die Einkaufskörbe ordnungsgemäß im vorgesehenen Ständer abgelegt und ragen nicht in den Verkehrsweg hinein, sodass keine Stolpergefahr besteht?" }
+        ]
+    },
+    {
+        id: "gefahrstoffe",
+        name: "Gefahrstoffe",
+        items: [
+            { id: "15.1", text: "Werden Gefahrstoffe unter Beachtung der Zusammenlagerungsregeln nach TRGS 510, insbesondere Abschnitt 13 und Anhang 2, so gelagert, dass gefährliche Wechselwirkungen zwischen verschiedenen Stoffgruppen vermieden werden?" },
+            { id: "15.2", text: "Wird die passende persönliche Schutzausrüstung (z. B. Schutzbrille, Handschuhe) für Tätigkeiten mit Gefahrstoffen zur Verfügung gestellt?" },
+            { id: "15.3", text: "Ist die in den Betriebsanweisungen geforderte Persönliche Schutzausrüstung in unmittelbarer Nähe und einsatzbereit vorhanden?" },
+            { id: "15.4", text: "Sind Sicherheitsdatenblätter verfügbar?" },
+            { id: "15.5", text: "Sind Mitarbeiter unterwiesen?" }
+        ]
+    },
+    {
+        id: "marktleiterbüro",
+        name: "Marktleiterbüro",
+        items: [
+            { id: "16.1", text: "Liegt eine aktuelle Liste sowie Prüfberichte prüfungsbedürftiger Einrichtungen vor?" },
+            { id: "16.2", text: "Sind Maßnahmen getroffen, die den Anreiz zu Raubüberfällen vermindern (z. B. Türspion, feststehender Knauf)?" },
+            { id: "16.3", text: "Ist die Tür während des Umgangs mit Zahlungsmitteln verschlossen?" },
+            { id: "16.4", text: "Werden neue Mitarbeiter vor Aufnahme der Tätigkeit zum Thema Arbeitssicherheit und Brandschutz unterwiesen?" },
+            { id: "16.5", text: "Ist der Fußboden im Büro des Marktleiters frei von Schäden, Verschmutzungen und Stolperstellen?" }
+        ]
+    },
+    {
+        id: "barrierefreies-wc",
+        name: "Barrierefreies WC",
+        items: [
+            { id: "17.1", text: "Hängt die Notrufschnur (Zugschnur) bis maximal 10 cm über dem Fußboden herab, um nach einem Sturz erreichbar zu sein?" },
+            { id: "17.2", text: "Wird der Alarm an eine ständig besetzte Stelle (z. B. Empfang, Leitwarte) weitergeleitet?" },
+            { id: "17.3", text: "Werden die Zugschnüre und Signalgeber in regelmäßigen Intervallen (z. B. monatlich) auf Funktion geprüft?" },
+            { id: "17.4", text: "Sind die Beschäftigten über das Verhalten bei einem Alarm unterwiesen?" },
+            { id: "17.5", text: "Ist sichergestellt, dass die Tür im Notfall von außen entriegelt werden kann (Notentriegelung)?" }
+        ]
+    },
+    {
+        id: "notfall",
+        name: "Notfallmanagement",
+        items: [
+            { id: "18.1", text: "Ist ein Notfallplan vorhanden?" },
+            { id: "18.2", text: "Sind Verhalten bei Brand, Unfall und Evakuierung bekannt?" },
+            { id: "18.3", text: "Sind Zuständigkeiten im Notfall geregelt?" },
+            { id: "18.4", text: "Ist die Alarmierung geregelt?" }
+        ]
+    },
+    {
+        id: "dokumentation",
+        name: "Dokumentation",
+        items: [
+            { id: "19.1", text: "Wird die Dokumentation von Erste-Hilfe-Leistungen ordnungsgemäß geführt und aufbewahrt?" },
+            { id: "19.2", text: "Ist ein Sicherheitsbeauftragter ausgebildet und bestellt?" },
+            { id: "19.3", text: "Ist anhand der Gefährdungsbeurteilung eine ausreichende Anzahl ausgebildeter Brandschutzhelfer sichergestellt und werden Schichtbetrieb sowie Abwesenheiten berücksichtigt?" },
+            { id: "19.4", text: "Erfolgte die letzte Unterweisung zum Umgang mit Zahlungsmitteln innerhalb der letzten 6 Monate?" },
+            { id: "19.5", text: "Sind Unterweisungen dokumentiert?" },
+            { id: "19.6", text: "Wurden bei der Unterweisung aktuelle Änderungen in den betrieblichen Abläufen oder neue Sicherheitstechniken berücksichtigt?" },
+            { id: "19.7", text: "Wurde die Gefährdungsbeurteilung (GBO) erstellt und ist sie auf dem aktuellen Stand?" }
+        ]
+    },
+    {
+        id: "psychische-belastung",
+        name: "Psychische Belastung",
+        items: [
+            { id: "20.1", text: "Werden Wünsche der Beschäftigten bei der Arbeitsplanung berücksichtigt?" },
+            { id: "20.2", text: "Ist die Pausenregelung umgesetzt?" },
+            { id: "20.3", text: "Werden Überstunden gering gehalten?" },
+            { id: "20.4", text: "Werden regelmäßige Teambesprechungen durchgeführt?" },
+            { id: "20.5", text: "Werden neue Mitarbeiter eingearbeitet?" },
+            { id: "20.6", text: "Ist eine Unterweisung zum Thema Brand- und Arbeitsschutz erfolgt?" },
+            { id: "20.7", text: "Hängt ein sogenanntes schwarzes Brett im Sozialraum oder Kassenbüro?" },
+            { id: "20.8", text: "Werden Entscheidungen transparent erläutert?" },
+            { id: "20.9", text: "Gibt es positive Rückmeldungen bei guter Leistung?" },
+            { id: "20.10", text: "Wird konstruktive Kritik geübt?" },
+            { id: "20.11", text: "Gibt es einen Aushang zur Information über die Suchtprävention?" },
+            { id: "20.12", text: "Ist ein betriebliches Wiedereingliederungsmanagement implementiert?" },
+            { id: "20.13", text: "Ist Alleinarbeit in der Gefährdungsbeurteilung berücksichtigt und sind abhängig von den konkreten Gefährdungen geeignete Schutzmaßnahmen festgelegt?" },
+            { id: "20.14", text: "Ist die Betreuung nach einem Überfall organisiert?" },
+            { id: "20.15", text: "Werden Schulungen für den Umgang mit gewalttätigen Situationen ermöglicht?" },
+            { id: "20.16", text: "Beziehen Sie Mitarbeiteranregungen in die Entscheidungsprozesse mit ein?" },
+            { id: "20.17", text: "Wurden Weiterbildungsmöglichkeiten geschaffen bzw. angeboten?" }
+        ]
+    },
+
+    {
+        id: "kundenaufzug",
+        name: "Kundenaufzug",
+        items: [
+        { id: "21.1", text: "Ist der Kundenaufzug (Kabine, Türen, Boden, Beleuchtung, Tragfähigkeitsangabe) äußerlich unbeschädigt und in ordnungsgemäßem Zustand?" },
+        { id: "21.2", text: "Funktionieren die Aufzugstüren, Lichtschranke bzw. Türsensoren einwandfrei und sind die Zugänge frei von Stolperstellen?" },
+        { id: "21.3", text: "Sind Bedientasten, Notruftaste sowie Etagen- bzw. Fahrtrichtungsanzeige funktionsfähig und verständlich beschriftet?" },
+        { id: "21.4", text: "Ist eine funktionierende Notrufeinrichtung vorhanden und ist das Personal über das Verhalten bei eingeschlossenen Kunden unterwiesen?" },
+        { id: "21.5", text: "Liegt die aktuelle Prüfbescheinigung vor, ist die wiederkehrende Prüfung fristgerecht erfolgt und sind festgestellte Mängel abgearbeitet?" },
+        { id: "21.6", text: "Sind die Bereiche vor den Aufzugstüren frei von Waren und Lagergut, eben und ausreichend beleuchtet?" },
+        { id: "21.7", text: "Ist der Aufzug für den Kundenverkehr (inkl. Einkaufswagen und mobilitätseingeschränkte Personen) geeignet und sind Störungshinweise verständlich angebracht?" },
+        { id: "21.8", text: "Ist die Notbefreiung von eingeschlossenen Personen organisatorisch geregelt und sind die Zuständigkeiten intern und extern eindeutig festgelegt?" },
+        { id: "21.9", text: "Ist eine dokumentierte Alarmierungs- und Eskalationskette für eine Aufzugsstörung bzw. eingeschlossene Personen vorhanden und bekannt?" },
+        { id: "21.10", text: "Sind die Kontaktdaten des zuständigen Aufzugsnotdienstes aktuell und für das Objektpersonal jederzeit verfügbar?" },
+        { id: "21.11", text: "Ist eine Notbefreiungsanleitung bzw. eine dokumentierte Vorgehensweise für den Störungsfall vor Ort verfügbar?" },
+        { id: "21.12", text: "Ist geregelt, wie das Objektpersonal im Notfall die Einsatzkräfte bzw. den Aufzugsnotdienst zum betroffenen Aufzug einweist?" },
+        { id: "21.13", text: "Ist das zuständige Personal für die erforderlichen Erstmaßnahmen bei eingeschlossenen Personen unterwiesen bzw. geschult?" },
+        { id: "21.14", text: "Ist sichergestellt, dass eingeschlossene Personen bis zum Eintreffen des zuständigen Fachpersonals angemessen betreut und beruhigt werden?" },
+        { id: "21.15", text: "Ist organisatorisch sichergestellt, dass der vorgeschriebene Aufzugsnotdienst über das Zweiwege-Kommunikationssystem ständig erreichbar bleibt und bei Ausfällen weiterhin sachgerechte Hilfe gewährleistet ist?" }
+    ]
+},
+{
+    id: "lastenaufzug",
+    name: "Lastenaufzug",
+    items: [
+        { id: "22.1", text: "Ist der Lastenaufzug einschließlich Kabine, Türen, Boden, Beleuchtung und Bedienelementen äußerlich unbeschädigt und in ordnungsgemäßem Zustand?" },
+        { id: "22.2", text: "Ist die zulässige Tragfähigkeit deutlich angegeben und sind keine Anzeichen für eine Überlastung oder unsachgemäße Beladung erkennbar?" },
+        { id: "22.3", text: "Funktionieren die Aufzugstüren und vorhandenen Türsicherungen ordnungsgemäß und sind keine offensichtlichen Quetsch- oder Absturzgefahren vorhanden?" },
+        { id: "22.4", text: "Sind die Bereiche vor den Aufzugstüren frei von Waren, Paletten und sonstigen Hindernissen?" },
+        { id: "22.5", text: "Wird der Lastenaufzug bestimmungsgemäß verwendet und sind Hinweise bzw. Verbote zur Personenbeförderung, soweit erforderlich, vorhanden und gut sichtbar?" },
+        { id: "22.6", text: "Sind Bedienelemente, Anzeigen und vorhandene Sicherheitseinrichtungen funktionsfähig und eindeutig gekennzeichnet?" },
+        { id: "22.7", text: "Liegt die erforderliche aktuelle Prüfbescheinigung vor und sind festgestellte Mängel aus der letzten Prüfung abgearbeitet?" },
+        { id: "22.8", text: "Sind die zuständigen Beschäftigten für die sichere Bedienung und Beladung des Lastenaufzugs unterwiesen?" },
+        { id: "22.9", text: "Ist geregelt, wie bei einer Störung oder einem Einschluss vorzugehen ist und sind die zuständigen Ansprechpartner bekannt?" }
+    ]
+},
+    {
+        id: "fluessiggasflaschen",
+        name: "Flüssiggasflaschen",
+        items: [
+            { id: "23.1", group: "Lagerung und Lagerbereich", text: "Werden Flüssiggasflaschen vorzugsweise im Freien bzw. in einem dafür geeigneten Lagerbereich aufbewahrt?" },
+            { id: "23.2", group: "Lagerung und Lagerbereich", text: "Ist anhand der vorhandenen Anzahl und Gesamtmenge der Flüssiggasflaschen geprüft, welche mengenabhängigen Schutzmaßnahmen erforderlich sind?" },
+            { id: "23.3", group: "Lagerung und Lagerbereich", text: "Werden bei mehr als einer Flüssiggasflasche oder mehr als 50 kg Flüssiggas die weitergehenden Anforderungen an ein Flüssiggaslager berücksichtigt?" },
+            { id: "23.4", group: "Lagerung und Lagerbereich", text: "Werden Flüssiggasflaschen stehend gelagert und sind sie gegen Umfallen oder Herabfallen gesichert?" },
+            { id: "23.5", group: "Lagerung und Lagerbereich", text: "Ist der Lagerbereich gegen unbefugten Zugriff geschützt?" },
+            { id: "23.6", group: "Lagerung und Lagerbereich", text: "Sind die Flüssiggasflaschen vor unzulässiger Wärmeeinwirkung geschützt und werden die erforderlichen Abstände bzw. Schutzmaßnahmen eingehalten?" },
+            { id: "23.7", group: "Flaschenzustand und Dichtheit", text: "Sind die Flaschenventile geschlossen und gegen Beschädigung geschützt?" },
+            { id: "23.8", group: "Flaschenzustand und Dichtheit", text: "Werden zurückgenommene bzw. teilentleerte Flüssiggasflaschen vor der Rückführung in das Lager auf Ventildichtheit kontrolliert?" },
+            { id: "23.9", group: "Flaschenzustand und Dichtheit", text: "Werden beschädigte, undichte oder sonst auffällige Flüssiggasflaschen sofort ausgesondert und sicher behandelt?" },
+            { id: "23.10", group: "Flaschenzustand und Dichtheit", text: "Sind Flüssiggasflaschen und ihre Kennzeichnungen so beschaffen, dass Inhalt und Gefahren eindeutig erkennbar sind?" },
+            { id: "23.11", group: "Ausgabe, Rücknahme und Transport", text: "Ist die Ausgabe von Flüssiggasflaschen an Kundinnen und Kunden organisatorisch geregelt?" },
+            { id: "23.12", group: "Ausgabe, Rücknahme und Transport", text: "Ist die Rücknahme von leeren bzw. teilentleerten Flüssiggasflaschen organisatorisch geregelt?" },
+            { id: "23.13", group: "Ausgabe, Rücknahme und Transport", text: "Werden zurückgenommene Flüssiggasflaschen zeitnah in den vorgesehenen Lagerbereich gebracht?" },
+            { id: "23.14", group: "Ausgabe, Rücknahme und Transport", text: "Wird vermieden, Flüssiggasflaschen unzulässig im Verkaufsraum oder auf Verkehrs- und Fluchtwegen abzustellen oder zu lagern?" },
+            { id: "23.15", group: "Ausgabe, Rücknahme und Transport", text: "Stehen für den innerbetrieblichen Transport geeignete Transporthilfen zur Verfügung und werden die Flaschen gegen Umfallen bzw. Herabfallen gesichert?" },
+            { id: "23.16", group: "Brand- und Explosionsschutz", text: "Ist der Lagerbereich frei von wirksamen Zündquellen und werden Brand- und Explosionsgefährdungen berücksichtigt?" },
+            { id: "23.17", group: "Brand- und Explosionsschutz", text: "Sind die aufgrund der Gefährdungsbeurteilung erforderlichen Sicherheits- und Verbotskennzeichnungen am Lagerbereich vorhanden und gut sichtbar?" },
+            { id: "23.18", group: "Brand- und Explosionsschutz", text: "Ist der Flüssiggas-Lagerbereich in vorhandenen Feuerwehrplänen sowie den betrieblichen Brandschutz- und Notfallunterlagen berücksichtigt?" },
+            { id: "23.19", group: "Brand- und Explosionsschutz", text: "Sind für den Brand- oder Gasaustrittsfall geeignete Alarmierungs- und Verhaltensmaßnahmen festgelegt und den betroffenen Beschäftigten bekannt?" },
+            { id: "23.20", group: "Organisation, Unterweisung und PSA", text: "Liegt für den Umgang mit Flüssiggasflaschen eine aktuelle Betriebsanweisung vor?" },
+            { id: "23.21", group: "Organisation, Unterweisung und PSA", text: "Werden Beschäftigte vor Aufnahme der Tätigkeit und danach mindestens jährlich über Gefährdungen und Schutzmaßnahmen beim Umgang mit Flüssiggasflaschen unterwiesen?" },
+            { id: "23.22", group: "Organisation, Unterweisung und PSA", text: "Werden die Unterweisungen dokumentiert?" },
+            { id: "23.23", group: "Organisation, Unterweisung und PSA", text: "Tragen Beschäftigte bei der Handhabung den anhand der Gefährdungsbeurteilung erforderlichen Fuß- und Handschutz?" },
+            { id: "23.24", group: "Organisation, Unterweisung und PSA", text: "Ist die Gefährdungsbeurteilung für Lagerung, Ausgabe, Rücknahme und innerbetrieblichen Transport der Flüssiggasflaschen aktuell?" }
+        ]
+    }
+    ,
+    {
+        id: "beleuchtung",
+        name: "Beleuchtung",
+        items: [
+            { id: "24.1", group: "Verkaufsraum", text: "Ist die Beleuchtung im Verkaufsraum ausreichend, funktionsfähig und ohne auffällige dunkle Bereiche oder störende Blendung (ASR A3.4: mindestens 300 lx im Verkaufsbereich)?" },
+            { id: "24.2", group: "Lager", text: "Ist die Beleuchtung im Lager ausreichend, funktionsfähig und für die dort ausgeführten Tätigkeiten und Sehaufgaben geeignet?" },
+            { id: "24.3", group: "Servicebereich", text: "Ist die Beleuchtung im Servicebereich ausreichend, funktionsfähig und für die dort ausgeführten Tätigkeiten und Sehaufgaben geeignet?" }
+        ]
+    }
+
+];
