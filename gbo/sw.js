@@ -3,7 +3,7 @@
 // ==========================================================================
 // Offline-Unterstützung für die ASiC-Handel-App.
 //
-// SERVICE-WORKER-VERSION: 2.0.20
+// SERVICE-WORKER-VERSION: 2.0.24 (immer identisch zu CACHE_NAME und APP_REVISION in js/app.js halten)
 //
 // Bei einer neuen technischen Version:
 //   1. Alle precachten App-Dateien werden neu vom Server geladen.
@@ -19,7 +19,7 @@
 //   - Fotos
 // ==========================================================================
 
-const CACHE_NAME = 'asic-handel-v2.0.20';
+const CACHE_NAME = 'asic-handel-v2.0.24';
 
 
 // ==========================================================================
@@ -51,10 +51,17 @@ const PRECACHE_URLS = [
     './css/styles.css',
     './css/gbo.css',
 
+    './fonts/space-grotesk-latin-500-normal.woff2',
+    './fonts/space-grotesk-latin-600-normal.woff2',
+    './fonts/space-grotesk-latin-700-normal.woff2',
+
     './js/app.js',
     './js/market-store.js',
     './js/market-ui.js',
     './js/gbo-v2.js',
+    './js/gbo-photos.js',
+    './js/gbo-pdf.js',
+    './js/storage-check.js',
     './js/gbo-data.js',
     './js/gbo.js',
     './js/access-gate.js',
@@ -211,6 +218,17 @@ self.addEventListener('fetch', event => {
 
     // Nur GET-Anfragen behandeln
     if (event.request.method !== 'GET') {
+        return;
+    }
+
+    // NAS-Endpunkte (list/load/save.php) und fremde Origins werden NIE
+    // gecacht: sonst wuerden offline veraltete Dateilisten bzw. Begehungs-
+    // daten aus dem Cache ausgeliefert.
+    const requestUrl = new URL(event.request.url);
+    if (
+        requestUrl.origin !== self.location.origin ||
+        /\.php$/i.test(requestUrl.pathname)
+    ) {
         return;
     }
 

@@ -68,10 +68,10 @@
   <h1>Gefährdungsbeurteilung</h1>
   <p>Aufbau, Datenhaltung, Bewertungslogik, Funktionen und fachliche Quellen der GBO in ASiC Handel.</p>
   <div class="doku-meta-grid">
-    <div class="doku-meta-item"><div class="doku-meta-label">App</div><div class="doku-meta-value">ASiC Handel Rev. 2.0</div></div>
-    <div class="doku-meta-item"><div class="doku-meta-label">Stand</div><div class="doku-meta-value">9.10.2026</div></div>
-    <div class="doku-meta-item"><div class="doku-meta-label">GBO-Daten</div><div class="doku-meta-value">1045 Fragen · 92 Module</div></div>
-    <div class="doku-meta-item"><div class="doku-meta-label">Service Worker</div><div class="doku-meta-value">v2.0.20</div></div>
+    <div class="doku-meta-item"><div class="doku-meta-label">App</div><div class="doku-meta-value">ASiC Handel Rev. 2.0.24</div></div>
+    <div class="doku-meta-item"><div class="doku-meta-label">Stand</div><div class="doku-meta-value"><span data-zahl="revision_datum">10.10.2026</span></div></div>
+    <div class="doku-meta-item"><div class="doku-meta-label">GBO-Daten</div><div class="doku-meta-value"><span data-zahl="gbo_fragen">1045</span> Fragen · <span data-zahl="gbo_module">92</span> Module</div></div>
+    <div class="doku-meta-item"><div class="doku-meta-label">Service Worker</div><div class="doku-meta-value">v2.0.24</div></div>
   </div>
 </div>
 
@@ -88,7 +88,7 @@
   <a href="#oberflaeche">10 Menüs &amp; Oberfläche</a>
   <a href="#mobil">11 Mobile Bedienung</a>
   <a href="#sicherung">12 Sicherung</a>
-  <a href="#druck">13 Druck/PDF</a>
+  <a href="#druck">13 Druck, PDF, Mail</a>
   <a href="#fragenbestand">14 Fragenbestand</a>
   <a href="#quellen">15 Quellen</a>
   <a href="#systemstand">16 Systemstand</a>
@@ -101,12 +101,14 @@
   <div class="card doku-card">
     <div class="doku-table-wrap"><table class="doku-table">
       <tr><th>Baustein</th><th>Beschreibung</th></tr>
-      <tr><td>GBO-Teilstand</td><td>Betriebsdaten, Modulauswahl, Bewertungen/Antworten, Maßnahmen- und Wirksamkeitsdaten, Bildbelege und Begehungs-Vormerkungen. Lokale Speicherung im Browser.</td></tr>
+      <tr><td>GBO-Teilstand</td><td>Betriebsdaten, Modulauswahl, Bewertungen/Antworten, Maßnahmen- und Wirksamkeitsdaten, Angaben zu den Bildbelegen (Dateiname, Kennzeichen, Vorschaubild) und Begehungs-Vormerkungen. Lokale Speicherung im Browser (<code>localStorage</code>, Schlüssel <code>asicGboStateV1</code>).</td></tr>
+      <tr><td>GBO-Bildspeicher</td><td>Die Bilddateien der Bildbelege liegen in der eigenen IndexedDB <code>asicGboPhotos</code> (<code>js/gbo-photos.js</code>), getrennt von den Fotos der Begehung.</td></tr>
+      <tr><td>Speicherprüfung</td><td><code>js/storage-check.js</code> prüft vor dem Speichern eines Fotos den verfügbaren Platz und gibt Warnungen aus (Abschnitt 8).</td></tr>
       <tr><td>Begehungs-Teilstand</td><td>Daten des Prüfkatalogs. Bleibt von der GBO getrennt; eine neue Begehung setzt die GBO nicht zurück.</td></tr>
       <tr><td>ASiC-Marktcontainer</td><td>Fasst beide Teilstände für die gemeinsame Sicherung bzw. Server-Speicherung zusammen, ohne sie inhaltlich zu vermischen. Formatversion 2.</td></tr>
       <tr><td>Server / NAS</td><td>Beide Bereiche verwenden dieselbe in den Einstellungen hinterlegte Server-Basis-Adresse und denselben optionalen Zugriffsschlüssel.</td></tr>
     </table></div>
-    <div class="doku-box"><div class="doku-box-title">Datenstand</div>1045 GBO-Fragen mit 1045 eindeutigen Fragen-IDs in 92 Modulen. Die Zahlen beziehen sich auf die ausgelieferte Datendatei.</div>
+    <div class="doku-box"><div class="doku-box-title">Datenstand</div><span data-zahl="gbo_fragen">1045</span> GBO-Fragen mit <span data-zahl="gbo_eindeutig">1045</span> eindeutigen Fragen-IDs in <span data-zahl="gbo_module">92</span> Modulen. Die Zahlen werden aus der ausgelieferten Datendatei <code>js/gbo-data.js</code> gelesen.</div>
   </div>
 </section>
 
@@ -246,12 +248,32 @@
   <h2>8. Bildbelege</h2>
   <p class="doku-lead">Fotos werden direkt an der jeweiligen GBO-Frage dokumentiert.</p>
   <div class="card doku-card">
-    <h3>Aufnahme und Speicherung</h3>
-    <p>An der Frage stehen die Schaltflächen <b>Kamera</b> und <b>Datei auswählen</b> sowie <b>Entfernen</b> zur Verfügung; es können ausschließlich Bilder angehängt werden. Jedes Bild wird auf maximal 1024 Pixel Kantenlänge und JPEG-Qualität 62 % verkleinert, entsprechend dem Prüfkatalog.</p>
-    <p>Das komprimierte Bild wird als eingebettete Data URL im Antwortobjekt der zugehörigen Frage gespeichert. Es liegt damit im lokalen GBO-Datenbestand, wird in die JSON-Sicherung aufgenommen und beim Import zusammen mit dem Antwortobjekt wiederhergestellt.</p>
+    <h3>Aufnahme und Verkleinerung</h3>
+    <p>An der Frage stehen die Schaltflächen <b>Kamera</b> und <b>Datei auswählen</b> sowie <b>Entfernen</b> zur Verfügung; es können ausschließlich Bilder angehängt werden (Originalgröße höchstens 12 MB). Jedes Bild wird auf maximal 1024 Pixel Kantenlänge und JPEG-Qualität 62 % verkleinert, entsprechend dem Prüfkatalog.</p>
+
+    <h3>Speicherung</h3>
+    <p>Das verkleinerte Bild wird als Datei in der IndexedDB <code>asicGboPhotos</code> gespeichert (Speicher <code>photos</code>, Schlüssel = Fragen-ID). Im GBO-Teilstand (<code>localStorage</code>) stehen nur der Dateiname, ein Kennzeichen (<code>photoStamp</code>), die Markierung <code>hasPhoto</code> und ein kleines Vorschaubild (<code>photoThumb</code>, höchstens 240 Pixel, JPEG-Qualität 50 %).</p>
+    <p>Das Kennzeichen verbindet den GBO-Teilstand mit der gespeicherten Datei. Nur wenn beide übereinstimmen, wird das Originalbild angezeigt. Stimmt es nicht überein, zeigt die Oberfläche das Vorschaubild mit dem Hinweis „Vorschau“.</p>
+
+    <h3>Verhalten auf einem anderen Gerät</h3>
+    <p>Der GBO-Teilstand wird mit JSON-Sicherung und Marktcontainer übertragen, die Bilddateien nicht. Auf einem anderen Gerät sind deshalb nur die Vorschaubilder sichtbar; das Originalbild bleibt auf dem Gerät, mit dem es aufgenommen wurde. Vorschaubilder lassen sich dort nicht als Original verwenden, aber entfernen.</p>
+
+    <h3>Speicherprüfung und Warnmeldungen</h3>
+    <p>Vor dem Speichern eines Bildes fragt <code>js/storage-check.js</code> über <code>navigator.storage.estimate()</code> den belegten und den verfügbaren Platz ab. Die Prüfung gilt für die Bildbelege der GBO, die Fotos der Begehung und die Maßnahmenfotos.</p>
+    <div class="doku-table-wrap"><table class="doku-table">
+      <tr><th>Lage</th><th>Verhalten</th></tr>
+      <tr><td>Freier Platz kleiner als der Bedarf (Bildgröße × 1,3 plus 256 KB Reserve)</td><td>Das Bild wird nicht gespeichert. Eine Meldung nennt Bedarf und freien Platz.</td></tr>
+      <tr><td>Belegung nach dem Speichern mindestens 80 %</td><td>Warnung. Bei den GBO-Bildbelegen kann der Nutzer wählen, ob er trotzdem speichert; bei den Fotos der Begehung erscheint ein Hinweis.</td></tr>
+      <tr><td>Browser liefert keine Werte</td><td>Keine Vorabprüfung. Ein Speicherfehler (<code>QuotaExceededError</code>) wird abgefangen und gemeldet.</td></tr>
+    </table></div>
+    <p>Die Ansichten „Bildbelege“ und „Dokumentation“ der GBO zeigen zusätzlich die Belegung des Gerätespeichers und des Browserspeichers (<code>localStorage</code>, Grenze etwa 5 MB, Warnung ab 80 %). Beim Speichern des GBO-Teilstands wird ein voller Browserspeicher gemeldet. Zusätzlich bittet die App den Browser einmalig, die Daten nicht selbstständig zu löschen (<code>navigator.storage.persist()</code>); ob der Browser zustimmt, entscheidet er selbst.</p>
+
+    <h3>Bilder aus früheren Ständen</h3>
+    <p>Enthält ein vorhandener GBO-Teilstand oder eine eingelesene JSON-Sicherung noch eingebettete Bilddaten (<code>photoData</code>), werden sie beim nächsten Öffnen der GBO automatisch in die IndexedDB übernommen. Dabei entsteht das Vorschaubild, und die eingebetteten Daten werden aus dem Teilstand entfernt.</p>
+
     <h3>Menüansicht „Bildbelege“</h3>
-    <p>Die Ansicht durchsucht alle gespeicherten GBO-Antworten nach eingebetteten Bilddaten – unabhängig davon, ob das zugehörige Modul derzeit aktiviert ist. Jede Bildkarte zeigt Modul, Themenbereich, Fragen-ID und Fragetext; ein vorhandener Foto-/Anhangbezug wird ergänzend ausgegeben.</p>
-    <p>Das Öffnen einer Vorschau ändert den Datenbestand nicht. Das Entfernen eines Bildes verändert das zugehörige Antwortobjekt und wirkt sich auf die nächste Sicherung aus.</p>
+    <p>Die Ansicht durchsucht alle gespeicherten GBO-Antworten nach Bildbelegen – unabhängig davon, ob das zugehörige Modul derzeit aktiviert ist. Jede Bildkarte zeigt Modul, Themenbereich, Fragen-ID und Fragetext; ein vorhandener Foto-/Anhangbezug wird ergänzend ausgegeben.</p>
+    <p>Das Öffnen einer Vorschau ändert den Datenbestand nicht. Das Entfernen eines Bildes löscht die Datei aus der IndexedDB und die Angaben aus dem Antwortobjekt; es wirkt sich auf die nächste Sicherung aus.</p>
     <div class="doku-box"><div class="doku-box-title">Datenschutz</div>Es sollen keine unnötigen personenbezogenen oder besonders sensiblen Angaben aufgenommen werden.</div>
   </div>
 </section>
@@ -288,7 +310,7 @@
       <tr><td>Gefährdungen beurteilen</td><td>Bewertung der Fragen und Dokumentation von Maßnahmen.</td></tr>
       <tr><td>Hinweise aus Begehungen</td><td>Zuordnung von Begehungsbefunden zu GBO-Fragen.</td></tr>
       <tr><td>Bildbelege</td><td>Sammelansicht aller gespeicherten Fotos.</td></tr>
-      <tr><td>Dokumentation</td><td>JSON-Sicherung/-Import sowie Ausgabe von Gesamt-GBO und Maßnahmenliste.</td></tr>
+      <tr><td>Dokumentation</td><td>JSON-Sicherung/-Import sowie PDF-Ausgabe (Drucken, Teilen, Mail) von Gesamt-GBO und Maßnahmenliste.</td></tr>
     </table></div>
     <p>Die Menütrennung ändert weder Frage-IDs noch den Grundsatz, dass Begehungshinweise keine automatische GBO-Bewertung auslösen. Die Aktionsschaltflächen sind kompakt gestaltet, damit Fragen, Befunde und Bearbeitungsinhalte mehr Raum erhalten.</p>
   </div>
@@ -307,7 +329,7 @@
       <tr><td>Bewertung</td><td>Antwortmöglichkeiten untereinander angeordnet.</td></tr>
       <tr><td>Maßnahmen / Aktionen</td><td>Schaltflächen untereinander, mindestens 42 px Touch-Höhe.</td></tr>
       <tr><td>Begehung ↔ GBO</td><td>Zuordnung, Herkunftshinweis und Aktionen vollständig erreichbar.</td></tr>
-      <tr><td>Sicherung / Druck</td><td>Aktionsschaltflächen füllen die verfügbare Breite; Druck und JSON-Sicherung arbeiten unverändert.</td></tr>
+      <tr><td>Sicherung / Druck</td><td>Aktionsschaltflächen füllen die verfügbare Breite; die beiden PDF-Ausgaben stehen auf schmalen Bildschirmen untereinander.</td></tr>
     </table></div>
   </div>
 </section>
@@ -318,7 +340,7 @@
   <p class="doku-lead">Die GBO kann einzeln oder gemeinsam mit der Begehung gesichert werden.</p>
   <div class="card doku-card">
     <h3>JSON-Sicherung</h3>
-    <p>Die JSON-Sicherung enthält den vollständigen GBO-Zustand einschließlich Bildbelegen und kann wieder eingelesen werden.</p>
+    <p>Die JSON-Sicherung enthält den vollständigen GBO-Teilstand und kann wieder eingelesen werden. Von den Bildbelegen enthält sie nur Dateiname, Kennzeichen und Vorschaubild, nicht die Bilddateien selbst.</p>
     <p>Dateinamensschema: <code>GBO_Sicherung_Markt_[Marktnummer]_[Datum].json</code></p>
     <p>Marktnummer und Datum stammen aus den Betriebsdaten; das Datum wird für den Dateinamen in <code>JJJJ-MM-TT</code> normalisiert.</p>
 
@@ -326,16 +348,55 @@
     <p>Bei der Gesamtsicherung bzw. Server-Speicherung werden Begehung und GBO gemeinsam im ASiC-Marktcontainer (Formatversion 2) übertragen, bleiben aber getrennte Teilstände. Einzel-Sicherungen der Begehung und der GBO bleiben einlesbar.</p>
 
     <h3>GBO zurücksetzen</h3>
-    <p>Vor dem Löschen erscheint eine Sicherheitsabfrage. Nach Bestätigung werden Auswahl, Bewertungen/Antworten, Maßnahmen- und Wirksamkeitsdaten sowie Begehungs-Vormerkungen zurückgesetzt. Die Begehung und die zentralen NAS-/Servereinstellungen bleiben erhalten.</p>
+    <p>Vor dem Löschen erscheint eine Sicherheitsabfrage. Nach Bestätigung werden Auswahl, Bewertungen/Antworten, Bildbelege (einschließlich der Bilddateien in der IndexedDB), Maßnahmen- und Wirksamkeitsdaten sowie Begehungs-Vormerkungen zurückgesetzt. Die Begehung und die zentralen NAS-/Servereinstellungen bleiben erhalten.</p>
   </div>
 </section>
 
 <!-- 13 -->
 <section class="doku-section" id="druck">
-  <h2>13. Druck und PDF</h2>
-  <p class="doku-lead">Zwei Ausgaben stehen zur Verfügung: Gesamt-GBO und Maßnahmenliste.</p>
+  <h2>13. Druck, PDF, Teilen und Mail</h2>
+  <p class="doku-lead">Zwei Ausgaben stehen zur Verfügung: Gesamt-GBO und Maßnahmenliste. Beide sind echte PDF-Dateien.</p>
   <div class="card doku-card">
-    <p>Beide verwenden denselben roten Dokumentkopf im Stil der Begehung. Betriebsdaten und GBO-Fortschritt werden automatisch übernommen. Über die Browser-Druckfunktion erfolgt die Ausgabe auf Papier oder als PDF.</p>
+    <h3>Aktionen</h3>
+    <p>Im Menü „Dokumentation“ gibt es für jede Ausgabe drei Schaltflächen. Das PDF wird mit jsPDF (<code>js/gbo-pdf.js</code>) auf dem Gerät erzeugt.</p>
+    <div class="doku-table-wrap"><table class="doku-table">
+      <tr><th>Aktion</th><th>Verhalten</th></tr>
+      <tr><td>Drucken (PDF)</td><td>Öffnet das PDF in einem neuen Tab; gedruckt wird über das Teilen-Symbol des Geräts. Blockiert der Browser das neue Fenster, wird das PDF stattdessen heruntergeladen.</td></tr>
+      <tr><td>PDF teilen</td><td>Öffnet das Teilen-Menü des Geräts mit der PDF-Datei sowie Betreff und Text für die Mail. Unterstützt das Gerät das Teilen nicht, wird die Datei heruntergeladen.</td></tr>
+      <tr><td>Mail vorbereiten</td><td>Öffnet einen neuen Mail-Entwurf mit Betreff und Text, ohne Anhang. Der Anhang lässt sich aus einer Web-App heraus nicht setzen; dafür dient „PDF teilen“.</td></tr>
+    </table></div>
+    <p>Die Dateien heißen <code>GBO_Gesamt_Markt_[Marktnummer]_[Datum].pdf</code> und <code>GBO_Massnahmen_Markt_[Marktnummer]_[Datum].pdf</code>.</p>
+
+    <h3>Mail-Betreff und Mail-Text</h3>
+    <p>Betreff: „Gefährdungsbeurteilung Markt [Nummer]“, bei der Maßnahmenliste „Gefährdungsbeurteilung – Maßnahmenliste Markt [Nummer]“. Der Text wird aus den Betriebsdaten gebildet:</p>
+    <ul>
+      <li>Marktnummer, Straße, PLZ/Ort und Stand (Datum)</li>
+      <li>Kurzstatus: beantwortete Prüffragen, Anzahl mit Handlungs- bzw. Beratungsbedarf, offene Maßnahmen und davon mit abgelaufener Frist</li>
+      <li>Bitte, die Maßnahmen bis zu den genannten Fristen umzusetzen und mit Datum zu dokumentieren</li>
+      <li>Grußformel mit dem Namen des Prüfers (falls eingetragen) und „Fachkraft für Arbeitssicherheit (SiFa)“</li>
+    </ul>
+
+    <h3>Aufbau der Gesamt-GBO</h3>
+    <ul>
+      <li><b>Deckblatt:</b> Betriebsdaten, Status der GBO mit Fortschrittsbalken und sechs Kennzahlen (Handlungsbedarf, Beratungsbedarf, Frist abgelaufen, Ausreichend, Nicht zutreffend, Nicht bewertet).</li>
+      <li><b>Gliederung:</b> nach den fachlichen Gesamtgruppen und darin nach Bereichen/Modulen. Jeder Bereich zeigt, wie viele Fragen beantwortet sind.</li>
+      <li><b>Kompakte Zeile</b> für Fragen mit „Ausreichend geschützt“, „Nicht zutreffend“ oder ohne Bewertung (Kennung, Thema, Frage, Status). Vorhandene Schutzmaßnahmen und ein Foto-/Anhangbezug werden darunter ergänzt, wenn sie eingetragen sind.</li>
+      <li><b>Ausführlicher Block</b> für Fragen mit Handlungs- oder Beratungsbedarf: Prüffrage, Feststellung, vorhandene Schutzmaßnahmen, Maßnahmen (gewählte Vorschläge und zusätzliche Maßnahme), Foto-/Anhangbezug, Verantwortlicher, Frist, Umsetzung und Wirksamkeit. Bei Handlungsbedarf folgen Quelle und Hinweis.</li>
+    </ul>
+
+    <h3>Aufbau der Maßnahmenliste</h3>
+    <p>Sie enthält alle Fragen mit Handlungs- oder Beratungsbedarf sowie alle Fragen mit hinterlegter zusätzlicher Maßnahme. Die Tabelle hat vier Spalten: Bereich/Frage, Feststellung/Maßnahme (einschließlich der gewählten Maßnahmenvorschläge), Verantwortlich sowie Frist/Status mit Umsetzung und Wirksamkeit. Der Tabellenkopf wiederholt sich auf jeder Seite; abgelaufene Fristen sind rot markiert.</p>
+
+    <h3>Bilder</h3>
+    <p>Ein Bildbeleg erscheint bei der jeweiligen Frage, in der Maßnahmenliste unter dem Eintrag. Liegt das Originalbild auf dem Gerät, wird es verwendet, sonst das Vorschaubild mit dem Zusatz „(Vorschau)“. Verwendet werden JPEG- und PNG-Bilder; andere Formate werden durch das Vorschaubild ersetzt.</p>
+
+    <h3>Seitenaufbau</h3>
+    <ul>
+      <li>Texte brechen automatisch um; ein Block wird möglichst nicht über zwei Seiten getrennt.</li>
+      <li>Ab Seite 2 steht oben Titel, Markt und Datum, unten Revision, Erstellungsdatum und „Seite x von y“.</li>
+      <li>Die PDF-Standardschrift kennt nicht alle Sonderzeichen. Nicht darstellbare Zeichen werden ersetzt (zum Beispiel Pfeil durch „-&gt;“) oder weggelassen.</li>
+      <li>Der Umfang richtet sich nach der Auswahl: je mehr Fragen und Bilder, desto größer die Datei.</li>
+    </ul>
   </div>
 </section>
 
@@ -405,10 +466,10 @@
   <div class="card doku-card">
     <div class="doku-table-wrap"><table class="doku-table">
       <tr><th>Merkmal</th><th>Wert</th></tr>
-      <tr><td>Anwendung</td><td>ASiC Handel · Rev. 2.0</td></tr>
-      <tr><td>Stand</td><td>9.10.2026</td></tr>
-      <tr><td>Service Worker</td><td>v2.0.20</td></tr>
-      <tr><td>Fragenbestand</td><td>1045 Fragen, 1045 eindeutige Fragen-IDs, 92 Module</td></tr>
+      <tr><td>Anwendung</td><td>ASiC Handel · Rev. 2.0.24</td></tr>
+      <tr><td>Stand</td><td><span data-zahl="revision_datum">10.10.2026</span></td></tr>
+      <tr><td>Service Worker</td><td>v2.0.24</td></tr>
+      <tr><td>Fragenbestand</td><td><span data-zahl="gbo_fragen">1045</span> Fragen, <span data-zahl="gbo_eindeutig">1045</span> eindeutige Fragen-IDs, <span data-zahl="gbo_module">92</span> Module</td></tr>
       <tr><td>Sicherungsformat</td><td>GBO-JSON; ASiC-Marktcontainer Formatversion 2</td></tr>
     </table></div>
   </div>
@@ -418,7 +479,7 @@
 
 <footer class="app-footer">
   <div class="app-footer-links"><a href="gbo.html">Gefährdungsbeurteilung</a><a href="gbo-hilfe.html">FAQ GBO</a><a href="gbo-dokumentation.html">Technische Dokumentation GBO</a><a href="hilfe.html">FAQ Begehung</a></div>
-  <div class="app-footer-meta"><div>Rev. 2.0 · Stand 9.10.2026</div><div>© <span class="js-current-year">2026</span> Andreas Zott – Alle Rechte vorbehalten</div></div>
+  <div class="app-footer-meta"><div>Rev. 2.0.24 · Stand 10.10.2026</div><div>© <span class="js-current-year">2026</span> Andreas Zott – Alle Rechte vorbehalten</div></div>
 </footer>
 <script>document.querySelectorAll('.js-current-year').forEach(el=>el.textContent=new Date().getFullYear());</script>
 </body>

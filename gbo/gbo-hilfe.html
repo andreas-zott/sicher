@@ -115,7 +115,7 @@
       <tr><td>Gefährdungen beurteilen</td><td>Fragen fachlich bewerten und bei Bedarf Maßnahmen dokumentieren.</td></tr>
       <tr><td>Hinweise aus Begehungen</td><td>Befunde einer passenden GBO-Frage zuordnen und zur Prüfung vormerken.</td></tr>
       <tr><td>Bildbelege</td><td>Gespeicherte Fotos mit Modul, Bereich, Fragen-ID und Fragetext ansehen.</td></tr>
-      <tr><td>Dokumentation</td><td>JSON sichern und importieren sowie Gesamt-GBO und Maßnahmenliste ausgeben.</td></tr>
+      <tr><td>Dokumentation</td><td>JSON sichern und importieren sowie Gesamt-GBO und Maßnahmenliste als PDF drucken, teilen oder per Mail vorbereiten.</td></tr>
     </table></div>
   </div></div>
 </section>
@@ -125,7 +125,7 @@
   <h2>3. Themen und Fragen finden</h2>
   <p class="doku-lead">Die GBO ist vierstufig aufgebaut: Hauptblock → Bereich/Modul → Untergruppe → Frage.</p>
   <details class="card faq-item">
-    <summary><span><span class="faq-tag">Struktur</span>Wie finde ich mich in 1045 Fragen zurecht?</span></summary>
+    <summary><span><span class="faq-tag">Struktur</span>Wie finde ich mich in <span data-zahl="gbo_fragen">1045</span> Fragen zurecht?</span></summary>
     <div class="faq-body">
       <p>Die sieben Hauptblöcke sind:</p>
       <ul>
@@ -267,8 +267,26 @@
   <details class="card faq-item">
     <summary><span><span class="faq-tag">Daten</span>Wo werden die Bilder gespeichert?</span></summary>
     <div class="faq-body">
-      <p>Die komprimierten Bilder liegen im lokalen GBO-Datenbestand, werden in die JSON-Sicherung aufgenommen und beim Import wiederhergestellt.</p>
+      <p>Die Bilder liegen auf dem Gerät, mit dem Sie sie aufgenommen haben, in einem eigenen Speicherbereich der App. Sie bleiben dort auch nach „Begehung zurücksetzen“ erhalten; nur „GBO zurücksetzen“ löscht sie.</p>
+      <p>In der JSON-Sicherung und im Marktcontainer steht pro Bild nur ein kleines Vorschaubild, nicht das Bild selbst. Wer die GBO auf einem anderen Gerät öffnet, sieht deshalb die Vorschau.</p>
       <div class="doku-box"><div class="doku-box-title">Datenschutz</div><p>Bitte keine unnötigen personenbezogenen oder besonders sensiblen Angaben aufnehmen.</p></div>
+    </div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Ansicht</span>Was bedeutet „Vorschau“ an einem Bild?</span></summary>
+    <div class="faq-body">
+      <p>Das Original liegt nicht auf diesem Gerät, zum Beispiel weil die GBO von einem anderen Gerät oder vom Server geladen wurde. Sie sehen dann nur das kleine Vorschaubild. Zur Dokumentation reicht es meist aus. Wollen Sie das Originalbild, nehmen Sie das Foto auf diesem Gerät neu auf; es ersetzt die Vorschau.</p>
+    </div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Speicher</span>Was passiert, wenn der Speicher knapp wird?</span></summary>
+    <div class="faq-body">
+      <p>Vor jedem neuen Bild prüft die App den freien Platz:</p>
+      <ul>
+        <li><b>Speicher zu mindestens 80 % belegt:</b> Sie bekommen eine Warnung und können wählen, ob Sie das Bild trotzdem speichern.</li>
+        <li><b>Nicht genug Platz:</b> Das Bild wird nicht gespeichert. Die Meldung nennt den Bedarf und den freien Platz.</li>
+      </ul>
+      <p>In den Menüs „Bildbelege“ und „Dokumentation“ sehen Sie jederzeit, wie voll der Speicher ist. Bei einer Warnung hilft es, nicht mehr benötigte Bilder zu entfernen, die GBO zu sichern und die Begehung zu archivieren. Die Prüfung gilt ebenso für die Fotos im Prüfkatalog und im Aktionsplan.</p>
     </div>
   </details>
 </section>
@@ -320,7 +338,7 @@
   <details class="card faq-item">
     <summary><span><span class="faq-tag">Daten</span>Wie sichere ich die GBO und wie heißt die Datei?</span></summary>
     <div class="faq-body">
-      <p>Im Menü „Dokumentation“ sichern Sie die GBO als JSON-Datei (einschließlich Bildbelegen) und lesen sie bei Bedarf wieder ein. Der Dateiname lautet:</p>
+      <p>Im Menü „Dokumentation“ sichern Sie die GBO als JSON-Datei und lesen sie bei Bedarf wieder ein. Die Datei enthält von den Bildbelegen nur die Vorschaubilder, nicht die Bilder selbst. Der Dateiname lautet:</p>
       <p><code>GBO_Sicherung_Markt_[Marktnummer]_[Datum].json</code></p>
       <p>Marktnummer und Betriebsdatum werden automatisch aus den Betriebsdaten übernommen.</p>
     </div>
@@ -333,12 +351,44 @@
     </div>
   </details>
   <details class="card faq-item">
-    <summary><span><span class="faq-tag">PDF</span>Welche Druckausgaben gibt es?</span></summary>
-    <div class="faq-body"><p>Gesamt-GBO und Maßnahmenliste. Beide verwenden denselben Betriebsdatenkopf und können über den Browser gedruckt oder als PDF gespeichert werden.</p></div>
+    <summary><span><span class="faq-tag">PDF</span>Welche Ausgaben gibt es und wie nutze ich sie?</span></summary>
+    <div class="faq-body">
+      <p>Im Menü „Dokumentation“ gibt es zwei Ausgaben, jeweils als PDF-Datei:</p>
+      <ul>
+        <li><b>Gesamte GBO:</b> Deckblatt mit Betriebsdaten und Status, danach alle ausgewählten Bereiche mit Bewertungen, Maßnahmen und Bildern.</li>
+        <li><b>Maßnahmenliste:</b> nur Fragen mit Handlungs- oder Beratungsbedarf oder hinterlegter Maßnahme, als Tabelle.</li>
+      </ul>
+      <p>Für jede Ausgabe gibt es drei Schaltflächen:</p>
+      <ul>
+        <li><b>Drucken (PDF):</b> öffnet das PDF in einem neuen Tab. Gedruckt wird über das Teilen-Symbol. Blockiert Ihr Gerät das neue Fenster, wird das PDF heruntergeladen.</li>
+        <li><b>PDF teilen:</b> öffnet das Teilen-Menü, zum Beispiel für Mail, mit der PDF-Datei und einem fertigen Text.</li>
+        <li><b>Mail vorbereiten:</b> öffnet einen Mail-Entwurf mit Betreff und Text, aber ohne Anhang.</li>
+      </ul>
+    </div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Mail</span>Wie verschicke ich die GBO per Mail?</span></summary>
+    <div class="faq-body">
+      <p>Am einfachsten mit <b>PDF teilen</b> und im Teilen-Menü die Mail-App wählen: Die PDF-Datei hängt dann bereits an. Der Mail-Text enthält Marktnummer, Anschrift, Stand, Prüfer, einen Kurzstatus (beantwortete Fragen, Handlungsbedarf, offene und überfällige Maßnahmen) und die Bitte, die Maßnahmen bis zu den Fristen umzusetzen.</p>
+      <p>Mit <b>Mail vorbereiten</b> entsteht nur der Entwurf mit Betreff und Text; die PDF-Datei müssen Sie dann selbst anhängen. Die Mail-App auf dem iPad übernimmt den Betreff beim Teilen nicht immer; der Text steht trotzdem im Entwurf.</p>
+      <p>Prüfer und Marktleitung stammen aus den Betriebsdaten. Tragen Sie dort den Namen des Prüfers ein, steht er als Absender unter der Mail.</p>
+    </div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">PDF</span>Was steht in der Gesamt-GBO ausführlich und was kompakt?</span></summary>
+    <div class="faq-body">
+      <p>Fragen mit „Ausreichend geschützt“, „Nicht zutreffend“ oder ohne Bewertung stehen kompakt in einer Zeile (Kennung, Thema, Frage und Status). Fragen mit Handlungs- oder Beratungsbedarf stehen als ausführlicher Block mit Feststellung, Maßnahmen, Verantwortlichem, Frist, Umsetzung, Wirksamkeit und bei Handlungsbedarf Quelle und Hinweis. Abgelaufene Fristen sind rot markiert. So bleibt auch eine große GBO übersichtlich.</p>
+    </div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">PDF</span>Sind Bilder im PDF enthalten?</span></summary>
+    <div class="faq-body">
+      <p>Ja. Jeder Bildbeleg erscheint bei seiner Frage, in der Maßnahmenliste unter dem Eintrag. Liegt das Originalbild auf diesem Gerät, wird es verwendet. Sonst erscheint das Vorschaubild mit dem Zusatz „(Vorschau)“. Wollen Sie das Original im PDF, erstellen Sie es auf dem Gerät, mit dem das Foto aufgenommen wurde.</p>
+    </div>
   </details>
   <details class="card faq-item">
     <summary><span><span class="faq-tag">Reset</span>Was passiert bei „GBO zurücksetzen“?</span></summary>
-    <div class="faq-body"><p>Zuerst erscheint eine Sicherheitsabfrage. Erst nach Bestätigung werden GBO-Auswahl, Bewertungen/Antworten, Maßnahmen- und Wirksamkeitsdaten sowie Vormerkungen gelöscht. Die Begehung und die zentralen NAS-/Servereinstellungen bleiben erhalten. Sichern Sie die GBO deshalb vorher.</p></div>
+    <div class="faq-body"><p>Zuerst erscheint eine Sicherheitsabfrage. Erst nach Bestätigung werden GBO-Auswahl, Bewertungen/Antworten, Bildbelege (einschließlich der Bilder auf diesem Gerät), Maßnahmen- und Wirksamkeitsdaten sowie Vormerkungen gelöscht. Die Begehung und die zentralen NAS-/Servereinstellungen bleiben erhalten. Sichern Sie die GBO deshalb vorher.</p></div>
   </details>
 </section>
 
@@ -355,7 +405,7 @@
       <tr><td>Bewertung</td><td>Die Bewertungsoptionen stehen untereinander und haben eine größere Touch-Fläche.</td></tr>
       <tr><td>Maßnahmen</td><td>Maßnahmenfelder und Aktionsschaltflächen stehen untereinander; nichts wird am rechten Rand abgeschnitten.</td></tr>
       <tr><td>Begehung ↔ GBO</td><td>Die Zuordnung von Modul und Frage ist vollständig bedienbar; der ursprüngliche Befund bleibt an der Frage sichtbar.</td></tr>
-      <tr><td>Sicherung / PDF</td><td>Sicherung, Import, Gesamtdruck und Maßnahmenliste stehen als untereinander angeordnete Schaltflächen bereit.</td></tr>
+      <tr><td>Sicherung / PDF</td><td>Sicherung, Import und die beiden PDF-Ausgaben mit je drei Schaltflächen stehen untereinander bereit.</td></tr>
       <tr><td>Eingaben</td><td>Formularfelder haben eine ausreichende Schriftgröße, damit Safari beim Tippen nicht in die Seite hineinzoomt.</td></tr>
     </table></div>
   </div></div>
@@ -417,7 +467,7 @@
 
 <footer class="app-footer">
   <div class="app-footer-links"><a href="gbo.html">Gefährdungsbeurteilung</a><a href="gbo-hilfe.html">FAQ GBO</a><a href="gbo-dokumentation.html">Technische Dokumentation GBO</a><a href="hilfe.html">FAQ Begehung</a></div>
-  <div class="app-footer-meta"><div>Rev. 2.0 · Stand 9.10.2026</div><div>© <span class="js-current-year">2026</span> Andreas Zott – Alle Rechte vorbehalten</div></div>
+  <div class="app-footer-meta"><div>Rev. 2.0.24 · Stand 10.10.2026</div><div>© <span class="js-current-year">2026</span> Andreas Zott – Alle Rechte vorbehalten</div></div>
 </footer>
 <script>document.querySelectorAll('.js-current-year').forEach(el=>el.textContent=new Date().getFullYear());</script>
 </body>
