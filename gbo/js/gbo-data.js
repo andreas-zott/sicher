@@ -623,22 +623,22 @@ window.GBO_DATA = {
     ],
     "band": [
       [
-        "BR-01",
+        "BS-01",
         "Maschinendaten",
         "Sind Hersteller, Typ, Baujahr und Betriebsanleitung der stationären Bandsäge erfasst bzw. verfügbar?"
       ],
       [
-        "BR-02",
+        "BS-02",
         "Aufstellung",
         "Ist die Bandsäge standsicher und so aufgestellt, dass ausreichend Bewegungsraum für sicheres Arbeiten vorhanden ist?"
       ],
       [
-        "BR-03",
+        "BS-03",
         "Sägeblattzustand",
         "Befinden sich Sägeblatt, Führungen und sichtbare Maschinenteile in einem erkennbar sicheren Zustand?"
       ],
       [
-        "BR-04",
+        "BS-04",
         "Sägeblattabdeckung",
         "Ist der nicht zum Schneiden benötigte Bereich des Sägeblatts durch die vorgesehenen Schutzeinrichtungen abgedeckt?"
       ],
@@ -1226,12 +1226,12 @@ window.GBO_DATA = {
         "Sind Alarmierung und Räumung organisatorisch geregelt und den Beschäftigten bekannt?"
       ],
       [
-        "BR-05",
+        "BRA-05",
         "Brandlasten / Zündquellen",
         "Werden vermeidbare Brandlasten und Zündquellen in Arbeits-, Lager- und Nebenbereichen begrenzt?"
       ],
       [
-        "BR-06",
+        "BRA-06",
         "Brandschutzhelfer",
         "Ist die erforderliche Anzahl an Brandschutzhelfern auf Grundlage der betrieblichen Gefährdung festgelegt und verfügbar?"
       ]
@@ -1324,12 +1324,12 @@ window.GBO_DATA = {
         "Sind Beschäftigte über das Verhalten bei Räumung und die betrieblichen Fluchtmöglichkeiten informiert?"
       ],
       [
-        "FL-04",
+        "FR-04",
         "Türen / Notausgänge",
         "Lassen sich erforderliche Türen und Notausgänge im Gefahrenfall schnell und ohne besondere Hilfsmittel nutzen?"
       ],
       [
-        "FL-05",
+        "FR-05",
         "Flucht- und Rettungsplan",
         "Sind Flucht- und Rettungspläne dort vorhanden und aktuell, wo sie aufgrund der betrieblichen Verhältnisse erforderlich sind?"
       ]
@@ -1493,12 +1493,12 @@ window.GBO_DATA = {
         "Sind Gefährdungen durch Quetschen, Scheren, Schneiden, Stechen, Stoßen oder Einziehen ermittelt und minimiert?"
       ],
       [
-        "ME-02",
+        "MECH-02",
         "Gefahrstellen",
         "Sind Quetsch-, Scher-, Schneid-, Stich-, Einzugs- und Stoßstellen bei den vorhandenen Tätigkeiten ermittelt?"
       ],
       [
-        "ME-03",
+        "MECH-03",
         "Schutzmaßnahmen",
         "Werden mechanische Gefahrstellen vorrangig durch sichere Gestaltung und technische Schutzmaßnahmen beherrscht?"
       ]
@@ -1664,12 +1664,12 @@ window.GBO_DATA = {
         "Sind Exposition und Haut-/Atemwegskontakt soweit wie möglich vermieden bzw. minimiert?"
       ],
       [
-        "SE-03",
+        "SENS-03",
         "Ermittlung",
         "Sind Tätigkeiten mit möglicher haut- oder atemwegssensibilisierender Wirkung ermittelt und betroffene Beschäftigte berücksichtigt?"
       ],
       [
-        "SE-04",
+        "SENS-04",
         "Expositionsminderung",
         "Werden Expositionen gegenüber sensibilisierenden Stoffen durch geeignete technische und organisatorische Maßnahmen minimiert?"
       ]
@@ -1686,12 +1686,12 @@ window.GBO_DATA = {
         "Sind Notrufmöglichkeiten und erforderliche Notfallinformationen schnell verfügbar?"
       ],
       [
-        "NO-03",
+        "NF-03",
         "Szenarien",
         "Sind die für den Betrieb relevanten Notfallszenarien wie Brand, medizinischer Notfall, Gewalt, Stofffreisetzung oder technische Störung berücksichtigt?"
       ],
       [
-        "NO-04",
+        "NF-04",
         "Übung / Aktualität",
         "Werden Notfallregelungen bei Änderungen überprüft und erforderliche Abläufe bzw. Evakuierung angemessen geübt?"
       ]
@@ -1762,17 +1762,17 @@ window.GBO_DATA = {
         "Sind Lager- und Verkehrsflächen ausreichend zugänglich und frei von vermeidbaren Stolperstellen?"
       ],
       [
-        "LA-03",
+        "LAG-03",
         "Stapel / Lagergut",
         "Sind Lagergut und Stapel gegen Umkippen, Herabfallen und unbeabsichtigtes Verschieben gesichert?"
       ],
       [
-        "LA-04",
+        "LAG-04",
         "Verkehr / Zugriff",
         "Sind Lager- und Verkehrsflächen ausreichend bemessen, freigehalten und sichere Zugriffe auf Lagergut möglich?"
       ],
       [
-        "LA-05",
+        "LAG-05",
         "Lasten / Tragfähigkeit",
         "Werden zulässige Belastungen von Regalen, Lagerflächen und sonstigen Lagereinrichtungen berücksichtigt?"
       ]
@@ -1944,17 +1944,17 @@ window.GBO_DATA = {
         "Ist der sichere Umgang mit beschädigten Flaschen und Glasbruch geregelt?"
       ],
       [
-        "LR-04",
+        "LGR-04",
         "Rücknahmeautomat",
         "Sind Einzugs-, Quetsch- und Bewegungsbereiche des Rücknahmeautomaten bei Bedienung und normaler Nutzung gesichert?"
       ],
       [
-        "LR-05",
+        "LGR-05",
         "Störung / Reinigung",
         "Werden Störungen, Entleerung und Reinigung nur nach einem sicheren festgelegten Verfahren durchgeführt?"
       ],
       [
-        "LR-06",
+        "LGR-06",
         "Glasbruch",
         "Ist der sichere Umgang mit zerbrochenen Flaschen und Scherben im Rücknahmebereich geregelt?"
       ]
@@ -1976,17 +1976,17 @@ window.GBO_DATA = {
         "Sind erforderliche Kontrollen und Prüfungen der Regalsysteme betrieblich organisiert und dokumentiert?"
       ],
       [
-        "RE-04",
+        "REG-04",
         "Beladung",
         "Werden Regale bestimmungsgemäß beladen und erforderliche Angaben zur zulässigen Belastung beachtet?"
       ],
       [
-        "RE-05",
+        "REG-05",
         "Anfahrschutz / Schäden",
         "Sind gefährdete Regalbereiche gegen Anfahren geschützt, soweit erforderlich, und werden Schäden unverzüglich gemeldet?"
       ],
       [
-        "RE-06",
+        "REG-06",
         "Prüforganisation",
         "Sind Art, Umfang und Fristen erforderlicher Regalprüfungen sowie die Behandlung festgestellter Mängel festgelegt?"
       ]
@@ -3529,770 +3529,770 @@ window.GBO_DATA = {
       [
         "ABHOL-01",
         "Kommissionieren",
-        "Ist beim Thema „Kommissionieren“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Werden Abholaufträge so kommissioniert, dass schwere Artikel unten bzw. in Griffhöhe liegen und Wege ohne Verdrehen und tiefes Bücken möglich sind?"
       ],
       [
         "ABHOL-02",
         "Sortieren und Zuordnen",
-        "Ist beim Thema „Sortieren und Zuordnen“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist das Sortieren und Zuordnen der Aufträge zu Fächern oder Boxen so organisiert, dass weder Zeitdruck noch lange Zwangshaltungen entstehen?"
       ],
       [
         "ABHOL-03",
         "Rollbehälter und Wagen",
-        "Ist beim Thema „Rollbehälter und Wagen“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Rollbehälter und Wagen der Abholstation in gutem Zustand, leichtgängig und werden sie nur so beladen, dass sie sicher bewegt werden können?"
       ],
       [
         "ABHOL-04",
         "Verkehrswege",
-        "Ist beim Thema „Verkehrswege“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind die Wege zwischen Lager, Abholstation und Kundenübergabe frei von Hindernissen und vom Kundenverkehr getrennt oder eindeutig geregelt?"
       ],
       [
         "ABHOL-05",
         "Trockenlagerung",
-        "Ist beim Thema „Trockenlagerung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Regale und Ablagen für Trockenware standsicher, nicht überladen und so angeordnet, dass keine Waren herabfallen können?"
       ],
       [
         "ABHOL-06",
         "Kühlware",
-        "Ist beim Thema „Kühlware“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Werden Kühlwaren so gelagert und ausgegeben, dass Kälteeinwirkung, Kondenswasser und Rutschgefahr begrenzt sind?"
       ],
       [
         "ABHOL-07",
         "Tiefkühlware",
-        "Ist beim Thema „Tiefkühlware“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind für den Umgang mit Tiefkühlware Handschuhe, Aufenthaltsdauer und Wärmepausen geregelt?"
       ],
       [
         "ABHOL-08",
         "Abholfächer",
-        "Ist beim Thema „Abholfächer“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Abholfächer und -boxen so gestaltet, dass Türen und Klappen nicht zuschlagen oder Finger quetschen und die Ware sicher erreichbar ist?"
       ],
       [
         "ABHOL-09",
         "Befüllen und Entnehmen",
-        "Ist beim Thema „Befüllen und Entnehmen“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Können Fächer befüllt und entleert werden, ohne über Kopf oder tief gebückt zu arbeiten, und sind bei Bedarf Tritte oder Hilfsmittel vorhanden?"
       ],
       [
         "ABHOL-10",
         "Kundenübergabe",
-        "Ist beim Thema „Kundenübergabe“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist die Übergabe an Kunden so organisiert, dass Einkaufswagen, Kunden und Beschäftigte sich nicht gefährden und Konflikte nicht allein bewältigt werden müssen?"
       ],
       [
         "ABHOL-11",
         "Zahlungsmittel",
-        "Ist beim Thema „Zahlungsmittel“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist geregelt, ob und wie bei der Abholung bezahlt wird, und werden Zahlungsmittel sicher aufbewahrt?"
       ],
       [
         "ABHOL-12",
         "Bargeld und Überfallrisiko",
-        "Ist beim Thema „Bargeld und Überfallrisiko“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist der Bargeldbestand an der Abholstation begrenzt und ist das Verhalten bei Überfall oder Bedrohung festgelegt und bekannt?"
       ],
       [
         "ABHOL-13",
         "Nichtabholung und Rückführung",
-        "Ist beim Thema „Nichtabholung und Rückführung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist geregelt, wie nicht abgeholte Ware, insbesondere Kühlware, hygienisch und ohne zusätzliche körperliche Belastung zurückgeführt wird?"
       ],
       [
         "ABHOL-14",
         "Störungen an Station oder Box",
-        "Ist beim Thema „Störungen an Station oder Box“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist festgelegt, wer Störungen an Station oder Box beheben darf und wie die Stelle bis dahin gesichert und gekennzeichnet wird?"
       ],
       [
         "ABHOL-15",
         "Reinigung",
-        "Ist beim Thema „Reinigung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Reinigung und Pflege der Abholstation und der Fächer geregelt, einschließlich geeigneter Reinigungsmittel und Hautschutz?"
       ]
     ],
     "fuss": [
       [
         "FUSS-01",
         "Gefährdungsbeurteilung Fußschutz",
-        "Ist beim Thema „Gefährdungsbeurteilung Fußschutz“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Wurde für die Tätigkeiten ermittelt, welcher Fußschutz (Berufsschuh, Sicherheitsschuh, Stiefel) erforderlich ist, und ist das dokumentiert?"
       ],
       [
         "FUSS-02",
         "Rutschhemmung",
-        "Ist beim Thema „Rutschhemmung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind in Bereichen mit Rutschgefahr (Nässe, Fett) Schuhe mit geprüfter Rutschhemmung im Einsatz (z. B. Kennzeichnung SRC)?"
       ],
       [
         "FUSS-03",
         "Quetschgefährdung",
-        "Ist beim Thema „Quetschgefährdung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Tragen Beschäftigte dort Schuhe mit Zehenschutzkappe, wo Füße durch Rollbehälter, Wagen oder Paletten gequetscht werden können?"
       ],
       [
         "FUSS-04",
         "Herabfallende Gegenstände",
-        "Ist beim Thema „Herabfallende Gegenstände“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist dort Sicherheitsschuhwerk mit Zehenschutzkappe vorgeschrieben und wird es getragen, wo schwere Gegenstände herabfallen können (z. B. Lager, Warenannahme, Metzgerei)?"
       ],
       [
         "FUSS-05",
         "Durchtritt",
-        "Ist beim Thema „Durchtritt“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Schuhe mit durchtrittsicherer Sohle vorhanden, wo Nägel, Scherben, Messer oder Paletten zum Durchtreten führen können?"
       ],
       [
         "FUSS-06",
         "Nässe",
-        "Ist beim Thema „Nässe“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Stehen bei Nässe und Reinigungsarbeiten wasserdichte Schuhe oder Stiefel zur Verfügung?"
       ],
       [
         "FUSS-07",
         "Kälte",
-        "Ist beim Thema „Kälte“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Stehen für Kühl- und Tiefkühlbereiche Schuhe mit ausreichender Kälteisolierung zur Verfügung?"
       ],
       [
         "FUSS-08",
         "Lebensmittel- und Nassbereiche",
-        "Ist beim Thema „Lebensmittel- und Nassbereiche“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind in Lebensmittel- und Nassbereichen Schuhe vorgeschrieben, die sich reinigen und desinfizieren lassen?"
       ],
       [
         "FUSS-09",
         "Passform",
-        "Ist beim Thema „Passform“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Wird bei der Bereitstellung die Passform (Größe, Weite) berücksichtigt, einschließlich Anprobe?"
       ],
       [
         "FUSS-10",
         "Tragekomfort",
-        "Ist beim Thema „Tragekomfort“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Tragekomfort und Gewicht der Schuhe so, dass sie über die gesamte Schicht tatsächlich getragen werden?"
       ],
       [
         "FUSS-11",
         "Zustand",
-        "Ist beim Thema „Zustand“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Wird der Zustand der Schuhe (Sohle, Zehenschutz, Nähte) regelmäßig geprüft und werden beschädigte Schuhe ersetzt?"
       ],
       [
         "FUSS-12",
         "Reinigung",
-        "Ist beim Thema „Reinigung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist geregelt, wie Arbeitsschuhe gereinigt, gepflegt und aufbewahrt werden?"
       ],
       [
         "FUSS-13",
         "Austausch",
-        "Ist beim Thema „Austausch“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist festgelegt, ab welchem Verschleiß oder nach welcher Zeit Schuhe ausgetauscht werden?"
       ],
       [
         "FUSS-14",
         "Bereitstellung",
-        "Ist beim Thema „Bereitstellung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Stellt der Arbeitgeber den erforderlichen Fußschutz kostenlos bereit?"
       ],
       [
         "FUSS-15",
         "Unterweisung",
-        "Ist beim Thema „Unterweisung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind die Beschäftigten zur richtigen Verwendung und zur Tragepflicht des Fußschutzes unterwiesen?"
       ]
     ],
     "treppe": [
       [
         "TREPPE-01",
         "Zustand der Stufen",
-        "Ist beim Thema „Zustand der Stufen“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind alle Stufen, Podeste und Kanten unbeschädigt und fest, ohne lockere Beläge?"
       ],
       [
         "TREPPE-02",
         "Stolperstellen",
-        "Ist beim Thema „Stolperstellen“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Treppen frei von Stolperstellen wie Kabeln, Kartons, Folien und losen Teppichen?"
       ],
       [
         "TREPPE-03",
         "Rutschhemmung",
-        "Ist beim Thema „Rutschhemmung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Haben die Stufen einen rutschhemmenden Belag oder rutschhemmende Kantenprofile?"
       ],
       [
         "TREPPE-04",
         "Handläufe",
-        "Ist beim Thema „Handläufe“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Handläufe vorhanden, stabil befestigt und durchgehend greifbar?"
       ],
       [
         "TREPPE-05",
         "Geländer",
-        "Ist beim Thema „Geländer“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind offene Treppenseiten, Podeste und Absturzkanten durch Geländer gesichert?"
       ],
       [
         "TREPPE-06",
         "Beleuchtung",
-        "Ist beim Thema „Beleuchtung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist die Treppe ausreichend beleuchtet, und bei Nutzung als Fluchtweg auch bei Ausfall des Hauptlichts?"
       ],
       [
         "TREPPE-07",
         "Erkennbarkeit der Stufen",
-        "Ist beim Thema „Erkennbarkeit der Stufen“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Stufenkanten, besonders die erste und letzte Stufe, kontrastreich markiert?"
       ],
       [
         "TREPPE-08",
         "Freihalten",
-        "Ist beim Thema „Freihalten“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Werden Treppen und Podeste dauerhaft von Lagergut freigehalten?"
       ],
       [
         "TREPPE-09",
         "Transport von Waren",
-        "Ist beim Thema „Transport von Waren“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist geregelt, wie Waren über Treppen transportiert werden (keine Last, die die Sicht nimmt, Hilfsmittel oder Aufzug)?"
       ],
       [
         "TREPPE-10",
         "Gegenverkehr",
-        "Ist beim Thema „Gegenverkehr“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist bei Gegenverkehr ausreichend Breite oder eine Regelung für Begegnungen vorhanden?"
       ],
       [
         "TREPPE-11",
         "Reinigung",
-        "Ist beim Thema „Reinigung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Wird die Treppe regelmäßig gereinigt, ohne dass nasse, rutschige Stufen entstehen?"
       ],
       [
         "TREPPE-12",
         "Nässe",
-        "Ist beim Thema „Nässe“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Wird bei Nässe (Regeneintrag, Reinigung) mit Matten oder Warnschildern abgesichert?"
       ],
       [
         "TREPPE-13",
         "Beschädigungen",
-        "Ist beim Thema „Beschädigungen“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Werden beschädigte Stufen, Beläge und Handläufe unverzüglich gesperrt oder repariert?"
       ],
       [
         "TREPPE-14",
         "Mängelmeldung",
-        "Ist beim Thema „Mängelmeldung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Wissen die Beschäftigten, wo und wie sie Mängel an Treppen melden, und wird darauf zeitnah reagiert?"
       ],
       [
         "TREPPE-15",
         "Fluchtwegfunktion",
-        "Ist beim Thema „Fluchtwegfunktion“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist eine als Flucht- und Rettungsweg genutzte Treppe frei, gekennzeichnet und ohne verschlossene Türen im Verlauf?"
       ]
     ],
     "technik": [
       [
         "TECHNIK-01",
         "Zutrittsregelung",
-        "Ist beim Thema „Zutrittsregelung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist der Zutritt zu Technikräumen auf unterwiesene Personen beschränkt (verschlossen, Schlüsselregelung)?"
       ],
       [
         "TECHNIK-02",
         "Verkehrswege",
-        "Ist beim Thema „Verkehrswege“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind die Wege zu und in den Technikräumen frei und ausreichend breit?"
       ],
       [
         "TECHNIK-03",
         "Fluchtwege",
-        "Ist beim Thema „Fluchtwege“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Fluchtwege aus Technikräumen frei und gekennzeichnet, und lassen sich die Türen von innen ohne Schlüssel öffnen?"
       ],
       [
         "TECHNIK-04",
         "Beleuchtung",
-        "Ist beim Thema „Beleuchtung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Technikräume ausreichend beleuchtet?"
       ],
       [
         "TECHNIK-05",
         "Ordnung und Sauberkeit",
-        "Ist beim Thema „Ordnung und Sauberkeit“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind die Räume geordnet und frei von nicht benötigten Gegenständen und Brandlasten?"
       ],
       [
         "TECHNIK-06",
         "Elektrische Gefährdungen",
-        "Ist beim Thema „Elektrische Gefährdungen“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind elektrische Anlagen (Verteiler, Schaltschränke) verschlossen, gekennzeichnet und geprüft?"
       ],
       [
         "TECHNIK-07",
         "Heiße Oberflächen",
-        "Ist beim Thema „Heiße Oberflächen“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind heiße Rohre, Aggregate und Oberflächen gegen Berührung geschützt?"
       ],
       [
         "TECHNIK-08",
         "Lärm",
-        "Ist beim Thema „Lärm“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind laute Anlagen erfasst, und sind bei Lärmbereichen Kennzeichnung und Gehörschutz geregelt?"
       ],
       [
         "TECHNIK-09",
         "Bewegte Teile",
-        "Ist beim Thema „Bewegte Teile“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind bewegte Teile (Riemen, Lüfter, Antriebe) mit Schutzeinrichtungen gesichert?"
       ],
       [
         "TECHNIK-10",
         "Lüftung",
-        "Ist beim Thema „Lüftung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Lüftung und Temperatur im Technikraum für Anlagen und Personen ausreichend?"
       ],
       [
         "TECHNIK-11",
         "Gelagerte Stoffe",
-        "Ist beim Thema „Gelagerte Stoffe“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Werden im Technikraum keine Gefahrstoffe, Verpackungen oder sonstigen Stoffe gelagert, die dort nicht zulässig sind?"
       ],
       [
         "TECHNIK-12",
         "Sicherer Zugang",
-        "Ist beim Thema „Sicherer Zugang“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist der Zugang zu Anlagenteilen sicher möglich (geeignete Tritte, Podeste, Leitern)?"
       ],
       [
         "TECHNIK-13",
         "Wartung",
-        "Ist beim Thema „Wartung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Wartung und Prüfung der Anlagen mit Zuständigkeit und Terminen geregelt?"
       ],
       [
         "TECHNIK-14",
         "Fremdfirmen",
-        "Ist beim Thema „Fremdfirmen“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Werden Fremdfirmen vor Arbeiten im Technikraum eingewiesen und die Arbeiten abgestimmt?"
       ],
       [
         "TECHNIK-15",
         "Störungen",
-        "Ist beim Thema „Störungen“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist festgelegt, wie bei Störungen (Ausfall, Leckage, Geruch) vorzugehen ist und wer informiert wird?"
       ]
     ],
     "heiz": [
       [
         "HEIZ-01",
         "Zutrittsregelung",
-        "Ist beim Thema „Zutrittsregelung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist der Zutritt zum Heizungsraum geregelt und auf befugte Personen beschränkt?"
       ],
       [
         "HEIZ-02",
         "Freihalten des Raums",
-        "Ist beim Thema „Freihalten des Raums“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Wird der Raum freigehalten, sodass Anlagen erreichbar sind und Wege frei bleiben?"
       ],
       [
         "HEIZ-03",
         "Unzulässige Lagerung",
-        "Ist beim Thema „Unzulässige Lagerung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Wird im Heizungsraum nichts gelagert, was dort unzulässig ist (Brennbares, Reinigungsmittel, Verpackungen)?"
       ],
       [
         "HEIZ-04",
         "Brandgefährdungen",
-        "Ist beim Thema „Brandgefährdungen“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Brandgefährdungen (Brennstoff, Zündquellen, Staub) berücksichtigt und Feuerlöscher vorhanden?"
       ],
       [
         "HEIZ-05",
         "Heiße Oberflächen",
-        "Ist beim Thema „Heiße Oberflächen“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind heiße Oberflächen und Leitungen gegen Berühren geschützt oder gekennzeichnet?"
       ],
       [
         "HEIZ-06",
         "Lüftung",
-        "Ist beim Thema „Lüftung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Zu- und Abluft des Heizungsraums frei und ausreichend, auch für die Verbrennungsluft?"
       ],
       [
         "HEIZ-07",
         "Technischer Zustand",
-        "Ist beim Thema „Technischer Zustand“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Befindet sich die Heizungsanlage in einwandfreiem technischem Zustand, mit gültigen Prüfnachweisen (z. B. Abgasmessung)?"
       ],
       [
         "HEIZ-08",
         "Elektrische Gefährdungen",
-        "Ist beim Thema „Elektrische Gefährdungen“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind elektrische Anlagen und Steuerungen im Heizungsraum geprüft und gegen Feuchtigkeit geschützt?"
       ],
       [
         "HEIZ-09",
         "Brennstoffsysteme",
-        "Ist beim Thema „Brennstoffsysteme“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist bei Öl-, Gas- oder Pelletsystemen geklärt, wie Brennstoff gelagert, abgesperrt und bei Störung abgeschaltet wird?"
       ],
       [
         "HEIZ-10",
         "Verkehrswege",
-        "Ist beim Thema „Verkehrswege“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind die Wege im Heizungsraum frei von Stolperstellen und Hindernissen?"
       ],
       [
         "HEIZ-11",
         "Beleuchtung",
-        "Ist beim Thema „Beleuchtung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist der Raum ausreichend beleuchtet?"
       ],
       [
         "HEIZ-12",
         "Störungen",
-        "Ist beim Thema „Störungen“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist festgelegt, wie bei Störungen (Alarm, Geruch, Leckage) vorzugehen ist und wer informiert wird?"
       ],
       [
         "HEIZ-13",
         "Wartung",
-        "Ist beim Thema „Wartung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Wartungen und Prüfungen der Heizung durch Fachfirmen terminiert und dokumentiert?"
       ],
       [
         "HEIZ-14",
         "Fremdfirmen",
-        "Ist beim Thema „Fremdfirmen“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Werden Fremdfirmen vor Arbeiten im Heizungsraum eingewiesen?"
       ],
       [
         "HEIZ-15",
         "Notfallmaßnahmen",
-        "Ist beim Thema „Notfallmaßnahmen“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Notfallmaßnahmen (Notaus, Absperrventile, Notrufnummern) bekannt und gekennzeichnet?"
       ]
     ],
     "buero": [
       [
         "BUERO-01",
         "Verkehrswege",
-        "Ist beim Thema „Verkehrswege“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind die Wege im Büro frei und ausreichend breit?"
       ],
       [
         "BUERO-02",
         "Stolperstellen",
-        "Ist beim Thema „Stolperstellen“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Stolperstellen wie lose Kabel, Kartons und Teppichkanten beseitigt?"
       ],
       [
         "BUERO-03",
         "Bodenflächen",
-        "Ist beim Thema „Bodenflächen“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind die Bodenflächen eben, rutschfest und unbeschädigt?"
       ],
       [
         "BUERO-04",
         "Beleuchtung",
-        "Ist beim Thema „Beleuchtung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist die Beleuchtung ausreichend und gleichmäßig?"
       ],
       [
         "BUERO-05",
         "Blendung",
-        "Ist beim Thema „Blendung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Blendung und Spiegelungen am Bildschirm und am Arbeitsplatz vermieden (Sonnenschutz, Leuchtenposition)?"
       ],
       [
         "BUERO-06",
         "Raumklima",
-        "Ist beim Thema „Raumklima“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist das Raumklima (Temperatur, Zugluft) im Büro zuträglich?"
       ],
       [
         "BUERO-07",
         "Lüftung",
-        "Ist beim Thema „Lüftung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Kann das Büro ausreichend gelüftet werden?"
       ],
       [
         "BUERO-08",
         "Elektrische Geräte",
-        "Ist beim Thema „Elektrische Geräte“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind elektrische Geräte unbeschädigt und geprüft?"
       ],
       [
         "BUERO-09",
         "Kabel und Anschlüsse",
-        "Ist beim Thema „Kabel und Anschlüsse“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Kabel und Steckdosen so geführt, dass sie nicht überlastet sind und keine Stolperstellen bilden?"
       ],
       [
         "BUERO-10",
         "Möblierung",
-        "Ist beim Thema „Möblierung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist die Möblierung standsicher, ausreichend dimensioniert und, wo nötig, höhenverstellbar?"
       ],
       [
         "BUERO-11",
         "Ergonomie",
-        "Ist beim Thema „Ergonomie“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Stuhl, Tisch und Bildschirm ergonomisch einstellbar, und werden sie auch eingestellt?"
       ],
       [
         "BUERO-12",
         "Regale und Ablagen",
-        "Ist beim Thema „Regale und Ablagen“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Regale und Ablagen standsicher und nicht überladen, mit schweren Ordnern unten?"
       ],
       [
         "BUERO-13",
         "Brandschutz",
-        "Ist beim Thema „Brandschutz“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Feuerlöscher vorhanden und zugänglich, und sind Brandlasten (Papier) begrenzt?"
       ],
       [
         "BUERO-14",
         "Fluchtwege",
-        "Ist beim Thema „Fluchtwege“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Fluchtwege aus dem Büro frei, und sind die Türen nicht versperrt?"
       ],
       [
         "BUERO-15",
         "Ordnung",
-        "Ist beim Thema „Ordnung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Wird im Büro Ordnung gehalten, sodass Verkehrs- und Fluchtwege frei bleiben?"
       ]
     ],
     "kassenbuero": [
       [
         "KASSENBU-01",
         "Zutritt",
-        "Ist beim Thema „Zutritt“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist der Zutritt zum Kassenbüro auf befugte Personen beschränkt und die Tür verschließbar?"
       ],
       [
         "KASSENBU-02",
         "Arbeitsplatzgestaltung",
-        "Ist beim Thema „Arbeitsplatzgestaltung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist der Arbeitsplatz im Kassenbüro ausreichend groß und ergonomisch gestaltet?"
       ],
       [
         "KASSENBU-03",
         "Beleuchtung",
-        "Ist beim Thema „Beleuchtung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist die Beleuchtung ausreichend und ohne Blendung?"
       ],
       [
         "KASSENBU-04",
         "Raumklima",
-        "Ist beim Thema „Raumklima“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist das Raumklima zuträglich und der Raum belüftbar?"
       ],
       [
         "KASSENBU-05",
         "Elektrische Geräte",
-        "Ist beim Thema „Elektrische Geräte“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind elektrische Geräte (Zählgeräte, Drucker, Tresorbeleuchtung) unbeschädigt und geprüft?"
       ],
       [
         "KASSENBU-06",
         "Kabel",
-        "Ist beim Thema „Kabel“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Kabel so verlegt, dass keine Stolperstellen entstehen?"
       ],
       [
         "KASSENBU-07",
         "Ergonomie",
-        "Ist beim Thema „Ergonomie“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Stuhl, Tisch und Zählarbeitsplatz so eingerichtet, dass keine Zwangshaltungen entstehen?"
       ],
       [
         "KASSENBU-08",
         "Bildschirmnutzung",
-        "Ist beim Thema „Bildschirmnutzung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Bildschirmarbeitsplätze im Kassenbüro nach den Anforderungen eingerichtet?"
       ],
       [
         "KASSENBU-09",
         "Aufbewahrung von Zahlungsmitteln",
-        "Ist beim Thema „Aufbewahrung von Zahlungsmitteln“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Werden Zahlungsmittel in Tresor oder Geldschrank aufbewahrt, und ist der Bestand begrenzt?"
       ],
       [
         "KASSENBU-10",
         "Geldübergabe",
-        "Ist beim Thema „Geldübergabe“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Erfolgt die Geldübergabe (Abschöpfung, Wechselgeld, Transport) so, dass sie nicht beobachtbar und nicht vorhersehbar ist?"
       ],
       [
         "KASSENBU-11",
         "Überfallorganisation",
-        "Ist beim Thema „Überfallorganisation“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist das Verhalten bei einem Überfall festgelegt (Verhalten, Meldung, Nachsorge) und bekannt?"
       ],
       [
         "KASSENBU-12",
         "Alarmierung",
-        "Ist beim Thema „Alarmierung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist eine Alarmierungsmöglichkeit (Alarmknopf, Telefon) vorhanden, und wird sie regelmäßig getestet?"
       ],
       [
         "KASSENBU-13",
         "Alleinarbeit",
-        "Ist beim Thema „Alleinarbeit“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist Alleinarbeit im Kassenbüro vermieden oder abgesichert?"
       ],
       [
         "KASSENBU-14",
         "Fluchtwege",
-        "Ist beim Thema „Fluchtwege“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Fluchtwege aus dem Kassenbüro frei, und lassen sich die Türen von innen öffnen?"
       ],
       [
         "KASSENBU-15",
         "Ordnung",
-        "Ist beim Thema „Ordnung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Wird Ordnung gehalten, sodass Geld, Belege und Verkehrswege sicher getrennt sind?"
       ]
     ],
     "bildschirm": [
       [
         "BILDSCHI-01",
         "Bildschirmqualität",
-        "Ist beim Thema „Bildschirmqualität“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist der Bildschirm flimmerfrei, ausreichend groß und gut lesbar (Zeichenschärfe, Kontrast)?"
       ],
       [
         "BILDSCHI-02",
         "Bildschirmposition",
-        "Ist beim Thema „Bildschirmposition“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist der Bildschirm so aufgestellt, dass der obere Rand in oder knapp unter Augenhöhe liegt?"
       ],
       [
         "BILDSCHI-03",
         "Sehabstand",
-        "Ist beim Thema „Sehabstand“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Beträgt der Sehabstand zum Bildschirm etwa 50 bis 70 cm, angepasst an Bildschirmgröße und Sehaufgabe?"
       ],
       [
         "BILDSCHI-04",
         "Blickrichtung",
-        "Ist beim Thema „Blickrichtung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Steht der Bildschirm so, dass der Blick parallel zu Fenstern und Leuchten fällt?"
       ],
       [
         "BILDSCHI-05",
         "Blendung und Reflexion",
-        "Ist beim Thema „Blendung und Reflexion“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Blendung und Spiegelungen auf dem Bildschirm vermieden (Jalousie, Position, entspiegelter Bildschirm)?"
       ],
       [
         "BILDSCHI-06",
         "Beleuchtung",
-        "Ist beim Thema „Beleuchtung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist die Beleuchtung am Bildschirmarbeitsplatz ausreichend, ohne Direktblendung und Reflexion?"
       ],
       [
         "BILDSCHI-07",
         "Tastatur",
-        "Ist beim Thema „Tastatur“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist die Tastatur separat, neigbar und mit ausreichender Auflagefläche davor?"
       ],
       [
         "BILDSCHI-08",
         "Maus und Eingabegeräte",
-        "Ist beim Thema „Maus und Eingabegeräte“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Maus und andere Eingabegeräte handgerecht, in Reichweite und ohne Belastung des Handgelenks?"
       ],
       [
         "BILDSCHI-09",
         "Arbeitsfläche",
-        "Ist beim Thema „Arbeitsfläche“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist die Arbeitsfläche ausreichend groß und blendfrei?"
       ],
       [
         "BILDSCHI-10",
         "Arbeitsstuhl",
-        "Ist beim Thema „Arbeitsstuhl“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist der Arbeitsstuhl höhenverstellbar, mit Rückenlehne, und passend eingestellt?"
       ],
       [
         "BILDSCHI-11",
         "Sitzhaltung",
-        "Ist beim Thema „Sitzhaltung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Können Beschäftigte aufrecht sitzen, mit etwa waagerechten Unterarmen und aufgestellten Füßen?"
       ],
       [
         "BILDSCHI-12",
         "Beinraum",
-        "Ist beim Thema „Beinraum“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist unter dem Tisch genügend Beinraum für Beine und Füße?"
       ],
       [
         "BILDSCHI-13",
         "Haltungswechsel",
-        "Ist beim Thema „Haltungswechsel“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Haltungswechsel (Sitzen, Stehen, Gehen) möglich und organisatorisch vorgesehen?"
       ],
       [
         "BILDSCHI-14",
         "Arbeitsorganisation",
-        "Ist beim Thema „Arbeitsorganisation“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist die Arbeit so organisiert, dass keine ununterbrochene Dauerarbeit am Bildschirm entsteht?"
       ],
       [
         "BILDSCHI-15",
         "Unterbrechung und Tätigkeitswechsel",
-        "Ist beim Thema „Unterbrechung und Tätigkeitswechsel“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Unterbrechungen oder Tätigkeitswechsel eingeplant, und wird arbeitsmedizinische Vorsorge für die Augen angeboten?"
       ]
     ],
     "fuehrung": [
       [
         "FUEHRUNG-01",
         "Arbeitsmenge",
-        "Ist beim Thema „Arbeitsmenge“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Wird die zugeteilte Arbeitsmenge regelmäßig mit der verfügbaren Personalstärke abgeglichen und angepasst?"
       ],
       [
         "FUEHRUNG-02",
         "Zeitdruck",
-        "Ist beim Thema „Zeitdruck“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Zeitvorgaben so gesetzt, dass sie bei normaler Arbeitsweise ohne Dauerstress eingehalten werden können?"
       ],
       [
         "FUEHRUNG-03",
         "Arbeitsunterbrechungen",
-        "Ist beim Thema „Arbeitsunterbrechungen“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Werden Arbeitsunterbrechungen durch Kunden, Telefon oder Zusatzaufgaben erfasst und begrenzt?"
       ],
       [
         "FUEHRUNG-04",
         "Aufgabenverteilung",
-        "Ist beim Thema „Aufgabenverteilung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Aufgaben nachvollziehbar und fair verteilt, mit klaren Prioritäten?"
       ],
       [
         "FUEHRUNG-05",
         "Handlungsspielraum",
-        "Ist beim Thema „Handlungsspielraum“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Können Beschäftigte Reihenfolge und Arbeitsweise in einem sinnvollen Rahmen selbst bestimmen?"
       ],
       [
         "FUEHRUNG-06",
         "Verantwortlichkeiten",
-        "Ist beim Thema „Verantwortlichkeiten“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Zuständigkeiten, Vertretung und Entscheidungsbefugnisse klar geregelt?"
       ],
       [
         "FUEHRUNG-07",
         "Informationsfluss",
-        "Ist beim Thema „Informationsfluss“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Erhalten Beschäftigte wichtige Informationen rechtzeitig, vollständig und verständlich?"
       ],
       [
         "FUEHRUNG-08",
         "Zusammenarbeit",
-        "Ist beim Thema „Zusammenarbeit“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Funktioniert die Zusammenarbeit im Team und zwischen Abteilungen so, dass Probleme offen angesprochen werden?"
       ],
       [
         "FUEHRUNG-09",
         "Führungsverhalten",
-        "Ist beim Thema „Führungsverhalten“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Geben Führungskräfte Rückmeldung, Unterstützung und Wertschätzung, und sind sie ansprechbar?"
       ],
       [
         "FUEHRUNG-10",
         "Konflikte",
-        "Ist beim Thema „Konflikte“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Gibt es einen geregelten Umgang mit Konflikten im Team, einschließlich Anlaufstellen?"
       ],
       [
         "FUEHRUNG-11",
         "Kundenkontakte",
-        "Ist beim Thema „Kundenkontakte“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Beschäftigte auf schwierige Kundenkontakte vorbereitet und werden sie dabei unterstützt?"
       ],
       [
         "FUEHRUNG-12",
         "Gewalt und Bedrohung",
-        "Ist beim Thema „Gewalt und Bedrohung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist geregelt, wie bei Beschimpfung, Bedrohung oder Gewalt zu verfahren ist, einschließlich Nachsorge?"
       ],
       [
         "FUEHRUNG-13",
         "Arbeitszeitgestaltung",
-        "Ist beim Thema „Arbeitszeitgestaltung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Werden Dienstpläne rechtzeitig, planbar und unter Beachtung der Ruhezeiten erstellt?"
       ],
       [
         "FUEHRUNG-14",
         "Pausen",
-        "Ist beim Thema „Pausen“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Können Pausen tatsächlich genommen werden, und sind sie vor Unterbrechungen geschützt?"
       ],
       [
         "FUEHRUNG-15",
         "Veränderungsprozesse",
-        "Ist beim Thema „Veränderungsprozesse“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Werden Beschäftigte bei Veränderungen (Umbau, neue Systeme, neue Abläufe) frühzeitig informiert und beteiligt?"
       ]
     ],
     "gewuerz": [
       [
         "GEWUERZ-01",
         "Lagerung",
-        "Ist beim Thema „Lagerung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Werden Gewürze und Zusatzstoffe in geschlossenen, gekennzeichneten Gebinden getrennt von Lebensmitteln und Reinigungsmitteln gelagert?"
       ],
       [
         "GEWUERZ-02",
         "Gebindezustand",
-        "Ist beim Thema „Gebindezustand“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind die Gebinde unbeschädigt, dicht und standsicher gestapelt?"
       ],
       [
         "GEWUERZ-03",
         "Kennzeichnung",
-        "Ist beim Thema „Kennzeichnung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Gebinde und Umfüllbehälter mit Inhalt und, wo nötig, mit Gefahrenhinweisen gekennzeichnet?"
       ],
       [
         "GEWUERZ-04",
         "Umfüllen",
-        "Ist beim Thema „Umfüllen“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Wird so umgefüllt, dass Stäube nicht aufgewirbelt werden (Trichter, langsames Schütten, Absaugung)?"
       ],
       [
         "GEWUERZ-05",
         "Staubentwicklung",
-        "Ist beim Thema „Staubentwicklung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Wird Staubentwicklung beim Arbeiten mit Gewürzen und Pökelmitteln vermieden oder abgesaugt?"
       ],
       [
         "GEWUERZ-06",
         "Einatmen von Stäuben",
-        "Ist beim Thema „Einatmen von Stäuben“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist geregelt, wann bei starker Staubbildung Atemschutz getragen wird, und ist die Auswahl geeignet?"
       ],
       [
         "GEWUERZ-07",
         "Hautkontakt",
-        "Ist beim Thema „Hautkontakt“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist Hautkontakt mit Gewürzmischungen, Pökelsalz und Zusatzstoffen minimiert, und sind geeignete Handschuhe verfügbar?"
       ],
       [
         "GEWUERZ-08",
         "Augenkontakt",
-        "Ist beim Thema „Augenkontakt“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind für Spritzer und Stäube Augenschutz und eine Augenspüleinrichtung vorhanden?"
       ],
       [
         "GEWUERZ-09",
         "Sensibilisierung",
-        "Ist beim Thema „Sensibilisierung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist geklärt, ob Beschäftigte auf Gewürze oder Zusatzstoffe allergisch reagieren, und werden Beschwerden gemeldet?"
       ],
       [
         "GEWUERZ-10",
         "Arbeitsplatzlüftung",
-        "Ist beim Thema „Arbeitsplatzlüftung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist der Arbeitsplatz ausreichend belüftet?"
       ],
       [
         "GEWUERZ-11",
         "Reinigung",
-        "Ist beim Thema „Reinigung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Wird Gewürzstaub feucht oder mit geeignetem Sauger entfernt, nicht trocken aufgewirbelt?"
       ],
       [
         "GEWUERZ-12",
         "Verschüttungen",
-        "Ist beim Thema „Verschüttungen“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist festgelegt, wie Verschüttetes aufgenommen wird (Rutschgefahr, Staub)?"
       ],
       [
         "GEWUERZ-13",
         "Hygiene",
-        "Ist beim Thema „Hygiene“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Hygieneregeln (Händewaschen, saubere Kleidung) festgelegt und praktikabel?"
       ],
       [
         "GEWUERZ-14",
         "PSA nach Gefährdung",
-        "Ist beim Thema „PSA nach Gefährdung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Wird die PSA (Handschuhe, Atemschutz, Schutzbrille) nach der Gefährdungsbeurteilung ausgewählt und getragen?"
       ],
       [
         "GEWUERZ-15",
         "Unterweisung",
-        "Ist beim Thema „Unterweisung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Beschäftigte zu Gefahren, Handhabung und zum Verhalten bei Verschütten oder Beschwerden unterwiesen?"
       ]
     ],
     "reinigung": [
@@ -4401,954 +4401,954 @@ window.GBO_DATA = {
       [
         "MESSERSC-01",
         "Messerauswahl",
-        "Ist beim Thema „Messerauswahl“ sichergestellt, dass die Umgang mit und Schleifen von Messern unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Werden nur für die Tätigkeit geeignete Messer verwendet (Klingenform, Griff, Größe)?"
       ],
       [
         "MESSERSC-02",
         "Messerzustand",
-        "Ist beim Thema „Messerzustand“ sichergestellt, dass die Umgang mit und Schleifen von Messern unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind die Messer scharf, unbeschädigt und mit festsitzendem Griff?"
       ],
       [
         "MESSERSC-03",
         "Sichere Schneidrichtung",
-        "Ist beim Thema „Sichere Schneidrichtung“ sichergestellt, dass die Umgang mit und Schleifen von Messern unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Wird beim Schneiden vom Körper weggeschnitten und die Haltehand geschützt?"
       ],
       [
         "MESSERSC-04",
         "Ablage",
-        "Ist beim Thema „Ablage“ sichergestellt, dass die Umgang mit und Schleifen von Messern unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Gibt es sichere Ablageplätze für Messer (Magnetleiste, Messerblock, Holster), sodass nichts im Spülwasser oder lose auf Arbeitsflächen liegt?"
       ],
       [
         "MESSERSC-05",
         "Transport",
-        "Ist beim Thema „Transport“ sichergestellt, dass die Umgang mit und Schleifen von Messern unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Werden Messer verdeckt und gesichert transportiert (Köcher, Scheide)?"
       ],
       [
         "MESSERSC-06",
         "Reinigung",
-        "Ist beim Thema „Reinigung“ sichergestellt, dass die Umgang mit und Schleifen von Messern unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Werden Messer einzeln, mit Schnittschutz und nicht im Spülbecken gereinigt?"
       ],
       [
         "MESSERSC-07",
         "Schärfwerkzeug",
-        "Ist beim Thema „Schärfwerkzeug“ sichergestellt, dass die Umgang mit und Schleifen von Messern unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Werden zum Abziehen geeignete Wetzstähle oder Abziehsteine mit Handschutz verwendet?"
       ],
       [
         "MESSERSC-08",
         "Schleifgerät",
-        "Ist beim Thema „Schleifgerät“ sichergestellt, dass die Umgang mit und Schleifen von Messern unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist das Schleifgerät für Messer geeignet, standsicher und in gutem Zustand?"
       ],
       [
         "MESSERSC-09",
         "Schutzvorrichtungen",
-        "Ist beim Thema „Schutzvorrichtungen“ sichergestellt, dass die Umgang mit und Schleifen von Messern unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind Schutzvorrichtungen am Schleifgerät (Schutzhaube, Werkstückauflage, Spaltmaß) vorhanden und richtig eingestellt?"
       ],
       [
         "MESSERSC-10",
         "Funken und Partikel",
-        "Ist beim Thema „Funken und Partikel“ sichergestellt, dass die Umgang mit und Schleifen von Messern unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind Funkenflug und Schleifpartikel durch Schutzbrille, Absaugung oder Abschirmung beherrscht?"
       ],
       [
         "MESSERSC-11",
         "Werkstückführung",
-        "Ist beim Thema „Werkstückführung“ sichergestellt, dass die Umgang mit und Schleifen von Messern unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Werden Messer beim Schleifen sicher geführt und gehalten?"
       ],
       [
         "MESSERSC-12",
         "Elektrische Sicherheit",
-        "Ist beim Thema „Elektrische Sicherheit“ sichergestellt, dass die Umgang mit und Schleifen von Messern unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist das Schleifgerät elektrisch geprüft und gegen Feuchtigkeit geschützt?"
       ],
       [
         "MESSERSC-13",
         "Schnitt- und Stichschutz",
-        "Ist beim Thema „Schnitt- und Stichschutz“ sichergestellt, dass die Umgang mit und Schleifen von Messern unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Werden Schnitt- und Stichschutzhandschuhe beim Schärfen und bei Zerlegearbeiten verwendet, wo erforderlich?"
       ],
       [
         "MESSERSC-14",
         "Aufbewahrung",
-        "Ist beim Thema „Aufbewahrung“ sichergestellt, dass die Umgang mit und Schleifen von Messern unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Werden Messer nach Gebrauch an einem festen Ort aufbewahrt und nicht lose in Schubladen?"
       ],
       [
         "MESSERSC-15",
         "Störung",
-        "Ist beim Thema „Störung“ sichergestellt, dass die Umgang mit und Schleifen von Messern unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist geregelt, wie bei Störung oder Defekt des Schleifgeräts vorzugehen ist (Außerbetriebnahme, Meldung)?"
       ]
     ],
     "boden": [
       [
         "BODEN-01",
         "Eignung des Bodenbelags",
-        "Ist beim Thema „Eignung des Bodenbelags“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist der Bodenbelag für die Nutzung geeignet (Belastung, Nassbelastung, Fahrzeuge)?"
       ],
       [
         "BODEN-02",
         "Rutschhemmung",
-        "Ist beim Thema „Rutschhemmung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Entspricht die Rutschhemmung den Anforderungen des Bereichs (Bewertungsgruppe R)?"
       ],
       [
         "BODEN-03",
         "Unebenheiten",
-        "Ist beim Thema „Unebenheiten“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist der Boden frei von Unebenheiten, Stufen und Absenkungen?"
       ],
       [
         "BODEN-04",
         "Beschädigungen",
-        "Ist beim Thema „Beschädigungen“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Beschädigungen (Risse, Löcher, lose Fliesen) beseitigt oder gesichert?"
       ],
       [
         "BODEN-05",
         "Übergänge",
-        "Ist beim Thema „Übergänge“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Übergänge zwischen Belägen ohne Stolperkanten ausgeführt?"
       ],
       [
         "BODEN-06",
         "Schwellen",
-        "Ist beim Thema „Schwellen“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Schwellen und Türanschläge gekennzeichnet oder abgeschrägt?"
       ],
       [
         "BODEN-07",
         "Nässe",
-        "Ist beim Thema „Nässe“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Werden Nässe und Feuchtigkeit (Eintrag, Reinigung, Kondenswasser) beseitigt oder abgesichert?"
       ],
       [
         "BODEN-08",
         "Fett und Lebensmittelreste",
-        "Ist beim Thema „Fett und Lebensmittelreste“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Werden Fett und Lebensmittelreste zeitnah entfernt?"
       ],
       [
         "BODEN-09",
         "Reinigungsverfahren",
-        "Ist beim Thema „Reinigungsverfahren“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist das Reinigungsverfahren so gewählt, dass der Boden rutschhemmend bleibt (keine Filmbildung)?"
       ],
       [
         "BODEN-10",
         "Reinigungszeiten",
-        "Ist beim Thema „Reinigungszeiten“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Findet die Reinigung außerhalb der Hauptkundenzeiten statt oder wird der Bereich abgesperrt?"
       ],
       [
         "BODEN-11",
         "Warnung bei Nässe",
-        "Ist beim Thema „Warnung bei Nässe“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Wird bei feuchtem Boden mit Warnschildern auf Rutschgefahr hingewiesen?"
       ],
       [
         "BODEN-12",
         "Entwässerung",
-        "Ist beim Thema „Entwässerung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist in Nassbereichen die Entwässerung (Gefälle, Abläufe) funktionsfähig?"
       ],
       [
         "BODEN-13",
         "Matten und Einlagen",
-        "Ist beim Thema „Matten und Einlagen“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Matten und Einlagen rutschfest, ohne Stolperkanten und in gutem Zustand?"
       ],
       [
         "BODEN-14",
         "Wintereintrag",
-        "Ist beim Thema „Wintereintrag“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist im Eingangsbereich im Winter der Schmutz- und Nässeeintrag begrenzt (Sauberlaufzone)?"
       ],
       [
         "BODEN-15",
         "Mängelbeseitigung",
-        "Ist beim Thema „Mängelbeseitigung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Werden Bodenschäden gemeldet und zeitnah beseitigt?"
       ]
     ],
     "co2zusatz": [
       [
         "CO2ZUSAT-01",
         "Anlagenzuordnung",
-        "Ist beim Thema „Anlagenzuordnung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist festgelegt, welcher CO₂-Anlage welche Räume zugeordnet sind (Verdampfer, Kühlräume, Maschinenraum)?"
       ],
       [
         "CO2ZUSAT-02",
         "Mögliche Freisetzungsstellen",
-        "Ist beim Thema „Mögliche Freisetzungsstellen“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind mögliche Freisetzungsstellen (Flansche, Ventile, Verdampfer) ermittelt?"
       ],
       [
         "CO2ZUSAT-03",
         "CO₂-Detektion",
-        "Ist beim Thema „CO₂-Detektion“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Gibt es CO₂-Sensoren in den gefährdeten Räumen, und sind sie richtig platziert?"
       ],
       [
         "CO2ZUSAT-04",
         "Alarmierung",
-        "Ist beim Thema „Alarmierung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Löst der Sensor einen Alarm aus, der in den Räumen und an einer besetzten Stelle ankommt?"
       ],
       [
         "CO2ZUSAT-05",
         "Alarmwahrnehmbarkeit",
-        "Ist beim Thema „Alarmwahrnehmbarkeit“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist der Alarm optisch und akustisch wahrnehmbar, auch bei Lärm?"
       ],
       [
         "CO2ZUSAT-06",
         "Lüftung",
-        "Ist beim Thema „Lüftung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist die Lüftung des Raums bei Alarm automatisch oder schnell zuschaltbar?"
       ],
       [
         "CO2ZUSAT-07",
         "Zutrittsregelung",
-        "Ist beim Thema „Zutrittsregelung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist der Zutritt zum Maschinenraum geregelt?"
       ],
       [
         "CO2ZUSAT-08",
         "Verhalten bei Alarm",
-        "Ist beim Thema „Verhalten bei Alarm“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Wissen die Beschäftigten, wie sie bei CO₂-Alarm reagieren (Raum verlassen, melden, nicht betreten)?"
       ],
       [
         "CO2ZUSAT-09",
         "Räumung",
-        "Ist beim Thema „Räumung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist die Räumung des Raums geregelt, mit Sammelstelle und Rückmeldung?"
       ],
       [
         "CO2ZUSAT-10",
         "Rettung ohne Eigengefährdung",
-        "Ist beim Thema „Rettung ohne Eigengefährdung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist festgelegt, dass Rettungen nur ohne Eigengefährdung erfolgen (Hilfe holen, geeigneter Atemschutz)?"
       ],
       [
         "CO2ZUSAT-11",
         "Störungsmeldung",
-        "Ist beim Thema „Störungsmeldung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist geregelt, wohin Störungs- und Leckagemeldungen gehen und wie schnell reagiert wird?"
       ],
       [
         "CO2ZUSAT-12",
         "Instandhaltung",
-        "Ist beim Thema „Instandhaltung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist festgelegt, dass die Instandhaltung der Anlage nur durch Fachkundige erfolgt?"
       ],
       [
         "CO2ZUSAT-13",
         "Prüfung der Sicherheitseinrichtungen",
-        "Ist beim Thema „Prüfung der Sicherheitseinrichtungen“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Werden Sensoren, Alarme und Lüftung regelmäßig geprüft und kalibriert, und ist das dokumentiert?"
       ],
       [
         "CO2ZUSAT-14",
         "Kennzeichnung",
-        "Ist beim Thema „Kennzeichnung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Räume mit CO₂-Risiko gekennzeichnet?"
       ],
       [
         "CO2ZUSAT-15",
         "Unterweisung",
-        "Ist beim Thema „Unterweisung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind die Beschäftigten regelmäßig zu den CO₂-Gefahren unterwiesen?"
       ]
     ],
     "orange": [
       [
         "ORANGE-01",
         "Bestimmungsgemäße Verwendung",
-        "Ist beim Thema „Bestimmungsgemäße Verwendung“ sichergestellt, dass die Orangen- / Zitruspresse unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Wird die Presse nur für Orangen und Zitrusfrüchte nach den Herstellerangaben verwendet?"
       ],
       [
         "ORANGE-02",
         "Aufstellung",
-        "Ist beim Thema „Aufstellung“ sichergestellt, dass die Orangen- / Zitruspresse unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Steht die Presse standsicher auf trockenem Untergrund und ist sie gegen Spritzwasser geschützt?"
       ],
       [
         "ORANGE-03",
         "Beschicken",
-        "Ist beim Thema „Beschicken“ sichergestellt, dass die Orangen- / Zitruspresse unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Lassen sich die Früchte so einlegen, dass niemand in den Pressbereich greifen muss?"
       ],
       [
         "ORANGE-04",
         "Einzugs- und Quetschstellen",
-        "Ist beim Thema „Einzugs- und Quetschstellen“ sichergestellt, dass die Orangen- / Zitruspresse unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind Einzugs- und Quetschstellen (Presskopf, Rollen, Förderband) gesichert?"
       ],
       [
         "ORANGE-05",
         "Schneid- und Pressteile",
-        "Ist beim Thema „Schneid- und Pressteile“ sichergestellt, dass die Orangen- / Zitruspresse unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind Schneid- und Pressteile verdeckt oder von Schutzeinrichtungen umschlossen?"
       ],
       [
         "ORANGE-06",
         "Abdeckungen",
-        "Ist beim Thema „Abdeckungen“ sichergestellt, dass die Orangen- / Zitruspresse unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind Abdeckungen und Haube vollständig, fest und unbeschädigt?"
       ],
       [
         "ORANGE-07",
         "Verriegelungen",
-        "Ist beim Thema „Verriegelungen“ sichergestellt, dass die Orangen- / Zitruspresse unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Schalten Verriegelungen die Maschine ab, wenn Abdeckungen geöffnet werden?"
       ],
       [
         "ORANGE-08",
         "Unbeabsichtigter Anlauf",
-        "Ist beim Thema „Unbeabsichtigter Anlauf“ sichergestellt, dass die Orangen- / Zitruspresse unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist ein unbeabsichtigter Anlauf (z. B. nach Stromausfall) ausgeschlossen?"
       ],
       [
         "ORANGE-09",
         "Kunden-Selbstbedienung",
-        "Ist beim Thema „Kunden-Selbstbedienung“ sichergestellt, dass die Orangen- / Zitruspresse unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist bei Kunden-Selbstbedienung der Zugriff auf gefährliche Teile ausgeschlossen und die Bedienung eindeutig erklärt?"
       ],
       [
         "ORANGE-10",
         "Störung und Blockade",
-        "Ist beim Thema „Störung und Blockade“ sichergestellt, dass die Orangen- / Zitruspresse unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist geregelt, wie Störungen und Verstopfungen ohne Eingriff bei laufender Presse behoben werden?"
       ],
       [
         "ORANGE-11",
         "Sicheres Stillsetzen",
-        "Ist beim Thema „Sicheres Stillsetzen“ sichergestellt, dass die Orangen- / Zitruspresse unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist festgelegt, wie die Presse stillgesetzt und gesichert wird (Netzstecker, Schalter)?"
       ],
       [
         "ORANGE-12",
         "Demontage",
-        "Ist beim Thema „Demontage“ sichergestellt, dass die Orangen- / Zitruspresse unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Wird die Maschine zur Demontage und Reinigung ausgeschaltet und vom Netz getrennt?"
       ],
       [
         "ORANGE-13",
         "Reinigung",
-        "Ist beim Thema „Reinigung“ sichergestellt, dass die Orangen- / Zitruspresse unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist die Reinigung geregelt (Zeitpunkte, Reihenfolge, geeignete Mittel)?"
       ],
       [
         "ORANGE-14",
         "Elektrik und Feuchtigkeit",
-        "Ist beim Thema „Elektrik und Feuchtigkeit“ sichergestellt, dass die Orangen- / Zitruspresse unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind elektrische Teile gegen Feuchtigkeit geschützt und geprüft?"
       ],
       [
         "ORANGE-15",
         "Rutschgefahr durch Saft",
-        "Ist beim Thema „Rutschgefahr durch Saft“ sichergestellt, dass die Orangen- / Zitruspresse unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Wird ausgelaufener Saft sofort aufgenommen, sodass der Boden nicht rutschig wird?"
       ]
     ],
     "rolltor": [
       [
         "ROLLTOR-01",
         "Allgemeiner Zustand",
-        "Ist beim Thema „Allgemeiner Zustand“ sichergestellt, dass die Rolltore unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Befinden sich Tor, Führungen und Antrieb in gutem Zustand, ohne Beschädigung?"
       ],
       [
         "ROLLTOR-02",
         "Bedienung",
-        "Ist beim Thema „Bedienung“ sichergestellt, dass die Rolltore unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist die Bedienung (Taster, Schlüsselschalter, Funk) nur befugten Personen möglich, und besteht Sicht auf das Tor?"
       ],
       [
         "ROLLTOR-03",
         "Quetschstellen",
-        "Ist beim Thema „Quetschstellen“ sichergestellt, dass die Rolltore unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind Quetschstellen zwischen Torblatt und Boden, Wand oder Zarge gesichert?"
       ],
       [
         "ROLLTOR-04",
         "Scherstellen",
-        "Ist beim Thema „Scherstellen“ sichergestellt, dass die Rolltore unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind Scherstellen zwischen Torblatt und Führungen oder Antrieb gesichert?"
       ],
       [
         "ROLLTOR-05",
         "Torblatt",
-        "Ist beim Thema „Torblatt“ sichergestellt, dass die Rolltore unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist das Torblatt unbeschädigt, und ist die Aufhängung (Federn, Gurte, Ketten) intakt?"
       ],
       [
         "ROLLTOR-06",
         "Absturz des Torblatts",
-        "Ist beim Thema „Absturz des Torblatts“ sichergestellt, dass die Rolltore unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist ein Absturz des Torblatts durch Fangvorrichtung oder Federbruchsicherung verhindert?"
       ],
       [
         "ROLLTOR-07",
         "Schutzeinrichtungen",
-        "Ist beim Thema „Schutzeinrichtungen“ sichergestellt, dass die Rolltore unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind Schutzeinrichtungen (Schaltleiste, Lichtschranke) vorhanden und wirksam?"
       ],
       [
         "ROLLTOR-08",
         "Hinderniserkennung",
-        "Ist beim Thema „Hinderniserkennung“ sichergestellt, dass die Rolltore unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Stoppt das Tor bei einem Hindernis oder fährt es zurück?"
       ],
       [
         "ROLLTOR-09",
         "Verkehrsbereich",
-        "Ist beim Thema „Verkehrsbereich“ sichergestellt, dass die Rolltore unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist der Bereich vor und hinter dem Tor frei und gekennzeichnet?"
       ],
       [
         "ROLLTOR-10",
         "Personenverkehr",
-        "Ist beim Thema „Personenverkehr“ sichergestellt, dass die Rolltore unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist der Personenverkehr durch das Tor (Schlupftür, Warnleuchte) sicher geregelt?"
       ],
       [
         "ROLLTOR-11",
         "Unbeabsichtigte Bewegung",
-        "Ist beim Thema „Unbeabsichtigte Bewegung“ sichergestellt, dass die Rolltore unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist ausgeschlossen, dass sich das Tor unbeabsichtigt bewegt (Notstopp, Abschaltung)?"
       ],
       [
         "ROLLTOR-12",
         "Störung",
-        "Ist beim Thema „Störung“ sichergestellt, dass die Rolltore unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist geregelt, wie bei Störungen vorzugehen ist und wer den Fehler behebt?"
       ],
       [
         "ROLLTOR-13",
         "Notbetätigung",
-        "Ist beim Thema „Notbetätigung“ sichergestellt, dass die Rolltore unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist die Notbetätigung (Handkurbel, Kettenzug) vorhanden, bekannt und funktionsfähig?"
       ],
       [
         "ROLLTOR-14",
         "Stillsetzen",
-        "Ist beim Thema „Stillsetzen“ sichergestellt, dass die Rolltore unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist das Tor bei Reinigung und Wartung stillgesetzt und gegen Bewegung gesichert?"
       ],
       [
         "ROLLTOR-15",
         "Prüfung und Wartung",
-        "Ist beim Thema „Prüfung und Wartung“ sichergestellt, dass die Rolltore unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Werden Prüfung und Wartung regelmäßig durch Sachkundige durchgeführt und dokumentiert?"
       ]
     ],
     "automatiktuer": [
       [
         "AUTOMATI-01",
         "Allgemeiner Zustand",
-        "Ist beim Thema „Allgemeiner Zustand“ sichergestellt, dass die Automatiktüren unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind Tür, Antrieb, Laufschiene und Verglasung in gutem Zustand?"
       ],
       [
         "AUTOMATI-02",
         "Sensoren",
-        "Ist beim Thema „Sensoren“ sichergestellt, dass die Automatiktüren unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Funktionieren die Sensoren (Radar, Lichtschranke) zuverlässig, und sind sie sauber und nicht verdeckt?"
       ],
       [
         "AUTOMATI-03",
         "Erfassungsbereich",
-        "Ist beim Thema „Erfassungsbereich“ sichergestellt, dass die Automatiktüren unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Deckt der Erfassungsbereich die Tür vollständig ab, auch für Kinder und Rollstuhlfahrer?"
       ],
       [
         "AUTOMATI-04",
         "Öffnungsbewegung",
-        "Ist beim Thema „Öffnungsbewegung“ sichergestellt, dass die Automatiktüren unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist die Öffnungsgeschwindigkeit angemessen?"
       ],
       [
         "AUTOMATI-05",
         "Schließbewegung",
-        "Ist beim Thema „Schließbewegung“ sichergestellt, dass die Automatiktüren unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist die Schließbewegung so begrenzt, dass niemand getroffen oder eingeklemmt wird?"
       ],
       [
         "AUTOMATI-06",
         "Quetschstellen",
-        "Ist beim Thema „Quetschstellen“ sichergestellt, dass die Automatiktüren unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind Quetschstellen an den Haupt- und Nebenschließkanten gesichert?"
       ],
       [
         "AUTOMATI-07",
         "Scherstellen",
-        "Ist beim Thema „Scherstellen“ sichergestellt, dass die Automatiktüren unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind Scherstellen zwischen Flügel und Wand oder Festverglasung gesichert?"
       ],
       [
         "AUTOMATI-08",
         "Hindernisverhalten",
-        "Ist beim Thema „Hindernisverhalten“ sichergestellt, dass die Automatiktüren unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Öffnet die Tür bei einem Hindernis erneut oder stoppt sie?"
       ],
       [
         "AUTOMATI-09",
         "Kundenverkehr",
-        "Ist beim Thema „Kundenverkehr“ sichergestellt, dass die Automatiktüren unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist die Tür auch bei starkem Kundenverkehr (Wagen, Rollstühle) ausreichend breit und übersichtlich?"
       ],
       [
         "AUTOMATI-10",
         "Kinder und besondere Nutzergruppen",
-        "Ist beim Thema „Kinder und besondere Nutzergruppen“ sichergestellt, dass die Automatiktüren unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind Kinder und Menschen mit Einschränkungen besonders berücksichtigt (Sensorik, Höhe, Markierung)?"
       ],
       [
         "AUTOMATI-11",
         "Fluchtwegfunktion",
-        "Ist beim Thema „Fluchtwegfunktion“ sichergestellt, dass die Automatiktüren unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Lässt sich eine Tür im Verlauf eines Fluchtwegs ohne Hilfsmittel öffnen oder ist sie entsprechend gesichert?"
       ],
       [
         "AUTOMATI-12",
         "Notöffnung",
-        "Ist beim Thema „Notöffnung“ sichergestellt, dass die Automatiktüren unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Gibt es eine funktionierende Notöffnung (Handöffnung, Panikfunktion)?"
       ],
       [
         "AUTOMATI-13",
         "Störung",
-        "Ist beim Thema „Störung“ sichergestellt, dass die Automatiktüren unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist geregelt, wie bei Störungen vorzugehen ist (Sperrung, Meldung, Reparatur)?"
       ],
       [
         "AUTOMATI-14",
         "Stromausfall",
-        "Ist beim Thema „Stromausfall“ sichergestellt, dass die Automatiktüren unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist das Verhalten bei Stromausfall geklärt (Offenstellung, Batterie)?"
       ],
       [
         "AUTOMATI-15",
         "Prüfung und Wartung",
-        "Ist beim Thema „Prüfung und Wartung“ sichergestellt, dass die Automatiktüren unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Werden Prüfung und Wartung regelmäßig durch Sachkundige durchgeführt und dokumentiert?"
       ]
     ],
     "braeter": [
       [
         "BRAETER-01",
         "Aufstellung",
-        "Ist beim Thema „Aufstellung“ sichergestellt, dass die Bräter / Kippbratpfanne unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Steht der Bräter standsicher mit ausreichend Freiraum, Abzug und sicheren Anschlüssen (Gas, Strom, Wasser)?"
       ],
       [
         "BRAETER-02",
         "Bestimmungsgemäße Verwendung",
-        "Ist beim Thema „Bestimmungsgemäße Verwendung“ sichergestellt, dass die Bräter / Kippbratpfanne unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Wird der Bräter nur für die vorgesehenen Garvorgänge und Mengen verwendet?"
       ],
       [
         "BRAETER-03",
         "Beschicken",
-        "Ist beim Thema „Beschicken“ sichergestellt, dass die Bräter / Kippbratpfanne unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Kann der Bräter beschickt werden, ohne dass Spritzer oder Dampf zu Verbrennungen führen?"
       ],
       [
         "BRAETER-04",
         "Heiße Oberflächen",
-        "Ist beim Thema „Heiße Oberflächen“ sichergestellt, dass die Bräter / Kippbratpfanne unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind heiße Oberflächen (Wanne, Deckel, Gehäuse) gegen Berühren geschützt oder gekennzeichnet?"
       ],
       [
         "BRAETER-05",
         "Heißes Gargut",
-        "Ist beim Thema „Heißes Gargut“ sichergestellt, dass die Bräter / Kippbratpfanne unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Wird heißes Gargut mit geeigneten Hilfsmitteln gehandhabt, ohne den Bräter zu überfüllen?"
       ],
       [
         "BRAETER-06",
         "Dampf",
-        "Ist beim Thema „Dampf“ sichergestellt, dass die Bräter / Kippbratpfanne unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist die Dampfbildung beim Öffnen des Deckels beherrscht (Abstand, Hinweis, Abzug)?"
       ],
       [
         "BRAETER-07",
         "Spritzer",
-        "Ist beim Thema „Spritzer“ sichergestellt, dass die Bräter / Kippbratpfanne unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind Fett- und Flüssigkeitsspritzer beim Kippen und Entleeren begrenzt?"
       ],
       [
         "BRAETER-08",
         "Kippbewegung",
-        "Ist beim Thema „Kippbewegung“ sichergestellt, dass die Bräter / Kippbratpfanne unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Lässt sich die Kippbewegung kontrolliert bedienen (Sicherung, Haltepunkte)?"
       ],
       [
         "BRAETER-09",
         "Quetschstellen",
-        "Ist beim Thema „Quetschstellen“ sichergestellt, dass die Bräter / Kippbratpfanne unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind Quetschstellen am Kippmechanismus und am Deckel gesichert?"
       ],
       [
         "BRAETER-10",
         "Bedienung",
-        "Ist beim Thema „Bedienung“ sichergestellt, dass die Bräter / Kippbratpfanne unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist die Bedienung auf befugte, unterwiesene Personen beschränkt?"
       ],
       [
         "BRAETER-11",
         "Unbeabsichtigter Anlauf",
-        "Ist beim Thema „Unbeabsichtigter Anlauf“ sichergestellt, dass die Bräter / Kippbratpfanne unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist ein unbeabsichtigter Start oder ein unbeabsichtigtes Kippen ausgeschlossen?"
       ],
       [
         "BRAETER-12",
         "Störung",
-        "Ist beim Thema „Störung“ sichergestellt, dass die Bräter / Kippbratpfanne unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist geregelt, wie bei Störungen (z. B. Gas- oder Stromausfall, Auslaufen) vorzugehen ist?"
       ],
       [
         "BRAETER-13",
         "Sicheres Stillsetzen",
-        "Ist beim Thema „Sicheres Stillsetzen“ sichergestellt, dass die Bräter / Kippbratpfanne unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist geregelt, wie der Bräter vor Reinigung und Wartung stillgesetzt, gesichert und abgekühlt wird?"
       ],
       [
         "BRAETER-14",
         "Entleeren",
-        "Ist beim Thema „Entleeren“ sichergestellt, dass die Bräter / Kippbratpfanne unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Gibt es beim Entleeren sichere Behälter, Wagen und Hilfsmittel?"
       ],
       [
         "BRAETER-15",
         "Reinigung",
-        "Ist beim Thema „Reinigung“ sichergestellt, dass die Bräter / Kippbratpfanne unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist die Reinigung geregelt (Abkühlen, Mittel, Schutzhandschuhe)?"
       ],
       [
         "BRAETER-16",
         "Prüfung und Unterweisung",
-        "Ist beim Thema „Prüfung und Unterweisung“ sichergestellt, dass die Bräter / Kippbratpfanne unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Werden Prüfung und Unterweisung regelmäßig durchgeführt und dokumentiert?"
       ]
     ],
     "ofen_fleisch": [
       [
         "OFENFLEI-01",
         "Aufstellung",
-        "Ist beim Thema „Aufstellung“ sichergestellt, dass die Backofen – Fleischprodukte unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Steht der Ofen standsicher mit ausreichend Abstand zu brennbaren Materialien und mit funktionierendem Abzug?"
       ],
       [
         "OFENFLEI-02",
         "Bestimmungsgemäße Verwendung",
-        "Ist beim Thema „Bestimmungsgemäße Verwendung“ sichergestellt, dass die Backofen – Fleischprodukte unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Wird der Ofen nur für die vorgesehenen Fleischprodukte und Garverfahren verwendet?"
       ],
       [
         "OFENFLEI-03",
         "Beschicken",
-        "Ist beim Thema „Beschicken“ sichergestellt, dass die Backofen – Fleischprodukte unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Kann der Ofen beschickt werden, ohne dass Gestelle, Wagen oder Heißluft zu Verbrennungen oder Quetschungen führen?"
       ],
       [
         "OFENFLEI-04",
         "Heiße Oberflächen",
-        "Ist beim Thema „Heiße Oberflächen“ sichergestellt, dass die Backofen – Fleischprodukte unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind heiße Oberflächen (Gehäuse, Tür, Scheibe) gegen Berühren geschützt oder gekennzeichnet?"
       ],
       [
         "OFENFLEI-05",
         "Tür und Dichtungen",
-        "Ist beim Thema „Tür und Dichtungen“ sichergestellt, dass die Backofen – Fleischprodukte unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind Tür und Dichtungen unbeschädigt, und schließt die Tür sicher?"
       ],
       [
         "OFENFLEI-06",
         "Dampf",
-        "Ist beim Thema „Dampf“ sichergestellt, dass die Backofen – Fleischprodukte unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Wird beim Öffnen die Dampf- und Heißluftfreisetzung beachtet (Abstand, Reihenfolge, Abzug)?"
       ],
       [
         "OFENFLEI-07",
         "Entnahme",
-        "Ist beim Thema „Entnahme“ sichergestellt, dass die Backofen – Fleischprodukte unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Kann das Gargut sicher entnommen und abgestellt werden (Wagen, Ablagen, Hilfsmittel)?"
       ],
       [
         "OFENFLEI-08",
         "Heiße Bleche und Behälter",
-        "Ist beim Thema „Heiße Bleche und Behälter“ sichergestellt, dass die Backofen – Fleischprodukte unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind für heiße Bleche und Behälter geeignete Hitzeschutzhandschuhe und Transporthilfen vorhanden?"
       ],
       [
         "OFENFLEI-09",
         "Verbrennungsgefahr",
-        "Ist beim Thema „Verbrennungsgefahr“ sichergestellt, dass die Backofen – Fleischprodukte unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist die Gefahr von Verbrennungen durch heißes Fett und Bratensaft begrenzt (Auffangwannen, Abkühlung)?"
       ],
       [
         "OFENFLEI-10",
         "Bedienung",
-        "Ist beim Thema „Bedienung“ sichergestellt, dass die Backofen – Fleischprodukte unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist die Bedienung auf befugte, unterwiesene Personen beschränkt?"
       ],
       [
         "OFENFLEI-11",
         "Störung",
-        "Ist beim Thema „Störung“ sichergestellt, dass die Backofen – Fleischprodukte unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist geregelt, wie bei Störungen (Ausfall, Geruch, Rauch, Brand im Ofen) vorzugehen ist?"
       ],
       [
         "OFENFLEI-12",
         "Sicheres Stillsetzen",
-        "Ist beim Thema „Sicheres Stillsetzen“ sichergestellt, dass die Backofen – Fleischprodukte unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist geregelt, wie der Ofen vor Reinigung und Wartung stillgesetzt, vom Netz getrennt und abgekühlt wird?"
       ],
       [
         "OFENFLEI-13",
         "Reinigung",
-        "Ist beim Thema „Reinigung“ sichergestellt, dass die Backofen – Fleischprodukte unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist die Reinigung geregelt (Abkühlzeit, Reinigungsmittel, Schutzbrille und Handschuhe, Fettablagerungen)?"
       ],
       [
         "OFENFLEI-14",
         "Elektrik",
-        "Ist beim Thema „Elektrik“ sichergestellt, dass die Backofen – Fleischprodukte unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind elektrische Teile und Zuleitungen unbeschädigt, geprüft und gegen Feuchtigkeit geschützt?"
       ],
       [
         "OFENFLEI-15",
         "Prüfung und Wartung",
-        "Ist beim Thema „Prüfung und Wartung“ sichergestellt, dass die Backofen – Fleischprodukte unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Werden Prüfung und Wartung des Ofens durch Fachkundige durchgeführt und dokumentiert?"
       ],
       [
         "OFENFLEI-16",
         "Unterweisung",
-        "Ist beim Thema „Unterweisung“ sichergestellt, dass die Backofen – Fleischprodukte unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind Bedienende zu Hitze, Dampf, Reinigung und Verhalten im Brandfall unterwiesen?"
       ]
     ],
     "ofen_brot": [
       [
         "OFENBROT-01",
         "Aufstellung",
-        "Ist beim Thema „Aufstellung“ sichergestellt, dass die Backofen – Brot / Backshop unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Steht der Ofen standsicher mit ausreichend Abstand zu brennbaren Materialien und mit funktionierendem Abzug?"
       ],
       [
         "OFENBROT-02",
         "Bestimmungsgemäße Verwendung",
-        "Ist beim Thema „Bestimmungsgemäße Verwendung“ sichergestellt, dass die Backofen – Brot / Backshop unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Wird der Ofen nur für die vorgesehenen Backwaren und Backprogramme verwendet?"
       ],
       [
         "OFENBROT-03",
         "Beschicken",
-        "Ist beim Thema „Beschicken“ sichergestellt, dass die Backofen – Brot / Backshop unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Kann der Ofen beschickt werden, ohne dass Bleche, Wagen oder Heißluft zu Verbrennungen oder Quetschungen führen?"
       ],
       [
         "OFENBROT-04",
         "Heiße Oberflächen",
-        "Ist beim Thema „Heiße Oberflächen“ sichergestellt, dass die Backofen – Brot / Backshop unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind heiße Oberflächen (Gehäuse, Tür, Scheibe) gegen Berühren geschützt oder gekennzeichnet?"
       ],
       [
         "OFENBROT-05",
         "Tür und Dichtungen",
-        "Ist beim Thema „Tür und Dichtungen“ sichergestellt, dass die Backofen – Brot / Backshop unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind Tür und Dichtungen unbeschädigt, und schließt die Tür sicher?"
       ],
       [
         "OFENBROT-06",
         "Dampf",
-        "Ist beim Thema „Dampf“ sichergestellt, dass die Backofen – Brot / Backshop unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Wird beim Öffnen die Freisetzung von Dampf und Schwaden beachtet (Abstand, Tür zunächst spaltweise öffnen)?"
       ],
       [
         "OFENBROT-07",
         "Entnahme",
-        "Ist beim Thema „Entnahme“ sichergestellt, dass die Backofen – Brot / Backshop unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Kann das Backgut sicher entnommen und abgestellt werden (Ablagen, Wagen, Hilfsmittel)?"
       ],
       [
         "OFENBROT-08",
         "Heiße Bleche",
-        "Ist beim Thema „Heiße Bleche“ sichergestellt, dass die Backofen – Brot / Backshop unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind für heiße Bleche geeignete Hitzeschutzhandschuhe, Zangen und Transporthilfen vorhanden?"
       ],
       [
         "OFENBROT-09",
         "Verbrennungsgefahr",
-        "Ist beim Thema „Verbrennungsgefahr“ sichergestellt, dass die Backofen – Brot / Backshop unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist die Gefahr von Verbrennungen am Backgut, an Blechen und beim Umsetzen begrenzt?"
       ],
       [
         "OFENBROT-10",
         "Bedienung",
-        "Ist beim Thema „Bedienung“ sichergestellt, dass die Backofen – Brot / Backshop unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist die Bedienung auf befugte, unterwiesene Personen beschränkt?"
       ],
       [
         "OFENBROT-11",
         "Störung",
-        "Ist beim Thema „Störung“ sichergestellt, dass die Backofen – Brot / Backshop unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist geregelt, wie bei Störungen (Ausfall, Geruch, Rauch, Brand im Ofen) vorzugehen ist?"
       ],
       [
         "OFENBROT-12",
         "Sicheres Stillsetzen",
-        "Ist beim Thema „Sicheres Stillsetzen“ sichergestellt, dass die Backofen – Brot / Backshop unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist geregelt, wie der Ofen vor Reinigung und Wartung stillgesetzt, vom Netz getrennt und abgekühlt wird?"
       ],
       [
         "OFENBROT-13",
         "Reinigung",
-        "Ist beim Thema „Reinigung“ sichergestellt, dass die Backofen – Brot / Backshop unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist die Reinigung geregelt (Abkühlzeit, Reinigungsmittel, Schutzbrille und Handschuhe)?"
       ],
       [
         "OFENBROT-14",
         "Elektrik",
-        "Ist beim Thema „Elektrik“ sichergestellt, dass die Backofen – Brot / Backshop unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind elektrische Teile und Zuleitungen unbeschädigt, geprüft und gegen Feuchtigkeit geschützt?"
       ],
       [
         "OFENBROT-15",
         "Prüfung und Wartung",
-        "Ist beim Thema „Prüfung und Wartung“ sichergestellt, dass die Backofen – Brot / Backshop unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Werden Prüfung und Wartung des Ofens durch Fachkundige durchgeführt und dokumentiert?"
       ],
       [
         "OFENBROT-16",
         "Unterweisung",
-        "Ist beim Thema „Unterweisung“ sichergestellt, dass die Backofen – Brot / Backshop unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind Bedienende zu Hitze, Dampf, Reinigung und Verhalten im Brandfall unterwiesen?"
       ]
     ],
     "fleischtheke": [
       [
         "FLEISCHT-01",
         "Aufstellung",
-        "Ist beim Thema „Aufstellung“ sichergestellt, dass die Fleischtheke / Verkaufs- und Kühlmöbel unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Steht die Theke standsicher und eben, mit ausreichend Abstand zur Wand für Lüftung und Wartung?"
       ],
       [
         "FLEISCHT-02",
         "Scheiben und Abdeckungen",
-        "Ist beim Thema „Scheiben und Abdeckungen“ sichergestellt, dass die Fleischtheke / Verkaufs- und Kühlmöbel unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind Scheiben und Abdeckungen unbeschädigt, fest montiert und aus Sicherheitsglas bzw. splitterarmem Material?"
       ],
       [
         "FLEISCHT-03",
         "Öffnen und Schließen",
-        "Ist beim Thema „Öffnen und Schließen“ sichergestellt, dass die Fleischtheke / Verkaufs- und Kühlmöbel unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Lassen sich Klappen, Schiebetüren und Scheiben leicht und sicher öffnen und schließen?"
       ],
       [
         "FLEISCHT-04",
         "Quetschstellen",
-        "Ist beim Thema „Quetschstellen“ sichergestellt, dass die Fleischtheke / Verkaufs- und Kühlmöbel unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind Quetschstellen an Klappen, Türen und Scheiben gesichert?"
       ],
       [
         "FLEISCHT-05",
         "Kühlung",
-        "Ist beim Thema „Kühlung“ sichergestellt, dass die Fleischtheke / Verkaufs- und Kühlmöbel unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Hält das Kühlmöbel die vorgesehene Temperatur sicher ein, und sind Verdampfer und Auffangwannen in Ordnung?"
       ],
       [
         "FLEISCHT-06",
         "Temperaturüberwachung",
-        "Ist beim Thema „Temperaturüberwachung“ sichergestellt, dass die Fleischtheke / Verkaufs- und Kühlmöbel unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Wird die Temperatur überwacht und dokumentiert, und ist festgelegt, wie bei Abweichung zu reagieren ist?"
       ],
       [
         "FLEISCHT-07",
         "Elektrische Sicherheit",
-        "Ist beim Thema „Elektrische Sicherheit“ sichergestellt, dass die Fleischtheke / Verkaufs- und Kühlmöbel unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind elektrische Geräte, Leitungen und Anschlüsse unbeschädigt, geprüft und gegen Feuchtigkeit geschützt?"
       ],
       [
         "FLEISCHT-08",
         "Beleuchtung im Möbel",
-        "Ist beim Thema „Beleuchtung im Möbel“ sichergestellt, dass die Fleischtheke / Verkaufs- und Kühlmöbel unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist die Beleuchtung im Möbel funktionsfähig, blendfrei und gegen Berührung und Feuchtigkeit gesichert?"
       ],
       [
         "FLEISCHT-09",
         "Warenentnahme",
-        "Ist beim Thema „Warenentnahme“ sichergestellt, dass die Fleischtheke / Verkaufs- und Kühlmöbel unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Kann die Ware ohne Überkopfarbeiten, tiefes Bücken oder weites Vorbeugen entnommen werden?"
       ],
       [
         "FLEISCHT-10",
         "Ergonomie",
-        "Ist beim Thema „Ergonomie“ sichergestellt, dass die Fleischtheke / Verkaufs- und Kühlmöbel unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind Arbeitshöhe, Greifraum und Standfläche hinter der Theke ergonomisch gestaltet (Matten, Sitz-Steh-Wechsel)?"
       ],
       [
         "FLEISCHT-11",
         "Reinigung",
-        "Ist beim Thema „Reinigung“ sichergestellt, dass die Fleischtheke / Verkaufs- und Kühlmöbel unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist die Reinigung des Möbels geregelt (Zeitpunkte, Reihenfolge, Stromlosigkeit, Vorgehen bei Nässe)?"
       ],
       [
         "FLEISCHT-12",
         "Reinigungsmittel",
-        "Ist beim Thema „Reinigungsmittel“ sichergestellt, dass die Fleischtheke / Verkaufs- und Kühlmöbel unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind Reinigungs- und Desinfektionsmittel beurteilt, und stehen Betriebsanweisung, Handschuhe und Schutzbrille bereit?"
       ],
       [
         "FLEISCHT-13",
         "Scherben und Beschädigungen",
-        "Ist beim Thema „Scherben und Beschädigungen“ sichergestellt, dass die Fleischtheke / Verkaufs- und Kühlmöbel unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist geregelt, wie bei Glasbruch und Beschädigungen vorzugehen ist (sperren, sichern, aufnehmen)?"
       ],
       [
         "FLEISCHT-14",
         "Störung",
-        "Ist beim Thema „Störung“ sichergestellt, dass die Fleischtheke / Verkaufs- und Kühlmöbel unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist geregelt, wie bei Störungen (Temperaturanstieg, Geräusche, Wasseraustritt) vorzugehen ist?"
       ],
       [
         "FLEISCHT-15",
         "Wartung und Prüfung",
-        "Ist beim Thema „Wartung und Prüfung“ sichergestellt, dass die Fleischtheke / Verkaufs- und Kühlmöbel unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Werden Wartung und Prüfung (Kältetechnik, Elektrik) durch Fachkundige durchgeführt und dokumentiert?"
       ],
       [
         "FLEISCHT-16",
         "Unterweisung",
-        "Ist beim Thema „Unterweisung“ sichergestellt, dass die Fleischtheke / Verkaufs- und Kühlmöbel unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind Beschäftigte zu Bedienung, Reinigung und Verhalten bei Störungen unterwiesen?"
       ]
     ],
     "heissetheke": [
       [
         "HEISSETH-01",
         "Aufstellung",
-        "Ist beim Thema „Aufstellung“ sichergestellt, dass die Heiße Theke / Warmhalte- und Imbisstheke unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Steht die Theke standsicher auf trockenem, ebenem Untergrund, mit ausreichend Abstand zu brennbaren Materialien?"
       ],
       [
         "HEISSETH-02",
         "Heiße Oberflächen",
-        "Ist beim Thema „Heiße Oberflächen“ sichergestellt, dass die Heiße Theke / Warmhalte- und Imbisstheke unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind heiße Oberflächen (Wärmeplatten, Gehäuse, Abdeckungen) gegen Berühren geschützt oder gekennzeichnet?"
       ],
       [
         "HEISSETH-03",
         "Heiße Speisen",
-        "Ist beim Thema „Heiße Speisen“ sichergestellt, dass die Heiße Theke / Warmhalte- und Imbisstheke unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Wird heiße Speise mit geeigneten Hilfsmitteln und in dafür vorgesehenen Behältern gehandhabt?"
       ],
       [
         "HEISSETH-04",
         "Dampf",
-        "Ist beim Thema „Dampf“ sichergestellt, dass die Heiße Theke / Warmhalte- und Imbisstheke unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist die Dampfbildung beim Öffnen von Abdeckungen und Behältern beherrscht?"
       ],
       [
         "HEISSETH-05",
         "Spritzer",
-        "Ist beim Thema „Spritzer“ sichergestellt, dass die Heiße Theke / Warmhalte- und Imbisstheke unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind Spritzer von heißem Fett und heißer Flüssigkeit durch Abdeckungen und Abstand begrenzt?"
       ],
       [
         "HEISSETH-06",
         "Behälter und Einsätze",
-        "Ist beim Thema „Behälter und Einsätze“ sichergestellt, dass die Heiße Theke / Warmhalte- und Imbisstheke unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind Behälter und Einsätze standsicher, unbeschädigt und mit ausreichend Griffen oder Hitzeschutz?"
       ],
       [
         "HEISSETH-07",
         "Entnahme und Ausgabe",
-        "Ist beim Thema „Entnahme und Ausgabe“ sichergestellt, dass die Heiße Theke / Warmhalte- und Imbisstheke unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Kann die Ware sicher entnommen und ausgegeben werden, ohne dass Beschäftigte oder Kunden Verbrennungen riskieren?"
       ],
       [
         "HEISSETH-08",
         "Kundenbereich",
-        "Ist beim Thema „Kundenbereich“ sichergestellt, dass die Heiße Theke / Warmhalte- und Imbisstheke unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist der Kundenbereich so gestaltet, dass Kunden nicht an heiße Teile oder Ausgabeflächen gelangen?"
       ],
       [
         "HEISSETH-09",
         "Verbrennungsgefahr",
-        "Ist beim Thema „Verbrennungsgefahr“ sichergestellt, dass die Heiße Theke / Warmhalte- und Imbisstheke unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist die Gefahr von Verbrennungen und Verbrühungen insgesamt beurteilt und sind geeignete Handschuhe oder Hilfsmittel vorhanden?"
       ],
       [
         "HEISSETH-10",
         "Elektrische Sicherheit",
-        "Ist beim Thema „Elektrische Sicherheit“ sichergestellt, dass die Heiße Theke / Warmhalte- und Imbisstheke unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind elektrische Geräte, Leitungen und Anschlüsse unbeschädigt, geprüft und gegen Feuchtigkeit geschützt?"
       ],
       [
         "HEISSETH-11",
         "Temperaturbetrieb",
-        "Ist beim Thema „Temperaturbetrieb“ sichergestellt, dass die Heiße Theke / Warmhalte- und Imbisstheke unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Wird die vorgesehene Temperatur sicher gehalten und überwacht (Lebensmittelsicherheit, Temperaturschutz)?"
       ],
       [
         "HEISSETH-12",
         "Störung",
-        "Ist beim Thema „Störung“ sichergestellt, dass die Heiße Theke / Warmhalte- und Imbisstheke unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist geregelt, wie bei Störungen (Ausfall, Geruch, Rauch, Wasser) vorzugehen ist?"
       ],
       [
         "HEISSETH-13",
         "Sicheres Stillsetzen",
-        "Ist beim Thema „Sicheres Stillsetzen“ sichergestellt, dass die Heiße Theke / Warmhalte- und Imbisstheke unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist geregelt, wie die Theke vor Reinigung und Wartung abgeschaltet, vom Netz getrennt und abgekühlt wird?"
       ],
       [
         "HEISSETH-14",
         "Reinigung",
-        "Ist beim Thema „Reinigung“ sichergestellt, dass die Heiße Theke / Warmhalte- und Imbisstheke unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Ist die Reinigung geregelt (Abkühlzeit, Mittel, Schutzhandschuhe)?"
       ],
       [
         "HEISSETH-15",
         "Wartung und Prüfung",
-        "Ist beim Thema „Wartung und Prüfung“ sichergestellt, dass die Heiße Theke / Warmhalte- und Imbisstheke unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Werden Wartung und Prüfung durch Fachkundige durchgeführt und dokumentiert?"
       ],
       [
         "HEISSETH-16",
         "Unterweisung",
-        "Ist beim Thema „Unterweisung“ sichergestellt, dass die Heiße Theke / Warmhalte- und Imbisstheke unter den tatsächlichen Betriebsbedingungen sicher verwendet wird und erforderliche Schutzmaßnahmen wirksam sind?"
+        "Sind Beschäftigte zu Hitze, Verbrennungsgefahr und Verhalten bei Störungen unterwiesen?"
       ]
     ],
     "hackklotz": [
       [
         "HACKKLOT-01",
         "Standsicherheit",
-        "Ist beim Thema „Standsicherheit“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Steht der Hackklotz standsicher (nicht kippelig), mit ebener, tragfähiger Aufstellung?"
       ],
       [
         "HACKKLOT-02",
         "Arbeitsfläche",
-        "Ist beim Thema „Arbeitsfläche“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist die Arbeitsfläche eben, ohne tiefe Risse, Splitter oder Ausbrüche und hygienisch zu reinigen?"
       ],
       [
         "HACKKLOT-03",
         "Arbeitshöhe",
-        "Ist beim Thema „Arbeitshöhe“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Entspricht die Arbeitshöhe den Beschäftigten, sodass keine Zwangshaltungen oder Überkopfarbeiten entstehen?"
       ],
       [
         "HACKKLOT-04",
         "Handmesser",
-        "Ist beim Thema „Handmesser“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind die verwendeten Handmesser für die Arbeit geeignet, scharf und mit sicherem Griff?"
       ],
       [
         "HACKKLOT-05",
         "Beile",
-        "Ist beim Thema „Beile“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Werden Beile und Hackmesser nur dafür verwendet, mit sicherem Stand und freiem Schwungraum?"
       ],
       [
         "HACKKLOT-06",
         "Werkzeugzustand",
-        "Ist beim Thema „Werkzeugzustand“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Werkzeuge in gutem Zustand (Stiel fest, Schneide intakt, kein Rost oder Ausbruch)?"
       ],
       [
         "HACKKLOT-07",
         "Schneidrichtung",
-        "Ist beim Thema „Schneidrichtung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist beim Schneiden und Hacken vom Körper weg und mit ausreichender Absicherung der Haltehand gearbeitet?"
       ],
       [
         "HACKKLOT-08",
         "Werkstückfixierung",
-        "Ist beim Thema „Werkstückfixierung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Wird das Werkstück sicher gehalten oder fixiert (Fleischhaken, Haltezange, Gegenhalter)?"
       ],
       [
         "HACKKLOT-09",
         "Sicherheitsabstand",
-        "Ist beim Thema „Sicherheitsabstand“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Wird ein Sicherheitsabstand zu anderen Personen und zum Durchgangsverkehr eingehalten?"
       ],
       [
         "HACKKLOT-10",
         "Ablage",
-        "Ist beim Thema „Ablage“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Gibt es feste Ablageplätze für Messer und Beile, sodass sie nicht auf dem Klotz liegen bleiben?"
       ],
       [
         "HACKKLOT-11",
         "Transport der Werkzeuge",
-        "Ist beim Thema „Transport der Werkzeuge“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Werden Werkzeuge verdeckt und gesichert transportiert (Scheide, Köcher)?"
       ],
       [
         "HACKKLOT-12",
         "Schnitt- und Stichschutz",
-        "Ist beim Thema „Schnitt- und Stichschutz“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Werden Schnitt- und Stichschutzhandschuhe und, wo nötig, eine Schutzschürze getragen?"
       ],
       [
         "HACKKLOT-13",
         "Reinigung",
-        "Ist beim Thema „Reinigung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Ist die Reinigung des Hackklotzes geregelt (Verfahren, Zeitpunkte, geeignete Mittel)?"
       ],
       [
         "HACKKLOT-14",
         "Hygiene",
-        "Ist beim Thema „Hygiene“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Hygieneanforderungen (Material, Oberflächenzustand, Desinfektion) erfüllt?"
       ],
       [
         "HACKKLOT-15",
         "Beschädigungen",
-        "Ist beim Thema „Beschädigungen“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Werden Beschädigungen am Klotz oder an den Werkzeugen gemeldet, und wird der Klotz bei Schäden gesperrt oder ersetzt?"
       ],
       [
         "HACKKLOT-16",
         "Unterweisung",
-        "Ist beim Thema „Unterweisung“ sichergestellt, dass die Gefährdungen im Arbeitsbereich beurteilt und erforderliche Schutzmaßnahmen wirksam umgesetzt sind?"
+        "Sind Beschäftigte zum sicheren Hacken und Schneiden unterwiesen?"
       ]
     ],
     "reinigungsmaschine": [

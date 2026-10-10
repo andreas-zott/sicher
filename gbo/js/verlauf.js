@@ -38,7 +38,7 @@ function renderArchiveList() {
         <div class="archive-item card" data-id="${record.id}">
             <div class="archive-item-head">
                 <div>
-                    <div class="archive-item-firma">${ci.marktnummer || 'Ohne Markt-Angabe'}</div>
+                    <div class="archive-item-firma">${escapeHtml(ci.marktnummer || 'Ohne Markt-Angabe')}</div>
                     <div class="archive-item-meta">Begehung vom ${auditDatum} · archiviert am ${archiviertAm}${fotoAnzahl ? ' · ' + fotoAnzahl + ' Foto(s)' : ''}</div>
                 </div>
             </div>
@@ -178,17 +178,17 @@ function renderTeamArchiveList() {
             : '-';
 
         return `
-        <div class="archive-item card" data-filename="${entry.fileName}">
+        <div class="archive-item card" data-filename="${escapeHtml(entry.fileName)}">
             <div class="archive-item-head">
                 <div>
-                    <div class="archive-item-firma">${entry.plzOrt || 'Ohne Markt-Angabe'}${entry.marktnummer ? ' (Nr. ' + entry.marktnummer + ')' : ''}</div>
-                    <div class="archive-item-meta">Begehung vom ${entry.datum || '-'} · auf NAS gespeichert am ${gespeichertAm}</div>
+                    <div class="archive-item-firma">${escapeHtml(entry.plzOrt || entry.firma || 'Ohne Markt-Angabe')}${entry.marktnummer ? ' (Nr. ' + escapeHtml(entry.marktnummer) + ')' : ''}</div>
+                    <div class="archive-item-meta">Begehung vom ${escapeHtml(entry.datum || '-')} · auf NAS gespeichert am ${gespeichertAm}</div>
                 </div>
             </div>
             <div class="archive-item-actions">
                 <div class="archive-item-actions-primary">
-                    <button class="btn btn-secondary btn-small" onclick="onTeamArchiveExport('${entry.fileName}')">📤 PDF exportieren</button>
-                    <button class="btn btn-secondary btn-small" onclick="onTeamArchiveRestore('${entry.fileName}')">📂 In App anzeigen</button>
+                    <button class="btn btn-secondary btn-small" onclick="onTeamArchiveExport(this.closest('[data-filename]').dataset.filename)">📤 PDF exportieren</button>
+                    <button class="btn btn-secondary btn-small" onclick="onTeamArchiveRestore(this.closest('[data-filename]').dataset.filename)">📂 In App anzeigen</button>
                 </div>
             </div>
         </div>`;

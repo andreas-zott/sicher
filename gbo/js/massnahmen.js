@@ -188,7 +188,7 @@ async function renderMeasures() {
                     </span>
 
                     <span class="measure-question-text">
-                        ${questionText}
+                        ${escapeHtml(questionText)}
                     </span>
 
                 </div>
@@ -273,7 +273,7 @@ async function renderMeasures() {
                             '${measure.id}',
                             'description',
                             this.value
-                        )">${measure.description || ''}</textarea>
+                        )">${escapeHtml(measure.description || '')}</textarea>
 
 
                     ${
@@ -442,6 +442,8 @@ async function onMeasurePhotosCaptured(
 
 
     let failed = 0;
+    let stopp = false;
+    let gewarnt = false;
 
 
     // ----------------------------------------------------------------------
@@ -450,10 +452,31 @@ async function onMeasurePhotosCaptured(
 
     for (const file of files) {
 
+        if (stopp) {
+            failed++;
+            continue;
+        }
+
         try {
 
             const blob =
                 await resizeImageFile(file);
+
+            // Platz vorher pruefen: bei zu wenig Speicher nicht speichern,
+            // bei knappem Speicher einmal warnen.
+            if (window.ASiCStorage) {
+                const pruefung = await ASiCStorage.check(blob.size);
+                if (!pruefung.ok) {
+                    alert(pruefung.message);
+                    failed++;
+                    stopp = true;
+                    continue;
+                }
+                if (pruefung.warn && !gewarnt) {
+                    gewarnt = true;
+                    showToast(pruefung.message, 'error');
+                }
+            }
 
 
             const record =

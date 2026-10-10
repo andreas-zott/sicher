@@ -11,16 +11,16 @@
   function audit(){return read(AUDIT_KEY,{})}
   function gbo(){return read(GBO_KEY,{})}
   function marketNo(){return audit().companyInfo?.marktnummer||gbo().meta?.marktnummer||''}
-  function container(){const a=audit(),g=gbo();return {format:FORMAT,formatVersion:VERSION,appVersion:(typeof APP_REVISION!=='undefined'?APP_REVISION:'2.0.25'),savedAt:new Date().toISOString(),market:{marktnummer:marketNo(),plzOrt:a.companyInfo?.plzOrt||g.meta?.plzOrt||'',strasse:a.companyInfo?.strasse||g.meta?.strasse||''},companyInfo:a.companyInfo||{},audit:a,gbo:g,links:read('asicMarketLinksV2',[])} }
+  function container(){const a=audit(),g=gbo();return {format:FORMAT,formatVersion:VERSION,appVersion:(typeof APP_REVISION!=='undefined'?APP_REVISION:'2.0.31'),savedAt:new Date().toISOString(),market:{marktnummer:marketNo(),plzOrt:a.companyInfo?.plzOrt||g.meta?.plzOrt||'',strasse:a.companyInfo?.strasse||g.meta?.strasse||''},companyInfo:a.companyInfo||{},audit:a,gbo:g,links:read('asicMarketLinksV2',[])} }
   function isContainer(x){return !!x&&x.format===FORMAT&&Number(x.formatVersion)>=2}
   function apply(x,scope='all'){
     if(isContainer(x)){
       if(scope!=='gbo'&&x.audit)write(AUDIT_KEY,x.audit);
-      if(scope!=='audit'&&x.gbo)write(GBO_KEY,x.gbo);
-      if(scope==='all'&&Array.isArray(x.links))write('asicMarketLinksV2',x.links);
+      if(scope!=='audit'&&x.gbo)write(GBO_KEY,window.GBOMigrate?GBOMigrate.state(x.gbo):x.gbo);
+      if(scope==='all'&&Array.isArray(x.links))write('asicMarketLinksV2',window.GBOMigrate?GBOMigrate.links(x.links):x.links);
       return 'market';
     }
-    if(x?.format==='ASiC-GBO'||x?.state?.answers||x?.answers){if(scope!=='audit')write(GBO_KEY,x.state||x);return 'gbo'}
+    if(x?.format==='ASiC-GBO'||x?.state?.answers||x?.answers){if(scope!=='audit')write(GBO_KEY,window.GBOMigrate?GBOMigrate.state(x.state||x):(x.state||x));return 'gbo'}
     if(x?.companyInfo||x?.ratings||x?.measures){if(scope!=='gbo')write(AUDIT_KEY,x);return 'audit'}
     throw new Error('Unbekanntes ASiC-Datenformat.');
   }

@@ -8,8 +8,8 @@ const STORAGE_KEY = 'begehungState';
 
 // Revisionsstand der App/Checkliste (in Fusszeile und PDF sichtbar,
 // bei inhaltlichen Aenderungen an Fragenkatalog/Massnahmen hochzaehlen)
-const APP_REVISION = '2.0.25';
-const APP_REVISION_DATE = '2026-10-10';
+const APP_REVISION = '2.0.31';
+const APP_REVISION_DATE = '2026-10-11';
 
 // Heutiges Datum als JJJJ-MM-TT in LOKALER Zeit. toISOString() liefert UTC,
 // dadurch stand zwischen 0 und 2 Uhr (deutsche Zeit) das Vortagsdatum drin.

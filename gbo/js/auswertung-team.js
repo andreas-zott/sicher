@@ -139,7 +139,7 @@ async function exportTeamAuswertungCsv() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'ASiC_Handel_Team-Auswertung_' + new Date().toISOString().split('T')[0] + '.csv';
+    a.download = 'ASiC_Handel_Team-Auswertung_' + todayIsoLocal() + '.csv';
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -152,7 +152,7 @@ async function shareTeamAuswertungCsv() {
     if (!rows) return;
 
     const blob = csvRowsToBlob(rows);
-    const filename = 'ASiC_Handel_Team-Auswertung_' + new Date().toISOString().split('T')[0] + '.csv';
+    const filename = 'ASiC_Handel_Team-Auswertung_' + todayIsoLocal() + '.csv';
     const text = 'Anbei der aktuelle Rohdaten-Export (CSV) aller Begehungen aus dem Team-Archiv von ASiC Handel.';
 
     try {
@@ -185,7 +185,7 @@ async function shareTeamAuswertungCsv() {
 }
 
 function teamAuswertungPdfFilename() {
-    return 'ASiC_Handel_Team-Gesamtauswertung_' + new Date().toISOString().split('T')[0] + '.pdf';
+    return 'ASiC_Handel_Team-Gesamtauswertung_' + todayIsoLocal() + '.pdf';
 }
 
 async function exportTeamAuswertungPdf() {

@@ -40,7 +40,7 @@ function renderPhotoGrid() {
         return `
         <div class="photo-tile card" data-id="${photo.id}">
             <img src="${url}" alt="Foto" class="photo-preview">
-            <textarea class="photo-comment" placeholder="Kommentar zu diesem Foto…" onchange="onPhotoCommentChange('${photo.id}', this.value)">${photo.comment || ''}</textarea>
+            <textarea class="photo-comment" placeholder="Kommentar zu diesem Foto…" onchange="onPhotoCommentChange('${photo.id}', this.value)">${escapeHtml(photo.comment || '')}</textarea>
             <div class="photo-tile-actions">
                 <button class="btn-link photo-delete" onclick="onPhotoDelete('${photo.id}')">🗑️ Löschen</button>
             </div>
@@ -76,9 +76,29 @@ async function onPhotosCaptured(fileList) {
     if (files.length === 0) return;
 
     let failed = 0;
+    let stopp = false;
+    let gewarnt = false;
     for (const file of files) {
+        if (stopp) { failed++; continue; }
         try {
             const blob = await resizeImageFile(file);
+
+            // Platz vorher prüfen: bei zu wenig Speicher nicht speichern,
+            // bei knappem Speicher einmal warnen.
+            if (window.ASiCStorage) {
+                const pruefung = await ASiCStorage.check(blob.size);
+                if (!pruefung.ok) {
+                    alert(pruefung.message);
+                    failed++;
+                    stopp = true;
+                    continue;
+                }
+                if (pruefung.warn && !gewarnt) {
+                    gewarnt = true;
+                    showToast(pruefung.message, 'error');
+                }
+            }
+
             await addPhoto(blob, '');
         } catch (err) {
             console.error('Foto konnte nicht verarbeitet werden:', err);

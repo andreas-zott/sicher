@@ -219,7 +219,7 @@ function csvRowsToBlob(rows) {
 }
 
 function csvExportFilename() {
-    return 'ASiC_Handel_Auswertung_' + new Date().toISOString().split('T')[0] + '.csv';
+    return 'ASiC_Handel_Auswertung_' + todayIsoLocal() + '.csv';
 }
 
 // Laedt das Archiv frisch (nicht die evtl. noch nicht fertig geladene
@@ -321,7 +321,7 @@ async function shareAuswertungCsv() {
 // bewusst dieselben berechne*()-Funktionen wie die Bildschirmanzeige,
 // damit PDF und Anzeige garantiert dieselben Zahlen zeigen.
 function auswertungPdfFilename() {
-    const datum = new Date().toISOString().split('T')[0];
+    const datum = todayIsoLocal();
     return `ASiC_Handel_Gesamtauswertung_${datum}.pdf`;
 }
 
