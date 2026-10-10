@@ -68,10 +68,10 @@
   <h1>Gefährdungsbeurteilung</h1>
   <p>Aufbau, Datenhaltung, Bewertungslogik, Funktionen und fachliche Quellen der GBO in ASiC Handel.</p>
   <div class="doku-meta-grid">
-    <div class="doku-meta-item"><div class="doku-meta-label">App</div><div class="doku-meta-value">ASiC Handel Rev. 2.0.31</div></div>
+    <div class="doku-meta-item"><div class="doku-meta-label">App</div><div class="doku-meta-value">ASiC Handel Rev. 2.0.32</div></div>
     <div class="doku-meta-item"><div class="doku-meta-label">Stand</div><div class="doku-meta-value"><span data-zahl="revision_datum">11.10.2026</span></div></div>
     <div class="doku-meta-item"><div class="doku-meta-label">GBO-Daten</div><div class="doku-meta-value"><span data-zahl="gbo_fragen">1045</span> Fragen · <span data-zahl="gbo_module">92</span> Module</div></div>
-    <div class="doku-meta-item"><div class="doku-meta-label">Service Worker</div><div class="doku-meta-value">v2.0.31</div></div>
+    <div class="doku-meta-item"><div class="doku-meta-label">Service Worker</div><div class="doku-meta-value">v2.0.32</div></div>
   </div>
 </div>
 
@@ -412,6 +412,12 @@
     <h3>Bilder</h3>
     <p>Ein Bildbeleg erscheint bei der jeweiligen Frage, in der Maßnahmenliste unter dem Eintrag. Liegt das Originalbild auf dem Gerät, wird es verwendet, sonst das Vorschaubild mit dem Zusatz „(Vorschau)“. Verwendet werden JPEG- und PNG-Bilder; andere Formate werden durch das Vorschaubild ersetzt.</p>
 
+    <h3>Kurzfassung, Inhaltsverzeichnis und Lesezeichen</h3>
+    <p>Die Gesamt-GBO enthält nach Deckblatt und Dokumentenkontrolle eine Kurzfassung (Risikomatrix aus den Restrisiken der Module, höchste Restrisiken, Module mit dem meisten Handlungsbedarf, überfällige Maßnahmen) und ein Inhaltsverzeichnis. Die Seiten des Verzeichnisses werden vorab reserviert und nach dem Inhalt gefüllt, damit die Seitenzahlen stimmen; Einträge sind verlinkt. Gruppen und Module werden zusätzlich als PDF-Lesezeichen angelegt.</p>
+    <h3>Druckumfang</h3>
+    <p>Die Auswahl „nur Handlungs-/Beratungsbedarf“, „ohne Bildbelege“ und „ohne Quellen und Hinweise“ wird unter <code>asicGboPrintOptsV1</code> im Browserspeicher abgelegt und wirkt nur auf die Gesamt-GBO. Kennzahlen, Kurzfassung und Risikomatrix beziehen sich immer auf den vollständigen Stand.</p>
+    <h3>Maßnahmenplan (Querformat)</h3>
+    <p>Eigene Ausgabe im A4-Querformat: Nummer, Bereich und Thema, Maßnahme, Verantwortlicher, Frist, Abhakfeld mit „erledigt am“ und Paraphe. Sortierung: überfällige zuerst, dann nach Frist, dann ohne Frist. Enthalten sind alle Einträge mit Handlungs- oder Beratungsbedarf oder hinterlegter Maßnahme; Bilder werden nicht eingefügt.</p>
     <h3>Unterschriftenfelder</h3>
     <p><code>js/gbo-signatur.js</code> stellt im Menü „GBO dokumentieren“ je ein Zeichenfeld für die verantwortliche Person und den Ersteller bereit (Zeigereingaben, Canvas 600 × 200 Pixel). Gespeichert wird ein kleines PNG mit Name und Datum unter <code>state.signatures.verantwortlich</code> bzw. <code>state.signatures.ersteller</code>; es ist damit Teil der JSON-Sicherung und des Marktcontainers. Das PDF setzt die Bilder auf Seite 2 über die Unterschriftenlinien ein. Es handelt sich um eine Handunterschrift als Bild, nicht um eine qualifizierte elektronische Signatur.</p>
     <h3>Dokumentenkontrolle und Freigabe (Seite 2)</h3>
@@ -494,9 +500,9 @@
   <div class="card doku-card">
     <div class="doku-table-wrap"><table class="doku-table">
       <tr><th>Merkmal</th><th>Wert</th></tr>
-      <tr><td>Anwendung</td><td>ASiC Handel · Rev. 2.0.31</td></tr>
+      <tr><td>Anwendung</td><td>ASiC Handel · Rev. 2.0.32</td></tr>
       <tr><td>Stand</td><td><span data-zahl="revision_datum">11.10.2026</span></td></tr>
-      <tr><td>Service Worker</td><td>v2.0.31</td></tr>
+      <tr><td>Service Worker</td><td>v2.0.32</td></tr>
       <tr><td>Fragenbestand</td><td><span data-zahl="gbo_fragen">1045</span> Fragen, <span data-zahl="gbo_eindeutig">1045</span> eindeutige Fragen-IDs, <span data-zahl="gbo_module">92</span> Module</td></tr>
       <tr><td>Sicherungsformat</td><td>GBO-JSON; ASiC-Marktcontainer Formatversion 2</td></tr>
     </table></div>
@@ -507,7 +513,7 @@
 
 <footer class="app-footer">
   <div class="app-footer-links"><a href="gbo.html">Gefährdungsbeurteilung</a><a href="gbo-hilfe.html">FAQ GBO</a><a href="gbo-dokumentation.html">Technische Dokumentation GBO</a><a href="hilfe.html">FAQ Begehung</a></div>
-  <div class="app-footer-meta"><div>Rev. 2.0.31 · Stand 11.10.2026</div><div>© <span class="js-current-year">2026</span> Andreas Zott – Alle Rechte vorbehalten</div></div>
+  <div class="app-footer-meta"><div>Rev. 2.0.32 · Stand 11.10.2026</div><div>© <span class="js-current-year">2026</span> Andreas Zott – Alle Rechte vorbehalten</div></div>
 </footer>
 <script>document.querySelectorAll('.js-current-year').forEach(el=>el.textContent=new Date().getFullYear());</script>
 </body>
