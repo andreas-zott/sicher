@@ -273,6 +273,9 @@ foreach (
         'firma' =>
             $firma,
 
+        'plzOrt' =>
+            (string) ($companyInfo['plzOrt'] ?? ''),
+
         'savedAt' =>
             $savedAt
     ];

@@ -463,6 +463,45 @@ if (
 
 /*
 |--------------------------------------------------------------------------
+| Vorherigen Stand sichern
+|--------------------------------------------------------------------------
+|
+| Der Dateiname besteht nur aus Datum und Marktnummer. Wird am selben Tag
+| fuer denselben Markt erneut gespeichert, wuerde die alte Datei sonst
+| kommentarlos verloren gehen. Deshalb wird sie vorher mit Zeitstempel in
+| den Unterordner "versionen" kopiert. list.php/load.php sehen diesen
+| Unterordner nicht (kein Treffer im Hauptordner). Schlaegt die Sicherung
+| fehl, wird trotzdem gespeichert - die Sicherung ist nur ein Zusatz.
+|
+*/
+
+if (is_file($datei)) {
+
+    $versionenOrdner =
+        $datenOrdner .
+        DIRECTORY_SEPARATOR .
+        'versionen';
+
+    if (
+        is_dir($versionenOrdner) ||
+        @mkdir($versionenOrdner, 0775, true)
+    ) {
+
+        $sicherung =
+            $versionenOrdner .
+            DIRECTORY_SEPARATOR .
+            preg_replace('/\.json$/', '', $dateiname) .
+            '_' .
+            date('Ymd-His') .
+            '.json';
+
+        @copy($datei, $sicherung);
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
 | Vorhandene Datei ersetzen
 |--------------------------------------------------------------------------
 */

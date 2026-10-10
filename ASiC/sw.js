@@ -3,7 +3,7 @@
 // ==========================================================================
 // Offline-Unterstützung für die ASiC-Handel-App.
 //
-// SERVICE-WORKER-VERSION: 1.28
+// SERVICE-WORKER-VERSION: 1.47 (immer identisch zu CACHE_NAME und APP_REVISION in js/app.js halten)
 //
 // Bei einer neuen technischen Version:
 //   1. Alle precachten App-Dateien werden neu vom Server geladen.
@@ -19,7 +19,7 @@
 //   - Fotos
 // ==========================================================================
 
-const CACHE_NAME = 'asic-handel-v1.46';
+const CACHE_NAME = 'asic-handel-v1.47';
 
 
 // ==========================================================================
@@ -202,6 +202,17 @@ self.addEventListener('fetch', event => {
 
     // Nur GET-Anfragen behandeln
     if (event.request.method !== 'GET') {
+        return;
+    }
+
+    // NAS-Endpunkte (list/load/save.php) und fremde Origins werden NIE
+    // gecacht: sonst wuerden offline veraltete Dateilisten bzw. Begehungs-
+    // daten aus dem Cache ausgeliefert.
+    const requestUrl = new URL(event.request.url);
+    if (
+        requestUrl.origin !== self.location.origin ||
+        /\.php$/i.test(requestUrl.pathname)
+    ) {
         return;
     }
 
