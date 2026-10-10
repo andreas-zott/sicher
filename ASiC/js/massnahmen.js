@@ -188,7 +188,7 @@ async function renderMeasures() {
                     </span>
 
                     <span class="measure-question-text">
-                        ${questionText}
+                        ${escapeHtml(questionText)}
                     </span>
 
                 </div>
@@ -273,7 +273,7 @@ async function renderMeasures() {
                             '${measure.id}',
                             'description',
                             this.value
-                        )">${measure.description || ''}</textarea>
+                        )">${escapeHtml(measure.description || '')}</textarea>
 
 
                     ${
