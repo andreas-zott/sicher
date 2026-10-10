@@ -15,278 +15,463 @@
 <meta name="theme-color" content="#1c2226">
 
 <style>
-    .doku-hero {
+    /* ====================================================================
+       Hilfe & FAQ - Aufbau:
+       Hero mit Suche -> Themen-Kacheln -> Abschnitte mit Fragen
+       (jede Frage: Kurzantwort, Details optional einklappbar)
+       ==================================================================== */
+
+    html { scroll-behavior: smooth; }
+
+    .h-hero {
         background: linear-gradient(135deg, var(--brand-red) 0%, var(--brand-red-dark) 100%);
         border-radius: var(--radius);
-        padding: 1.75rem 1.5rem;
+        padding: 1.75rem 1.5rem 1.5rem;
         color: #fff;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1.25rem;
         box-shadow: var(--shadow);
     }
 
-    .doku-hero-badge {
+    .h-hero-badge {
         display: inline-block;
-        background: rgba(255,255,255,0.18);
-        border: 1px solid rgba(255,255,255,0.5);
+        background: rgba(255, 255, 255, 0.18);
+        border: 1px solid rgba(255, 255, 255, 0.5);
         border-radius: 999px;
         padding: 0.25rem 0.9rem;
         font-size: 0.72rem;
         letter-spacing: 0.08em;
         text-transform: uppercase;
-        margin-bottom: 0.9rem;
+        margin-bottom: 0.8rem;
     }
 
-    .doku-hero h1 {
+    .h-hero h1 {
+        font-family: var(--font-display);
         font-size: 1.7rem;
+        margin: 0 0 0.3rem;
         color: #fff;
-        margin-bottom: 0.3rem;
     }
 
-    .doku-hero p {
+    .h-hero p {
+        margin: 0 0 1.1rem;
         opacity: 0.92;
         font-size: 0.95rem;
     }
 
-    .doku-section {
-        margin-bottom: 2rem;
+    .h-search {
+        position: relative;
+        max-width: 640px;
     }
 
-    .doku-section h2 {
-        font-size: 1.15rem;
+    .h-search input {
+        width: 100%;
+        box-sizing: border-box;
+        font: inherit;
+        font-size: 16px; /* verhindert das Hineinzoomen von Safari */
+        padding: 0.85rem 2.9rem 0.85rem 2.9rem;
+        border: 2px solid transparent;
+        border-radius: 999px;
+        background: #fff;
         color: var(--ink);
-        border-bottom: 2px solid var(--brand-red);
-        padding-bottom: 0.4rem;
-        margin-bottom: 1rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
     }
 
-    .doku-section h3 {
-        font-size: 0.98rem;
-        color: var(--ink);
-        margin: 1.1rem 0 0.5rem 0;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
+    .h-search input:focus {
+        outline: none;
+        border-color: var(--ink);
     }
 
-    .doku-section h3::before {
-        content: "";
-        width: 8px;
-        height: 8px;
-        background: var(--brand-red);
-        border-radius: 2px;
-        flex-shrink: 0;
+    .h-search-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.05rem;
+        pointer-events: none;
     }
 
-    .doku-card {
-        padding: 1.1rem 1.25rem;
-        margin-bottom: 0.9rem;
-    }
-
-    .doku-card p:last-child,
-    .doku-card ul:last-child,
-    .doku-card ol:last-child {
-        margin-bottom: 0;
-    }
-
-    .doku-card p {
-        margin-bottom: 0.6rem;
-    }
-
-    .doku-card ul,
-    .doku-card ol {
-        margin: 0 0 0.6rem 1.2rem;
-    }
-
-    .doku-card li {
-        margin-bottom: 0.35rem;
-    }
-
-    .doku-card code {
+    .h-search-clear {
+        position: absolute;
+        right: 0.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 2.2rem;
+        height: 2.2rem;
+        border: none;
+        border-radius: 50%;
         background: var(--paper);
-        border: 1px solid var(--line);
-        padding: 0.1rem 0.4rem;
-        border-radius: 4px;
-        font-size: 0.85em;
-        color: var(--brand-red-dark);
-    }
-
-    .doku-toc {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.4rem 1.25rem;
-        font-size: 0.85rem;
-        margin-bottom: 1.75rem;
-        padding: 0.9rem 1.1rem;
-        background: var(--paper-raised);
-        border-radius: var(--radius-sm);
-        border: 1px solid var(--line);
-    }
-
-    .doku-toc a {
-        text-decoration: none;
-        color: var(--ink-soft);
-        border-bottom: 1px dotted var(--steel-light);
-        white-space: nowrap;
-    }
-
-    .doku-toc a:hover {
-        color: var(--brand-red-dark);
-    }
-
-    /* FAQ-Akkordeon */
-    .faq-item {
-        margin-bottom: 0.7rem;
-        overflow: hidden;
-    }
-
-    .faq-item summary {
-        padding: 0.9rem 1.15rem;
-        cursor: pointer;
-        font-weight: 600;
-        font-size: 0.92rem;
         color: var(--ink);
-        list-style: none;
+        font-size: 1.1rem;
+        line-height: 1;
+        cursor: pointer;
+    }
+
+    /* ---------- Themen-Kacheln ---------- */
+
+    .h-tiles {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.75rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .h-tile {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+        padding: 0.9rem 1rem;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        text-decoration: none;
+        color: var(--ink);
+        min-height: 5.2rem;
+    }
+
+    .h-tile:hover,
+    .h-tile:focus-visible {
+        border-color: var(--brand-red);
+        outline: none;
+    }
+
+    .h-tile-icon { font-size: 1.35rem; }
+
+    .h-tile-title {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+
+    .h-tile-sub {
+        font-size: 0.78rem;
+        color: var(--steel);
+    }
+
+    .h-tile.is-alert {
+        background: var(--brand-red-tint);
+        border-color: #f0c4c9;
+    }
+
+    body.is-searching .h-tiles,
+    body.is-searching .h-hint { display: none; }
+
+    /* ---------- Werkzeugleiste ---------- */
+
+    .h-tools {
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        gap: 1rem;
-    }
-
-    .faq-item summary::-webkit-details-marker {
-        display: none;
-    }
-
-    .faq-item summary::after {
-        content: "+";
-        font-size: 1.2rem;
-        color: var(--brand-red-dark);
-        flex-shrink: 0;
-        font-weight: 400;
-    }
-
-    .faq-item[open] summary::after {
-        content: "–";
-    }
-
-    .faq-item[open] summary {
-        border-bottom: 1px solid var(--line);
-    }
-
-    .faq-body {
-        padding: 0.9rem 1.15rem 1.1rem 1.15rem;
+        flex-wrap: wrap;
+        gap: 0.6rem 1rem;
+        margin: 0 0 1rem;
         font-size: 0.88rem;
         color: var(--ink-soft);
     }
 
-    .faq-body p {
-        margin-bottom: 0.5rem;
-    }
-
-    .faq-body p:last-child {
-        margin-bottom: 0;
-    }
-
-    .faq-body ul,
-    .faq-body ol {
-        margin: 0.3rem 0 0.5rem 1.2rem;
-    }
-
-    .faq-body li {
-        margin-bottom: 0.3rem;
-    }
-
-    .faq-body code {
-        background: var(--paper);
+    .h-tools button {
+        font: inherit;
+        font-size: 0.85rem;
+        padding: 0.45rem 1rem;
         border: 1px solid var(--line);
-        padding: 0.1rem 0.4rem;
-        border-radius: 4px;
-        font-size: 0.85em;
-        color: var(--brand-red-dark);
-    }
-
-    .faq-tag {
-        display: inline-block;
-        font-size: 0.68rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        padding: 0.15rem 0.55rem;
         border-radius: 999px;
-        margin-right: 0.4rem;
+        background: var(--card);
+        color: var(--ink);
+        cursor: pointer;
     }
 
-    .faq-tag.bedienung {
-        background: var(--na-tint);
-        color: var(--na);
+    .h-tools button:hover { border-color: var(--brand-red); }
+
+    .h-status { flex: 1 1 14rem; min-height: 1.3em; }
+
+    /* ---------- Abschnitte ---------- */
+
+    .h-section {
+        margin-bottom: 2rem;
+        scroll-margin-top: 1rem;
     }
 
-    .faq-tag.problem {
-        background: var(--mangel-tint);
-        color: var(--mangel);
+    .h-section-label {
+        font-size: 0.72rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--steel);
+        margin-bottom: 0.2rem;
     }
 
-    .faq-tag.daten {
-        background: var(--brand-red-tint);
-        color: var(--brand-red-dark);
+    .h-section h2 {
+        font-family: var(--font-display);
+        font-size: 1.2rem;
+        margin: 0 0 0.35rem;
+        padding-bottom: 0.45rem;
+        border-bottom: 2px solid var(--brand-red);
     }
 
-    .faq-tag.foto {
-        background: var(--ok-tint);
-        color: var(--ok);
+    .h-section-intro {
+        margin: 0.6rem 0 0.9rem;
+        font-size: 0.9rem;
+        color: var(--ink-soft);
     }
 
-    .step-list {
-        counter-reset: step;
+    /* ---------- Schnellstart: Schritt-Karten ---------- */
+
+    .h-steps {
         list-style: none;
-        margin-left: 0 !important;
+        counter-reset: schritt;
+        margin: 0.9rem 0 0;
+        padding: 0;
+        display: grid;
+        gap: 0.7rem;
     }
 
-    .step-list li {
-        counter-increment: step;
+    .h-step {
+        counter-increment: schritt;
         position: relative;
-        padding-left: 2.1rem;
-        margin-bottom: 0.7rem !important;
+        padding: 0.9rem 1rem 0.9rem 3.6rem;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        font-size: 0.92rem;
     }
 
-    .step-list li::before {
-        content: counter(step);
+    .h-step::before {
+        content: counter(schritt);
         position: absolute;
-        left: 0;
-        top: 0;
-        width: 1.5rem;
-        height: 1.5rem;
-        background: var(--brand-red-dark);
-        color: #fff;
+        left: 0.9rem;
+        top: 0.85rem;
+        width: 2rem;
+        height: 2rem;
         border-radius: 50%;
+        background: var(--brand-red);
+        color: #fff;
+        font-family: var(--font-display);
+        font-weight: 700;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 0.78rem;
-        font-weight: 700;
     }
 
-    .doku-info-box {
+    .h-step-title {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 1rem;
+        display: block;
+        margin-bottom: 0.2rem;
+    }
+
+    .h-step p { margin: 0 0 0.35rem; }
+
+    .h-step p:last-child { margin-bottom: 0; }
+
+    .h-where {
+        display: inline-block;
+        font-size: 0.75rem;
+        padding: 0.12rem 0.6rem;
+        border-radius: 999px;
+        background: var(--paper);
+        color: var(--ink-soft);
+    }
+
+    /* ---------- Fragen (aufklappbar) ---------- */
+
+    .h-item {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        margin-bottom: 0.6rem;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+    }
+
+    .h-item[hidden] { display: none; }
+
+    .h-item > summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 0.9rem 2.8rem 0.9rem 1.1rem;
+        font-weight: 600;
+        font-size: 0.95rem;
+        position: relative;
+    }
+
+    .h-item > summary::-webkit-details-marker { display: none; }
+
+    .h-item > summary::after {
+        content: "+";
+        position: absolute;
+        right: 1.1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.3rem;
+        color: var(--brand-red-dark);
+    }
+
+    .h-item[open] > summary::after { content: "–"; }
+
+    .h-item[open] > summary { border-bottom: 1px solid var(--line); }
+
+    .h-item > summary:focus-visible { outline: 2px solid var(--brand-red); outline-offset: -2px; }
+
+    .h-body {
+        padding: 0.9rem 1.1rem 1.1rem;
+        font-size: 0.9rem;
+        color: var(--ink-soft);
+    }
+
+    .h-body p { margin: 0 0 0.7rem; }
+
+    .h-body p:last-child { margin-bottom: 0; }
+
+    .h-body ul,
+    .h-body ol { margin: 0.4rem 0 0.8rem; padding-left: 1.3rem; }
+
+    .h-body li { margin: 0.3rem 0; }
+
+    .h-body code {
+        background: var(--paper);
+        padding: 0.05rem 0.35rem;
+        border-radius: 4px;
+        font-size: 0.85em;
+    }
+
+    .h-short {
+        color: var(--ink);
+        font-size: 0.95rem;
+    }
+
+    .h-more {
+        margin-top: 0.8rem;
+        border-top: 1px dashed var(--line);
+        padding-top: 0.6rem;
+    }
+
+    .h-more > summary {
+        list-style: none;
+        cursor: pointer;
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: var(--brand-red-dark);
+    }
+
+    .h-more > summary::-webkit-details-marker { display: none; }
+
+    .h-more > summary::before { content: "▸ "; }
+
+    .h-more[open] > summary::before { content: "▾ "; }
+
+    .h-more > div { margin-top: 0.6rem; }
+
+    /* Problemlöser: Ursache / Lösung */
+
+    .h-problem { border-left: 4px solid var(--brand-red); }
+
+    .h-ps {
+        display: grid;
+        grid-template-columns: 5.5rem 1fr;
+        gap: 0.5rem 0.9rem;
+        margin: 0;
+    }
+
+    .h-ps dt {
+        font-weight: 700;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--brand-red-dark);
+        padding-top: 0.15rem;
+    }
+
+    .h-ps dd { margin: 0; }
+
+    .h-ps dd ol,
+    .h-ps dd ul { margin: 0.2rem 0 0.2rem; }
+
+    .h-warn {
+        margin-top: 0.7rem;
+        padding: 0.65rem 0.9rem;
         border-left: 3px solid var(--brand-red);
         background: var(--brand-red-tint);
         border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-        padding: 0.85rem 1.1rem;
-        margin-bottom: 0.9rem;
-        font-size: 0.88rem;
+        font-size: 0.86rem;
+        color: var(--ink);
     }
 
-    .doku-info-box.ok {
-        border-left-color: var(--ok);
-        background: var(--ok-tint);
+    /* Leer-Zustand der Suche */
+
+    .h-empty {
+        display: none;
+        text-align: center;
+        padding: 2rem 1rem;
+        background: var(--card);
+        border: 1px dashed var(--steel-light);
+        border-radius: var(--radius);
+        color: var(--ink-soft);
     }
 
-    .doku-info-title {
-        font-weight: 700;
-        color: var(--brand-red-dark);
-        margin-bottom: 0.3rem;
+    .h-empty button {
+        margin-top: 0.7rem;
+        font: inherit;
+        padding: 0.5rem 1.2rem;
+        border: none;
+        border-radius: 999px;
+        background: var(--brand-red-dark);
+        color: #fff;
+        cursor: pointer;
     }
 
-    .doku-info-box.ok .doku-info-title {
-        color: var(--ok);
+    body.is-searching .h-empty.is-visible { display: block; }
+
+    /* Hinweisbox am Ende */
+
+    .h-help {
+        padding: 1.1rem 1.25rem;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        font-size: 0.92rem;
+    }
+
+    .h-help p { margin: 0 0 0.6rem; }
+
+    .h-help p:last-child { margin: 0; }
+
+    /* Nach oben */
+
+    .h-top {
+        position: fixed;
+        right: 1rem;
+        bottom: calc(1rem + env(safe-area-inset-bottom));
+        width: 3rem;
+        height: 3rem;
+        border: none;
+        border-radius: 50%;
+        background: var(--brand-red-dark);
+        color: #fff;
+        font-size: 1.25rem;
+        box-shadow: var(--shadow-lg);
+        cursor: pointer;
+        display: none;
+        z-index: 50;
+    }
+
+    .h-top.is-visible { display: block; }
+
+    /* Schmale Bildschirme (iPhone) und iPad hochkant */
+
+    @media (max-width: 860px) {
+        .h-tiles { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 520px) {
+        .h-hero { padding: 1.25rem 1rem 1.1rem; }
+        .h-hero h1 { font-size: 1.4rem; }
+        .h-ps { grid-template-columns: 1fr; gap: 0.1rem; }
+        .h-ps dd { margin-bottom: 0.6rem; }
+        .h-step { padding-left: 3.3rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
     }
 </style>
 </head>
@@ -317,1672 +502,750 @@
 </header>
 
 
-<main class="page">
-
+<main class="page" id="oben">
 
     <!-- ================================================================ -->
-    <!-- HERO                                                             -->
+    <!-- KOPF MIT SUCHE                                                   -->
     <!-- ================================================================ -->
 
-    <div class="doku-hero">
+    <div class="h-hero">
 
-        <div class="doku-hero-badge">
-            Hilfe &amp; FAQ
+        <div class="h-hero-badge">Hilfe &amp; FAQ</div>
+
+        <h1>Wie können wir helfen?</h1>
+
+        <p>Suchen Sie nach einem Stichwort oder wählen Sie ein Thema.</p>
+
+        <div class="h-search" role="search">
+            <span class="h-search-icon" aria-hidden="true">🔍</span>
+            <input
+                type="search"
+                id="faq-search"
+                placeholder="z. B. Foto, NAS, PDF, Archiv"
+                autocomplete="off"
+                autocapitalize="off"
+                spellcheck="false"
+                aria-label="Hilfe durchsuchen">
+            <button type="button" class="h-search-clear" id="faq-clear" aria-label="Suche löschen" hidden>×</button>
         </div>
-
-        <h1>
-            Bedienungsanleitung
-        </h1>
-
-        <p>
-            So nutzen Sie ASiC Handel – inklusive
-            Fotodokumentation, Maßnahmen, Archiv und PDF-Export
-        </p>
 
     </div>
 
 
     <!-- ================================================================ -->
-    <!-- INHALTSVERZEICHNIS                                               -->
+    <!-- THEMEN                                                           -->
     <!-- ================================================================ -->
 
-    <div class="doku-toc">
+    <nav class="h-tiles" aria-label="Themen">
 
-        <a href="#erste-schritte">
-            Erste Schritte
+        <a class="h-tile" href="#start">
+            <span class="h-tile-icon" aria-hidden="true">🚀</span>
+            <span class="h-tile-title">Begehung starten</span>
+            <span class="h-tile-sub">In 6 Schritten</span>
         </a>
 
-        <a href="#bedienung">
-            Bedienung im Detail
+        <a class="h-tile" href="#pruefen">
+            <span class="h-tile-icon" aria-hidden="true">📋</span>
+            <span class="h-tile-title">Prüfkatalog</span>
+            <span class="h-tile-sub">Bewerten und Mängel</span>
         </a>
 
-        <a href="#fotos">
-            Fotos
+        <a class="h-tile" href="#fotos">
+            <span class="h-tile-icon" aria-hidden="true">📷</span>
+            <span class="h-tile-title">Fotos</span>
+            <span class="h-tile-sub">Aufnehmen und zuordnen</span>
         </a>
 
-        <a href="#export">
-            Export und PDF
+        <a class="h-tile" href="#export">
+            <span class="h-tile-icon" aria-hidden="true">📄</span>
+            <span class="h-tile-title">PDF &amp; Export</span>
+            <span class="h-tile-sub">Drucken, teilen, mailen</span>
         </a>
 
-        <a href="#faq">
-            Häufige Fragen &amp; Probleme
+        <a class="h-tile" href="#sichern">
+            <span class="h-tile-icon" aria-hidden="true">💾</span>
+            <span class="h-tile-title">Sichern &amp; NAS</span>
+            <span class="h-tile-sub">Archiv, Backup, Team</span>
         </a>
 
-        <a href="#kontakt">
-            Weitere Hilfe
+        <a class="h-tile" href="#auswertung">
+            <span class="h-tile-icon" aria-hidden="true">📊</span>
+            <span class="h-tile-title">Auswertung</span>
+            <span class="h-tile-sub">Märkte vergleichen</span>
         </a>
 
+        <a class="h-tile is-alert" href="#probleme">
+            <span class="h-tile-icon" aria-hidden="true">🛠️</span>
+            <span class="h-tile-title">Probleme lösen</span>
+            <span class="h-tile-sub">Wenn etwas nicht klappt</span>
+        </a>
+
+        <a class="h-tile" href="#wissen">
+            <span class="h-tile-icon" aria-hidden="true">💡</span>
+            <span class="h-tile-title">Gut zu wissen</span>
+            <span class="h-tile-sub">Offline, Updates, Recht</span>
+        </a>
+
+    </nav>
+
+
+    <div class="h-tools">
+        <button type="button" id="faq-toggle" aria-pressed="false">Alle Antworten aufklappen</button>
+        <span class="h-status" id="faq-status" role="status" aria-live="polite"></span>
+    </div>
+
+    <div class="h-empty" id="faq-empty">
+        <p><strong>Keine Treffer.</strong></p>
+        <p>Versuchen Sie ein kürzeres oder anderes Stichwort, z. B. „Foto“, „PDF“ oder „NAS“.</p>
+        <button type="button" id="faq-empty-reset">Suche zurücksetzen</button>
     </div>
 
 
     <!-- ================================================================ -->
-    <!-- ERSTE SCHRITTE                                                   -->
+    <!-- 1. SCHNELLSTART                                                  -->
     <!-- ================================================================ -->
 
-    <section
-        class="doku-section"
-        id="erste-schritte">
+    <section class="h-section" id="start" data-unit>
 
-        <div class="section-title">
-            Schnellstart
-        </div>
+        <div class="h-section-label">Schnellstart</div>
 
-        <h2>
-            Eine Begehung in 6 Schritten
-        </h2>
+        <h2>Eine Begehung in 6 Schritten</h2>
 
-        <div class="card doku-card">
+        <ol class="h-steps">
 
-            <ol class="step-list">
+            <li class="h-step">
+                <span class="h-step-title">Betriebsdaten eintragen</span>
+                <p>Oben auf der Seite <strong>Prüfkatalog</strong>: Marktnummer, PLZ/Ort, Straße, Datum, Prüfer, Marktleitung und Teilnehmer. Diese Angaben erscheinen in allen PDFs. Für das Speichern auf dem NAS werden Datum und Marktnummer zwingend gebraucht.</p>
+                <span class="h-where">Prüfkatalog</span>
+            </li>
 
-                <li>
-                    <strong>Betriebsdaten eintragen</strong> –
-                    auf der Seite „Prüfkatalog“ oben Marktnummer,
-                    Postleitzahl/Ort, Straße, Datum, Prüfer, Marktleitung
-                    und Teilnehmer eintragen. Diese Angaben werden
-                    automatisch in den PDFs verwendet.
-                </li>
+            <li class="h-step">
+                <span class="h-step-title">Fragen bewerten</span>
+                <p>Alle <span data-zahl="fragen">199</span> Fragen in <span data-zahl="kategorien">24</span> Kategorien mit <strong>OK</strong>, <strong>!</strong> (Mangel) oder <strong>N.V.</strong> (nicht vorhanden) bewerten. Bei einem Mangel können Sie die Situation kurz beschreiben.</p>
+                <span class="h-where">Prüfkatalog</span>
+            </li>
 
-                <li>
-                    <strong>Kategorien durchgehen</strong> –
-                    jede der 198 Fragen mit OK, Mangel oder N.V. bewerten.
-                    Bei einem Mangel kann zusätzlich ein individueller
-                    Kommentar hinterlegt werden.
-                </li>
+            <li class="h-step">
+                <span class="h-step-title">Fotos aufnehmen</span>
+                <p>Allgemeine Fotos auf der Seite <strong>Fotos</strong>. Gehört ein Foto zu einem Mangel, nehmen Sie es direkt im <strong>Aktionsplan</strong> bei der Maßnahme auf – eine nachträgliche Zuordnung ist nicht möglich.</p>
+                <span class="h-where">Fotos oder Aktionsplan</span>
+            </li>
 
-                <li>
-                    <strong>Fotos aufnehmen oder einfügen</strong> –
-                    auf der Seite „Fotos“ Beweisfotos aufnehmen bzw.
-                    auswählen und bei Bedarf kommentieren.
-                </li>
+            <li class="h-step">
+                <span class="h-step-title">Maßnahmen bearbeiten</span>
+                <p>Status setzen (<strong>Offen</strong>, <strong>In Bearbeitung</strong>, <strong>Erledigt</strong>) und die Unterschriften von Prüfer und Marktleitung erfassen.</p>
+                <span class="h-where">Aktionsplan</span>
+            </li>
 
-                <li>
-                    <strong>Fotos einer Maßnahme zuordnen</strong> –
-                    wenn ein Foto einen konkreten Mangel dokumentiert,
-                    direkt auf der Seite „Aktionsplan“ bei der
-                    jeweiligen Maßnahme fotografieren bzw. einfügen.
-                    Eine nachträgliche Zuordnung eines bereits auf der
-                    Fotos-Seite gespeicherten Bildes ist nicht möglich.
-                </li>
+            <li class="h-step">
+                <span class="h-step-title">Bericht erstellen</span>
+                <p><strong>Exportieren ▾</strong> öffnen, den Umfang wählen (Checkliste, Maßnahmen, Fotos oder Alles) und dann <strong>Drucken</strong>, <strong>PDF teilen</strong> oder <strong>Mail vorbereiten</strong> antippen.</p>
+                <span class="h-where">auf jeder Seite</span>
+            </li>
 
-                <li>
-                    <strong>Maßnahmen bearbeiten</strong> –
-                    auf der Seite „Aktionsplan“ den Bearbeitungsstatus
-                    ergänzen und die Unterschriften
-                    von Prüfer und Marktleitung erfassen.
-                </li>
+            <li class="h-step">
+                <span class="h-step-title">Archivieren</span>
+                <p><strong>Datei ▾ → Begehung archivieren</strong>. Danach mit <strong>Zurücksetzen</strong> für den nächsten Markt neu beginnen. Archivierte Begehungen bleiben unter <strong>Verlauf</strong> erhalten.</p>
+                <span class="h-where">Prüfkatalog, Verlauf</span>
+            </li>
 
-                <li>
-                    <strong>Exportieren und archivieren</strong> –
-                    den gewünschten PDF-Modus auswählen, Bericht
-                    drucken/teilen oder per Mail versenden und die
-                    fertige Begehung anschließend archivieren.
-                </li>
-
-            </ol>
-
-        </div>
+        </ol>
 
     </section>
 
 
     <!-- ================================================================ -->
-    <!-- BEDIENUNG                                                        -->
+    <!-- 2. PRÜFKATALOG                                                   -->
     <!-- ================================================================ -->
 
-    <section
-        class="doku-section"
-        id="bedienung">
+    <section class="h-section" id="pruefen">
 
-        <div class="section-title">
-            Im Detail
-        </div>
+        <div class="h-section-label">Prüfkatalog</div>
 
-        <h2>
-            Bedienung im Detail
-        </h2>
+        <h2>Fragen bewerten und Mängel festhalten</h2>
 
+        <details class="h-item" id="q-bewerten" data-unit data-kw="ok mangel nv n.v. nicht vorhanden bewertung antwort">
+            <summary>Wie bewerte ich eine Frage?</summary>
+            <div class="h-body">
+                <p class="h-short">Tippen Sie auf <strong>OK</strong>, <strong>!</strong> (Mangel) oder <strong>N.V.</strong> (nicht vorhanden). Bei einem Mangel erscheint darunter ein Feld für die Beschreibung, und die passende Maßnahme landet im Aktionsplan.</p>
+            </div>
+        </details>
 
-        <h3>
-            Sprachstil der Maßnahmentexte wechseln
-        </h3>
+        <details class="h-item" id="q-mangeltext" data-unit data-kw="beschreibung mangel kommentar freitext textfeld">
+            <summary>Was trage ich bei „Beschreibung des Mangels“ ein?</summary>
+            <div class="h-body">
+                <p class="h-short">Alles, was die konkrete Situation beschreibt, z. B. „Regal 3 im Lager, rechte Ecke beschädigt“. Das Feld ist optional.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Der Text erscheint zusätzlich zum Standard-Maßnahmentext im Aktionsplan – am Bildschirm und im PDF, direkt unter der jeweiligen Maßnahme. So müssen Sie den allgemeinen Maßnahmentext nicht selbst anpassen.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
 
-        <div class="card doku-card">
+        <details class="h-item" id="q-sprachstil" data-unit data-kw="sprachstil einfach bghw rechtlich maßnahmentext formulierung">
+            <summary>Wie wechsle ich den Sprachstil der Maßnahmentexte?</summary>
+            <div class="h-body">
+                <p class="h-short">Unten auf der Seite Prüfkatalog, zwischen den Bereichen <strong>Datei</strong> und <strong>Exportieren</strong>, wählen Sie <strong>Einfach</strong>, <strong>BGHW</strong> oder <strong>Rechtlich</strong>.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <ul>
+                            <li><strong>Einfach:</strong> verständliche Formulierungen für die schnelle Abstimmung im Markt</li>
+                            <li><strong>BGHW:</strong> fachlich orientierte Formulierungen</li>
+                            <li><strong>Rechtlich:</strong> ausführlichere Formulierungen mit Verweisen auf Vorschriften</li>
+                        </ul>
+                        <p>Der gewählte Stil gilt für die angezeigten Maßnahmentexte und für das PDF.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
 
-            <p>
-                Unten auf der Prüfkatalog-Seite befindet sich der
-                Umschalter für den Sprachstil der Maßnahmentexte.
-                Die Auswahl steht zwischen den Bedienbereichen
-                „Datei“ und „Exportieren“ zur Verfügung.
-            </p>
+        <details class="h-item" id="q-nv" data-unit data-kw="nicht vorhanden schalter kategorie aufzug wc praktikanten kühl sperren gesperrt">
+            <summary>Was bedeutet der Schalter „nicht vorhanden“?</summary>
+            <div class="h-body">
+                <p class="h-short">Damit markieren Sie eine ganze Kategorie als N.V., wenn es sie im Markt nicht gibt. Alle Fragen werden automatisch auf N.V. gesetzt und gesperrt.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Den Schalter gibt es bei Kundenaufzug, Lastenaufzug, Barrierefreies WC, Praktikanten, CO2-Kühleinrichtungen und Flüssiggasflaschen. Schalten Sie ihn wieder aus, lassen sich die Fragen wieder bearbeiten.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
 
-            <ul>
+        <details class="h-item" id="q-unterbereiche" data-unit data-kw="flüssiggas fluessiggas flaschen beleuchtung unterbereich unterbereiche gas lager">
+            <summary>Wie funktionieren die Unterbereiche (Flüssiggas, Beleuchtung)?</summary>
+            <div class="h-body">
+                <p class="h-short">Flüssiggasflaschen (24 Fragen in 5 Unterbereichen) und Beleuchtung (3 Unterbereiche) sind zum Aufklappen gegliedert. Jeder Unterbereich hat einen eigenen N.V.-Schalter.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p><strong>So bearbeiten Sie die Flüssiggasflaschen:</strong> Öffnen Sie die Kategorie. Darunter erscheinen die fünf Unterbereiche als Menüzeilen. Ein Tipp klappt einen Unterbereich auf oder zu. Das verändert keine Bewertungen.</p>
+                        <ul>
+                            <li>Lagerung und Lagerbereich (6 Fragen)</li>
+                            <li>Flaschenzustand und Dichtheit (4)</li>
+                            <li>Ausgabe, Rücknahme und Transport (5)</li>
+                            <li>Brand- und Explosionsschutz (4)</li>
+                            <li>Organisation, Unterweisung und PSA (5)</li>
+                        </ul>
+                        <p>Der Schalter <strong>Unterbereich nicht vorhanden / nicht anwendbar</strong> setzt nur die Fragen dieses Unterbereichs auf N.V. Der Schalter <strong>Keine Flüssiggasflaschen im Markt vorhanden</strong> gilt für alle 24 Fragen.</p>
+                        <p>Die Kategorie <strong>Beleuchtung</strong> hat die Unterbereiche Verkaufsraum, Lager und Servicebereich, ebenfalls mit je einem N.V.-Schalter. Sie ersetzt keine vollständige lichttechnische Beurteilung.</p>
+                        <p>Fachliche Grundlage für Flüssiggas sind DGUV Regel 108-601, DGUV Regel 110-010 und TRGS 510. Beschäftigte brauchen vor Aufnahme der Tätigkeit eine Betriebsanweisung und Unterweisung, danach mindestens jährlich.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
 
-                <li>
-                    <strong>Einfach</strong> –
-                    verständliche Formulierungen für die schnelle
-                    Abstimmung im Markt
-                </li>
-
-                <li>
-                    <strong>BGHW</strong> –
-                    fachlich orientierte Formulierungen
-                </li>
-
-                <li>
-                    <strong>Rechtlich</strong> –
-                    detailliertere Formulierungen mit entsprechenden
-                    Verweisen
-                </li>
-
-            </ul>
-
-            <p>
-                Der gewählte Stil wirkt sich auf die dargestellten
-                Maßnahmentexte und die PDF-Ausgabe aus.
-            </p>
-
-        </div>
-
-
-        <h3>
-            „Nicht vorhanden“-Schalter
-        </h3>
-
-        <div class="card doku-card">
-
-            <p>
-                Bei den Kategorien Kundenaufzug, Lastenaufzug,
-                Barrierefreies WC, Praktikanten,
-                CO2-Kühleinrichtungen und Flüssiggasflaschen kann die komplette Kategorie
-                über den Schalter „nicht vorhanden“ als N.V. markiert
-                werden.
-            </p>
-
-            <p>
-                Dabei werden alle zugehörigen Fragen automatisch auf
-                N.V. gesetzt und gesperrt. Wird der Schalter wieder
-                deaktiviert, können die Fragen wieder bearbeitet werden.
-                Bei „Flüssiggasflaschen“ gilt der Hauptschalter für alle
-                fünf Unterbereiche und damit für sämtliche 24 Fragen.
-                Zusätzlich besitzt dort jeder Unterbereich einen eigenen
-                N.V.-Schalter, der nur seine zugehörigen Fragen betrifft.
-            </p>
-
-        </div>
-
-
-        <h3>
-            Beschreibung des Mangels
-        </h3>
-
-        <div class="card doku-card">
-
-            <p>
-                Wird eine Frage mit „Mangel" beantwortet, erscheint darunter
-                ein Textfeld „Beschreibung des Mangels" (optional). Was dort
-                eingetragen wird, erscheint automatisch zusätzlich zum
-                Standard-Maßnahmentext im <strong>Aktionsplan</strong> –
-                sowohl in der Bildschirmansicht als auch im PDF-Ausdruck,
-                direkt unter der jeweiligen Maßnahme.
-            </p>
-
-            <p>
-                So lassen sich z. B. konkrete Details festhalten („Regal 3
-                im Lager, rechte Ecke beschädigt"), ohne den allgemeinen
-                Maßnahmentext selbst anpassen zu müssen.
-            </p>
-
-        </div>
-
-
-        <h3>
-            Speichern und Daten sichern
-        </h3>
-
-        <div class="card doku-card">
-
-            <p>
-                Die laufende Begehung wird automatisch gespeichert.
-                Zusätzlich stehen im Datei-Menü folgende Funktionen
-                zur Verfügung:
-            </p>
-
-            <ul>
-
-                <li>
-                    <strong>Speichern</strong> –
-                    manueller Speichervorgang
-                </li>
-
-                <li>
-                    <strong>JSON exportieren</strong> –
-                    externes Backup des aktuellen textlichen
-                    Begehungsstands
-                </li>
-
-                <li>
-                    <strong>JSON per Mail teilen</strong> –
-                    öffnet das Teilen-Menü direkt mit der JSON-Datei im
-                    Anhang, z. B. um sie ohne NAS-Zugriff an eine Kollegin
-                    bzw. einen Kollegen zur Ablage auf dem NAS
-                    weiterzugeben. Im Unterschied zum CSV-Rohdatenexport
-                    verlustfrei — enthält die vollständige Begehung
-                    inklusive Maßnahmen, Status und Unterschriften. Wird
-                    die Datei danach manuell in den NAS-Ordner gelegt
-                    (z. B. per File Station), erscheint sie automatisch
-                    auch im Team-Archiv (siehe Verlauf-Seite).
-                </li>
-
-                <li>
-                    <strong>JSON laden</strong> –
-                    Wiederherstellung eines zuvor exportierten
-                    Begehungsstands
-                </li>
-
-                <li>
-                    <strong>Begehung archivieren</strong> –
-                    vollständigen Schnappschuss der abgeschlossenen
-                    Begehung sichern
-                </li>
-
-                <li>
-                    <strong>Zurücksetzen</strong> –
-                    aktuelle Begehung und deren Fotos löschen
-                </li>
-
-            </ul>
-
-        </div>
-
-
-        <h3>
-            Archiv nutzen
-        </h3>
-
-        <div class="card doku-card">
-
-            <p>
-                Nach Abschluss einer Begehung sollte diese über
-                <strong>„Begehung archivieren“</strong> gesichert werden.
-                Die laufende Begehung bleibt zunächst erhalten.
-            </p>
-
-            <p>
-                Anschließend kann über „Zurücksetzen“ eine neue,
-                leere Begehung für den nächsten Markt gestartet werden.
-            </p>
-
-            <p>
-                Bereits archivierte Begehungen bleiben auf der Seite
-                „Verlauf“ erhalten und können dort erneut angezeigt,
-                exportiert oder gelöscht werden.
-            </p>
-
-        </div>
+        <details class="h-item" id="q-mehrere" data-unit data-kw="mehrere märkte gleichzeitig parallel zurücksetzen neuer markt">
+            <summary>Kann ich mehrere Märkte gleichzeitig bearbeiten?</summary>
+            <div class="h-body">
+                <p class="h-short">Nein, pro Gerät gibt es eine laufende Begehung. Archivieren Sie den fertigen Markt, setzen Sie zurück und beginnen Sie den nächsten.</p>
+            </div>
+        </details>
 
     </section>
 
 
     <!-- ================================================================ -->
-    <!-- FOTOS                                                            -->
+    <!-- 3. FOTOS                                                         -->
     <!-- ================================================================ -->
 
-    <section
-        class="doku-section"
-        id="fotos">
+    <section class="h-section" id="fotos">
 
-        <div class="section-title">
-            Fotodokumentation
-        </div>
+        <div class="h-section-label">Fotos</div>
 
-        <h2>
-            Fotos aufnehmen, einfügen und verwalten
-        </h2>
+        <h2>Fotos aufnehmen, zuordnen und verwalten</h2>
 
-
-        <div class="card doku-card">
-
-            <p>
-                Die App kann Fotos direkt über das Gerät erfassen.
-                Auf der Seite „Fotos“ können Bilder aufgenommen bzw.
-                aus der verfügbaren Fotoauswahl des Geräts eingefügt
-                werden.
-            </p>
-
-            <ul>
-
-                <li>
-                    Foto direkt mit der Kamera aufnehmen
-                </li>
-
-                <li>
-                    vorhandenes Foto auswählen/einfügen
-                </li>
-
-                <li>
-                    Foto mit einem Kommentar versehen
-                </li>
-
-                <li>
-                    Foto einzeln löschen
-                </li>
-
-            </ul>
-
-        </div>
-
-
-        <div class="doku-info-box ok">
-
-            <div class="doku-info-title">
-                Empfehlung für die Begehung
+        <details class="h-item" id="q-foto-add" data-unit data-kw="foto bild kamera galerie auswählen einfügen kommentar löschen">
+            <summary>Wie füge ich ein Foto hinzu?</summary>
+            <div class="h-body">
+                <p class="h-short">Auf der Seite <strong>Fotos</strong> nehmen Sie ein Foto mit der Kamera auf oder wählen ein vorhandenes Bild aus. Jedes Foto können Sie kommentieren oder einzeln löschen.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Fotografieren Sie einen Mangel möglichst direkt und ergänzen Sie bei Bedarf einen kurzen Kommentar. Die Bilder werden automatisch verkleinert, um Speicherplatz zu sparen. Ob die Auswahl vorhandener Bilder möglich ist, hängt von Browser und Gerät ab.</p>
+                    </div>
+                </details>
             </div>
+        </details>
 
-            Fotografieren Sie bei einem festgestellten Mangel möglichst
-            direkt die relevante Situation. Schreiben Sie bei Bedarf
-            einen kurzen erklärenden Kommentar und ordnen Sie das Foto
-            anschließend der entsprechenden Maßnahme zu. Dadurch bleibt
-            im späteren PDF eindeutig nachvollziehbar, welcher Mangel
-            durch welches Bild dokumentiert wurde.
+        <details class="h-item" id="q-foto-massnahme" data-unit data-kw="foto maßnahme zuordnen aktionsplan verknüpfen nachträglich">
+            <summary>Wie ordne ich ein Foto einer Maßnahme zu?</summary>
+            <div class="h-body">
+                <p class="h-short">Nehmen Sie das Foto direkt im <strong>Aktionsplan</strong> bei der jeweiligen Maßnahme auf. Ein bereits auf der Seite Fotos gespeichertes Bild lässt sich nachträglich nicht zuordnen.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Das Foto ist dann automatisch mit der Maßnahme verknüpft und erscheint im Maßnahmen-PDF zusammen mit Feststellung und Maßnahmentext.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
 
-        </div>
+        <details class="h-item" id="q-foto-ort" data-unit data-kw="foto speicher indexeddb zurücksetzen archivieren löschen gerät">
+            <summary>Wo liegen meine Fotos, und was passiert beim Zurücksetzen?</summary>
+            <div class="h-body">
+                <p class="h-short">Nur auf diesem Gerät, in einer eigenen Datenbank. Beim <strong>Zurücksetzen</strong> werden sie gelöscht, beim <strong>Archivieren</strong> ins Archiv übernommen.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Fotos liegen in IndexedDB und nicht in der normalen Begehungsdatei, weil Bilder viel größer sind als Textdaten. Archivierte Begehungen behalten ihre Fotos auch nach einem Zurücksetzen. Löschen Sie die Website-Daten des Browsers, gehen auch die Fotos verloren.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
 
-
-        <h3>
-            Fotos speichern
-        </h3>
-
-        <div class="card doku-card">
-
-            <p>
-                Fotos werden nicht im normalen <code>localStorage</code>
-                gespeichert. Sie liegen in einer eigenen
-                <strong>IndexedDB</strong>-Datenbank, da Bilddateien
-                deutlich größer sein können als normale Textdaten.
-            </p>
-
-            <p>
-                Die Fotos bleiben auf dem jeweiligen Gerät gespeichert
-                und gehören zum lokalen Datenbestand der App.
-            </p>
-
-        </div>
-
-
-        <h3>
-            Fotos in Maßnahmen verwenden
-        </h3>
-
-        <div class="card doku-card">
-
-            <p>
-                Ein Foto kann einer Maßnahme zugeordnet werden.
-                Solche Fotos werden bei der PDF-Erzeugung dem jeweiligen
-                Maßnahmenbereich zugeordnet.
-            </p>
-
-            <p>
-                Dadurch können beispielsweise Feststellung,
-                Maßnahmentext und Bildnachweis in einem zusammenhängenden
-                Abschnitt dokumentiert werden.
-            </p>
-
-        </div>
-
-
-        <h3>
-            Fotos beim Archivieren
-        </h3>
-
-        <div class="card doku-card">
-
-            <p>
-                Beim Archivieren einer Begehung werden die zu diesem
-                Zeitpunkt vorhandenen Fotos mit dem Archivdatensatz
-                übernommen.
-            </p>
-
-            <p>
-                Damit bleibt die Fotodokumentation auch nach einem
-                späteren Zurücksetzen der aktuellen Begehung
-                dem archivierten Datensatz erhalten.
-            </p>
-
-        </div>
+        <details class="h-item" id="q-foto-vorschau" data-unit data-kw="vorschau vorschaubild gestrichelt team archiv anderes gerät foto löschen nicht möglich">
+            <summary>Warum sehe ich „Vorschau“ statt des echten Fotos?</summary>
+            <div class="h-body">
+                <p class="h-short">Die Begehung wurde auf einem anderen Gerät geöffnet, z. B. über das Team-Archiv. Dort gibt es nur ein kleines Vorschaubild, das sich nicht löschen lässt.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Zu jedem Foto einer Maßnahme speichert die App ein kleines, stark komprimiertes Vorschaubild in der Begehungsdatei. Das Original bleibt auf dem Gerät, auf dem es aufgenommen wurde. Auf anderen Geräten erkennen Sie die Vorschau am gestrichelten Rahmen und der Kennzeichnung „Vorschau“.</p>
+                        <p>Bei älteren Fotos ohne Vorschaubild wird es beim nächsten Öffnen des Aktionsplans automatisch nachgeholt.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
 
     </section>
 
 
     <!-- ================================================================ -->
-    <!-- EXPORT                                                           -->
+    <!-- 4. PDF UND EXPORT                                                -->
     <!-- ================================================================ -->
 
-    <section
-        class="doku-section"
-        id="export">
+    <section class="h-section" id="export">
 
-        <div class="section-title">
-            Export
-        </div>
+        <div class="h-section-label">PDF &amp; Export</div>
 
-        <h2>
-            PDF, Drucken, Teilen und Mail
-        </h2>
+        <h2>Berichte erstellen, drucken und versenden</h2>
 
+        <details class="h-item" id="q-pdf-arten" data-unit data-kw="pdf checkliste maßnahmen fotos alles gesamtbericht exportieren bericht deckblatt">
+            <summary>Welche Berichte kann ich erstellen?</summary>
+            <div class="h-body">
+                <p class="h-short">Über <strong>Exportieren ▾</strong> wählen Sie zuerst den Umfang:</p>
+                <ul>
+                    <li><strong>Checkliste</strong> – Fragen und Bewertungen</li>
+                    <li><strong>Maßnahmen</strong> – Aktionsplan mit Status, Unterschriften und Maßnahmenfotos</li>
+                    <li><strong>Fotos</strong> – eigenständige Fotodokumentation</li>
+                    <li><strong>Alles</strong> – kombinierter Gesamtbericht</li>
+                </ul>
+                <p>Jedes PDF beginnt mit einem Deckblatt aus Betriebsdaten und Begehungsstatus.</p>
+            </div>
+        </details>
 
-        <div class="card doku-card">
+        <details class="h-item" id="q-pdf-aktion" data-unit data-kw="drucken pdf teilen mail vorbereiten e-mail versenden download">
+            <summary>Was machen Drucken, PDF teilen und Mail vorbereiten?</summary>
+            <div class="h-body">
+                <ul>
+                    <li><strong>Drucken</strong> – erzeugt das PDF und öffnet es in einem neuen Tab</li>
+                    <li><strong>PDF teilen</strong> – öffnet das Teilen-Menü Ihres Geräts</li>
+                    <li><strong>Mail vorbereiten</strong> – öffnet eine Mail mit vorausgefülltem Text (Markt, Prüfer, Betreff)</li>
+                </ul>
+                <p>Unterstützt Ihr Gerät das Teilen nicht, lädt die App das PDF stattdessen herunter.</p>
+            </div>
+        </details>
 
-            <p>
-                Über „Exportieren ▾“ kann zuerst der gewünschte
-                Dokumenttyp ausgewählt werden.
-            </p>
-
-            <ul>
-
-                <li>
-                    <strong>Checkliste</strong> –
-                    Fragen und Bewertungen
-                </li>
-
-                <li>
-                    <strong>Maßnahmen</strong> –
-                    Aktionsplan, Status, Unterschriften und
-                    zugehörige Maßnahmenfotos
-                </li>
-
-                <li>
-                    <strong>Fotos</strong> –
-                    eigenständige Fotodokumentation
-                </li>
-
-                <li>
-                    <strong>Alles</strong> –
-                    kombinierter Gesamtbericht
-                </li>
-
-            </ul>
-
-        </div>
-
-
-        <h3>
-            PDF mit Fotos
-        </h3>
-
-        <div class="card doku-card">
-
-            <p>
-                Bei den PDF-Ausgaben können die Fotos automatisch
-                berücksichtigt werden.
-            </p>
-
-            <ul>
-
-                <li>
-                    Allgemeine Fotos erscheinen im
-                    Fotodokumentationsteil. Wurden keine allgemeinen
-                    Fotos aufgenommen, entfällt dieser Abschnitt im
-                    PDF automatisch komplett – es erscheint keine
-                    leere Überschriftenseite.
-                </li>
-
-                <li>
-                    Fotos, die direkt einer Maßnahme zugeordnet sind,
-                    können im Maßnahmenbereich als Vorschaubilder
-                    erscheinen.
-                </li>
-
-                <li>
-                    Ein eigenständiger Fotoanhang kann ebenfalls
-                    erzeugt werden.
-                </li>
-
-                <li>
-                    Kommentare zu Fotos können in der
-                    Fotodokumentation mit ausgegeben werden.
-                </li>
-
-            </ul>
-
-        </div>
-
-
-        <h3>
-            Drei Exportaktionen
-        </h3>
-
-        <div class="card doku-card">
-
-            <ul>
-
-                <li>
-                    <strong>Drucken</strong> –
-                    erzeugt das PDF und öffnet es in einem neuen Tab
-                </li>
-
-                <li>
-                    <strong>PDF teilen</strong> –
-                    verwendet die Geräte-Teilen-Funktion, sofern
-                    diese verfügbar ist
-                </li>
-
-                <li>
-                    <strong>Mail vorbereiten</strong> –
-                    öffnet einen vorausgefüllten Mailtext
-                </li>
-
-            </ul>
-
-            <p>
-                Wenn die native Teilen-Funktion nicht unterstützt
-                wird, verwendet die App einen Download als
-                Ausweichlösung.
-            </p>
-
-        </div>
-
-
-        <h3>
-            Externe Sicherung auf der Synology
-        </h3>
-
-        <div class="card doku-card">
-
-            <p>
-                Über „Datei ▾ → Auf NAS speichern" lässt sich der aktuelle
-                Begehungsstand zusätzlich auf der Synology sichern, über
-                „Vom NAS laden" lässt er sich später wieder abrufen.
-            </p>
-
-            <p>
-                <strong>Wichtig:</strong> Datum und Marktnummer müssen in
-                den Betriebsdaten ausgefüllt sein, sonst wird das Speichern
-                abgelehnt. Außerdem funktioniert das nur, wenn die App über
-                die Synology-Adresse selbst geöffnet wurde (bzw. deren
-                Tailscale-Adresse) – nicht über eine andere Adresse wie
-                GitHub Pages.
-            </p>
-
-            <p>
-                Auf der Seite „Verlauf" zeigt der Reiter
-                <strong>„Team-Archiv (NAS)"</strong> alle Begehungen, die
-                auf diese Weise von einer beliebigen Kollegin bzw. einem
-                beliebigen Kollegen auf dem NAS gespeichert wurden – nicht
-                nur die eigenen. So behält das ganze Team den Überblick,
-                welche Märkte bereits geprüft wurden. Fotos sind in diesen
-                Exporten nicht enthalten, da nur die reinen Prüfdaten auf
-                dem NAS gespeichert werden.
-            </p>
-
-            <p>
-                Wird die App über eine andere Adresse als die Synology
-                selbst aufgerufen (z. B. GitHub Pages), lässt sich unter
-                „Einstellungen" trotzdem eine externe Server-Adresse für
-                die NAS-Funktionen hinterlegen. Voraussetzung ist, dass
-                der Zielserver Anfragen von der App-Adresse ausdrücklich
-                erlaubt (CORS) – das ist beim üblichen Fall, dass App und
-                Server über dieselbe Adresse laufen, nicht nötig.
-            </p>
-
-            <p>
-                Zusätzlich lässt sich dort ein <strong>Zugriffsschlüssel</strong>
-                hinterlegen, der bei jeder NAS-Anfrage automatisch
-                mitgeschickt wird. Sinnvoll, sobald der Server nicht mehr
-                nur über ein geschütztes Netz (z. B. Tailscale) erreichbar
-                ist. Wirkt nur, wenn auf dem Server ebenfalls ein
-                entsprechender Schlüssel eingerichtet wurde – ohne das ist
-                dieses Feld wirkungslos.
-            </p>
-
-        </div>
+        <details class="h-item" id="q-pdf-fotos" data-unit data-kw="pdf fotos bilder fotoanhang kommentar seite">
+            <summary>Wie erscheinen Fotos im PDF?</summary>
+            <div class="h-body">
+                <p class="h-short">Allgemeine Fotos stehen in der Fotodokumentation, Fotos einer Maßnahme als Vorschaubilder direkt bei der Maßnahme.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <ul>
+                            <li>Gibt es keine allgemeinen Fotos, entfällt dieser Abschnitt komplett – es erscheint keine leere Seite.</li>
+                            <li>Für Maßnahmen mit Fotos kann zusätzlich ein Fotoanhang erzeugt werden.</li>
+                            <li>Die Fotodokumentation zeigt bis zu vier Fotos pro Seite, Kommentare werden mit ausgegeben.</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+        </details>
 
     </section>
 
 
     <!-- ================================================================ -->
-    <!-- FAQ                                                              -->
+    <!-- 5. SICHERN, ARCHIV, NAS                                          -->
     <!-- ================================================================ -->
 
-    <section
-        class="doku-section"
-        id="faq">
+    <section class="h-section" id="sichern">
 
-        <div class="section-title">
-            Support
-        </div>
+        <div class="h-section-label">Sichern &amp; NAS</div>
 
-        <h2>
-            Häufige Fragen &amp; bekannte Probleme
-        </h2>
+        <h2>Daten sichern, archivieren und im Team teilen</h2>
 
-
-        <!-- DATEN -->
-
-        <details class="faq-item card">
-
-            <summary>
-                <span>
-                    <span class="faq-tag daten">
-                        Daten
-                    </span>
-                    Wo werden meine Daten gespeichert?
-                </span>
-            </summary>
-
-            <div class="faq-body">
-
-                <p>
-                    Die laufende Begehung wird lokal im Browser gespeichert.
-                    Die Fotodaten und das Archiv werden separat über
-                    IndexedDB verwaltet.
-                </p>
-
-                <p>
-                    Die Daten sind grundsätzlich an das jeweilige Gerät
-                    bzw. den jeweiligen Browser gebunden.
-                </p>
-
-                <p>
-                    Auf einem zweiten iPad entsteht deshalb zunächst ein
-                    eigener Datenbestand.
-                </p>
-
+        <details class="h-item" id="q-ort" data-unit data-kw="daten speicher gespeichert lokal browser localstorage website-daten löschen zweites ipad gerät">
+            <summary>Wo werden meine Daten gespeichert?</summary>
+            <div class="h-body">
+                <p class="h-short">Lokal auf diesem Gerät im Browser. Auf einem zweiten iPad entsteht ein eigener, getrennter Datenbestand.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Die laufende Begehung liegt im Browserspeicher, Fotos und Archiv in einer eigenen Datenbank (IndexedDB). Löschen Sie die Website-Daten des Browsers, kann alles verloren gehen. Sichern Sie wichtige Begehungen deshalb zusätzlich als PDF, als JSON-Datei oder auf dem NAS.</p>
+                    </div>
+                </details>
             </div>
-
         </details>
 
-
-        <!-- FOTO -->
-
-        <details class="faq-item card">
-
-            <summary>
-                <span>
-                    <span class="faq-tag foto">
-                        Foto
-                    </span>
-                    Wo werden meine Fotos gespeichert?
-                </span>
-            </summary>
-
-            <div class="faq-body">
-
-                <p>
-                    Fotos werden lokal in IndexedDB gespeichert und nicht
-                    in der normalen Textspeicherung der laufenden
-                    Begehung.
-                </p>
-
-                <p>
-                    Dadurch können auch größere Bilddateien verarbeitet
-                    werden, ohne das localStorage-Limit auszureizen.
-                </p>
-
+        <details class="h-item" id="q-datei" data-unit data-kw="datei menü speichern json exportieren laden mail teilen archivieren zurücksetzen backup sicherung">
+            <summary>Was kann ich im Datei-Menü tun?</summary>
+            <div class="h-body">
+                <p class="h-short">Die laufende Begehung wird automatisch gespeichert. Unter <strong>Datei ▾</strong> auf dem Prüfkatalog stehen außerdem bereit:</p>
+                <ul>
+                    <li><strong>Speichern</strong> – manueller Speichervorgang</li>
+                    <li><strong>Auf NAS speichern</strong> / <strong>Vom NAS laden</strong> – Sicherung auf der Synology</li>
+                    <li><strong>JSON exportieren</strong> – Backup des aktuellen Begehungsstands als Datei</li>
+                    <li><strong>JSON per Mail teilen</strong> – öffnet das Teilen-Menü mit der JSON-Datei im Anhang</li>
+                    <li><strong>JSON laden</strong> – stellt einen exportierten Stand wieder her</li>
+                    <li><strong>Begehung archivieren</strong> – sichert einen vollständigen Schnappschuss</li>
+                    <li><strong>Zurücksetzen</strong> – löscht die aktuelle Begehung samt Fotos</li>
+                </ul>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Die JSON-Datei ist verlustfrei: Sie enthält die vollständige Begehung mit Maßnahmen, Status und Unterschriften, aber keine Fotos. Legen Sie die Datei manuell in den NAS-Ordner (z. B. per File Station), erscheint sie automatisch im Team-Archiv.</p>
+                    </div>
+                </details>
             </div>
-
         </details>
 
-
-        <!-- FOTO -->
-
-        <details class="faq-item card">
-
-            <summary>
-                <span>
-                    <span class="faq-tag foto">
-                        Foto
-                    </span>
-                    Kann ich ein vorhandenes Foto einfügen?
-                </span>
-            </summary>
-
-            <div class="faq-body">
-
-                <p>
-                    Ja. Auf der Seite „Fotos“ kann neben einer
-                    Kameraaufnahme auch ein vorhandenes Bild über die
-                    Geräteauswahl hinzugefügt werden, soweit der
-                    verwendete Browser und das Gerät diese Funktion
-                    anbieten.
-                </p>
-
+        <details class="h-item" id="q-archiv" data-unit data-kw="archiv archivieren verlauf mein verlauf abgeschlossen begehung">
+            <summary>Wie archiviere ich eine Begehung?</summary>
+            <div class="h-body">
+                <p class="h-short"><strong>Datei ▾ → Begehung archivieren</strong>. Die laufende Begehung bleibt bestehen; mit <strong>Zurücksetzen</strong> beginnen Sie danach eine neue.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Beim Archivieren werden die zu diesem Zeitpunkt vorhandenen Fotos mit übernommen. Archivierte Begehungen finden Sie auf der Seite <strong>Verlauf</strong> unter <strong>Mein Verlauf</strong>. Dort können Sie sie erneut anzeigen, als PDF exportieren oder löschen.</p>
+                    </div>
+                </details>
             </div>
-
         </details>
 
-
-        <!-- FOTO -->
-
-        <details class="faq-item card">
-
-            <summary>
-                <span>
-                    <span class="faq-tag foto">
-                        Foto
-                    </span>
-                    Kann ich ein Foto einer Maßnahme zuordnen?
-                </span>
-            </summary>
-
-            <div class="faq-body">
-
-                <p>
-                    Ja. Ein Foto kann direkt auf der Seite
-                    „Aktionsplan“ bei der jeweiligen Maßnahme
-                    aufgenommen bzw. eingefügt werden — dadurch ist es
-                    automatisch mit dieser Maßnahme verknüpft.
-                </p>
-
-                <p>
-                    Eine nachträgliche Zuordnung eines bereits auf der
-                    allgemeinen Fotos-Seite gespeicherten Bildes ist
-                    nicht möglich.
-                </p>
-
-                <p>
-                    Dadurch kann das Foto im Maßnahmen-PDF direkt im
-                    Zusammenhang mit dem dokumentierten Mangel
-                    erscheinen.
-                </p>
-
+        <details class="h-item" id="q-archiv-bearbeiten" data-unit data-kw="archiv bearbeiten anzeigen in app anzeigen wiederherstellen überschreiben verlauf">
+            <summary>Kann ich eine archivierte Begehung wieder bearbeiten?</summary>
+            <div class="h-body">
+                <p class="h-short">Ja: <strong>Verlauf → Mein Verlauf → In App anzeigen</strong>. Der aktuelle, noch nicht archivierte Stand auf diesem Gerät wird dabei überschrieben – vorher fragt die App nach.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Das Archiv selbst bleibt unberührt, die Begehung lässt sich jederzeit erneut öffnen. Die zugehörigen Fotos werden mit zurückgeladen.</p>
+                        <p>Im Team-Archiv gibt es dieselbe Funktion. Dort sind aber keine Fotos gespeichert: Ein auf diesem Gerät vorhandener Fotobestand wird beim Öffnen geleert und nicht ersetzt.</p>
+                    </div>
+                </details>
             </div>
-
         </details>
 
-
-        <!-- FOTO -->
-
-        <details class="faq-item card">
-
-            <summary>
-                <span>
-                    <span class="faq-tag foto">
-                        Foto
-                    </span>
-                    Was passiert mit meinen Fotos beim Zurücksetzen?
-                </span>
-            </summary>
-
-            <div class="faq-body">
-
-                <p>
-                    Das Zurücksetzen der laufenden Begehung löscht
-                    zusätzlich die zugehörigen Fotos.
-                </p>
-
-                <p>
-                    Bereits archivierte Begehungen mit ihren
-                    gespeicherten Fotos sind davon nicht betroffen.
-                </p>
-
+        <details class="h-item" id="q-geraet" data-unit data-kw="übertragen anderes gerät wechseln umziehen json fotos">
+            <summary>Wie übertrage ich eine Begehung auf ein anderes Gerät?</summary>
+            <div class="h-body">
+                <p class="h-short">Mit <strong>JSON exportieren</strong> (oder <strong>JSON per Mail teilen</strong>) und auf dem anderen Gerät mit <strong>JSON laden</strong>. Fotos sind in der JSON-Datei nicht enthalten.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Für die Fotos nutzen Sie das PDF oder die Archivfunktion, weil die Bilder nur auf dem Gerät gespeichert sind. Auch das NAS überträgt nur die Prüfdaten.</p>
+                    </div>
+                </details>
             </div>
-
         </details>
 
-
-        <details class="faq-item card">
-
-            <summary>
-                <span>
-                    <span class="faq-tag foto">
-                        Foto
-                    </span>
-                    Warum sehe ich bei manchen Fotos „Vorschau" statt des echten Bildes, und warum lässt es sich nicht löschen?
-                </span>
-            </summary>
-
-            <div class="faq-body">
-
-                <p>
-                    Zu jedem einer Maßnahme zugeordneten Foto wird
-                    zusätzlich ein kleines, stark komprimiertes
-                    Vorschaubild direkt in der Begehungsdatei (JSON)
-                    gespeichert. Das eigentliche Foto bleibt dagegen
-                    geräte­gebunden in der lokalen Fotodatenbank
-                    (IndexedDB) — nicht Teil der JSON-Datei.
-                </p>
-
-                <p>
-                    Wird eine Begehung z. B. über das Team-Archiv auf
-                    einem <strong>anderen Gerät</strong> geöffnet, liegt
-                    dort kein echtes Foto vor — die App zeigt dann
-                    stattdessen automatisch das mitgelieferte
-                    Vorschaubild (gestrichelter Rahmen, „Vorschau"-
-                    Kennzeichnung). Da dahinter kein echtes Foto in der
-                    lokalen Fotodatenbank steckt, lässt es sich von dort
-                    aus auch nicht löschen — nur auf dem Gerät, auf dem
-                    das Original tatsächlich aufgenommen wurde.
-                </p>
-
-                <p>
-                    Fotos, die vor dieser Funktion aufgenommen wurden
-                    (z. B. bei einer bereits laufenden Begehung während
-                    eines App-Updates), bekommen ihr Vorschaubild
-                    automatisch beim nächsten Öffnen der Maßnahmenseite
-                    nachträglich erzeugt — kein manuelles Neu-Fotografieren
-                    nötig.
-                </p>
-
+        <details class="h-item" id="q-nas" data-unit data-kw="nas synology server speichern laden einstellungen zugriffsschlüssel cors versionen überschreiben">
+            <summary>Wie sichere ich auf der Synology (NAS)?</summary>
+            <div class="h-body">
+                <p class="h-short"><strong>Datei ▾ → Auf NAS speichern</strong>, später <strong>Vom NAS laden</strong>. Datum und Marktnummer müssen ausgefüllt sein, und die App muss über die Synology-Adresse geöffnet sein.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <ul>
+                            <li>Gespeichert werden nur die Prüfdaten, keine Fotos.</li>
+                            <li>Speichern Sie für denselben Markt am selben Tag erneut, wird die Datei ersetzt. Der vorherige Stand liegt als Kopie im Ordner <code>versionen</code> auf dem NAS (für Administratoren).</li>
+                            <li>Läuft die App unter einer anderen Adresse (z. B. GitHub Pages), tragen Sie unter <strong>Einstellungen</strong> eine externe Server-Adresse ein. Der Server muss Anfragen von der App-Adresse ausdrücklich erlauben (CORS).</li>
+                            <li>Ein <strong>Zugriffsschlüssel</strong> wird bei jeder NAS-Anfrage mitgeschickt. Er wirkt nur, wenn auf dem Server derselbe Schlüssel eingerichtet ist.</li>
+                        </ul>
+                    </div>
+                </details>
             </div>
-
         </details>
 
-
-        <details class="faq-item card">
-
-            <summary>
-                <span>
-                    <span class="faq-tag daten">
-                        Verlauf
-                    </span>
-                    Kann ich eine archivierte Begehung wieder bearbeiten?
-                </span>
-            </summary>
-
-            <div class="faq-body">
-
-                <p>
-                    Ja. Auf der Seite „Verlauf" (Reiter „Mein Verlauf")
-                    steht bei jeder archivierten Begehung neben „PDF
-                    exportieren" auch <strong>„In App anzeigen"</strong>
-                    zur Verfügung — lädt die Begehung inklusive aller
-                    zugehörigen Fotos zurück in den Prüfkatalog/Aktionsplan,
-                    wo sie ganz normal weiterbearbeitet werden kann.
-                </p>
-
-                <p>
-                    <strong>Wichtig:</strong> Dabei wird der aktuell
-                    laufende, noch nicht archivierte Bearbeitungsstand
-                    auf diesem Gerät überschrieben — deshalb erscheint
-                    vorher eine Sicherheitsabfrage. Das Archiv selbst
-                    bleibt davon unberührt; die archivierte Begehung kann
-                    jederzeit erneut geöffnet werden.
-                </p>
-
-                <p>
-                    Im Team-Archiv (Reiter „Team-Archiv (NAS)") steht
-                    dieselbe Funktion ebenfalls zur Verfügung — mit einem
-                    wichtigen Unterschied: Da dort keine Fotos gespeichert
-                    sind (siehe die entsprechende Frage weiter oben), wird
-                    ein evtl. auf diesem Gerät vorhandener Fotobestand
-                    beim Öffnen nur geleert, nicht durch neue Fotos ersetzt.
-                </p>
-
+        <details class="h-item" id="q-team" data-unit data-kw="team archiv nas kollegen alle märkte überblick">
+            <summary>Was ist das Team-Archiv?</summary>
+            <div class="h-body">
+                <p class="h-short">Auf der Seite <strong>Verlauf</strong> zeigt der Reiter <strong>Team-Archiv (NAS)</strong> alle Begehungen, die irgendjemand im Team auf dem NAS gespeichert hat – nicht nur Ihre eigenen.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>So behält das ganze Team den Überblick, welche Märkte schon geprüft wurden. Sie können jede Begehung als PDF exportieren oder in der App anzeigen. Fotos sind nicht enthalten. Der Reiter funktioniert nur, wenn die App über die Synology-Adresse läuft oder in den Einstellungen eine Server-Adresse hinterlegt ist.</p>
+                    </div>
+                </details>
             </div>
-
         </details>
 
-
-
-
-        <!-- FLÜSSIGGAS -->
-
-        <details class="faq-item card">
-
-            <summary>
-                <span>
-                    <span class="faq-tag bedienung">
-                        Flüssiggas
-                    </span>
-                    Was ist bei Flüssiggasflaschen im Markt besonders zu beachten?
-                </span>
-            </summary>
-
-            <div class="faq-body">
-
-                <p>
-                    Die Kategorie „Flüssiggasflaschen“ ist für Märkte gedacht,
-                    die Flüssiggasflaschen lagern, ausgeben oder zurücknehmen.
-                    Sie enthält 24 Prüffragen, die zur besseren Übersicht in
-                    fünf aufklappbare Unterbereiche gegliedert sind:
-                    Lagerung und Lagerbereich, Flaschenzustand und Dichtheit,
-                    Ausgabe/Rücknahme/Transport, Brand- und Explosionsschutz
-                    sowie Organisation/Unterweisung/PSA. Ist dies im Markt
-                    nicht der Fall, kann die komplette Kategorie über
-                    „Keine Flüssiggasflaschen im Markt vorhanden“ als N.V.
-                    markiert werden.
-                </p>
-
-                <p>
-                    Zum Bearbeiten zuerst die Hauptkategorie
-                    <strong>„Flüssiggasflaschen“</strong> öffnen. Danach werden
-                    die fünf Unterbereiche als eigene Menüzeilen angezeigt.
-                    Mit einem Tipp auf eine Menüzeile wird der jeweilige
-                    Unterbereich aufgeklappt; ein weiterer Tipp klappt ihn
-                    wieder zu. Die Unterbereiche dienen nur der Übersicht –
-                    jede der 24 Fragen bleibt ein eigenständiger Prüfpunkt.
-                </p>
-
-                <p>
-                    Jede einzelne Frage wird wie im übrigen Prüfkatalog mit
-                    <strong>OK</strong>, <strong>Mangel</strong> oder
-                    <strong>N.V.</strong> bewertet. Bei „Mangel“ erscheint
-                    weiterhin das Feld „Beschreibung des Mangels“ und die
-                    zugehörige Maßnahme wird in den Aktionsplan übernommen.
-                    Das Auf- oder Zuklappen eines Unterbereichs verändert
-                    bereits gesetzte Bewertungen nicht.
-                </p>
-
-                <p>
-                    Jeder der fünf Unterbereiche besitzt einen eigenen
-                    Schalter <strong>„Unterbereich nicht vorhanden / nicht
-                    anwendbar“</strong>. Dieser Schalter wirkt ausschließlich
-                    auf die Fragen des geöffneten Unterbereichs und setzt
-                    diese automatisch auf N.V. Die Unterbereiche enthalten
-                    6, 4, 5, 4 und 5 Fragen; zusammen sind es 24
-                    Flüssiggasfragen.
-                </p>
-
-                <p>
-                    Der Schalter
-                    <strong>„Keine Flüssiggasflaschen im Markt vorhanden“</strong>
-                    bezieht sich dagegen auf die gesamte Hauptkategorie. Wird
-                    er aktiviert, werden alle 24 Fragen in allen fünf
-                    Unterbereichen automatisch auf N.V. gesetzt und für die
-                    Bearbeitung gesperrt. Wird der Schalter wieder
-                    ausgeschaltet, können die Unterbereiche und Fragen wieder
-                    einzeln bearbeitet werden.
-                </p>
-
-                <p>
-                    Flüssiggasflaschen sollen vorzugsweise im Freien in einem
-                    geeigneten Lagerbereich aufbewahrt und gegen Umfallen bzw.
-                    Herabfallen gesichert werden. Ausgabe, Rücknahme und der
-                    Transport zurückgegebener Flaschen in das Lager müssen
-                    betrieblich geregelt sein.
-                </p>
-
-                <p>
-                    Für Beschäftigte, die mit den Flaschen umgehen, sind eine
-                    Betriebsanweisung und eine Unterweisung vor Aufnahme der
-                    Tätigkeit sowie danach mindestens jährlich erforderlich.
-                    Welche zusätzlichen Schutzmaßnahmen gelten, hängt unter
-                    anderem von Lagerort und Lagermenge ab.
-                </p>
-
-                <p>
-                    Fachliche Grundlage sind insbesondere die
-                    <strong>DGUV Regel 108-601 „Branche Einzelhandel“</strong>,
-                    die <strong>DGUV Regel 110-010 „Verwendung von Flüssiggas“</strong>
-                    und die <strong>TRGS 510</strong>.
-                </p>
-
-            </div>
-
-        </details>
-
-        <!-- PROBLEM -->
-
-        <details class="faq-item card">
-
-            <summary>
-                <span>
-                    <span class="faq-tag problem">
-                        Problem
-                    </span>
-                    Fotos lassen sich nicht speichern oder die Seite hängt
-                </span>
-            </summary>
-
-            <div class="faq-body">
-
-                <p>
-                    Fotos und Archiv verwenden IndexedDB. Wenn der
-                    Browser diesen Speicher blockiert oder sich Safari
-                    in einem problematischen Zustand befindet, kann
-                    die Speicherung fehlschlagen.
-                </p>
-
-                <ol>
-
-                    <li>
-                        Prüfen, ob Safari im privaten Surfmodus verwendet wird.
-                    </li>
-
-                    <li>
-                        Die App vollständig schließen und erneut öffnen.
-                    </li>
-
-                    <li>
-                        Prüfen, ob ausreichend Gerätespeicher vorhanden ist.
-                    </li>
-
-                    <li>
-                        Wenn die Meldung erneut erscheint, den genauen
-                        Fehlertext notieren.
-                    </li>
-
-                </ol>
-
-            </div>
-
-        </details>
-
-
-        <!-- DATEN -->
-
-        <details class="faq-item card">
-
-            <summary>
-                <span>
-                    <span class="faq-tag daten">
-                        Daten
-                    </span>
-                    Was passiert beim Löschen der Website-Daten?
-                </span>
-            </summary>
-
-            <div class="faq-body">
-
-                <p>
-                    Das Löschen der Browser-/Website-Daten kann die
-                    lokale laufende Begehung, Fotos und Archive
-                    vollständig entfernen.
-                </p>
-
-                <p>
-                    Wichtige abgeschlossene Begehungen sollten deshalb
-                    zusätzlich als PDF oder anderweitiges Backup
-                    gespeichert werden.
-                </p>
-
-            </div>
-
-        </details>
-
-
-        <!-- BEDIENUNG -->
-
-        <details class="faq-item card">
-
-            <summary>
-                <span>
-                    <span class="faq-tag bedienung">
-                        Bedienung
-                    </span>
-                    Kann ich mehrere Märkte gleichzeitig bearbeiten?
-                </span>
-            </summary>
-
-            <div class="faq-body">
-
-                <p>
-                    Es gibt pro Gerät eine aktive laufende Begehung.
-                    Abgeschlossene Märkte sollten deshalb zunächst
-                    archiviert werden.
-                </p>
-
-                <p>
-                    Danach kann die laufende Begehung zurückgesetzt
-                    und für den nächsten Markt neu begonnen werden.
-                </p>
-
-            </div>
-
-        </details>
-
-
-        <!-- PROBLEM -->
-
-        <details class="faq-item card">
-
-            <summary>
-                <span>
-                    <span class="faq-tag problem">
-                        Problem
-                    </span>
-                    Ein Menü funktioniert nicht oder reagiert nicht
-                </span>
-            </summary>
-
-            <div class="faq-body">
-
-                <p>
-                    Zuerst die Seite vollständig neu laden.
-                </p>
-
-                <p>
-                    Da mehrere Seiten auf dieselbe zentrale Datei
-                    <code>js/app.js</code> zugreifen, kann eine
-                    unvollständige oder alte JavaScript-Datei dazu führen,
-                    dass Menüs oder Exportfunktionen nicht korrekt
-                    reagieren.
-                </p>
-
-            </div>
-
-        </details>
-
-
-        <!-- PROBLEM -->
-
-        <details class="faq-item card">
-
-            <summary>
-                <span>
-                    <span class="faq-tag problem">
-                        Problem
-                    </span>
-                    Beim PDF-Export erscheint „… is not defined“
-                </span>
-            </summary>
-
-            <div class="faq-body">
-
-                <p>
-                    Prüfen Sie zunächst, ob alle Dateien aus der aktuellen
-                    Version auf dem Server vorhanden sind.
-                </p>
-
-                <p>
-                    Insbesondere die JavaScript-Dateien im Ordner
-                    <code>js/</code> arbeiten zusammen.
-                </p>
-
-                <ol>
-
-                    <li>
-                        Seite komplett neu laden
-                    </li>
-
-                    <li>
-                        App gegebenenfalls vollständig schließen
-                    </li>
-
-                    <li>
-                        prüfen, ob alle aktuellen JS-Dateien hochgeladen wurden
-                    </li>
-
-                    <li>
-                        bei erneutem Fehler den genauen Fehlertext notieren
-                    </li>
-
-                </ol>
-
-            </div>
-
-        </details>
-
-
-        <!-- PDF -->
-
-        <details class="faq-item card">
-
-            <summary>
-                <span>
-                    <span class="faq-tag bedienung">
-                        Bedienung
-                    </span>
-                    Beim Drucken öffnet sich kein PDF
-                </span>
-            </summary>
-
-            <div class="faq-body">
-
-                <p>
-                    Der Druckvorgang öffnet das erzeugte PDF bewusst in
-                    einem neuen Browser-Tab.
-                </p>
-
-                <p>
-                    Wenn Safari das Öffnen eines neuen Fensters oder Tabs
-                    blockiert, kann ein Popup-Blocker die Ursache sein.
-                </p>
-
-                <p>
-                    In diesem Fall Popups für die App-Adresse erlauben
-                    und den Vorgang erneut ausführen.
-                </p>
-
-            </div>
-
-        </details>
-
-
-        <!-- BEDIENUNG -->
-
-        <details class="faq-item card">
-
-            <summary>
-                <span>
-                    <span class="faq-tag bedienung">
-                        Bedienung
-                    </span>
-                    Eine Kategorie ist gesperrt und lässt sich nicht bearbeiten
-                </span>
-            </summary>
-
-            <div class="faq-body">
-
-                <p>
-                    Prüfen Sie, ob der Schalter „Im Markt nicht vorhanden“
-                    aktiviert wurde.
-                </p>
-
-                <p>
-                    Dies betrifft insbesondere Kundenaufzug,
-                    Lastenaufzug, barrierefreies WC, Praktikanten und
-                    CO2-Kühleinrichtungen.
-                </p>
-
-            </div>
-
-        </details>
-
-
-        <!-- DATEN -->
-
-        <details class="faq-item card">
-
-            <summary>
-                <span>
-                    <span class="faq-tag daten">
-                        Daten
-                    </span>
-                    Kann ich die Begehung auf ein anderes Gerät übertragen?
-                </span>
-            </summary>
-
-            <div class="faq-body">
-
-                <p>
-                    Der JSON-Export eignet sich zur Übertragung der
-                    textlichen Daten der aktuellen Begehung.
-                </p>
-
-                <p>
-                    Für Fotos und archivierte Datensätze sollte zusätzlich
-                    die entsprechende PDF-/Archivfunktion genutzt werden,
-                    da die Bilddaten separat in IndexedDB gespeichert
-                    werden.
-                </p>
-
-            </div>
-
-        </details>
-
-
-        <!-- OFFLINE -->
-
-        <details class="faq-item card">
-
-            <summary>
-                <span>
-                    <span class="faq-tag bedienung">
-                        Bedienung
-                    </span>
-                    Funktioniert die App ohne Internet?
-                </span>
-            </summary>
-
-            <div class="faq-body">
-
-                <p>
-                    Ja. Nach einem erfolgreichen ersten Laden stellt der
-                    Service Worker die benötigten App-Dateien auch ohne
-                    Netzwerk zur Verfügung.
-                </p>
-
-                <p>
-                    Online wird weiterhin das Netzwerk bevorzugt.
-                    Funktioniert das Netzwerk nicht, greift die App auf
-                    den lokalen Cache zurück.
-                </p>
-
-            </div>
-
-        </details>
-
-
-        <!-- SERVICE WORKER -->
-
-        <details class="faq-item card">
-
-            <summary>
-                <span>
-                    <span class="faq-tag daten">
-                        Update
-                    </span>
-                    Warum werden neue Änderungen manchmal erst nach dem Aktualisieren sichtbar?
-                </span>
-            </summary>
-
-            <div class="faq-body">
-
-                <p>
-                    Die App verwendet einen Service Worker für den
-                    Offline-Betrieb. Die aktuelle technische Cache-Version
-                    lautet <code>asic-handel-v1.47</code>.
-                </p>
-
-                <p>
-                    Bei einem neuen technischen Versionsstand wird der
-                    Cache gewechselt und die vorgesehenen App-Dateien
-                    werden neu geladen.
-                </p>
-
-                <p>
-                    Die lokalen Begehungsdaten werden dabei nicht
-                    automatisch gelöscht.
-                </p>
-
-                <p>
-                    <strong>Falls eine Änderung partout nicht ankommt:</strong>
-                    zuerst die Seite mit einer echten Aktualisierung neu
-                    laden (nicht nur zwischen Tabs wechseln). Hilft das
-                    nicht, in Firefox <code>about:serviceworkers</code>
-                    aufrufen, den Eintrag der App suchen und dort
-                    „Unregister" anklicken – danach die Seite neu laden.
-                    Auf dem iPad: bei installiertem Home-Bildschirm-Symbol
-                    dieses löschen und über Safari neu hinzufügen; als
-                    letzte Möglichkeit Einstellungen → Safari → Verlauf
-                    und Websitedaten löschen.
-                </p>
-
-            </div>
-
-        </details>
-
-
-        <!-- ZUGANG -->
-
-        <details class="faq-item card">
-
-            <summary>
-                <span>
-                    <span class="faq-tag bedienung">
-                        Bedienung
-                    </span>
-                    Warum sehe ich die Zugangscode-Abfrage nicht immer?
-                </span>
-            </summary>
-
-            <div class="faq-body">
-
-                <p>
-                    Die Zugangscode-Abfrage ist für die installierte
-                    App-Ansicht vorgesehen. Beim normalen Aufruf in einem
-                    Browser-Tab kann sie bewusst ausbleiben.
-                </p>
-
-                <p>
-                    Der Zugangscode ist eine organisatorische Hürde und
-                    kein echter serverseitiger Sicherheitsschutz.
-                </p>
-
-            </div>
-
-        </details>
-
-
-
-
-        <!-- TEXTE -->
-
-        <details class="faq-item card">
-
-            <summary>
-                <span>
-                    <span class="faq-tag daten">
-                        Inhalte
-                    </span>
-                    Sind die rechtlichen Maßnahmentexte verbindliche Rechtsberatung?
-                </span>
-            </summary>
-
-            <div class="faq-body">
-
-                <p>
-                    Nein. Die Texte dienen als fachliche Unterstützung
-                    bei der Dokumentation von Maßnahmen.
-                </p>
-
-                <p>
-                    Insbesondere bei rechtlichen oder technischen
-                    Detailfragen muss die konkrete Situation durch die
-                    zuständige Fachkraft bzw. erforderlichenfalls durch
-                    geeignete Fachstellen geprüft werden.
-                </p>
-
-                <p>
-                    Gesetzliche und technische Regelwerke können sich
-                    ändern und sollten bei kritischen Fragestellungen
-                    stets auf Aktualität geprüft werden.
-                </p>
-
-            </div>
-
-        </details>
-
-
-        <h3 id="auswertung-analyse" style="margin-top: 2rem;">
-            Auswertung &amp; Analyse
-        </h3>
-
-        <p style="color: var(--ink-soft); margin-bottom: 1rem;">
-            Die folgenden Fragen betreffen die Auswertungsfunktionen
-            (Kategorien-Schwachstellen, Zeitraum-Filter, Team-Archiv-Auswertung
-            u. Ä.) — für den alltäglichen Umgang mit dem Prüfkatalog nicht
-            unbedingt nötig, aber hilfreich für einen tieferen Einblick.
-        </p>
-
-
-        <details class="faq-item card">
-
-            <summary>
-                <span>
-                    <span class="faq-tag daten">
-                        Auswertung
-                    </span>
-                    Was bedeuten Zeitraum-Filter, „Auffällige Märkte" und die Gesamtauswertung als PDF?
-                </span>
-            </summary>
-
-            <div class="faq-body">
-
-                <p>
-                    Der <strong>Zeitraum-Filter</strong> oben auf der
-                    Auswertungsseite („Letzte 3 Monate / 6 Monate / Alles")
-                    schränkt Kategorien-Schwachstellen, Auffällige Märkte,
-                    Verlauf pro Markt sowie den CSV- und PDF-Export auf
-                    den gewählten Zeitraum ein. „Wiederkehrende Mängel"
-                    und „Offene Maßnahmen" berücksichtigen den Filter
-                    bewusst nicht — dort soll immer der tatsächlich
-                    aktuellste Stand sichtbar bleiben, auch wenn er
-                    außerhalb des gewählten Zeitraums liegt.
-                </p>
-
-                <p>
-                    <strong>Auffällige Märkte</strong> listet alle Märkte,
-                    deren Mängelquote über dem Durchschnitt aller Märkte
-                    im gewählten Zeitraum liegt — ein schneller Überblick,
-                    wo zuerst hingeschaut werden sollte.
-                </p>
-
-                <p>
-                    <strong>Gesamtauswertung als PDF</strong> fasst
-                    Gesamtverteilung, Kategorien-Schwachstellen,
-                    Auffällige Märkte und den Marktverlauf als ein
-                    zusammenhängendes Dokument zusammen — z. B. für eine
-                    monatliche Übersicht an die Regionalleitung. Wie bei
-                    CSV und JSON gibt es sowohl „Herunterladen" als auch
-                    „Per Mail teilen".
-                </p>
-
-                <p>
-                    <strong>Gesamtverteilung</strong> (Tortendiagramm
-                    Ja/Mangel/N.V.) und <strong>Kategorien-Schwachstellen</strong>
-                    (Balkendiagramm nach Mängelquote) werden zusätzlich
-                    als Diagramm dargestellt — am Bildschirm ebenso wie im
-                    PDF-Export, mit identischen Farben und Zahlen an
-                    beiden Stellen.
-                </p>
-
-            </div>
-
-        </details>
-
-
-        <details class="faq-item card">
-
-            <summary>
-                <span>
-                    <span class="faq-tag daten">
-                        Auswertung
-                    </span>
-                    Was zeigen „Auswertung Verlauf" auf der Verlauf-Seite und „Auswertung Team"?
-                </span>
-            </summary>
-
-            <div class="faq-body">
-
-                <p>
-                    Auf der Verlauf-Seite gibt es neben „Mein Verlauf" und
-                    „Team-Archiv (NAS)" zwei weitere Buttons, die direkt
-                    zu den beiden eigenständigen Auswertungsseiten
-                    führen — <strong>„Auswertung Verlauf"</strong> zur
-                    normalen <code>auswertung.html</code> (wertet die
-                    lokal auf diesem Gerät archivierten Begehungen aus)
-                    und <strong>„Auswertung Team"</strong> zur eigenen
-                    Seite <code>auswertung-team.html</code>.
-                </p>
-
-                <p>
-                    <strong>„Auswertung Team"</strong> wertet alle im
-                    Team-Archiv gefundenen Begehungen gemeinsam aus,
-                    unabhängig davon, wer sie gespeichert hat — dafür
-                    lädt die Seite im Hintergrund jede gefundene Datei
-                    einzeln vom NAS. Bei vielen Begehungen kann das einen
-                    Moment dauern; einzelne nicht ladbare Dateien werden
-                    übersprungen, ohne die gesamte Auswertung zu blockieren.
-                    Ein eigener Zeitraum-Filter steht dort ebenfalls zur
-                    Verfügung.
-                </p>
-
-                <p>
-                    „Auswertung Team" funktioniert nur unter denselben
-                    Voraussetzungen wie das Team-Archiv selbst (siehe
-                    entsprechende Frage weiter oben).
-                </p>
-
-                <p>
-                    Genau wie die normale Auswertungsseite bietet auch
-                    „Auswertung Team" einen eigenen Rohdaten-Export (CSV)
-                    und eine eigene Gesamtauswertung als PDF — bezogen auf
-                    alle im Team-Archiv gefundenen Begehungen statt nur
-                    die lokal auf diesem Gerät archivierten.
-                </p>
-
-            </div>
-
-        </details>
-
-
-        <details class="faq-item card">
-
-            <summary>
-                <span>
-                    <span class="faq-tag daten">
-                        Auswertung
-                    </span>
-                    Warum zeigt die Auswertung bei einer älteren Begehung „nicht mehr im aktuellen Katalog" an?
-                </span>
-            </summary>
-
-            <div class="faq-body">
-
-                <p>
-                    Der Prüfkatalog kann sich mit der Zeit weiterentwickeln
-                    (neue Fragen, geänderte Nummerierung). Wurde eine
-                    Begehung archiviert, bevor eine solche Änderung
-                    vorgenommen wurde, kann es sein, dass eine damals
-                    beantwortete Frage im heutigen Katalog nicht mehr
-                    unter derselben Kennung existiert.
-                </p>
-
-                <p>
-                    Die Auswertung zeigt solche Fragen dann mit dem
-                    Hinweis „(nicht mehr im aktuellen Katalog)" an, statt
-                    sie stillschweigend wegzulassen — die ursprüngliche
-                    Antwort bleibt dabei vollständig erhalten und wird in
-                    „Kategorien-Schwachstellen" sowie im CSV-Export
-                    korrekt mitgezählt bzw. exportiert, nur eben ohne
-                    aktuellen Kategorienamen bzw. Fragetext.
-                </p>
-
-                <p>
-                    Es handelt sich also nicht um einen Datenverlust,
-                    sondern lediglich um eine nicht mehr auflösbare
-                    Zuordnung zum jeweils aktuellen Fragenkatalog.
-                </p>
-
-            </div>
-
-        </details>
-
-
-</section>
+    </section>
 
 
     <!-- ================================================================ -->
-    <!-- KONTAKT                                                          -->
+    <!-- 6. AUSWERTUNG                                                    -->
     <!-- ================================================================ -->
 
-    <section
-        class="doku-section"
-        id="kontakt">
+    <section class="h-section" id="auswertung">
 
-        <div class="section-title">
-            Weitere Hilfe
-        </div>
+        <div class="h-section-label">Auswertung</div>
 
-        <h2>
-            Ist Ihre Frage nicht dabei?
-        </h2>
+        <h2>Märkte und Zeiträume vergleichen</h2>
 
-        <div class="card doku-card">
+        <p class="h-section-intro">Für den Alltag nicht nötig, aber hilfreich, wenn Sie mehrere Begehungen oder Märkte überblicken wollen.</p>
 
-            <p>
-                Für technische Details zum Aufbau, zur Speicherung,
-                zur Fotodokumentation und zum Service Worker siehe die
-                <a href="dokumentation.html">
-                    Technische Dokumentation
-                </a>.
-            </p>
+        <details class="h-item" id="q-aw-filter" data-unit data-kw="zeitraum filter markt monate auswertung wiederkehrende mängel offene maßnahmen">
+            <summary>Wie funktionieren Zeitraum- und Markt-Filter?</summary>
+            <div class="h-body">
+                <p class="h-short">Oben auf der Auswertungsseite wählen Sie den Zeitraum (<strong>Letzte 3 Monate</strong>, <strong>Letzte 6 Monate</strong>, <strong>Alles</strong>) und optional einen einzelnen Markt.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Der Zeitraum gilt für Kategorien-Schwachstellen, Auffällige Märkte, Verlauf pro Markt sowie CSV- und PDF-Export. <strong>Wiederkehrende Mängel</strong> und <strong>Offene Maßnahmen</strong> berücksichtigen ihn bewusst nicht, damit dort immer der aktuellste Stand sichtbar bleibt. Der Markt-Filter wirkt auf alles außer Wiederkehrende Mängel.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
 
-            <p>
-                Bei einem konkreten technischen Problem möglichst den
-                genauen Wortlaut einer Fehlermeldung sowie die verwendete
-                Seite notieren. Dadurch lässt sich die Ursache deutlich
-                schneller eingrenzen.
-            </p>
+        <details class="h-item" id="q-aw-auffaellig" data-unit data-kw="auffällige märkte gesamtauswertung pdf csv diagramm mängelquote kriterium trend">
+            <summary>Was zeigen „Auffällige Märkte“ und die Gesamtauswertung?</summary>
+            <div class="h-body">
+                <p class="h-short">Auffällige Märkte sind Märkte mit hoher Mängelquote. Das Kriterium wählen Sie selbst (über Durchschnitt, Top 5, Top 10, ab 50 %, ab 75 %). Die Gesamtauswertung fasst alles in einem PDF zusammen.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Das PDF enthält Gesamtverteilung, Kategorien-Schwachstellen, Auffällige Märkte, Marktverlauf und den Gesamt-Trend, z. B. für eine monatliche Übersicht an die Regionalleitung. Sie können es herunterladen oder per Mail teilen. Dasselbe gibt es als CSV mit den Rohdaten.</p>
+                        <p>Die Diagramme sehen am Bildschirm und im PDF gleich aus. Ein Tipp auf einen Balken in den Kategorien-Schwachstellen zeigt die Einzelfragen dieser Kategorie.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
 
+        <details class="h-item" id="q-aw-team" data-unit data-kw="auswertung verlauf team unterschied lokal nas">
+            <summary>Was ist der Unterschied zwischen „Auswertung Verlauf“ und „Auswertung Team“?</summary>
+            <div class="h-body">
+                <p class="h-short"><strong>Auswertung Verlauf</strong> wertet die auf diesem Gerät archivierten Begehungen aus, <strong>Auswertung Team</strong> alle im Team-Archiv auf dem NAS.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Beide Buttons stehen auf der Seite Verlauf. Die Team-Auswertung lädt im Hintergrund jede Datei einzeln vom NAS, das kann bei vielen Begehungen etwas dauern. Dateien, die sich nicht laden lassen, werden übersprungen. Sie hat einen eigenen Zeitraum-Filter, CSV-Export und PDF und funktioniert nur unter denselben Voraussetzungen wie das Team-Archiv.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-aw-katalog" data-unit data-kw="nicht mehr im aktuellen katalog frage entfernt nummer alt">
+            <summary>Warum steht bei einer Frage „nicht mehr im aktuellen Katalog“?</summary>
+            <div class="h-body">
+                <p class="h-short">Die Frage gibt es im heutigen Katalog nicht mehr unter derselben Nummer. Das ist kein Datenverlust.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Der Prüfkatalog entwickelt sich weiter. Die ursprüngliche Antwort bleibt erhalten und wird in den Kategorien-Schwachstellen und im CSV-Export mitgezählt – nur eben ohne aktuellen Kategorienamen und Fragetext.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+    </section>
+
+
+    <!-- ================================================================ -->
+    <!-- 7. PROBLEME LÖSEN                                                -->
+    <!-- ================================================================ -->
+
+    <section class="h-section" id="probleme">
+
+        <div class="h-section-label">Probleme lösen</div>
+
+        <h2>Wenn etwas nicht klappt</h2>
+
+        <p class="h-section-intro">Zu jedem Problem: was meist dahintersteckt und was Sie tun können.</p>
+
+        <details class="h-item h-problem" id="p-foto" data-unit data-kw="foto speichern hängt seite safari privat indexeddb speicher fehler">
+            <summary>Fotos lassen sich nicht speichern, oder die Seite hängt</summary>
+            <div class="h-body">
+                <dl class="h-ps">
+                    <dt>Ursache</dt>
+                    <dd>Safari blockiert den Speicher für Fotos und Archiv (IndexedDB), z. B. im privaten Surfmodus oder in einem hängenden Zustand.</dd>
+                    <dt>Lösung</dt>
+                    <dd>
+                        <ol>
+                            <li>Prüfen, ob Safari im privaten Modus läuft, und ihn beenden.</li>
+                            <li>Die App vollständig schließen und neu öffnen.</li>
+                            <li>Prüfen, ob genug Gerätespeicher frei ist.</li>
+                            <li>Erscheint die Meldung erneut, den genauen Fehlertext notieren.</li>
+                        </ol>
+                    </dd>
+                </dl>
+            </div>
+        </details>
+
+        <details class="h-item h-problem" id="p-menue" data-unit data-kw="menü reagiert nicht export is not defined fehlermeldung javascript neu laden">
+            <summary>Ein Menü oder der Export reagiert nicht, oder „… is not defined“ erscheint</summary>
+            <div class="h-body">
+                <dl class="h-ps">
+                    <dt>Ursache</dt>
+                    <dd>Eine alte oder unvollständige JavaScript-Datei. Die Seiten teilen sich <code>js/app.js</code> und weitere Dateien im Ordner <code>js/</code>.</dd>
+                    <dt>Lösung</dt>
+                    <dd>
+                        <ol>
+                            <li>Die Seite komplett neu laden.</li>
+                            <li>Die App vollständig schließen und neu öffnen.</li>
+                            <li>Prüfen, ob alle aktuellen Dateien auf dem Server liegen.</li>
+                            <li>Bei erneutem Fehler den genauen Fehlertext notieren.</li>
+                        </ol>
+                    </dd>
+                </dl>
+            </div>
+        </details>
+
+        <details class="h-item h-problem" id="p-druck" data-unit data-kw="drucken pdf öffnet sich nicht popup blocker tab safari">
+            <summary>Beim Drucken öffnet sich kein PDF</summary>
+            <div class="h-body">
+                <dl class="h-ps">
+                    <dt>Ursache</dt>
+                    <dd>Das PDF wird bewusst in einem neuen Tab geöffnet. Safari blockiert das möglicherweise (Popup-Blocker).</dd>
+                    <dt>Lösung</dt>
+                    <dd>Popups für die App-Adresse erlauben und <strong>Drucken</strong> erneut antippen.</dd>
+                </dl>
+            </div>
+        </details>
+
+        <details class="h-item h-problem" id="p-gesperrt" data-unit data-kw="kategorie gesperrt nicht bearbeiten schalter nicht vorhanden grau">
+            <summary>Eine Kategorie ist gesperrt und lässt sich nicht bearbeiten</summary>
+            <div class="h-body">
+                <dl class="h-ps">
+                    <dt>Ursache</dt>
+                    <dd>Der Schalter „nicht vorhanden“ der Kategorie ist eingeschaltet (Kundenaufzug, Lastenaufzug, Barrierefreies WC, Praktikanten, CO2-Kühleinrichtungen, Flüssiggasflaschen). Bei Flüssiggas und Beleuchtung kann auch der Schalter eines Unterbereichs aktiv sein.</dd>
+                    <dt>Lösung</dt>
+                    <dd>Den Schalter ausschalten. Danach lassen sich die Fragen wieder bewerten.</dd>
+                </dl>
+            </div>
+        </details>
+
+        <details class="h-item h-problem" id="p-update" data-unit data-kw="update aktualisierung neue version erscheint nicht alt cache service worker home bildschirm">
+            <summary>Neue Änderungen erscheinen nicht</summary>
+            <div class="h-body">
+                <dl class="h-ps">
+                    <dt>Ursache</dt>
+                    <dd>Der Service Worker (Offline-Speicher der App) liefert noch alte Dateien aus. Bei einer neuen App-Version wechselt er den Zwischenspeicher, iOS-Safari bemerkt das manchmal verzögert. Ihre Begehungsdaten bleiben dabei erhalten.</dd>
+                    <dt>Lösung</dt>
+                    <dd>
+                        <ol>
+                            <li>Die Seite wirklich neu laden (nicht nur zwischen Tabs wechseln).</li>
+                            <li>iPad mit Symbol auf dem Home-Bildschirm: Symbol löschen und die App über Safari neu hinzufügen.</li>
+                            <li>Firefox: <code>about:serviceworkers</code> öffnen, den Eintrag der App suchen, <strong>Unregister</strong> anklicken und neu laden.</li>
+                            <li>Letzte Möglichkeit: Einstellungen → Safari → Verlauf und Websitedaten löschen.</li>
+                        </ol>
+                    </dd>
+                </dl>
+                <div class="h-warn"><strong>Achtung bei Schritt 4:</strong> Das löscht auch Ihre lokale Begehung, Fotos und Archive sowie die Daten anderer Websites. Exportieren Sie vorher die JSON-Datei und sichern Sie wichtige Begehungen als PDF.</div>
+            </div>
+        </details>
+
+        <details class="h-item h-problem" id="p-nas" data-unit data-kw="nas speichern laden funktioniert nicht synology fehler schlüssel zugriff server erreichbar github pages">
+            <summary>„Auf NAS speichern“ oder „Vom NAS laden“ funktioniert nicht</summary>
+            <div class="h-body">
+                <dl class="h-ps">
+                    <dt>Ursache</dt>
+                    <dd>
+                        <ul>
+                            <li>Datum oder Marktnummer fehlen in den Betriebsdaten.</li>
+                            <li>Die App wurde nicht über die Synology-Adresse geöffnet (z. B. GitHub Pages) und in den Einstellungen ist keine Server-Adresse hinterlegt.</li>
+                            <li>Der Server ist nicht erreichbar (Netzwerk, VPN oder Synology ausgeschaltet).</li>
+                            <li>Die Meldung „Ungültiger oder fehlender Zugriffsschlüssel“: Der Schlüssel in den Einstellungen stimmt nicht mit dem Server überein.</li>
+                        </ul>
+                    </dd>
+                    <dt>Lösung</dt>
+                    <dd>Die passende Ursache beheben: Betriebsdaten ausfüllen, die App über die Synology-Adresse öffnen oder die Server-Adresse unter <strong>Einstellungen</strong> eintragen, Verbindung prüfen, Schlüssel abgleichen. Ein NAS-Fehler hat keinen Einfluss auf Ihre lokal gespeicherten Daten.</dd>
+                </dl>
+            </div>
+        </details>
+
+    </section>
+
+
+    <!-- ================================================================ -->
+    <!-- 8. GUT ZU WISSEN                                                 -->
+    <!-- ================================================================ -->
+
+    <section class="h-section" id="wissen">
+
+        <div class="h-section-label">Gut zu wissen</div>
+
+        <h2>Offline, Zugang und Rechtliches</h2>
+
+        <details class="h-item" id="w-offline" data-unit data-kw="offline internet ohne netz service worker schrift datenschutz">
+            <summary>Funktioniert die App ohne Internet?</summary>
+            <div class="h-body">
+                <p class="h-short">Ja. Nach dem ersten erfolgreichen Laden stehen die App-Dateien auch ohne Netz zur Verfügung. Nur die NAS-Funktionen brauchen eine Verbindung.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Online bevorzugt die App das Netzwerk, ohne Netz nutzt sie den Zwischenspeicher. Auch die Schrift liegt lokal in der App. Es werden keine Daten an Dritte übertragen.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="w-version" data-unit data-kw="version revision stand fußzeile">
+            <summary>Welche Version der App nutze ich?</summary>
+            <div class="h-body">
+                <p class="h-short">Die Revision steht in der Fußzeile jeder Seite und auf jedem PDF. Aktuell ist die Revision <span data-zahl="revision">1.49</span> vom <span data-zahl="revision_datum">10.10.2026</span>.</p>
+            </div>
+        </details>
+
+        <details class="h-item" id="w-zugang" data-unit data-kw="zugangscode passwort code abfrage installierte app">
+            <summary>Warum sehe ich die Zugangscode-Abfrage nicht immer?</summary>
+            <div class="h-body">
+                <p class="h-short">Sie erscheint nur in der installierten App-Ansicht, nicht im normalen Browser-Tab. Sie ist eine organisatorische Hürde und kein echter Zugriffsschutz.</p>
+            </div>
+        </details>
+
+        <details class="h-item" id="w-recht" data-unit data-kw="rechtsberatung maßnahmentexte verbindlich recht gesetz vorschrift aktualität">
+            <summary>Sind die Maßnahmentexte eine verbindliche Rechtsberatung?</summary>
+            <div class="h-body">
+                <p class="h-short">Nein. Die Texte unterstützen die Dokumentation. Bei rechtlichen oder technischen Detailfragen muss die zuständige Fachkraft oder eine geeignete Fachstelle die konkrete Situation prüfen.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Gesetzliche und technische Regelwerke können sich ändern. Prüfen Sie sie bei kritischen Fragen auf Aktualität.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+    </section>
+
+
+    <!-- ================================================================ -->
+    <!-- WEITERE HILFE                                                    -->
+    <!-- ================================================================ -->
+
+    <section class="h-section" id="weiter" data-unit>
+
+        <div class="h-section-label">Weitere Hilfe</div>
+
+        <h2>Ist Ihre Frage nicht dabei?</h2>
+
+        <div class="h-help">
+            <p>Technische Details zu Aufbau, Speicherung, Fotodokumentation und Service Worker finden Sie in der <a href="dokumentation.html">Technischen Dokumentation</a>.</p>
+            <p>Bei einem konkreten Problem hilft es, den genauen Wortlaut der Fehlermeldung und die betroffene Seite zu notieren. So lässt sich die Ursache deutlich schneller eingrenzen.</p>
         </div>
 
     </section>
 
 </main>
+
+<button type="button" class="h-top" id="faq-top" aria-label="Nach oben">↑</button>
 
 
 <footer class="app-footer">
@@ -2038,6 +1301,206 @@
 <script src="js/audit-data.js"></script>
 <script src="js/text.js"></script>
 <script src="js/app.js"></script>
+
+<script>
+(function () {
+    'use strict';
+
+    var input = document.getElementById('faq-search');
+    var clearBtn = document.getElementById('faq-clear');
+    var statusEl = document.getElementById('faq-status');
+    var toggleBtn = document.getElementById('faq-toggle');
+    var emptyEl = document.getElementById('faq-empty');
+    var emptyReset = document.getElementById('faq-empty-reset');
+    var topBtn = document.getElementById('faq-top');
+
+    var units = Array.prototype.slice.call(document.querySelectorAll('[data-unit]'));
+    var sections = Array.prototype.slice.call(document.querySelectorAll('.h-section'));
+    var items = Array.prototype.slice.call(document.querySelectorAll('.h-item'));
+    var timer = null;
+
+    // ---- Text fuer die Suche normalisieren (Umlaute und Gross-/Kleinschreibung)
+    function normA(s) {
+        return String(s).toLowerCase()
+            .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss');
+    }
+
+    function normB(s) {
+        return String(s).toLowerCase()
+            .replace(/ä/g, 'a').replace(/ö/g, 'o').replace(/ü/g, 'u').replace(/ß/g, 'ss');
+    }
+
+    // Suchtext je Einheit einmal berechnen (inkl. versteckter Details)
+    units.forEach(function (u) {
+        var raw = u.textContent + ' ' + (u.getAttribute('data-kw') || '');
+        u._hayA = normA(raw);
+        u._hayB = normB(raw);
+    });
+
+    function matches(unit, words) {
+        for (var i = 0; i < words.length; i++) {
+            var wa = normA(words[i]);
+            var wb = normB(words[i]);
+            if (unit._hayA.indexOf(wa) === -1 && unit._hayB.indexOf(wb) === -1) return false;
+        }
+        return true;
+    }
+
+    function setSearching(on) {
+        document.body.classList.toggle('is-searching', on);
+    }
+
+    function setStatus(text) {
+        statusEl.textContent = text;
+    }
+
+    function resetSearch() {
+        units.forEach(function (u) {
+            u.hidden = false;
+            if (u._openedBySearch) {
+                u.open = false;
+                u._openedBySearch = false;
+            }
+        });
+        sections.forEach(function (s) { s.hidden = false; });
+        emptyEl.classList.remove('is-visible');
+        setSearching(false);
+        setStatus('');
+        clearBtn.hidden = true;
+        updateToggleLabel();
+    }
+
+    function runSearch() {
+        var q = input.value.trim();
+        clearBtn.hidden = (input.value === '');
+
+        if (q.length < 2) {
+            resetSearch();
+            return;
+        }
+
+        var words = q.split(/\s+/);
+        var treffer = 0;
+
+        setSearching(true);
+
+        units.forEach(function (u) {
+            var ok = matches(u, words);
+            u.hidden = !ok;
+            if (ok) {
+                treffer++;
+                if (u.tagName === 'DETAILS' && !u.open) {
+                    u.open = true;
+                    u._openedBySearch = true;
+                }
+            } else if (u._openedBySearch) {
+                u.open = false;
+                u._openedBySearch = false;
+            }
+        });
+
+        sections.forEach(function (s) {
+            if (s.hasAttribute('data-unit')) return;
+            var sichtbar = s.querySelector('.h-item:not([hidden])');
+            s.hidden = !sichtbar;
+        });
+
+        emptyEl.classList.toggle('is-visible', treffer === 0);
+        setStatus(treffer === 0
+            ? ''
+            : treffer + (treffer === 1 ? ' Treffer' : ' Treffer') + ' für „' + q + '“');
+        updateToggleLabel();
+    }
+
+    function onInput() {
+        clearTimeout(timer);
+        timer = setTimeout(runSearch, 120);
+    }
+
+    input.addEventListener('input', onInput);
+
+    input.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            input.value = '';
+            runSearch();
+        }
+    });
+
+    function clearSearch() {
+        input.value = '';
+        runSearch();
+        input.focus();
+    }
+
+    clearBtn.addEventListener('click', clearSearch);
+    emptyReset.addEventListener('click', clearSearch);
+
+    // ---- Alle aufklappen / zuklappen
+    function sichtbareItems() {
+        return items.filter(function (i) { return !i.hidden; });
+    }
+
+    function alleOffen() {
+        var v = sichtbareItems();
+        return v.length > 0 && v.every(function (i) { return i.open; });
+    }
+
+    function updateToggleLabel() {
+        var offen = alleOffen();
+        toggleBtn.textContent = offen ? 'Alle Antworten zuklappen' : 'Alle Antworten aufklappen';
+        toggleBtn.setAttribute('aria-pressed', offen ? 'true' : 'false');
+    }
+
+    toggleBtn.addEventListener('click', function () {
+        var oeffnen = !alleOffen();
+        sichtbareItems().forEach(function (i) {
+            i.open = oeffnen;
+            if (!oeffnen) {
+                var m = i.querySelectorAll('.h-more');
+                for (var k = 0; k < m.length; k++) m[k].open = false;
+            } else {
+                var m2 = i.querySelectorAll('.h-more');
+                for (var j = 0; j < m2.length; j++) m2[j].open = true;
+            }
+            i._openedBySearch = false;
+        });
+        updateToggleLabel();
+    });
+
+    items.forEach(function (i) {
+        i.addEventListener('toggle', updateToggleLabel);
+    });
+
+    // ---- Direktlink: #q-... oeffnet die Frage
+    function openFromHash() {
+        var id = decodeURIComponent((location.hash || '').replace(/^#/, ''));
+        if (!id) return;
+        var el = document.getElementById(id);
+        if (el && el.classList.contains('h-item')) {
+            el.open = true;
+            setTimeout(function () { el.scrollIntoView({ block: 'start' }); }, 50);
+        }
+    }
+
+    window.addEventListener('hashchange', openFromHash);
+    openFromHash();
+
+    // ---- Nach oben
+    function onScroll() {
+        topBtn.classList.toggle('is-visible', window.scrollY > 700);
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    topBtn.addEventListener('click', function () {
+        window.scrollTo({ top: 0 });
+        input.focus({ preventScroll: true });
+    });
+
+    updateToggleLabel();
+})();
+</script>
 
 </body>
 </html>

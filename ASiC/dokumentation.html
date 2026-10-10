@@ -172,6 +172,20 @@
         white-space: nowrap;
     }
 
+    table.doku-table.dateien td:first-child {
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+
+    table.doku-table td.zahl {
+        text-align: right;
+        white-space: nowrap;
+    }
+
+    .doku-table-wrap {
+        overflow-x: auto;
+    }
+
     .doku-box {
         border-left: 3px solid var(--brand-red);
         background: var(--brand-red-tint);
@@ -284,27 +298,21 @@
                 <div class="doku-meta-label">
                     Dokumentstand
                 </div>
-                <div class="doku-meta-value">
-                    01.10.2026
-                </div>
+                <div class="doku-meta-value"> <span data-zahl="stand">10.10.2026</span> </div>
             </div>
 
             <div class="doku-meta-item">
                 <div class="doku-meta-label">
                     App-Revision
                 </div>
-                <div class="doku-meta-value">
-                    1.47 (10.10.2026)
-                </div>
+                <div class="doku-meta-value"> <span data-zahl="revision">1.49</span> (<span data-zahl="revision_datum">10.10.2026</span>) </div>
             </div>
 
             <div class="doku-meta-item">
                 <div class="doku-meta-label">
                     Service Worker
                 </div>
-                <div class="doku-meta-value">
-                    v1.44
-                </div>
+                <div class="doku-meta-value"> <span data-zahl="cache_version">v1.49</span> </div>
             </div>
 
             <div class="doku-meta-item">
@@ -320,9 +328,7 @@
                 <div class="doku-meta-label">
                     Umfang
                 </div>
-                <div class="doku-meta-value">
-                    24 Kategorien · 199 Prüfpunkte
-                </div>
+                <div class="doku-meta-value"> <span data-zahl="kategorien">24</span> Kategorien · <span data-zahl="fragen">199</span> Prüfpunkte </div>
             </div>
 
         </div>
@@ -355,9 +361,7 @@
             5. PDF und Export
         </a>
 
-        <a href="#design">
-            6. Design
-        </a>
+        <a href="#design"> 6. Design und Schrift </a>
 
         <a href="#recht">
             7. Rechtliche Bestandteile
@@ -367,9 +371,9 @@
             8. Bekannte Einschränkungen
         </a>
 
-        <a href="#dateien">
-            9. Dateiübersicht
-        </a>
+        <a href="#sicherheit"> 9. Sicherheit im Code </a>
+
+        <a href="#dateien"> 10. Dateiübersicht </a>
 
     </div>
 
@@ -521,12 +525,17 @@
                 </li>
 
                 <li>
-                    Keine Framework-Abhängigkeit wie React, Vue oder Angular
+                    <strong>Space Grotesk</strong>
+                    (<code>fonts/*.woff2</code>) –
+                    lokal eingebundene Schrift für Überschriften
+                    (siehe Abschnitt 6)
                 </li>
 
                 <li>
-                    Keine CDN-Abhängigkeit für die Kernfunktionen
+                    Keine Framework-Abhängigkeit wie React, Vue oder Angular
                 </li>
+
+                <li> Keine CDN- oder Fremdserver-Abhängigkeit: Bibliotheken und Schrift liegen lokal im Projekt, es werden keine Daten an Dritte übertragen </li>
 
                 <li>
                     Kein Build-Prozess und kein npm/Bundler erforderlich;
@@ -551,7 +560,7 @@
 
             <p>
                 Die aktuelle technische Cache-Version lautet:
-                <strong><code>asic-handel-v1.47</code></strong>.
+                <strong><code><span data-zahl="cache">asic-handel-v1.49</span></code></strong>.
             </p>
 
             <ul>
@@ -563,8 +572,7 @@
                 </li>
 
                 <li>
-                    HTML-, CSS-, JavaScript-, Icon-, Manifest- und
-                    jsPDF-Dateien werden anschließend für den Offline-Betrieb
+                    HTML-, CSS-, JavaScript-, Icon-, Manifest-, Schrift- und jsPDF-Dateien werden anschließend für den Offline-Betrieb
                     im neuen Cache gespeichert.
                 </li>
 
@@ -573,6 +581,13 @@
                     <strong>„Netzwerk zuerst“</strong>.
                     Eine erfolgreiche Netzwerkantwort wird anschließend
                     im aktuellen Cache aktualisiert.
+                </li>
+
+                <li>
+                    Nicht zwischengespeichert werden die
+                    NAS-Endpunkte (<code>*.php</code>) sowie Anfragen
+                    an fremde Adressen. Dadurch erscheinen offline keine
+                    veralteten Dateilisten oder Begehungsdaten aus dem Cache.
                 </li>
 
                 <li>
@@ -775,69 +790,71 @@
                 die gemeinsame CSS-, Daten- und Logikdateien verwenden.
             </p>
 
+            <div class="doku-table-wrap">
             <table class="doku-table">
 
                 <tr>
-                    <th>Datei</th>
+                    <th>Seite</th>
                     <th>Zweck</th>
                 </tr>
 
                 <tr>
                     <td>index.html</td>
-                    <td>787</td>
+                    <td>Prüfkatalog und Eingabe der Begehungsdaten</td>
                 </tr>
 
                 <tr>
                     <td>massnahmen.html</td>
-                    <td>697</td>
+                    <td>Aktionsplan: Maßnahmen, Status, Fotos und Unterschriften</td>
                 </tr>
 
                 <tr>
                     <td>fotos.html</td>
-                    <td>541</td>
+                    <td>Allgemeine Fotodokumentation</td>
                 </tr>
 
                 <tr>
                     <td>verlauf.html</td>
-                    <td>357</td>
+                    <td>Mein Verlauf (lokales Archiv) und Team-Archiv (NAS)</td>
                 </tr>
 
                 <tr>
                     <td>auswertung.html</td>
-                    <td>935</td>
+                    <td>Auswertung der lokal archivierten Begehungen</td>
                 </tr>
 
                 <tr>
                     <td>auswertung-team.html</td>
-                    <td>867</td>
-                </tr>
-
-                <tr>
-                    <td>dokumentation.html</td>
-                    <td>2.097</td>
-                </tr>
-
-                <tr>
-                    <td>hilfe.html</td>
-                    <td>2.043</td>
-                </tr>
-
-                <tr>
-                    <td>impressum.html</td>
-                    <td>478</td>
-                </tr>
-
-                <tr>
-                    <td>datenschutz.html</td>
-                    <td>843</td>
+                    <td>Auswertung aller Begehungen im Team-Archiv</td>
                 </tr>
 
                 <tr>
                     <td>einstellungen.html</td>
-                    <td>296</td>
+                    <td>NAS-Server-Adresse und Zugriffsschlüssel</td>
+                </tr>
+
+                <tr>
+                    <td>hilfe.html</td>
+                    <td>Bedienungsanleitung und FAQ</td>
+                </tr>
+
+                <tr>
+                    <td>dokumentation.html</td>
+                    <td>Technische Dokumentation</td>
+                </tr>
+
+                <tr>
+                    <td>impressum.html</td>
+                    <td>Impressum</td>
+                </tr>
+
+                <tr>
+                    <td>datenschutz.html</td>
+                    <td>Datenschutzerklärung</td>
                 </tr>
 
             </table>
+            </div>
 
             <p>
                 Die Hauptseiten teilen sich den gemeinsamen Header,
@@ -866,7 +883,7 @@
 
 
         <h3>
-            Prüfkatalog – 24 Kategorien, 199 Einzelfragen
+            Prüfkatalog – <span data-zahl="kategorien">24</span> Kategorien, <span data-zahl="fragen">199</span> Einzelfragen
         </h3>
 
         <div class="card doku-card">
@@ -1197,8 +1214,7 @@
         <div class="card doku-card">
 
             <p>
-                Die App unterstützt jetzt eine vollständige lokale
-                Fotodokumentation. Fotos können direkt mit dem iPad
+                Die App bietet eine vollständige lokale Fotodokumentation. Fotos können direkt mit dem iPad
                 aufgenommen bzw. über die Gerätefunktionen eingefügt
                 werden.
             </p>
@@ -1472,7 +1488,7 @@
         </div>
 
         <h2>
-            Design
+            Design und Schrift
         </h2>
 
         <div class="card doku-card">
@@ -1504,6 +1520,21 @@
                 <li>
                     Touch-orientierte Bedienelemente für
                     die praktische Verwendung während einer Begehung
+                </li>
+
+                <li>
+                    <strong>Schrift:</strong> Überschriften und Kennzahlen
+                    verwenden <strong>Space Grotesk</strong> (Schnitte 500,
+                    600 und 700), der Fließtext die Systemschrift des Geräts.
+                    Die Schrift liegt als <code>.woff2</code>-Dateien im Ordner
+                    <code>fonts/</code> und wird in
+                    <code>css/styles.css</code> per <code>@font-face</code>
+                    eingebunden. Es erfolgt <strong>kein Abruf bei Google</strong>
+                    oder einem anderen Fremdserver; die Dateien sind Teil des
+                    Offline-Caches. Lizenz: SIL Open Font License 1.1
+                    (Lizenztext im Ordner <code>fonts/</code>).
+                    Fällt die Schrift aus, greift die Systemschrift
+                    (Segoe UI bzw. <code>system-ui</code>).
                 </li>
 
             </ul>
@@ -1604,8 +1635,7 @@
             wird eine relative Adresse im selben Verzeichnis wie die App
             verwendet; unter „Einstellungen" lässt sich stattdessen eine
             externe Server-Adresse hinterlegen (<code>nasUrl()</code> baut
-            daraus die tatsächliche Adresse, ohne Konfiguration identisch
-            zum bisherigen relativen Pfad). Optional zusätzlich ein
+            daraus die tatsächliche Adresse, ohne Konfiguration gilt der relative Pfad). Optional zusätzlich ein
             Zugriffsschlüssel, der als Kopfzeile mitgeschickt und
             serverseitig zeitsicher per <code>hash_equals()</code>
             geprüft wird, sofern dort ebenfalls einer hinterlegt ist.
@@ -1624,6 +1654,17 @@
                     Dateien als auch manuell (z. B. per File Station)
                     eingespielte Exporte aus „JSON exportieren"/„JSON per
                     Mail teilen" — beide erscheinen im Team-Archiv</li>
+                <li><code>list.php</code> liefert je Datei Datum, Marktnummer,
+                    Firma und PLZ/Ort für die Anzeige in „Vom NAS laden"
+                    und im Team-Archiv</li>
+                <li>Wird für denselben Markt am selben Tag erneut
+                    gespeichert, ersetzt <code>save.php</code> die Datei.
+                    Der vorherige Stand wird vorher mit Zeitstempel in den
+                    Unterordner <code>versionen</code> des Datenordners
+                    kopiert. Dieser Ordner wird von
+                    <code>list.php</code> und <code>load.php</code> nicht
+                    erfasst und dient nur der Wiederherstellung durch
+                    Administratoren; er wird nicht automatisch geleert.</li>
             </ul>
 
         </div>
@@ -1755,9 +1796,7 @@
             </p>
 
             <p>
-                <strong>Kriterium bei „Auffällige Märkte"</strong>: Statt
-                der bisher fest verdrahteten „über dem Durchschnitt"-Regel
-                steht jetzt eine Auswahl zur Verfügung (Über Durchschnitt,
+                <strong>Kriterium bei „Auffällige Märkte"</strong>: Das Kriterium ist über eine Auswahl wählbar (Über Durchschnitt,
                 Top 5, Top 10, ab 50%, ab 75%) – wirkt sich auch auf den
                 PDF-Export aus.
             </p>
@@ -1849,10 +1888,132 @@
     <!-- 9. DATEIÜBERSICHT                                                -->
     <!-- ================================================================ -->
 
-    <section class="doku-section" id="dateien">
+    <section class="doku-section" id="sicherheit">
 
         <div class="section-title">
             Abschnitt 9
+        </div>
+
+        <h2>
+            Sicherheit und Robustheit im Code
+        </h2>
+
+        <div class="card doku-card">
+
+            <div class="doku-table-wrap">
+            <table class="doku-table">
+
+                <tr>
+                    <th>Thema</th>
+                    <th>Umsetzung</th>
+                </tr>
+
+                <tr>
+                    <td>Ausgabe von Texten</td>
+                    <td>
+                        Alle Nutzereingaben und von außen geladenen Werte
+                        (Foto-Kommentare, Mängelbeschreibung, Maßnahmentexte,
+                        Marktnummer, NAS-Dateiliste, Fehlermeldungen) werden
+                        mit <code>escapeHtml()</code> aus <code>js/app.js</code>
+                        maskiert, bevor sie in <code>innerHTML</code> gelangen.
+                        Importierte JSON-Dateien und NAS-Daten gelten als nicht
+                        vertrauenswürdig.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Team-Archiv</td>
+                    <td>
+                        Dateinamen stehen im <code>data-filename</code>-Attribut;
+                        die Schaltflächen lesen sie von dort und setzen sie nicht
+                        in den JavaScript-Code des <code>onclick</code> ein.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Datum</td>
+                    <td>
+                        <code>todayIsoLocal()</code> liefert das Tagesdatum in
+                        lokaler Zeit. <code>toISOString()</code> rechnet nach UTC
+                        und lieferte zwischen 0 und 2 Uhr deutscher Zeit das
+                        Datum des Vortags.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Downloads</td>
+                    <td>
+                        <code>URL.revokeObjectURL()</code> wird erst nach
+                        einer Sekunde aufgerufen, weil iOS-Safari den Download
+                        sonst abbrechen kann.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Offline-Cache</td>
+                    <td>
+                        Der Service Worker speichert keine <code>*.php</code>-Antworten
+                        und keine Anfragen an fremde Adressen.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>NAS-Dateien</td>
+                    <td>
+                        <code>load.php</code> akzeptiert nur Dateinamen, die einem der
+                        beiden bekannten Muster entsprechen, und entfernt
+                        Pfadanteile mit <code>basename()</code>. <code>save.php</code>
+                        schreibt über eine temporäre Datei und sichert den
+                        Vorgängerstand (siehe Abschnitt 8).
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Zugriffsschlüssel</td>
+                    <td>
+                        Optional. Wird mit <code>hash_equals()</code> geprüft. In
+                        <code>save.php</code>, <code>list.php</code> und
+                        <code>load.php</code> ist standardmäßig kein Schlüssel
+                        gesetzt; er muss in allen drei Dateien und in den
+                        App-Einstellungen identisch hinterlegt werden.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Fremdserver</td>
+                    <td>
+                        Es werden weder Schriften noch Bibliotheken von Dritten
+                        geladen. Die einzigen Netzwerkzugriffe sind die
+                        konfigurierten NAS-Endpunkte.
+                    </td>
+                </tr>
+
+            </table>
+            </div>
+
+            <div class="doku-box">
+                <div class="doku-box-title">Bei zukünftigen Änderungen</div>
+                <p>
+                    Jeden neuen Text aus Eingabefeldern, Dateien oder vom Server
+                    mit <code>escapeHtml()</code> ausgeben. Das Tagesdatum immer
+                    über <code>todayIsoLocal()</code> bilden. Neue Dateien in
+                    <code>tools/doku-dateien.json</code> eintragen.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================================================ -->
+    <!-- 10. DATEIÜBERSICHT                                               -->
+    <!-- ================================================================ -->
+
+    <section class="doku-section" id="dateien">
+
+        <div class="section-title">
+            Abschnitt 10
         </div>
 
         <h2>
@@ -1861,257 +2022,240 @@
 
         <div class="card doku-card">
 
-            <table class="doku-table">
+            <p>
+                Die Zahlen dieser Tabelle werden mit
+                <code>python tools/doku-zahlen.py</code> aus dem Code erzeugt
+                und nicht von Hand gepflegt.
+            </p>
+
+            <div class="doku-table-wrap">
+            <table class="doku-table dateien">
 
                 <tr>
                     <th>Datei</th>
                     <th>Zeilen</th>
                     <th>Funktion</th>
                 </tr>
-
+                <!-- DATEITABELLE:START -->
                 <tr>
                     <td>index.html</td>
-                    <td>787</td>
-                    <td>
-                        Prüfkatalog und Eingabe der Begehungsdaten
-                    </td>
+                    <td class="zahl">787</td>
+                    <td>Prüfkatalog und Eingabe der Begehungsdaten</td>
                 </tr>
-
                 <tr>
                     <td>massnahmen.html</td>
-                    <td>697</td>
-                    <td>
-                        Aktionsplan, Maßnahmenbearbeitung,
-                        Status und Unterschriften
-                    </td>
+                    <td class="zahl">697</td>
+                    <td>Aktionsplan, Maßnahmenbearbeitung, Status und Unterschriften</td>
                 </tr>
-
                 <tr>
                     <td>fotos.html</td>
-                    <td>541</td>
-                    <td>
-                        Aufnahme, Einfügen, Kommentieren und
-                        Verwaltung von Fotos
-                    </td>
+                    <td class="zahl">541</td>
+                    <td>Aufnahme, Einfügen, Kommentieren und Verwaltung von Fotos</td>
                 </tr>
-
                 <tr>
                     <td>verlauf.html</td>
-                    <td>357</td>
-                    <td>
-                        Verwaltung archivierter Begehungen
-                    </td>
+                    <td class="zahl">357</td>
+                    <td>Archivierte Begehungen (Mein Verlauf) und Team-Archiv (NAS)</td>
                 </tr>
-
-                <tr>
-                    <td>dokumentation.html</td>
-                    <td>2.097</td>
-                    <td>
-                        Technische Dokumentation
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>hilfe.html</td>
-                    <td>2.043</td>
-                    <td>
-                        Hilfe und FAQ
-                    </td>
-                </tr>
-
                 <tr>
                     <td>auswertung.html</td>
-                    <td>935</td>
-                    <td>
-                        Auswertung
-                    </td>
+                    <td class="zahl">935</td>
+                    <td>Auswertung der lokal archivierten Begehungen</td>
                 </tr>
-
                 <tr>
                     <td>auswertung-team.html</td>
-                    <td>867</td>
-                    <td>
-                        Team-Auswertung
-                    </td>
+                    <td class="zahl">867</td>
+                    <td>Auswertung aller Begehungen im Team-Archiv (NAS)</td>
                 </tr>
-
-                <tr>
-                    <td>impressum.html</td>
-                    <td>478</td>
-                    <td>
-                        Impressum
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>datenschutz.html</td>
-                    <td>843</td>
-                    <td>
-                        Datenschutzerklärung
-                    </td>
-                </tr>
-
                 <tr>
                     <td>einstellungen.html</td>
-                    <td>296</td>
-                    <td>
-                        Konfigurierbare externe NAS-Server-Adresse
-                    </td>
+                    <td class="zahl">296</td>
+                    <td>Konfigurierbare externe NAS-Server-Adresse und Zugriffsschlüssel</td>
                 </tr>
-
+                <tr>
+                    <td>impressum.html</td>
+                    <td class="zahl">478</td>
+                    <td>Impressum</td>
+                </tr>
+                <tr>
+                    <td>datenschutz.html</td>
+                    <td class="zahl">843</td>
+                    <td>Datenschutzerklärung</td>
+                </tr>
+                <tr>
+                    <td>hilfe.html</td>
+                    <td class="zahl">1.506</td>
+                    <td>Bedienungsanleitung und FAQ</td>
+                </tr>
+                <tr>
+                    <td>dokumentation.html</td>
+                    <td class="zahl">2.320</td>
+                    <td>Technische Dokumentation (diese Seite)</td>
+                </tr>
                 <tr>
                     <td>css/styles.css</td>
-                    <td>1.882</td>
-                    <td>
-                        Gesamtes gemeinsames Styling
-                    </td>
+                    <td class="zahl">1.973</td>
+                    <td>Gesamtes gemeinsames Styling</td>
                 </tr>
-
                 <tr>
                     <td>js/app.js</td>
-                    <td>3.216</td>
-                    <td>
-                        Kernlogik, State-Verwaltung,
-                        Checkliste, PDF-Erzeugung,
-                        Export, Archivierung
-                        und Service-Worker-Registrierung
-                    </td>
+                    <td class="zahl">3.245</td>
+                    <td>Kernlogik, State-Verwaltung, Checkliste, PDF-Erzeugung, Export, Archivierung, NAS-Zugriff, Hilfsfunktionen (escapeHtml, todayIsoLocal) und Service-Worker-Registrierung</td>
                 </tr>
-
                 <tr>
                     <td>js/audit-data.js</td>
-                    <td>340</td>
-                    <td>
-                        Prüfkatalog:
-                        22 Kategorien / 174 Prüfpunkte
-                    </td>
+                    <td class="zahl">348</td>
+                    <td>Prüfkatalog: 24 Kategorien / 199 Prüfpunkte</td>
                 </tr>
-
                 <tr>
                     <td>js/text.js</td>
-                    <td>1.137</td>
-                    <td>
-                        Hinterlegte Maßnahmentexte und
-                        Sprachstile
-                    </td>
+                    <td class="zahl">1.146</td>
+                    <td>Hinterlegte Maßnahmentexte und Sprachstile</td>
                 </tr>
-
                 <tr>
                     <td>js/massnahmen.js</td>
-                    <td>1.059</td>
-                    <td>
-                        Logik der Aktionsplan-Seite
-                    </td>
+                    <td class="zahl">1.059</td>
+                    <td>Logik der Aktionsplan-Seite</td>
                 </tr>
-
                 <tr>
                     <td>js/photos-store.js</td>
-                    <td>187</td>
-                    <td>
-                        IndexedDB-Speicherung und Verwaltung
-                        der Fotos
-                    </td>
+                    <td class="zahl">187</td>
+                    <td>IndexedDB-Speicherung und Verwaltung der Fotos</td>
                 </tr>
-
                 <tr>
                     <td>js/fotos.js</td>
-                    <td>111</td>
-                    <td>
-                        Bedienlogik der Fotodokumentationsseite
-                    </td>
+                    <td class="zahl">111</td>
+                    <td>Bedienlogik der Fotodokumentationsseite</td>
                 </tr>
-
                 <tr>
                     <td>js/archive-store.js</td>
-                    <td>91</td>
-                    <td>
-                        IndexedDB-Speicherung der archivierten
-                        Begehungen
-                    </td>
+                    <td class="zahl">91</td>
+                    <td>IndexedDB-Speicherung der archivierten Begehungen</td>
                 </tr>
-
                 <tr>
                     <td>js/verlauf.js</td>
-                    <td>280</td>
-                    <td>
-                        Bedienlogik der Archiv-/Verlaufseite,
-                        inkl. Team-Archiv (NAS)
-                    </td>
+                    <td class="zahl">280</td>
+                    <td>Bedienlogik der Archiv-/Verlaufseite inkl. Team-Archiv (NAS)</td>
                 </tr>
-
                 <tr>
                     <td>js/einstellungen.js</td>
-                    <td>65</td>
-                    <td>
-                        Bedienlogik der Einstellungsseite
-                    </td>
+                    <td class="zahl">65</td>
+                    <td>Bedienlogik der Einstellungsseite</td>
                 </tr>
-
                 <tr>
                     <td>js/auswertung-logik.js</td>
-                    <td>486</td>
-                    <td>
-                        Gemeinsame Auswertungs-Berechnungslogik
-                        (auswertung.html + auswertung-team.html + verlauf.html)
-                    </td>
+                    <td class="zahl">486</td>
+                    <td>Gemeinsame Auswertungs-Berechnungslogik (auswertung.html, auswertung-team.html, verlauf.html)</td>
                 </tr>
-
                 <tr>
                     <td>js/auswertung.js</td>
-                    <td>792</td>
-                    <td>
-                        Logik der Auswertungsseite
-                    </td>
+                    <td class="zahl">792</td>
+                    <td>Logik der Auswertungsseite</td>
                 </tr>
-
                 <tr>
                     <td>js/auswertung-team.js</td>
-                    <td>233</td>
-                    <td>
-                        Logik der Team-Auswertungsseite
-                    </td>
+                    <td class="zahl">233</td>
+                    <td>Logik der Team-Auswertungsseite</td>
                 </tr>
-
                 <tr>
                     <td>js/access-gate.js</td>
-                    <td>62</td>
-                    <td>
-                        Clientseitige Zugangshürde für
-                        installierte App-Ansicht
-                    </td>
+                    <td class="zahl">62</td>
+                    <td>Clientseitige Zugangshürde für die installierte App-Ansicht</td>
                 </tr>
-
                 <tr>
                     <td>sw.js</td>
-                    <td>287</td>
-                    <td>
-                        Service Worker, Offline-Fähigkeit,
-                        Cache-Version <strong>v1.47</strong>
-                    </td>
+                    <td class="zahl">292</td>
+                    <td>Service Worker, Offline-Fähigkeit, Cache-Version v1.49</td>
                 </tr>
-
+                <tr>
+                    <td>manifest.json</td>
+                    <td class="zahl">24</td>
+                    <td>Web-App-Manifest für die Installation als App</td>
+                </tr>
+                <tr>
+                    <td>save.php</td>
+                    <td class="zahl">578</td>
+                    <td>NAS: Begehung speichern (sichert den Vorgängerstand im Unterordner versionen)</td>
+                </tr>
+                <tr>
+                    <td>list.php</td>
+                    <td class="zahl">342</td>
+                    <td>NAS: Liste aller gespeicherten Begehungen für das Team-Archiv</td>
+                </tr>
+                <tr>
+                    <td>nas-test.html</td>
+                    <td class="zahl">167</td>
+                    <td>Eigenständige Testseite für die NAS-Anbindung (wird von den App-Seiten nicht verlinkt)</td>
+                </tr>
+                <tr>
+                    <td>auswertung.js</td>
+                    <td class="zahl">716</td>
+                    <td>Auswertungs-Skript im Hauptordner (wird von den App-Seiten nicht eingebunden; wird auf dem NAS verwendet)</td>
+                </tr>
+                <tr>
+                    <td>js/webdav-store.js</td>
+                    <td class="zahl">161</td>
+                    <td>Ältere WebDAV-Anbindung für das Synology-Backup (wird von den App-Seiten nicht eingebunden)</td>
+                </tr>
+                <tr>
+                    <td>load.php</td>
+                    <td class="zahl">176</td>
+                    <td>NAS: einzelne gespeicherte Begehung laden</td>
+                </tr>
+                <tr>
+                    <td>tools/doku-zahlen.py</td>
+                    <td class="zahl">280</td>
+                    <td>Hilfsskript: aktualisiert Zahlen und Dateitabelle in dokumentation.html und hilfe.html</td>
+                </tr>
+                <tr>
+                    <td>tools/doku-dateien.json</td>
+                    <td class="zahl">48</td>
+                    <td>Dateiliste mit Beschreibungen für das Hilfsskript</td>
+                </tr>
                 <tr>
                     <td>js/jspdf.umd.min.js</td>
-                    <td>398 (minifiziert)</td>
-                    <td>
-                        lokal eingebundene Bibliothek
-                        zur PDF-Erzeugung
-                    </td>
+                    <td class="zahl">398 (minifiziert)</td>
+                    <td>Lokal eingebundene Bibliothek zur PDF-Erzeugung</td>
                 </tr>
+                <tr>
+                    <td>fonts/space-grotesk-latin-500-normal.woff2</td>
+                    <td class="zahl">13,0 KB</td>
+                    <td>Schrift Space Grotesk, Schnitt 500 (lokal eingebunden)</td>
+                </tr>
+                <tr>
+                    <td>fonts/space-grotesk-latin-600-normal.woff2</td>
+                    <td class="zahl">13,0 KB</td>
+                    <td>Schrift Space Grotesk, Schnitt 600 (lokal eingebunden)</td>
+                </tr>
+                <tr>
+                    <td>fonts/space-grotesk-latin-700-normal.woff2</td>
+                    <td class="zahl">12,5 KB</td>
+                    <td>Schrift Space Grotesk, Schnitt 700 (lokal eingebunden)</td>
+                </tr>
+                <tr>
+                    <td>fonts/LICENSE-SpaceGrotesk-OFL.txt</td>
+                    <td class="zahl">4,3 KB</td>
+                    <td>Lizenztext der Schrift (SIL Open Font License 1.1)</td>
+                </tr>
+                <!-- DATEITABELLE:ENDE -->
 
             </table>
+            </div>
 
             <p>
-                <strong>Gesamt (eigener Code, ohne jsPDF):</strong> 20.159 Zeilen
+                <strong>Gesamt (eigener Code, ohne jsPDF und Schrift):</strong>
+                <span data-zahl="zeilen_gesamt">22.489</span> Zeilen
             </p>
 
             <p style="font-size:0.82rem; color:var(--ink-soft);">
-                Stand der Zeilenzahlen: 30.09.2026. Die Werte wurden für diesen Stand neu aus den tatsächlich enthaltenen Dateien gezählt.
+                Stand der Zeilenzahlen: <span data-zahl="zeilen_stand">10.10.2026</span>.
+                Die Werte wurden aus den tatsächlich enthaltenen Dateien gezählt.
             </p>
 
         </div>
 
     </section>
+
 
 </main>
 
