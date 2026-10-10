@@ -68,10 +68,10 @@
   <h1>Gefährdungsbeurteilung</h1>
   <p>Aufbau, Datenhaltung, Bewertungslogik, Funktionen und fachliche Quellen der GBO in ASiC Handel.</p>
   <div class="doku-meta-grid">
-    <div class="doku-meta-item"><div class="doku-meta-label">App</div><div class="doku-meta-value">ASiC Handel Rev. 2.0.25</div></div>
-    <div class="doku-meta-item"><div class="doku-meta-label">Stand</div><div class="doku-meta-value"><span data-zahl="revision_datum">10.10.2026</span></div></div>
+    <div class="doku-meta-item"><div class="doku-meta-label">App</div><div class="doku-meta-value">ASiC Handel Rev. 2.0.31</div></div>
+    <div class="doku-meta-item"><div class="doku-meta-label">Stand</div><div class="doku-meta-value"><span data-zahl="revision_datum">11.10.2026</span></div></div>
     <div class="doku-meta-item"><div class="doku-meta-label">GBO-Daten</div><div class="doku-meta-value"><span data-zahl="gbo_fragen">1045</span> Fragen · <span data-zahl="gbo_module">92</span> Module</div></div>
-    <div class="doku-meta-item"><div class="doku-meta-label">Service Worker</div><div class="doku-meta-value">v2.0.25</div></div>
+    <div class="doku-meta-item"><div class="doku-meta-label">Service Worker</div><div class="doku-meta-value">v2.0.31</div></div>
   </div>
 </div>
 
@@ -102,6 +102,7 @@
     <div class="doku-table-wrap"><table class="doku-table">
       <tr><th>Baustein</th><th>Beschreibung</th></tr>
       <tr><td>GBO-Teilstand</td><td>Betriebsdaten, Modulauswahl, Bewertungen/Antworten, Maßnahmen- und Wirksamkeitsdaten, Angaben zu den Bildbelegen (Dateiname, Kennzeichen, Vorschaubild) und Begehungs-Vormerkungen. Lokale Speicherung im Browser (<code>localStorage</code>, Schlüssel <code>asicGboStateV1</code>).</td></tr>
+      <tr><td>Frage-Kürzel (Übernahme)</td><td>Seit Rev. 2.0.29 sind die Frage-Kürzel je Modul einheitlich. Alte Kürzel (23 betroffene Fragen) werden von js/gbo-migrate.js beim Start auf die neuen übertragen: Bewertungen, Risikobewertungen, Vormerkungen aus der Begehung und Fotos. Import und Markt-Container laufen durch dieselbe Übernahme.</td></tr>
       <tr><td>GBO-Bildspeicher</td><td>Die Bilddateien der Bildbelege liegen in der eigenen IndexedDB <code>asicGboPhotos</code> (<code>js/gbo-photos.js</code>), getrennt von den Fotos der Begehung.</td></tr>
       <tr><td>Speicherprüfung</td><td><code>js/storage-check.js</code> prüft vor dem Speichern eines Fotos den verfügbaren Platz und gibt Warnungen aus (Abschnitt 8).</td></tr>
       <tr><td>Begehungs-Teilstand</td><td>Daten des Prüfkatalogs. Bleibt von der GBO getrennt; eine neue Begehung setzt die GBO nicht zurück.</td></tr>
@@ -124,7 +125,9 @@
       <tr><td>Allgemeine GBO</td><td>Betriebsübergreifende Hauptthemen.</td></tr>
       <tr><td>Arbeitsbereiche</td><td>Tätigkeits- und bereichsbezogene Gefährdungen.</td></tr>
       <tr><td>Maschinen</td><td>Technische Tiefenmodule über alle Betriebsphasen hinweg.</td></tr>
-      <tr><td>Maßnahmen</td><td>Verantwortung, Frist, Umsetzung und Wirksamkeitskontrolle.</td></tr>
+      <tr><td>Maßnahmen</td><td>Verantwortung, Frist, Umsetzung und Wirksamkeitskontrolle je Frage.</td></tr>
+      <tr><td>Risikobewertung</td><td>Ausgangsrisiko, Restrisiko und Wirksamkeitskontrolle je Modul (<code>state.risk</code>).</td></tr>
+      <tr><td>Fortschreibung</td><td>Dokumentierte Überprüfungen der gesamten GBO mit Datum und Anlass (<code>state.reviews</code>).</td></tr>
     </table></div>
 
     <h3>Darstellung der Fragen</h3>
@@ -154,6 +157,17 @@
       <tr><td>Beratungs-/Vertiefungsbedarf</td><td>Weitere fachliche Klärung oder Unterlagen sind erforderlich. Die Maßnahmenfelder stehen ebenfalls zur Verfügung.</td></tr>
       <tr><td>Nicht zutreffend</td><td>Die Gefährdung bzw. Tätigkeit ist im betrachteten Betrieb nicht vorhanden.</td></tr>
     </table></div>
+    <h3>Risikobewertung je Modul</h3>
+    <p>Jedes Modul mit Fragen enthält vor den Untergruppen den Block „Risikobewertung“ (<code>js/gbo-risk.js</code>). Er erfasst:</p>
+    <ul>
+      <li><b>Ausgangsrisiko:</b> Schwere (1 bis 4) × Wahrscheinlichkeit (1 bis 4) ohne die vorgesehenen Maßnahmen.</li>
+      <li><b>Restrisiko:</b> dieselbe Einstufung nach Umsetzung der Maßnahmen.</li>
+      <li><b>Wirksamkeitskontrolle:</b> Datum, Ergebnis (wirksam, teilweise wirksam, nicht wirksam) und prüfende Person.</li>
+    </ul>
+    <p>Die Risikozahl ist das Produkt von Schwere und Wahrscheinlichkeit (mögliche Werte 1, 2, 3, 4, 6, 8, 9, 12, 16). Die Klassen sind: 1 bis 2 niedrig, 3 bis 6 mittel, 8 bis 9 hoch, 12 bis 16 sehr hoch. Ein Restrisiko bis zur Risikozahl 6 gilt als vertretbar, ab 8 als nicht vertretbar. Das ist eine betriebliche Festlegung in der Konstante <code>ACCEPTABLE_MAX</code>; das Arbeitsschutzgesetz schreibt kein bestimmtes Bewertungsverfahren vor. Die Einstufungen setzen ausschließlich Benutzer. Die Anwendung berechnet Risikozahl, Klasse und Hinweise (zum Beispiel „Restrisiko höher als Ausgangsrisiko“ oder „Restrisiko nicht vertretbar“).</p>
+    <h3>Einzelgefährdungen je Modul</h3>
+    <p>Optional lassen sich innerhalb eines Moduls beliebig viele Einzelgefährdungen bewerten (Bezeichnung, Ausgangs- und Restrisiko, Maßnahme oder Bemerkung). Die Daten liegen unter <code>state.risk[Modul-ID].items</code> als Liste mit <code>n</code> (Bezeichnung), <code>s0</code>, <code>w0</code>, <code>s1</code>, <code>w1</code> und <code>m</code> (Maßnahme). Sobald Einzelgefährdungen bewertet sind, ergibt sich die Modulbewertung aus dem jeweils höchsten Einzelwert für Ausgangs- und Restrisiko; die Modulfelder sind dann gesperrt, ihre eigenen Eingaben bleiben gespeichert. Das PDF nennt die Einzelgefährdungen unter dem Modul. Vorschläge für die Bezeichnung stammen aus den Themen des Moduls.</p>
+    <p>Die Daten liegen im GBO-Stand unter <code>state.risk[Modul-ID]</code> mit den Feldern <code>s0</code>, <code>w0</code>, <code>s1</code>, <code>w1</code>, <code>effDate</code>, <code>effResult</code> und <code>effBy</code>. Sie sind damit Teil der GBO-Sicherung, des Marktcontainers und der Server-Ablage. Die Frage-IDs und die Bewertungen der Fragen bleiben unverändert.</p>
     <h3>Fortschritt</h3>
     <p>Der Fortschritt berechnet sich ausschließlich aus Fragen der aktivierten Module. Jede gesetzte Bewertung – auch „Nicht zutreffend“ – zählt als beantwortet.</p>
     <div class="doku-box"><div class="doku-box-title">Grundsatz</div>Bewertungen werden ausschließlich von Benutzern gesetzt. Weder die Auswahl von Maßnahmen noch eine Verknüpfung mit einem Begehungsbefund erzeugt automatisch eine Bewertung.</div>
@@ -216,7 +230,7 @@
     <div class="doku-table-wrap"><table class="doku-table">
       <tr><th>Element</th><th>Technische Funktion</th></tr>
       <tr><td>Bewertung</td><td>Verwendet die bestehende vierstufige GBO-Statuslogik.</td></tr>
-      <tr><td>Rechts-/Quellenhinweis</td><td>Wird je Frage aus der psychischen Fachkonfiguration direkt an der Frage ausgegeben.</td></tr>
+      <tr><td>Rechts-/Quellenhinweis</td><td>Wird wie bei allen Modulen aus <code>js/gbo-quellen.js</code> über das Themenfeld „Psychische Belastung“ ausgegeben (ArbSchG § 5 Abs. 3 Nr. 6, GDA-Leitlinie, DIN EN ISO 10075, ArbZG §§ 3 bis 5).</td></tr>
       <tr><td>Maßnahmenvorschläge</td><td>Mehrfachauswahl je Frage; die Auswahl wird im Antwortobjekt gespeichert.</td></tr>
       <tr><td>Sonstige Maßnahme</td><td>Freitextfeld für betriebsindividuelle Maßnahmen.</td></tr>
       <tr><td>U-Kennzeichnung</td><td>Metadatenkennzeichen für Fragen mit Unterweisungsbezug; reine Bedienhilfe, keine gesetzliche Aussage.</td></tr>
@@ -238,6 +252,12 @@
   <div class="card doku-card">
     <h3>Statusgruppen</h3>
     <p>Die Statistik zählt die Bewertungen der aktuell aktivierten Module in fünf getrennten Gruppen: ausreichend geschützt, Handlungsbedarf, Beratungs-/Vertiefungsbedarf, nicht zutreffend und noch nicht bewertet. Eine Frage mit gesetztem Status gilt als bewertet.</p>
+    <h3>Risikoübersicht</h3>
+    <p>Unter den Statusgruppen zählt die Übersicht die aktivierten Module nach der Risikoklasse ihres Restrisikos (niedrig, mittel, hoch, sehr hoch, noch nicht bewertet). Eine Matrix zeigt die Anzahl der Module je Kombination aus Schwere und Wahrscheinlichkeit. Eine Liste nennt die Module mit nicht vertretbarem Restrisiko.</p>
+    <h3>Fortschreibung der GBO</h3>
+    <p>Dokumentierte Überprüfungen werden in <code>state.reviews</code> mit Datum, Anlass, Name und Bemerkung gespeichert. Die nächste Überprüfung ist das Datum der letzten Überprüfung plus zwölf Monate; ohne Eintrag gilt das Datum der GBO (Betriebsdaten) plus zwölf Monate. Der Status lautet „nicht fällig“, „bald fällig“ (30 Tage oder weniger) oder „überfällig“. Der Zeitraum von zwölf Monaten ist eine betriebliche Festlegung; zusätzlich ist die GBO bei einem Anlass zu überprüfen.</p>
+    <h3>Fristüberwachung und Erinnerungsmail</h3>
+    <p><code>js/gbo-fristen.js</code> zeigt in der Statistik alle Maßnahmen mit abgelaufener Frist und die fällige jährliche Überprüfung der GBO. Auf den GBO-Seiten erscheint dazu eine Hinweisleiste. Der Knopf „Erinnerung per Mail vorbereiten“ öffnet im Mailprogramm des Geräts einen Entwurf an das Feld „E-Mail des Marktes“ (Betriebsdaten, <code>meta.marktEmail</code>) mit Betreff und einer Liste der überfälligen Punkte. Die App versendet nichts selbst; ein automatischer Versand würde einen Server mit einer zeitgesteuerten Aufgabe voraussetzen. Das Datum jeder erstellten Erinnerung steht unter <code>state.reminders</code>.</p>
     <h3>Überfällige Maßnahmen</h3>
     <p>Eine Maßnahme wird als überfällig gezählt, wenn ein gültiges Fristdatum vor dem lokalen Kalenderdatum liegt und kein Umsetzungsdatum gespeichert ist. Ein Fristdatum allein ist kein Umsetzungsnachweis; die Anzeige muss mit dem tatsächlichen Maßnahmenstand abgeglichen werden.</p>
   </div>
@@ -290,7 +310,7 @@
       <li><b>Ändern:</b> ändert die Zuordnung.</li>
       <li><b>Lösen:</b> hebt die Zuordnung auf.</li>
     </ul>
-    <p>Die GBO-Bewertung bleibt eine eigenständige fachliche Entscheidung und wird durch die Verknüpfung nicht gesetzt.</p>
+    <p>Die GBO-Bewertung bleibt eine eigenständige fachliche Entscheidung und wird durch die Verknüpfung nicht gesetzt. Für den größten Teil der Begehungspunkte (148 von 199) ist bereits eine passende Frage vorbelegt; sie ist ein Vorschlag und sollte vor dem Vormerken kontrolliert werden. Punkte ohne passende GBO-Frage (z. B. Elektrik, Aufzüge) wählen Sie selbst aus.</p>
 
     <h3>Betriebsdaten übernehmen</h3>
     <p>Die Funktion überträgt vorhandene passende Angaben aus der Begehung in die GBO: Marktnummer, Anschrift, Datum, Prüfer, Marktleitung und Teilnehmer. Leere Quellfelder überschreiben keine bereits vorhandenen GBO-Angaben. Das Begehungsfeld <code>companyInfo.datum</code> wird dem GBO-Feld <code>meta.date</code> zugeordnet.</p>
@@ -365,6 +385,7 @@
       <tr><td>PDF teilen</td><td>Öffnet das Teilen-Menü des Geräts mit der PDF-Datei sowie Betreff und Text für die Mail. Unterstützt das Gerät das Teilen nicht, wird die Datei heruntergeladen.</td></tr>
       <tr><td>Mail vorbereiten</td><td>Öffnet einen neuen Mail-Entwurf mit Betreff und Text, ohne Anhang. Der Anhang lässt sich aus einer Web-App heraus nicht setzen; dafür dient „PDF teilen“.</td></tr>
     </table></div>
+    <p>Das Deckblatt beider Ausgaben zeigt zusätzlich die Risikobewertung der Module (Anzahl je Restrisiko-Klasse, Hinweis auf nicht vertretbares Restrisiko) und die Fortschreibung. In der Gesamt-GBO steht unter jeder Modulüberschrift eine Zeile mit Ausgangsrisiko, Restrisiko und Wirksamkeitskontrolle, sofern erfasst.</p>
     <p>Die Dateien heißen <code>GBO_Gesamt_Markt_[Marktnummer]_[Datum].pdf</code> und <code>GBO_Massnahmen_Markt_[Marktnummer]_[Datum].pdf</code>.</p>
 
     <h3>Mail-Betreff und Mail-Text</h3>
@@ -372,6 +393,7 @@
     <ul>
       <li>Marktnummer, Straße, PLZ/Ort und Stand (Datum)</li>
       <li>Kurzstatus: beantwortete Prüffragen, Anzahl mit Handlungs- bzw. Beratungsbedarf, offene Maßnahmen und davon mit abgelaufener Frist</li>
+      <li>Risikobewertung der Module (Anzahl je Restrisiko-Klasse, Hinweis auf nicht vertretbares Restrisiko) und Fortschreibung der GBO</li>
       <li>Bitte, die Maßnahmen bis zu den genannten Fristen umzusetzen und mit Datum zu dokumentieren</li>
       <li>Grußformel mit dem Namen des Prüfers (falls eingetragen) und „Fachkraft für Arbeitssicherheit (SiFa)“</li>
     </ul>
@@ -390,6 +412,10 @@
     <h3>Bilder</h3>
     <p>Ein Bildbeleg erscheint bei der jeweiligen Frage, in der Maßnahmenliste unter dem Eintrag. Liegt das Originalbild auf dem Gerät, wird es verwendet, sonst das Vorschaubild mit dem Zusatz „(Vorschau)“. Verwendet werden JPEG- und PNG-Bilder; andere Formate werden durch das Vorschaubild ersetzt.</p>
 
+    <h3>Unterschriftenfelder</h3>
+    <p><code>js/gbo-signatur.js</code> stellt im Menü „GBO dokumentieren“ je ein Zeichenfeld für die verantwortliche Person und den Ersteller bereit (Zeigereingaben, Canvas 600 × 200 Pixel). Gespeichert wird ein kleines PNG mit Name und Datum unter <code>state.signatures.verantwortlich</code> bzw. <code>state.signatures.ersteller</code>; es ist damit Teil der JSON-Sicherung und des Marktcontainers. Das PDF setzt die Bilder auf Seite 2 über die Unterschriftenlinien ein. Es handelt sich um eine Handunterschrift als Bild, nicht um eine qualifizierte elektronische Signatur.</p>
+    <h3>Dokumentenkontrolle und Freigabe (Seite 2)</h3>
+    <p>Nach dem Deckblatt enthält jede PDF-Ausgabe eine Seite mit Zweck und Rechtsgrundlage, Dokumentenkontrolle (Markt, Stand, Ersteller, letzte und nächste Überprüfung, Softwarestand), Bewertungsmaßstab sowie Feldern für Name, Datum und Unterschrift der erstellenden Person, der Marktleitung bzw. des Unternehmers und der Kenntnisnahme (Betriebsrat, Sicherheitsbeauftragte/r).</p>
     <h3>Seitenaufbau</h3>
     <ul>
       <li>Texte brechen automatisch um; ein Block wird möglichst nicht über zwei Seiten getrennt.</li>
@@ -447,6 +473,8 @@
       <tr><td>DGUV Regel 110-011</td><td>Fleischwirtschaft – Handwerk, Ausgabe 08/2025</td><td>Fleisch-/Lebensmittelbereiche und branchenspezifische Arbeitsmittel- und Tätigkeitsgefahren.</td></tr>
       <tr><td>ArbSchG, DGUV Vorschrift 1, DGUV Information 206-007, GDA-Leitlinie „Gefährdungsbeurteilung psychischer Belastung“, BGHW-Handlungshilfe „Psychische Belastungen im Handel“, ArbStättV, ASR, DIN EN ISO 10075, BetrVG</td><td>Psychische Belastungen</td><td>Fachliche Grundlage des Moduls; BetrVG, soweit für Beteiligung/Organisation relevant. Keine Übernahme einer Punktbewertung.</td></tr>
     </table></div>
+    <p><b>Zuordnung zu den Fragen:</b> Die Datei <code>js/gbo-quellen.js</code> enthält rund 65 Themenfelder, zum Beispiel Flucht- und Rettungswege, Rutschhemmung, Leitern, Flurförderzeuge, Maschinen (Aufstellung, Bedienung, Stillsetzen, Prüfung, Reinigung, Störung), Gefahrstoffe, Hautschutz, Kältearbeit oder psychische Belastung. Jede Frage gehört über Modul und Thema zu genau einem Themenfeld. Das Themenfeld liefert die Quellenliste mit Paragraf, Anhang oder Abschnitt, eine Erläuterung und die Maßnahmenhinweise (technisch, organisatorisch, personenbezogen). Die frühere Erkennung über Stichwörter im Fragetext entfällt.</p>
+    <p><b>Prüfstand der Quellenangaben (Oktober 2026):</b> Die Gliederung von ArbSchG, ArbStättV samt Anhang, BetrSichV, GefStoffV, ArbMedVV, ArbZG, ASiG, MuSchG und PSA-BV, der ASR (Titel und Abschnitte der in der GBO verwendeten Regeln), der TRBS (Titel und Abschnitte), DGUV Vorschrift 1 und 68 sowie der LasthandhabV (Paragrafen) wurde gegen öffentliche Fundstellen abgeglichen. Bei den übrigen Regelwerken (u. a. TRGS, DIN-Normen, DGUV Regeln und Informationen, DGUV Vorschrift 3) ist das Regelwerk benannt, der Abschnitt aber nicht abgeglichen; die App kennzeichnet das an der Frage mit „Abschnitt prüfen“. Die Aussagen in den Erläuterungen sind Orientierung und ersetzen weder den Wortlaut noch die Beurteilung im Betrieb.</p>
     <p><b>Ergänzende technische Normen:</b> Soweit eine konkrete Frage eine Norm voraussetzt, wird diese als technische Referenz kenntlich gemacht, z. B. DIN EN 15635 für Regale oder DIN 14462:2023-07 für Wandhydranten. Normen ersetzen nicht die Gefährdungsbeurteilung.</p>
     <div class="doku-box">
       <div class="doku-box-title">Offizielle Fundstellen</div>
@@ -466,9 +494,9 @@
   <div class="card doku-card">
     <div class="doku-table-wrap"><table class="doku-table">
       <tr><th>Merkmal</th><th>Wert</th></tr>
-      <tr><td>Anwendung</td><td>ASiC Handel · Rev. 2.0.25</td></tr>
-      <tr><td>Stand</td><td><span data-zahl="revision_datum">10.10.2026</span></td></tr>
-      <tr><td>Service Worker</td><td>v2.0.25</td></tr>
+      <tr><td>Anwendung</td><td>ASiC Handel · Rev. 2.0.31</td></tr>
+      <tr><td>Stand</td><td><span data-zahl="revision_datum">11.10.2026</span></td></tr>
+      <tr><td>Service Worker</td><td>v2.0.31</td></tr>
       <tr><td>Fragenbestand</td><td><span data-zahl="gbo_fragen">1045</span> Fragen, <span data-zahl="gbo_eindeutig">1045</span> eindeutige Fragen-IDs, <span data-zahl="gbo_module">92</span> Module</td></tr>
       <tr><td>Sicherungsformat</td><td>GBO-JSON; ASiC-Marktcontainer Formatversion 2</td></tr>
     </table></div>
@@ -479,7 +507,7 @@
 
 <footer class="app-footer">
   <div class="app-footer-links"><a href="gbo.html">Gefährdungsbeurteilung</a><a href="gbo-hilfe.html">FAQ GBO</a><a href="gbo-dokumentation.html">Technische Dokumentation GBO</a><a href="hilfe.html">FAQ Begehung</a></div>
-  <div class="app-footer-meta"><div>Rev. 2.0.25 · Stand 10.10.2026</div><div>© <span class="js-current-year">2026</span> Andreas Zott – Alle Rechte vorbehalten</div></div>
+  <div class="app-footer-meta"><div>Rev. 2.0.31 · Stand 11.10.2026</div><div>© <span class="js-current-year">2026</span> Andreas Zott – Alle Rechte vorbehalten</div></div>
 </footer>
 <script>document.querySelectorAll('.js-current-year').forEach(el=>el.textContent=new Date().getFullYear());</script>
 </body>
