@@ -18,7 +18,7 @@
 // - DGUV Vorschrift 25 "Überfallprävention" und DGUV Regel 108-010
 // - DGUV Vorschrift 1, 2, 3, 68 sowie DGUV Informationen 204-020/204-022,
 //   208-016, 208-043, 208-061
-// - DGUV Regel 110-008 (CO2-/Kälteanlagen), soweit einschlägig
+// - DGUV Regel 100-500 Kapitel 2.35 (Kälteanlagen), soweit einschlägig
 // - ASR A1.2, A1.3, A1.5, A1.7, A1.8, A2.1, A2.2, A2.3, A3.4, A4.1, A4.2, A4.3
 // - ArbSchG, ArbStättV, BetrSichV, GefStoffV, ArbMedVV, ArbZG, JArbSchG,
 //   SGB VII und SGB IX sowie einschlägige TRBS/TRGS
@@ -48,7 +48,7 @@ const MEASURE_SOURCES = {
         'DGUV Information 204-022 – Erste-Hilfe im Betrieb',
         'DGUV Information 208-016 – Handlungsanleitung für den Umgang mit Leitern und Tritten',
         'DGUV Information 208-061 – Lagereinrichtungen und Ladungsträger',
-        'DGUV Regel 110-008 – Betreiben von Kälteanlagen, Wärmepumpen und Kühleinrichtungen mit Kohlendioxid',
+        'DGUV Regel 100-500 Kapitel 2.35 – Betreiben von Kälteanlagen, Wärmepumpen und Kühleinrichtungen',
         'TRBS 3121 – Betrieb von Aufzugsanlagen',
         'DIN 14406-4 – Tragbare Feuerlöscher, Instandhaltung',
         'DIN EN 15635 – Ortsfeste Regalsysteme aus Stahl, Nutzung und Instandhaltung',
@@ -90,7 +90,7 @@ const MEASURES_TEXT = {
         "1.2": {
             einfach: 'Unterweisen Sie die Beschäftigten im sicheren Umgang mit Flurförderzeugen und Hubwagen. Beachten Sie Traglasten, erforderliche Schutzausrüstung und das Verbot unzulässiger Personenmitnahme. Mitfahrbare Flurförderzeuge dürfen nur von geeigneten, mindestens 18 Jahre alten und schriftlich beauftragten Personen geführt werden.',
             bghw: 'Führen Sie regelmäßige Unterweisungen zum sicheren Umgang mit Flurförderfahrzeugen gemäß DGUV Vorschrift 68 und der DGUV Regel 108-601 durch, inkl. PSA-Pflicht, zulässiger Traglasten und Verbot der Personenmitnahme. Für mitfahrbare Flurförderzeuge ist ein schriftlicher Fahrauftrag zu erteilen; Mindestalter 18 Jahre (§ 7 DGUV Vorschrift 68).',
-            rechtlich: 'Beschäftigte sind regelmäßig anhand der Betriebsanweisung zum sicheren Umgang mit Flurförderfahrzeugen zu unterweisen. PSA-Pflicht, Traglastbegrenzungen und das Verbot der Personenmitnahme sind konsequent einzuhalten. Fahrer mitfahrbarer Flurförderzeuge müssen mindestens 18 Jahre alt, körperlich/geistig geeignet und schriftlich beauftragt sein (§ 7 DGUV Vorschrift 68); die Unterweisung ist mindestens jährlich zu wiederholen (§ 4 Abs. 3 DGUV Vorschrift 68).'
+            rechtlich: 'Beschäftigte sind regelmäßig anhand der Betriebsanweisung zum sicheren Umgang mit Flurförderfahrzeugen zu unterweisen. PSA-Pflicht, Traglastbegrenzungen und das Verbot der Personenmitnahme sind konsequent einzuhalten. Fahrer mitfahrbarer Flurförderzeuge müssen mindestens 18 Jahre alt, körperlich/geistig geeignet und schriftlich beauftragt sein (§ 7 DGUV Vorschrift 68). Die Unterweisung ist nach § 4 Abs. 1 DGUV Vorschrift 1 mindestens einmal jährlich zu wiederholen und zu dokumentieren.'
         },
         "1.3": {
             einfach: 'Lassen Sie auffällige oder beschädigte Automatiktüren umgehend fachkundig prüfen und festgestellte Mängel beseitigen. Kraftbetätigte Türen sind wiederkehrend sicherheitstechnisch zu prüfen; die ASR A1.7 empfiehlt hierfür mindestens eine jährliche Prüfung.',
@@ -125,12 +125,12 @@ const MEASURES_TEXT = {
         "1.10": {
             einfach: 'Halten Sie Treppen frei von Gegenständen und beheben Sie Schäden zügig.',
             bghw: 'Kontrollieren Sie Treppen regelmäßig auf Schäden und halten Sie sie gemäß ASR A1.5 und der DGUV Regel 108-601 frei von Gegenständen.',
-            rechtlich: 'Treppen sind gemäß ASR A1.5 frei von Gegenständen zu halten und regelmäßig auf Schäden zu kontrollieren. Handläufe und Stufenkanten sind entsprechend ASR A1.5 Abschnitt 6 sicher und rutschhemmend zu gestalten.'
+            rechtlich: 'Treppen sind gemäß ASR A1.5 frei von Gegenständen zu halten und regelmäßig auf Schäden zu kontrollieren. Anforderungen an Handläufe und Stufenkanten ergeben sich aus ASR A1.8 Nr. 4.5 (Treppen).'
         },
         "1.11": {
             einfach: 'Hängen Sie Betriebsanweisungen gut sichtbar auf und achten Sie darauf, dass sie auch befolgt werden.',
-            bghw: 'Machen Sie Betriebsanweisungen gemäß § 14 GefStoffV bzw. § 4 BetrSichV und der DGUV Regel 108-601 jederzeit zugänglich und kontrollieren Sie die Einhaltung der Sicherheitsanweisungen.',
-            rechtlich: 'Betriebsanweisungen sind gemäß § 14 GefStoffV bzw. § 4 BetrSichV aktuell, zugänglich und für Beschäftigte verständlich bereitzustellen. Betriebsanweisungen sind in einer für die Beschäftigten verständlichen Form und Sprache abzufassen (§ 14 Abs. 1 GefStoffV) und regelmäßig auf Aktualität zu prüfen.'
+            bghw: 'Machen Sie Betriebsanweisungen gemäß § 14 GefStoffV bzw. § 12 Abs. 2 BetrSichV und der DGUV Regel 108-601 jederzeit zugänglich und kontrollieren Sie die Einhaltung der Sicherheitsanweisungen.',
+            rechtlich: 'Für Gefahrstoffe sind Betriebsanweisungen nach § 14 GefStoffV, für Arbeitsmittel nach § 12 Abs. 2 BetrSichV vor der ersten Verwendung schriftlich bereitzustellen. Sie sind in einer für die Beschäftigten verständlichen Form und Sprache abzufassen (§ 14 Abs. 1 GefStoffV), zugänglich zu halten und regelmäßig auf Aktualität zu prüfen.'
         },
         "1.13": {
             einfach: 'Lassen Sie ein mangelhaftes Schnelllauftor umgehend fachkundig prüfen und instand setzen. Kraftbetätigte Tore sind wiederkehrend sicherheitstechnisch zu prüfen; die ASR A1.7 empfiehlt mindestens eine jährliche Prüfung.',
@@ -186,7 +186,7 @@ const MEASURES_TEXT = {
         "2.9": {
             einfach: 'Halten Sie Fluchtwege und Notausgänge komplett frei – innen wie außen.',
             bghw: 'Halten Sie Flucht- und Rettungswege sowie Notausgänge gemäß ASR A2.3 und der DGUV Regel 108-601 in voller Breite und dauerhaft frei, auch im Außenbereich.',
-            rechtlich: 'Flucht- und Rettungswege sowie Notausgänge sind gemäß ASR A2.3 in ihrer gesamten Breite ständig freizuhalten, auch im Außenbereich. Die Mindestbreite der Fluchtwege richtet sich nach ASR A2.3 Nr. 5 (i. d. R. mind. 1,00–1,20 m, je nach Personenzahl).'
+            rechtlich: 'Flucht- und Rettungswege sowie Notausgänge sind gemäß ASR A2.3 in ihrer gesamten Breite ständig freizuhalten, auch im Außenbereich. Die Mindestbreite der Fluchtwege richtet sich nach ASR A2.3 und der Personenzahl.'
         },
         "2.10": {
             einfach: 'Sorgen Sie dafür, dass sich Notausgänge jederzeit ohne Schlüssel oder Werkzeug leicht öffnen lassen.',
@@ -237,7 +237,7 @@ const MEASURES_TEXT = {
         "3.4": {
             einfach: 'Halten Sie den Pausenraum frei von Lagergut, damit er wirklich der Erholung dient.',
             bghw: 'Stellen Sie gemäß ASR A4.2 und der DGUV Regel 108-601 sicher, dass der Pausenraum primär der Erholung dient und nicht als Lagerfläche zweckentfremdet wird.',
-            rechtlich: 'Der Pausenraum ist gemäß ASR A4.2 primär zu Erholungszwecken vorzuhalten und von betrieblichem Lagergut freizuhalten. Die Mindestgröße des Pausenraums richtet sich nach ASR A4.2 Nr. 5 (i. d. R. mind. 6 m² bzw. 1 m² pro gleichzeitig anwesender Person zzgl. Grundfläche).'
+            rechtlich: 'Der Pausenraum ist gemäß ASR A4.2 primär zu Erholungszwecken vorzuhalten und von betrieblichem Lagergut freizuhalten. Größe und Ausstattung richten sich nach ASR A4.2 und der Zahl der Beschäftigten.'
         }
     },
     "Erste Hilfe": {        "4.1": {
@@ -248,7 +248,7 @@ const MEASURES_TEXT = {
         "4.2": {
             einfach: 'Kontrollieren Sie regelmäßig, ob das Verbandsmaterial vollständig und nicht abgelaufen ist. Kontrollieren Sie das am besten mindestens zweimal im Jahr.',
             bghw: 'Kontrollieren Sie das Erste-Hilfe-Material gemäß DGUV Information 204-022 und der DGUV Regel 108-601 regelmäßig auf Vollständigkeit und Verfallsdaten. Empfohlen wird eine Kontrolle mindestens halbjährlich gemäß DGUV Information 204-022.',
-            rechtlich: 'Das Erste-Hilfe-Material ist gemäß DGUV Information 204-022 an allen Standorten vollständig vorzuhalten; die Verfallsdaten steriler Inhalte sind zu überwachen. Das Erste-Hilfe-Material ist gemäß DIN 13157/13169 vollständig vorzuhalten; eine Kontrolle auf Vollständigkeit und Verfallsdaten wird gemäß DGUV Information 204-022 mindestens halbjährlich empfohlen.'
+            rechtlich: 'Das Erste-Hilfe-Material ist gemäß DGUV Information 204-022 an allen Standorten vollständig vorzuhalten (Inhalt nach DIN 13157/13169); die Verfallsdaten steriler Inhalte sind zu überwachen. Eine Kontrolle auf Vollständigkeit und Verfallsdaten wird mindestens halbjährlich empfohlen.'
         },
         "4.3": {
             einfach: 'Dokumentieren Sie jede Erste-Hilfe-Leistung sorgfältig.',
@@ -262,19 +262,19 @@ const MEASURES_TEXT = {
         },
         "4.5": {
             einfach: 'Hängen Sie die Notrufnummer gut sichtbar aus.',
-            bghw: 'Hängen Sie die Notrufnummer gemäß § 10 ArbSchG und der DGUV Regel 108-601 gut sichtbar an zentraler Stelle aus.',
-            rechtlich: 'Eine Notrufnummer ist gut sichtbar auszuhängen (§ 10 ArbSchG). Die Notrufnummer 112 (Feuerwehr/Rettungsdienst) ist zusätzlich zu betrieblichen Meldewegen gut sichtbar auszuhängen (§ 10 Abs. 2 ArbSchG).'
+            bghw: 'Hängen Sie die Notrufnummer gemäß DGUV Regel 108-601 gut sichtbar an zentraler Stelle aus.',
+            rechtlich: 'Der Arbeitgeber hat nach § 10 Abs. 1 ArbSchG die Maßnahmen für Notfälle, insbesondere die Verbindungen zu externen Stellen (Rettungsdienst), zu treffen. Der Aushang der Notrufnummer 112 zusätzlich zu den betrieblichen Meldewegen ist dafür eine bewährte Umsetzung.'
         },
         "4.6": {
             einfach: 'Hängen Sie Anweisungen zur Ersten Hilfe gut sichtbar auf.',
             bghw: 'Hängen Sie Erste-Hilfe-Anweisungen gemäß DGUV Information 204-022 und der DGUV Regel 108-601 aus.',
-            rechtlich: 'Erste-Hilfe-Anweisungen sind gemäß § 10 ArbSchG bereitzustellen und auszuhängen. Erste-Hilfe-Anweisungen sollten dem DGUV-Aushang „Anleitung zur Ersten Hilfe“ gemäß DGUV Information 204-022 entsprechen.'
+            rechtlich: 'Erste-Hilfe-Anweisungen sind als Teil der betrieblichen Erste-Hilfe-Organisation (§ 10 ArbSchG, DGUV Vorschrift 1) gut sichtbar bereitzustellen. Sie sollten dem DGUV-Aushang „Anleitung zur Ersten Hilfe“ (DGUV Information 204-022) entsprechen.'
         }
     },
     "Elektrische Sicherheit": {        "5.1": {
             einfach: 'Beheben Sie beschädigte Schalter und Steckdosen sofort.',
             bghw: 'Kontrollieren Sie Schalter und Steckdosen gemäß DGUV Vorschrift 3 und der DGUV Regel 108-601 regelmäßig auf Beschädigungen und veranlassen Sie ggf. eine Instandsetzung durch eine Elektrofachkraft.',
-            rechtlich: 'Schäden an Schaltern und Steckdosen sind unverzüglich durch eine Elektrofachkraft zu beseitigen (DGUV Vorschrift 3). Die Instandsetzung darf nur durch eine Elektrofachkraft oder unter deren Anleitung durch eine elektrotechnisch unterwiesene Person erfolgen (§ 2 DGUV Vorschrift 3).'
+            rechtlich: 'Schäden an Schaltern und Steckdosen sind unverzüglich durch eine Elektrofachkraft zu beseitigen (DGUV Vorschrift 3). Die Instandsetzung darf nur durch eine Elektrofachkraft oder unter deren Anleitung und Aufsicht erfolgen (§ 3 Abs. 1 DGUV Vorschrift 3).'
         },
         "5.2": {
             einfach: 'Sichern Sie Kabel, die von der Decke hängen, so, dass niemand daran ziehen kann.',
@@ -289,12 +289,12 @@ const MEASURES_TEXT = {
         "5.4": {
             einfach: 'Lassen Sie Kabelverbindungen nicht offen auf dem Boden liegen, z. B. unter Kühltruhen.',
             bghw: 'Vermeiden Sie ungeschützt auf dem Boden liegende Steckverbindungen gemäß DGUV Vorschrift 3 und der DGUV Regel 108-601, insbesondere unter Kühl- und Tiefkühltruhen.',
-            rechtlich: 'Elektrische Steckverbindungen dürfen gemäß DGUV Vorschrift 3 nicht ungeschützt auf dem Boden liegen, insbesondere nicht in feuchtigkeitsgefährdeten Bereichen wie unter Kühl- oder Tiefkühltruhen. Feuchtigkeitsgefährdete Bereiche erfordern mindestens Schutzart IP44, in nassen Bereichen entsprechend höher (DIN VDE 0100-737).'
+            rechtlich: 'Elektrische Steckverbindungen dürfen gemäß DGUV Vorschrift 3 nicht ungeschützt auf dem Boden liegen, insbesondere nicht in feuchtigkeitsgefährdeten Bereichen wie unter Kühl- oder Tiefkühltruhen. In feuchten Bereichen ist eine geeignete Schutzart nach Gefährdungsbeurteilung und DIN VDE 0100-737 zu wählen.'
         },
         "5.5": {
             einfach: 'Vermeiden Sie provisorische Verkabelungen – lassen Sie alles fest installieren.',
             bghw: 'Vermeiden Sie provisorische elektrische Installationen gemäß DGUV Vorschrift 3 und der DGUV Regel 108-601 und lassen Sie dauerhafte Lösungen durch eine Elektrofachkraft einrichten.',
-            rechtlich: 'Provisorische elektrische Installationen sind zu vermeiden und durch fachgerechte, dauerhafte Installationen zu ersetzen (DGUV Vorschrift 3). Elektrische Installationen sind nur durch eine Elektrofachkraft gemäß DIN VDE 0100 zu errichten, zu ändern und zu prüfen (§ 2 DGUV Vorschrift 3).'
+            rechtlich: 'Provisorische elektrische Installationen sind zu vermeiden und durch fachgerechte, dauerhafte Installationen zu ersetzen (DGUV Vorschrift 3). Elektrische Anlagen und Betriebsmittel dürfen nur von einer Elektrofachkraft oder unter deren Leitung und Aufsicht errichtet, geändert und instand gehalten werden (§ 3 Abs. 1 DGUV Vorschrift 3).'
         }
     },
     "CO2 Kühleinrichtungen": {        "6.1": {
@@ -304,23 +304,23 @@ const MEASURES_TEXT = {
         },
         "6.2": {
             einfach: 'Prüfen Sie, ob sich die Notentriegelung leicht öffnen lässt.',
-            bghw: 'Prüfen Sie die Notentriegelung an CO2-Kühlanlagen gemäß DGUV Regel 110-008 (Kälteanlagen mit Kohlendioxid) und der DGUV Regel 108-601 regelmäßig auf Funktion.',
-            rechtlich: 'Die Notentriegelung ist gemäß DGUV Regel 110-008 regelmäßig auf Vorhandensein und Funktionsfähigkeit zu prüfen. Die Funktionsprüfung der Notentriegelung ist gemäß DGUV Regel 110-008 in die regelmäßige technische Prüfung der Kälteanlage einzubeziehen und zu dokumentieren.'
+            bghw: 'Prüfen Sie die Notentriegelung an Kühlanlagen gemäß DGUV Regel 100-500 Kapitel 2.35 (Betreiben von Kälteanlagen, Wärmepumpen und Kühleinrichtungen) und der DGUV Regel 108-601 regelmäßig auf Funktion.',
+            rechtlich: 'Die Notentriegelung ist regelmäßig auf Vorhandensein und Funktionsfähigkeit zu prüfen (vgl. DGUV Regel 100-500 Kapitel 2.35 (Betreiben von Kälteanlagen, Wärmepumpen und Kühleinrichtungen)). Die Funktionsprüfung ist in die regelmäßige technische Prüfung der Kälteanlage einzubeziehen und zu dokumentieren.'
         },
         "6.3": {
             einfach: 'Stellen Sie keine Kisten oder Waren vor die Gas-Sensoren.',
-            bghw: 'Halten Sie CO2-Sensoren gemäß DGUV Regel 110-008 (Kälteanlagen mit Kohlendioxid) und der DGUV Regel 108-601 frei von Verstellungen, damit die Warnfunktion jederzeit gewährleistet ist.',
-            rechtlich: 'Sensoren dürfen gemäß DGUV Regel 110-008 nicht durch Material oder Gegenstände verstellt werden, um die Funktionsfähigkeit der Gaswarnanlage sicherzustellen. Die CO2-Warneinrichtung ist gemäß DGUV Regel 110-008 auf zwei Alarmstufen auszulegen (Voralarm und Hauptalarm) und regelmäßig auf Funktion und freie Zugänglichkeit der Sensoren zu prüfen.'
+            bghw: 'Halten Sie Gassensoren der Kälteanlage (z. B. CO2) nach Herstellerangaben, DGUV Regel 100-500 Kapitel 2.35 (Betreiben von Kälteanlagen, Wärmepumpen und Kühleinrichtungen) und der DGUV Regel 108-601 frei von Verstellungen, damit die Warnfunktion jederzeit gewährleistet ist.',
+            rechtlich: 'Sensoren der Gaswarnanlage dürfen nicht durch Material oder Gegenstände verstellt werden, damit die Funktionsfähigkeit sichergestellt ist. Alarmstufen und Prüfumfang richten sich nach Herstellerangaben und Anlagenkonzept (vgl. DGUV Regel 100-500 Kapitel 2.35 (Betreiben von Kälteanlagen, Wärmepumpen und Kühleinrichtungen)); die Sensoren sind regelmäßig auf Funktion und freie Zugänglichkeit zu prüfen.'
         },
         "6.4": {
             einfach: 'Prüfen Sie, ob die Beleuchtung im Kühlbereich einwandfrei funktioniert.',
             bghw: 'Kontrollieren Sie die Beleuchtung im Kühlbereich gemäß ASR A3.4 und der DGUV Regel 108-601 regelmäßig auf einwandfreie Funktion.',
-            rechtlich: 'Die Beleuchtung im Kühlbereich ist regelmäßig auf Funktionsfähigkeit zu prüfen (ASR A3.4). Als Anhaltswert nach ASR A3.4 gilt für Kühl-/Lagerbereiche eine Mindestbeleuchtungsstärke von etwa 100–200 Lux.'
+            rechtlich: 'Die Beleuchtung im Kühlbereich ist regelmäßig auf Funktionsfähigkeit zu prüfen. Die erforderliche Beleuchtungsstärke richtet sich tätigkeitsbezogen nach der Gefährdungsbeurteilung und ASR A3.4.'
         },
         "6.5": {
             einfach: 'Kontrollieren Sie Alarmleuchten, Kennzeichnungen und Türen der Kühlanlage regelmäßig.',
-            bghw: 'Kontrollieren Sie alle Sicherheitsvorrichtungen (Alarmleuchten, Kennzeichnungen, Kühlhaustüren) gemäß DGUV Regel 110-008 (Kälteanlagen mit Kohlendioxid) und der DGUV Regel 108-601 auf Funktionsfähigkeit.',
-            rechtlich: 'Sämtliche Sicherheitsvorrichtungen (Alarmleuchten, Kennzeichnungen, Kühlhaustüren) sind auf Funktionsfähigkeit zu prüfen (DGUV Regel 110-008). Die Prüfung der Sicherheitsvorrichtungen ist gemäß DGUV Regel 110-008 in die wiederkehrende Anlagenprüfung durch eine befähigte Person einzubeziehen und zu dokumentieren.'
+            bghw: 'Kontrollieren Sie alle Sicherheitsvorrichtungen (Alarmleuchten, Kennzeichnungen, Kühlhaustüren) gemäß DGUV Regel 100-500 Kapitel 2.35 (Betreiben von Kälteanlagen, Wärmepumpen und Kühleinrichtungen) und der DGUV Regel 108-601 auf Funktionsfähigkeit.',
+            rechtlich: 'Sämtliche Sicherheitsvorrichtungen (Alarmleuchten, Kennzeichnungen, Kühlhaustüren) sind auf Funktionsfähigkeit zu prüfen (vgl. DGUV Regel 100-500 Kapitel 2.35 (Betreiben von Kälteanlagen, Wärmepumpen und Kühleinrichtungen)). Die Prüfung ist in die wiederkehrende Anlagenprüfung einzubeziehen und zu dokumentieren.'
         }
     },
     "Kühlhaus": {        "7.1": {
@@ -330,8 +330,8 @@ const MEASURES_TEXT = {
         },
         "7.2": {
             einfach: 'Prüfen Sie, ob sich die Notentriegelung im Kühlhaus leicht öffnen lässt.',
-            bghw: 'Prüfen Sie die Notentriegelung im Kühlhaus gemäß DGUV Regel 110-008 (Kälteanlagen mit Kohlendioxid) und der DGUV Regel 108-601 regelmäßig auf Funktion.',
-            rechtlich: 'Die Notentriegelung im Kühlhaus ist gemäß DGUV Regel 110-008 regelmäßig auf Vorhandensein und Funktionsfähigkeit zu prüfen. Die Notentriegelung ist gemäß DGUV Regel 110-008 in die regelmäßige technische Prüfung einzubeziehen.'
+            bghw: 'Prüfen Sie die Notentriegelung im Kühlhaus gemäß DGUV Regel 100-500 Kapitel 2.35 (Betreiben von Kälteanlagen, Wärmepumpen und Kühleinrichtungen) und der DGUV Regel 108-601 regelmäßig auf Funktion.',
+            rechtlich: 'Die Notentriegelung im Kühlhaus ist regelmäßig auf Vorhandensein und Funktionsfähigkeit zu prüfen und in die regelmäßige technische Prüfung einzubeziehen (vgl. DGUV Regel 100-500 Kapitel 2.35 (Betreiben von Kälteanlagen, Wärmepumpen und Kühleinrichtungen)).'
         },
         "7.3": {
             einfach: 'Kennzeichnen Sie die Innenseite der Kühlhaustüren mit dem Rettungswegschild.',
@@ -341,12 +341,12 @@ const MEASURES_TEXT = {
         "7.4": {
             einfach: 'Prüfen Sie, ob die Beleuchtung im Kühlhaus einwandfrei funktioniert.',
             bghw: 'Kontrollieren Sie die Beleuchtung im Kühlhaus gemäß ASR A3.4 und der DGUV Regel 108-601 regelmäßig auf einwandfreie Funktion.',
-            rechtlich: 'Die Beleuchtung im Kühlhaus ist regelmäßig auf Funktionsfähigkeit zu prüfen (ASR A3.4). Als Anhaltswert nach ASR A3.4 gilt für Kühlhäuser eine Mindestbeleuchtungsstärke von etwa 100–150 Lux.'
+            rechtlich: 'Die Beleuchtung im Kühlhaus ist regelmäßig auf Funktionsfähigkeit zu prüfen. Die erforderliche Beleuchtungsstärke richtet sich tätigkeitsbezogen nach der Gefährdungsbeurteilung und ASR A3.4.'
         },
         "7.5": {
             einfach: 'Prüfen Sie, ob die Notruf-Funktion im Kühlhaus (falls vorhanden) funktioniert und unbeschädigt ist.',
-            bghw: 'Prüfen Sie eine vorhandene Notruf-Funktion im Kühlhaus gemäß DGUV Regel 110-008 (Kälteanlagen mit Kohlendioxid) und der DGUV Regel 108-601 regelmäßig auf Funktionsfähigkeit.',
-            rechtlich: 'Die Notruf-Funktion im Kühlhaus ist, sofern vorhanden, gemäß DGUV Regel 110-008 regelmäßig auf Funktionsfähigkeit und Unversehrtheit zu prüfen. Eine vorhandene Notruf-Funktion ist gemäß DGUV Regel 110-008 in die regelmäßige Anlagenprüfung einzubeziehen.'
+            bghw: 'Prüfen Sie eine vorhandene Notruf-Funktion im Kühlhaus gemäß DGUV Regel 100-500 Kapitel 2.35 (Betreiben von Kälteanlagen, Wärmepumpen und Kühleinrichtungen) und der DGUV Regel 108-601 regelmäßig auf Funktionsfähigkeit.',
+            rechtlich: 'Die Notruf-Funktion im Kühlhaus ist, sofern vorhanden, regelmäßig auf Funktionsfähigkeit und Unversehrtheit zu prüfen und in die regelmäßige Anlagenprüfung einzubeziehen (vgl. DGUV Regel 100-500 Kapitel 2.35 (Betreiben von Kälteanlagen, Wärmepumpen und Kühleinrichtungen)).'
         }
     },
     "Lager und Regale": {        "8.1": {
@@ -355,9 +355,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Nach § 37 Abs. 1 DGUV Vorschrift 68 sind Flurförderzeuge und ihre Anbaugeräte in Abständen von längstens einem Jahr durch einen Sachkundigen zu prüfen. Nach § 39 DGUV Vorschrift 68 ist über die wiederkehrenden Prüfungen ein Prüfnachweis zu führen.'
         },
         "8.2": {
-            einfach: 'Kontrollieren Sie den Gabelhubwagen regelmäßig auf Schäden.',
-            bghw: 'Kontrollieren Sie den Gabelhubwagen gemäß DGUV Vorschrift 1 und DGUV Regel 108-601 „Branche Einzelhandel“ regelmäßig auf Beschädigungen.',
-            rechtlich: 'Der Gabelhubwagen ist gemäß § 3 DGUV Vorschrift 1 regelmäßig auf seinen ordnungsgemäßen Zustand zu prüfen. Für handgeführte Flurförderzeuge ist als Richtwert eine jährliche Prüfung durch eine befähigte Person angemessen (§ 3 Abs. 6 BetrSichV).'
+            einfach: 'Lassen Sie den Gabelhubwagen mindestens einmal jährlich durch einen Sachkundigen prüfen und kontrollieren Sie ihn zwischendurch auf Schäden.',
+            bghw: 'Kontrollieren Sie den Gabelhubwagen regelmäßig auf Beschädigungen und lassen Sie ihn gemäß § 37 DGUV Vorschrift 68 und DGUV Regel 108-601 mindestens jährlich durch einen Sachkundigen prüfen; führen Sie den Prüfnachweis (§ 39 DGUV Vorschrift 68).',
+            rechtlich: 'Flurförderzeuge einschließlich handgeführter Gabelhubwagen sind nach § 37 Abs. 1 DGUV Vorschrift 68 mindestens einmal jährlich durch einen Sachkundigen zu prüfen; über die Prüfung ist nach § 39 DGUV Vorschrift 68 ein Nachweis zu führen. Festgestellte Mängel sind unverzüglich zu beseitigen.'
         },
         "8.3": {
             einfach: 'Kontrollieren Sie Regale regelmäßig auf Schäden. Legen Sie die Abstände der Sichtkontrollen anhand der Gefährdung fest. Bei entsprechend prüfpflichtigen Regalanlagen ist zusätzlich mindestens alle 12 Monate eine Experteninspektion durch eine fachkundige Person durchzuführen.',
@@ -442,14 +442,14 @@ const MEASURES_TEXT = {
         },
         "9.9": {
             einfach: 'Sorgen Sie dafür, dass zwischen Rollbahn und Wand mindestens 60 cm Platz zum Durchgehen bleibt (an engen Stellen kurz auch 50 cm).',
-            bghw: 'Halten Sie die lichte Breite des Wartungsganges zwischen Rollbahn und Wand gemäß ASR A1.8 und der DGUV Regel 108-601 durchgehend bei mindestens 0,60 m (Engstellen kurzzeitig 0,50 m).',
-            rechtlich: 'Die lichte Breite des Wartungsganges zwischen Rollbahn und Wand muss gemäß ASR A1.8 durchgehend mindestens 0,60 m betragen (an Engstellen kurzzeitig 0,50 m zulässig). Die Mindestbreite von 0,60 m orientiert sich an ASR A1.8 Nr. 4 für selten begangene Wartungs- und Kontrollgänge; bei regelmäßigem Personenverkehr ist grundsätzlich eine größere Breite (mind. 0,875 m) vorzusehen.'
+            bghw: 'Halten Sie die lichte Breite des Wartungsganges zwischen Rollbahn und Wand gemäß der betrieblichen Festlegung bzw. DGUV Regel 108-601 durchgehend bei mindestens 0,60 m (Engstellen kurzzeitig 0,50 m).',
+            rechtlich: 'Die lichte Breite des Wartungsganges zwischen Rollbahn und Wand ist betrieblich festzulegen; als Orientierung gelten 0,60 m (an Engstellen kurzzeitig 0,50 m), vgl. DGUV Regel 108-601. Bei regelmäßigem Personenverkehr ist eine größere Breite vorzusehen (ASR A1.8).'
         }
     },
     "Praktikanten": {        "10.1": {
             einfach: 'Weisen Sie neue Praktikanten und Schüleraushilfen vor dem ersten Arbeitstag in die Sicherheitsregeln ein. Bei minderjährigen Praktikanten ist die Unterweisung alle sechs Monate zu wiederholen.',
             bghw: 'Führen Sie die Unterweisung von Praktikanten und Schüleraushilfen gemäß § 12 ArbSchG, § 29 JArbSchG (bei Minderjährigen) und der DGUV Regel 108-601 durch. Bei minderjährigen Beschäftigten ist die Unterweisung nach § 29 JArbSchG mindestens halbjährlich zu wiederholen.',
-            rechtlich: 'Praktikanten und Schüleraushilfen sind vor Aufnahme der Tätigkeit gemäß § 12 ArbSchG zu unterweisen; bei minderjährigen Beschäftigten ist zusätzlich die halbjährliche Unterweisungspflicht nach § 29 JArbSchG zu beachten. Bei minderjährigen Beschäftigten ist die Unterweisung nach § 29 Abs. 1 JArbSchG mindestens alle sechs Monate zu wiederholen und um die besonderen Beschäftigungsbeschränkungen für Jugendliche (§§ 22 ff. JArbSchG) zu ergänzen.'
+            rechtlich: 'Praktikanten und Schüleraushilfen sind vor Aufnahme der Tätigkeit gemäß § 12 ArbSchG zu unterweisen. Bei minderjährigen Beschäftigten ist die Unterweisung nach § 29 Abs. 2 JArbSchG mindestens halbjährlich zu wiederholen und um die besonderen Beschäftigungsbeschränkungen für Jugendliche (§§ 22 ff. JArbSchG) zu ergänzen.'
         },
         "10.2": {
             einfach: 'Halten Sie schriftlich fest, wer wann unterwiesen wurde.',
@@ -485,7 +485,7 @@ const MEASURES_TEXT = {
         "11.5": {
             einfach: 'Setzen Sie die Empfehlungen des Betriebsarztes um und halten Sie sie schriftlich fest.',
             bghw: 'Dokumentieren und setzen Sie Berichte und Empfehlungen des Betriebsarztes gemäß § 3 ArbMedVV und der DGUV Regel 108-601 konsequent um.',
-            rechtlich: 'Berichte und Empfehlungen des Betriebsarztes sind zu dokumentieren und im Rahmen der Gefährdungsbeurteilung umzusetzen (§ 3 ArbMedVV). Empfehlungen des Betriebsarztes sind im Rahmen der Fortschreibung der Gefährdungsbeurteilung nach § 3 ArbMedVV zu berücksichtigen und zu dokumentieren.'
+            rechtlich: 'Berichte und Empfehlungen des Betriebsarztes sind zu dokumentieren und im Rahmen der Gefährdungsbeurteilung umzusetzen (§ 3 ArbMedVV); sie sind bei der Fortschreibung der Gefährdungsbeurteilung zu berücksichtigen.'
         },
         "11.6": {
             einfach: 'Halten Sie Toiletten und Pausenräume sauber, funktionsfähig und gut ausgestattet.',
@@ -510,8 +510,8 @@ const MEASURES_TEXT = {
         },
         "12.4": {
             einfach: 'Nehmen Sie beschädigte oder offensichtlich ungeeignete Zuleitungen, Stecker und Anschlüsse außer Betrieb und lassen Sie sie fachgerecht instand setzen bzw. prüfen.',
-            bghw: 'Lassen Sie die Zuleitung gemäß DIN VDE 0100 und der DGUV Regel 108-601 durch eine Elektrofachkraft prüfen.',
-            rechtlich: 'Die Zuleitung ist auf Konformität mit DIN VDE 0100 zu prüfen. Die Prüfung der Zuleitung durch eine Elektrofachkraft ist gemäß DGUV Vorschrift 3 i. V. m. DIN VDE 0100-600 vor Erstinbetriebnahme und danach wiederkehrend durchzuführen.'
+            bghw: 'Lassen Sie sichtbar beschädigte oder ungeeignete Zuleitungen und Stecker gemäß DGUV Vorschrift 3 und der DGUV Regel 108-601 durch eine Elektrofachkraft prüfen und instand setzen.',
+            rechtlich: 'Beschädigte oder für das Gerät ungeeignete Zuleitungen und Stecker sind außer Betrieb zu nehmen. Prüfung und Instandsetzung dürfen nur durch eine Elektrofachkraft erfolgen (DGUV Vorschrift 3); die elektrische Anlage ist nach DIN VDE 0100 zu errichten.'
         },
         "12.5": {
             einfach: 'Legen Sie für die Maschinen fest, welche Kontrollen und Prüfungen für einen sicheren Betrieb erforderlich sind. Führen Sie diese fristgerecht durch und dokumentieren Sie die Prüfungen, soweit dies vorgeschrieben oder erforderlich ist. Festgestellte Mängel sind zu beseitigen.',
@@ -521,7 +521,7 @@ const MEASURES_TEXT = {
         "12.6": {
             einfach: 'Kontrollieren Sie, ob alle Schutzvorrichtungen an den Maschinen vorhanden und funktionsfähig sind.',
             bghw: 'Kontrollieren Sie Schutzeinrichtungen an Backstationsmaschinen gemäß § 4 BetrSichV und der DGUV Regel 108-601 regelmäßig auf Vorhandensein und Funktion.',
-            rechtlich: 'Schutzeinrichtungen müssen entsprechend der Gefährdungsbeurteilung sicher vorhanden und funktionsfähig sein; die regelmäßige Funktionskontrolle ist nach § 4 Abs. 5 BetrSichV sicherzustellen. Die regelmäßige Funktionskontrolle ist gemäß § 4 Abs. 5 BetrSichV mindestens im Rahmen jeder wiederkehrenden Prüfung sicherzustellen.'
+            rechtlich: 'Schutzeinrichtungen müssen entsprechend der Gefährdungsbeurteilung vorhanden und funktionsfähig sein; die regelmäßige Funktionskontrolle ist nach § 4 Abs. 5 BetrSichV sicherzustellen und mindestens im Rahmen jeder wiederkehrenden Prüfung zu erfolgen.'
         },
         "12.7": {
             einfach: 'Stellen Sie die erforderlichen Betriebsanweisungen für die Backstation verständlich bereit und sorgen Sie dafür, dass die Beschäftigten darauf zugreifen können.',
@@ -540,8 +540,8 @@ const MEASURES_TEXT = {
         },
         "12.10": {
             einfach: 'Wenn die Brotschneidemaschine defekt ist: sofort ausstecken, ein Warnschild dranhängen und einen Elektriker rufen.',
-            bghw: 'Nehmen Sie eine defekte Brotschneidemaschine gemäß BGHW-Vorgaben unverzüglich außer Betrieb, kennzeichnen Sie sie deutlich und veranlassen Sie eine DGUV V3-Prüfung durch eine Elektrofachkraft.',
-            rechtlich: 'Gerät sofort sperren (Netzstecker ziehen), mit einem Warnhinweis \'Defekt – Nicht benutzen\' kennzeichnen und eine DGUV V3 Prüfung bzw. Instandsetzung durch eine Elektrofachkraft veranlassen. Nach DGUV Vorschrift 3 ist ein als defekt erkanntes Elektrogerät sofort außer Betrieb zu nehmen und darf erst nach Instandsetzung und Prüfung durch eine Elektrofachkraft wieder genutzt werden.'
+            bghw: 'Nehmen Sie eine defekte Brotschneidemaschine unverzüglich außer Betrieb, kennzeichnen Sie sie deutlich und lassen Sie Schutzeinrichtungen und elektrische Teile vor der Wiederinbetriebnahme durch eine Fachkraft prüfen (DGUV Vorschrift 3, DGUV Regel 108-601).',
+            rechtlich: 'Ein als defekt erkanntes Arbeitsmittel ist sofort außer Betrieb zu nehmen und gegen Benutzung zu sichern (Netzstecker ziehen, Hinweis „Defekt – Nicht benutzen“). Nach der Instandsetzung ist vor der Wiederverwendung eine Prüfung erforderlich, bei Schutzeinrichtungen nach § 3 Abs. 6 BetrSichV und bei elektrischen Teilen durch eine Elektrofachkraft nach DGUV Vorschrift 3.'
         }
     },
     "Serviceabteilung": {        "13.1": {
@@ -567,7 +567,7 @@ const MEASURES_TEXT = {
         "13.5": {
             einfach: 'Kleben Sie Markierungen in Augenhöhe an Glastüren und Glaswände.',
             bghw: 'Kennzeichnen Sie Glastüren und Glaswände gemäß ASR A1.7 und der DGUV Regel 108-601 in Augenhöhe, um Anstoßunfälle zu vermeiden.',
-            rechtlich: 'Glastüren und Glaswände sind gemäß ASR A1.7 in Augenhöhe deutlich zu kennzeichnen. Die Kennzeichnung großflächiger Verglasungen dient der Vermeidung von Anstoßunfällen; sie sollte in zwei Höhen (ca. 0,90–1,05 m sowie 1,50–1,70 m) angebracht werden, orientiert an ASR A1.7 und DIN 4844-2 (Sicherheitskennzeichnung).'
+            rechtlich: 'Glastüren und Glaswände sind gemäß ASR A1.7 in Augenhöhe deutlich zu kennzeichnen. Die Kennzeichnung großflächiger Verglasungen dient der Vermeidung von Anstoßunfällen; Art und Höhe der Markierung richten sich nach ASR A1.7 und der Gefährdungsbeurteilung.'
         },
         "13.6": {
             einfach: 'Reinigen Sie Schneidbretter und Messer regelmäßig und nutzen Sie die Farbcodierung für unterschiedliche Lebensmittel.',
@@ -611,9 +611,9 @@ const MEASURES_TEXT = {
             rechtlich: 'Kassenstühle sind gemäß § 3a ArbStättV in funktionsfähigem, ergonomisch geeignetem Zustand vorzuhalten. Kassenarbeitsplätze sind ergonomisch nach § 3a ArbStättV i. V. m. ASR A1.2 zu gestalten; höhenverstellbare, standsichere Stühle mit intakten Rollen und Rückenlehne sind vorzuhalten.'
         },
         "14.5": {
-            einfach: 'Prüfen Sie das Kassenband auf Schäden und größere Lücken.',
-            bghw: 'Kontrollieren Sie das Transportband gemäß DGUV Vorschrift 3 und der DGUV Regel 108-601 regelmäßig auf Beschädigungen und Lücken über 5 mm.',
-            rechtlich: 'Das Transportband ist unbeschädigt zu halten; Lücken von über 5 mm sind zu vermeiden (DGUV Vorschrift 3, Verletzungsgefahr). Lücken über 5 mm im Transportband stellen eine Klemm-/Quetschgefahr dar und sind gemäß DGUV Vorschrift 3 unverzüglich zu beheben.'
+            einfach: 'Prüfen Sie das Kassenband auf Schäden und größere Lücken, in denen Finger eingeklemmt werden könnten.',
+            bghw: 'Kontrollieren Sie das Transportband gemäß Herstellerangaben, Gefährdungsbeurteilung und der DGUV Regel 108-601 regelmäßig auf Beschädigungen und Quetsch-/Einklemmstellen (Lücken).',
+            rechtlich: 'Das Transportband ist unbeschädigt zu halten; Lücken, die eine Quetsch- oder Einklemmgefahr darstellen, sind nach den Herstellerangaben und der Gefährdungsbeurteilung (§ 3 BetrSichV) zu vermeiden bzw. unverzüglich zu beheben.'
         },
         "14.6": {
             einfach: 'Räumen Sie Einkaufskörbe ordentlich in den Ständer, damit niemand darüber stolpert.',
@@ -649,13 +649,13 @@ const MEASURES_TEXT = {
     },
     "Marktleiterbüro": {        "16.1": {
             einfach: 'Führen Sie eine aktuelle Liste aller Anlagen, die regelmäßig geprüft werden müssen, und heften Sie die Prüfberichte dazu ab.',
-            bghw: 'Führen und pflegen Sie ein Prüfverzeichnis prüfpflichtiger Anlagen und Einrichtungen gemäß § 3 BetrSichV und der DGUV Regel 108-601 und legen Sie die zugehörigen Prüfberichte vollständig und aktuell vor.',
-            rechtlich: 'Prüfungen, Prüffristen und Ergebnisse sind entsprechend den Anforderungen der BetrSichV, insbesondere §§ 3, 14 bis 17, zu ermitteln, zu dokumentieren und nachvollziehbar aufzubewahren. Das Prüfverzeichnis muss nach § 3 Abs. 6 BetrSichV mindestens die geprüften Arbeitsmittel/Anlagen, die festgelegten Prüffristen, das Prüfdatum und den Prüfer benennen.'
+            bghw: 'Führen Sie eine Übersicht der prüfpflichtigen Anlagen und Einrichtungen mit Prüffristen gemäß § 3 BetrSichV und der DGUV Regel 108-601 (empfehlenswert als Prüfverzeichnis) und legen Sie die zugehörigen Prüfberichte vollständig und aktuell vor.',
+            rechtlich: 'Prüfungen, Prüffristen und Ergebnisse sind entsprechend den Anforderungen der BetrSichV zu ermitteln, zu dokumentieren und nachvollziehbar aufzubewahren: Prüffristen werden nach § 3 Abs. 6 BetrSichV festgelegt und nach § 3 Abs. 8 Nr. 4 dokumentiert; Prüfaufzeichnungen enthalten nach § 14 Abs. 7 BetrSichV Art und Umfang der Prüfung, das Ergebnis sowie Name und Unterschrift des Prüfers. Ein Prüfverzeichnis ist dafür eine bewährte Organisationshilfe.'
         },
         "16.2": {
-            einfach: 'Sorgen Sie dafür, dass möglichst wenig Bargeld sichtbar und griffbereit im Büro liegt, damit ein Überfall weniger attraktiv wird.',
-            bghw: 'Setzen Sie die im Rahmen der Gefährdungsbeurteilung (§ 5 ArbSchG) und der DGUV Regel 108-601 „Branche Einzelhandel“ empfohlenen organisatorischen und baulichen Maßnahmen zur Überfallprävention um (z. B. Bargeldreduzierung, Zeitschlosstresore, Sichtschutz).',
-            rechtlich: 'Geeignete organisatorische und technische Maßnahmen zur Reduzierung des Überfallrisikos sind gemäß Gefährdungsbeurteilung nach § 5 ArbSchG umzusetzen. Maßgeblich sind zusätzlich die Vorgaben der DGUV Vorschrift 25 „Überfallprävention“ und der DGUV Regel 108-010 zu baulich-technischen und organisatorischen Maßnahmen (Zeitschlosstresore, Kassenschleusen, Videoüberwachung, Bargeldlimits).'
+            einfach: 'Sorgen Sie dafür, dass möglichst wenig Bargeld sichtbar und griffbereit im Büro liegt und die Bürotür nur kontrolliert geöffnet werden kann (z. B. Türspion, feststehender Knauf), damit ein Überfall weniger attraktiv wird.',
+            bghw: 'Setzen Sie die im Rahmen der Gefährdungsbeurteilung (§ 5 ArbSchG) und der DGUV Regel 108-601 „Branche Einzelhandel“ empfohlenen organisatorischen und baulichen Maßnahmen zur Überfallprävention um (z. B. Bargeldreduzierung, Zeitschlosstresore, Sichtschutz, Türspion bzw. feststehender Türknauf am Büro).',
+            rechtlich: 'Geeignete organisatorische und technische Maßnahmen zur Reduzierung des Überfallrisikos sind gemäß Gefährdungsbeurteilung nach § 5 ArbSchG umzusetzen. Maßgeblich sind zusätzlich die Vorgaben der DGUV Vorschrift 25 „Überfallprävention“ und der DGUV Regel 108-010 (z. B. Bargeldbestände gering halten, Zeitschlosstresore, kontrollierter Zugang zu Kassen- und Büroräumen).'
         },
         "16.3": {
             einfach: 'Schließen Sie die Bürotür ab, wenn Sie mit Bargeld oder anderen Zahlungsmitteln hantieren.',
@@ -676,12 +676,12 @@ const MEASURES_TEXT = {
     "Barrierefreies WC": {        "17.1": {
             einfach: 'Prüfen Sie, ob die Notrufschnur bis maximal 10 cm über dem Boden hängt, damit man sie auch liegend erreicht.',
             bghw: 'Stellen Sie gemäß DIN 18040-1 und der DGUV Regel 108-601 sicher, dass die Notrufschnur maximal 10 cm über dem Fußboden herabhängt.',
-            rechtlich: 'Die Notrufschnur muss gemäß DIN 18040-1 bis maximal 10 cm über dem Fußboden herabhängen, um nach einem Sturz erreichbar zu sein. Die Höhe von max. 10 cm über dem Fußboden gewährleistet, dass die Notrufschnur auch von einer liegenden, gestürzten Person erreicht werden kann (DIN 18040-1 Nr. 5.5).'
+            rechtlich: 'Die Notrufschnur muss gemäß DIN 18040-1 bis maximal 10 cm über dem Fußboden herabhängen, um nach einem Sturz erreichbar zu sein. Die geringe Höhe gewährleistet, dass die Notrufschnur auch von einer liegenden, gestürzten Person erreicht werden kann.'
         },
         "17.2": {
             einfach: 'Sorgen Sie dafür, dass ein Alarm sofort bei einer besetzten Stelle ankommt.',
             bghw: 'Leiten Sie den Alarm gemäß DIN 18040-1 und der DGUV Regel 108-601 an eine ständig besetzte Stelle (z. B. Empfang, Leitwarte) weiter.',
-            rechtlich: 'Der Alarm ist gemäß DIN 18040-1 an eine ständig besetzte Stelle weiterzuleiten. Die ständig besetzte Stelle ist gemäß DIN 18040-1 so zu organisieren, dass eine Reaktion auf den Alarm jederzeit, auch außerhalb der Kernöffnungszeiten, sichergestellt ist.'
+            rechtlich: 'Der Alarm ist gemäß DIN 18040-1 an eine ständig besetzte Stelle weiterzuleiten, sodass eine Reaktion auf den Alarm jederzeit, auch außerhalb der Kernöffnungszeiten, sichergestellt ist.'
         },
         "17.3": {
             einfach: 'Testen Sie die Notrufeinrichtung des barrierefreien WCs regelmäßig und nach den für die eingebaute Anlage geltenden Vorgaben. Halten Sie die festgelegten Prüfungen nachvollziehbar fest.',
@@ -696,7 +696,7 @@ const MEASURES_TEXT = {
         "17.5": {
             einfach: 'Prüfen Sie, ob sich die WC-Tür im Notfall auch von außen öffnen lässt.',
             bghw: 'Stellen Sie sicher, dass die Tür gemäß DIN 18040-1 und der DGUV Regel 108-601 im Notfall von außen entriegelt werden kann.',
-            rechtlich: 'Es ist sicherzustellen, dass die Tür im Notfall gemäß DIN 18040-1 von außen entriegelt werden kann. Die Tür muss gemäß DIN 18040-1 Nr. 5.5 im Notfall von außen entriegelbar sein, ohne dass die Privatsphäre bei normaler Nutzung beeinträchtigt wird.'
+            rechtlich: 'Es ist sicherzustellen, dass die Tür im Notfall gemäß DIN 18040-1 von außen entriegelt werden kann, ohne dass die Privatsphäre bei normaler Nutzung beeinträchtigt wird.'
         }
     },
     "Notfallmanagement": {        "18.1": {
@@ -758,7 +758,7 @@ const MEASURES_TEXT = {
     },
     "Psychische Belastung": {        "20.1": {
             einfach: 'Berücksichtigen Sie Wünsche der Mitarbeitenden bei der Dienstplanung, wo es geht.',
-            bghw: 'Berücksichtigen Sie Beschäftigtenwünsche gemäß der Gefährdungsbeurteilung psychischer Belastung nach § 5 ArbSchG (vgl. DGUV Information 206-007) und der DGUV Regel 108-601 bei der Arbeitsplanung.',
+            bghw: 'Berücksichtigen Sie Beschäftigtenwünsche im Rahmen der Gefährdungsbeurteilung psychischer Belastung nach § 5 ArbSchG und der DGUV Regel 108-601 bei der Arbeitsplanung.',
             rechtlich: 'Arbeitszeit und Arbeitsorganisation sind im Rahmen der Gefährdungsbeurteilung psychischer Belastungen zu beurteilen und erforderlichenfalls anzupassen (§§ 3, 5 ArbSchG). Psychische Belastungen sind seit der ArbSchG-Novelle 2013 gemäß § 5 Abs. 3 Nr. 6 ArbSchG ausdrücklicher Bestandteil der Gefährdungsbeurteilung; die GDA-Leitlinie „Gefährdungsbeurteilung psychischer Belastung“ konkretisiert die Vorgehensweise.'
         },
         "20.2": {
@@ -865,12 +865,12 @@ const MEASURES_TEXT = {
         "21.5": {
             einfach: 'Holen Sie die fällige Aufzugsprüfung nach, beheben Sie offene Mängel aus dem letzten Prüfbericht und legen Sie die Prüfbescheinigung vor. Die Hauptprüfung durch eine zugelassene Überwachungsstelle (ZÜS) ist gesetzlich spätestens alle zwei Jahre Pflicht.',
             bghw: 'Veranlassen Sie die fristgerechte wiederkehrende Prüfung gemäß § 16 BetrSichV und der DGUV Regel 108-601, arbeiten Sie festgestellte Mängel vollständig ab und halten Sie die Prüfbescheinigung bereit. Die ZÜS-Hauptprüfung darf gemäß § 16 i. V. m. Anhang 2 Abschnitt 2 Nr. 4.1 BetrSichV im Abstand von höchstens zwei Jahren erfolgen.',
-            rechtlich: 'Die wiederkehrende Prüfung des Aufzugs ist gemäß § 16 BetrSichV durch eine zugelassene Überwachungsstelle (ZÜS) fristgerecht durchzuführen; festgestellte Mängel sind vollständig abzuarbeiten und die Prüfbescheinigung ist vorzuhalten. Die vom Arbeitgeber nach § 3 Abs. 6 BetrSichV festzulegende Prüffrist der ZÜS-Hauptprüfung darf gemäß Anhang 2 Abschnitt 2 Nr. 4.1 BetrSichV zwei Jahre nicht überschreiten; stellt die ZÜS eine unzutreffende Frist fest, ist diese in Abstimmung mit ihr zu verkürzen (§ 16 Abs. 2 BetrSichV).'
+            rechtlich: 'Die wiederkehrende Prüfung des Aufzugs ist gemäß § 16 BetrSichV durch eine zugelassene Überwachungsstelle (ZÜS) fristgerecht durchzuführen; festgestellte Mängel sind vollständig abzuarbeiten und die Prüfbescheinigung ist vorzuhalten. Die Prüffristen legt der Arbeitgeber nach § 3 Abs. 6 BetrSichV fest; die ZÜS prüft diese Fristen mit. Für die Hauptprüfung gilt als Höchstfrist nach Anhang 2 Abschnitt 2 Nr. 4.1 BetrSichV zwei Jahre. Stellt die ZÜS eine unzutreffende Frist fest, entscheidet bei Uneinigkeit die zuständige Behörde (§ 16 Abs. 2 BetrSichV).'
         },
         "21.6": {
             einfach: 'Räumen Sie Waren und Lagergut vor den Aufzugstüren weg und sorgen Sie für einen ebenen, gut beleuchteten Bereich.',
             bghw: 'Halten Sie die Bereiche vor den Aufzugstüren gemäß ASR A3.4 und der DGUV Regel 108-601 frei von Waren und Lagergut und sorgen Sie für ausreichende Beleuchtung.',
-            rechtlich: 'Die Bereiche vor den Aufzugstüren sind freizuhalten, eben zu gestalten und gemäß ASR A3.4 ausreichend zu beleuchten. Die Beleuchtung im Zugangsbereich richtet sich nach ASR A3.4 (Anhaltswert i. d. R. mind. 100–200 Lux).'
+            rechtlich: 'Die Bereiche vor den Aufzugstüren sind freizuhalten, eben zu gestalten und ausreichend zu beleuchten (ASR A3.4; für Treppen, Fahrtreppen und Aufzüge nennt die Tabelle der ASR A3.4 eine Beleuchtungsstärke von 100 lx).'
         },
         "21.7": {
             einfach: 'Prüfen Sie, ob der Aufzug für Kunden inkl. Einkaufswagen und mobilitätseingeschränkte Personen geeignet ist, und bringen Sie verständliche Hinweise bei Störungen an.',
@@ -960,7 +960,7 @@ const MEASURES_TEXT = {
         },
         "22.9": {
             einfach: 'Legen Sie für Störungen oder einen möglichen Einschluss fest, wie Hilfe gerufen wird, wer zuständig ist und welche Informationen benötigt werden.',
-            bghw: 'Richten Sie die Notfallorganisation nach den für die konkrete Aufzugsanlage geltenden Anforderungen aus. Ist ein Einschluss möglich, müssen Hilfeherbeirufung, Notfallplan und Notbefreiungsorganisation entsprechend BetrSichV Anhang 1 Nr. 4.1 sichergestellt sein.',
+            bghw: 'Richten Sie die Notfallorganisation nach den für die konkrete Aufzugsanlage geltenden Anforderungen aus. Ist ein Einschluss möglich, müssen das Herbeirufen von Hilfe, der Notfallplan und die Notbefreiungsorganisation entsprechend BetrSichV Anhang 1 Nr. 4.1 sichergestellt sein.',
             rechtlich: 'Für Aufzugsanlagen, in denen Personen eingeschlossen werden können, gelten die Notfallanforderungen aus BetrSichV Anhang 1 Nr. 4.1 entsprechend. Dazu gehören je nach Anlagenart insbesondere die Möglichkeit, Hilfe herbeizurufen, der Notfallplan und die Notbefreiungsanleitung. Eine pauschale Bezugnahme auf eine bestimmte Reaktionszeit der alten TRBS 3121 wird vermieden.'
         }
     },
@@ -974,7 +974,7 @@ const MEASURES_TEXT = {
         "23.2": {
             einfach: 'Ermitteln Sie Anzahl und Gesamtmenge der gelagerten Flüssiggasflaschen und legen Sie danach die erforderlichen Schutzmaßnahmen fest.',
             bghw: 'Ordnen Sie die Lagermenge nach DGUV Regel 110-010 dem zutreffenden Mengenbereich zu: eine Flasche bzw. maximal 50 kg, mehr als eine Flasche oder mehr als 50 kg bis 200 kg sowie über 200 kg.',
-            rechtlich: 'DGUV Regel 110-010 Tabelle 7 staffelt die Schutzmaßnahmen nach der Lagermenge. Beim Überschreiten einer der jeweiligen Mengenschwellen sind die weitergehenden Schutzmaßnahmen anzuwenden.'
+            rechtlich: 'DGUV Regel 110-010 staffelt die Schutzmaßnahmen nach der Lagermenge. Beim Überschreiten einer der jeweiligen Mengenschwellen sind die weitergehenden Schutzmaßnahmen anzuwenden.'
         },
         "23.3": {
             einfach: 'Richten Sie bei mehr als einer Flasche oder mehr als 50 kg Flüssiggas einen geeigneten Lagerbereich mit den erforderlichen zusätzlichen Schutzmaßnahmen ein.',
@@ -1004,7 +1004,7 @@ const MEASURES_TEXT = {
         "23.8": {
             einfach: 'Kontrollieren Sie insbesondere teilentleerte Rückgabeflaschen vor der Rückführung ins Lager auf Ventildichtheit, z. B. mit geeignetem Lecksuchmittel.',
             bghw: 'Führen Sie die in DGUV Regel 110-010 beschriebene Dichtheitskontrolle des Flaschenventils vor der Rückführung teilentleerter Flaschen in das Lager durch.',
-            rechtlich: 'DGUV Regel 110-010 Abschnitt 5.1.19 beschreibt den Dichtheitsnachweis der Flaschenventile, z. B. mit schaumbildenden Mitteln, ausdrücklich auch für teilentleerte Flaschen vor der Rückführung in das Lager.'
+            rechtlich: 'DGUV Regel 110-010 beschreibt den Dichtheitsnachweis der Flaschenventile, z. B. mit schaumbildenden Mitteln, auch für teilentleerte Flaschen vor der Rückführung in das Lager.'
         },
         "23.9": {
             einfach: 'Nehmen Sie beschädigte, undichte oder auffällige Flaschen aus dem normalen Ablauf und sichern Sie sie nach dem festgelegten Notfallverfahren.',

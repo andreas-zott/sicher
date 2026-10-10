@@ -8,8 +8,28 @@ const STORAGE_KEY = 'begehungState';
 
 // Revisionsstand der App/Checkliste (in Fusszeile und PDF sichtbar,
 // bei inhaltlichen Aenderungen an Fragenkatalog/Massnahmen hochzaehlen)
-const APP_REVISION = '2.0';
-const APP_REVISION_DATE = '2026-10-01';
+const APP_REVISION = '2.0.25';
+const APP_REVISION_DATE = '2026-10-10';
+
+// Heutiges Datum als JJJJ-MM-TT in LOKALER Zeit. toISOString() liefert UTC,
+// dadurch stand zwischen 0 und 2 Uhr (deutsche Zeit) das Vortagsdatum drin.
+function todayIsoLocal() {
+    const d = new Date();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return `${d.getFullYear()}-${mm}-${dd}`;
+}
+
+// Maskiert Text fuer die Verwendung in innerHTML und in Attributwerten.
+// Fuer ALLE Nutzereingaben und vom Server/aus Dateien geladenen Werte nutzen.
+function escapeHtml(value) {
+    return String(value === null || value === undefined ? '' : value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
 
 function renderFooterMeta() {
     const el = document.getElementById('footer-version');
@@ -35,7 +55,7 @@ function defaultState() {
             marktnummer: '',
             plzOrt: '',
             strasse: '',
-            datum: new Date().toISOString().split('T')[0],
+            datum: todayIsoLocal(),
             pruefername: '',
             marktleitung: '',
             teilnehmer: ''
@@ -362,8 +382,8 @@ async function openSynologyLoadDialog() {
             return;
         }
         listEl.innerHTML = files.map(f => `
-            <button class="btn btn-secondary btn-small" style="width:100%; text-align:left; margin-bottom:0.5rem;" data-filename="${f.fileName}">
-                ${f.datum || '?'} — ${f.plzOrt || 'ohne Angabe'}${f.marktnummer ? ' (Nr. ' + f.marktnummer + ')' : ''}
+            <button class="btn btn-secondary btn-small" style="width:100%; text-align:left; margin-bottom:0.5rem;" data-filename="${escapeHtml(f.fileName)}">
+                ${escapeHtml(f.datum || '?')} — ${escapeHtml(f.plzOrt || f.firma || 'ohne Angabe')}${f.marktnummer ? ' (Nr. ' + escapeHtml(f.marktnummer) + ')' : ''}
             </button>`).join('');
         listEl.querySelectorAll('button[data-filename]').forEach(btn => {
             btn.addEventListener('click', async () => {
@@ -378,7 +398,7 @@ async function openSynologyLoadDialog() {
         });
     } catch (err) {
         console.error('Dateiliste konnte nicht geladen werden:', err);
-        listEl.innerHTML = `<p style="color:var(--mangel);">Dateiliste konnte nicht geladen werden: ${err && err.message ? err.message : 'unbekannter Fehler'}</p>`;
+        listEl.innerHTML = `<p style="color:var(--mangel);">Dateiliste konnte nicht geladen werden: ${escapeHtml(err && err.message ? err.message : 'unbekannter Fehler')}</p>`;
     }
 }
 
@@ -619,7 +639,7 @@ function drawCoverPage(doc, pageWidth, pageHeight, margin, documentTitle, docume
     doc.setFont(undefined, 'normal');
     doc.setFontSize(8.5);
     doc.setTextColor(150);
-    const erstellt = new Date().toISOString().split('T')[0];
+    const erstellt = todayIsoLocal();
     doc.text(`ASiC Handel Rev. ${APP_REVISION} · Erstellt am ${formatDate(erstellt)}`, pageWidth / 2, pageHeight - 15, { align: 'center' });
 
     doc.addPage();
@@ -983,7 +1003,7 @@ function fotosPdfFilename() {
 
     const datum =
         state.companyInfo.datum ||
-        new Date().toISOString().split('T')[0];
+        todayIsoLocal();
 
     return `Fotodokumentation_${marktnummer}_${datum}.pdf`;
 }
@@ -994,7 +1014,7 @@ function checklistPdfFilename() {
 
     const datum =
         state.companyInfo.datum ||
-        new Date().toISOString().split('T')[0];
+        todayIsoLocal();
 
     return `Checkliste_${marktnummer}_${datum}.pdf`;
 }
@@ -1112,7 +1132,7 @@ function pdfFilename() {
 
     const datum =
         state.companyInfo.datum ||
-        new Date().toISOString().split('T')[0];
+        todayIsoLocal();
 
     return `Massnahmenplan_${marktnummer}_${datum}.pdf`;
 }
@@ -2299,7 +2319,7 @@ function renderItem(item, locked) {
         ${isMangel ? `
         <div class="item-detail">
             <label for="comment-${item.id}">Beschreibung des Mangels</label>
-            <textarea id="comment-${item.id}" placeholder="Was wurde festgestellt? (optional)" oninput="updateComment('${item.id}', this.value)">${comment}</textarea>
+            <textarea id="comment-${item.id}" placeholder="Was wurde festgestellt? (optional)" oninput="updateComment('${item.id}', this.value)">${escapeHtml(comment)}</textarea>
             <div class="measure-preview">
                 <span class="label">Empfohlene Maßnahme</span>
                 ${getMeasureText(item.id)}
@@ -2586,7 +2606,7 @@ function buildJsonBlob() {
 }
 
 function jsonExportFilename() {
-    const datum = state.companyInfo.datum || new Date().toISOString().split('T')[0];
+    const datum = state.companyInfo.datum || todayIsoLocal();
     const marktnummer = (state.companyInfo.marktnummer || 'begehung').replace(/[^a-z0-9äöüß]+/gi, '-');
     return `ASiC-Handel_${marktnummer}_${datum}.json`;
 }
@@ -2598,7 +2618,7 @@ function exportJson() {
     a.href = url;
     a.download = jsonExportFilename();
     a.click();
-    URL.revokeObjectURL(url);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
     showToast('JSON exportiert');
 }
 
@@ -2636,7 +2656,7 @@ async function shareJson() {
         a.href = url;
         a.download = filename;
         a.click();
-        URL.revokeObjectURL(url);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
         showToast('JSON heruntergeladen (Teilen auf diesem Gerät nicht verfügbar)');
     } catch (err) {
         console.error('JSON-Teilen fehlgeschlagen:', err);

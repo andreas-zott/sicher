@@ -11,7 +11,7 @@
   function audit(){return read(AUDIT_KEY,{})}
   function gbo(){return read(GBO_KEY,{})}
   function marketNo(){return audit().companyInfo?.marktnummer||gbo().meta?.marktnummer||''}
-  function container(){const a=audit(),g=gbo();return {format:FORMAT,formatVersion:VERSION,appVersion:'2.0',savedAt:new Date().toISOString(),market:{marktnummer:marketNo(),plzOrt:a.companyInfo?.plzOrt||g.meta?.plzOrt||'',strasse:a.companyInfo?.strasse||g.meta?.strasse||''},companyInfo:a.companyInfo||{},audit:a,gbo:g,links:read('asicMarketLinksV2',[])} }
+  function container(){const a=audit(),g=gbo();return {format:FORMAT,formatVersion:VERSION,appVersion:(typeof APP_REVISION!=='undefined'?APP_REVISION:'2.0.25'),savedAt:new Date().toISOString(),market:{marktnummer:marketNo(),plzOrt:a.companyInfo?.plzOrt||g.meta?.plzOrt||'',strasse:a.companyInfo?.strasse||g.meta?.strasse||''},companyInfo:a.companyInfo||{},audit:a,gbo:g,links:read('asicMarketLinksV2',[])} }
   function isContainer(x){return !!x&&x.format===FORMAT&&Number(x.formatVersion)>=2}
   function apply(x,scope='all'){
     if(isContainer(x)){
@@ -28,7 +28,7 @@
   async function listServer(){const res=await fetch(url('list.php'),opts({cache:'no-store'}));const r=await json(res);if(!res.ok||!r.ok)throw new Error(r.message||`Fehler beim Abrufen (HTTP ${res.status}).`);return r.files||[]}
   async function loadServer(filename){const res=await fetch(url('load.php')+'?filename='+encodeURIComponent(filename),opts({cache:'no-store'}));const r=await json(res);if(!res.ok)throw new Error(r?.message||`Fehler beim Laden (HTTP ${res.status}).`);apply(r,'all');return r}
   function safe(v,f='ohne-Marktnummer'){return String(v||f).trim().replace(/[^a-z0-9äöüß_-]+/gi,'-').replace(/^-+|-+$/g,'')||f}
-  function filename(){return `ASiC_Markt_${safe(marketNo())}_${new Date().toISOString().slice(0,10)}.json`}
+  function filename(){return `ASiC_Markt_${safe(marketNo())}_${(typeof todayIsoLocal==='function'?todayIsoLocal():new Date().toISOString().slice(0,10))}.json`}
   function download(){const data=JSON.stringify(container(),null,2),blob=new Blob([data],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename();a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
   window.ASiCMarket={FORMAT,VERSION,container,isContainer,apply,saveServer,listServer,loadServer,download,filename,baseUrl};
 })();
