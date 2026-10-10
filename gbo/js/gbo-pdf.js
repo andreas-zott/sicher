@@ -527,13 +527,22 @@
     }
 
     function bodyGesamt(P, data, guidance) {
+        const opts = P.opts || {};
+        const doc = P.doc;
+        let any = false;
         data.groups.forEach(g => {
+            const mods = g.modules.filter(m => visibleRows(m, opts).length);
+            if (!mods.length) return;
+            any = true;
             groupBand(P, g.title);
-            g.modules.forEach(m => {
+            P.toc.push({ level: 0, title: g.title, page: doc.getNumberOfPages() });
+            mods.forEach(m => {
+                const rows = visibleRows(m, opts);
                 const answered = m.rows.filter(r => r.status).length;
-                moduleHeading(P, m.name, `${answered} von ${m.rows.length} beantwortet`);
+                moduleHeading(P, m.name, opts.onlyAction ? `${rows.length} mit Handlungs-/Beratungsbedarf` : `${answered} von ${m.rows.length} beantwortet`);
+                P.toc.push({ level: 1, title: m.name, page: doc.getNumberOfPages() });
                 riskLine(P, m.risk);
-                m.rows.forEach(r => {
+                rows.forEach(r => {
                     const image = data.images[r.id] || null;
                     if (r.status === 'action' || r.status === 'consult') detailBlock(P, r, image, guidance);
                     else compactRow(P, r, image);
@@ -541,6 +550,7 @@
                 P.y += 2;
             });
         });
+        if (!any) paragraph(P, 'Es liegen keine Einträge mit Handlungs- oder Beratungsbedarf vor.', { size: 10, color: C.soft });
     }
 
     // ----------------------------------------------------------------------
@@ -701,6 +711,331 @@
     // ----------------------------------------------------------------------
 
     // ----------------------------------------------------------------------
+    // Druckumfang (Auswahl im Menü "GBO dokumentieren", gilt für die Gesamt-GBO)
+    // ----------------------------------------------------------------------
+
+    const OPT_KEY = 'asicGboPrintOptsV1';
+
+    function printOpts() {
+        try {
+            const o = JSON.parse(localStorage.getItem(OPT_KEY) || '{}');
+            return { onlyAction: !!o.onlyAction, noImages: !!o.noImages, noGuidance: !!o.noGuidance };
+        } catch (e) {
+            return { onlyAction: false, noImages: false, noGuidance: false };
+        }
+    }
+
+    function bindPrintOpts() {
+        const boxes = document.querySelectorAll('[data-print-opt]');
+        if (!boxes.length) return;
+        const o = printOpts();
+        boxes.forEach(b => {
+            b.checked = !!o[b.dataset.printOpt];
+            b.onchange = () => {
+                const cur = printOpts();
+                cur[b.dataset.printOpt] = b.checked;
+                try { localStorage.setItem(OPT_KEY, JSON.stringify(cur)); } catch (e) { /* ohne Speicher weiter */ }
+            };
+        });
+    }
+
+    const isAct = r => r.status === 'action' || r.status === 'consult';
+    const visibleRows = (m, opts) => (opts && opts.onlyAction ? m.rows.filter(isAct) : m.rows);
+
+    function sect(P, title) {
+        ensure(P, 14);
+        const d = P.doc;
+        setText(d, 10, 'bold', C.brand);
+        d.text(clean(title).toUpperCase(), PAGE.ml, P.y + 3);
+        d.setDrawColor(C.brand[0], C.brand[1], C.brand[2]);
+        d.setLineWidth(0.4);
+        d.line(PAGE.ml, P.y + 4.6, PAGE.ml + W, P.y + 4.6);
+        P.y += 9;
+    }
+
+    function classKey(score) {
+        return score <= 2 ? 'low' : score <= 6 ? 'mid' : score <= 9 ? 'high' : 'top';
+    }
+    const tint = (c, f) => c.map(v => Math.round(v + (255 - v) * f));
+
+    // ----------------------------------------------------------------------
+    // Kurzfassung mit Risikomatrix
+    // ----------------------------------------------------------------------
+
+    function summaryPage(P, data) {
+        const d = P.doc;
+        const mods = [];
+        data.groups.forEach(g => g.modules.forEach(m => mods.push(m)));
+        const rated = mods.filter(m => m.risk && m.risk.rated1);
+        const today = todayIso();
+
+        sect(P, 'Kurzfassung');
+        paragraph(P, 'Diese Seite fasst die wichtigsten Ergebnisse zusammen. Die Einzelheiten stehen in den folgenden Abschnitten.', { size: 8.5, color: C.soft, gap: 3 });
+
+        // ---- Risikomatrix (Restrisiko, Anzahl Module)
+        const SEV = ['gering', 'mittel', 'schwer', 'sehr schwer'];
+        const PRO = ['unwahrsch.', 'selten', 'wahrsch.', 'sehr wahrsch.'];
+        const x0 = PAGE.ml + 24, cw = 19, ch = 11;
+        let y0 = P.y + 9;
+        setText(d, 8.5, 'bold', C.ink);
+        d.text(clean('Risikomatrix: Restrisiko der Module (Anzahl)'), PAGE.ml, P.y + 3);
+        const cnt = {};
+        rated.forEach(m => { const k = `${m.risk.s1}-${m.risk.w1}`; cnt[k] = (cnt[k] || 0) + 1; });
+        for (let s = 4; s >= 1; s--) {
+            const ry = y0 + (4 - s) * ch;
+            setText(d, 6.5, 'normal', C.soft);
+            d.text(clean(`${s} ${SEV[s - 1]}`), x0 - 2, ry + ch / 2 + 1.2, { align: 'right' });
+            for (let w = 1; w <= 4; w++) {
+                const rx = x0 + (w - 1) * cw, col = riskColor(classKey(s * w));
+                const t = tint(col, 0.72);
+                d.setFillColor(t[0], t[1], t[2]);
+                d.setDrawColor(255, 255, 255);
+                d.setLineWidth(0.6);
+                d.rect(rx, ry, cw, ch, 'FD');
+                const n = cnt[`${s}-${w}`] || 0;
+                if (n) { setText(d, 13, 'bold', col); d.text(String(n), rx + cw / 2, ry + ch / 2 + 2.3, { align: 'center' }); }
+            }
+        }
+        for (let w = 1; w <= 4; w++) {
+            setText(d, 6.5, 'normal', C.soft);
+            d.text(clean(`${w} ${PRO[w - 1]}`), x0 + (w - 1) * cw + cw / 2, y0 + 4 * ch + 4, { align: 'center' });
+        }
+        setText(d, 6.5, 'normal', C.grey);
+        d.text('Schwere (senkrecht) × Wahrscheinlichkeit (waagerecht)', x0, y0 + 4 * ch + 8);
+
+        // ---- Zahlen rechts neben der Matrix
+        const rs = data.riskSummary || {};
+        const rx = x0 + 4 * cw + 10, rw = PAGE.ml + W - rx;
+        const lines = [
+            ['sehr hoch', rs.top || 0, C.top], ['hoch', rs.high || 0, C.high], ['mittel', rs.mid || 0, C.mid],
+            ['niedrig', rs.low || 0, C.ok], ['nicht bewertet', rs.unrated || 0, C.grey]
+        ];
+        lines.forEach((l, i) => {
+            const ly = y0 + 2 + i * 8.5;
+            d.setFillColor(l[2][0], l[2][1], l[2][2]);
+            d.rect(rx, ly - 3, 2.2, 6, 'F');
+            setText(d, 13, 'bold', l[2]);
+            d.text(String(l[1]), rx + 5, ly + 2);
+            setText(d, 8, 'normal', C.soft);
+            d.text(clean(l[0]), rx + 16, ly + 1.8);
+        });
+        const na = (rs.notAcceptable || []).length;
+        setText(d, 8, 'bold', na ? C.top : C.ok);
+        d.text(clean(na ? `${na} ${na === 1 ? 'Modul' : 'Module'} mit nicht vertretbarem Restrisiko` : 'Alle bewerteten Restrisiken vertretbar'), rx, y0 + 4 * ch + 4, { maxWidth: rw });
+        P.y = y0 + 4 * ch + 14;
+
+        // ---- Höchste Restrisiken
+        const top = rated.slice().sort((a, b) => b.risk.score1 - a.risk.score1).filter(m => m.risk.score1 >= 3).slice(0, 6);
+        sect(P, 'Höchste Restrisiken');
+        if (!top.length) paragraph(P, rated.length ? 'Kein Modul mit Restrisiko über 2.' : 'Es ist noch kein Restrisiko bewertet.', { size: 9, color: C.soft });
+        top.forEach(m => {
+            const r = m.risk;
+            paragraph(P, `${m.name}: Restrisiko ${r.score1} (${r.class1}${r.acceptable ? '' : ', nicht vertretbar'})${r.rated0 ? ', Ausgangsrisiko ' + r.score0 : ''}`, { size: 9, style: r.acceptable ? 'normal' : 'bold', color: r.acceptable ? C.ink : C.top, gap: 0.8 });
+        });
+        P.y += 2;
+
+        // ---- Handlungsfelder
+        const fields = mods.map(m => ({ m, a: m.rows.filter(r => r.status === 'action').length, c: m.rows.filter(r => r.status === 'consult').length }))
+            .filter(f => f.a + f.c).sort((a, b) => (b.a - a.a) || (b.c - a.c)).slice(0, 6);
+        sect(P, 'Module mit dem meisten Handlungsbedarf');
+        if (!fields.length) paragraph(P, 'Kein Handlungs- oder Beratungsbedarf erfasst.', { size: 9, color: C.soft });
+        fields.forEach(f => paragraph(P, `${f.m.name}: ${f.a} mit Handlungsbedarf, ${f.c} mit Beratungsbedarf`, { size: 9, gap: 0.8 }));
+        P.y += 2;
+
+        // ---- Überfällige Maßnahmen
+        const late = [];
+        mods.forEach(m => m.rows.forEach(r => { if (r.overdue) late.push({ m, r }); }));
+        late.sort((a, b) => String(a.r.due).localeCompare(String(b.r.due)));
+        sect(P, `Überfällige Maßnahmen (${late.length})`);
+        if (!late.length) paragraph(P, 'Keine Maßnahme mit abgelaufener Frist.', { size: 9, color: C.soft });
+        late.slice(0, 8).forEach(({ m, r }) => {
+            const t = Math.round((Date.parse(today) - Date.parse(r.due)) / 86400000);
+            paragraph(P, `${m.name} · ${r.topic || r.id}: Frist ${fmtDate(r.due)} (${t} ${t === 1 ? 'Tag' : 'Tage'} überfällig)${r.owner ? ', zuständig: ' + r.owner : ''}`, { size: 9, color: C.action, gap: 0.8 });
+        });
+        if (late.length > 8) paragraph(P, `… und ${late.length - 8} weitere (siehe Maßnahmenliste).`, { size: 8.5, color: C.soft });
+        if (data.reviewLine) { P.y += 2; paragraph(P, 'Fortschreibung: ' + data.reviewLine, { size: 8.5, color: C.soft }); }
+    }
+
+    // ----------------------------------------------------------------------
+    // Inhaltsverzeichnis (Platz wird vorab reserviert und nach dem Inhalt gefüllt)
+    // ----------------------------------------------------------------------
+
+    const TOC_PER_PAGE = 42;
+
+    function drawToc(P, pages) {
+        const d = P.doc, list = P.toc;
+        for (let k = 0; k < pages; k++) {
+            d.setPage(P.tocStart + k);
+            let y = PAGE.top;
+            if (k === 0) {
+                setText(d, 12, 'bold', C.brand);
+                d.text('INHALTSVERZEICHNIS', PAGE.ml, y + 2);
+                d.setDrawColor(C.brand[0], C.brand[1], C.brand[2]);
+                d.setLineWidth(0.4);
+                d.line(PAGE.ml, y + 4.4, PAGE.ml + W, y + 4.4);
+                y += 10;
+            }
+            list.slice(k * TOC_PER_PAGE, (k + 1) * TOC_PER_PAGE).forEach(e => {
+                const x = PAGE.ml + (e.level ? 5 : 0);
+                setText(d, e.level ? 9 : 9.5, e.level ? 'normal' : 'bold', e.level ? C.ink : C.dark);
+                if (!e.level) y += 1.5;
+                const t = wrap(d, e.title, e.level ? 9 : 9.5, e.level ? 'normal' : 'bold', W - 22)[0];
+                d.text(t, x, y);
+                const tw = d.getTextWidth(t);
+                setText(d, 9, 'normal', C.grey);
+                const num = String(e.page);
+                d.text(num, PAGE.ml + W, y, { align: 'right' });
+                const dots = Math.floor((PAGE.ml + W - d.getTextWidth(num) - 2 - (x + tw + 2)) / d.getTextWidth('.'));
+                if (dots > 2) d.text('.'.repeat(dots), x + tw + 2, y);
+                d.link(PAGE.ml, y - 3.5, W, 5, { pageNumber: e.page });
+                y += 5.2;
+            });
+        }
+    }
+
+    function addOutline(P) {
+        const d = P.doc;
+        if (!d.outline || typeof d.outline.add !== 'function') return;
+        try {
+            let node = null;
+            P.marks.forEach(e => { d.outline.add(null, clean(e.title), { pageNumber: e.page }); });
+            P.toc.forEach(e => {
+                if (!e.level) node = d.outline.add(null, clean(e.title), { pageNumber: e.page });
+                else d.outline.add(node, clean(e.title), { pageNumber: e.page });
+            });
+        } catch (err) { console.warn('PDF-Lesezeichen nicht erzeugt:', err); }
+    }
+
+    // ----------------------------------------------------------------------
+    // Maßnahmenplan im Querformat mit Abhakfeldern
+    // ----------------------------------------------------------------------
+
+    function buildPlan(data) {
+        const doc = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4', orientation: 'landscape' });
+        const PW = 297, ML = 12, WW = PW - 2 * ML, TOP = 38, BOT = 192;
+        const meta = data.meta || {};
+        const today = todayIso();
+        const items = [];
+        data.groups.forEach(g => g.modules.forEach(m => m.rows.forEach(r => {
+            if (isAct(r) || r.measure || (Array.isArray(r.measures) && r.measures.length)) items.push({ m, r });
+        })));
+        const rank = it => (it.r.overdue ? 0 : it.r.due ? 1 : 2);
+        items.sort((a, b) => (rank(a) - rank(b)) || String(a.r.due || '9999').localeCompare(String(b.r.due || '9999')));
+
+        const cols = [
+            ['Nr.', 9], ['Bereich / Thema', 52], ['Maßnahme', 84], ['Verantwortlich', 34],
+            ['Frist', 24], ['Erledigt am', 38], ['Paraphe', 32]
+        ];
+        let y = TOP;
+
+        const header = () => {
+            let x = ML;
+            doc.setFillColor(C.dark[0], C.dark[1], C.dark[2]);
+            doc.rect(ML, y, WW, 7, 'F');
+            setText(doc, 8.5, 'bold', [255, 255, 255]);
+            cols.forEach(c => { doc.text(clean(c[0]), x + 2, y + 4.8); x += c[1]; });
+            y += 7;
+        };
+        const newPlanPage = () => { doc.addPage(); y = TOP - 6; header(); };
+
+        // Kopf der ersten Seite
+        setText(doc, 17, 'bold', C.ink);
+        doc.text('Maßnahmenplan', ML, 20);
+        setText(doc, 9, 'normal', C.soft);
+        const open = items.filter(i => !i.r.done).length, late = items.filter(i => i.r.overdue).length;
+        doc.text(clean(`Markt ${meta.marktnummer || '-'}${meta.plzOrt ? ', ' + meta.plzOrt : ''}${meta.strasse ? ', ' + meta.strasse : ''}`), ML, 26);
+        doc.text(clean(`Stand ${fmtDate(meta.date) || fmtDate(today)} · Ersteller: ${meta.pruefername || '-'} · Verantwortlich: ${meta.marktleitung || '-'}`), ML, 31);
+        setText(doc, 9, 'bold', late ? C.action : C.ink);
+        doc.text(clean(`${items.length} Maßnahmen, ${open} offen${late ? ', davon ' + late + ' überfällig' : ''}`), PW - ML, 26, { align: 'right' });
+        header();
+
+        if (!items.length) {
+            setText(doc, 10, 'normal', C.soft);
+            doc.text('Es liegen keine Maßnahmen vor.', ML + 2, y + 8);
+        }
+
+        items.forEach((it, i) => {
+            const r = it.r, d = doc;
+            const col2 = wrap(d, `${it.m.name}\n${r.id} ${r.topic || ''}`.replace('\n', ' · '), 8, 'normal', cols[1][1] - 4);
+            const col3 = wrap(d, measureText(r) || r.finding || r.question || '', 8.5, 'normal', cols[2][1] - 4);
+            const col4 = wrap(d, r.owner || '', 8.5, 'normal', cols[3][1] - 4);
+            const step = lineStep(8.5, 1.25);
+            const rh = Math.max(14, Math.max(col2.length, col3.length, col4.length) * step + 4);
+            if (y + rh > BOT) newPlanPage();
+            const color = statusColor(r.status);
+            let x = ML;
+            d.setDrawColor(C.line[0], C.line[1], C.line[2]);
+            d.setLineWidth(0.25);
+            cols.forEach(c => { d.rect(x, y, c[1], rh); x += c[1]; });
+            d.setFillColor(color[0], color[1], color[2]);
+            d.rect(ML, y, 1.4, rh, 'F');
+            setText(d, 8.5, 'bold', C.ink);
+            d.text(String(i + 1), ML + 3.5, y + 5);
+            x = ML + cols[0][1];
+            setText(d, 8, 'normal', C.ink);
+            col2.forEach((l, k) => d.text(l, x + 2, y + 4.5 + k * step));
+            x += cols[1][1];
+            setText(d, 8.5, 'normal', C.ink);
+            col3.forEach((l, k) => d.text(l, x + 2, y + 4.5 + k * step));
+            x += cols[2][1];
+            col4.forEach((l, k) => d.text(l, x + 2, y + 4.5 + k * step));
+            x += cols[3][1];
+            setText(d, 8.5, r.overdue ? 'bold' : 'normal', r.overdue ? C.action : C.ink);
+            d.text(r.due ? fmtDate(r.due) : '-', x + 2, y + 5);
+            if (r.overdue) { setText(d, 7, 'bold', C.action); d.text('überfällig', x + 2, y + 9.5); }
+            x += cols[4][1];
+            // Abhakfeld
+            d.setDrawColor(C.ink[0], C.ink[1], C.ink[2]);
+            d.setLineWidth(0.4);
+            d.rect(x + 3, y + 3, 5, 5);
+            if (r.done) {
+                setText(d, 10, 'bold', C.ok);
+                d.text('x', x + 4.2, y + 7.2);
+                setText(d, 8.5, 'normal', C.ink);
+                d.text(fmtDate(r.done), x + 11, y + 7);
+            } else {
+                d.setLineWidth(0.25);
+                d.setDrawColor(C.grey[0], C.grey[1], C.grey[2]);
+                setText(d, 7, 'normal', C.grey);
+                d.text('am', x + 11, y + 7);
+                d.line(x + 16, y + 7.4, x + cols[5][1] - 3, y + 7.4);
+            }
+            x += cols[5][1];
+            d.setDrawColor(C.grey[0], C.grey[1], C.grey[2]);
+            d.setLineWidth(0.25);
+            d.line(x + 3, y + rh - 4, x + cols[6][1] - 3, y + rh - 4);
+            y += rh;
+        });
+
+        if (items.length) {
+            if (y + 14 > BOT + 6) newPlanPage();
+            setText(doc, 8, 'normal', C.soft);
+            doc.text(clean('Erledigung bitte mit Datum und Paraphe bestätigen. Soll eine Frist verschoben werden, bitte Grund und neuen Termin mit der Fachkraft für Arbeitssicherheit abstimmen.'), ML, y + 7);
+        }
+
+        const n = doc.getNumberOfPages();
+        for (let i = 1; i <= n; i++) {
+            doc.setPage(i);
+            if (i > 1) {
+                setText(doc, 8, 'bold', C.ink);
+                doc.text('Maßnahmenplan', ML, 13);
+                setText(doc, 8, 'normal', C.soft);
+                doc.text(clean(`Markt ${meta.marktnummer || '-'}${meta.plzOrt ? ' · ' + meta.plzOrt : ''}`), PW - ML, 13, { align: 'right' });
+                doc.setDrawColor(C.brand[0], C.brand[1], C.brand[2]);
+                doc.setLineWidth(0.5);
+                doc.line(ML, 16, PW - ML, 16);
+            }
+            doc.setDrawColor(C.line[0], C.line[1], C.line[2]);
+            doc.setLineWidth(0.2);
+            doc.line(ML, 200, PW - ML, 200);
+            setText(doc, 7.5, 'normal', C.grey);
+            doc.text(clean(`ASiC Handel${data.rev ? ' Rev. ' + data.rev : ''} · Erstellt am ${fmtDate(today)}`), ML, 205);
+            doc.text(`Seite ${i} von ${n}`, PW - ML, 205, { align: 'right' });
+        }
+        return doc;
+    }
+
+    // ----------------------------------------------------------------------
     // Seite 2: Dokumentenkontrolle und Freigabe
     // ----------------------------------------------------------------------
 
@@ -787,18 +1122,38 @@
         P.y = y;
     }
 
-    async function build(data, mode, guidance) {
+    async function build(data, mode, guidance, opts) {
         if (!window.jspdf || !window.jspdf.jsPDF) throw new Error('PDF-Bibliothek nicht geladen.');
+        if (mode === 'plan') return buildPlan(data);
+        opts = opts || {};
         const doc = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4' });
-        const P = { doc, y: PAGE.top };
+        const P = { doc, y: PAGE.top, toc: [], marks: [], opts: mode === 'gesamt' ? opts : {} };
 
         cover(P, data, mode);
+        P.marks.push({ title: 'Deckblatt', page: 1 });
         newPage(P);
         controlPage(P, data, mode);
+        P.marks.push({ title: 'Dokumentenkontrolle und Freigabe', page: doc.getNumberOfPages() });
+
+        let tocPages = 0;
+        if (mode === 'gesamt') {
+            newPage(P);
+            P.marks.push({ title: 'Kurzfassung', page: doc.getNumberOfPages() });
+            summaryPage(P, data);
+            const entries = data.groups.reduce((n, g) => {
+                const mods = g.modules.filter(m => visibleRows(m, P.opts).length);
+                return n + (mods.length ? 1 + mods.length : 0);
+            }, 0);
+            tocPages = Math.max(1, Math.ceil(entries / TOC_PER_PAGE));
+            P.tocStart = doc.getNumberOfPages() + 1;
+            for (let i = 0; i < tocPages; i++) newPage(P);
+            P.marks.push({ title: 'Inhaltsverzeichnis', page: P.tocStart });
+        }
         newPage(P);
         if (mode === 'massnahmen') bodyMassnahmen(P, data);
-        else bodyGesamt(P, data, guidance);
+        else bodyGesamt(P, data, P.opts.noGuidance ? null : guidance);
 
+        if (mode === 'gesamt') { drawToc(P, tocPages); addOutline(P); }
         decorate(doc, data, mode);
         return doc;
     }
@@ -814,13 +1169,13 @@
 
     function filename(data, mode) {
         const d = String(data.fileDate || todayIso());
-        return `GBO_${mode === 'massnahmen' ? 'Massnahmen' : 'Gesamt'}_Markt_${safePart(data.meta.marktnummer, 'ohne-Marktnummer')}_${d}.pdf`;
+        return `GBO_${mode === 'plan' ? 'Massnahmenplan' : mode === 'massnahmen' ? 'Massnahmen' : 'Gesamt'}_Markt_${safePart(data.meta.marktnummer, 'ohne-Marktnummer')}_${d}.pdf`;
     }
 
     function mailSubject(meta, mode) {
         const markt = (meta && meta.marktnummer) || '-';
-        return mode === 'massnahmen'
-            ? `Gefährdungsbeurteilung – Maßnahmenliste Markt ${markt}`
+        return mode !== 'gesamt'
+            ? `Gefährdungsbeurteilung – ${mode === 'plan' ? 'Maßnahmenplan' : 'Maßnahmenliste'} Markt ${markt}`
             : `Gefährdungsbeurteilung Markt ${markt}`;
     }
 
@@ -830,8 +1185,8 @@
         const markt = meta.marktnummer || '-';
         const adresse = [meta.strasse, meta.plzOrt].filter(Boolean).join(', ');
         const stand = meta.date ? `, Stand ${fmtDate(meta.date)}` : '';
-        const inhalt = mode === 'massnahmen'
-            ? 'die Maßnahmenliste der Gefährdungsbeurteilung'
+        const inhalt = mode !== 'gesamt'
+            ? (mode === 'plan' ? 'den Maßnahmenplan' : 'die Maßnahmenliste') + ' der Gefährdungsbeurteilung'
             : 'die Gefährdungsbeurteilung';
 
         const teile = [];
@@ -867,8 +1222,9 @@
     // ----------------------------------------------------------------------
 
     // ctx: { collect(measuresOnly) -> Promise<data>, guidance(q) }
-    async function run(action, measuresOnly, ctx) {
-        const mode = measuresOnly ? 'massnahmen' : 'gesamt';
+    async function run(action, measuresOnly, ctx, variant) {
+        const mode = variant === 'plan' ? 'plan' : measuresOnly ? 'massnahmen' : 'gesamt';
+        const opts = printOpts();
 
         // Mail ohne PDF: nur Entwurf mit Betreff und Text
         if (action === 'mail') {
@@ -892,8 +1248,8 @@
 
         try {
             toast('PDF wird erstellt …');
-            const data = await ctx.collect(measuresOnly, { images: true });
-            const doc = await build(data, mode, ctx.guidance);
+            const data = await ctx.collect(measuresOnly, { images: mode === 'plan' ? false : !(mode === 'gesamt' && opts.noImages) });
+            const doc = await build(data, mode, ctx.guidance, opts);
             const name = filename(data, mode);
             const blob = doc.output('blob');
 
@@ -937,5 +1293,7 @@
         }
     }
 
-    window.GBOPdf = { run, build, mailSubject, mailText, filename, clean };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindPrintOpts); else bindPrintOpts();
+
+    window.GBOPdf = { run, printOpts, build, mailSubject, mailText, filename, clean };
 })();

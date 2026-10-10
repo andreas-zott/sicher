@@ -11,7 +11,7 @@
   function audit(){return read(AUDIT_KEY,{})}
   function gbo(){return read(GBO_KEY,{})}
   function marketNo(){return audit().companyInfo?.marktnummer||gbo().meta?.marktnummer||''}
-  function container(){const a=audit(),g=gbo();return {format:FORMAT,formatVersion:VERSION,appVersion:(typeof APP_REVISION!=='undefined'?APP_REVISION:'2.0.31'),savedAt:new Date().toISOString(),market:{marktnummer:marketNo(),plzOrt:a.companyInfo?.plzOrt||g.meta?.plzOrt||'',strasse:a.companyInfo?.strasse||g.meta?.strasse||''},companyInfo:a.companyInfo||{},audit:a,gbo:g,links:read('asicMarketLinksV2',[])} }
+  function container(){const a=audit(),g=gbo();return {format:FORMAT,formatVersion:VERSION,appVersion:(typeof APP_REVISION!=='undefined'?APP_REVISION:'2.0.32'),savedAt:new Date().toISOString(),market:{marktnummer:marketNo(),plzOrt:a.companyInfo?.plzOrt||g.meta?.plzOrt||'',strasse:a.companyInfo?.strasse||g.meta?.strasse||''},companyInfo:a.companyInfo||{},audit:a,gbo:g,links:read('asicMarketLinksV2',[])} }
   function isContainer(x){return !!x&&x.format===FORMAT&&Number(x.formatVersion)>=2}
   function apply(x,scope='all'){
     if(isContainer(x)){
