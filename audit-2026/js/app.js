@@ -72,10 +72,10 @@ function renderChecklist() {
             <div class="category-header" onclick="toggleCategory('${category.id}')">
                 <span class="category-title">
                     <!-- Icon startet ohne Drehung (style="transform: rotate(0deg);") -->
-                    <svg xmlns="http://w3.org" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(0deg); transition: transform 0.2s;"><path d="m9 18 6-6-6-6"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(0deg); transition: transform 0.2s;"><path d="m9 18 6-6-6-6"/></svg>
                     ${category.name}
                 </span>
-                <span class="category-badge">${filteredItems.length} / ${category.items.length} Pruefpunkte</span>
+                <span class="category-badge">${filteredItems.length} / ${category.items.length} Prüfpunkte</span>
             </div>
             <!-- Klasse "collapsed" hier direkt standardmäßig hinzugefügt -->
             <div class="category-content collapsed" id="category-${category.id}">
@@ -227,10 +227,15 @@ function updateStatistics() {
         else if (rating === 'na') na++;
     });
     
-    document.getElementById('stat-ok').textContent = ok;
-    document.getElementById('stat-mangel').textContent = mangel;
-    document.getElementById('stat-na').textContent = na;
-    document.getElementById('stat-total').textContent = total;
+    // Die Felder gibt es nur auf der Checkliste-Seite
+    const setStat = (id, value) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value;
+    };
+    setStat('stat-ok', ok);
+    setStat('stat-mangel', mangel);
+    setStat('stat-na', na);
+    setStat('stat-total', total);
 }
 
 // ===== Signature Canvas =====
@@ -250,7 +255,7 @@ function initSignatureCanvases() {
         canvas.addEventListener('mousedown', (e) => startDrawing(e, type));
         canvas.addEventListener('mousemove', (e) => draw(e, type));
         canvas.addEventListener('mouseup', () => stopDrawing(type));
-        canvas.addEventListener('mouseout', () => stopDrawing(type));
+        canvas.addEventListener('mouseleave', () => stopDrawing(type));
         
         // Touch events
         canvas.addEventListener('touchstart', (e) => {
@@ -292,6 +297,8 @@ function draw(e, type) {
 }
 
 function stopDrawing(type) {
+    // Nur speichern, wenn tatsächlich gezeichnet wurde
+    if (!signatureCanvases[type].drawing) return;
     signatureCanvases[type].drawing = false;
     saveSignature(type);
 }
@@ -425,7 +432,8 @@ function resetAudit() {
         const input = document.getElementById(field);
         if (input) input.value = '';
     });
-    document.getElementById('datum').value = auditState.companyInfo.datum;
+    const datumFeld = document.getElementById('datum');
+    if (datumFeld) datumFeld.value = auditState.companyInfo.datum;
     
     // Clear signatures
     ['pruefer', 'verantwortlicher'].forEach(type => {
@@ -435,7 +443,7 @@ function resetAudit() {
     localStorage.removeItem('auditState');
     renderChecklist();
     updateStatistics();
-    showToast('Audit zurueckgesetzt', 'success');
+    showToast('Audit zurückgesetzt', 'success');
 }
 
 // ===== PDF Export =====
@@ -462,7 +470,7 @@ function exportPDF() {
     y += lineHeight;
     doc.text(`Verantwortlicher: ${auditState.companyInfo.verantwortlicher || '-'}`, 20, y);
     y += lineHeight;
-    doc.text(`Pruefer: ${auditState.companyInfo.pruefer || '-'}`, 20, y);
+    doc.text(`Prüfer: ${auditState.companyInfo.pruefer || '-'}`, 20, y);
     y += lineHeight;
     doc.text(`Teilnehmer: ${[auditState.companyInfo.teilnehmer1, auditState.companyInfo.teilnehmer2].filter(Boolean).join(', ') || '-'}`, 20, y);
     y += lineHeight;
@@ -477,7 +485,7 @@ function exportPDF() {
     y += lineHeight;
     doc.setFont(undefined, 'normal');
     doc.setFontSize(10);
-    doc.text(`In Ordnung: ${stats.ok} | Maengel: ${stats.mangel} | N/A: ${stats.na} | Gesamt: ${stats.total}`, 20, y);
+    doc.text(`In Ordnung: ${stats.ok} | Mängel: ${stats.mangel} | N/A: ${stats.na} | Gesamt: ${stats.total}`, 20, y);
     y += 15;
     
     // Checklist

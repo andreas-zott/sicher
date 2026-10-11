@@ -4,7 +4,7 @@ const AUDIT_CATEGORIES = [
         name: "Gesamtmarkt",
         items: [
             { id: "1.1", text: "Entspricht das getragene Schuhwerk aller im Bereich tätigen Personen den Anforderungen der Gefährdungsbeurteilung (fest, im Zehenbereich geschlossen, flach und rutschhemmend)?" },
-            { id: "1.2", text: "Beachten die Mitarbeitenden die Betriebsanweisung für Flurförderfahrzeuge insbes. PSA-Pflicht, Traglasten, Verbot der Personenmitnahme?" },
+            { id: "1.2", text: "Beachten die Beschäftigten die Betriebsanweisung für Flurförderfahrzeuge, insbesondere PSA-Pflicht, Traglasten und Verbot der Personenmitnahme?" },
             { id: "1.3", text: "Wurden die Automatiktüren, Schnelllauftore und Rolltore gemäß den geltenden Regelwerken geprüft und befinden sich diese in einem ordnungsgemäßen Zustand?" },
             { id: "1.4", text: "Ist die Aufzugsanlage geprüft und in einem ordnungsgemäßen Zustand (ohne sichtbare Beschädigungen und mit funktionsfähigen Schutzeinrichtungen)?" },
             { id: "1.5", text: "Ist die Leergutrücknahme in einem ordnungsgemäßen Zustand (Schutzeinrichtungen intakt, Einzugsstellen gesichert, keine Glasscherben)?" },
@@ -67,7 +67,7 @@ const AUDIT_CATEGORIES = [
             { id: "5.1", text: "Sind zur Zeit der Begehung keine sichtbaren Beschädigungen an Schaltern und Steckdosen vorhanden?" },
             { id: "5.2", text: "Sind von der Decke geführte Leitungen und Steckverbindungen durch geeignete mechanische Zugentlastungen (z. B. Stahlseile, Ketten oder spezielle Klemmvorrichtungen) so gesichert, dass keine Zugkräfte auf die elektrischen Kontaktstellen wirken?" },
             { id: "5.3", text: "Sind Steckdosen und Kabel in einwandfreiem Zustand?" },
-            { id: "5.4", text: "Elektrische Steckverbindungen liegen nicht ungeschützt auf dem Boden, insbesondere in Bereichen (z. B. unter Kühl- oder Tiefkühltruhen)?" },
+            { id: "5.4", text: "Liegen elektrische Steckverbindungen nicht ungeschützt auf dem Boden (z. B. unter Kühl- oder Tiefkühltruhen)?" },
             { id: "5.5", text: "Sind provisorische Installationen vermieden?" }
         ]
     },
@@ -121,7 +121,7 @@ const AUDIT_CATEGORIES = [
             { id: "9.6", text: "Werden Abfälle und Bruchmaterial ordnungsgemäß entsorgt?" },
             { id: "9.7", text: "Werden Stapelhöhen eingehalten?" },
             { id: "9.8", text: "Ist die Lagerfläche sauber und rutschfrei?" },
-            { id: "9.9", text: "Beträgt die lichte Breite des Wartungsganges zwischen Rollbahn und Wand durchgehend mindestens 0,60 m (an Engstellen kurzzeitig 0,50 m)?" }
+            { id: "9.9", text: "Beträgt die lichte Breite des Wartungsganges zwischen Rollbahn und Wand durchgehend mindestens 0,60 m (in Gebäuden, die bis zum 30.09.2022 errichtet wurden oder für die bis dahin der Bauantrag gestellt wurde: mindestens 0,50 m)?" }
         ]
     },
     {
@@ -155,7 +155,7 @@ const AUDIT_CATEGORIES = [
             { id: "12.4", text: "Entspricht die Zuleitung der VDE-Norm?" },
             { id: "12.5", text: "Sind alle Maschinen geprüft und dokumentiert?" },
             { id: "12.6", text: "Sind Schutzeinrichtungen vorhanden und funktionsfähig?" },
-            { id: "12.7", text: "Sind Betriebsanweisungen ausgehaengt?" },
+            { id: "12.7", text: "Sind Betriebsanweisungen ausgehängt?" },
             { id: "12.8", text: "Ist der Backhandschuh für die Backstation in einem ordnungsgemäßen Zustand (kein Verschleiß) und besitzt eine lange Stulpe?" },
             { id: "12.9", text: "Sind alle Heißgeräte (z. B. Heißtheken, Fritteusen) in technisch einwandfreiem Zustand?" },
             { id: "12.10", text: "Ist die Brotschneidemaschine aktuell geprüft und inklusive aller Schutzeinrichtungen in einwandfreiem Zustand?" }
@@ -193,11 +193,11 @@ const AUDIT_CATEGORIES = [
         id: "gefahrstoffe",
         name: "Gefahrstoffe",
         items: [
-            { id: "15.1", text: "Werden Gefahrstoffe unter strikter Beachtung der Zusammenlagerungsverbote nach TRGS 510 (Abschnitt 7 und Anlage 2) so gelagert, dass gefährliche Wechselwirkungen zwischen verschiedenen Stoffgruppen ausgeschlossen sind?" },
+            { id: "15.1", text: "Werden Gefahrstoffe unter strikter Beachtung der Zusammenlagerungsverbote nach TRGS 510 (Abschnitt 13) so gelagert, dass gefährliche Wechselwirkungen zwischen verschiedenen Stoffgruppen ausgeschlossen sind?" },
             { id: "15.2", text: "Wird die passende persönliche Schutzausrüstung (z. B. Schutzbrille, Handschuhe) für Tätigkeiten mit Gefahrstoffen zur Verfügung gestellt?" },
-            { id: "15.3", text: "Ist die in den Betriebsanweisungen geforderte Persönliche Schutzausrüstung in unmittelbarer Nähe und einsatzbereit vorhanden?" },
+            { id: "15.3", text: "Ist die in den Betriebsanweisungen geforderte persönliche Schutzausrüstung in unmittelbarer Nähe und einsatzbereit vorhanden?" },
             { id: "15.4", text: "Sind Sicherheitsdatenblätter verfügbar?" },
-            { id: "15.5", text: "Sind Mitarbeiter unterwiesen?" }
+            { id: "15.5", text: "Sind die Beschäftigten unterwiesen?" }
         ]
     },
     {
@@ -207,7 +207,7 @@ const AUDIT_CATEGORIES = [
             { id: "16.1", text: "Liegt eine aktuelle Liste sowie Prüfberichte prüfungsbedürftiger Einrichtungen vor?" },
             { id: "16.2", text: "Sind Maßnahmen getroffen, die den Anreiz zu Raubüberfällen vermindern (z. B. Türspion, feststehender Knauf)?" },
             { id: "16.3", text: "Ist die Tür während des Umgangs mit Zahlungsmitteln verschlossen?" },
-            { id: "16.4", text: "Werden neue Mitarbeiter vor Aufnahme der Tätigkeit zum Thema Arbeitssicherheit und Brandschutz unterwiesen?" },
+            { id: "16.4", text: "Werden neue Beschäftigte vor Aufnahme der Tätigkeit zum Thema Arbeitssicherheit und Brandschutz unterwiesen?" },
             { id: "16.5", text: "Ist der Fußboden im Büro des Marktleiters frei von Schäden, Verschmutzungen und Stolperstellen?" }
         ]
     },
@@ -227,7 +227,7 @@ const AUDIT_CATEGORIES = [
         name: "Notfallmanagement",
         items: [
             { id: "18.1", text: "Ist ein Notfallplan vorhanden?" },
-            { id: "18.2", text: "Sind Verhalten bei Brand, Unfall und Evakuierung bekannt?" },
+            { id: "18.2", text: "Ist den Beschäftigten das Verhalten bei Brand, Unfall und Evakuierung bekannt?" },
             { id: "18.3", text: "Sind Zuständigkeiten im Notfall geregelt?" },
             { id: "18.4", text: "Ist die Alarmierung geregelt?" }
         ]
@@ -238,7 +238,7 @@ const AUDIT_CATEGORIES = [
         items: [
             { id: "19.1", text: "Wird die Dokumentation von Erste-Hilfe-Leistungen ordnungsgemäß geführt und aufbewahrt?" },
             { id: "19.2", text: "Ist ein Sicherheitsbeauftragter ausgebildet und bestellt?" },
-            { id: "19.3", text: "Ist während der gesamten Ladenöffnungszeit mindestens ein Mitarbeiter mit der Qualifikation als Brandschutzhelfer anwesend?" },
+            { id: "19.3", text: "Ist während der gesamten Ladenöffnungszeit mindestens eine beschäftigte Person mit der Qualifikation als Brandschutzhelfer anwesend?" },
             { id: "19.4", text: "Erfolgte die letzte Unterweisung zum Umgang mit Zahlungsmitteln innerhalb der letzten 6 Monate?" },
             { id: "19.5", text: "Sind Unterweisungen dokumentiert?" },
             { id: "19.6", text: "Wurden bei der Unterweisung aktuelle Änderungen in den betrieblichen Abläufen oder neue Sicherheitstechniken berücksichtigt?" },
@@ -253,18 +253,18 @@ const AUDIT_CATEGORIES = [
             { id: "20.2", text: "Ist die Pausenregelung umgesetzt?" },
             { id: "20.3", text: "Werden Überstunden gering gehalten?" },
             { id: "20.4", text: "Werden regelmäßige Teambesprechungen durchgeführt?" },
-            { id: "20.5", text: "Werden neue Mitarbeiter eingearbeitet?" },
+            { id: "20.5", text: "Werden neue Beschäftigte eingearbeitet?" },
             { id: "20.6", text: "Ist eine Unterweisung zum Thema Brand- und Arbeitsschutz erfolgt?" },
             { id: "20.7", text: "Hängt ein sogenanntes schwarzes Brett im Sozialraum oder Kassenbüro?" },
             { id: "20.8", text: "Werden Entscheidungen transparent erläutert?" },
             { id: "20.9", text: "Gibt es positive Rückmeldungen bei guter Leistung?" },
             { id: "20.10", text: "Wird konstruktive Kritik geübt?" },
             { id: "20.11", text: "Gibt es einen Aushang zur Information über die Suchtprävention?" },
-            { id: "20.12", text: "Ist ein betriebliches Wiedereingliederungsmanagement implementiert?" },
+            { id: "20.12", text: "Ist ein betriebliches Eingliederungsmanagement (BEM) implementiert?" },
             { id: "20.13", text: "Wird Alleinarbeit vermieden?" },
             { id: "20.14", text: "Ist die Betreuung nach einem Überfall organisiert?" },
             { id: "20.15", text: "Werden Schulungen für den Umgang mit gewalttätigen Situationen ermöglicht?" },
-            { id: "20.16", text: "Beziehen Sie Mitarbeiteranregungen in die Entscheidungsprozesse mit ein?" },
+            { id: "20.16", text: "Werden Anregungen der Beschäftigten in die Entscheidungsprozesse einbezogen?" },
             { id: "20.17", text: "Wurden Weiterbildungsmöglichkeiten geschaffen bzw. angeboten?" }
         ]
     }

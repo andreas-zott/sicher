@@ -105,16 +105,16 @@ function renderMeasures() {
                 <span class="measure-number">${index + 1}.</span>
                 ${questionText
                     ? `<span class="measure-question-text">${questionText}</span>`
-                    : `<span class="measure-question-text measure-question-manual">Manuell erfasste Massnahme</span>`}
+                    : `<span class="measure-question-text measure-question-manual">Manuell erfasste Maßnahme</span>`}
             </div>
             <div class="measure-answer">
-                <span class="measure-answer-label">Massnahme</span>
+                <span class="measure-answer-label">Maßnahme</span>
                 <p class="measure-answer-text">${measure.description}</p>
                 ${measure.comment ? `<p class="measure-comment">Kommentar: ${measure.comment}</p>` : ''}
             </div>
             <div class="measure-tile">
                 <div class="tile-field">
-                    <span class="tile-label">Prioritaet</span>
+                    <span class="tile-label">Priorität</span>
                     <span class="priority-badge ${measure.priority}">${capitalize(measure.priority)}</span>
                 </div>
                 <div class="tile-field">
@@ -122,7 +122,7 @@ function renderMeasures() {
                     <span class="tile-value">${measure.responsible || '-'}</span>
                 </div>
                 <div class="tile-field">
-                    <span class="tile-label">Faellig bis</span>
+                    <span class="tile-label">Fällig bis</span>
                     <span class="tile-value">${measure.dueDate ? formatDate(measure.dueDate) : '-'}</span>
                 </div>
                 <div class="tile-field">
@@ -164,7 +164,7 @@ function updateMeasureStats() {
 // ===== Modal Functions =====
 function openAddMeasureModal() {
     editingMeasureId = null;
-    document.getElementById('modal-title').textContent = 'Neue Massnahme';
+    document.getElementById('modal-title').textContent = 'Neue Maßnahme';
     document.getElementById('measure-form').reset();
     document.getElementById('measure-modal').style.display = 'flex';
 }
@@ -174,7 +174,7 @@ function editMeasure(id) {
     if (!measure) return;
     
     editingMeasureId = id;
-    document.getElementById('modal-title').textContent = 'Massnahme bearbeiten';
+    document.getElementById('modal-title').textContent = 'Maßnahme bearbeiten';
     document.getElementById('measure-id').value = id;
     document.getElementById('measure-description').value = measure.description;
     document.getElementById('measure-priority').value = measure.priority;
@@ -221,17 +221,17 @@ function saveMeasure() {
     renderMeasures();
     updateMeasureStats();
     closeMeasureModal();
-    showToast('Massnahme gespeichert', 'success');
+    showToast('Maßnahme gespeichert', 'success');
 }
 
 function deleteMeasure(id) {
-    if (!confirm('Moechten Sie diese Massnahme wirklich loeschen?')) return;
+    if (!confirm('Möchten Sie diese Maßnahme wirklich löschen?')) return;
     
     measuresState.measures = measuresState.measures.filter(m => m.id !== id);
     saveMeasuresToStorage();
     renderMeasures();
     updateMeasureStats();
-    showToast('Massnahme geloescht', 'success');
+    showToast('Maßnahme gelöscht', 'success');
 }
 
 // ===== PDF Export =====
@@ -261,7 +261,7 @@ async function exportMeasuresPDF() {
             doc.setFont(undefined, "bold");
             doc.setTextColor(179, 0, 0);
 
-            doc.text("Massnahmenplan", pageWidth / 2, y, { align: "center" });
+            doc.text("Maßnahmenplan", pageWidth / 2, y, { align: "center" });
 
             y += 8;
 
@@ -289,7 +289,7 @@ async function exportMeasuresPDF() {
             const teilnehmer = [companyInfo.teilnehmer1, companyInfo.teilnehmer2].filter(Boolean).join(', ');
 
             const infoLine1 = `Firma: ${companyInfo.firma || '-'}    Standort: ${companyInfo.standort || '-'}    Datum: ${companyInfo.datum ? formatDate(companyInfo.datum) : '-'}`;
-            const infoLine2 = `Verantwortlicher: ${companyInfo.verantwortlicher || '-'}    Pruefer: ${companyInfo.pruefer || '-'}    Teilnehmer: ${teilnehmer || '-'}`;
+            const infoLine2 = `Verantwortlicher: ${companyInfo.verantwortlicher || '-'}    Prüfer: ${companyInfo.pruefer || '-'}    Teilnehmer: ${teilnehmer || '-'}`;
 
             doc.setFontSize(9);
             doc.setTextColor(60);
@@ -310,7 +310,7 @@ async function exportMeasuresPDF() {
 
             doc.setFontSize(11);
             doc.setTextColor(0);
-            doc.text("Keine Massnahmen vorhanden.", margin, y);
+            doc.text("Keine Maßnahmen vorhanden.", margin, y);
 
         } else {
 
@@ -324,7 +324,7 @@ async function exportMeasuresPDF() {
                 const item = measure.itemId && typeof findItemById === 'function' ? findItemById(measure.itemId) : null;
                 const questionText = item
                     ? `${index + 1}. ${measure.itemId ? `[${measure.itemId}] ` : ''}${item.text}`
-                    : `${index + 1}. Manuell erfasste Massnahme`;
+                    : `${index + 1}. Manuell erfasste Maßnahme`;
 
                 doc.setFont(undefined, "bold");
                 doc.setFontSize(10);
@@ -369,7 +369,7 @@ async function exportMeasuresPDF() {
                 doc.line(margin + padding, cy, margin + contentWidth - padding, cy);
                 cy += 4.5;
 
-                // Massnahme-Label + Text
+                // Maßnahme-Label + Text
                 doc.setFont(undefined, "bold");
                 doc.setFontSize(7.5);
                 doc.setTextColor(146, 64, 14);
@@ -390,7 +390,7 @@ async function exportMeasuresPDF() {
                 }
                 cy += 6;
 
-                // Prioritaet | Verantwortlich | Faellig bis | Status
+                // Priorität | Verantwortlich | Fällig bis | Status
                 const labels = ["PRIORITAET", "VERANTWORTLICH", "FAELLIG BIS", "STATUS"];
                 doc.setFont(undefined, "bold");
                 doc.setFontSize(7);

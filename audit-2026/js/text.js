@@ -2,8 +2,6 @@
 // Wird als globale Variable bereitgestellt, damit klassische Scripts
 // (app.js) ohne Modul-Import darauf zugreifen können.
 
-// ===== Vordefinierte Maßnahmen-Texte je Prüfpunkt =====
-
 const MEASURES_TEXT = {
 
     Gesamtmarkt: {
@@ -163,16 +161,16 @@ const MEASURES_TEXT = {
 
         "9.8": "Lagerflächen sind sauber und rutschfrei zu halten.",
 
-        "9.9": "Einzug- und Quetschstellen der Rollbahn zur Wand hin technisch absichern (z. B. durch festen Seitenschutz/Verkleidung), den Betrieb der Bahn bei Wartung zwingend stoppen oder, falls betrieblich machbar, den Bereich zeitweise sperren."
+        "9.9": "Der Wartungsgang zwischen Rollbahn und Wand ist gemäß ASR A1.8 mit einer lichten Breite von mindestens 0,60 m freizuhalten; in Gebäuden, die bis zum 30.09.2022 errichtet wurden oder für die bis dahin der Bauantrag gestellt wurde, sind 0,50 m zulässig, bis der Bereich wesentlich erweitert oder umgebaut wird. Einzug- und Quetschstellen der Rollbahn zur Wand hin sind technisch abzusichern (z. B. durch festen Seitenschutz oder Verkleidung); bei Wartung ist der Betrieb der Bahn zwingend zu stoppen."
     },
 
 
 Praktikanten: {
-        "10.1": "Führen Sie eine Unterweisung für Praktikanten und Schüleraushilfen vor Beginn der Beschäftigung gemäß § 12 ArbSchG durch und dokumentieren Sie diese schriftlich.",
+        "10.1": "Praktikanten und Schüleraushilfen sind vor Beginn der Beschäftigung gemäß § 12 ArbSchG zu unterweisen; die Unterweisung ist schriftlich zu dokumentieren.",
 
-        "10.2": "Dokumentieren Sie alle durchgeführten Unterweisungen rechtskonform und archivieren Sie die Nachweise gemä § 6 ArbSchG",
+        "10.2": "Alle durchgeführten Unterweisungen sind rechtskonform zu dokumentieren; die Nachweise sind gemäß § 6 ArbSchG aufzubewahren.",
 
-        "10.3": "Vergewissern Sie sich, dass unterwiesene Personen die vermittelten Inhalte verstanden haben, etwa durch Rückfragen oder Lernerfolgskontrollen (§ 12 ArbSchG)."
+        "10.3": "Es ist sicherzustellen, dass unterwiesene Personen die vermittelten Inhalte verstanden haben, etwa durch Rückfragen oder Lernerfolgskontrollen (§ 12 ArbSchG)."
     },
 
     Arbeitsmedizin: {
@@ -209,7 +207,7 @@ Praktikanten: {
 
         "12.9": "Heißgeräte sind regelmäßig technisch zu warten.",
 
-        "12.10": "Gerät sofort sperren (Netzstecker ziehen), mit einem Warnhinweis 'Defekt – Nicht benutzen' kennzeichnen und eine DGUV V3 Prüfung bzw. Instandsetzung durch eine Elektrofachkraft veranlassen."
+        "12.10": "Das Gerät ist sofort zu sperren (Netzstecker ziehen), mit dem Warnhinweis 'Defekt – Nicht benutzen' zu kennzeichnen und einer DGUV-V3-Prüfung bzw. Instandsetzung durch eine Elektrofachkraft zuzuführen."
     },
 
      Serviceabteilung: {
@@ -271,7 +269,7 @@ Praktikanten: {
 
         "16.4": "Neue Beschäftigte sind vor Tätigkeitsaufnahme zu Arbeitssicherheit, Brandschutz und betrieblichen Gefährdungen zu unterweisen.",
 
-        "16.5": "Stellen Sie sicher, dass sich der Fußboden im Büro des Marktleiters in einem ordnungsgemäßen Zustand befindet, frei von Beschädigungen, Stolperstellen und Verschmutzungen ist, um die Sicherheit gemäß ArbStättV und ASR A1.5 zu gewährleisten."
+        "16.5": "Der Fußboden im Büro des Marktleiters ist in ordnungsgemäßem Zustand sowie frei von Beschädigungen, Stolperstellen und Verschmutzungen zu halten (ArbStättV, ASR A1.5)."
     },
 
    "Barrierefreies WC": {
@@ -337,7 +335,7 @@ Praktikanten: {
 
         "20.11": "Informationen und Ansprechpartner zur Suchtprävention sind bereitzustellen.",
 
-        "20.12": "Ein betriebliches Eingliederungsmanagement gemäß §167 SGB IX ist umzusetzen.",
+        "20.12": "Ein betriebliches Eingliederungsmanagement (BEM) gemäß § 167 Abs. 2 SGB IX ist umzusetzen.",
 
         "20.13": "Alleinarbeit ist im Rahmen der Gefährdungsbeurteilung möglichst zu vermeiden.",
 
@@ -347,7 +345,7 @@ Praktikanten: {
 
         "20.16": "Mitarbeiteranregungen sind aktiv in Entscheidungs- und Verbesserungsprozesse einzubeziehen.",
 
-        "20.17": "Schaffen Sie innerbetriebliche oder externe Weiterbildungsangebote und fördern Sie Qualifizierungen gemäß § 82 BetrVG sowie § 3 ArbSchG."
+        "20.17": "Innerbetriebliche oder externe Weiterbildungsangebote sind zu schaffen und Qualifizierungen zu fördern; Fragen der Berufsbildung sind gemäß §§ 96 bis 98 BetrVG mit dem Betriebsrat zu beraten."
     },
 
 

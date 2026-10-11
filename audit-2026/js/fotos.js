@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadPhotos();
     renderPhotos();
     setupUploadArea();
-    populatePruefpunktSelect();
+    populatePrüfpunktSelect();
 });
 
 // ===== Load Photos =====
@@ -134,7 +134,7 @@ function renderPhotos() {
             <img src="${photo.dataUrl}" alt="${photo.title || photo.filename}" onclick="openPhotoModal('${photo.id}')" style="cursor: pointer;">
             <div class="photo-info">
                 <h4>${photo.title || photo.filename}</h4>
-                <p>${photo.itemId ? `Pruefpunkt: ${photo.itemId}` : 'Kein Pruefpunkt zugeordnet'}</p>
+                <p>${photo.itemId ? `Prüfpunkt: ${photo.itemId}` : 'Kein Prüfpunkt zugeordnet'}</p>
                 <p>${formatDateTime(photo.uploadedAt)}</p>
             </div>
             <div class="photo-actions">
@@ -150,12 +150,12 @@ function renderPhotos() {
     `).join('');
 }
 
-// ===== Populate Pruefpunkt Select =====
-function populatePruefpunktSelect() {
+// ===== Populate Prüfpunkt Select =====
+function populatePrüfpunktSelect() {
     const select = document.getElementById('photo-item');
     if (!select) return;
     
-    select.innerHTML = '<option value="">-- Kein Pruefpunkt --</option>';
+    select.innerHTML = '<option value="">-- Kein Prüfpunkt --</option>';
     
     AUDIT_CATEGORIES.forEach(category => {
         const optgroup = document.createElement('optgroup');
@@ -207,21 +207,21 @@ function savePhotoDetails() {
 
 // ===== Delete Functions =====
 function deletePhoto(id) {
-    if (!confirm('Moechten Sie dieses Foto wirklich loeschen?')) return;
+    if (!confirm('Möchten Sie dieses Foto wirklich löschen?')) return;
     
     photosState.photos = photosState.photos.filter(p => p.id !== id);
     savePhotosToStorage();
     renderPhotos();
-    showToast('Foto geloescht', 'success');
+    showToast('Foto gelöscht', 'success');
 }
 
 function clearAllPhotos() {
-    if (!confirm('Moechten Sie wirklich alle Fotos loeschen?')) return;
+    if (!confirm('Möchten Sie wirklich alle Fotos löschen?')) return;
     
     photosState.photos = [];
     savePhotosToStorage();
     renderPhotos();
-    showToast('Alle Fotos geloescht', 'success');
+    showToast('Alle Fotos gelöscht', 'success');
 }
 
 // ===== Helper Functions =====
