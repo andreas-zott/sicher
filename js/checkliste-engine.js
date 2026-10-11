@@ -318,7 +318,7 @@ const ChecklisteEngine = (() => {
         const name = feldWert('name');
         const sifa = feldWert('sifa');
         if (!markt || !name || !sifa) {
-            alert('Bitte Marktnummer, Name und SiFa ausfüllen, bevor es weitergeht.');
+            alert('Bitte Marktnummer, Teilnehmer/in und SiFa ausfüllen, bevor es weitergeht.');
             return;
         }
         const url = `foto.html?marktnummer=${encodeURIComponent(markt)}&name=${encodeURIComponent(name)}&sifa=${encodeURIComponent(sifa)}`;
@@ -370,7 +370,7 @@ const ChecklisteEngine = (() => {
 
         const neuesFenster = window.open('massnahmen-sifa.html', 'massnahmen');
         if (!neuesFenster) {
-            alert('Die Maßnahmen-Auswertung konnte nicht geöffnet werden — vermutlich blockiert dein Browser das Pop-up. Bitte Pop-ups für diese Seite erlauben und erneut versuchen, oder „massnahmen-sifa.html" direkt aus der Übersicht öffnen.');
+            alert('Die Maßnahmen-Auswertung konnte nicht geöffnet werden — vermutlich blockiert dein Browser das Pop-up. Bitte Pop-ups für diese Seite erlauben (iPad: Einstellungen → Apps → Safari → Pop-ups blockieren aus) und erneut versuchen.');
             return;
         }
 
