@@ -14,7 +14,7 @@
 // Frueher wurden ALLE Caches der Domain geloescht - also auch die
 // Offline-Daten von ASiC Handel, GBO und Audit-2026.
 // ─────────────────────────────────────────────────────────────
-const APP_VERSION = '1.1.0';
+const APP_VERSION = '1.3.0';
 const CACHE_PREFIX = 'sicherheit-cache-';
 const CACHE_NAME = `${CACHE_PREFIX}v${APP_VERSION}`;
 const ALTE_EIGENE_CACHES = ['checkliste-cache-v1'];
@@ -56,7 +56,10 @@ const FILES_TO_CACHE = [
   '/sicher/lib/webfonts/fa-solid-900.woff2',
   '/sicher/lib/webfonts/fa-regular-400.woff2',
   '/sicher/lib/webfonts/fa-brands-400.woff2',
-  '/sicher/lib/jspdf.umd.min.js'
+  '/sicher/lib/jspdf.umd.min.js',
+  '/sicher/lib/fonts/space-grotesk-latin-500-normal.woff2',
+  '/sicher/lib/fonts/space-grotesk-latin-600-normal.woff2',
+  '/sicher/lib/fonts/space-grotesk-latin-700-normal.woff2'
 ];
 
 // Installations-Ereignis: Dateien einzeln cachen (eine fehlende Datei
