@@ -46,7 +46,7 @@ body.dark .card,
 body.dark .content,
 body.dark .tiles-container { background: #1e293b; border-color: rgba(255,255,255,0.08); }
 body.dark .hero::after { background: #0f172a; }
-body.dark h2, body.dark h3 { color: #e2e8f0; }
+body.dark h3 { color: #e2e8f0; }
 body.dark p, body.dark li { color: #cbd5e1; }
 body.dark .tile { background: #1e293b; }
 body.dark .app-footer { border-top-color: rgba(255,255,255,0.1); color: #94a3b8; }
@@ -338,4 +338,76 @@ body.dark .app-footer-links a:hover { background: #f87171; color: #1e293b; }
 @media (max-width: 640px) {
     .card, .content { padding: 22px; }
     .container { padding: 0 14px 30px; }
+}
+
+/* ===== Dunkelmodus: Grundfarben umstellen =====
+   Seiten nutzen var(--bg)/var(--card)/var(--line) auch in Inline-Stilen
+   (z. B. das Datumsfeld der Checkliste) - ohne diese Umstellung stand dort
+   helle Schrift auf hellem Grund. */
+body.dark {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --line: rgba(255,255,255,0.12);
+    --ink: #e2e8f0;
+    --ink-soft: #94a3b8;
+}
+body.dark .btn-secondary,
+body.dark .btn-danger-ghost { background: #263449; color: #e2e8f0; border-color: rgba(255,255,255,0.15); }
+body.dark .btn-danger-ghost { color: #f87171; }
+
+/* ===== Button-Leiste unter Formularen ===== */
+.button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0 10px;
+}
+.button-row .btn { flex: 1 1 200px; width: auto; }
+
+/* ===== Unterschriftsfeld =====
+   Bleibt immer hell, damit die schwarze Unterschrift auch im
+   Dunkelmodus sichtbar ist und im PDF/Ausdruck stimmt. */
+.sign-canvas {
+    display: block;
+    width: 100%;
+    max-width: 520px;
+    height: 180px;
+    background: #fff;
+    border: 2px dashed #94a3b8;
+    border-radius: 12px;
+    touch-action: none;
+    cursor: crosshair;
+}
+
+/* ===== Maßnahmentabelle ===== */
+.gbu-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    margin-top: 8px;
+}
+.gbu-table th {
+    background: var(--navy);
+    color: #fff;
+    text-align: left;
+    padding: 9px 12px;
+    font-size: 0.82rem;
+}
+.gbu-table td {
+    border-bottom: 1px solid var(--line);
+    padding: 10px 12px;
+    vertical-align: top;
+}
+.gbu-table td:first-child { width: 40px; font-weight: 700; color: var(--red); }
+.gbu-table td:nth-child(2) { width: 42%; font-style: italic; color: var(--ink-soft); }
+.gbu-table .th-hinweis { font-weight: 400; opacity: 0.8; }
+.massnahme-bearbeitbar { border-radius: 6px; outline: none; }
+.massnahme-bearbeitbar:focus { background: rgba(0,59,143,0.06); box-shadow: inset 0 0 0 1.5px var(--navy-bright); }
+@media (max-width: 560px) {
+    .gbu-table thead { display: none; }
+    .gbu-table tr { display: block; border-bottom: 1px solid var(--line); padding: 8px 0; }
+    .gbu-table td { display: block; width: auto !important; border: none; padding: 4px 4px; }
+}
+@media print {
+    .sign-canvas { border: 1px solid #94a3b8; }
 }
