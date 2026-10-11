@@ -4022,7 +4022,7 @@ canvas.addEventListener('touchend', stopDrawing);
 // Service Worker (einheitlich service-worker.js fuer das ganze Portal)
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sicher/service-worker.js')
+    navigator.serviceWorker.register('/sicher/service-worker.js', { updateViaCache: 'none' })
       .catch(err => console.warn('Service Worker konnte nicht registriert werden:', err));
   });
 }
