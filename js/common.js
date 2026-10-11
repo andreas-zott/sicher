@@ -6,14 +6,25 @@
 // Service-Workern (sw.js / service-worker.js), die sich gegenseitig
 // ueberschrieben haben. Jetzt: eine Quelle, ein Service Worker.
 
-const APP_VERSION = '1.1.0';
+const APP_VERSION = '1.3.0';
+
+// Dunklen Modus sofort setzen (common.js steht am Ende von <body>), damit die
+// Seite nicht kurz hell aufblitzt. Standard: dunkel ("Leitstand").
+(function sofortTheme() {
+    let theme = null;
+    try { theme = localStorage.getItem('theme'); } catch (e) {}
+    if (theme !== 'light' && document.body) document.body.classList.add('dark');
+})();
 
 function initThemeToggle() {
     const toggle = document.getElementById('themeToggle');
     if (!toggle) return;
     const body = document.body;
 
-    if (localStorage.getItem('theme') === 'dark') {
+    // Standard ist der dunkle "Leitstand"-Modus; hell nur, wenn ausdruecklich gewaehlt.
+    let theme = null;
+    try { theme = localStorage.getItem('theme'); } catch (e) {}
+    if (theme !== 'light') {
         body.classList.add('dark');
         toggle.textContent = '☀️';
     }
@@ -22,7 +33,7 @@ function initThemeToggle() {
         body.classList.toggle('dark');
         const isDark = body.classList.contains('dark');
         toggle.textContent = isDark ? '☀️' : '🌙';
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch (e) {}
     });
 }
 
