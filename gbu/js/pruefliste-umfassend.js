@@ -74,8 +74,8 @@ const GBU_ABSCHNITTE_UMFASSEND = [
    },
    {
     "nr": "2.09",
-    "frage": "Werden Fortbildungsmaßnahmen für Brandschutzbeauftragte alle 2 Jahre besucht?",
-    "massnahme": "Zweijährliche Fortbildung der brandschutzbeauftragten Person verbindlich einplanen."
+    "frage": "Besucht die brandschutzbeauftragte Person mindestens alle drei Jahre eine Fortbildung (DGUV Information 205-003)?",
+    "massnahme": "Fortbildung der brandschutzbeauftragten Person mindestens alle drei Jahre (mind. 16 Unterrichtseinheiten) verbindlich einplanen (DGUV Information 205-003)."
    },
    {
     "nr": "2.10",
@@ -134,7 +134,7 @@ const GBU_ABSCHNITTE_UMFASSEND = [
    },
    {
     "nr": "3.05",
-    "frage": "Werden arbeitsmedizinische Vorsorgeuntersuchungen angeboten?",
+    "frage": "Wird arbeitsmedizinische Vorsorge angeboten?",
     "massnahme": "Arbeitsmedizinische Vorsorgeuntersuchungen gemäß ArbMedVV aktiv anbieten."
    }
   ]
