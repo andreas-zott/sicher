@@ -12,21 +12,23 @@
 <link rel="stylesheet" href="css/styles.css">
 <style>
     .hint {
-        color: #b91c1c;
-        font-weight: 600;
-        background-color: #fff3cd;
-        border-left: 4px solid #ffcc02;
-        padding: 10px 14px;
-        margin: 8px 0 4px;
-        border-radius: 6px;
-        display: none;
-        font-size: 0.9rem;
+        display: none; margin: 10px 0 4px; padding: 10px 14px;
+        border-left: 4px solid var(--red); border-radius: 8px;
+        background: rgba(204,7,30,0.08); font-size: 0.9rem;
     }
     .hint.show { display: block; }
-    .emoji { margin-right: 6px; }
-    .highlight { font-weight: 700; }
-    .beispielfrage { margin-bottom: 20px; }
-    .beispielfrage label { display: inline-block; margin: 0 14px 0 0; font-weight: 400; }
+    .hint strong { color: var(--red); }
+    .beispielfrage {
+        border: 1px solid var(--line); border-radius: 10px;
+        padding: 12px 14px; margin-bottom: 12px;
+    }
+    .beispielfrage .bf-text { font-weight: 600; margin-bottom: 8px; }
+    .beispielfrage label { display: inline-flex; align-items: center; gap: 6px; margin: 0 16px 0 0; font-weight: 500; }
+    .farbe { display: inline-block; padding: 1px 10px; border-radius: 999px; color: #fff; font-weight: 600; font-size: 0.85rem; }
+    .farbe-ja { background: var(--ok); } .farbe-nein { background: var(--red); } .farbe-nv { background: #6b7280; }
+    .hinweis-box { background: var(--raised); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; font-size: 0.9rem; margin: 12px 0; }
+    .inhalt-liste { columns: 2; column-gap: 28px; }
+    @media (max-width: 640px) { .inhalt-liste { columns: 1; } }
 </style>
 </head>
 <body>
@@ -36,127 +38,122 @@
 <section class="hero">
     <div class="hero-icon"><i class="fas fa-shield-alt"></i></div>
     <h1>Anleitung</h1>
-    <p>Nutzung der Arbeitssicherheits-Checkliste</p>
+    <p>So arbeitest du mit dem Portal und der Checkliste</p>
 </section>
 
 <div class="container container-narrow">
 
     <a href="welcome.html" class="back-button"><i class="fas fa-arrow-left"></i> Zurück zur Übersicht</a>
 
-    <div class="content" style="margin-bottom:20px;">
-        <h2 style="margin-top:0;">1. Übersicht</h2>
-        <p>
-            Die Webseite bietet eine strukturierte Checkliste zur Überprüfung der
-            Arbeitssicherheit in verschiedenen Bereichen eines Marktes. Jede Frage
-            muss beantwortet werden, um die Einhaltung von Sicherheitsstandards zu
-            gewährleisten.
-        </p>
+    <div class="content">
 
-        <h2>2. Ausfüllen — Übersicht und Farbkennzeichnung</h2>
-        <ol>
-            <li>Marktnummer und Name eintragen.</li>
-            <li>SiFa (Fachkraft für Arbeitssicherheit) eintragen.</li>
-            <li>Bereich auswählen, z. B. „Gesamtmarkt".</li>
-            <li>
-                Jede Frage sorgfältig beantworten:
-                <ul>
-                    <li><span class="highlight">Ja</span> — Alles in Ordnung. Diese Antwort wird <span style="color:var(--ok);">grün hinterlegt</span>.</li>
-                    <li><span class="highlight">Nein</span> — Problem vorhanden → Maßnahmen erforderlich. Diese Antwort wird <span style="color:var(--red);">rot hinterlegt</span>, automatisch erscheinen Hinweise zur Behebung.</li>
-                    <li><span class="highlight">Nicht vorhanden</span> — Frage bzw. Einrichtung ist nicht relevant. Diese Antwort wird <span style="color:#6b7280;">grau hinterlegt</span>.</li>
-                </ul>
-            </li>
+        <h2 style="margin-top:0;">Inhalt</h2>
+        <ol class="inhalt-liste">
+            <li><a href="#start">Erste Schritte</a></li>
+            <li><a href="#ausfuellen">Checkliste ausfüllen</a></li>
+            <li><a href="#beispiel">Beispiel zum Ausprobieren</a></li>
+            <li><a href="#abschluss">Abschließen und versenden</a></li>
+            <li><a href="#versionen">Desktop, Mobil, ältere Fassung</a></li>
+            <li><a href="#werkzeuge">Weitere Werkzeuge</a></li>
+            <li><a href="#ergebnis">Was mit dem Ergebnis passiert</a></li>
         </ol>
 
-        <h2>3. Beispiel — Bereich auswählen und Fragen beantworten</h2>
-        <p>Für jeden Bereich wird <strong>Ja</strong>, <strong>Nein</strong> oder <strong>Nicht vorhanden</strong> gewählt. Bei einer „Nein"-Antwort erscheinen automatisch Hinweise:</p>
+        <h2 id="start">1. Erste Schritte</h2>
+        <ol>
+            <li>Mit Benutzername und Passwort anmelden.</li>
+            <li>In der Übersicht wählen: <strong>ASiC Handel</strong> für die digitale Marktbegehung mit Team-Archiv oder <strong>Checklisten</strong> für Checkliste, Audit, Theke und Aushänge.</li>
+            <li>Tipp fürs iPad: In Safari auf <em>Teilen → Zum Home-Bildschirm</em> tippen. Das Portal startet dann wie eine App und funktioniert nach dem ersten Aufruf auch ohne Internet.</li>
+            <li>Oben rechts lässt sich zwischen dunkler und heller Darstellung wechseln. Ausdrucke und PDFs sind immer hell.</li>
+        </ol>
 
+        <h2 id="ausfuellen">2. Checkliste ausfüllen</h2>
+        <ol>
+            <li><strong>Kopfdaten</strong> eintragen: Marktnummer, Teilnehmer/in, SiFa und Marktleitung. Das Datum wird automatisch gesetzt.</li>
+            <li>Die Prüfpunkte sind nach Bereichen gegliedert (Gesamtmarkt, Brandschutz, Kassenzone, Lager, Kühlhaus … – 17 Bereiche). Jede Frage beantworten:
+                <ul>
+                    <li><span class="farbe farbe-ja">Ja</span> – in Ordnung.</li>
+                    <li><span class="farbe farbe-nein">Nein</span> – Mangel. Die passende Maßnahme erscheint automatisch in der Tabelle <em>„Maßnahmen (aus ‚Nein‘-Antworten)“</em>.</li>
+                    <li><span class="farbe farbe-nv">N/V</span> – nicht vorhanden bzw. trifft nicht zu.</li>
+                </ul>
+                Alle Fragen sind so gestellt, dass <strong>„Ja“ immer „in Ordnung“</strong> bedeutet.
+            </li>
+            <li>Die <strong>Maßnahmentexte</strong> lassen sich in der Tabelle direkt antippen und an die Situation im Markt anpassen. Die Änderung wird gespeichert und erscheint im PDF.</li>
+            <li>Im <strong>Bemerkungsfeld</strong> fügen die Knöpfe <em>Notiz</em>, <em>Hinweis</em>, <em>Fazit positiv</em> und <em>Fazit negativ</em> fertige Textbausteine an der Cursor-Stelle ein.</li>
+            <li>Zum Schluss im Feld <strong>Unterschrift</strong> mit Finger oder Stift unterschreiben.</li>
+        </ol>
+        <div class="hinweis-box" style="margin-bottom:0;">Alles wird während der Eingabe automatisch auf dem Gerät gespeichert. Wird die Seite geschlossen, geht es beim nächsten Öffnen an derselben Stelle weiter – die Übersicht zeigt dann „Angefangene Checkliste“ an.</div>
+
+        <h2 id="beispiel">3. Beispiel zum Ausprobieren</h2>
+        <p>Drei echte Prüfpunkte aus der Checkliste. Bei „Nein“ siehst du, welcher Text in die Maßnahmentabelle übernommen würde. Hier wird nichts gespeichert.</p>
         <div class="beispielfrage">
-            <span class="emoji">🛠️</span><strong>Frage:</strong> Feuerlöscher geprüft?<br>
-            <label><input type="radio" name="feuerloescher" value="ja"> Ja</label>
-            <label><input type="radio" name="feuerloescher" value="nein"> Nein</label>
-            <label><input type="radio" name="feuerloescher" value="nv"> N/V</label>
-            <div class="hint">❗ Bitte Feuerlöscher sofort überprüfen und fehlende Wartungen nachholen.</div>
+            <div class="bf-text">Sind die Feuerlöscheinrichtungen frei zugänglich und nicht durch Ware, Displays oder sonstige Gegenstände blockiert?</div>
+            <label><input type="radio" name="bsp1" value="ja"> Ja</label>
+            <label><input type="radio" name="bsp1" value="nein"> Nein</label>
+            <label><input type="radio" name="bsp1" value="nv"> N/V</label>
+            <div class="hint"><strong>Maßnahme:</strong> Halten Sie alle Feuerlöscheinrichtungen gemäß ASR A2.2 und § 10 ArbSchG stets frei zugänglich, um eine unverzügliche Nutzung im Brandfall zu gewährleisten.</div>
+        </div>
+        <div class="beispielfrage">
+            <div class="bf-text">Ist die Notausgangsbeleuchtung ohne Defekte?</div>
+            <label><input type="radio" name="bsp2" value="ja"> Ja</label>
+            <label><input type="radio" name="bsp2" value="nein"> Nein</label>
+            <label><input type="radio" name="bsp2" value="nv"> N/V</label>
+            <div class="hint"><strong>Maßnahme:</strong> Stellen Sie die Funktion der Sicherheitsbeleuchtung umgehend wieder her und lassen Sie sie regelmäßig prüfen, damit bei Stromausfall eine sichere Flucht möglich ist (ASR A2.3, ASR A3.4).</div>
+        </div>
+        <div class="beispielfrage" style="margin-bottom:0;">
+            <div class="bf-text">Sind die Leitern geprüft gemäß DGUV Information 208-016 Leitern und Tritte?</div>
+            <label><input type="radio" name="bsp3" value="ja"> Ja</label>
+            <label><input type="radio" name="bsp3" value="nein"> Nein</label>
+            <label><input type="radio" name="bsp3" value="nv"> N/V</label>
+            <div class="hint"><strong>Maßnahme:</strong> Führen Sie regelmäßige Prüfungen aller Leitern und Tritte nach DGUV Information 208-016 sowie gemäß den Regelungen der BetrSichV durch und dokumentieren Sie diese nachvollziehbar.</div>
         </div>
 
-        <div class="beispielfrage">
-            <span class="emoji">🚪</span><strong>Frage:</strong> Notausgänge frei und beschildert?<br>
-            <label><input type="radio" name="notausgang" value="ja"> Ja</label>
-            <label><input type="radio" name="notausgang" value="nein"> Nein</label>
-            <label><input type="radio" name="notausgang" value="nv"> N/V</label>
-            <div class="hint">❗ Blockierte oder fehlend beschilderte Notausgänge sofort freiräumen und markieren.</div>
-        </div>
-
-        <div class="beispielfrage">
-            <span class="emoji">⚡</span><strong>Frage:</strong> Elektrische Geräte überprüft?<br>
-            <label><input type="radio" name="elektrisch" value="ja"> Ja</label>
-            <label><input type="radio" name="elektrisch" value="nein"> Nein</label>
-            <label><input type="radio" name="elektrisch" value="nv"> N/V</label>
-            <div class="hint">❗ Defekte Geräte sofort kennzeichnen und nicht benutzen; Sicherheitsprüfung durchführen.</div>
-        </div>
-
-        <p style="color:var(--ink-soft); font-size:0.88rem;">Hinweis: Automatische Hinweise werden nur angezeigt, wenn „Nein" gewählt wird — hier nur zur Veranschaulichung, ohne Auswirkung auf eine echte Begehung.</p>
-
-        <h2>4. Webseiten-Versionen</h2>
-        <p>
-            Die Seite <a href="liste-neu.html">liste-neu.html</a> zeigt die
-            Arbeitssicherheits-Checkliste im klassischen Layout, geeignet für
-            Desktop-PCs und Tablets — optimiert für größere Bildschirme mit voller
-            Übersicht der Checklistenpunkte.
-        </p>
-        <p>
-            Die Seite <a href="mobile-neu.html">mobile-neu.html</a> ist speziell für die
-            Nutzung auf dem iPhone gestaltet und passt das Layout automatisch an
-            kleine Bildschirme an. Bei Verwendung auf dem iPad passt sich das
-            Design dynamisch an: Im Querformat wird das Layout wie auf einem
-            Tablet dargestellt, um mehr Inhalte gleichzeitig sichtbar zu machen.
-        </p>
-        <p>
-            Die frühere Fassung (<a href="liste.html">liste.html</a> /
-            <a href="mobile.html">mobile.html</a>) bleibt unter „Ältere Version"
-            im Checklisten-Menü weiterhin erreichbar, wird für neue Begehungen
-            aber nicht mehr empfohlen.
-        </p>
-        <p style="margin-bottom:0;">
-            Daneben steht <a href="ASiC/index.html">ASiC Handel</a> als eigenständige,
-            umfangreichere Marktbegehungs-App zur Verfügung — mit Team-Archiv
-            auf dem NAS, sodass mehrere Prüfer auf denselben Datenbestand
-            zugreifen können. Der PDF-Export dort bietet zusätzlich zu „PDF
-            teilen" einen eigenen Button <strong>„✉️ Mail vorbereiten"</strong>:
-            er öffnet direkt eine neue E-Mail mit fertig ausgefülltem Betreff
-            und Text (Markt, Anlass, Grußformel) — die Geräte-Teilen-Funktion
-            übernimmt Betreff/Text beim Versand an die Mail-App auf dem iPad
-            oft nicht zuverlässig, dieser Button umgeht das. Das PDF selbst
-            muss dabei einmal zusätzlich angehängt werden, da ein Web-Browser
-            einer E-Mail keinen Anhang automatisch beifügen kann.
-        </p>
-
-        <h2>5. Abschluss</h2>
-        <p style="margin-bottom:0;">
-            Nach dem Ausfüllen können die Ergebnisse zur
-            <strong>Gefährdungsbeurteilung</strong> und
-            <strong>Wirksamkeitskontrolle</strong> genutzt werden. Die Checkliste
-            sollte regelmäßig aktualisiert werden, um gesetzliche Vorgaben
-            einzuhalten.
-        </p>
-    </div>
-
-    <div class="content">
-        <h2 style="margin-top:0;">Checkliste als PDF versenden (iPad)</h2>
+        <h2 id="abschluss">4. Abschließen und versenden</h2>
+        <p>Die Aktionen stehen am Ende der Checkliste:</p>
         <ul>
-            <li><span class="emoji">📧</span>In der Checkliste unten auf „PDF teilen“ tippen (ältere Fassung: roter Button „PDF teilen (iPad)“ im Menü ☰).</li>
-            <li><span class="emoji">📧</span>Im Teilen-Menü auf „Mail" tippen.</li>
-            <li><span class="emoji">📝</span>Eine neue E-Mail öffnet sich mit dem PDF als Anhang — Empfänger, Betreff und Nachricht eingeben.</li>
-            <li><span class="emoji">📨</span>Oben rechts auf das Senden-Symbol (Pfeil) tippen, um die Mail zu verschicken.</li>
+            <li><strong>PDF speichern</strong> – erstellt das PDF und lädt es herunter (iPad: Ordner „Downloads“ in der Dateien-App).</li>
+            <li><strong>PDF teilen</strong> – öffnet das Teilen-Menü des Geräts (Mail, AirDrop, Teams …) mit dem PDF als Anhang.</li>
+            <li><strong>Mail vorbereiten</strong> – öffnet eine neue E-Mail mit fertigem Betreff und Text. Das PDF muss dort selbst angehängt werden.</li>
+            <li><strong>Zur Foto-Seite</strong> – öffnet das Fotoformular; Marktnummer, Teilnehmer/in und SiFa werden übernommen (müssen also ausgefüllt sein).</li>
+            <li><strong>Maßnahmen exportieren</strong> – zeigt alle Maßnahmen als Karten zum separaten Drucken oder Teilen.</li>
+            <li><strong>Zurücksetzen</strong> – löscht alle Eingaben und die Unterschrift nach einer Sicherheitsabfrage. Vorher das PDF sichern.</li>
         </ul>
-        <p style="margin-bottom:0; color:var(--ink-soft); font-size:0.9rem;">
-            💡 Leichterer Weg (aktuelle Checkliste und ASiC Handel): Der Button
-            „Mail vorbereiten“ öffnet direkt eine neue E-Mail mit bereits
-            ausgefülltem Betreff und Text, ohne den Umweg über das Teilen-Menü —
-            das zuvor per „PDF speichern“ oder „PDF teilen“ gesicherte PDF muss
-            dort nur noch angehängt werden.
+        <h3>PDF per Mail vom iPad</h3>
+        <ol>
+            <li>„PDF teilen“ tippen und im Teilen-Menü „Mail“ wählen.</li>
+            <li>Die neue Mail enthält das PDF als Anhang – Empfänger, Betreff und Text ergänzen.</li>
+            <li>Oben rechts auf den Pfeil tippen, um zu senden.</li>
+        </ol>
+        <p style="color:var(--ink-soft); font-size:0.9rem;">💡 Die Mail-App übernimmt beim Teilen den Betreff oft nicht. Dann zuerst „PDF speichern“, danach „Mail vorbereiten“ und das PDF aus „Downloads“ anhängen.</p>
+
+        <h2 id="versionen">5. Desktop, Mobil, ältere Fassung</h2>
+        <ul>
+            <li><a href="liste-neu.html">Desktop &amp; Tablet</a> – breites Layout mit voller Übersicht, ideal fürs iPad.</li>
+            <li><a href="mobile-neu.html">Mobil</a> – gleiche Fragen und gleicher Speicherstand, angepasst an das iPhone.</li>
+            <li>Die frühere Fassung (<a href="liste.html">liste.html</a> / <a href="mobile.html">mobile.html</a>) ist im Checklisten-Menü unter „Ältere Version“ noch erreichbar, hat aber einen eigenen Speicherstand und eigene Texte. Für neue Begehungen die aktuelle Checkliste verwenden.</li>
+        </ul>
+
+        <h2 id="werkzeuge">6. Weitere Werkzeuge</h2>
+        <ul>
+            <li><strong><a href="ASiC/index.html">ASiC Handel</a></strong> – umfangreichere Marktbegehung mit Team-Archiv auf dem NAS; eigene Anleitung in der App.</li>
+            <li><strong><a href="foto.html">Fotoformular</a></strong> – Fotos aufnehmen oder aus der Galerie wählen, mit ⟲ / ⟳ drehen, kommentieren und als PDF speichern oder teilen (4 Fotos je Seite).</li>
+            <li><strong><a href="audit.html">Arbeitssicherheits-Audit</a></strong> – Prüfung mit Unterschrift von Prüfer und Marktleitung, Maßnahmenplan, Speichern als JSON-Datei (auch wieder einlesbar) oder direkt auf das NAS.</li>
+            <li><strong><a href="theke.html">Theke / Metzgerei</a></strong> – Prüfliste für Fleischverarbeitung und Bedientheke mit Unterschrift; Ausgabe über „Drucken“ (auch „Als PDF sichern“ im Druckmenü).</li>
+            <li><strong><a href="aushang.html">Pflicht-Aushänge</a></strong> – was im Markt aushängen oder ausliegen muss, mit Suche und Links zu den Quellen.</li>
+            <li><strong><a href="faq.html">Häufige Fragen</a></strong> – kurze Antworten zu Speichern, Offline-Betrieb und Problemen.</li>
+        </ul>
+
+        <h2 id="ergebnis">7. Was mit dem Ergebnis passiert</h2>
+        <p style="margin-bottom:0;">
+            Das PDF dokumentiert die Begehung. Die Maßnahmen gehen an die
+            Marktleitung zur Umsetzung, fließen in die
+            <strong>Gefährdungsbeurteilung</strong> ein und werden bei der
+            nächsten Begehung im Rahmen der
+            <strong>Wirksamkeitskontrolle</strong> nachgeprüft. Die Checkliste
+            ersetzt keine Gefährdungsbeurteilung und keine Prüfung durch
+            befähigte Personen.
         </p>
     </div>
-
+    
 </div>
 
 <footer class="app-footer">
