@@ -2,7 +2,7 @@
 // Arbeitssicherheit-Checkliste — gemeinsame Engine
 // ==========================================================================
 //
-// Wird von liste.html (Desktop/Tablet) UND mobile.html (Telefon) genutzt.
+// Wird von liste-neu.html (Desktop/Tablet) UND mobile-neu.html (Telefon) genutzt.
 // Beide laden dieselbe Datenquelle (js/checkliste-daten.js) und dieselbe
 // Logik hier - nur das CSS/Layout unterscheidet sich zwischen den Seiten.
 //
@@ -21,6 +21,16 @@ const ChecklisteEngine = (() => {
 
     const STORAGE_KEY = 'checkliste_stand_v2';
 
+    // Stabiler Feldname je Frage: bevorzugt die feste id aus
+    // checkliste-daten.js, damit gespeicherte Antworten beim Einfuegen
+    // neuer Fragen nicht auf andere Fragen verrutschen.
+    function frageName(f, kIdx, fIdx) {
+        return f && f.id ? `frage-${f.id}` : `frage-${kIdx}-${fIdx}`;
+    }
+
+    // Vom Nutzer bearbeitete Massnahmentexte (Schluessel = Feldname der Frage)
+    let massnahmenText = {};
+
     // ===== Rendering =====
 
     function renderKategorien() {
@@ -32,7 +42,7 @@ const ChecklisteEngine = (() => {
                 <h2 class="kategorie-titel">${kat.nummer} ${escapeHtml(kat.name)}</h2>
                 <div class="fragen-liste">
                     ${kat.fragen.map((f, fIdx) => {
-                        const name = `frage-${kIdx}-${fIdx}`;
+                        const name = frageName(f, kIdx, fIdx);
                         return `
                         <div class="frage-zeile" data-name="${name}" data-massnahme="${escapeAttr(f.massnahme)}">
                             <div class="frage-text">${escapeHtml(f.frage)}</div>
@@ -93,13 +103,25 @@ const ChecklisteEngine = (() => {
             return checked && checked.value === 'nein';
         });
 
-        tbody.innerHTML = neinZeilen.map((zeile, i) => `
+        tbody.innerHTML = neinZeilen.map((zeile, i) => {
+            const name = zeile.dataset.name;
+            const text = Object.prototype.hasOwnProperty.call(massnahmenText, name)
+                ? massnahmenText[name]
+                : zeile.dataset.massnahme;
+            return `
             <tr>
                 <td>${i + 1}</td>
-                <td>${zeile.querySelector('.frage-text').textContent}</td>
-                <td>${zeile.dataset.massnahme}</td>
-            </tr>
-        `).join('');
+                <td>${escapeHtml(zeile.querySelector('.frage-text').textContent)}</td>
+                <td class="massnahme-bearbeitbar" contenteditable="true" data-name="${escapeAttr(name)}" title="Maßnahmentext kann bearbeitet werden">${escapeHtml(text)}</td>
+            </tr>`;
+        }).join('');
+
+        tbody.querySelectorAll('.massnahme-bearbeitbar').forEach(zelle => {
+            zelle.addEventListener('input', () => {
+                massnahmenText[zelle.dataset.name] = zelle.textContent;
+                speichereStand();
+            });
+        });
 
         const auswertungContainer = document.getElementById('auswertung-hinweis');
         if (auswertungContainer) {
@@ -233,6 +255,7 @@ const ChecklisteEngine = (() => {
             marktleitung: feldWert('Marktleitung'),
             freitext: feldWert('freitextfeld'),
             antworten,
+            massnahmenText,
             unterschrift: istCanvasLeer() ? null : canvas.toDataURL('image/png')
         };
 
@@ -260,6 +283,10 @@ const ChecklisteEngine = (() => {
 
         const freitextfeld = document.getElementById('freitextfeld');
         if (freitextfeld && stand.freitext) freitextfeld.value = stand.freitext;
+
+        if (stand.massnahmenText && typeof stand.massnahmenText === 'object') {
+            massnahmenText = stand.massnahmenText;
+        }
 
         Object.keys(stand.antworten || {}).forEach(name => {
             const radio = document.querySelector(`input[name="${name}"][value="${stand.antworten[name]}"]`);
@@ -462,7 +489,7 @@ const ChecklisteEngine = (() => {
             tabellenKopf();
 
             kat.fragen.forEach((f, fIdx) => {
-                const zeile = document.querySelector(`.frage-zeile[data-name="frage-${kIdx}-${fIdx}"]`);
+                const zeile = document.querySelector(`.frage-zeile[data-name="${frageName(f, kIdx, fIdx)}"]`);
                 const checked = zeile ? zeile.querySelector('input[type="radio"]:checked') : null;
                 const antwort = checked ? checked.value : null;
 
@@ -674,7 +701,8 @@ const ChecklisteEngine = (() => {
 
     function pdfDateiname() {
         const markt = (feldWert('markt') || 'Markt').replace(/[^a-z0-9-]+/gi, '-');
-        const datum = new Date().toISOString().split('T')[0];
+        const h = new Date();
+        const datum = `${h.getFullYear()}-${String(h.getMonth() + 1).padStart(2, '0')}-${String(h.getDate()).padStart(2, '0')}`;
         return `Checkliste_${markt}_${datum}.pdf`;
     }
 
@@ -706,6 +734,13 @@ const ChecklisteEngine = (() => {
 
     function init() {
         renderKategorien();
+
+        // Umfang (Kategorien / Pruefpunkte) aus den Daten zaehlen statt fest im HTML
+        const umfang = document.getElementById('checkliste-umfang');
+        if (umfang) {
+            const anzahl = CHECKLISTE_KATALOG.reduce((summe, kat) => summe + kat.fragen.length, 0);
+            umfang.textContent = `${CHECKLISTE_KATALOG.length} Kategorien, ${anzahl} Prüfpunkte`;
+        }
         initSignatur();
         initFreitext();
         ladeStand();

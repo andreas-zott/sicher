@@ -15,7 +15,7 @@ const THEKE_KATEGORIEN = [
     "name": "arbeitsflaechen_reinigung"
    },
    {
-    "frage": "Sind Reinigungs- und Desinfektionsmittel vorhanden und richtig gelagert?",
+    "frage": "Sind Reinigungs- und Desinfektionsmittel vorhanden und werden sie sicher gelagert und unter Beachtung des Arbeitsschutzes verwendet?",
     "name": "desinfektionsmittel"
    },
    {
@@ -48,7 +48,7 @@ const THEKE_KATEGORIEN = [
     "name": "unfaelle_dokumentation"
    },
    {
-    "frage": "Werden die Aufschnittschneidemaschine sicher bedient und regelmäßig gereinigt?",
+    "frage": "Wird die Aufschnittschneidemaschine sicher bedient und regelmäßig gereinigt?",
     "name": "aufschnittschneidemaschine_sicherheit"
    },
    {
@@ -56,7 +56,7 @@ const THEKE_KATEGORIEN = [
     "name": "kutter_sicherheit"
    },
    {
-    "frage": "Ist der Fleischwolf sicher bedient und nach Gebrauch gründlich gereinigt?",
+    "frage": "Wird der Fleischwolf sicher bedient und nach Gebrauch gründlich gereinigt?",
     "name": "fleischwolf_sicherheit"
    }
   ]
@@ -86,7 +86,7 @@ const THEKE_KATEGORIEN = [
     "name": "feuerloescher"
    },
    {
-    "frage": "Gibt es Maßnahmen zur Vermeidung von Fettbränden?",
+    "frage": "Gibt es Maßnahmen zur Vermeidung von Fettbränden und sind geeignete Fettbrandlöscher (Brandklasse F) vorhanden?",
     "name": "fettbrand_massnahmen"
    }
   ]
@@ -134,23 +134,19 @@ const THEKE_KATEGORIEN = [
   "titel": "8. Weitere Gefahren",
   "fragen": [
    {
-    "frage": "Besteht Rutschgefahr am Arbeitsplatz?",
-    "name": "gefahr_rutschgefahr"
+    "frage": "Ist der Arbeitsplatz frei von Rutschgefahren (Boden trocken, rutschhemmend, Fett- und Fleischreste entfernt)?",
+    "name": "arbeitsplatz_rutschfrei"
    },
    {
     "frage": "Werden hygienische Maßnahmen zur Vermeidung biologischer Kontaminationen konsequent eingehalten?",
     "name": "gefahr_biologische_kontamination"
    },
    {
-    "frage": "Werden Reinigungs- und Desinfektionsmittel sicher gelagert und unter Beachtung des Arbeitsschutzes verwendet?",
-    "name": "gefahr_chemikalien"
-   },
-   {
     "frage": "Gibt es ergonomische Arbeitsplätze und wird auf rückenschonende Arbeitsweisen geachtet?",
     "name": "gefahr_ergonomie"
    },
    {
-    "frage": "Wird Lärm und Vibrationen durch Maschinen regelmäßig kontrolliert und auf Schutzmaßnahmen geachtet?",
+    "frage": "Werden Lärm und Vibrationen durch Maschinen regelmäßig kontrolliert und Schutzmaßnahmen umgesetzt?",
     "name": "gefahr_laerm_vibration"
    },
    {
@@ -160,10 +156,6 @@ const THEKE_KATEGORIEN = [
    {
     "frage": "Ist der Arbeitsbereich gegen Kältebelastung in Kühlräumen ausreichend geschützt?",
     "name": "gefahr_kältebelastung"
-   },
-   {
-    "frage": "Gibt es Maßnahmen zur Vermeidung von Fettbränden und sind entsprechende Feuerlöscher vorhanden?",
-    "name": "gefahr_fettbrand"
    },
    {
     "frage": "Werden schwere Lasten richtig gehoben und gibt es Hilfsmittel zum Transport?",
@@ -224,7 +216,7 @@ const THEKE_KATEGORIEN = [
     "name": "theke_temperaturkontrolle"
    },
    {
-    "frage": "Werden warme Speisen nicht zu lange in Warmhaltegeräten aufbewahrt (z. B. max. 2 Stunden)?",
+    "frage": "Werden warme Speisen nicht zu lange und ausreichend heiß in Warmhaltegeräten aufbewahrt (gemäß HACCP-Konzept)?",
     "name": "theke_warmhaltezeit"
    },
    {
@@ -244,7 +236,7 @@ const THEKE_KATEGORIEN = [
     "name": "theke_reinigung"
    },
    {
-    "frage": "Ist der Umgang mit allergenen Stoffen gekennzeichnet und wird Mitarbeitenden geschult?",
+    "frage": "Sind Allergene gekennzeichnet und werden die Mitarbeitenden im Umgang damit geschult?",
     "name": "theke_allergene"
    },
    {

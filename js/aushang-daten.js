@@ -4,25 +4,25 @@ const AUSHANG_KATEGORIEN = [
   "items": [
    {
     "titel": "Arbeitszeitgesetz (ArbZG)",
-    "beschreibung": "Regelt Pausen, Höchstarbeitszeiten, Sonn- und Feiertagsarbeit. Pflichtaushang für alle Betriebe mit Angestellten.",
+    "beschreibung": "Regelt Pausen, Höchstarbeitszeiten, Sonn- und Feiertagsarbeit. Pflichtaushang ab dem ersten Beschäftigten (§ 16 ArbZG).",
     "link": "https://www.gesetze-im-internet.de/arbzg/",
     "linktext": "Zum Gesetzestext"
    },
    {
     "titel": "Arbeitsschutzgesetz (ArbSchG)",
-    "beschreibung": "Definiert Grundpflichten des Arbeitgebers zum Arbeitsschutz und zur Unfallverhütung.",
+    "beschreibung": "Definiert Grundpflichten des Arbeitgebers zum Arbeitsschutz. Keine Aushangpflicht, Auslage aber empfohlen.",
     "link": "https://www.gesetze-im-internet.de/arbschg/",
     "linktext": "Zum Gesetzestext"
    },
    {
     "titel": "Arbeitsstättenverordnung (ArbStättV)",
-    "beschreibung": "Regelt die Einrichtung und den Betrieb von Arbeitsstätten, inkl. Flucht- und Rettungspläne.",
+    "beschreibung": "Regelt die Einrichtung und den Betrieb von Arbeitsstätten, inkl. Flucht- und Rettungspläne. Keine Aushangpflicht, Auslage empfohlen.",
     "link": "https://www.gesetze-im-internet.de/arbst_ttv_2004/",
     "linktext": "Zur Verordnung"
    },
    {
     "titel": "DGUV Vorschrift 1 \"Grundsätze der Prävention\"",
-    "beschreibung": "Unfallverhütungsvorschriften für Sicherheits- und Gesundheitsschutz am Arbeitsplatz.",
+    "beschreibung": "Grundlegende Unfallverhütungsvorschrift. Muss den Beschäftigten an geeigneter Stelle zugänglich gemacht werden (§ 12 DGUV Vorschrift 1).",
     "link": "https://publikationen.dguv.de/widgets/pdf/download/article/2909",
     "linktext": "Zur DGUV Vorschrift"
    }
@@ -33,19 +33,19 @@ const AUSHANG_KATEGORIEN = [
   "items": [
    {
     "titel": "Jugendarbeitsschutzgesetz (JArbSchG)",
-    "beschreibung": "Schutzbestimmungen für die Beschäftigung von Kindern und Jugendlichen. Pflichtaushang wenn Azubis oder jugendliche Aushilfen beschäftigt werden.",
+    "beschreibung": "Schutzbestimmungen für die Beschäftigung von Kindern und Jugendlichen. Pflichtaushang, sobald mindestens ein Jugendlicher beschäftigt wird (§ 47 JArbSchG).",
     "link": "https://www.gesetze-im-internet.de/jarbschg/",
     "linktext": "Zum Gesetzestext"
    },
    {
     "titel": "Mutterschutzgesetz (MuSchG)",
-    "beschreibung": "Schutz von Mutter und Kind vor und nach der Geburt. Pflichtaushang bei mehr als 3 regelmäßig beschäftigten Frauen.",
+    "beschreibung": "Schutz von Mutter und Kind vor und nach der Geburt. Pflichtaushang bei regelmäßig mehr als drei beschäftigten Frauen (§ 26 MuSchG).",
     "link": "https://www.gesetze-im-internet.de/muschg_2018/",
     "linktext": "Zum Gesetzestext"
    },
    {
     "titel": "Elternzeitgesetz (BEEG)",
-    "beschreibung": "Regelungen zu Anspruch auf Elternzeit und Elterngeld für berufstätige Eltern.",
+    "beschreibung": "Regelungen zu Anspruch auf Elternzeit und Elterngeld. Keine Aushangpflicht.",
     "link": "https://www.gesetze-im-internet.de/beeg/",
     "linktext": "Zum Gesetzestext"
    }
@@ -56,19 +56,19 @@ const AUSHANG_KATEGORIEN = [
   "items": [
    {
     "titel": "Allgemeines Gleichbehandlungsgesetz (AGG)",
-    "beschreibung": "Schutz vor Diskriminierung am Arbeitsplatz, inkl. Beschwerdestelle. Pflichtaushang ab 15 Beschäftigten.",
+    "beschreibung": "Schutz vor Diskriminierung am Arbeitsplatz. Pflichtaushang ab dem ersten Beschäftigten, zusammen mit der Angabe der zuständigen Beschwerdestelle (§ 12 Abs. 5, § 13 AGG).",
     "link": "https://www.gesetze-im-internet.de/agg/",
     "linktext": "Zum Gesetzestext"
    },
    {
     "titel": "Mindestlohngesetz (MiLoG)",
-    "beschreibung": "Information über Anspruch auf Mindestlohn. Informationspflicht gegenüber Arbeitnehmern.",
+    "beschreibung": "Anspruch auf den gesetzlichen Mindestlohn. Keine Aushangpflicht, Auslage empfohlen.",
     "link": "https://www.gesetze-im-internet.de/milog/",
     "linktext": "Zum Gesetzestext"
    },
    {
     "titel": "Entgeltfortzahlungsgesetz (EFZG)",
-    "beschreibung": "Regelungen zur Lohnfortzahlung im Krankheitsfall und an Feiertagen.",
+    "beschreibung": "Regelungen zur Lohnfortzahlung im Krankheitsfall und an Feiertagen. Keine Aushangpflicht.",
     "link": "https://www.gesetze-im-internet.de/entgfg/",
     "linktext": "Zum Gesetzestext"
    }
@@ -79,37 +79,37 @@ const AUSHANG_KATEGORIEN = [
   "items": [
    {
     "titel": "Bürgerliches Gesetzbuch (BGB)",
-    "beschreibung": "Auszüge zum Arbeitsvertrag und arbeitsrechtlichen Grundlagen.",
+    "beschreibung": "Auszüge zum Arbeitsvertrag (u. a. § 611a, § 612a, §§ 613a, 622 BGB). Keine Aushangpflicht, Auslage der arbeitsrechtlichen Auszüge üblich.",
     "link": "https://www.gesetze-im-internet.de/bgb/",
     "linktext": "Zum Gesetzestext"
    },
    {
     "titel": "Kündigungsschutzgesetz (KSchG)",
-    "beschreibung": "Schutz vor ungerechtfertigter Kündigung. Pflichtaushang sofern Betrieb mehr als 10 Beschäftigte hat.",
+    "beschreibung": "Schutz vor sozial ungerechtfertigter Kündigung; gilt in Betrieben mit mehr als zehn Beschäftigten (§ 23 KSchG). Keine Aushangpflicht.",
     "link": "https://www.gesetze-im-internet.de/kuendschg/",
     "linktext": "Zum Gesetzestext"
    },
    {
     "titel": "Bundesurlaubsgesetz (BUrlG)",
-    "beschreibung": "Regelungen zu Urlaubsansprüchen und Urlaubsgewährung.",
+    "beschreibung": "Regelungen zu Urlaubsansprüchen und Urlaubsgewährung. Keine Aushangpflicht.",
     "link": "https://www.gesetze-im-internet.de/burlg/",
     "linktext": "Zum Gesetzestext"
    },
    {
     "titel": "Nachweisgesetz (NachwG)",
-    "beschreibung": "Verpflichtung, Arbeitsbedingungen schriftlich festzuhalten und nachzuweisen.",
+    "beschreibung": "Verpflichtung, Arbeitsbedingungen schriftlich festzuhalten und nachzuweisen. Keine Aushangpflicht.",
     "link": "https://www.gesetze-im-internet.de/nachwg/",
     "linktext": "Zum Gesetzestext"
    },
    {
     "titel": "Teilzeit- und Befristungsgesetz (TzBfG)",
-    "beschreibung": "Rechte bei Teilzeitarbeit und befristeten Arbeitsverhältnissen.",
+    "beschreibung": "Rechte bei Teilzeitarbeit und befristeten Arbeitsverhältnissen. Keine Aushangpflicht.",
     "link": "https://www.gesetze-im-internet.de/tzbfg/",
     "linktext": "Zum Gesetzestext"
    },
    {
     "titel": "Tarifvertragsgesetz (TVG)",
-    "beschreibung": "Regelungen zu Tarifverträgen. Aushang falls ein Tarifvertrag gilt.",
+    "beschreibung": "Gilt ein Tarifvertrag, ist dieser im Betrieb auszulegen (§ 8 TVG).",
     "link": "https://www.gesetze-im-internet.de/tvg/",
     "linktext": "Zum Gesetzestext"
    }
@@ -120,13 +120,13 @@ const AUSHANG_KATEGORIEN = [
   "items": [
    {
     "titel": "Ladenschlussgesetz (LadSchlG)",
-    "beschreibung": "Arbeitszeiten im Handel - Ländergesetze beachten. Regelungen zu Öffnungszeiten im Einzelhandel.",
+    "beschreibung": "Öffnungszeiten und Arbeitszeiten in Verkaufsstellen. In den meisten Bundesländern gilt ein eigenes Ladenöffnungsgesetz – das jeweils gültige Gesetz aushängen.",
     "link": "https://www.gesetze-im-internet.de/ladschlg/",
-    "linktext": "Informationen HDE"
+    "linktext": "Zum Gesetzestext (Bund)"
    },
    {
     "titel": "Gefahrstoffverordnung (GefStoffV)",
-    "beschreibung": "Schutzmaßnahmen wenn mit Reinigungs- oder Chemikalien gearbeitet wird.",
+    "beschreibung": "Schutzmaßnahmen beim Umgang mit Reinigungsmitteln und anderen Gefahrstoffen. Keine Aushangpflicht; Betriebsanweisungen nach § 14 GefStoffV müssen aber zugänglich sein.",
     "link": "https://www.gesetze-im-internet.de/gefstoffv_2010/",
     "linktext": "Zur Verordnung"
    },
@@ -134,7 +134,7 @@ const AUSHANG_KATEGORIEN = [
     "titel": "Sicherheitsdatenblätter",
     "beschreibung": "Sicherheitsdatenblätter der verwendeten Gefahrstoffe müssen verfügbar sein.",
     "link": "https://gestis.dguv.de/",
-    "linktext": "BAuA Informationen"
+    "linktext": "GESTIS-Stoffdatenbank (DGUV/IFA)"
    }
   ]
  },
@@ -145,19 +145,19 @@ const AUSHANG_KATEGORIEN = [
     "titel": "Aushang Arbeitssicherheit",
     "beschreibung": "Zentrale Informationstafel mit allen wichtigen Sicherheitshinweisen, Notfallnummern und Verhaltensregeln für den Arbeitsplatz.",
     "link": "https://www.bghw-medienshop.de/fileadmin/user_upload/BGHW_Medienshop/Website/Medien-Dateien/A/A_6.pdf",
-    "linktext": "BAuA Publikationen"
+    "linktext": "BGHW-Medienshop"
    },
    {
     "titel": "Betriebsarzt",
-    "beschreibung": "Kontaktdaten und Sprechzeiten des Betriebsarztes müssen für alle Mitarbeiter zugänglich sein. Pflicht ab einem Mitarbeiter.",
+    "beschreibung": "Name und Erreichbarkeit von Betriebsarzt und Fachkraft für Arbeitssicherheit sollten für alle Beschäftigten bekannt gemacht werden. Betreuungspflicht ab dem ersten Beschäftigten (ASiG, DGUV Vorschrift 2).",
     "link": "https://www.gesetze-im-internet.de/asig/",
     "linktext": "Arbeitssicherheitsgesetz (ASiG)"
    },
    {
     "titel": "Brandschutzmappe",
     "beschreibung": "Brandschutzordnung, Flucht- und Rettungspläne, Verhalten im Brandfall. Muss für alle Mitarbeiter einsehbar sein.",
-    "link": "https://www.bgw-online.de/bgw-online-de/themen/sicher-mit-system/brandschutz/brandschutz-im-betrieb-richtiges-verhalten-im-brandfall-20668",
-    "linktext": "BAuA Brandschutz"
+    "link": "https://www.baua.de/DE/Angebote/Regelwerk/ASR/ASR-A2-2",
+    "linktext": "ASR A2.2 (BAuA)"
    },
    {
     "titel": "BGHW Tafel",
@@ -180,7 +180,7 @@ const AUSHANG_KATEGORIEN = [
    {
     "titel": "BGHW Kompendium Arbeitsschutz",
     "beschreibung": "Digitaler Zugang zu allen Vorschriften und Präventionsmedien der BGHW für Online-Recherche, Ausdruck und Download.",
-    "link": "https://www.bghw.de/weiterbildung-services/fuer-sie-zusammengestellt/formulare-und-downloads",
+    "link": "https://kompendium.bghw.de/",
     "linktext": "Zum Kompendium"
    }
   ]
