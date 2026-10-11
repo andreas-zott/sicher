@@ -11,24 +11,30 @@
 <link rel="stylesheet" href="lib/css/fontawesome.min.css">
 <link rel="stylesheet" href="css/styles.css">
 <style>
-    .tech-table { width: 100%; border-collapse: collapse; margin: 14px 0 20px; font-size: 0.9rem; }
-    .tech-table th { background: var(--navy); color: #fff; text-align: left; padding: 9px 12px; font-size: 0.82rem; }
+    .tabelle-scroll { overflow-x: auto; margin: 14px 0 20px; }
+    .tech-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; min-width: 520px; }
+    .tech-table th { background: #1c2226; color: #fff; text-align: left; padding: 9px 12px; font-size: 0.82rem; }
+    body.dark .tech-table th { background: #2b3338; }
     .tech-table td { border-bottom: 1px solid var(--line); padding: 9px 12px; vertical-align: top; }
+    .tech-table td:first-child { white-space: nowrap; }
     .tech-table code { font-size: 0.85em; }
     .badge {
-        display: inline-block; background: rgba(10,47,115,0.08); color: var(--navy-bright);
+        display: inline-block; background: var(--raised); color: var(--ink);
+        border: 1px solid var(--line);
         padding: 2px 9px; border-radius: 999px; font-size: 0.8rem; font-weight: 600;
     }
-    body.dark .badge { background: rgba(96,165,250,0.15); color: #93c5fd; }
     .hinweis-box {
-        background: #fff3cd; border-left: 4px solid #ffcc02; border-radius: 8px;
-        padding: 12px 16px; font-size: 0.88rem; margin: 12px 0;
+        background: var(--raised); border: 1px solid var(--line); border-radius: 10px;
+        padding: 12px 16px; font-size: 0.9rem; margin: 12px 0;
     }
     code {
-        background: rgba(0,0,0,0.06); padding: 1px 5px; border-radius: 4px;
+        background: rgba(127,127,127,0.15); padding: 1px 5px; border-radius: 4px;
         font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.9em;
     }
-    body.dark code { background: rgba(255,255,255,0.1); }
+    pre { background: var(--raised); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; overflow-x: auto; font-size: 0.85rem; }
+    pre code { background: none; padding: 0; }
+    .inhalt-liste { columns: 2; column-gap: 28px; }
+    @media (max-width: 640px) { .inhalt-liste { columns: 1; } }
 </style>
 </head>
 <body>
@@ -47,143 +53,166 @@
 
     <div class="content">
 
-        <h2 style="margin-top:0;">1. Überblick &amp; Architektur</h2>
-        <p>
-            Die Anwendung ist eine rein <strong>clientseitige, statische
-            Web-App</strong> (kein Backend, keine Datenbank, kein
-            Server-Rendering). Jede Seite ist eine eigenständige HTML-Datei;
-            das Portal-Grundgerüst (Login, Übersicht, Anleitung, Fotoformular,
-            Checklisten-Menü, Rechtliches) teilt sich seit der Überarbeitung
-            ein gemeinsames Stylesheet (<code>css/styles.css</code>) und eine
-            gemeinsame Logik-Datei (<code>js/common.js</code>) für Dark Mode,
-            Fußzeile und Service-Worker-Registrierung — zuvor war das auf
-            jeder Seite einzeln kopiert.
-        </p>
-        <p>
-            Alle Dateien liegen unter dem gemeinsamen Pfad <code>/sicher/</code>
-            (GitHub Pages) und werden als installierbare
-            <strong>Progressive Web App (PWA)</strong> ausgeliefert, sodass
-            sie auf iPad/iPhone zum Home-Bildschirm hinzugefügt werden und
-            offline funktionieren kann.
-        </p>
+        <h2 style="margin-top:0;">Inhalt</h2>
+        <ol class="inhalt-liste">
+            <li><a href="#ueberblick">Überblick</a></li>
+            <li><a href="#seiten">Seiten</a></li>
+            <li><a href="#dateien">Gemeinsame Dateien</a></li>
+            <li><a href="#datenfluss">Datenfluss und Speicherung</a></li>
+            <li><a href="#bibliotheken">Bibliotheken und Schriften</a></li>
+            <li><a href="#offline">Offline-Betrieb und Updates</a></li>
+            <li><a href="#pflege">Pflege: Fragen, Zugänge, Versionen</a></li>
+            <li><a href="#grenzen">Bekannte Grenzen</a></li>
+        </ol>
 
-        <h2>2. Seiten &amp; Dateien</h2>
-        <table class="tech-table">
-            <thead><tr><th>Datei</th><th>Zweck</th></tr></thead>
-            <tbody>
-                <tr><td><code>index.html</code></td><td>Login / Einstieg</td></tr>
-                <tr><td><code>welcome.html</code></td><td>Übersicht nach dem Login, Kacheln zu allen Werkzeugen</td></tr>
-                <tr><td><code>l1.html</code></td><td>Untermenü: Checklisten-Formate (Desktop, Mobil, Audit, Theke, Aushänge, plus „Ältere Version")</td></tr>
-                <tr><td><code>liste-neu.html</code></td><td>Aktuelle Haupt-Checkliste (Desktop/Tablet): Prüfpunkte, automatische Maßnahmen-Ableitung bei „Nein" (bearbeitbar), Unterschrift, PDF-Export</td></tr>
-                <tr><td><code>js/checkliste-daten.js</code></td><td>Fragenkatalog der aktuellen Checkliste: Kategorien, Fragen mit fester <code>id</code> und zugehöriger Maßnahme</td></tr>
-                <tr><td><code>js/checkliste-engine.js</code></td><td>Gemeinsame Logik von <code>liste-neu.html</code> und <code>mobile-neu.html</code> (Darstellung, Speichern, PDF, Übergaben)</td></tr>
-                <tr><td><code>mobile-neu.html</code></td><td>Aktuelle Checkliste, optimiert für iPhone/iPad-Hochformat</td></tr>
-                <tr><td><code>liste.html</code> / <code>mobile.html</code></td><td>Ältere Fassung der Checkliste, weiterhin verfügbar (eigener Bereich „Ältere Version" in <code>l1.html</code>) — für neue Begehungen wird <code>liste-neu.html</code>/<code>mobile-neu.html</code> empfohlen</td></tr>
-                <tr><td><code>audit.html</code></td><td>Audit-Variante der Checkliste, inkl. direktem NAS-Speichern (<code>save.php</code>) und Maßnahmenplan-Export</td></tr>
-                <tr><td><code>Massnahmenplan.html</code></td><td>Editierbare Maßnahmenplan-Ansicht mit Dashboard, JSON-/PDF-Export — Zielseite von <code>audit.html</code>s „Maßnahmenplan"-Button</td></tr>
-                <tr><td><code>theke.html</code></td><td>Checkliste Theke/Metzgerei (Fleischverarbeitung), Fragen aus <code>js/theke-daten.js</code>, Unterschrift, Drucken, Zurücksetzen</td></tr>
-                <tr><td><code>aushang.html</code></td><td>Übersicht der Pflicht-Aushänge und empfohlenen Auslagen im Einzelhandel (Daten in <code>js/aushang-daten.js</code>), mit Suchfunktion</td></tr>
-                <tr><td><code>foto.html</code></td><td>Fotoerfassung zur Begehung: Kamera/Galerie, Drehen, Kommentieren, eigener PDF-Export</td></tr>
-                <tr><td><code>massnahmen-sifa.html</code></td><td>Eigenständige Auswertungsansicht aller Maßnahmen, empfängt Daten von <code>liste.html</code>/<code>liste-neu.html</code>/<code>mobile.html</code>/<code>mobile-neu.html</code></td></tr>
-                <tr><td><code>aufzug.html</code></td><td>Eigenständige Auswertung „Kundenaufzug – Notbefreiung &amp; Notrufkette“ (nicht im Menü verlinkt, direkt aufrufbar)</td></tr>
-                <tr><td><code>help.html</code></td><td>Bedienungsanleitung</td></tr>
-                <tr><td><code>faq.html</code></td><td>Häufig gestellte Fragen</td></tr>
-                <tr><td><code>technische-beschreibung.html</code></td><td>Diese Seite</td></tr>
-                <tr><td><code>impressum.html</code> / <code>datenschutz.html</code></td><td>Rechtliches</td></tr>
-                <tr><td><code>manifest.json</code></td><td>PWA-Manifest (Name, Icons, Farben, Version)</td></tr>
-                <tr><td><code>service-worker.js</code></td><td>Offline-Caching &amp; Versionsverwaltung (einziger Service Worker des Portals)</td></tr>
-                <tr><td><code>sw.js</code></td><td>Nur noch Verweis auf <code>service-worker.js</code> für früher installierte Registrierungen</td></tr>
-                <tr><td><code>save.php</code> / <code>list.php</code> / <code>load.php</code></td><td>Serverseitige NAS-Anbindung für <code>audit.html</code> (Synology, analog zu ASiC Handel) — liegen <strong>nicht</strong> im Repository-Hauptordner, sondern nur auf der Synology; laufen nur, wenn die Seite direkt über die Synology bzw. deren Tailscale-Adresse aufgerufen wird (oder in den Einstellungen von ASiC Handel – gleiche Domain – eine NAS-Adresse hinterlegt ist), nicht über GitHub Pages</td></tr>
-            </tbody>
-        </table>
-
-        <h2>3. Datenfluss zwischen den Seiten</h2>
-        <h3>liste-neu.html / mobile-neu.html / audit.html → foto.html</h3>
+        <h2 id="ueberblick">1. Überblick</h2>
         <p>
-            Beim Wechsel zur Foto-Seite werden Marktnummer, Teilnehmer und
-            SiFa als <strong>URL-Parameter</strong>
-            (<code>?marktnummer=…&amp;name=…&amp;sifa=…</code>) übergeben und
-            dort beim Laden automatisch in die passenden Felder eingetragen.
+            Das Portal ist eine <strong>statische Web-App</strong> ohne eigenes
+            Backend und ohne Datenbank. Jede Seite ist eine HTML-Datei; alle
+            Berechnungen, PDFs und Speichervorgänge laufen im Browser des
+            Geräts. Ausgeliefert wird über <strong>GitHub Pages</strong> unter
+            dem Pfad <code>/sicher/</code>. Das Portal lässt sich auf iPad und
+            iPhone zum Home-Bildschirm hinzufügen und funktioniert nach dem
+            ersten Aufruf auch offline.
         </p>
-        <h3>liste.html / liste-neu.html / mobile.html / mobile-neu.html → massnahmen-sifa.html</h3>
         <p>
-            Beim Exportieren der Defizite werden die gesammelten Maßnahmen
-            sowie Metadaten (Datum, Markt, Marktleitung, Name, SiFa) VOR dem
-            Öffnen in <code>localStorage</code> geschrieben (Schlüssel
-            <code>massnahmen_uebergabe</code>) — <code>massnahmen-sifa.html</code>
-            liest diesen Stand beim Laden direkt aus. Das ist der
-            zuverlässige Hauptweg, unabhängig von Pop-up-Blockern oder
-            Fenster-Beziehungen. Zusätzlich wird weiterhin
-            <code>window.postMessage()</code> versucht, falls beide Fenster
-            bereits offen sind.
+            Gestaltung „Leitstand“: gleiche Schrift (Space Grotesk) und
+            Markenfarbe wie ASiC Handel. Standard ist der dunkle Modus; über
+            den Schalter oben rechts lässt sich auf hell umstellen.
+            Ausdrucke sind immer hell.
         </p>
-        <h3>audit.html → Massnahmenplan.html</h3>
-        <p>
-            Der „Maßnahmenplan"-Button schreibt die Daten in
-            <code>localStorage</code> (Schlüssel <code>massnahmenplanData</code>)
-            und öffnet <code>Massnahmenplan.html</code> in einem neuen Fenster.
-            Bereits im Maßnahmenplan bearbeitete Angaben (Verantwortlich, Frist,
-            Status) derselben Begehung werden dabei übernommen und nicht
-            überschrieben.
-        </p>
-        <h3>audit.html → save.php (NAS)</h3>
-        <p style="margin-bottom:0;">
-            „Direkt auf NAS speichern" sendet die vollständige Begehung per
-            <code>fetch()</code> als JSON an <code>save.php</code>, das die
-            Datei auf der Synology ablegt und Erfolg/Fehler als JSON-Antwort
-            zurückgibt. Erwartet unter <code>companyInfo.datum</code> und
-            <code>companyInfo.marktnummer</code> die Pflichtangaben, sonst
-            wird mit einer klaren Fehlermeldung abgelehnt.
-        </p>
+        <p style="margin-bottom:0;">Unterprojekte im selben Repository mit eigener Technik:</p>
+        <div class="tabelle-scroll"><table class="tech-table">
+<thead><tr><th>Ordner</th><th>Anwendung</th><th>Eigener Service Worker</th></tr></thead>
+<tbody>
+<tr><td><code>ASiC/</code></td><td>ASiC Handel – digitale Marktbegehung mit Team-Archiv (Version 1.x, im Einsatz)</td><td>ja (<code>asic-handel-v1…</code>)</td></tr>
+<tr><td><code>gbo/</code></td><td>ASiC GBO – Gefährdungsbeurteilung (Version 2.x, im Aufbau)</td><td>ja (<code>asic-handel-v2…</code>)</td></tr>
+<tr><td><code>gbu/</code></td><td>GBU Zentrale – Gefährdungsbeurteilungen und Prüflisten</td><td>nein</td></tr>
+<tr><td><code>audit-2026/</code></td><td>Arbeitssicherheits-Audit 2026</td><td>ja (<code>audit-2026-…</code>)</td></tr>
+<tr><td><code>unfallanzeige/</code></td><td>BGHW-Unfallanzeige</td><td>nein</td></tr>
+</tbody>
+</table></div>
 
-        <h3>Innerhalb einer Seite</h3>
-        <p style="margin-bottom:0;">
-            Formulareingaben werden fortlaufend automatisch im
-            <code>localStorage</code> des Browsers zwischengespeichert,
-            sodass ein versehentlich geschlossener Tab die Eingaben nicht
-            verliert.
-        </p>
+        <h2 id="seiten">2. Seiten</h2>
+        <div class="tabelle-scroll"><table class="tech-table">
+<thead><tr><th>Datei</th><th>Zweck</th></tr></thead>
+<tbody>
+<tr><td><code>index.html</code></td><td>Anmeldung (Prüfung im Browser, siehe Abschnitte 7 und 8)</td></tr>
+<tr><td><code>welcome.html</code></td><td>Übersicht: ASiC Handel als Hauptanwendung, Checklisten, Statusfelder (angefangene Checkliste, Offline-Betrieb), weitere Anwendungen</td></tr>
+<tr><td><code>l1.html</code></td><td>Checklisten-Menü: aktuelle Checkliste (Desktop/Mobil), Audit, Theke, Aushänge, „Ältere Version“</td></tr>
+<tr><td><code>liste-neu.html</code> / <code>mobile-neu.html</code></td><td><strong>Aktuelle Checkliste</strong> (gleicher Inhalt, unterschiedliches Layout): Prüfpunkte, Maßnahmen bei „Nein“ (bearbeitbar), Bemerkungsfeld mit Textbausteinen, Unterschrift, PDF, Teilen, Mail</td></tr>
+<tr><td><code>liste.html</code> / <code>mobile.html</code></td><td>Ältere Fassung der Checkliste mit eigener Gestaltung und eigener Maßnahmen-Logik; weiterhin erreichbar</td></tr>
+<tr><td><code>audit.html</code></td><td>Audit-Checkliste mit Maßnahmenplan, Unterschriften, JSON-Export/-Import und optionalem NAS-Speichern</td></tr>
+<tr><td><code>Massnahmenplan.html</code></td><td>Bearbeitbarer Maßnahmenplan zum Audit (Verantwortlich, Frist, Status), PDF/JSON</td></tr>
+<tr><td><code>massnahmen-sifa.html</code></td><td>Maßnahmen-Auswertung aus den Checklisten als Karten, Druck/PDF/Text teilen</td></tr>
+<tr><td><code>foto.html</code></td><td>Fotodokumentation: Kamera/Galerie, drehen, kommentieren, PDF (4 Fotos je Seite)</td></tr>
+<tr><td><code>theke.html</code></td><td>Checkliste Theke/Metzgerei (Daten in <code>js/theke-daten.js</code>), Unterschrift, Drucken, Zurücksetzen</td></tr>
+<tr><td><code>aushang.html</code></td><td>Pflicht-Aushänge und empfohlene Auslagen (Daten in <code>js/aushang-daten.js</code>), Suche</td></tr>
+<tr><td><code>aufzug.html</code></td><td>Eigenständige Auswertung „Kundenaufzug – Notbefreiung &amp; Notrufkette“; nicht im Menü verlinkt</td></tr>
+<tr><td><code>help.html</code> / <code>faq.html</code></td><td>Anleitung und häufige Fragen</td></tr>
+<tr><td><code>technische-beschreibung.html</code></td><td>Diese Seite</td></tr>
+<tr><td><code>impressum.html</code> / <code>datenschutz.html</code></td><td>Rechtliches</td></tr>
+</tbody>
+</table></div>
 
-        <h2>4. Eingesetzte Bibliotheken</h2>
-        <p>
-            Alle Seiten des Portals binden ihre Bibliotheken
-            <strong>lokal</strong> aus <code>lib/</code> ein — ohne
-            Laufzeit-Anfrage an ein CDN oder an Google Fonts.
-        </p>
-        <table class="tech-table">
-            <thead><tr><th>Bibliothek</th><th>Verwendet in</th><th>Zweck</th></tr></thead>
-            <tbody>
-                <tr><td><span class="badge">jsPDF 2.5.1</span></td><td>liste.html, liste-neu.html, foto.html, mobile.html, mobile-neu.html, audit.html, Massnahmenplan.html, massnahmen-sifa.html, aufzug.html</td><td>Manuelle, layoutgenaue PDF-Erzeugung direkt im Browser</td></tr>
-                <tr><td><span class="badge">Font Awesome 6.5.0</span></td><td>alle Portal-Seiten</td><td>Icons (jetzt lokal eingebunden)</td></tr>
-                <tr><td><span class="badge">Space Grotesk</span></td><td>alle Portal-Seiten (über <code>css/styles.css</code>), wie in ASiC Handel</td><td>Überschriften-Schrift, lokal in <code>lib/fonts/</code> (SIL Open Font License)</td></tr>
-            </tbody>
-        </table>
-        <p style="margin-bottom:0; font-size:0.88rem; color:var(--ink-soft);"><code>theke.html</code> und <code>aushang.html</code> benötigen kein PDF — <code>theke.html</code> nutzt den nativen Browser-Druck, <code>aushang.html</code> ist eine reine Übersichtsseite.</p>
+        <h2 id="dateien">3. Gemeinsame Dateien</h2>
+        <div class="tabelle-scroll"><table class="tech-table">
+<thead><tr><th>Datei / Ordner</th><th>Inhalt</th></tr></thead>
+<tbody>
+<tr><td><code>css/styles.css</code></td><td>Gemeinsame Gestaltung aller Portal-Seiten: Farben, Schrift, Kopfbereich, Kacheln, Formulare, Hell/Dunkel</td></tr>
+<tr><td><code>css/checkliste.css</code></td><td>Zusätzliche Gestaltung der Checklisten (Fragezeilen, Antwort-Knöpfe)</td></tr>
+<tr><td><code>js/common.js</code></td><td>Versionsnummer, Hell/Dunkel-Schalter, Fußzeile, Registrierung des Service Workers inkl. automatischem Neuladen nach Updates</td></tr>
+<tr><td><code>js/checkliste-daten.js</code></td><td>Fragenkatalog der aktuellen Checkliste (Kategorien, Fragen, Maßnahmen)</td></tr>
+<tr><td><code>js/checkliste-engine.js</code></td><td>Logik der aktuellen Checkliste: Darstellung, Speichern, Maßnahmentabelle, PDF, Übergaben</td></tr>
+<tr><td><code>js/theke-daten.js</code>, <code>js/aushang-daten.js</code></td><td>Inhalte für Theke und Aushänge</td></tr>
+<tr><td><code>lib/</code></td><td>Fremdbibliotheken und Schriften (siehe Abschnitt 5)</td></tr>
+<tr><td><code>service-worker.js</code></td><td>Offline-Betrieb und Aktualisierung (siehe Abschnitt 6)</td></tr>
+<tr><td><code>sw.js</code></td><td>Nur noch Verweis auf <code>service-worker.js</code> für ältere Installationen</td></tr>
+<tr><td><code>manifest.json</code>, <code>mobile.json</code>, <code>audit.json</code></td><td>Web-App-Manifeste (Name, Symbol, Farben) für Portal, alte Mobil-Liste und Audit</td></tr>
+<tr><td>Symbole</td><td><code>icon-192.png</code>, <code>icon-512.png</code>, <code>apple-touch-icon.png</code>, <code>favicon.ico</code>, <code>mobile.png</code>, <code>2026.png</code></td></tr>
+</tbody>
+</table></div>
 
-        <h2>5. PWA, Manifest &amp; Service Worker</h2>
-        <p>
-            <code>manifest.json</code> definiert Name, Icons, Start-URL sowie
-            <code>theme_color</code> (<code>#1c2226</code>, passend zu ASiC Handel) und eine eigene <code>version</code>-Angabe.
-        </p>
-        <p><code>service-worker.js</code> übernimmt das Offline-Caching (Cache-First-Strategie, versionierter Cache-Name). Beim Aktivieren werden nur <strong>eigene</strong> alte Caches (<code>sicherheit-cache-…</code>) gelöscht — die Caches von ASiC Handel, GBO und Audit-2026 bleiben unberührt. Anfragen an diese Unterprojekte bedient der Portal-Service-Worker nicht. Versionsnummer in <code>service-worker.js</code> und <code>js/common.js</code> bei Änderungen gemeinsam erhöhen.</p>
-      
-
-        <h2>6. Datenspeicherung &amp; Datenschutz</h2>
+        <h2 id="datenfluss">4. Datenfluss und Speicherung</h2>
+        <h3>Zwischen den Seiten</h3>
         <ul>
-            <li>Für den Großteil der App gilt: <strong>keine Serverkommunikation</strong>, keine Übertragung an Dritte. <strong>Ausnahme:</strong> <code>audit.html</code> kann optional per „Direkt auf NAS speichern" die komplette Begehung an den eigenen Server (Synology) senden — bewusste Funktion, kein Dritter beteiligt.</li>
-            <li><code>localStorage</code> wird für den Formularstand der Checklisten sowie das Theme (hell/dunkel) genutzt.</li>
-            <li>Fotos und generierte PDFs verbleiben nur im Arbeitsspeicher des Browsers; Unterschriften werden zusammen mit dem Formularstand im <code>localStorage</code> gespeichert. Nichts davon verlässt das Gerät, bis es manuell heruntergeladen, geteilt oder (nur bei <code>audit.html</code>) aktiv auf die eigene NAS gespeichert wird.</li>
-            <li>Der Service-Worker-Cache enthält ausschließlich die statischen App-Dateien selbst, keine Nutzereingaben.</li>
+            <li><strong>Checkliste/Audit → Fotoformular:</strong> Marktnummer, Name und SiFa als URL-Parameter (<code>foto.html?marktnummer=…&amp;name=…&amp;sifa=…</code>).</li>
+            <li><strong>Checkliste → Maßnahmen-Auswertung:</strong> Die Maßnahmen werden vor dem Öffnen in <code>localStorage</code> geschrieben (<code>massnahmen_uebergabe</code>); zusätzlich wird <code>postMessage</code> versucht.</li>
+            <li><strong>Audit → Maßnahmenplan:</strong> über <code>localStorage</code> (<code>massnahmenplanData</code>). Im Plan bearbeitete Angaben derselben Begehung (gleicher Markt und gleiches Datum) werden beim erneuten Öffnen übernommen.</li>
+            <li><strong>Audit → NAS:</strong> „Direkt auf NAS speichern“ sendet die Begehung als JSON per <code>fetch()</code> an <code>save.php</code>. Pflichtangaben: <code>companyInfo.datum</code> und <code>companyInfo.marktnummer</code>.</li>
+            <li><strong>Übersicht:</strong> liest <code>checkliste_stand_v2</code> für das Statusfeld „Angefangene Checkliste“ und prüft, ob der Service Worker bereit ist.</li>
         </ul>
-        <p>Ausführliche rechtliche Formulierung: siehe <a href="datenschutz.html">Datenschutzerklärung</a>.</p>
+        <h3>Gespeicherte Daten im Browser</h3>
+        <p>Alle Eingaben werden fortlaufend im <code>localStorage</code> des Geräts gespeichert; nichts davon wird automatisch übertragen.</p>
+        <div class="tabelle-scroll"><table class="tech-table">
+<thead><tr><th>Schlüssel</th><th>Seite</th><th>Inhalt</th></tr></thead>
+<tbody>
+<tr><td><code>checkliste_stand_v2</code></td><td>liste-neu / mobile-neu</td><td>Kopfdaten, Antworten (nach Fragen-id), bearbeitete Maßnahmen, Bemerkung, Unterschrift</td></tr>
+<tr><td><code>formSicherheit2025</code>, <code>signatureImage</code></td><td>liste / mobile (alt)</td><td>Formularstand und Unterschrift der älteren Fassung</td></tr>
+<tr><td><code>auditData</code></td><td>audit</td><td>Kompletter Audit-Stand (wird automatisch gespeichert)</td></tr>
+<tr><td><code>massnahmenplanData</code></td><td>audit → Massnahmenplan</td><td>Übergabe und Bearbeitungsstand des Maßnahmenplans</td></tr>
+<tr><td><code>massnahmen_uebergabe</code></td><td>Checklisten → massnahmen-sifa</td><td>Übergabe der Maßnahmen an die Auswertung</td></tr>
+<tr><td><code>theke_stand_v1</code></td><td>theke</td><td>Antworten, Kopfdaten, Unterschrift</td></tr>
+<tr><td><code>theme</code></td><td>alle</td><td><code>light</code> oder <code>dark</code> (ohne Eintrag: dunkel)</td></tr>
+<tr><td><code>nasBaseUrl</code>, <code>nasApiKey</code></td><td>audit (gesetzt in ASiC Handel)</td><td>NAS-Adresse und Zugriffsschlüssel; gleiche Domain, daher gemeinsam genutzt</td></tr>
+</tbody>
+</table></div>
+        <p>Fotos und erzeugte PDFs liegen nur im Arbeitsspeicher. Der Cache des Service Workers enthält ausschließlich Programmdateien. Rechtliche Darstellung: <a href="datenschutz.html">Datenschutzerklärung</a>.</p>
 
-        <h2>7. Kompatibilität &amp; bekannte Einschränkungen</h2>
+        <h2 id="bibliotheken">5. Bibliotheken und Schriften</h2>
+        <p>Alle Bibliotheken und Schriften liegen lokal in <code>lib/</code>. Zur Laufzeit wird nichts von Dritten nachgeladen (kein CDN, kein Google Fonts).</p>
+        <div class="tabelle-scroll"><table class="tech-table">
+<thead><tr><th>Bibliothek</th><th>Datei</th><th>Verwendet in</th><th>Lizenz</th></tr></thead>
+<tbody>
+<tr><td><span class="badge">jsPDF 2.5.1</span></td><td><code>lib/jspdf.umd.min.js</code></td><td>liste, liste-neu, mobile, mobile-neu, foto, audit, Massnahmenplan, massnahmen-sifa, aufzug</td><td>MIT</td></tr>
+<tr><td><span class="badge">Font Awesome Free 6.5.0</span></td><td><code>lib/css/fontawesome.min.css</code>, <code>lib/webfonts/</code></td><td>alle Portal-Seiten (Symbole)</td><td>Icons CC BY 4.0, Fonts SIL OFL, Code MIT</td></tr>
+<tr><td><span class="badge">Space Grotesk</span></td><td><code>lib/fonts/</code></td><td>alle Portal-Seiten über <code>css/styles.css</code> (Überschriften), wie in ASiC Handel</td><td>SIL OFL 1.1</td></tr>
+</tbody>
+</table></div>
+
+        <h2 id="offline">6. Offline-Betrieb und Updates</h2>
+        <p>
+            <code>service-worker.js</code> ist der einzige Service Worker des
+            Portals (Geltungsbereich <code>/sicher/</code>). Anfragen an die
+            Unterprojekte bearbeitet er nicht.
+        </p>
         <ul>
-            <li><strong>Zielplattform:</strong> iPadOS/iOS Safari (Web-Share-API mit Dateianhang, Kamera-Capture, Touch-Bedienung).</li>
-            <li>Die native <em>„Teilen"</em>-Funktion (<code>navigator.share</code> mit Dateien) wird nicht von allen Browsern/Desktop-Systemen unterstützt; in diesem Fall fällt die App automatisch auf einen normalen PDF-Download zurück.</li>
-            <li>Sehr große Foto-Mengen (deutlich über 20–30 Fotos) können die PDF-Erzeugung im Browser spürbar verlangsamen.</li>
-            <li>Der Login (<code>index.html</code>) prüft Benutzername/Passwort rein clientseitig. Im Quelltext steht nur noch ein SHA-256-Hash, nicht mehr Name und Passwort im Klartext. Es bleibt eine organisatorische Hürde, kein echter Zugriffsschutz: Alle Seiten sind direkt aufrufbar.</li>
-            <li><code>audit.html</code>s NAS-Speichern (<code>save.php</code>) funktioniert nur, wenn die Seite direkt über die Synology (bzw. deren Tailscale-Adresse) aufgerufen wird — über GitHub Pages allein ist der Endpunkt nicht erreichbar, da dort keine serverseitigen Skripte laufen können.</li>
+            <li><strong>Seiten, Stylesheets, Skripte, JSON: Netz zuerst.</strong> Ist das Gerät online, kommt immer der aktuelle Stand vom Server, und die gespeicherte Kopie wird aufgefrischt. Offline oder nach 4 Sekunden ohne Antwort wird die gespeicherte Fassung geliefert.</li>
+            <li><strong>Schriften, Bilder, Bibliotheken: Speicher zuerst</strong>, weil sie sich selten ändern.</li>
+            <li><strong>Installation:</strong> Beim Einrichten einer neuen Version werden die Dateien unter Umgehung des Browser-Zwischenspeichers geladen (<code>cache: 'reload'</code>), damit keine bis zu 10 Minuten alte Fassung von GitHub Pages übernommen wird.</li>
+            <li><strong>Automatisches Neuladen:</strong> Übernimmt eine neue Version die Kontrolle, lädt <code>js/common.js</code> die Seite einmal neu. Die Prüfung auf eine neue Version erfolgt bei jedem Aufruf ohne Zwischenspeicher (<code>updateViaCache: 'none'</code>).</li>
+            <li><strong>Aufräumen:</strong> Beim Aktivieren werden nur eigene alte Caches (<code>sicherheit-cache-…</code>) gelöscht; die Caches von ASiC Handel, GBO und Audit-2026 bleiben unberührt.</li>
+        </ul>
+
+        <h2 id="pflege">7. Pflege: Fragen, Zugänge, Versionen</h2>
+        <h3>Frage der aktuellen Checkliste ändern oder ergänzen</h3>
+        <p>In <code>js/checkliste-daten.js</code> hat jede Frage eine feste <code>id</code>, unter der die Antworten gespeichert werden:</p>
+<pre><code>{ "id": "1.22",
+  "frage": "So formulieren, dass „Ja“ = in Ordnung bedeutet?",
+  "massnahme": "Text, der bei „Nein“ in die Maßnahmentabelle kommt." }</code></pre>
+        <div class="hinweis-box">Neue Fragen bekommen eine <strong>neue</strong> id. Bestehende ids nicht umnummerieren – sonst landen gespeicherte Antworten bei der falschen Frage. Die Anzahl im Kopf der Checkliste wird automatisch gezählt.</div>
+        <h3>Zugang anlegen</h3>
+        <p>In <code>index.html</code> steht pro Zugang nur ein SHA-256-Hash von <code>name:passwort:sicher-portal-v1</code> (Name in Kleinbuchstaben). Neuen Hash bilden, z. B. in Python:</p>
+<pre><code>import hashlib
+print(hashlib.sha256("name:passwort:sicher-portal-v1".encode()).hexdigest())</code></pre>
+        <p>und in die Liste <code>ZUGANG_HASHES</code> eintragen.</p>
+        <h3>Neue Version veröffentlichen</h3>
+        <ol>
+            <li>Versionsnummer gleichlautend erhöhen in <code>service-worker.js</code> (<code>APP_VERSION</code>), <code>js/common.js</code> (<code>APP_VERSION</code>) und <code>manifest.json</code> (<code>version</code>).</li>
+            <li>Neue Dateien, die offline verfügbar sein sollen, in <code>FILES_TO_CACHE</code> in <code>service-worker.js</code> eintragen.</li>
+            <li>Dateien hochladen. Gelöschte Dateien im Repository von Hand entfernen – das Hochladen löscht nichts.</li>
+        </ol>
+        <p>Reine Text- und Gestaltungsänderungen an Seiten, CSS oder JS sind auch ohne Versionssprung sofort sichtbar (Netz zuerst). Die Versionsnummer ist nötig, wenn sich Schriften, Bilder oder Bibliotheken ändern.</p>
+
+        <h2 id="grenzen">8. Bekannte Grenzen</h2>
+        <ul>
+            <li><strong>Zielplattform:</strong> iPadOS/iOS Safari (Teilen mit Dateianhang, Kamera, Touch). In anderen Browsern fällt „PDF teilen“ auf einen normalen Download zurück.</li>
+            <li><strong>Anmeldung:</strong> Die Prüfung erfolgt nur im Browser. Im Quelltext stehen keine Namen oder Passwörter, aber alle Seiten sind direkt aufrufbar und kurze Zahlencodes lassen sich durchprobieren – eine organisatorische Hürde, kein Zugriffsschutz.</li>
+            <li><strong>NAS-Speichern im Audit:</strong> <code>save.php</code> liegt nicht im Hauptordner des Repositorys. Es funktioniert nur, wenn die Seite über die Synology (bzw. Tailscale) aufgerufen wird oder in ASiC Handel eine NAS-Adresse hinterlegt ist; über GitHub Pages laufen keine PHP-Skripte.</li>
+            <li><strong>Audit-Fragen:</strong> Antworten werden nach Position gespeichert. Fragen in <code>audit.html</code> daher nicht löschen oder umsortieren, sonst verrutschen gespeicherte Audits.</li>
+            <li><strong>Theke/Metzgerei:</strong> erzeugt bei „Nein“ keine Maßnahmen und hat keinen PDF-Export (nur Druck).</li>
+            <li><strong>Fotos:</strong> Sehr viele Fotos (deutlich über 20–30) verlangsamen die PDF-Erzeugung.</li>
+            <li><strong>Gerätespeicher:</strong> Daten im Browser gehen verloren, wenn die Websitedaten gelöscht werden; sie werden nicht zwischen Geräten abgeglichen.</li>
         </ul>
 
     </div>
