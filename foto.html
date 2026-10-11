@@ -8,7 +8,6 @@
 <link href="manifest.json" rel="manifest"/>
 <meta content="#C62828" name="theme-color"/>
   <script src="lib/jspdf.umd.min.js"></script>
-  <script src="lib/exif.js"></script>
   <style>
     :root {
       --rot: #C62828;
@@ -601,7 +600,7 @@
     function drawHeader() {
       doc.setFontSize(18);
       doc.setFont(undefined, 'bold');
-      doc.text("Arbeitssicherheit-Checkliste-2025", margin, margin + 20);
+      doc.text(`Fotodokumentation Arbeitssicherheit ${new Date().getFullYear()}`, margin, margin + 20);
       doc.setFontSize(11);
       doc.setFont(undefined, 'normal');
       doc.text(`Datum: ${datumDeutsch}`, margin, margin + 45);
@@ -692,6 +691,9 @@ Fachkraft für Arbeitssicherheit (SiFa: ${sifa})`,
       });
 
     } catch (e) {
+      // Abbruch im Teilen-Menue durch den Nutzer ist kein Fehler - frueher
+      // wurde dann trotzdem ein Download gestartet und "Teilen nicht moeglich" gemeldet.
+      if (e && e.name === 'AbortError') return;
       const doc = await createPDF();
       const blob = doc.output("blob");
       const url = URL.createObjectURL(blob);
@@ -758,7 +760,11 @@ Fachkraft für Arbeitssicherheit (SiFa: ${sifa})`,
 
   renderVorschau();
 
-  document.getElementById("datum").value = new Date().toISOString().split("T")[0];
+  (function () {
+    // Lokales Datum statt UTC (toISOString lieferte zwischen 0 und 2 Uhr den Vortag)
+    const h = new Date();
+    document.getElementById("datum").value = `${h.getFullYear()}-${String(h.getMonth() + 1).padStart(2, "0")}-${String(h.getDate()).padStart(2, "0")}`;
+  })();
   document.querySelectorAll(".app-footer-jahr").forEach(el => el.textContent = new Date().getFullYear());
 
   if ('serviceWorker' in navigator) {

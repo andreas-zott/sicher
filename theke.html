@@ -25,7 +25,7 @@
 <section class="hero hero-compact">
     <div class="hero-icon"><i class="fas fa-cut"></i></div>
     <h1>Theke / Metzgerei</h1>
-    <p>Arbeitssicherheit — Fleischverarbeitung, 70 Prüfpunkte</p>
+    <p>Arbeitssicherheit — Fleischverarbeitung, <span id="theke-umfang"></span></p>
 </section>
 
 <div class="container">
@@ -65,6 +65,7 @@
 
     <div class="button-row">
         <button type="button" class="btn btn-primary" onclick="window.print()"><i class="fas fa-print"></i> Drucken</button>
+        <button type="button" class="btn btn-danger-ghost" onclick="formularZuruecksetzen()">Zurücksetzen</button>
     </div>
 
 </div>
@@ -230,7 +231,18 @@
         }
     }
 
+    // Neue Begehung: gespeicherten Stand (Antworten, Kopfdaten, Unterschrift) verwerfen.
+    // Zuvor gab es keinen Weg zurueck - der Stand der letzten Begehung
+    // erschien beim naechsten Markt wieder.
+    function formularZuruecksetzen() {
+        if (!confirm('Formular wirklich zurücksetzen? Alle Eingaben und die Unterschrift gehen dabei verloren.')) return;
+        try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+        window.location.reload();
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
+        const umfang = document.getElementById('theke-umfang');
+        if (umfang) umfang.textContent = THEKE_KATEGORIEN.reduce((n, k) => n + k.fragen.length, 0) + ' Prüfpunkte';
         renderKategorien();
         initSignatur();
         ladeStand();

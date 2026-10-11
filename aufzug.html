@@ -310,7 +310,7 @@
 
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="lib/jspdf.umd.min.js"></script>
 <script>
 /* ---------- Daten ---------- */
 const meta = {
@@ -333,8 +333,8 @@ const problemstellung = [
 const kurzbewertung = "Der geschilderte Sachverhalt (keine Meldung an das Marktpersonal, Befreiung erst nach 55 Minuten, verspätetes Eintreffen der beauftragten Firma) deutet mit hoher Wahrscheinlichkeit auf einen Verstoß gegen die Betriebssicherheitsverordnung (BetrSichV) i. V. m. TRBS 3121 hin. Die zentrale Vorgabe – Eintreffen des Hilfeleistenden bzw. Befreiung innerhalb von 30 Minuten – wurde deutlich überschritten; die Rettungskette hat faktisch versagt.";
 
 const regelwerke = [
-  { name: "Betriebssicherheitsverordnung (BetrSichV)", relevanz: "Grundpflichten (§ 4), Gefährdungsbeurteilung (§ 5), Maßnahmen bei Störungen (§ 12), besondere Vorschriften für Aufzugsanlagen (Anhang 1 Nr. 2)." },
-  { name: "BetrSichV Anhang 1 Nr. 2.3", relevanz: "Eingeschlossene Personen müssen jederzeit und in möglichst kurzer Zeit befreit werden können; Zweiwege-Kommunikationssystem zu einer ständig besetzten Stelle ist erforderlich." },
+  { name: "Betriebssicherheitsverordnung (BetrSichV)", relevanz: "Grundpflichten (§ 4), Gefährdungsbeurteilung (§ 5), Betriebsstörungen und Unfälle (§ 11), besondere Vorschriften für Aufzugsanlagen (Anhang 1 Nr. 4)." },
+  { name: "BetrSichV Anhang 1 Nr. 4.1", relevanz: "Eingeschlossene Personen müssen jederzeit und in möglichst kurzer Zeit befreit werden können; Zweiwege-Kommunikationssystem zu einer ständig besetzten Stelle ist erforderlich." },
   { name: "TRBS 3121 „Betrieb von Aufzugsanlagen“", relevanz: "Zentrales Konkretisierungsdokument: Notbefreiung, Notdienst, ständig besetzte Stelle, 30-Minuten-Regel, beauftragte Person, Notfallplan / Notbefreiungsanleitung." },
   { name: "DGUV Vorschrift 1 / DGUV Regelwerk", relevanz: "Organisationspflichten, Unterweisung und Beauftragung von Personen." },
   { name: "DIN EN 81-28 (Fernnotruf)", relevanz: "Technische Anforderungen an das Notrufsystem: Zweiwege-Sprechverbindung, Funktion bei Stromausfall, Bestätigung/Filterung des Notrufs." },
@@ -427,12 +427,12 @@ const massnahmen = [
 const empfehlungen = {
   "1":  { prio: "Hoch",    regel: "BetrSichV § 5; TRBS 1111",                          massnahme: "Gefährdungsbeurteilung nach § 5 BetrSichV erstellen bzw. aktualisieren, datieren und durch den Betreiber freigeben lassen." },
   "2":  { prio: "Hoch",    regel: "BetrSichV § 16 u. Anhang 2 Abschn. 2; TRBS 1201",   massnahme: "Prüffristen durch eine ZÜS festlegen lassen und wiederkehrende Prüfungen fristgerecht beauftragen und dokumentieren." },
-  "3":  { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.3; BetrSichV Anhang 1 Nr. 2.3",     massnahme: "Aktuelle Notbefreiungsanleitung / Notfallplan erstellen und nachweislich beim Notdienst hinterlegen." },
+  "3":  { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.3; BetrSichV Anhang 1 Nr. 4.1",     massnahme: "Aktuelle Notbefreiungsanleitung / Notfallplan erstellen und nachweislich beim Notdienst hinterlegen." },
   "4":  { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.2/4.3",                             massnahme: "Notdienstvertrag mit ständig besetzter Notrufannahme und garantierter Befreiung ≤ 30 Min inkl. Nachweis- und Pönaleregelung schließen bzw. nachverhandeln." },
   "5":  { prio: "Mittel",  regel: "BetrSichV § 14 Abs. 7; TRBS 1201",                  massnahme: "Prüfbuch, Wartungsnachweise und Instandhaltungshistorie vollständig führen und aufbewahren." },
-  "6":  { prio: "Hoch",    regel: "DIN EN 81-28; BetrSichV Anhang 1 Nr. 2.3",         massnahme: "Zweiwege-Sprechverbindung instand setzen und Funktion nach DIN EN 81-28 testen und protokollieren." },
+  "6":  { prio: "Hoch",    regel: "DIN EN 81-28; BetrSichV Anhang 1 Nr. 4.1",         massnahme: "Zweiwege-Sprechverbindung instand setzen und Funktion nach DIN EN 81-28 testen und protokollieren." },
   "7":  { prio: "Hoch",    regel: "DIN EN 81-28 Abschn. 4",                            massnahme: "Notrufsystem mit Notstromversorgung (Akku) ausrüsten und die Funktion bei Stromausfall regelmäßig prüfen." },
-  "8":  { prio: "Hoch",    regel: "BetrSichV Anhang 1 Nr. 2.3; TRBS 3121 Nr. 4.3; DIN EN 81-28", massnahme: "Aufschaltung des Notrufs auf eine rund um die Uhr besetzte Stelle sicherstellen (keine Mailbox / Bandansage)." },
+  "8":  { prio: "Hoch",    regel: "BetrSichV Anhang 1 Nr. 4.1; TRBS 3121 Nr. 4.3; DIN EN 81-28", massnahme: "Aufschaltung des Notrufs auf eine rund um die Uhr besetzte Stelle sicherstellen (keine Mailbox / Bandansage)." },
   "9":  { prio: "Mittel",  regel: "DIN EN 81-20 Abschn. 5.4.10; BetrSichV § 4",        massnahme: "Notbeleuchtung im Fahrkorb instand setzen und in die wiederkehrende Prüfung aufnehmen." },
   "10": { prio: "Mittel",  regel: "TRBS 3121 Nr. 4.3; DGUV Vorschrift 1",             massnahme: "Zugang zu Maschinenraum / Notbefreiungseinrichtung regeln: Schlüsselverwaltung und berechtigte, unterwiesene Personen festlegen." },
   "11": { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.3",                                 massnahme: "Alarmierungskette (Notdienst → Objektpersonal → Feuerwehr) schriftlich festlegen und im Notfallplan verankern." },
@@ -449,7 +449,7 @@ const empfehlungen = {
   "22": { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.2; DGUV Vorschrift 1 § 13",         massnahme: "Beauftragte Person zur Notbefreiung benennen und deren Qualifikation / Unterweisung nachweisen." },
   "23": { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.2",                                 massnahme: "Zuständigkeit für die Notbefreiung (intern / extern / kombiniert) eindeutig regeln und dokumentieren." },
   "24": { prio: "Hoch",    regel: "DIN EN 81-28",                                      massnahme: "Notrufsystem an DIN EN 81-28 anpassen (Zweiwege-Verbindung, Stromausfallsicherheit, Notrufbestätigung)." },
-  "25": { prio: "Hoch",    regel: "BetrSichV Anhang 1 Nr. 2.3; TRBS 3121 Nr. 4.3",     massnahme: "Sicherstellen, dass die Notruf-Empfangsstelle rund um die Uhr besetzt ist, und Nachweis einfordern." },
+  "25": { prio: "Hoch",    regel: "BetrSichV Anhang 1 Nr. 4.1; TRBS 3121 Nr. 4.3",     massnahme: "Sicherstellen, dass die Notruf-Empfangsstelle rund um die Uhr besetzt ist, und Nachweis einfordern." },
   "26": { prio: "Mittel",  regel: "DIN EN 81-28; TRBS 3121",                           massnahme: "Aktuellen Notruf-Funktionstest durchführen und in regelmäßigen Intervallen protokollieren." },
   "27": { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.3",                                 massnahme: "30-Minuten-Frist vertraglich und praktisch sicherstellen, inkl. Nachweis- und Pönaleregelung." },
   "28": { prio: "Mittel",  regel: "TRBS 3121; BetrSichV § 4",                          massnahme: "Durchschnittliche und maximale Reaktionszeiten erfassen und regelmäßig auswerten." },
@@ -461,7 +461,7 @@ const empfehlungen = {
   "34": { prio: "Hoch",    regel: "BetrSichV § 16 u. Anhang 2 Abschn. 2",             massnahme: "ZÜS-Prüfungen fristgerecht durchführen und Prüfbescheinigungen aufbewahren." },
   "35": { prio: "Mittel",  regel: "TRBS 3121 Nr. 4.3; DGUV Vorschrift 1 § 4",          massnahme: "Notfall- / Alarmplan erstellen und regelmäßig üben und dokumentieren." },
   "36": { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.3",                                 massnahme: "Klären und dokumentieren, warum die beauftragte Firma verspätet eintraf; Vertrag und Prozess entsprechend anpassen." },
-  "37": { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.3; BetrSichV Anhang 1 Nr. 2.3",     massnahme: "Klären, warum die Eingeschlossenen selbst die Feuerwehr rufen mussten, und eine automatische Eskalationsstufe einführen." },
+  "37": { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.3; BetrSichV Anhang 1 Nr. 4.1",     massnahme: "Klären, warum die Eingeschlossenen selbst die Feuerwehr rufen mussten, und eine automatische Eskalationsstufe einführen." },
   "38": { prio: "Hoch",    regel: "BetrSichV § 4 Abs. 2",                              massnahme: "Sofort- und Dauermaßnahmen nach dem Vorfall einleiten und dokumentieren (CAPA)." },
 };
 

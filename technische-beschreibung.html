@@ -74,22 +74,26 @@
                 <tr><td><code>index.html</code></td><td>Login / Einstieg</td></tr>
                 <tr><td><code>welcome.html</code></td><td>Übersicht nach dem Login, Kacheln zu allen Werkzeugen</td></tr>
                 <tr><td><code>l1.html</code></td><td>Untermenü: Checklisten-Formate (Desktop, Mobil, Audit, Theke, Aushänge, plus „Ältere Version")</td></tr>
-                <tr><td><code>liste-neu.html</code></td><td>Aktuelle Haupt-Checkliste (Desktop/Tablet): Prüfpunkte, automatische Maßnahmen-Ableitung bei „Nein", Unterschrift, PDF-Export</td></tr>
+                <tr><td><code>liste-neu.html</code></td><td>Aktuelle Haupt-Checkliste (Desktop/Tablet): Prüfpunkte, automatische Maßnahmen-Ableitung bei „Nein" (bearbeitbar), Unterschrift, PDF-Export</td></tr>
+                <tr><td><code>js/checkliste-daten.js</code></td><td>Fragenkatalog der aktuellen Checkliste: Kategorien, Fragen mit fester <code>id</code> und zugehöriger Maßnahme</td></tr>
+                <tr><td><code>js/checkliste-engine.js</code></td><td>Gemeinsame Logik von <code>liste-neu.html</code> und <code>mobile-neu.html</code> (Darstellung, Speichern, PDF, Übergaben)</td></tr>
                 <tr><td><code>mobile-neu.html</code></td><td>Aktuelle Checkliste, optimiert für iPhone/iPad-Hochformat</td></tr>
                 <tr><td><code>liste.html</code> / <code>mobile.html</code></td><td>Ältere Fassung der Checkliste, weiterhin verfügbar (eigener Bereich „Ältere Version" in <code>l1.html</code>) — für neue Begehungen wird <code>liste-neu.html</code>/<code>mobile-neu.html</code> empfohlen</td></tr>
                 <tr><td><code>audit.html</code></td><td>Audit-Variante der Checkliste, inkl. direktem NAS-Speichern (<code>save.php</code>) und Maßnahmenplan-Export</td></tr>
-                <tr><td><code>Maßnahmenplan.html</code></td><td>Editierbare Maßnahmenplan-Ansicht mit Dashboard, JSON-/PDF-Export — Zielseite von <code>audit.html</code>s „Maßnahmenplan"-Button</td></tr>
-                <tr><td><code>theke.html</code></td><td>Checkliste Theke/Metzgerei (Fleischverarbeitung), 70 Prüfpunkte, Unterschrift, Drucken</td></tr>
-                <tr><td><code>aushang.html</code></td><td>Digitale Übersicht aller Pflicht-Aushänge im Einzelhandel, mit Suchfunktion</td></tr>
+                <tr><td><code>Massnahmenplan.html</code></td><td>Editierbare Maßnahmenplan-Ansicht mit Dashboard, JSON-/PDF-Export — Zielseite von <code>audit.html</code>s „Maßnahmenplan"-Button</td></tr>
+                <tr><td><code>theke.html</code></td><td>Checkliste Theke/Metzgerei (Fleischverarbeitung), Fragen aus <code>js/theke-daten.js</code>, Unterschrift, Drucken, Zurücksetzen</td></tr>
+                <tr><td><code>aushang.html</code></td><td>Übersicht der Pflicht-Aushänge und empfohlenen Auslagen im Einzelhandel (Daten in <code>js/aushang-daten.js</code>), mit Suchfunktion</td></tr>
                 <tr><td><code>foto.html</code></td><td>Fotoerfassung zur Begehung: Kamera/Galerie, Drehen, Kommentieren, eigener PDF-Export</td></tr>
                 <tr><td><code>massnahmen-sifa.html</code></td><td>Eigenständige Auswertungsansicht aller Maßnahmen, empfängt Daten von <code>liste.html</code>/<code>liste-neu.html</code>/<code>mobile.html</code>/<code>mobile-neu.html</code></td></tr>
+                <tr><td><code>aufzug.html</code></td><td>Eigenständige Auswertung „Kundenaufzug – Notbefreiung &amp; Notrufkette“ (nicht im Menü verlinkt, direkt aufrufbar)</td></tr>
                 <tr><td><code>help.html</code></td><td>Bedienungsanleitung</td></tr>
                 <tr><td><code>faq.html</code></td><td>Häufig gestellte Fragen</td></tr>
                 <tr><td><code>technische-beschreibung.html</code></td><td>Diese Seite</td></tr>
                 <tr><td><code>impressum.html</code> / <code>datenschutz.html</code></td><td>Rechtliches</td></tr>
                 <tr><td><code>manifest.json</code></td><td>PWA-Manifest (Name, Icons, Farben, Version)</td></tr>
-                <tr><td><code>service-worker.js</code></td><td>Offline-Caching &amp; Versionsverwaltung</td></tr>
-                <tr><td><code>save.php</code> / <code>list.php</code> / <code>load.php</code></td><td>Serverseitige NAS-Anbindung für <code>audit.html</code> (Synology, analog zu ASiC Handel) — laufen nur, wenn diese Seite direkt über die Synology bzw. deren Tailscale-Adresse aufgerufen wird, nicht über GitHub Pages</td></tr>
+                <tr><td><code>service-worker.js</code></td><td>Offline-Caching &amp; Versionsverwaltung (einziger Service Worker des Portals)</td></tr>
+                <tr><td><code>sw.js</code></td><td>Nur noch Verweis auf <code>service-worker.js</code> für früher installierte Registrierungen</td></tr>
+                <tr><td><code>save.php</code> / <code>list.php</code> / <code>load.php</code></td><td>Serverseitige NAS-Anbindung für <code>audit.html</code> (Synology, analog zu ASiC Handel) — liegen <strong>nicht</strong> im Repository-Hauptordner, sondern nur auf der Synology; laufen nur, wenn die Seite direkt über die Synology bzw. deren Tailscale-Adresse aufgerufen wird (oder in den Einstellungen von ASiC Handel – gleiche Domain – eine NAS-Adresse hinterlegt ist), nicht über GitHub Pages</td></tr>
             </tbody>
         </table>
 
@@ -113,11 +117,14 @@
             <code>window.postMessage()</code> versucht, falls beide Fenster
             bereits offen sind.
         </p>
-        <h3>audit.html → Maßnahmenplan.html</h3>
+        <h3>audit.html → Massnahmenplan.html</h3>
         <p>
-            Der „Maßnahmenplan"-Button öffnet <code>Maßnahmenplan.html</code>
-            in einem neuen Fenster und übergibt die Daten als URL-Parameter
-            (<code>?data=…</code>, JSON-kodiert).
+            Der „Maßnahmenplan"-Button schreibt die Daten in
+            <code>localStorage</code> (Schlüssel <code>massnahmenplanData</code>)
+            und öffnet <code>Massnahmenplan.html</code> in einem neuen Fenster.
+            Bereits im Maßnahmenplan bearbeitete Angaben (Verantwortlich, Frist,
+            Status) derselben Begehung werden dabei übernommen und nicht
+            überschrieben.
         </p>
         <h3>audit.html → save.php (NAS)</h3>
         <p style="margin-bottom:0;">
@@ -139,23 +146,15 @@
 
         <h2>4. Eingesetzte Bibliotheken</h2>
         <p>
-            Das Portal-Grundgerüst sowie <code>liste-neu.html</code>,
-            <code>mobile-neu.html</code> und <code>massnahmen-sifa.html</code>
-            binden alle Bibliotheken <strong>lokal</strong> ein
-            (<code>lib/</code>), ohne Laufzeit-Anfrage an ein CDN. Die
-            älteren Dateien (<code>liste.html</code>, <code>mobile.html</code>,
-            <code>audit.html</code>, <code>theke.html</code>) laden ihre
-            Bibliotheken noch per CDN — Umstellung auf lokale Einbindung
-            steht für diese Seiten noch aus. <code>aushang.html</code>
-            benötigt keine externen Bibliotheken.
+            Alle Seiten des Portals binden ihre Bibliotheken
+            <strong>lokal</strong> aus <code>lib/</code> ein — ohne
+            Laufzeit-Anfrage an ein CDN oder an Google Fonts.
         </p>
         <table class="tech-table">
             <thead><tr><th>Bibliothek</th><th>Verwendet in</th><th>Zweck</th></tr></thead>
             <tbody>
-                <tr><td><span class="badge">jsPDF 2.5.1</span></td><td>liste.html, liste-neu.html, foto.html, mobile.html, mobile-neu.html, audit.html, massnahmen-sifa.html</td><td>Manuelle, layoutgenaue PDF-Erzeugung direkt im Browser</td></tr>
-                <tr><td><span class="badge">html2pdf.js 0.10.1</span></td><td>audit.html</td><td>Screenshot-basierter PDF-Export</td></tr>
+                <tr><td><span class="badge">jsPDF 2.5.1</span></td><td>liste.html, liste-neu.html, foto.html, mobile.html, mobile-neu.html, audit.html, Massnahmenplan.html, massnahmen-sifa.html, aufzug.html</td><td>Manuelle, layoutgenaue PDF-Erzeugung direkt im Browser</td></tr>
                 <tr><td><span class="badge">Font Awesome 6.5.0</span></td><td>alle Portal-Seiten</td><td>Icons (jetzt lokal eingebunden)</td></tr>
-                <tr><td><span class="badge">exif-js 2.3.0</span></td><td>foto.html</td><td>EXIF-Auslesung von Fotos (z. B. Ausrichtung), jetzt lokal eingebunden</td></tr>
             </tbody>
         </table>
         <p style="margin-bottom:0; font-size:0.88rem; color:var(--ink-soft);"><code>theke.html</code> und <code>aushang.html</code> benötigen kein PDF — <code>theke.html</code> nutzt den nativen Browser-Druck, <code>aushang.html</code> ist eine reine Übersichtsseite.</p>
@@ -166,14 +165,14 @@
             <code>theme_color</code> (<code>#0a2f73</code>, passend zur neuen
             Portal-Farbe) und eine eigene <code>version</code>-Angabe.
         </p>
-        <p><code>service-worker.js</code> übernimmt das Offline-Caching (Cache-First-Strategie, versionierter Cache-Name, alte Caches werden beim Aktivieren automatisch gelöscht).</p>
+        <p><code>service-worker.js</code> übernimmt das Offline-Caching (Cache-First-Strategie, versionierter Cache-Name). Beim Aktivieren werden nur <strong>eigene</strong> alte Caches (<code>sicherheit-cache-…</code>) gelöscht — die Caches von ASiC Handel, GBO und Audit-2026 bleiben unberührt. Anfragen an diese Unterprojekte bedient der Portal-Service-Worker nicht. Versionsnummer in <code>service-worker.js</code> und <code>js/common.js</code> bei Änderungen gemeinsam erhöhen.</p>
       
 
         <h2>6. Datenspeicherung &amp; Datenschutz</h2>
         <ul>
             <li>Für den Großteil der App gilt: <strong>keine Serverkommunikation</strong>, keine Übertragung an Dritte. <strong>Ausnahme:</strong> <code>audit.html</code> kann optional per „Direkt auf NAS speichern" die komplette Begehung an den eigenen Server (Synology) senden — bewusste Funktion, kein Dritter beteiligt.</li>
             <li><code>localStorage</code> wird für den Formularstand der Checklisten sowie das Theme (hell/dunkel) genutzt.</li>
-            <li>Fotos, Unterschrift und generierte PDFs verbleiben nur im Arbeitsspeicher des Browsers, bis sie manuell heruntergeladen, geteilt oder (nur bei <code>audit.html</code>) aktiv auf die eigene NAS gespeichert werden.</li>
+            <li>Fotos und generierte PDFs verbleiben nur im Arbeitsspeicher des Browsers; Unterschriften werden zusammen mit dem Formularstand im <code>localStorage</code> gespeichert. Nichts davon verlässt das Gerät, bis es manuell heruntergeladen, geteilt oder (nur bei <code>audit.html</code>) aktiv auf die eigene NAS gespeichert wird.</li>
             <li>Der Service-Worker-Cache enthält ausschließlich die statischen App-Dateien selbst, keine Nutzereingaben.</li>
         </ul>
         <p>Ausführliche rechtliche Formulierung: siehe <a href="datenschutz.html">Datenschutzerklärung</a>.</p>
@@ -183,9 +182,8 @@
             <li><strong>Zielplattform:</strong> iPadOS/iOS Safari (Web-Share-API mit Dateianhang, Kamera-Capture, Touch-Bedienung).</li>
             <li>Die native <em>„Teilen"</em>-Funktion (<code>navigator.share</code> mit Dateien) wird nicht von allen Browsern/Desktop-Systemen unterstützt; in diesem Fall fällt die App automatisch auf einen normalen PDF-Download zurück.</li>
             <li>Sehr große Foto-Mengen (deutlich über 20–30 Fotos) können die PDF-Erzeugung im Browser spürbar verlangsamen.</li>
-            <li>Der Login (<code>index.html</code>) prüft Benutzername/Passwort rein clientseitig im JavaScript — eine organisatorische Zugriffshürde, kein echter Zugriffsschutz. Bewusst so belassen.</li>
+            <li>Der Login (<code>index.html</code>) prüft Benutzername/Passwort rein clientseitig. Im Quelltext steht nur noch ein SHA-256-Hash, nicht mehr Name und Passwort im Klartext. Es bleibt eine organisatorische Hürde, kein echter Zugriffsschutz: Alle Seiten sind direkt aufrufbar.</li>
             <li><code>audit.html</code>s NAS-Speichern (<code>save.php</code>) funktioniert nur, wenn die Seite direkt über die Synology (bzw. deren Tailscale-Adresse) aufgerufen wird — über GitHub Pages allein ist der Endpunkt nicht erreichbar, da dort keine serverseitigen Skripte laufen können.</li>
-            <li>Mehrere ältere Dateivarianten (u. a. <code>liste-alt.html</code>, <code>foto2.html</code>, <code>audit-iphone.html</code>, mehrere <code>massnahmen*.html</code>-Varianten sowie diverse unverlinkte Themenseiten) liegen noch im Repository, sind aber nicht Teil der Navigation.</li>
         </ul>
 
     </div>
