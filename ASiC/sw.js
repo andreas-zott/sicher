@@ -162,8 +162,11 @@ self.addEventListener('activate', event => {
 
                     keys.map(key => {
 
+                        // Nur eigene Caches loeschen: ASiC Handel (v1.x) und GBO (v2.x)
+                        // nutzen beide das Praefix 'asic-handel-' auf derselben Domain
+                        // und haben sich frueher gegenseitig den Offline-Cache geloescht.
                         if (
-                            key.startsWith('asic-handel-') &&
+                            key.startsWith('asic-handel-v1.') &&
                             key !== CACHE_NAME
                         ) {
 
