@@ -38,7 +38,7 @@ self.addEventListener('install', event => {
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))))
+      .then(keys => Promise.all(keys.filter(k => k.startsWith('audit-2026-') && k !== CACHE_NAME).map(k => caches.delete(k)))) // nur eigene Caches (frueher: ALLE Caches der Domain)
       .then(() => self.clients.claim())
   );
 });
