@@ -5680,6 +5680,51 @@ window.GBO_DATA = {
         "PSY-30",
         "Alleinarbeit",
         "Ist bei Alleinarbeit die erforderliche Unterstützung bzw. Notfallorganisation anhand der tatsächlichen Gefährdung geregelt?"
+      ],
+      [
+        "PSY-31",
+        "Abwechslung / Monotonie",
+        "Ist die Arbeit so organisiert, dass lang andauernde gleichförmige Tätigkeiten (z. B. mehrstündiges Kassieren) durch Wechsel oder Unterbrechungen begrenzt werden?"
+      ],
+      [
+        "PSY-32",
+        "Verantwortung Kasse / Geld",
+        "Sind Regelungen zu Kassendifferenzen, Bargeldverantwortung und Kontrollen so festgelegt, dass Beschäftigte nicht unangemessen unter Druck gesetzt werden?"
+      ],
+      [
+        "PSY-33",
+        "Technische Störungen",
+        "Werden Störungen an Kassen, Scannern, SB-Kassen und anderen Arbeitsmitteln schnell behoben, und ist das Vorgehen bei Ausfällen geregelt?"
+      ],
+      [
+        "PSY-34",
+        "Einarbeitung",
+        "Werden neue Beschäftigte, Aushilfen und Springer strukturiert eingearbeitet und haben sie eine feste Ansprechperson?"
+      ],
+      [
+        "PSY-35",
+        "Beteiligung",
+        "Werden Beschäftigte bei Änderungen, die ihre Arbeit betreffen, und bei der Ermittlung von Belastungen beteiligt (z. B. Teamgespräch, Kurzbefragung, Workshop)?"
+      ],
+      [
+        "PSY-36",
+        "Umgang mit Fehlern",
+        "Werden Fehler sachlich besprochen und zur Verbesserung der Abläufe genutzt, statt Beschäftigte bloßzustellen?"
+      ],
+      [
+        "PSY-37",
+        "Emotionale Anforderungen",
+        "Werden Beschäftigte bei dauerhaft hohen emotionalen Anforderungen im Kundenkontakt (ständige Freundlichkeit trotz Belastung) unterstützt und entlastet?"
+      ],
+      [
+        "PSY-38",
+        "Ladendiebstahl",
+        "Ist festgelegt und bekannt, wie sich Beschäftigte bei Ladendiebstahl verhalten sollen (kein Festhalten oder Verfolgen, Meldeweg, Zuständigkeit)?"
+      ],
+      [
+        "PSY-39",
+        "Vereinbarkeit",
+        "Werden bei der Dienstplanung private Belange (z. B. Kinderbetreuung, Pflege) im Rahmen der betrieblichen Möglichkeiten berücksichtigt und gibt es ein faires Verfahren für Wünsche?"
       ]
     ]
   },
