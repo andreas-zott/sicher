@@ -40,6 +40,7 @@ const FILES_TO_CACHE = [
   '/sicher/aufzug.html',
   '/sicher/faq.html',
   '/sicher/technische-beschreibung.html',
+  '/sicher/quellen.html',
   '/sicher/impressum.html',
   '/sicher/datenschutz.html',
   '/sicher/manifest.json',
