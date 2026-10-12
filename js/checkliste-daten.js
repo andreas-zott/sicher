@@ -376,7 +376,7 @@ const CHECKLISTE_KATALOG = [
    {
     "id": "7.02",
     "frage": "Sind die Sensoren nicht mit Material oder sonstigen Gegenständen verstellt?",
-    "massnahme": "Achten Sie darauf, dass sicherheitsrelevante Sensoren, Melder oder Lüftungselemente nicht verstellt oder blockiert sind (§ 3 ArbSchG, TRBS 1115)."
+    "massnahme": "Achten Sie darauf, dass sicherheitsrelevante Sensoren, Melder oder Lüftungselemente nicht verstellt oder blockiert sind (§ 3 ArbSchG, DGUV Regel 100-500 Kap. 2.35, DIN EN 378)."
    },
    {
     "id": "7.03",
@@ -392,17 +392,17 @@ const CHECKLISTE_KATALOG = [
    {
     "id": "8.01",
     "frage": "Sind die Schwerlastregale geprüft?",
-    "massnahme": "Veranlassen Sie regelmäßige Prüfungen aller Schwerlastregale durch befähigte Personen gemäß BetrSichV § 14 sowie DGUV Regel 108-007."
+    "massnahme": "Veranlassen Sie regelmäßige Prüfungen aller Schwerlastregale durch befähigte Personen gemäß BetrSichV § 14 sowie DGUV Information 208-061."
    },
    {
     "id": "8.02",
     "frage": "Ist der Anfahrschutz vorhanden?",
-    "massnahme": "Bringen Sie an Regalen und gefährdeten Bauteilen einen geeigneten Anfahrschutz an und kennzeichnen Sie ihn (DGUV Regel 108-007, ASR A1.3)."
+    "massnahme": "Bringen Sie an Regalen und gefährdeten Bauteilen einen geeigneten Anfahrschutz an und kennzeichnen Sie ihn (DGUV Information 208-061, ASR A1.3)."
    },
    {
     "id": "8.03",
     "frage": "Ist die Traglastangabe an den Schwerlastregalen vorhanden?",
-    "massnahme": "Bringen Sie an jedem Regal deutlich sichtbare und dauerhafte Traglastangaben an (DGUV Regel 108-007, DIN EN 15635)."
+    "massnahme": "Bringen Sie an jedem Regal deutlich sichtbare und dauerhafte Traglastangaben an (DGUV Information 208-061, DIN EN 15635)."
    },
    {
     "id": "8.04",
