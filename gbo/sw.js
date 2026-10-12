@@ -3,7 +3,7 @@
 // ==========================================================================
 // Offline-Unterstützung für die ASiC-Handel-App.
 //
-// SERVICE-WORKER-VERSION: 2.0.33 (immer identisch zu CACHE_NAME und APP_REVISION in js/app.js halten)
+// SERVICE-WORKER-VERSION: 2.1.1 (immer identisch zu CACHE_NAME und APP_REVISION in js/app.js halten)
 //
 // Bei einer neuen technischen Version:
 //   1. Alle precachten App-Dateien werden neu vom Server geladen.
@@ -19,7 +19,7 @@
 //   - Fotos
 // ==========================================================================
 
-const CACHE_NAME = 'asic-handel-v2.0.33';
+const CACHE_NAME = 'asic-handel-v2.1.1';
 
 
 // ==========================================================================
@@ -68,6 +68,7 @@ const PRECACHE_URLS = [
     './js/storage-check.js',
     './js/gbo-data.js',
     './js/gbo-quellen.js',
+    './js/gbo-struktur.js',
     './js/gbo.js',
     './js/access-gate.js',
     './js/audit-data.js',
@@ -287,6 +288,9 @@ self.addEventListener('fetch', event => {
                 return caches.match(
                     event.request
                 )
+
+                // Dateien mit Versionsanhang (?v=…) auch ohne Anhang finden
+                .then(hit => hit || caches.match(event.request, { ignoreSearch: true }))
 
                 .then(cachedResponse => {
 
