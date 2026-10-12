@@ -762,6 +762,77 @@
     // Kurzfassung mit Risikomatrix
     // ----------------------------------------------------------------------
 
+    // Übersicht der Gefährdungsfaktoren (ab Rev. 2.1.0)
+    function factorPage(P, data) {
+        const rows = data.factors || [];
+        if (!rows.length) return;
+        const d = P.doc;
+        sect(P, 'Gefährdungsfaktoren – Übersicht');
+        paragraph(P, 'Die Kernbeurteilung gilt für jeden Markt und ist nach den Gefährdungsfaktoren der BGHW/GDA gegliedert. Die Vertiefung ergibt sich aus dem Inventar des Marktes und aus Handlungs- oder Beratungsbedarf im Kern.', { size: 8.5, color: C.soft, gap: 3 });
+        const cols = [{ t: 'Gefährdungsfaktor', w: 66 }, { t: 'Kern beantwortet', w: 26 }, { t: 'Handlungs-/ Beratungsbedarf', w: 30 }, { t: 'Vertiefung', w: 22 }, { t: 'Restrisiko', w: 36 }];
+        const head = () => {
+            ensure(P, 16);
+            d.setFillColor(C.dark[0], C.dark[1], C.dark[2]);
+            d.rect(PAGE.ml, P.y, W, 8, 'F');
+            setText(d, 7.5, 'bold', [255, 255, 255]);
+            let x = PAGE.ml;
+            cols.forEach(c => { d.text(clean(c.t), x + 1.5, P.y + 5.2, { maxWidth: c.w - 3 }); x += c.w; });
+            P.y += 8;
+        };
+        head();
+        rows.forEach((r, i) => {
+            if (ensure(P, 8)) head();
+            if (i % 2) { d.setFillColor(C.band[0], C.band[1], C.band[2]); d.rect(PAGE.ml, P.y, W, 7.5, 'F'); }
+            const risk = r.nr === 0 ? '–' : (r.risk && r.risk.rated1 ? `${r.risk.score1} · ${r.risk.class1}` : 'nicht bewertet');
+            const need = r.action + r.deepAction + r.consult + r.deepConsult;
+            const vals = [r.name, `${r.answered} / ${r.total}`, `${r.action + r.deepAction} / ${r.consult + r.deepConsult}`, r.deepTotal ? `${r.deepTotal} ${r.deepTotal === 1 ? 'Frage' : 'Fragen'}` : '–', risk];
+            let x = PAGE.ml;
+            vals.forEach((v, j) => {
+                const col = j === 2 && need ? C.action : j === 4 && r.risk && r.risk.rated1 && !r.risk.acceptable ? C.top : C.ink;
+                setText(d, 8, j === 0 ? 'bold' : 'normal', col);
+                d.text(clean(v), x + 1.5, P.y + 5, { maxWidth: cols[j].w - 3 });
+                x += cols[j].w;
+            });
+            P.y += 7.5;
+        });
+        P.y += 4;
+    }
+
+    // Verlauf der Fortschreibung (ab Rev. 2.1.0)
+    function reviewPage(P, data) {
+        const ri = data.reviewInfo || {};
+        const list = (ri.list || []).slice().sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
+        const d = P.doc;
+        sect(P, 'Fortschreibung');
+        paragraph(P, 'Überprüfung und Anpassung bei jedem Anlass (ArbSchG § 3 Abs. 1, § 5) sowie regelmäßig alle ' + (ri.months || 12) + ' Monate.' + (data.reviewLine ? ' ' + data.reviewLine + '.' : ''), { size: 8.5, color: C.soft, gap: 3 });
+        if (!list.length) { paragraph(P, 'Noch keine Überprüfung dokumentiert.', { size: 8.5 }); return; }
+        const L = window.GBOStruktur;
+        const cols = [{ t: 'Datum', w: 22 }, { t: 'Anlass', w: 50 }, { t: 'Ergebnis', w: 34 }, { t: 'Betroffene Faktoren / Bemerkung', w: 56 }, { t: 'Durch', w: 18 }];
+        const head = () => {
+            ensure(P, 16);
+            d.setFillColor(C.dark[0], C.dark[1], C.dark[2]);
+            d.rect(PAGE.ml, P.y, W, 8, 'F');
+            setText(d, 7.5, 'bold', [255, 255, 255]);
+            let x = PAGE.ml;
+            cols.forEach(c => { d.text(clean(c.t), x + 1.5, P.y + 5.2, { maxWidth: c.w - 3 }); x += c.w; });
+            P.y += 8;
+        };
+        head();
+        list.forEach((e, i) => {
+            const fk = Array.isArray(e.faktoren) && e.faktoren.length ? 'Faktor ' + e.faktoren.map(n => L ? L.faktorName(n).split(' · ')[0] : n).join(', ') : '';
+            const vals = [fmtDate(e.date), e.reason || 'Überprüfung', e.result || '', [fk, e.note || ''].filter(Boolean).join(' – '), e.by || ''];
+            setText(d, 8, 'normal', C.ink);
+            const lines = vals.map((v, j) => d.splitTextToSize(clean(v), cols[j].w - 3));
+            const h = Math.max(7.5, Math.max.apply(null, lines.map(l => l.length)) * 3.6 + 3.5);
+            if (ensure(P, h)) head();
+            if (i % 2) { d.setFillColor(C.band[0], C.band[1], C.band[2]); d.rect(PAGE.ml, P.y, W, h, 'F'); }
+            let x = PAGE.ml;
+            lines.forEach((l, j) => { setText(d, 8, j === 0 ? 'bold' : 'normal', C.ink); d.text(l, x + 1.5, P.y + 5); x += cols[j].w; });
+            P.y += h;
+        });
+        P.y += 4;
+    }
+
     function summaryPage(P, data) {
         const d = P.doc;
         const mods = [];
@@ -778,7 +849,7 @@
         const x0 = PAGE.ml + 24, cw = 19, ch = 11;
         let y0 = P.y + 9;
         setText(d, 8.5, 'bold', C.ink);
-        d.text(clean('Risikomatrix: Restrisiko der Module (Anzahl)'), PAGE.ml, P.y + 3);
+        d.text(clean('Risikomatrix: Restrisiko der Gefährdungsfaktoren (Anzahl)'), PAGE.ml, P.y + 3);
         const cnt = {};
         rated.forEach(m => { const k = `${m.risk.s1}-${m.risk.w1}`; cnt[k] = (cnt[k] || 0) + 1; });
         for (let s = 4; s >= 1; s--) {
@@ -1140,6 +1211,8 @@
             newPage(P);
             P.marks.push({ title: 'Kurzfassung', page: doc.getNumberOfPages() });
             summaryPage(P, data);
+            factorPage(P, data);
+            reviewPage(P, data);
             const entries = data.groups.reduce((n, g) => {
                 const mods = g.modules.filter(m => visibleRows(m, P.opts).length);
                 return n + (mods.length ? 1 + mods.length : 0);

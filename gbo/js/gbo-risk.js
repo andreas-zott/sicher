@@ -46,15 +46,25 @@
     // Betriebliche Festlegung: Ein Restrisiko bis zur Risikozahl 6 gilt als vertretbar.
     const ACCEPTABLE_MAX = 6;
 
+    // Anlässe nach ArbSchG § 3 Abs. 1, § 5 und BGHW-Handlungshilfe A 130/A 131
     const REVIEW_REASONS = [
-        'Jährliche Überprüfung',
-        'Unfall oder Beinaheunfall',
-        'Neues Arbeitsmittel oder neuer Arbeitsstoff',
-        'Änderung der Arbeitsabläufe oder Umbau',
-        'Neue Rechtslage oder neue Erkenntnisse',
-        'Ergebnis einer Begehung oder arbeitsmedizinischen Vorsorge',
+        'Regelmäßige Überprüfung',
+        'Unfall, Beinaheunfall oder arbeitsbedingte Erkrankung',
+        'Überfall oder Gewaltereignis',
+        'Neue Maschinen, Arbeitsmittel oder Arbeitsstoffe',
+        'Umbau oder geänderte Arbeitsabläufe',
+        'Geänderte Vorschriften oder neue Erkenntnisse',
+        'Ergebnis der Wirksamkeitskontrolle',
+        'Hinweise aus Begehung oder arbeitsmedizinischer Vorsorge',
         'Sonstiger Anlass'
     ];
+    const REVIEW_RESULTS = ['Keine Änderung erforderlich', 'GBO angepasst', 'Maßnahmen ergänzt', 'GBO angepasst und Maßnahmen ergänzt'];
+    const REVIEW_MONTHS = [12, 24, 36];
+    function reviewMonths() {
+        const st = stateObj();
+        const m = st && st.meta ? Number(st.meta.reviewMonths) : 0;
+        return REVIEW_MONTHS.includes(m) ? m : 12;
+    }
 
     const EFFECT_RESULTS = [
         ['yes', 'wirksam'],
@@ -172,11 +182,20 @@
         };
     }
 
+    // Ab Rev. 2.1.0: Risikobewertung je Gefährdungsfaktor; Vertiefungsmodule nur, wenn bereits bewertet
+    function riskAllowed(id) {
+        const L = window.GBOStruktur;
+        if (!L) return true;
+        if (L.hasRisk(id)) return true;
+        const st = stateObj();
+        const e = st && st.risk && st.risk[id];
+        return !!(e && Object.keys(e).length);
+    }
     function activeModuleIds() {
         const g = api();
         if (!g) return [];
         const D = window.GBO_DATA;
-        return g.modules().map(m => m[0]).filter(id => D.questions && D.questions[id]);
+        return g.modules().map(m => m[0]).filter(id => D.questions && D.questions[id] && riskAllowed(id));
     }
 
     function summary() {
@@ -203,13 +222,13 @@
         const list = st.reviews.slice().sort((a, b) => String(b.date).localeCompare(String(a.date)));
         const last = list[0] || null;
         const base = last ? last.date : (st.meta && /^\d{4}-\d{2}-\d{2}$/.test(String(st.meta.date || '')) ? st.meta.date : '');
-        const due = base ? addMonths(base, 12) : '';
+        const due = base ? addMonths(base, reviewMonths()) : '';
         let status = 'none', days = null;
         if (due) {
             days = daysBetween(isoToday(), due);
             status = days < 0 ? 'late' : (days <= 30 ? 'soon' : 'ok');
         }
-        return { last, base, due, days, status, count: list.length, list };
+        return { last, base, due, days, status, count: list.length, list, months: reviewMonths() };
     }
 
     function reviewLine() {
@@ -288,7 +307,7 @@
         const r = effective(id);
         const dis0 = r.derived0 ? ' disabled' : '', dis1 = r.derived1 ? ' disabled' : '';
         const eff = EFFECT_RESULTS.map(e => `<option value="${e[0]}" ${r.effResult === e[0] ? 'selected' : ''}>${e[1]}</option>`).join('');
-        return `<div class="gbo-risk-head"><b>Risikobewertung dieses Moduls</b><span>Schwere × Wahrscheinlichkeit, je Stufe 1 bis 4</span></div>
+        return `<div class="gbo-risk-head"><b>${window.GBOStruktur && GBOStruktur.isKern(id) ? 'Risikobewertung dieses Gefährdungsfaktors' : 'Risikobewertung dieses Moduls (aus früherer Fassung)'}</b><span>Schwere × Wahrscheinlichkeit, je Stufe 1 bis 4</span></div>
 <div class="gbo-risk-grid">
   <div class="gbo-risk-col">
     <h4>① Ausgangsrisiko <small>ohne die vorgesehenen Maßnahmen</small></h4>
@@ -423,6 +442,7 @@
         root.querySelectorAll('details.gbo-module[data-module]').forEach(det => {
             const id = det.dataset.module;
             if (!(window.GBO_DATA.questions && window.GBO_DATA.questions[id])) return;
+            if (!riskAllowed(id)) return;
             if (det.querySelector(':scope > .gbo-risk')) return;
             const box = document.createElement('div');
             box.className = 'gbo-risk';
@@ -470,41 +490,54 @@
             rows += `<tr><th>${s} · ${esc(SEVERITY[s - 1][1])}</th>${cells}</tr>`;
         }
         const head = PROBABILITY.map(p => `<th>${p[0]} · ${esc(p[1])}</th>`).join('');
-        return `<table class="gbo-risk-matrix"><caption>Module nach Restrisiko (Anzahl)</caption><thead><tr><th>Schwere ↓ / Wahrscheinlichkeit →</th>${head}</tr></thead><tbody>${rows}</tbody></table>`;
+        return `<table class="gbo-risk-matrix"><caption>Gefährdungsfaktoren nach Restrisiko (Anzahl)</caption><thead><tr><th>Schwere ↓ / Wahrscheinlichkeit →</th>${head}</tr></thead><tbody>${rows}</tbody></table>`;
     }
 
     function overviewHtml() {
         const sum = summary();
-        const card = (label, n, cls) => `<div class="gbo-stat-card ${cls}"><span>${label}</span><strong>${n}</strong></div>`;
+        const legend = [['top', 'sehr hoch', sum.top], ['high', 'hoch', sum.high], ['mid', 'mittel', sum.mid], ['low', 'niedrig', sum.low], ['none', 'nicht bewertet', sum.unrated]]
+            .map(x => `<li><i class="is-${x[0]}"></i>${x[1]}<b>${x[2]}</b></li>`).join('');
         const list = sum.notAcceptable.map(id => {
             const m = forModule(id);
-            return `<div class="gbo-stat-row"><div><b>${esc(moduleName(id))}</b><small>Ausgangsrisiko ${m.score0 || '–'} → Restrisiko ${m.score1} (${esc(m.class1)})</small></div><div class="gbo-stat-due late">nicht vertretbar</div></div>`;
+            return `<li><b>${esc(moduleName(id))}</b><span>${m.score0 || '–'} → ${m.score1} (${esc(m.class1)})</span></li>`;
         }).join('');
-        return `<h3>Risikobewertung der Module (Restrisiko)</h3>
-<p class="gbo-note">Bewertet wird je Modul nach Schwere × Wahrscheinlichkeit. Berücksichtigt sind die aktuell ausgewählten Module.</p>
-<div class="gbo-stats-grid">${card('Niedrig', sum.low, 'is-ok')}${card('Mittel', sum.mid, 'is-mid')}${card('Hoch', sum.high, 'is-action')}${card('Sehr hoch', sum.top, 'is-overdue')}${card('Noch nicht bewertet', sum.unrated, '')}</div>
-${matrixHtml(sum)}
-<section class="gbo-stat-list"><h3>Restrisiko nicht vertretbar <span>${sum.notAcceptable.length}</span></h3>${list || '<p class="gbo-note">Keine Module mit nicht vertretbarem Restrisiko.</p>'}</section>`;
+        return `<section class="gbo-ov-card"><header><h3>Restrisiko</h3><span class="gbo-ov-hint">je Gefährdungsfaktor · Schwere × Wahrscheinlichkeit</span></header>
+<div class="gbo-risk-ov">${matrixHtml(sum)}<ul class="gbo-risk-legend">${legend}</ul></div>
+${list ? `<div class="gbo-risk-bad"><b>Nicht vertretbar (über ${ACCEPTABLE_MAX})</b><ul>${list}</ul></div>` : (sum.total - sum.unrated ? '<p class="gbo-ov-foot">Alle bewerteten Restrisiken sind vertretbar.</p>' : '<p class="gbo-ov-foot">Noch keine Risikobewertung. Bewertet wird in „Gefährdungen beurteilen“ am Anfang jedes Gefährdungsfaktors.</p>')}</section>`;
     }
 
     function reviewHtml() {
         const r = reviewInfo();
         if (!r) return '';
-        const stText = { none: 'Noch kein Termin berechenbar: bitte das Datum der GBO in den Betriebsdaten eintragen.', ok: 'Überprüfung nicht fällig.', soon: `Überprüfung bald fällig (in ${r.days} ${r.days === 1 ? 'Tag' : 'Tagen'}).`, late: `Überprüfung überfällig seit ${Math.abs(r.days)} ${Math.abs(r.days) === 1 ? 'Tag' : 'Tagen'}.` }[r.status];
+        const months = reviewMonths();
+        const stText = {
+            none: 'Noch kein Termin: bitte das Datum der GBO in den Betriebsdaten eintragen.',
+            ok: 'Regelmäßige Überprüfung nicht fällig.',
+            soon: `Regelmäßige Überprüfung bald fällig (in ${r.days} ${r.days === 1 ? 'Tag' : 'Tagen'}).`,
+            late: `Regelmäßige Überprüfung überfällig seit ${Math.abs(r.days)} ${Math.abs(r.days) === 1 ? 'Tag' : 'Tagen'}.`
+        }[r.status];
         const cls = { none: '', ok: 'ok', soon: 'warn', late: 'late' }[r.status];
-        const rows = r.list.map((e, i) => `<div class="gbo-stat-row"><div><b>${fmtDate(e.date)} · ${esc(e.reason || 'Überprüfung')}</b>${e.by ? `<small>durch ${esc(e.by)}</small>` : ''}${e.note ? `<p>${esc(e.note)}</p>` : ''}</div><div class="gbo-stat-due"><button type="button" class="gbo-btn secondary" data-review-del="${i}">Entfernen</button></div></div>`).join('');
+        const fname = n => { const L = window.GBOStruktur; return L ? L.faktorName(n) : String(n); };
+        const rows = r.list.map((e, i) => `<li><div class="gbo-review-when">${fmtDate(e.date)}</div><div class="gbo-review-what"><b>${esc(e.reason || 'Überprüfung')}</b>${e.result ? `<span class="gbo-review-result">${esc(e.result)}</span>` : ''}${Array.isArray(e.faktoren) && e.faktoren.length ? `<span class="gbo-review-fk">${e.faktoren.map(n => `<i>${esc(fname(n).split(' · ')[0])}</i>`).join('')}</span>` : ''}${e.note ? `<p>${esc(e.note)}</p>` : ''}${e.by ? `<small>durch ${esc(e.by)}</small>` : ''}</div><button type="button" class="gbo-mini-btn" data-review-del="${i}" aria-label="Eintrag entfernen">Entfernen</button></li>`).join('');
         const reasons = REVIEW_REASONS.map(x => `<option>${esc(x)}</option>`).join('');
-        return `<h3>Fortschreibung der GBO</h3>
-<p class="gbo-note">Die Gefährdungsbeurteilung wird mindestens jährlich und zusätzlich bei einem Anlass überprüft (zum Beispiel nach einem Unfall, bei neuen Arbeitsmitteln oder bei einer Änderung der Abläufe) und bei Bedarf angepasst.</p>
+        const results = REVIEW_RESULTS.map(x => `<option>${esc(x)}</option>`).join('');
+        const L = window.GBOStruktur;
+        const fk = L ? L.faktoren.map((f, n) => `<label class="gbo-chip"><input type="checkbox" data-review-fk="${n}"><span>${esc(f[1])}</span></label>`).join('') : '';
+        return `<section class="gbo-ov-card gbo-review"><header><h3>Fortschreibung</h3><span class="gbo-ov-hint">${r.count} ${r.count === 1 ? 'Überprüfung' : 'Überprüfungen'} dokumentiert</span></header>
 <div class="gbo-review-status ${cls}"><b>${esc(reviewLine() || 'Noch kein Überprüfungstermin')}</b><span>${esc(stText)}</span></div>
+<p class="gbo-ov-foot">Die GBO wird bei jedem Anlass überprüft und angepasst – etwa nach Unfällen, Beinaheunfällen oder Überfällen, bei neuen Maschinen, Umbauten oder geänderten Abläufen (ArbSchG § 3 Abs. 1, § 5). Zusätzlich gilt eine regelmäßige Überprüfung nach betrieblicher Festlegung:
+<label class="gbo-review-interval">alle <select id="reviewMonths">${REVIEW_MONTHS.map(m => `<option value="${m}" ${m === months ? 'selected' : ''}>${m}</option>`).join('')}</select> Monate</label></p>
+<details class="gbo-review-add"${r.count ? '' : ' open'}><summary>Überprüfung dokumentieren</summary>
 <div class="gbo-grid gbo-review-form">
   <label>Datum<input type="date" id="reviewDate" value="${isoToday()}"></label>
   <label>Anlass<select id="reviewReason">${reasons}</select></label>
+  <label>Ergebnis<select id="reviewResult">${results}</select></label>
   <label>Durchgeführt von<input id="reviewBy" placeholder="Name"></label>
-  <label class="wide">Bemerkung<input id="reviewNote" placeholder="z. B. Ergebnis der Überprüfung, angepasste Module"></label>
+  <div class="wide"><span class="gbo-review-label">Betroffene Gefährdungsfaktoren (optional)</span><div class="gbo-chips">${fk}</div></div>
+  <label class="wide">Bemerkung<input id="reviewNote" placeholder="z. B. was geändert wurde, welche Maßnahmen neu sind"></label>
 </div>
-<div class="gbo-doc-actions"><button type="button" class="gbo-btn" id="reviewAdd">Überprüfung dokumentieren</button></div>
-<section class="gbo-stat-list"><h3>Dokumentierte Überprüfungen <span>${r.count}</span></h3>${rows || '<p class="gbo-note">Noch keine Überprüfung dokumentiert.</p>'}</section>`;
+<div class="gbo-doc-actions"><button type="button" class="gbo-btn" id="reviewAdd">Überprüfung speichern</button></div></details>
+${rows ? `<ol class="gbo-review-list">${rows}</ol>` : ''}</section>`;
     }
 
     function renderOverview() {
@@ -528,10 +561,14 @@ ${matrixHtml(sum)}
         }
         const keepFocus = document.activeElement && rv.contains(document.activeElement) ? document.activeElement.id : '';
         const vals = {};
-        ['reviewDate', 'reviewReason', 'reviewBy', 'reviewNote'].forEach(k => { const el = document.getElementById(k); if (el) vals[k] = el.value; });
+        ['reviewDate', 'reviewReason', 'reviewResult', 'reviewBy', 'reviewNote'].forEach(k => { const el = document.getElementById(k); if (el) vals[k] = el.value; });
+        const openAdd = !!(rv.querySelector('.gbo-review-add') && rv.querySelector('.gbo-review-add').open);
         rv.innerHTML = reviewHtml();
         Object.keys(vals).forEach(k => { const el = document.getElementById(k); if (el && vals[k] !== '') el.value = vals[k]; });
         if (keepFocus) { const f = document.getElementById(keepFocus); if (f) f.focus(); }
+        if (openAdd) { const d = rv.querySelector('.gbo-review-add'); if (d) d.open = true; }
+        const ms = document.getElementById('reviewMonths');
+        if (ms) ms.onchange = () => { const st = stateObj(); st.meta = st.meta || {}; st.meta.reviewMonths = Number(ms.value); api().save(); renderOverview(); };
         const add = document.getElementById('reviewAdd');
         if (add) add.onclick = () => {
             const date = document.getElementById('reviewDate').value;
@@ -540,6 +577,8 @@ ${matrixHtml(sum)}
             st.reviews.push({
                 date,
                 reason: document.getElementById('reviewReason').value,
+                result: document.getElementById('reviewResult').value,
+                faktoren: [...rv.querySelectorAll('[data-review-fk]:checked')].map(x => Number(x.dataset.reviewFk)),
                 by: document.getElementById('reviewBy').value.trim(),
                 note: document.getElementById('reviewNote').value.trim()
             });

@@ -487,6 +487,8 @@
   // q = [id, topic, text]; moduleId optional (Fallback: Präfix des Frage-IDs wird nicht verwendet)
   let QMOD = null;
   function moduleOf(qid) {
+    const OM = window.GBO_DATA && window.GBO_DATA.origModule;
+    if (OM && OM[qid]) return OM[qid];
     if (!QMOD) {
       QMOD = {};
       const Q = (window.GBO_DATA && window.GBO_DATA.questions) || {};
@@ -496,7 +498,9 @@
   }
 
   function describe(q, moduleId) {
-    const cat = catFor(moduleId || moduleOf(q[0]), q[1]);
+    const QC = window.GBO_DATA && window.GBO_DATA.qCat;
+    const OM = window.GBO_DATA && window.GBO_DATA.origModule;
+    const cat = (QC && QC[q[0]]) || catFor((OM && OM[q[0]]) || moduleId || moduleOf(q[0]), q[1]);
     const c = CAT[cat] || CAT.AREA;
     const list = sourcesFor(cat);
     const line = x => x.norm + (x.checked ? '' : ' (Abschnitt prüfen)');

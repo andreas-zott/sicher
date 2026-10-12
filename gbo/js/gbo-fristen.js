@@ -2,7 +2,7 @@
 // ASiC Handel — GBO: Fristüberwachung und Erinnerungsmail an den Markt
 // ==========================================================================
 // Zeigt überfällige Maßnahmen (Frist überschritten, nicht erledigt) und die
-// fällige jährliche Überprüfung der GBO. Aus der Liste lässt sich per Knopfdruck
+// fällige regelmäßige Überprüfung der GBO. Aus der Liste lässt sich per Knopfdruck
 // ein Mailentwurf an die hinterlegte Marktadresse erstellen.
 // Hinweis: Eine reine Browser-App kann Mails nicht selbstständig versenden.
 // Der Entwurf wird im Mailprogramm des Geräts geöffnet und dort abgeschickt.
@@ -48,7 +48,7 @@
         if (list.length) {
             t.push('Überfällige Maßnahmen:\n' + list.map((x, i) => `${i + 1}. ${x.module} – ${x.topic}\n   Maßnahme: ${x.text}\n   Frist: ${fmt(x.due)} (${x.late} ${x.late === 1 ? 'Tag' : 'Tage'} überfällig)${x.owner ? '\n   Zuständig: ' + x.owner : ''}`).join('\n'));
         }
-        if (rv && rv.status === 'late') t.push(`Die jährliche Überprüfung der Gefährdungsbeurteilung war spätestens am ${fmt(rv.due)} fällig.`);
+        if (rv && rv.status === 'late') t.push(`Die regelmäßige Überprüfung der Gefährdungsbeurteilung war spätestens am ${fmt(rv.due)} fällig.`);
         t.push('Bitte setzen Sie die Maßnahmen um und tragen Sie die Erledigung mit Datum ein. Falls eine Frist nicht zu halten ist, teilen Sie mir bitte den Grund und einen neuen Termin mit.');
         t.push(`Mit freundlichen Grüßen\n${meta.pruefername ? meta.pruefername + '\n' : ''}Fachkraft für Arbeitssicherheit (SiFa)`);
         return t.join('\n\n');
@@ -59,14 +59,10 @@
         const rvLate = !!(rv && rv.status === 'late');
         const meta = api().get().meta || {};
         const mail = (meta.marktEmail || '').trim();
-        const rows = list.map(x => `<div class="gbo-stat-row"><div><b>${esc(x.module)} · ${esc(x.topic)}</b><small>${esc(x.text)}${x.owner ? ' · zuständig: ' + esc(x.owner) : ''}</small></div><div class="gbo-stat-due late">${fmt(x.due)} · ${x.late} T. überfällig</div></div>`).join('');
         const last = (api().get().reminders || []).slice(-1)[0];
-        return `<h3>Fristüberwachung</h3>
-<p class="gbo-note">Zeigt Maßnahmen mit abgelaufener Frist, die noch nicht als erledigt markiert sind, und die jährliche Überprüfung der GBO.</p>
-<div class="gbo-review-status ${list.length || rvLate ? 'late' : 'ok'}"><b>${list.length ? list.length + (list.length === 1 ? ' Frist überschritten' : ' Fristen überschritten') : 'Keine überfälligen Maßnahmen'}${rvLate ? ' · Überprüfung der GBO überfällig' : ''}</b><span>${last ? 'Zuletzt Erinnerung erstellt am ' + fmt(last.date) + ' (' + last.count + ' Punkte)' : 'Noch keine Erinnerung erstellt'}</span></div>
-<section class="gbo-stat-list"><h3>Überfällige Maßnahmen <span>${list.length}</span></h3>${rows || '<p class="gbo-note">Keine Maßnahme mit abgelaufener Frist.</p>'}</section>
-<div class="gbo-doc-actions"><button type="button" class="gbo-btn" id="fristMail" ${list.length || rvLate ? '' : 'disabled'}>Erinnerung per Mail vorbereiten</button></div>
-<p class="gbo-note">${mail ? 'Empfänger: ' + esc(mail) : 'Keine E-Mail-Adresse des Marktes hinterlegt (Betriebsdaten, Feld „E-Mail des Marktes“). Der Entwurf wird ohne Empfänger geöffnet.'} Die App öffnet nur einen Entwurf im Mailprogramm; abgeschickt wird er von Ihnen. Ein automatischer Versand ist ohne Server nicht möglich.</p>`;
+        const any = list.length || rvLate;
+        const status = (list.length ? list.length + (list.length === 1 ? ' Frist überschritten' : ' Fristen überschritten') : 'Keine Frist überschritten') + (rvLate ? ' · Überprüfung der GBO überfällig' : '');
+        return `<div class="gbo-frist-mail ${any ? 'late' : ''}"><div><b>${status}</b><small>${last ? 'Letzte Erinnerung am ' + fmt(last.date) + ' (' + last.count + ' Punkte)' : 'Noch keine Erinnerung erstellt'} · ${mail ? 'Empfänger: ' + esc(mail) : 'keine Markt-E-Mail in den Betriebsdaten'}</small></div><button type="button" class="gbo-btn secondary" id="fristMail" ${any ? '' : 'disabled'}>Erinnerung per Mail</button></div>`;
     }
 
     function banner() {
@@ -82,7 +78,7 @@
             b.setAttribute('role', 'status');
             host.insertAdjacentElement('afterbegin', b);
         }
-        b.textContent = (n ? `${n} ${n === 1 ? 'Frist' : 'Fristen'} überschritten` : '') + (n && late ? ' · ' : '') + (late ? 'Überprüfung der GBO überfällig' : '') + ' – siehe Statistik, Fristüberwachung.';
+        b.textContent = (n ? `${n} ${n === 1 ? 'Frist' : 'Fristen'} überschritten` : '') + (n && late ? ' · ' : '') + (late ? 'Überprüfung der GBO überfällig' : '') + ' – siehe Übersicht, „Zu erledigen“.';
     }
 
     function render() {
