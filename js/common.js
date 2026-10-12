@@ -6,7 +6,7 @@
 // Service-Workern (sw.js / service-worker.js), die sich gegenseitig
 // ueberschrieben haben. Jetzt: eine Quelle, ein Service Worker.
 
-const APP_VERSION = '1.3.0';
+const APP_VERSION = '1.3.1';
 
 // Dunklen Modus sofort setzen (common.js steht am Ende von <body>), damit die
 // Seite nicht kurz hell aufblitzt. Standard: dunkel ("Leitstand").
@@ -48,8 +48,21 @@ function initFooter() {
 
 function initServiceWorker() {
     if (!('serviceWorker' in navigator)) return;
+
+    // Hat ein NEUER Service Worker die Kontrolle uebernommen (Update), die
+    // Seite einmal automatisch neu laden, damit sofort der neue Stand zu
+    // sehen ist. Beim allerersten Besuch (noch kein Controller) nicht.
+    const hatteController = !!navigator.serviceWorker.controller;
+    let neuGeladen = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (!hatteController || neuGeladen) return;
+        neuGeladen = true;
+        window.location.reload();
+    });
+
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sicher/service-worker.js')
+        navigator.serviceWorker.register('/sicher/service-worker.js', { updateViaCache: 'none' })
+            .then(reg => reg.update())
             .catch(err => console.warn('Service Worker konnte nicht registriert werden:', err));
     });
 }
