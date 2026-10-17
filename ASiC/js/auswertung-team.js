@@ -26,12 +26,12 @@ async function ladeTeamAuswertungDaten() {
         if (el) el.innerHTML = html;
     });
 
-    zeigeInAllen('<p class="auswertung-empty">Lade Team-Daten vom NAS …</p>');
+    zeigeInAllen('<p class="auswertung-empty">Lade Team-Daten vom Server …</p>');
     const infoEl = document.getElementById('team-anzahl-info');
     if (infoEl) infoEl.textContent = 'Lade Team-Archiv …';
 
     if (window.location.hostname.endsWith('.github.io') && !getNasBaseUrl()) {
-        zeigeInAllen('<p class="auswertung-empty">Team-Auswertung ist hier nicht verfügbar. Bitte über die Synology-Adresse aufrufen (siehe „Einstellungen").</p>');
+        zeigeInAllen('<p class="auswertung-empty">Team-Auswertung ist hier nicht verfügbar. Bitte über die Server-Adresse aufrufen (siehe „Einstellungen").</p>');
         if (infoEl) infoEl.textContent = 'Nicht verfügbar';
         return;
     }

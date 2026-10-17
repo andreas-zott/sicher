@@ -52,6 +52,7 @@ function renderArchiveList() {
                 <div class="archive-item-actions-primary">
                     <button class="btn btn-secondary btn-small" onclick="onArchiveExport('${record.id}')">📤 PDF exportieren</button>
                     <button class="btn btn-secondary btn-small" onclick="onArchiveRestore('${record.id}')">📂 In App anzeigen</button>
+                    <button class="btn btn-secondary btn-small" onclick="onArchiveFollowUp('${record.id}')" title="Neue Begehung für diesen Markt mit den offenen Maßnahmen dieser Begehung">🔁 Wiederholungsbegehung</button>
                 </div>
                 <button class="btn-link photo-delete" onclick="onArchiveDelete('${record.id}')">🗑️ Löschen</button>
             </div>
@@ -89,7 +90,8 @@ async function onArchiveRestore(id) {
             comments: { ...(record.comments || {}) },
             measures: JSON.parse(JSON.stringify(record.measures || [])),
             signatures: { ...(record.signatures || {}) },
-            notApplicable: { ...(record.notApplicable || {}) }
+            notApplicable: { ...(record.notApplicable || {}) },
+            subgroupNotApplicable: { ...(record.subgroupNotApplicable || {}) }
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(restoredState));
 
@@ -105,6 +107,21 @@ async function onArchiveRestore(id) {
     } catch (err) {
         console.error('Begehung konnte nicht wiederhergestellt werden:', err);
         showToast('Wiederherstellen fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+    }
+}
+
+// Wiederholungsbegehung aus einer archivierten Begehung (ab Rev. 1.52)
+async function onArchiveFollowUp(id) {
+    const record = archiveCache.find(r => r.id === id);
+    if (!record) return;
+    try {
+        const ergebnis = await startFollowUpAudit(record, 'lokal');
+        if (!ergebnis) return;
+        showToast('Wiederholungsbegehung angelegt' + (ergebnis.uebernommen ? ' – ' + ergebnis.uebernommen + ' offene Maßnahme(n) übernommen' : ''));
+        window.location.href = 'index.html';
+    } catch (err) {
+        console.error('Wiederholungsbegehung konnte nicht angelegt werden:', err);
+        showToast('Wiederholungsbegehung fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
     }
 }
 
@@ -182,13 +199,14 @@ function renderTeamArchiveList() {
             <div class="archive-item-head">
                 <div>
                     <div class="archive-item-firma">${escapeHtml(entry.plzOrt || entry.firma || 'Ohne Markt-Angabe')}${entry.marktnummer ? ' (Nr. ' + escapeHtml(entry.marktnummer) + ')' : ''}</div>
-                    <div class="archive-item-meta">Begehung vom ${escapeHtml(entry.datum || '-')} · auf NAS gespeichert am ${gespeichertAm}</div>
+                    <div class="archive-item-meta">Begehung vom ${escapeHtml(entry.datum || '-')} · auf dem Server gespeichert am ${gespeichertAm}</div>
                 </div>
             </div>
             <div class="archive-item-actions">
                 <div class="archive-item-actions-primary">
                     <button class="btn btn-secondary btn-small" onclick="onTeamArchiveExport(this.closest('[data-filename]').dataset.filename)">📤 PDF exportieren</button>
                     <button class="btn btn-secondary btn-small" onclick="onTeamArchiveRestore(this.closest('[data-filename]').dataset.filename)">📂 In App anzeigen</button>
+                    <button class="btn btn-secondary btn-small" onclick="onTeamArchiveFollowUp(this.closest('[data-filename]').dataset.filename)" title="Neue Begehung für diesen Markt mit den offenen Maßnahmen dieser Begehung">🔁 Wiederholungsbegehung</button>
                 </div>
             </div>
         </div>`;
@@ -197,7 +215,7 @@ function renderTeamArchiveList() {
 
 async function onTeamArchiveExport(fileName) {
     try {
-        showToast('Lade Begehung vom NAS …');
+        showToast('Lade Begehung vom Server …');
         const record = await fetchSynologyRecord(fileName);
         showToast('PDF wird erzeugt…');
         // Team-Archiv-Datensaetze vom NAS enthalten keine Fotos (save.php
@@ -219,10 +237,10 @@ async function onTeamArchiveExport(fileName) {
 // obwohl die urspruengliche Kollegin/der urspruengliche Kollege welche
 // hatte.
 async function onTeamArchiveRestore(fileName) {
-    if (!confirm('Diese Begehung vom NAS in der App anzeigen? Der aktuell laufende, noch nicht archivierte Bearbeitungsstand auf diesem Gerät wird dabei überschrieben. Hinweis: Team-Archiv-Datensätze enthalten keine Fotos – ein evtl. vorhandener lokaler Fotobestand wird dabei geleert, nicht ersetzt.')) return;
+    if (!confirm('Diese Begehung vom Server in der App anzeigen? Der aktuell laufende, noch nicht archivierte Bearbeitungsstand auf diesem Gerät wird dabei überschrieben. Hinweis: Team-Archiv-Datensätze enthalten keine Fotos – ein evtl. vorhandener lokaler Fotobestand wird dabei geleert, nicht ersetzt.')) return;
 
     try {
-        showToast('Lade Begehung vom NAS …');
+        showToast('Lade Begehung vom Server …');
         const record = await fetchSynologyRecord(fileName);
 
         const restoredState = {
@@ -231,7 +249,8 @@ async function onTeamArchiveRestore(fileName) {
             comments: { ...(record.comments || {}) },
             measures: JSON.parse(JSON.stringify(record.measures || [])),
             signatures: { ...(record.signatures || {}) },
-            notApplicable: { ...(record.notApplicable || {}) }
+            notApplicable: { ...(record.notApplicable || {}) },
+            subgroupNotApplicable: { ...(record.subgroupNotApplicable || {}) }
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(restoredState));
 
@@ -244,6 +263,21 @@ async function onTeamArchiveRestore(fileName) {
     } catch (err) {
         console.error('Team-Archiv-Begehung konnte nicht geöffnet werden:', err);
         showToast('Laden fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+    }
+}
+
+// Wiederholungsbegehung aus einer Begehung im Team-Archiv (ab Rev. 1.52)
+async function onTeamArchiveFollowUp(fileName) {
+    try {
+        showToast('Lade Begehung vom Server …');
+        const record = await fetchSynologyRecord(fileName);
+        const ergebnis = await startFollowUpAudit(record, 'team');
+        if (!ergebnis) return;
+        showToast('Wiederholungsbegehung angelegt' + (ergebnis.uebernommen ? ' – ' + ergebnis.uebernommen + ' offene Maßnahme(n) übernommen' : ''));
+        window.location.href = 'index.html';
+    } catch (err) {
+        console.error('Wiederholungsbegehung konnte nicht angelegt werden:', err);
+        showToast('Wiederholungsbegehung fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
     }
 }
 

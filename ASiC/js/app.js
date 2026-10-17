@@ -8,8 +8,8 @@ const STORAGE_KEY = 'begehungState';
 
 // Revisionsstand der App/Checkliste (in Fusszeile und PDF sichtbar,
 // bei inhaltlichen Aenderungen an Fragenkatalog/Massnahmen hochzaehlen)
-const APP_REVISION = '1.51';
-const APP_REVISION_DATE = '2026-10-10';
+const APP_REVISION = '1.52';
+const APP_REVISION_DATE = '2026-10-17';
 
 // Heutiges Datum als JJJJ-MM-TT in LOKALER Zeit. toISOString() liefert UTC,
 // dadurch stand zwischen 0 und 2 Uhr (deutsche Zeit) das Vortagsdatum drin.
@@ -228,7 +228,7 @@ async function parseJsonResponse(res) {
     try {
         return await res.json();
     } catch (parseErr) {
-        throw new Error('Ungültige Antwort vom NAS (kein gültiges JSON).');
+        throw new Error('Ungültige Antwort vom Server (kein gültiges JSON).');
     }
 }
 
@@ -290,10 +290,10 @@ async function saveStateToSynology() {
         if (!res.ok || !result.ok) {
             throw new Error(result.message || `Fehler beim Speichern (HTTP ${res.status}).`);
         }
-        showToast('Auf NAS gespeichert: ' + result.fileName);
+        showToast('Auf Server gespeichert: ' + result.fileName);
     } catch (err) {
-        console.error('NAS-Speichern fehlgeschlagen:', err);
-        showToast('NAS-Speichern fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+        console.error('Server-Speichern fehlgeschlagen:', err);
+        showToast('Speichern auf dem Server fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
     }
 }
 
@@ -349,7 +349,7 @@ async function loadStateFromSynology(filename) {
     if (typeof renderMeasures === 'function') await renderMeasures();
     if (typeof restoreSignatures === 'function') restoreSignatures();
 
-    showToast('Begehung vom NAS geladen: ' + filename);
+    showToast('Begehung vom Server geladen: ' + filename);
 }
 
 // Einfacher Auswahl-Dialog: listet alle auf dem NAS gespeicherten Begehungen
@@ -359,7 +359,7 @@ async function openSynologyLoadDialog() {
     overlay.className = 'access-gate-overlay';
     overlay.innerHTML = `
         <div class="access-gate-box" style="max-width:420px; text-align:left;">
-            <div class="access-gate-brand" style="margin-bottom:0.75rem;">Vom NAS laden</div>
+            <div class="access-gate-brand" style="margin-bottom:0.75rem;">Vom Server laden</div>
             <div id="nas-load-list">
                 <p class="auswertung-empty">Lade Dateiliste …</p>
             </div>
@@ -373,7 +373,7 @@ async function openSynologyLoadDialog() {
     try {
         const files = await getSynologyFiles();
         if (files.length === 0) {
-            listEl.innerHTML = '<p class="auswertung-empty">Noch keine Begehung auf dem NAS gespeichert.</p>';
+            listEl.innerHTML = '<p class="auswertung-empty">Noch keine Begehung auf dem Server gespeichert.</p>';
             return;
         }
         listEl.innerHTML = files.map(f => `
@@ -386,8 +386,8 @@ async function openSynologyLoadDialog() {
                 try {
                     await loadStateFromSynology(btn.dataset.filename);
                 } catch (err) {
-                    console.error('NAS-Laden fehlgeschlagen:', err);
-                    showToast('NAS-Laden fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+                    console.error('Server-Laden fehlgeschlagen:', err);
+                    showToast('Laden vom Server fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
                 }
             });
         });
@@ -1348,9 +1348,10 @@ async function buildPdf(includeChecklist, includeFotos) {
                 findItemById(measure.itemId);
 
             const questionText =
-                found
+                (found
                     ? `${index + 1}. [${measure.itemId}] ${found.item.text}`
-                    : `${index + 1}. Manuell erfasste Maßnahme`;
+                    : `${index + 1}. Manuell erfasste Maßnahme`) +
+                (measure.vorbegehung ? ` (${vorbegehungHinweis(measure)})` : '');
 
             let photos = [];
 
@@ -2301,6 +2302,10 @@ function renderItem(item, locked) {
     const isMangel =
         rating === 'mangel';
 
+    const vorMassnahme = isMangel
+        ? state.measures.find(m => m.itemId === item.id && m.vorbegehung)
+        : null;
+
     return `
     <div class="item ${isMangel ? 'is-mangel' : ''}" data-item-id="${item.id}">
         <div class="item-row">
@@ -2313,6 +2318,7 @@ function renderItem(item, locked) {
         </div>
         ${isMangel ? `
         <div class="item-detail">
+            ${vorMassnahme ? `<div class="vorbegehung-hinweis">↻ ${escapeHtml(vorbegehungHinweis(vorMassnahme))} – bitte prüfen; ist der Mangel behoben, auf „OK“ setzen.</div>` : ''}
             <label for="comment-${item.id}">Beschreibung des Mangels</label>
             <textarea id="comment-${item.id}" placeholder="Was wurde festgestellt? (optional)" oninput="updateComment('${item.id}', this.value)">${escapeHtml(comment)}</textarea>
             <div class="measure-preview">
@@ -2628,7 +2634,7 @@ async function shareJson() {
     const blob = buildJsonBlob();
     const filename = jsonExportFilename();
     const markt = state.companyInfo.marktnummer || '-';
-    const text = `Anbei die JSON-Datei der Begehung „${markt}" zur Weiterleitung/Ablage auf dem NAS, falls der direkte NAS-Zugriff gerade nicht möglich war.`;
+    const text = `Anbei die JSON-Datei der Begehung „${markt}" zur Weiterleitung/Ablage auf dem Server, falls der direkte Server-Zugriff gerade nicht möglich war.`;
 
     try {
         if (navigator.canShare && typeof File !== 'undefined') {
@@ -2747,6 +2753,72 @@ function importJson(file) {
 // Zeitpunkt der Archivierung) inklusive der zu diesem Zeitpunkt vorhandenen
 // Fotos. Archivieren loescht NICHT die aktuelle Begehung - beides bleibt
 // parallel bestehen, bis man separat "Zurücksetzen" nutzt.
+// ===== Wiederholungsbegehung (ab Rev. 1.52) =====
+// Kennzeichnung einer Massnahme, die aus der Vorbegehung uebernommen wurde.
+function vorbegehungHinweis(measure) {
+    const v = measure && measure.vorbegehung;
+    if (!v) return '';
+    return 'Offen aus Vorbegehung' + (v.datum ? ' vom ' + formatDate(v.datum) : '') +
+        (v.status === 'bearbeitung' ? ' (dort in Bearbeitung)' : '');
+}
+
+// Baut aus einer frueheren Begehung (lokales Archiv oder Team-Archiv) den
+// Startstand einer Wiederholungsbegehung: Betriebsdaten und N.V.-Schalter
+// werden uebernommen, das Datum auf heute gesetzt. Nicht erledigte
+// Massnahmen werden als Mangel vorbelegt und mit Hinweis auf die
+// Vorbegehung versehen - ist der Mangel inzwischen behoben, setzt der
+// Pruefer einfach "OK", dann entfaellt die Massnahme wie gewohnt.
+// Unterschriften und Fotos werden bewusst nicht uebernommen.
+function buildFollowUpState(record) {
+    const neu = defaultState();
+    const ci = (record && record.companyInfo) || {};
+    const vorDatum = ci.datum || '';
+    neu.companyInfo = { ...neu.companyInfo, ...ci, datum: todayIsoLocal() };
+    neu.notApplicable = { ...((record && record.notApplicable) || {}) };
+    neu.subgroupNotApplicable = { ...((record && record.subgroupNotApplicable) || {}) };
+    const alteKommentare = (record && record.comments) || {};
+    let n = 0;
+    ((record && record.measures) || []).forEach(m => {
+        if (!m || m.status === 'erledigt') return;
+        const found = m.itemId ? findItemById(m.itemId) : null;
+        if (m.itemId && !found) return;
+        const kommentar = (m.comment || alteKommentare[m.itemId] || '').trim();
+        if (found) {
+            neu.ratings[m.itemId] = 'mangel';
+            if (kommentar) neu.comments[m.itemId] = kommentar;
+        }
+        neu.measures.push({
+            id: Date.now().toString() + Math.random().toString(36).slice(2, 7) + n,
+            itemId: m.itemId,
+            description: (found && typeof getMeasureText === 'function' ? getMeasureText(m.itemId) : '') || m.description || '',
+            comment: kommentar,
+            responsible: m.responsible || '',
+            dueDate: m.dueDate || '',
+            status: m.status === 'bearbeitung' ? 'bearbeitung' : 'offen',
+            photoThumbnails: [],
+            vorbegehung: { datum: vorDatum, status: m.status || 'offen' }
+        });
+        n++;
+    });
+    return { state: neu, uebernommen: n, vorDatum: vorDatum };
+}
+
+async function startFollowUpAudit(record, quelle) {
+    const ci = (record && record.companyInfo) || {};
+    const offen = ((record && record.measures) || []).filter(m => m && m.status !== 'erledigt').length;
+    const text = 'Wiederholungsbegehung für Markt ' + (ci.marktnummer || '–') +
+        ' anlegen?\n\nBetriebsdaten werden übernommen, das Datum wird auf heute gesetzt. ' +
+        (offen ? offen + ' nicht erledigte Maßnahme(n) der Begehung vom ' + (ci.datum ? formatDate(ci.datum) : '–') + ' werden als Mangel vorbelegt.' : 'Die Vorbegehung hat keine offenen Maßnahmen.') +
+        '\n\nDer aktuell laufende, noch nicht archivierte Bearbeitungsstand auf diesem Gerät wird dabei ersetzt. ' + (quelle === 'team' ? '' : 'Archivierte Begehungen bleiben unverändert.');
+    if (!confirm(text)) return false;
+    const ergebnis = buildFollowUpState(record);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(ergebnis.state));
+    if (typeof deleteAllPhotos === 'function') {
+        try { await deleteAllPhotos(); } catch (e) { console.error('Fotos konnten nicht geleert werden:', e); }
+    }
+    return ergebnis;
+}
+
 async function archiveCurrentAudit() {
     if (!confirm('Aktuelle Begehung jetzt archivieren? Die laufende Begehung bleibt zusätzlich unverändert bestehen, bis Sie „Zurücksetzen“ nutzen.')) return;
 
@@ -2807,6 +2879,13 @@ async function archiveCurrentAudit() {
                 JSON.parse(
                     JSON.stringify(
                         state.notApplicable || {}
+                    )
+                ),
+
+            subgroupNotApplicable:
+                JSON.parse(
+                    JSON.stringify(
+                        state.subgroupNotApplicable || {}
                     )
                 ),
 

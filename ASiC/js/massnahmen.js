@@ -189,6 +189,7 @@ async function renderMeasures() {
 
                     <span class="measure-question-text">
                         ${escapeHtml(questionText)}
+                        ${measure.vorbegehung ? `<br><span class="vorbegehung-badge">↻ ${escapeHtml(vorbegehungHinweis(measure))}</span>` : ''}
                     </span>
 
                 </div>

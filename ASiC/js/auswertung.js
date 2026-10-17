@@ -282,7 +282,7 @@ async function shareAuswertungCsv() {
 
     const blob = csvRowsToBlob(rows);
     const filename = csvExportFilename();
-    const text = 'Anbei der aktuelle Rohdaten-Export (CSV) der archivierten Begehungen aus ASiC Handel.\n\nBitte im gemeinsamen Team-Ordner ablegen, falls der direkte NAS-Zugriff gerade nicht möglich war.';
+    const text = 'Anbei der aktuelle Rohdaten-Export (CSV) der archivierten Begehungen aus ASiC Handel.\n\nBitte im gemeinsamen Team-Ordner ablegen, falls der direkte Server-Zugriff gerade nicht möglich war.';
 
     try {
         if (navigator.canShare && typeof File !== 'undefined') {
