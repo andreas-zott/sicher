@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quellen — Arbeitssicherheit</title>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1c2226">
+<link rel="stylesheet" href="lib/css/fontawesome.min.css">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+    .tabelle-scroll { overflow-x: auto; margin: 10px 0 8px; }
+    .q-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; min-width: 560px; }
+    .q-table th { background: #1c2226; color: #fff; text-align: left; padding: 8px 12px; font-size: 0.8rem; }
+    body.dark .q-table th { background: #2b3338; }
+    .q-table td { border-bottom: 1px solid var(--line); padding: 8px 12px; vertical-align: top; }
+    .q-table th:first-child, .q-kurz { width: 26%; }
+    .q-table th:last-child, .q-apps { width: 26%; }
+    .q-kurz { font-weight: 600; }
+    .q-kurz a { color: inherit; text-decoration-color: var(--red); text-underline-offset: 3px; }
+    .q-app { display: inline-block; margin: 0 4px 4px 0; padding: 1px 8px; border-radius: 999px;
+              border: 1px solid var(--line); background: var(--raised); font-size: 0.75rem; white-space: nowrap; }
+    .q-hinweis { margin-top: 4px; font-size: 0.82rem; color: var(--red); }
+    .q-anzahl { font-size: 0.8rem; font-weight: 600; color: var(--ink-soft); margin-left: 6px; }
+    .q-gruppe-text { color: var(--ink-soft); font-size: 0.88rem; margin: 0; }
+    .q-gruppe { margin-top: 26px; }
+    .q-suche { display: flex; gap: 10px; align-items: center; margin: 16px 0 4px; }
+    .q-suche input { flex: 1; }
+    .q-treffer { font-size: 0.85rem; color: var(--ink-soft); white-space: nowrap; }
+    .hinweis-box { background: var(--raised); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; font-size: 0.9rem; margin: 14px 0; }
+    .hinweis-box ul { margin: 6px 0 0; padding-left: 20px; }
+    .inhalt-liste { columns: 2; column-gap: 28px; margin-bottom: 0; }
+    @media (max-width: 640px) { .inhalt-liste { columns: 1; } }
+    @media print { .q-suche, .back-button, .theme-toggle { display: none; } .q-table { min-width: 0; } }
+</style>
+</head>
+<body>
+<button class="theme-toggle" id="themeToggle" aria-label="Theme umschalten">🌙</button>
+<section class="hero">
+    <div class="hero-icon"><i class="fas fa-scale-balanced"></i></div>
+    <h1>Rechtsgrundlagen und Quellen</h1>
+    <p>Vorschriften, Regeln und Normen, auf die sich die Inhalte stützen</p>
+</section>
+<div class="container">
+    <a href="welcome.html" class="back-button"><i class="fas fa-arrow-left"></i> Zurück zur Übersicht</a>
+    <div class="content">
+
+        <p style="margin-top:0;">
+            Diese Übersicht führt alle Gesetze, Verordnungen, Technischen Regeln,
+            DGUV-Schriften und Normen auf, die in den Prüffragen, Maßnahmentexten
+            und Hinweisen des Portals und der zugehörigen Anwendungen genannt werden
+            – insgesamt <strong>156 Quellen</strong>. Die Spalte
+            „Verwendet in“ zeigt, wo eine Quelle vorkommt.
+        </p>
+        <div class="hinweis-box">
+            <strong>Stand: Oktober 2026.</strong> Maßgeblich ist immer der Wortlaut der
+            jeweils aktuellen Fassung. Die Inhalte des Portals sind eine Arbeitshilfe
+            und keine Rechtsberatung; sie ersetzen weder die Gefährdungsbeurteilung im
+            Betrieb noch vorgeschriebene Prüfungen durch befähigte Personen.
+            Gesetze und Technische Regeln sind amtliche Werke; DGUV-Schriften und Normen
+            werden nur genannt, nicht wiedergegeben.
+        </div>
+        <p style="font-size:0.9rem;">
+            Ausführlichere Verzeichnisse mit Paragrafen und fachlichem Bezug:
+            <a href="ASiC/dokumentation.html#funktionsumfang">ASiC Handel – Quellenverzeichnis der Maßnahmentexte</a> ·
+            <a href="gbo/gbo-dokumentation.html#quellen">GBO – Quellennachweis</a>
+        </p>
+        <p style="font-size:0.85rem; color:var(--ink-soft); margin-bottom:0;">
+            Abkürzungen: <span class="q-app">Checkliste</span> Arbeitssicherheits-Checkliste ·
+            <span class="q-app">Theke</span> Theke/Metzgerei · <span class="q-app">Aushänge</span> Pflicht-Aushänge ·
+            <span class="q-app">Audit</span> Audit im Portal · <span class="q-app">ASiC</span> ASiC Handel ·
+            <span class="q-app">GBO</span> ASiC GBO · <span class="q-app">GBU</span> GBU Zentrale ·
+            <span class="q-app">Audit 2026</span> · <span class="q-app">Unfall</span> Unfallanzeige
+        </p>
+
+        <div class="q-suche">
+            <input type="text" enterkeyhint="search" autocomplete="off" id="quellenSuche" placeholder="Suchen, z. B. „Leitern“, „A2.3“ oder „GBO“ …" aria-label="Quellen durchsuchen">
+            <span class="q-treffer" id="quellenTreffer"></span>
+        </div>
+
+        <h2 style="margin-top:22px;">Gliederung</h2>
+        <ol class="inhalt-liste"><li><a href="#gesetze">Gesetze und Verordnungen (Arbeitsschutz)</a></li><li><a href="#arbeitsrecht">Arbeitsrecht und Aushänge</a></li><li><a href="#eu">EU-Recht</a></li><li><a href="#asr">Technische Regeln für Arbeitsstätten (ASR)</a></li><li><a href="#trbs">Technische Regeln für Betriebssicherheit (TRBS)</a></li><li><a href="#trgs">Technische Regeln für Gefahrstoffe (TRGS)</a></li><li><a href="#dguv-v">DGUV Vorschriften (Unfallverhütungsvorschriften)</a></li><li><a href="#dguv-r">DGUV Regeln und Grundsätze</a></li><li><a href="#dguv-i">DGUV Informationen</a></li><li><a href="#normen">Normen</a></li><li><a href="#weitere">Branchenhilfen und Leitlinien</a></li></ol>
+
+        <section class="q-gruppe" id="gesetze">
+            <h2>Gesetze und Verordnungen (Arbeitsschutz) <span class="q-anzahl">21</span></h2>
+            <p class="q-gruppe-text">Volltexte beim Bundesministerium der Justiz.</p>
+            <div class="tabelle-scroll"><table class="q-table">
+                <thead><tr><th>Kurzbezeichnung</th><th>Titel</th><th>Verwendet in</th></tr></thead>
+                <tbody>
+                                <tr><td class="q-kurz"><a href="https://www.gesetze-im-internet.de/arbschg/" target="_blank" rel="noopener">ArbSchG</a></td><td>Arbeitsschutzgesetz</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Aushänge</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">GBO</span><span class="q-app">GBU</span><span class="q-app">Audit 2026</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.gesetze-im-internet.de/arbst_ttv_2004/" target="_blank" rel="noopener">ArbStättV</a></td><td>Arbeitsstättenverordnung</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Aushänge</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">GBO</span><span class="q-app">GBU</span><span class="q-app">Audit 2026</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.gesetze-im-internet.de/betrsichv_2015/" target="_blank" rel="noopener">BetrSichV</a></td><td>Betriebssicherheitsverordnung</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">GBO</span><span class="q-app">GBU</span><span class="q-app">Audit 2026</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.gesetze-im-internet.de/gefstoffv_2010/" target="_blank" rel="noopener">GefStoffV</a></td><td>Gefahrstoffverordnung</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Aushänge</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">GBO</span><span class="q-app">GBU</span><span class="q-app">Audit 2026</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.gesetze-im-internet.de/biostoffv_2013/" target="_blank" rel="noopener">BiostoffV</a></td><td>Biostoffverordnung</td><td class="q-apps"><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.gesetze-im-internet.de/arbmedvv/" target="_blank" rel="noopener">ArbMedVV</a></td><td>Verordnung zur arbeitsmedizinischen Vorsorge</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">GBO</span><span class="q-app">GBU</span><span class="q-app">Audit 2026</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.gesetze-im-internet.de/lasthandhabv/" target="_blank" rel="noopener">LasthandhabV</a></td><td>Lastenhandhabungsverordnung</td><td class="q-apps"><span class="q-app">ASiC</span><span class="q-app">GBO</span><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.gesetze-im-internet.de/psa-bv/" target="_blank" rel="noopener">PSA-BV</a></td><td>PSA-Benutzungsverordnung</td><td class="q-apps"><span class="q-app">ASiC</span><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.gesetze-im-internet.de/asig/" target="_blank" rel="noopener">ASiG</a></td><td>Arbeitssicherheitsgesetz</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Aushänge</span><span class="q-app">Audit</span><span class="q-app">GBO</span><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.gesetze-im-internet.de/arbzg/" target="_blank" rel="noopener">ArbZG</a></td><td>Arbeitszeitgesetz</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Aushänge</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">GBO</span><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.gesetze-im-internet.de/jarbschg/" target="_blank" rel="noopener">JArbSchG</a></td><td>Jugendarbeitsschutzgesetz</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Aushänge</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.gesetze-im-internet.de/muschg_2018/" target="_blank" rel="noopener">MuSchG</a></td><td>Mutterschutzgesetz</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Aushänge</span><span class="q-app">GBO</span><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.gesetze-im-internet.de/sgb_7/" target="_blank" rel="noopener">SGB VII</a></td><td>Sozialgesetzbuch VII – Gesetzliche Unfallversicherung</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">GBU</span><span class="q-app">Unfall</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.gesetze-im-internet.de/sgb_9_2018/" target="_blank" rel="noopener">SGB IX</a></td><td>Sozialgesetzbuch IX – Rehabilitation und Teilhabe (u. a. § 167 BEM)</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">Audit 2026</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.gesetze-im-internet.de/betrvg/" target="_blank" rel="noopener">BetrVG</a></td><td>Betriebsverfassungsgesetz</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Aushänge</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">GBO</span><span class="q-app">Audit 2026</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.gesetze-im-internet.de/bgb/__618.html" target="_blank" rel="noopener">BGB</a></td><td>Bürgerliches Gesetzbuch (§ 618 Pflicht zu Schutzmaßnahmen)</td><td class="q-apps"><span class="q-app">Aushänge</span><span class="q-app">ASiC</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.gesetze-im-internet.de/prodsg_2021/" target="_blank" rel="noopener">ProdSG</a></td><td>Produktsicherheitsgesetz</td><td class="q-apps"><span class="q-app">Audit</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.gesetze-im-internet.de/lmhv_2007/" target="_blank" rel="noopener">LMHV</a></td><td>Lebensmittelhygiene-Verordnung</td><td class="q-apps"><span class="q-app">ASiC</span><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.gesetze-im-internet.de/ifsg/" target="_blank" rel="noopener">IfSG</a></td><td>Infektionsschutzgesetz</td><td class="q-apps"><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.gesetze-im-internet.de/stvo_2013/" target="_blank" rel="noopener">StVO</a></td><td>Straßenverkehrs-Ordnung (Verkehr auf dem Betriebsgelände)</td><td class="q-apps"><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz">NiSchG NRW</td><td>Nichtraucherschutzgesetz NRW</td><td class="q-apps"><span class="q-app">GBU</span></td></tr>
+                </tbody>
+            </table></div>
+        </section>
+        <section class="q-gruppe" id="arbeitsrecht">
+            <h2>Arbeitsrecht und Aushänge <span class="q-anzahl">12</span></h2>
+            <p class="q-gruppe-text">Aus der Übersicht „Pflicht-Aushänge“.</p>
+            <div class="tabelle-scroll"><table class="q-table">
+                <thead><tr><th>Kurzbezeichnung</th><th>Titel</th><th>Verwendet in</th></tr></thead>
+                <tbody>
+                                <tr><td class="q-kurz"><a href="https://www.gesetze-im-internet.de/agg/" target="_blank" rel="noopener">AGG</a></td><td>Allgemeines Gleichbehandlungsgesetz</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Aushänge</span><span class="q-app">Audit</span><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.gesetze-im-internet.de/kuendschg/" target="_blank" rel="noopener">KSchG</a></td><td>Kündigungsschutzgesetz</td><td class="q-apps"><span class="q-app">Aushänge</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.gesetze-im-internet.de/nachwg/" target="_blank" rel="noopener">NachwG</a></td><td>Nachweisgesetz</td><td class="q-apps"><span class="q-app">Aushänge</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.gesetze-im-internet.de/tzbfg/" target="_blank" rel="noopener">TzBfG</a></td><td>Teilzeit- und Befristungsgesetz</td><td class="q-apps"><span class="q-app">Aushänge</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.gesetze-im-internet.de/burlg/" target="_blank" rel="noopener">BUrlG</a></td><td>Bundesurlaubsgesetz</td><td class="q-apps"><span class="q-app">Aushänge</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.gesetze-im-internet.de/beeg/" target="_blank" rel="noopener">BEEG</a></td><td>Bundeselterngeld- und Elternzeitgesetz</td><td class="q-apps"><span class="q-app">Aushänge</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.gesetze-im-internet.de/entgfg/" target="_blank" rel="noopener">EFZG</a></td><td>Entgeltfortzahlungsgesetz</td><td class="q-apps"><span class="q-app">Aushänge</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.gesetze-im-internet.de/tvg/" target="_blank" rel="noopener">TVG</a></td><td>Tarifvertragsgesetz</td><td class="q-apps"><span class="q-app">Aushänge</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.gesetze-im-internet.de/milog/" target="_blank" rel="noopener">MiLoG</a></td><td>Mindestlohngesetz</td><td class="q-apps"><span class="q-app">Aushänge</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.gesetze-im-internet.de/ladschlg/" target="_blank" rel="noopener">LadSchlG</a></td><td>Ladenschlussgesetz (in NRW: Ladenöffnungsgesetz NRW)</td><td class="q-apps"><span class="q-app">Aushänge</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.gesetze-im-internet.de/bdsg_2018/" target="_blank" rel="noopener">BDSG</a></td><td>Bundesdatenschutzgesetz</td><td class="q-apps"><span class="q-app">Aushänge</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32016R0679" target="_blank" rel="noopener">DSGVO</a></td><td>Datenschutz-Grundverordnung (EU) 2016/679</td><td class="q-apps"><span class="q-app">Aushänge</span><span class="q-app">GBU</span></td></tr>
+                </tbody>
+            </table></div>
+        </section>
+        <section class="q-gruppe" id="eu">
+            <h2>EU-Recht <span class="q-anzahl">8</span></h2>
+            <p class="q-gruppe-text">Amtsblatt der EU (EUR-Lex).</p>
+            <div class="tabelle-scroll"><table class="q-table">
+                <thead><tr><th>Kurzbezeichnung</th><th>Titel</th><th>Verwendet in</th></tr></thead>
+                <tbody>
+                                <tr><td class="q-kurz"><a href="https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32006L0042" target="_blank" rel="noopener">2006/42/EG</a></td><td>Maschinenrichtlinie<div class="q-hinweis">Ab 20.01.2027 abgelöst durch die Maschinenverordnung (EU) 2023/1230.</div></td><td class="q-apps"><span class="q-app">ASiC</span><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32023R1230" target="_blank" rel="noopener">2023/1230</a></td><td>Maschinenverordnung (EU) 2023/1230<div class="q-hinweis">Gilt ab 20.01.2027.</div></td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32014L0033" target="_blank" rel="noopener">2014/33/EU</a></td><td>Aufzugsrichtlinie</td><td class="q-apps"><span class="q-app">Audit</span><span class="q-app">ASiC</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32014L0068" target="_blank" rel="noopener">2014/68/EU</a></td><td>Druckgeräterichtlinie</td><td class="q-apps"><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32006R1907" target="_blank" rel="noopener">REACH</a></td><td>REACH-Verordnung (EG) Nr. 1907/2006 (u. a. Art. 31 Sicherheitsdatenblatt)</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">ASiC</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32008R1272" target="_blank" rel="noopener">CLP</a></td><td>CLP-Verordnung (EG) Nr. 1272/2008 (Einstufung und Kennzeichnung)</td><td class="q-apps"><span class="q-app">ASiC</span><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32004R0852" target="_blank" rel="noopener">852/2004</a></td><td>Verordnung (EG) Nr. 852/2004 über Lebensmittelhygiene</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">HACCP</td><td>HACCP-Konzept (Art. 5 VO (EG) Nr. 852/2004)</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Theke</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">GBU</span></td></tr>
+                </tbody>
+            </table></div>
+        </section>
+        <section class="q-gruppe" id="asr">
+            <h2>Technische Regeln für Arbeitsstätten (ASR) <span class="q-anzahl">19</span></h2>
+            <p class="q-gruppe-text">Herausgegeben von der BAuA (baua.de → Angebote → Regelwerk).</p>
+            <div class="tabelle-scroll"><table class="q-table">
+                <thead><tr><th>Kurzbezeichnung</th><th>Titel</th><th>Verwendet in</th></tr></thead>
+                <tbody>
+                                <tr><td class="q-kurz">ASR V3</td><td>Gefährdungsbeurteilung</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">ASR V3a.2</td><td>Barrierefreie Gestaltung von Arbeitsstätten</td><td class="q-apps"><span class="q-app">ASiC</span><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.baua.de/DE/Angebote/Regelwerk/ASR/ASR-A1-2" target="_blank" rel="noopener">ASR A1.2</a></td><td>Raumabmessungen und Bewegungsflächen</td><td class="q-apps"><span class="q-app">ASiC</span><span class="q-app">GBO</span><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.baua.de/DE/Angebote/Regelwerk/ASR/ASR-A1-3" target="_blank" rel="noopener">ASR A1.3</a></td><td>Sicherheits- und Gesundheitsschutzkennzeichnung</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">GBO</span><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.baua.de/DE/Angebote/Regelwerk/ASR/ASR-A1-5" target="_blank" rel="noopener">ASR A1.5</a></td><td>Fußböden</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">GBO</span><span class="q-app">GBU</span><span class="q-app">Audit 2026</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.baua.de/DE/Angebote/Regelwerk/ASR/ASR-A1-6" target="_blank" rel="noopener">ASR A1.6</a></td><td>Fenster, Oberlichter, lichtdurchlässige Wände</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.baua.de/DE/Angebote/Regelwerk/ASR/ASR-A1-7" target="_blank" rel="noopener">ASR A1.7</a></td><td>Türen und Tore</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">GBO</span><span class="q-app">Audit 2026</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.baua.de/DE/Angebote/Regelwerk/ASR/ASR-A1-8" target="_blank" rel="noopener">ASR A1.8</a></td><td>Verkehrswege</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">GBO</span><span class="q-app">GBU</span><span class="q-app">Audit 2026</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.baua.de/DE/Angebote/Regelwerk/ASR/ASR-A2-1" target="_blank" rel="noopener">ASR A2.1</a></td><td>Schutz vor Absturz und herabfallenden Gegenständen</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.baua.de/DE/Angebote/Regelwerk/ASR/ASR-A2-2" target="_blank" rel="noopener">ASR A2.2</a></td><td>Maßnahmen gegen Brände</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Aushänge</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">GBO</span><span class="q-app">GBU</span><span class="q-app">Audit 2026</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.baua.de/DE/Angebote/Regelwerk/ASR/ASR-A2-3" target="_blank" rel="noopener">ASR A2.3</a></td><td>Fluchtwege und Notausgänge</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">GBO</span><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.baua.de/DE/Angebote/Regelwerk/ASR/ASR-A3-4" target="_blank" rel="noopener">ASR A3.4</a></td><td>Beleuchtung und Sichtverbindung</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">GBO</span><span class="q-app">GBU</span><span class="q-app">Audit 2026</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.baua.de/DE/Angebote/Regelwerk/ASR/ASR-A3-5" target="_blank" rel="noopener">ASR A3.5</a></td><td>Raumtemperatur</td><td class="q-apps"><span class="q-app">GBO</span><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.baua.de/DE/Angebote/Regelwerk/ASR/ASR-A3-6" target="_blank" rel="noopener">ASR A3.6</a></td><td>Lüftung</td><td class="q-apps"><span class="q-app">GBO</span><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.baua.de/DE/Angebote/Regelwerk/ASR/ASR-A3-7" target="_blank" rel="noopener">ASR A3.7</a></td><td>Lärm</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.baua.de/DE/Angebote/Regelwerk/ASR/ASR-A4-1" target="_blank" rel="noopener">ASR A4.1</a></td><td>Sanitärräume</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.baua.de/DE/Angebote/Regelwerk/ASR/ASR-A4-2" target="_blank" rel="noopener">ASR A4.2</a></td><td>Pausen- und Bereitschaftsräume</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.baua.de/DE/Angebote/Regelwerk/ASR/ASR-A4-3" target="_blank" rel="noopener">ASR A4.3</a></td><td>Erste-Hilfe-Räume, Mittel und Einrichtungen zur Ersten Hilfe</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">ASiC</span><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.baua.de/DE/Angebote/Regelwerk/ASR/ASR-A6" target="_blank" rel="noopener">ASR A6</a></td><td>Bildschirmarbeit</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                </tbody>
+            </table></div>
+        </section>
+        <section class="q-gruppe" id="trbs">
+            <h2>Technische Regeln für Betriebssicherheit (TRBS) <span class="q-anzahl">10</span></h2>
+            <p class="q-gruppe-text">Herausgegeben von der BAuA.</p>
+            <div class="tabelle-scroll"><table class="q-table">
+                <thead><tr><th>Kurzbezeichnung</th><th>Titel</th><th>Verwendet in</th></tr></thead>
+                <tbody>
+                                <tr><td class="q-kurz">TRBS 1111</td><td>Gefährdungsbeurteilung</td><td class="q-apps"><span class="q-app">Audit</span><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">TRBS 1112</td><td>Instandhaltung</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">TRBS 1116</td><td>Qualifikation, Unterweisung und Beauftragung von Beschäftigten</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">TRBS 1201</td><td>Prüfungen und Kontrollen von Arbeitsmitteln und überwachungsbedürftigen Anlagen</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">TRBS 1201 Teil 4</td><td>Prüfung von Aufzugsanlagen</td><td class="q-apps"><span class="q-app">ASiC</span></td></tr>
+                <tr><td class="q-kurz">TRBS 1203</td><td>Zur Prüfung befähigte Personen</td><td class="q-apps"><span class="q-app">ASiC</span><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">TRBS 2111</td><td>Mechanische Gefährdungen</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">TRBS 2121 Teil 2</td><td>Gefährdungen bei der Verwendung von Leitern</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">TRBS 3121</td><td>Betrieb von Aufzugsanlagen</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">ASiC</span></td></tr>
+                <tr><td class="q-kurz">TRBS 3145</td><td>Ortsbewegliche Druckgasbehälter – Füllen, Bereithalten, innerbetriebliche Beförderung, Entleeren</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                </tbody>
+            </table></div>
+        </section>
+        <section class="q-gruppe" id="trgs">
+            <h2>Technische Regeln für Gefahrstoffe (TRGS) <span class="q-anzahl">9</span></h2>
+            <p class="q-gruppe-text">Herausgegeben von der BAuA.</p>
+            <div class="tabelle-scroll"><table class="q-table">
+                <thead><tr><th>Kurzbezeichnung</th><th>Titel</th><th>Verwendet in</th></tr></thead>
+                <tbody>
+                                <tr><td class="q-kurz">TRGS 400</td><td>Gefährdungsbeurteilung für Tätigkeiten mit Gefahrstoffen</td><td class="q-apps"><span class="q-app">ASiC</span><span class="q-app">GBO</span><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz">TRGS 401</td><td>Gefährdung durch Hautkontakt</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">GBO</span><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz">TRGS 406</td><td>Sensibilisierende Stoffe für die Atemwege</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">TRGS 500</td><td>Schutzmaßnahmen</td><td class="q-apps"><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz">TRGS 510</td><td>Lagerung von Gefahrstoffen in ortsbeweglichen Behältern</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">GBO</span><span class="q-app">GBU</span><span class="q-app">Audit 2026</span></td></tr>
+                <tr><td class="q-kurz">TRGS 555</td><td>Betriebsanweisung und Information der Beschäftigten</td><td class="q-apps"><span class="q-app">ASiC</span><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">TRGS 600</td><td>Substitution</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">TRGS 745</td><td>Ortsbewegliche Druckgasbehälter</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">TRGS 900</td><td>Arbeitsplatzgrenzwerte</td><td class="q-apps"><span class="q-app">GBO</span><span class="q-app">GBU</span></td></tr>
+                </tbody>
+            </table></div>
+        </section>
+        <section class="q-gruppe" id="dguv-v">
+            <h2>DGUV Vorschriften (Unfallverhütungsvorschriften) <span class="q-anzahl">6</span></h2>
+            <p class="q-gruppe-text">Verbindlich für alle Mitgliedsbetriebe der Berufsgenossenschaft.</p>
+            <div class="tabelle-scroll"><table class="q-table">
+                <thead><tr><th>Kurzbezeichnung</th><th>Titel</th><th>Verwendet in</th></tr></thead>
+                <tbody>
+                                <tr><td class="q-kurz">DGUV Vorschrift 1</td><td>Grundsätze der Prävention</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Aushänge</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">GBO</span><span class="q-app">GBU</span><span class="q-app">Audit 2026</span></td></tr>
+                <tr><td class="q-kurz">DGUV Vorschrift 2</td><td>Betriebsärzte und Fachkräfte für Arbeitssicherheit</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Aushänge</span><span class="q-app">Audit</span><span class="q-app">ASiC</span></td></tr>
+                <tr><td class="q-kurz">DGUV Vorschrift 3</td><td>Elektrische Anlagen und Betriebsmittel</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">GBO</span><span class="q-app">GBU</span><span class="q-app">Audit 2026</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://publikationen.dguv.de/DguvWebcode/index/query/p021725" target="_blank" rel="noopener">DGUV Vorschrift 25</a></td><td>Überfallprävention</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">GBO</span><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz">DGUV Vorschrift 68</td><td>Flurförderzeuge</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">GBO</span><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz">DGUV Vorschrift 70</td><td>Fahrzeuge</td><td class="q-apps"><span class="q-app">GBO</span><span class="q-app">GBU</span></td></tr>
+                </tbody>
+            </table></div>
+        </section>
+        <section class="q-gruppe" id="dguv-r">
+            <h2>DGUV Regeln und Grundsätze <span class="q-anzahl">14</span></h2>
+            <p class="q-gruppe-text">Konkretisieren die Vorschriften; Links führen zu publikationen.dguv.de.</p>
+            <div class="tabelle-scroll"><table class="q-table">
+                <thead><tr><th>Kurzbezeichnung</th><th>Titel</th><th>Verwendet in</th></tr></thead>
+                <tbody>
+                                <tr><td class="q-kurz"><a href="https://publikationen.dguv.de/DguvWebcode/index/query/p100001" target="_blank" rel="noopener">DGUV Regel 100-001</a></td><td>Grundsätze der Prävention</td><td class="q-apps"><span class="q-app">ASiC</span><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://publikationen.dguv.de/DguvWebcode/index/query/p100500" target="_blank" rel="noopener">DGUV Regel 100-500</a></td><td>Betreiben von Arbeitsmitteln (u. a. Kap. 2.35 Kälteanlagen, Wärmepumpen und Kühleinrichtungen)</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://publikationen.dguv.de/DguvWebcode/index/query/p108003" target="_blank" rel="noopener">DGUV Regel 108-003</a></td><td>Fußböden in Arbeitsräumen und Arbeitsbereichen mit Rutschgefahr</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">DGUV Regel 108-007</td><td>Lagereinrichtungen und -geräte<div class="q-hinweis">Zurückgezogen, ersetzt durch DGUV Information 208-061; in Portal und GBO umgestellt (nur noch als Hinweis auf die Ablösung genannt).</div></td><td class="q-apps"><span class="q-app">ASiC</span><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://publikationen.dguv.de/DguvWebcode/index/query/p108010" target="_blank" rel="noopener">DGUV Regel 108-010</a></td><td>Überfallprävention in Verkaufsstellen</td><td class="q-apps"><span class="q-app">ASiC</span><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://publikationen.dguv.de/DguvWebcode/index/query/p108601" target="_blank" rel="noopener">DGUV Regel 108-601</a></td><td>Branche Einzelhandel</td><td class="q-apps"><span class="q-app">Aushänge</span><span class="q-app">ASiC</span><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://publikationen.dguv.de/DguvWebcode/index/query/p110010" target="_blank" rel="noopener">DGUV Regel 110-010</a></td><td>Verwendung von Flüssiggas</td><td class="q-apps"><span class="q-app">ASiC</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://publikationen.dguv.de/DguvWebcode/index/query/p110011" target="_blank" rel="noopener">DGUV Regel 110-011</a></td><td>Branche Fleischwirtschaft – Handwerk</td><td class="q-apps"><span class="q-app">GBO</span><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz">DGUV Regel 110-008</td><td>Branche Fleischwirtschaft (alt)<div class="q-hinweis">Durch DGUV Regel 110-011 abgelöst; nur noch als Verweis genannt.</div></td><td class="q-apps"><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://publikationen.dguv.de/DguvWebcode/index/query/p112139" target="_blank" rel="noopener">DGUV Regel 112-139</a></td><td>Einsatz von Personen-Notsignal-Anlagen</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://publikationen.dguv.de/DguvWebcode/index/query/p112191" target="_blank" rel="noopener">DGUV Regel 112-191</a></td><td>Benutzung von Fuß- und Knieschutz</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">ASiC</span><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://publikationen.dguv.de/DguvWebcode/index/query/p112195" target="_blank" rel="noopener">DGUV Regel 112-195</a></td><td>Benutzung von Schutzhandschuhen</td><td class="q-apps"><span class="q-app">GBO</span><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://publikationen.dguv.de/DguvWebcode/index/query/p112202" target="_blank" rel="noopener">DGUV Regel 112-202</a></td><td>Benutzung von Stechschutzkleidung, Stechschutzhandschuhen und Armschützern</td><td class="q-apps"><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://publikationen.dguv.de/DguvWebcode/index/query/p308001" target="_blank" rel="noopener">DGUV Grundsatz 308-001</a></td><td>Ausbildung und Beauftragung der Fahrer von Flurförderzeugen</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                </tbody>
+            </table></div>
+        </section>
+        <section class="q-gruppe" id="dguv-i">
+            <h2>DGUV Informationen <span class="q-anzahl">17</span></h2>
+            <p class="q-gruppe-text">Praxishilfen; Links führen zu publikationen.dguv.de.</p>
+            <div class="tabelle-scroll"><table class="q-table">
+                <thead><tr><th>Kurzbezeichnung</th><th>Titel</th><th>Verwendet in</th></tr></thead>
+                <tbody>
+                                <tr><td class="q-kurz"><a href="https://publikationen.dguv.de/DguvWebcode/index/query/p203071" target="_blank" rel="noopener">DGUV Information 203-071</a></td><td>Wiederkehrende Prüfungen elektrischer Anlagen und Betriebsmittel</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://publikationen.dguv.de/DguvWebcode/index/query/p204001" target="_blank" rel="noopener">DGUV Information 204-001</a></td><td>Aushang Erste Hilfe</td><td class="q-apps"><span class="q-app">Audit</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://publikationen.dguv.de/DguvWebcode/index/query/p204020" target="_blank" rel="noopener">DGUV Information 204-020</a></td><td>Verbandbuch – Dokumentation der Erste-Hilfe-Leistungen</td><td class="q-apps"><span class="q-app">ASiC</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://publikationen.dguv.de/DguvWebcode/index/query/p204022" target="_blank" rel="noopener">DGUV Information 204-022</a></td><td>Erste Hilfe im Betrieb</td><td class="q-apps"><span class="q-app">ASiC</span><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://publikationen.dguv.de/DguvWebcode/index/query/p205001" target="_blank" rel="noopener">DGUV Information 205-001</a></td><td>Betrieblicher Brandschutz in der Praxis</td><td class="q-apps"><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://publikationen.dguv.de/DguvWebcode/index/query/p205003" target="_blank" rel="noopener">DGUV Information 205-003</a></td><td>Aufgaben, Qualifikation, Ausbildung und Bestellung von Brandschutzbeauftragten</td><td class="q-apps"><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://publikationen.dguv.de/DguvWebcode/index/query/p205023" target="_blank" rel="noopener">DGUV Information 205-023</a></td><td>Brandschutzhelfer</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://publikationen.dguv.de/DguvWebcode/index/query/p205034" target="_blank" rel="noopener">DGUV Information 205-034</a></td><td>Einsatz von Kohlendioxid-(CO₂-)Feuerlöschern in Räumen</td><td class="q-apps"><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://publikationen.dguv.de/DguvWebcode/index/query/p206007" target="_blank" rel="noopener">DGUV Information 206-007</a></td><td>So geht’s mit Ideen-Treffen</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://publikationen.dguv.de/DguvWebcode/index/query/p206023" target="_blank" rel="noopener">DGUV Information 206-023</a></td><td>Standards in der betrieblichen psychologischen Erstbetreuung (bpE) bei traumatischen Ereignissen</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://publikationen.dguv.de/DguvWebcode/index/query/p208014" target="_blank" rel="noopener">DGUV Information 208-014</a></td><td>Glastüren, Glaswände</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://publikationen.dguv.de/DguvWebcode/index/query/p208016" target="_blank" rel="noopener">DGUV Information 208-016</a></td><td>Handlungsanleitung für den Umgang mit Leitern und Tritten</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">GBO</span><span class="q-app">GBU</span><span class="q-app">Audit 2026</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://publikationen.dguv.de/DguvWebcode/index/query/p208033" target="_blank" rel="noopener">DGUV Information 208-033</a></td><td>Muskel-Skelett-Belastungen – erkennen und beurteilen</td><td class="q-apps"><span class="q-app">ASiC</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://publikationen.dguv.de/DguvWebcode/index/query/p208041" target="_blank" rel="noopener">DGUV Information 208-041</a></td><td>Bewertung der Rutschgefahr unter Betriebsbedingungen</td><td class="q-apps"><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://publikationen.dguv.de/DguvWebcode/index/query/p208043" target="_blank" rel="noopener">DGUV Information 208-043</a></td><td>Sicherheit von Regalen</td><td class="q-apps"><span class="q-app">ASiC</span><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://publikationen.dguv.de/DguvWebcode/index/query/p208061" target="_blank" rel="noopener">DGUV Information 208-061</a></td><td>Lagereinrichtungen und Ladungsträger</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://publikationen.dguv.de/DguvWebcode/index/query/p215410" target="_blank" rel="noopener">DGUV Information 215-410</a></td><td>Bildschirm- und Büroarbeitsplätze</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                </tbody>
+            </table></div>
+        </section>
+        <section class="q-gruppe" id="normen">
+            <h2>Normen <span class="q-anzahl">37</span></h2>
+            <p class="q-gruppe-text">Kostenpflichtig bei DIN Media; daher ohne Link. Maßgeblich ist jeweils die aktuelle Ausgabe.</p>
+            <div class="tabelle-scroll"><table class="q-table">
+                <thead><tr><th>Kurzbezeichnung</th><th>Titel</th><th>Verwendet in</th></tr></thead>
+                <tbody>
+                                <tr><td class="q-kurz">DIN 13157</td><td>Erste-Hilfe-Material – Verbandkasten C</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz">DIN 13169</td><td>Erste-Hilfe-Material – Verbandkasten E</td><td class="q-apps"><span class="q-app">ASiC</span></td></tr>
+                <tr><td class="q-kurz">DIN 14096</td><td>Brandschutzordnung</td><td class="q-apps"><span class="q-app">ASiC</span></td></tr>
+                <tr><td class="q-kurz">DIN 14406-4</td><td>Tragbare Feuerlöscher – Instandhaltung</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">ASiC</span></td></tr>
+                <tr><td class="q-kurz">DIN 14462</td><td>Löschwassereinrichtungen</td><td class="q-apps"><span class="q-app">ASiC</span><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">DIN 14675</td><td>Brandmeldeanlagen – Aufbau und Betrieb</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">ASiC</span></td></tr>
+                <tr><td class="q-kurz">DIN 14677</td><td>Instandhaltung von elektrisch gesteuerten Feststellanlagen</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">ASiC</span></td></tr>
+                <tr><td class="q-kurz">DIN 18040-1</td><td>Barrierefreies Bauen – Öffentlich zugängliche Gebäude</td><td class="q-apps"><span class="q-app">ASiC</span><span class="q-app">Audit 2026</span></td></tr>
+                <tr><td class="q-kurz">DIN 18650-2</td><td>Automatische Türsysteme – Sicherheit</td><td class="q-apps"><span class="q-app">ASiC</span></td></tr>
+                <tr><td class="q-kurz">DIN 1988-600</td><td>Trinkwasser-Installationen in Verbindung mit Feuerlösch- und Brandschutzanlagen</td><td class="q-apps"><span class="q-app">ASiC</span></td></tr>
+                <tr><td class="q-kurz">DIN EN 131</td><td>Leitern</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">DIN EN 179</td><td>Notausgangsverschlüsse (mit DIN EN 1125 Paniktürverschlüsse)</td><td class="q-apps"><span class="q-app">ASiC</span></td></tr>
+                <tr><td class="q-kurz">DIN EN 342</td><td>Schutzkleidung gegen Kälte</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">DIN EN 378</td><td>Kälteanlagen und Wärmepumpen – Sicherheitstechnische und umweltrelevante Anforderungen</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">GBO</span><span class="q-app">GBU</span></td></tr>
+                <tr><td class="q-kurz">DIN EN 388</td><td>Schutzhandschuhe gegen mechanische Risiken</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">DIN EN 407</td><td>Schutzhandschuhe gegen thermische Risiken</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">DIN EN 511</td><td>Schutzhandschuhe gegen Kälte</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">DIN EN 1974</td><td>Nahrungsmittelmaschinen – Aufschnittschneidemaschinen</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">DIN EN 12331</td><td>Nahrungsmittelmaschinen – Fleischwölfe</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">DIN EN 12355</td><td>Nahrungsmittelmaschinen – Entschwartungs-, Enthäutungs- und Membranhautabziehmaschinen</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">DIN EN 13241</td><td>Tore – Produktnorm</td><td class="q-apps"><span class="q-app">ASiC</span></td></tr>
+                <tr><td class="q-kurz">DIN EN 15635</td><td>Ortsfeste Regalsysteme aus Stahl – Anwendung und Wartung</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">ASiC</span><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">DIN EN 50172</td><td>Sicherheitsbeleuchtungsanlagen</td><td class="q-apps"><span class="q-app">ASiC</span></td></tr>
+                <tr><td class="q-kurz">DIN EN ISO 374-1</td><td>Schutzhandschuhe gegen gefährliche Chemikalien</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">DIN EN ISO 7010</td><td>Graphische Symbole – Sicherheitszeichen</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">ASiC</span><span class="q-app">Audit 2026</span></td></tr>
+                <tr><td class="q-kurz">DIN EN ISO 10075</td><td>Ergonomische Grundlagen bezüglich psychischer Arbeitsbelastung</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">DIN EN ISO 12100</td><td>Sicherheit von Maschinen – Risikobeurteilung</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">DIN EN ISO 13732</td><td>Ergonomie – Berührung heißer, kalter Oberflächen</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">DIN EN ISO 13998</td><td>Schürzen, Hosen und Westen zum Schutz gegen Schnitt- und Stichverletzungen</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">DIN EN ISO 20345</td><td>Sicherheitsschuhe</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">DIN ISO 23601</td><td>Flucht- und Rettungspläne</td><td class="q-apps"><span class="q-app">ASiC</span></td></tr>
+                <tr><td class="q-kurz">DIN V VDE V 0108-100</td><td>Sicherheitsbeleuchtungsanlagen</td><td class="q-apps"><span class="q-app">ASiC</span></td></tr>
+                <tr><td class="q-kurz">DIN VDE 0100-520</td><td>Errichten von Niederspannungsanlagen (Teile 520 Kabel- und Leitungsanlagen, 737 Feuchte und nasse Bereiche)</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">ASiC</span></td></tr>
+                <tr><td class="q-kurz">DIN EN 50678 / DIN EN 50699</td><td>Prüfung elektrischer Geräte nach Reparatur (VDE 0701) bzw. Wiederholungsprüfung (VDE 0702)</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">DIN VDE 0701-0702</td><td>Prüfung elektrischer Geräte<div class="q-hinweis">Ersetzt durch DIN EN 50678 (VDE 0701) und DIN EN 50699 (VDE 0702); Übergangsfristen abgelaufen. In der GBO umgestellt (nur noch als Hinweis genannt).</div></td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz">DIN VDE 0833-1</td><td>Gefahrenmeldeanlagen für Brand, Einbruch und Überfall</td><td class="q-apps"><span class="q-app">ASiC</span></td></tr>
+                <tr><td class="q-kurz">DIN VDE 0834</td><td>Rufanlagen in Krankenhäusern, Pflegeheimen und ähnlichen Einrichtungen (für Notrufanlagen in WCs)</td><td class="q-apps"><span class="q-app">Checkliste</span><span class="q-app">Audit</span><span class="q-app">ASiC</span></td></tr>
+                </tbody>
+            </table></div>
+        </section>
+        <section class="q-gruppe" id="weitere">
+            <h2>Branchenhilfen und Leitlinien <span class="q-anzahl">3</span></h2>
+            
+            <div class="tabelle-scroll"><table class="q-table">
+                <thead><tr><th>Kurzbezeichnung</th><th>Titel</th><th>Verwendet in</th></tr></thead>
+                <tbody>
+                                <tr><td class="q-kurz"><a href="https://kompendium.bghw.de/" target="_blank" rel="noopener">BGHW-Kompendium</a></td><td>Kompendium Arbeitsschutz der Berufsgenossenschaft Handel und Warenlogistik</td><td class="q-apps"><span class="q-app">Aushänge</span></td></tr>
+                <tr><td class="q-kurz">BGHW-Handlungshilfe Psychische Belastungen</td><td>BGHW-Handlungshilfe „Psychische Belastungen im Handel“</td><td class="q-apps"><span class="q-app">GBO</span></td></tr>
+                <tr><td class="q-kurz"><a href="https://www.gda-portal.de/" target="_blank" rel="noopener">GDA-Leitlinie</a></td><td>GDA-Leitlinie „Beratung und Überwachung bei psychischer Belastung am Arbeitsplatz“ und Empfehlungen zur Gefährdungsbeurteilung psychischer Belastung</td><td class="q-apps"><span class="q-app">ASiC</span><span class="q-app">GBO</span><span class="q-app">GBU</span></td></tr>
+                </tbody>
+            </table></div>
+        </section>
+    </div>
+</div>
+
+<footer class="app-footer">
+    <nav class="app-footer-links">
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutz</a>
+        <a href="faq.html">FAQ</a>
+        <a href="technische-beschreibung.html">Technik</a>
+        <a href="welcome.html">Startseite</a>
+    </nav>
+    <p>© <span class="app-footer-jahr"></span> Andreas Zott — Alle Rechte vorbehalten</p>
+    <p class="app-footer-version"></p>
+</footer>
+
+<script src="js/common.js"></script>
+<script>
+(function () {
+    const feld = document.getElementById('quellenSuche');
+    const anzeige = document.getElementById('quellenTreffer');
+    const zeilen = Array.from(document.querySelectorAll('.q-table tbody tr'));
+    const gruppen = Array.from(document.querySelectorAll('.q-gruppe'));
+    function filtern() {
+        const q = feld.value.trim().toLowerCase();
+        let n = 0;
+        zeilen.forEach(tr => {
+            const treffer = !q || tr.textContent.toLowerCase().includes(q);
+            tr.hidden = !treffer;
+            if (treffer) n++;
+        });
+        gruppen.forEach(g => { g.hidden = !g.querySelector('tbody tr:not([hidden])'); });
+        anzeige.textContent = q ? n + ' Treffer' : '';
+    }
+    feld.addEventListener('input', filtern);
+})();
+</script>
+
+</body>
+</html>
