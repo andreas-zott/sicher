@@ -1,128 +1,789 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Arbeitssicherheit — Anmeldung</title>
-<link rel="icon" href="favicon.ico" type="image/x-icon">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#1c2226">
-<link rel="stylesheet" href="lib/css/fontawesome.min.css">
-<link rel="stylesheet" href="css/styles.css">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+<title>
+    ASiC Handel – Arbeitssicherheits-Check
+</title>
+
+<link
+    rel="stylesheet"
+    href="css/styles.css"
+>
+
+<script src="zugang-config.js"></script>
+
+<script src="js/access-gate.js"></script>
+
+<link
+    rel="manifest"
+    href="manifest.json"
+>
+
+<link
+    rel="apple-touch-icon"
+    href="icon-192.png"
+>
+
+<meta
+    name="apple-mobile-web-app-capable"
+    content="yes"
+>
+
+<meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="black-translucent"
+>
+
+<meta
+    name="theme-color"
+    content="#1c2226"
+>
+
+<script src="js/jspdf.umd.min.js"></script>
+
 </head>
+
+
 <body>
 
-<button class="theme-toggle" id="themeToggle" aria-label="Theme umschalten">🌙</button>
 
-<section class="hero">
-    <div class="hero-icon"><i class="fas fa-shield-alt"></i></div>
-    <h1>Arbeitssicherheit</h1>
-    <p>„Sicher geprüft. Sicher gehandelt."</p>
-</section>
+<!-- ====================================================================== -->
+<!-- HEADER                                                                 -->
+<!-- ====================================================================== -->
 
-<div class="container container-narrow">
+<header class="app-header">
 
-    <div class="card">
-        <div style="text-align:center; font-size:0.95rem; margin-bottom:8px; color:var(--navy-bright); font-weight:600;">
-            🔐 Passwortgeschützt
+    <div class="hazard-strip"></div>
+
+    <div class="app-header-inner">
+
+
+        <div class="brand">
+
+            <span class="brand-title">
+                ASiC Handel
+            </span>
+
+            <span class="brand-tag">
+                Märkte
+            </span>
+
+            <span class="brand-subtitle">
+                „Sicher geprüft. Sicher gehandelt.“
+            </span>
+
         </div>
 
-        <form id="loginForm">
-            <label for="username">Benutzername</label>
-            <input type="text" id="username" autocomplete="username" required>
 
-            <label for="password">Passwort</label>
-            <input type="password" id="password" autocomplete="current-password" required>
+        <nav class="app-nav">
 
-            <div style="display:flex; align-items:center; gap:8px; margin-top:10px; font-size:0.88rem;">
-                <input type="checkbox" id="togglePassword" style="width:auto;">
-                <label for="togglePassword" style="margin:0; font-weight:400;">Passwort anzeigen</label>
+            <a
+                href="index.html"
+                class="active"
+            >
+                Prüfkatalog
+            </a>
+
+            <a href="massnahmen.html">
+                Aktionsplan
+            </a>
+
+            <a href="fotos.html">
+                Fotos
+            </a>
+
+            <a href="verlauf.html">
+                Verlauf
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+
+<!-- ====================================================================== -->
+<!-- HAUPTBEREICH                                                           -->
+<!-- ====================================================================== -->
+
+<main class="page">
+
+
+    <!-- ================================================================== -->
+    <!-- BETRIEBSDATEN                                                       -->
+    <!-- ================================================================== -->
+
+    <section class="card company-card">
+
+        <div class="section-title">
+            Betriebsdaten
+        </div>
+
+
+        <div class="company-grid">
+
+
+            <div class="field">
+
+                <label for="marktnummer">
+                    Marktnummer
+                </label>
+
+                <input
+                    type="text"
+                    id="marktnummer"
+                    placeholder="z. B. 123"
+                >
+
             </div>
 
-            <button type="submit" class="btn btn-primary" style="margin-top:22px;">Anmelden</button>
-            <div class="error-msg" id="errorMsg"></div>
-        </form>
+
+            <div class="field">
+
+                <label for="plzOrt">
+                    Postleitzahl und Ort
+                </label>
+
+                <input
+                    type="text"
+                    id="plzOrt"
+                    placeholder="z. B. 12345 Musterstadt"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="strasse">
+                    Straße und Hausnummer
+                </label>
+
+                <input
+                    type="text"
+                    id="strasse"
+                    placeholder="z. B. Musterstraße 123"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="datum">
+                    Datum
+                </label>
+
+                <input
+                    type="date"
+                    id="datum"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="pruefername">
+                    Prüfer
+                </label>
+
+                <input
+                    type="text"
+                    id="pruefername"
+                    placeholder="Name des Prüfers"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="marktleitung">
+                    Marktleitung
+                </label>
+
+                <input
+                    type="text"
+                    id="marktleitung"
+                    placeholder="Name der Marktleitung"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="teilnehmer">
+                    Teilnehmer
+                </label>
+
+                <input
+                    type="text"
+                    id="teilnehmer"
+                    placeholder="Weitere Teilnehmer"
+                >
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================================================================== -->
+    <!-- FORTSCHRITT                                                         -->
+    <!-- ================================================================== -->
+
+    <section class="card progress-bar-card">
+
+        <div class="progress-row">
+
+            <span
+                class="progress-label"
+                id="progress-label"
+            >
+                0 / 174 geprüft
+            </span>
+
+
+            <div class="progress-track">
+
+                <div
+                    class="progress-fill"
+                    id="progress-fill"
+                    style="width: 0%;"
+                ></div>
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-pills">
+
+            <span class="stat-pill ok">
+
+                ✓
+
+                <span id="stat-ok">
+                    0
+                </span>
+
+                In Ordnung
+
+            </span>
+
+
+            <span class="stat-pill mangel">
+
+                !
+
+                <span id="stat-mangel">
+                    0
+                </span>
+
+                Mangel
+
+            </span>
+
+
+            <span class="stat-pill na">
+
+                –
+
+                <span id="stat-na">
+                    0
+                </span>
+
+                N.V.
+
+            </span>
+
+
+            <span class="stat-pill offen">
+
+                <span id="stat-offen">
+                    174
+                </span>
+
+                Offen
+
+            </span>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================================================================== -->
+    <!-- HINWEIS FOTODOKUMENTATION                                          -->
+    <!-- ================================================================== -->
+
+    <div
+        class="card"
+        style="
+            margin-bottom: 1rem;
+            padding: 0.75rem 1rem;
+        "
+    >
+
+        <p
+            style="
+                margin: 0;
+                font-size: 0.86rem;
+                color: var(--ink-soft);
+            "
+        >
+
+            <strong>
+                Fotodokumentation:
+            </strong>
+
+            Festgestellte Mängel können direkt auf der Seite
+            <strong>„Fotos“</strong>
+            fotografiert oder aus der Mediathek eingefügt und
+            anschließend einer Maßnahme zugeordnet werden.
+
+        </p>
+
+    </div>
+
+
+
+    <!-- ================================================================== -->
+    <!-- CHECKLISTE                                                          -->
+    <!-- ================================================================== -->
+
+    <div
+        id="checklist-container"
+    ></div>
+
+
+</main>
+
+
+
+<!-- ====================================================================== -->
+<!-- FOOTER                                                                 -->
+<!-- ====================================================================== -->
+
+<footer class="app-footer">
+
+    <div class="app-footer-meta">
+
+        <span
+            id="footer-version"
+        ></span>
+
+
+        <span
+            class="footer-copyright"
+            id="footer-copyright"
+        ></span>
+
+    </div>
+
+
+    <div class="app-footer-links">
+
+        <a href="impressum.html">
+            Impressum
+        </a>
+
+
+        <a href="datenschutz.html">
+            Datenschutz
+        </a>
+
+
+        <a href="dokumentation.html">
+            Technische Dokumentation
+        </a>
+
+
+        <a href="hilfe.html">
+            Hilfe &amp; FAQ
+        </a>
+
+
+        <a href="auswertung.html">
+            Auswertung
+        </a>
+
+
+        <a href="auswertung-team.html">
+            Auswertung Team
+        </a>
+
+
+        <a href="einstellungen.html">
+            Einstellungen
+        </a>
+
+    </div>
+
+</footer>
+
+
+
+<!-- ====================================================================== -->
+<!-- ACTION BAR                                                             -->
+<!-- ====================================================================== -->
+
+<div class="action-bar">
+
+    <div class="action-bar-inner">
+
+
+        <!-- ================================================================ -->
+        <!-- DATEI                                                           -->
+        <!-- ================================================================ -->
+
+        <div class="action-bar-group">
+
+            <div class="menu-dropdown">
+
+                <button
+                    class="btn btn-secondary btn-small"
+                    id="file-menu-toggle"
+                    type="button"
+                >
+                    Datei ▾
+                </button>
+
+
+                <div
+                    class="menu-dropdown-panel"
+                    id="file-menu-panel"
+                >
+
+                    <!-- -------------------------------------------------- -->
+                    <!-- LOKAL SPEICHERN                                    -->
+                    <!-- -------------------------------------------------- -->
+
+                    <button
+                        class="menu-item"
+                        id="btn-save"
+                        type="button"
+                    >
+                        💾 Speichern
+                    </button>
+
+
+                    <div class="menu-divider"></div>
+
+
+                    <!-- -------------------------------------------------- -->
+                    <!-- NAS SPEICHERN/LADEN                                -->
+                    <!-- Funktioniert nur, wenn die App direkt ueber die    -->
+                    <!-- Synology (bzw. deren Tailscale-Adresse) laeuft -   -->
+                    <!-- ueber GitHub Pages sind save.php/list.php/load.php -->
+                    <!-- nicht erreichbar (keine serverseitigen Skripte).  -->
+                    <!-- -------------------------------------------------- -->
+
+                    <button
+                        class="menu-item"
+                        id="btn-save-nas"
+                        type="button"
+                    >
+                        ☁️ Auf Server speichern
+                    </button>
+
+                    <button
+                        class="menu-item"
+                        id="btn-load-nas"
+                        type="button"
+                    >
+                        📂 Vom Server laden
+                    </button>
+
+
+                    <div class="menu-divider"></div>
+
+
+                    <!-- -------------------------------------------------- -->
+                    <!-- JSON EXPORT                                        -->
+                    <!-- -------------------------------------------------- -->
+
+                    <button
+                        class="menu-item"
+                        id="btn-json-export"
+                        type="button"
+                    >
+                        ⬆️ JSON exportieren
+                    </button>
+
+                    <button
+                        class="menu-item"
+                        id="btn-json-share"
+                        type="button"
+                    >
+                        📧 JSON per Mail teilen
+                    </button>
+
+
+                    <!-- -------------------------------------------------- -->
+                    <!-- JSON IMPORT                                        -->
+                    <!-- -------------------------------------------------- -->
+
+                    <label
+                        class="menu-item"
+                        for="json-import-input"
+                        style="cursor:pointer;"
+                    >
+
+                        ⬇️ JSON laden
+
+
+                        <input
+                            type="file"
+                            id="json-import-input"
+                            accept="application/json"
+                            style="display:none;"
+                        >
+
+                    </label>
+
+
+                    <div class="menu-divider"></div>
+
+
+                    <!-- -------------------------------------------------- -->
+                    <!-- ARCHIV                                              -->
+                    <!-- -------------------------------------------------- -->
+
+                    <button
+                        class="menu-item"
+                        id="btn-archive"
+                        type="button"
+                    >
+                        📦 Begehung archivieren
+                    </button>
+
+
+                    <div class="menu-divider"></div>
+
+
+                    <!-- -------------------------------------------------- -->
+                    <!-- ZURÜCKSETZEN                                       -->
+                    <!-- -------------------------------------------------- -->
+
+                    <button
+                        class="menu-item menu-item-danger"
+                        id="btn-reset"
+                        type="button"
+                    >
+                        🗑️ Zurücksetzen
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================================================================ -->
+        <!-- SPRACHSTIL                                                       -->
+        <!-- ================================================================ -->
+
+        <div
+            class="action-bar-group action-bar-group-style"
+        >
+
+            <span
+                class="style-switch-label"
+            >
+                Sprachstil der Maßnahmentexte:
+            </span>
+
+
+            <div
+                class="style-switch"
+                id="style-switch"
+            >
+
+                <button
+                    class="style-btn"
+                    data-style="einfach"
+                    type="button"
+                >
+                    Einfach
+                </button>
+
+
+                <button
+                    class="style-btn"
+                    data-style="bghw"
+                    type="button"
+                >
+                    BGHW
+                </button>
+
+
+                <button
+                    class="style-btn"
+                    data-style="rechtlich"
+                    type="button"
+                >
+                    Rechtlich
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================================================================ -->
+        <!-- EXPORT                                                           -->
+        <!-- ================================================================ -->
+
+        <div
+            class="action-bar-group"
+        >
+
+            <div
+                class="menu-dropdown"
+            >
+
+                <button
+                    class="btn btn-primary btn-small"
+                    id="export-menu-toggle"
+                    type="button"
+                >
+                    Exportieren ▾
+                </button>
+
+
+                <div
+                    class="menu-dropdown-panel"
+                    id="export-menu-panel"
+                >
+
+                    <div
+                        class="menu-mode-row"
+                    >
+
+                        <button
+                            class="mode-btn"
+                            data-mode="checkliste"
+                            type="button"
+                        >
+                            Checkliste
+                        </button>
+
+
+                        <button
+                            class="mode-btn"
+                            data-mode="massnahmen"
+                            type="button"
+                        >
+                            Maßnahmen
+                        </button>
+
+
+                        <button
+                            class="mode-btn"
+                            data-mode="fotos"
+                            type="button"
+                        >
+                            Fotos
+                        </button>
+
+
+                        <button
+                            class="mode-btn"
+                            data-mode="alle"
+                            type="button"
+                        >
+                            Alles
+                        </button>
+
+                    </div>
+
+
+                    <div class="menu-divider"></div>
+
+
+                    <button
+                        class="menu-item"
+                        data-action="print"
+                        type="button"
+                    >
+                        🖨️ Drucken
+                    </button>
+
+
+                    <button
+                        class="menu-item"
+                        data-action="share"
+                        type="button"
+                    >
+                        📤 PDF teilen
+                    </button>
+
+
+                    <button
+                        class="menu-item"
+                        data-action="mail"
+                        type="button"
+                    >
+                        ✉️ Mail vorbereiten
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <a
+                href="massnahmen.html"
+                class="btn btn-primary btn-small"
+            >
+                Weiter →
+            </a>
+
+        </div>
+
     </div>
 
 </div>
 
-<footer class="app-footer">
-    <nav class="app-footer-links">
-        <a href="impressum.html">Impressum</a>
-        <a href="datenschutz.html">Datenschutz</a>
-        <a href="quellen.html">Quellen</a>
-    </nav>
-    <p>© <span class="app-footer-jahr"></span> Andreas Zott — Alle Rechte vorbehalten</p>
-    <p class="app-footer-version"></p>
-</footer>
 
-<script src="js/common.js"></script>
-<script>
-    document.getElementById('togglePassword').addEventListener('change', function () {
-        document.getElementById('password').type = this.checked ? 'text' : 'password';
-    });
 
-    // Zugangsdaten stehen NICHT mehr im Klartext im Quelltext (frueher waren
-    // Benutzernamen und Passwoerter fuer jeden lesbar). Gespeichert ist nur
-    // ein SHA-256-Hash aus "benutzer:passwort:salz".
-    // WICHTIG: Das ist kein echter Zugriffsschutz - alle Seiten sind weiterhin
-    // direkt aufrufbar, und kurze Zahlencodes lassen sich durchprobieren.
-    // Echter Schutz geht nur serverseitig (z. B. Synology-Freigabe/Webserver-Login).
-    // Neuen Zugang anlegen: Hash von "name:passwort:sicher-portal-v1" bilden
-    // (z. B. in Python: hashlib.sha256("name:pw:sicher-portal-v1".encode()).hexdigest())
-    // und unten eintragen.
-    const ZUGANG_SALT = 'sicher-portal-v1';
-    const ZUGANG_HASHES = [
-        '096059915db0d357e70d93195dfb2c81948a57f24b4bef82a3a6e177041b5119',
-        '8ba58190239e984e6edbad83e0f27f76cd069ea16e16c4ee260a20a93cbe938c',
-        '15ea2a1adf5e252ae9ee1fab4ce04d65e27aa4686265b3582799230499319628',
-        'a2ae2e17ccc144765f30da990739b98bfa3f52670d0cb23f8dbdea3576067ba8',
-    ];
+<!-- ====================================================================== -->
+<!-- JAVASCRIPT                                                             -->
+<!-- ====================================================================== -->
 
-    // Kompakte SHA-256-Implementierung (funktioniert auch ohne HTTPS, wo
-    // crypto.subtle nicht verfuegbar ist, z. B. bei Aufruf ueber die NAS-IP).
-    function sha256Hex(text) {
-        const bytes = new TextEncoder().encode(text);
-        const K = [0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
-        const H = [0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
-        const l = bytes.length, n = ((l + 9 + 63) >> 6) << 6;
-        const m = new Uint8Array(n); m.set(bytes); m[l] = 0x80;
-        const dv = new DataView(m.buffer);
-        dv.setUint32(n - 4, (l * 8) >>> 0); dv.setUint32(n - 8, Math.floor(l / 0x20000000));
-        const w = new Uint32Array(64);
-        const r = (x, k) => (x >>> k) | (x << (32 - k));
-        for (let o = 0; o < n; o += 64) {
-            for (let i = 0; i < 16; i++) w[i] = dv.getUint32(o + i * 4);
-            for (let i = 16; i < 64; i++) {
-                const s0 = r(w[i-15], 7) ^ r(w[i-15], 18) ^ (w[i-15] >>> 3);
-                const s1 = r(w[i-2], 17) ^ r(w[i-2], 19) ^ (w[i-2] >>> 10);
-                w[i] = (w[i-16] + s0 + w[i-7] + s1) >>> 0;
-            }
-            let [a, b, c, d, e, f, g, h] = H;
-            for (let i = 0; i < 64; i++) {
-                const t1 = (h + (r(e, 6) ^ r(e, 11) ^ r(e, 25)) + ((e & f) ^ (~e & g)) + K[i] + w[i]) >>> 0;
-                const t2 = ((r(a, 2) ^ r(a, 13) ^ r(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) >>> 0;
-                h = g; g = f; f = e; e = (d + t1) >>> 0; d = c; c = b; b = a; a = (t1 + t2) >>> 0;
-            }
-            H[0] = (H[0] + a) >>> 0; H[1] = (H[1] + b) >>> 0; H[2] = (H[2] + c) >>> 0; H[3] = (H[3] + d) >>> 0;
-            H[4] = (H[4] + e) >>> 0; H[5] = (H[5] + f) >>> 0; H[6] = (H[6] + g) >>> 0; H[7] = (H[7] + h) >>> 0;
-        }
-        return H.map(x => x.toString(16).padStart(8, '0')).join('');
-    }
+<script src="js/audit-data.js"></script>
 
-    document.getElementById('loginForm').addEventListener('submit', function (e) {
-        e.preventDefault();
-        const u = document.getElementById('username').value.trim().toLowerCase();
-        const p = document.getElementById('password').value;
+<script src="js/text.js"></script>
 
-        if (ZUGANG_HASHES.includes(sha256Hex(`${u}:${p}:${ZUGANG_SALT}`))) {
-            window.location.href = 'welcome.html';
-        } else {
-            document.getElementById('errorMsg').textContent = 'Falscher Benutzername oder Passwort!';
-        }
-    });
-</script>
+<script src="js/photos-store.js"></script>
+
+<script src="js/archive-store.js"></script>
+
+
+<script src="js/app.js"></script>
+
 
 </body>
+
 </html>
