@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Technische Dokumentation – ASiC Handel</title>
-<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/styles.css?v=1.54">
 <script src="zugang-config.js"></script>
-<script src="js/access-gate.js"></script>
+<script src="js/access-gate.js?v=1.54"></script>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -299,21 +299,21 @@
                 <div class="doku-meta-label">
                     Dokumentstand
                 </div>
-                <div class="doku-meta-value"> <span data-zahl="stand">17.10.2026</span> </div>
+                <div class="doku-meta-value"> <span data-zahl="stand">24.10.2026</span> </div>
             </div>
 
             <div class="doku-meta-item">
                 <div class="doku-meta-label">
                     App-Revision
                 </div>
-                <div class="doku-meta-value"> <span data-zahl="revision">1.52</span> (<span data-zahl="revision_datum">17.10.2026</span>) </div>
+                <div class="doku-meta-value"> <span data-zahl="revision">1.54</span> (<span data-zahl="revision_datum">24.10.2026</span>) </div>
             </div>
 
             <div class="doku-meta-item">
                 <div class="doku-meta-label">
                     Service Worker
                 </div>
-                <div class="doku-meta-value"> <span data-zahl="cache_version">v1.52</span> </div>
+                <div class="doku-meta-value"> <span data-zahl="cache_version">v1.54</span> </div>
             </div>
 
             <div class="doku-meta-item">
@@ -562,7 +562,7 @@
 
             <p>
                 Die aktuelle technische Cache-Version lautet:
-                <strong><code><span data-zahl="cache">asic-handel-v1.52</span></code></strong>.
+                <strong><code><span data-zahl="cache">asic-handel-v1.54</span></code></strong>.
             </p>
 
             <ul>
@@ -1793,6 +1793,42 @@
             </p>
 
             <p>
+                <strong>Ladestatus (ab Rev. 1.53)</strong>: Oberhalb der
+                Filter zeigt <code>auswertung-team.html</code> einen
+                Statusbalken (<code>#team-lade-status</code>,
+                <code>setzeTeamLadeStatus()</code> in
+                <code>js/auswertung-team.js</code>). Während des Ladens:
+                Spinner, „x von y Begehungen geladen" und Fortschrittsbalken;
+                die Dateien werden weiterhin parallel geladen, jede fertige
+                Datei zählt hoch. Danach grün „vollständig geladen" mit
+                Anzahl, Dauer und Uhrzeit, gelb „teilweise geladen", wenn
+                Dateien übersprungen wurden, oder rot mit Fehlergrund. Ein
+                Knopf „Neu laden" bzw. „Erneut versuchen" lädt das
+                Team-Archiv ohne Seitenneuladen erneut. Filter und
+                Export-Knöpfe sind während des Ladens gesperrt.
+            </p>
+
+            <p>
+                <strong>Frische Dateien und schneller Seitenaufbau (ab Rev. 1.53/1.54)</strong>:
+                Alle Einbindungen von <code>js/…</code> und <code>css/…</code>
+                tragen den Zusatz <code>?v=1.54</code>. Diese Dateien (und die
+                Schriften) liefert der Service Worker ab Rev. 1.54 sofort aus
+                dem Cache auf dem Gerät, ohne Rückfrage beim Server; nach einem
+                Update ändert sich der Zusatz, dadurch werden sie automatisch
+                neu geladen. HTML-Seiten, <code>zugang-config.js</code> (ohne
+                Zusatz, damit eine Änderung des Betreibers sofort greift),
+                Manifest und Icons werden zuerst beim Server nachgefragt
+                (<code>cache: 'no-cache'</code>), offline aus dem Cache.
+                <code>js/jspdf.umd.min.js</code> wird mit <code>defer</code>
+                geladen und blockiert den Seitenaufbau nicht mehr.
+                <code>js/auswertung.js</code> liest das lokale Archiv nur noch
+                auf <code>auswertung.html</code>, nicht mehr auf der
+                Team-Auswertung. Bei jedem Update <code>?v=</code>,
+                <code>APP_VERSION</code> in <code>sw.js</code> und
+                <code>APP_REVISION</code> gemeinsam hochzählen.
+            </p>
+
+            <p>
                 <strong>Markt-Filter</strong>: Ein zweites Dropdown neben
                 dem Zeitraum-Filter schränkt alle Auswertungsbereiche
                 (außer „Wiederkehrende Mängel") auf einen einzelnen Markt
@@ -2170,11 +2206,11 @@
                 </tr>
                 <tr>
                     <td><code>APP_REVISION</code> / <code>APP_REVISION_DATE</code> in js/app.js</td>
-                    <td><span data-zahl="revision">1.52</span> / <span data-zahl="revision_datum">17.10.2026</span></td>
+                    <td><span data-zahl="revision">1.54</span> / <span data-zahl="revision_datum">24.10.2026</span></td>
                 </tr>
                 <tr>
                     <td><code>CACHE_NAME</code> und Kommentar <code>SERVICE-WORKER-VERSION</code> in sw.js</td>
-                    <td>asic-handel-v<span data-zahl="revision">1.52</span></td>
+                    <td>asic-handel-v<span data-zahl="revision">1.54</span></td>
                 </tr>
             </table>
             </div>
@@ -2417,7 +2453,7 @@
                 <tr>
                     <td>sw.js</td>
                     <td class="zahl">296</td>
-                    <td>Service Worker, Offline-Fähigkeit, Cache-Version v1.52</td>
+                    <td>Service Worker, Offline-Fähigkeit, Cache-Version v1.54</td>
                 </tr>
                 <tr>
                     <td>manifest.json</td>
@@ -2567,9 +2603,9 @@
 </footer>
 
 
-<script src="js/audit-data.js"></script>
-<script src="js/text.js"></script>
-<script src="js/app.js"></script>
+<script src="js/audit-data.js?v=1.54"></script>
+<script src="js/text.js?v=1.54"></script>
+<script src="js/app.js?v=1.54"></script>
 
 <!-- Quellenverzeichnis ist für diesen Dokumentstand detailliert und statisch dokumentiert. -->
 
