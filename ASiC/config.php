@@ -1,7 +1,7 @@
 <?php
 /*
 |--------------------------------------------------------------------------
-| ASiC Handel 1.52 – Server-Konfiguration
+| ASiC Handel 1.53 – Server-Konfiguration
 |--------------------------------------------------------------------------
 |
 | Diese Datei wird von save.php, list.php, load.php und pruefen.php gelesen.
@@ -44,6 +44,6 @@
 date_default_timezone_set('Europe/Berlin');
 
 return [
-    'datenOrdner' => '/srv/asic-daten',
+    'datenOrdner' => '/volume1/asic-handel-backup/daten',
     'apiKey'      => '',
 ];
