@@ -8,29 +8,35 @@ header('Content-Type: application/json; charset=utf-8');
 | Konfiguration
 |--------------------------------------------------------------------------
 |
-| Muss exakt derselbe Pfad sein wie in save.php und load.php.
+| Datenordner und Zugriffsschluessel stehen zentral in config.php
+| (im selben Ordner wie dieses Skript). Hier nichts aendern.
 |
 |--------------------------------------------------------------------------
 */
 
-$datenOrdner = '/volume1/asic-handel-backup/daten';
+$asicConfig = require __DIR__ . DIRECTORY_SEPARATOR . 'config.php';
+
+$datenOrdner = (string) ($asicConfig['datenOrdner'] ?? '');
 
 /*
 |--------------------------------------------------------------------------
-| Optionaler Zugriffsschluessel
-|--------------------------------------------------------------------------
-|
-| Leer lassen = kein Schluessel erforderlich (bisheriges Verhalten, z. B.
-| wenn der Server nur ueber ein geschuetztes Netz wie Tailscale erreichbar
-| ist). Zum Aktivieren: eigenen, langen Zufallswert eintragen und denselben
-| Wert auf der Einstellungsseite der App unter "Zugriffsschluessel"
-| hinterlegen - muss in ALLEN DREI Dateien (save.php/list.php/load.php)
-| identisch gesetzt werden.
-|
+| Optionaler Zugriffsschluessel (Wert in config.php)
 |--------------------------------------------------------------------------
 */
 
-$apiKey = '';
+$apiKey = (string) ($asicConfig['apiKey'] ?? '');
+
+if ($datenOrdner === '') {
+
+    http_response_code(500);
+
+    echo json_encode([
+        'ok' => false,
+        'message' => 'Datenordner ist in config.php nicht eingetragen.'
+    ], JSON_UNESCAPED_UNICODE);
+
+    exit;
+}
 
 if ($apiKey !== '') {
 
@@ -77,13 +83,20 @@ if (
 |--------------------------------------------------------------------------
 | Wenn Ordner nicht existiert
 |--------------------------------------------------------------------------
+|
+| Ab Rev. 1.52 bewusst eine Fehlermeldung statt einer leeren Liste: Ein
+| falscher Pfad in config.php fiel sonst nur als „keine Begehungen“ auf.
+| save.php legt den Ordner beim ersten Speichern an; pruefen.php ebenso.
+|
 */
 
 if (!is_dir($datenOrdner)) {
 
+    http_response_code(500);
+
     echo json_encode([
-        'ok' => true,
-        'files' => []
+        'ok' => false,
+        'message' => 'Datenordner nicht gefunden. Bitte den Pfad in config.php prüfen (oder einmal speichern bzw. pruefen.php aufrufen, um ihn anzulegen).'
     ], JSON_UNESCAPED_UNICODE);
 
     exit;
@@ -98,7 +111,7 @@ if (!is_dir($datenOrdner)) {
 | Zwei Namensmuster werden gefunden:
 | - "Begehung_<Datum>_Markt<Nummer>.json" (von save.php selbst erzeugt)
 | - "ASiC-Handel_<Firma>_<Datum>.json" (aus "JSON exportieren"/"JSON per
-|   Mail teilen" in der App, manuell z. B. per File Station in diesen
+|   Mail teilen" in der App, manuell z. B. per Dateifreigabe in diesen
 |   Ordner eingespielt)
 |
 |--------------------------------------------------------------------------

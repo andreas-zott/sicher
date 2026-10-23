@@ -8,34 +8,35 @@ header('Content-Type: application/json; charset=utf-8');
 | Konfiguration
 |--------------------------------------------------------------------------
 |
-| WICHTIG: Absoluter Pfad auf der Synology, NICHT relativ zu diesem Skript -
-| liegt bewusst AUSSERHALB des Web-Verzeichnisses, in einem eigenen
-| freigegebenen Ordner. Falls die Synology mehr als ein Volume hat (z. B.
-| SSD-Cache oder mehrere Festplattengruppen), in der DSM-"File Station"
-| per Rechtsklick auf den Ordner -> Eigenschaften den exakten Pfad pruefen
-| und hier ggf. anpassen (z. B. "/volume2/..." statt "/volume1/...").
+| Datenordner und Zugriffsschluessel stehen zentral in config.php
+| (im selben Ordner wie dieses Skript). Hier nichts aendern.
 |
 |--------------------------------------------------------------------------
 */
 
-$datenOrdner = '/volume1/asic-handel-backup/daten';
+$asicConfig = require __DIR__ . DIRECTORY_SEPARATOR . 'config.php';
+
+$datenOrdner = (string) ($asicConfig['datenOrdner'] ?? '');
 
 /*
 |--------------------------------------------------------------------------
-| Optionaler Zugriffsschluessel
-|--------------------------------------------------------------------------
-|
-| Leer lassen = kein Schluessel erforderlich (bisheriges Verhalten, z. B.
-| wenn der Server nur ueber ein geschuetztes Netz wie Tailscale erreichbar
-| ist). Zum Aktivieren: eigenen, langen Zufallswert eintragen und denselben
-| Wert auf der Einstellungsseite der App unter "Zugriffsschluessel"
-| hinterlegen - muss in ALLEN DREI Dateien (save.php/list.php/load.php)
-| identisch gesetzt werden.
-|
+| Optionaler Zugriffsschluessel (Wert in config.php)
 |--------------------------------------------------------------------------
 */
 
-$apiKey = '';
+$apiKey = (string) ($asicConfig['apiKey'] ?? '');
+
+if ($datenOrdner === '') {
+
+    http_response_code(500);
+
+    echo json_encode([
+        'ok' => false,
+        'message' => 'Datenordner ist in config.php nicht eingetragen.'
+    ], JSON_UNESCAPED_UNICODE);
+
+    exit;
+}
 
 if ($apiKey !== '') {
 
@@ -359,7 +360,7 @@ if (!is_dir($datenOrdner)) {
 
 /*
 |--------------------------------------------------------------------------
-| NAS-Metadaten hinzufügen
+| Server-Metadaten hinzufügen
 |--------------------------------------------------------------------------
 */
 
@@ -558,7 +559,7 @@ echo json_encode([
         true,
 
     'message' =>
-        'Begehung auf NAS gespeichert.',
+        'Begehung auf dem Server gespeichert.',
 
     'fileName' =>
         $dateiname,

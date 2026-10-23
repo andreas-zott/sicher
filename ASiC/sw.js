@@ -213,7 +213,7 @@ self.addEventListener('fetch', event => {
         return;
     }
 
-    // NAS-Endpunkte (list/load/save.php) und fremde Origins werden NIE
+    // Server-Endpunkte (list/load/save.php) und fremde Origins werden NIE
     // gecacht: sonst wuerden offline veraltete Dateilisten bzw. Begehungs-
     // daten aus dem Cache ausgeliefert.
     const requestUrl = new URL(event.request.url);

@@ -8,29 +8,35 @@ header('Content-Type: application/json; charset=utf-8');
 | Konfiguration
 |--------------------------------------------------------------------------
 |
-| Muss exakt derselbe Pfad sein wie in save.php und list.php.
+| Datenordner und Zugriffsschluessel stehen zentral in config.php
+| (im selben Ordner wie dieses Skript). Hier nichts aendern.
 |
 |--------------------------------------------------------------------------
 */
 
-$datenOrdner = '/volume1/asic-handel-backup/daten';
+$asicConfig = require __DIR__ . DIRECTORY_SEPARATOR . 'config.php';
+
+$datenOrdner = (string) ($asicConfig['datenOrdner'] ?? '');
 
 /*
 |--------------------------------------------------------------------------
-| Optionaler Zugriffsschluessel
-|--------------------------------------------------------------------------
-|
-| Leer lassen = kein Schluessel erforderlich (bisheriges Verhalten, z. B.
-| wenn der Server nur ueber ein geschuetztes Netz wie Tailscale erreichbar
-| ist). Zum Aktivieren: eigenen, langen Zufallswert eintragen und denselben
-| Wert auf der Einstellungsseite der App unter "Zugriffsschluessel"
-| hinterlegen - muss in ALLEN DREI Dateien (save.php/list.php/load.php)
-| identisch gesetzt werden.
-|
+| Optionaler Zugriffsschluessel (Wert in config.php)
 |--------------------------------------------------------------------------
 */
 
-$apiKey = '';
+$apiKey = (string) ($asicConfig['apiKey'] ?? '');
+
+if ($datenOrdner === '') {
+
+    http_response_code(500);
+
+    echo json_encode([
+        'ok' => false,
+        'message' => 'Datenordner ist in config.php nicht eingetragen.'
+    ], JSON_UNESCAPED_UNICODE);
+
+    exit;
+}
 
 if ($apiKey !== '') {
 
@@ -110,7 +116,7 @@ if (trim($angeforderterName) === '') {
 | Muster 1: von save.php selbst erzeugt
 |   Begehung_25.08.2026_Markt123.json
 | Muster 2: aus "JSON exportieren"/"JSON per Mail teilen" in der App,
-| manuell z. B. per File Station in diesen Ordner eingespielt
+| manuell z. B. per Dateifreigabe in diesen Ordner eingespielt
 |   ASiC-Handel_Testmarkt_2026-08-25.json
 |
 |--------------------------------------------------------------------------
@@ -143,7 +149,7 @@ if (!file_exists($datei)) {
     http_response_code(404);
     echo json_encode([
         'ok' => false,
-        'message' => 'Diese Begehung wurde auf dem NAS nicht gefunden.'
+        'message' => 'Diese Begehung wurde auf dem Server nicht gefunden.'
     ], JSON_UNESCAPED_UNICODE);
     exit;
 }
