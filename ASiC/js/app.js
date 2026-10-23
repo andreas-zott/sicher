@@ -217,9 +217,9 @@ let exportMode = document.getElementById('measures-container') ? 'massnahmen'
     : document.getElementById('photo-grid') ? 'fotos'
     : 'checkliste';
 
-// ===== Synology-NAS-Speicherung (save.php / list.php / load.php) =====
-// Setzt voraus, dass die App direkt ueber die Synology selbst (bzw. deren
-// Tailscale-Adresse) aufgerufen wird - die drei PHP-Skripte muessen im
+// ===== Server-Speicherung (save.php / list.php / load.php) =====
+// Setzt voraus, dass die App direkt ueber den Server aufgerufen
+// wird - die drei PHP-Skripte muessen im
 // selben Verzeichnis wie diese Seite liegen. Ueber eine andere Adresse
 // (z. B. GitHub Pages) sind diese Endpunkte nicht erreichbar, da dort
 // keine serverseitigen Skripte laufen koennen.
@@ -278,7 +278,7 @@ function withNasAuthHeaders(options) {
     };
 }
 
-async function saveStateToSynology() {
+async function saveStateToServer() {
     try {
         const res = await fetch(nasUrl('save.php'), withNasAuthHeaders({
             method: 'POST',
@@ -297,7 +297,7 @@ async function saveStateToSynology() {
     }
 }
 
-async function getSynologyFiles() {
+async function getServerFiles() {
     const res = await fetch(nasUrl('list.php'), withNasAuthHeaders({ cache: 'no-store' }));
     const result = await parseJsonResponse(res);
     if (!res.ok || !result.ok) {
@@ -306,12 +306,12 @@ async function getSynologyFiles() {
     return result.files || [];
 }
 
-// Wie loadStateFromSynology(), aendert aber NICHT den globalen state - gibt
+// Wie loadStateFromServer(), aendert aber NICHT den globalen state - gibt
 // den geladenen Datensatz einfach zurueck. Wird fuer das Team-Archiv
-// (verlauf.html) genutzt, um eine fremde, auf dem NAS gespeicherte Begehung
+// (verlauf.html) genutzt, um eine fremde, auf dem Server gespeicherte Begehung
 // anzusehen/zu exportieren, ohne die gerade laufende eigene Begehung zu
 // ueberschreiben.
-async function fetchSynologyRecord(filename) {
+async function fetchServerRecord(filename) {
     const res = await fetch(nasUrl('load.php') + '?filename=' + encodeURIComponent(filename), withNasAuthHeaders({ cache: 'no-store' }));
     const result = await parseJsonResponse(res);
     if (!res.ok) {
@@ -320,7 +320,7 @@ async function fetchSynologyRecord(filename) {
     return result;
 }
 
-async function loadStateFromSynology(filename) {
+async function loadStateFromServer(filename) {
     const res = await fetch(nasUrl('load.php') + '?filename=' + encodeURIComponent(filename), withNasAuthHeaders({ cache: 'no-store' }));
     const result = await parseJsonResponse(res);
     if (!res.ok) {
@@ -352,9 +352,9 @@ async function loadStateFromSynology(filename) {
     showToast('Begehung vom Server geladen: ' + filename);
 }
 
-// Einfacher Auswahl-Dialog: listet alle auf dem NAS gespeicherten Begehungen
+// Einfacher Auswahl-Dialog: listet alle auf dem Server gespeicherten Begehungen
 // auf, per Klick wird die jeweilige geladen.
-async function openSynologyLoadDialog() {
+async function openServerLoadDialog() {
     const overlay = document.createElement('div');
     overlay.className = 'access-gate-overlay';
     overlay.innerHTML = `
@@ -371,7 +371,7 @@ async function openSynologyLoadDialog() {
 
     const listEl = document.getElementById('nas-load-list');
     try {
-        const files = await getSynologyFiles();
+        const files = await getServerFiles();
         if (files.length === 0) {
             listEl.innerHTML = '<p class="auswertung-empty">Noch keine Begehung auf dem Server gespeichert.</p>';
             return;
@@ -384,7 +384,7 @@ async function openSynologyLoadDialog() {
             btn.addEventListener('click', async () => {
                 overlay.remove();
                 try {
-                    await loadStateFromSynology(btn.dataset.filename);
+                    await loadStateFromServer(btn.dataset.filename);
                 } catch (err) {
                     console.error('Server-Laden fehlgeschlagen:', err);
                     showToast('Laden vom Server fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
@@ -1366,7 +1366,7 @@ async function buildPdf(includeChecklist, includeFotos) {
 
             // Fallback: liegen lokal (IndexedDB) keine Fotos zu dieser
             // Maßnahme vor - z. B. weil die Begehung gerade erst importiert
-            // oder vom NAS geladen wurde, auf einem anderen Geraet
+            // oder vom Server geladen wurde, auf einem anderen Geraet
             // gespeichert - werden ersatzweise die im JSON mitgelieferten
             // kleinen Vorschaubilder gedruckt. Qualitativ schlechter als das
             // Original, aber besser als gar kein Foto im Ausdruck.
@@ -2624,12 +2624,12 @@ function exportJson() {
 }
 
 // Teilt die JSON-Datei ueber das native Teilen-Menue (z. B. direkt an
-// die Mail-App) - fuer den Fall, dass kein Zugriff auf das NAS besteht und
+// die Mail-App) - fuer den Fall, dass kein Zugriff auf den Server besteht und
 // die Datei stattdessen manuell per Mail an eine Kollegin/einen Kollegen
-// weitergegeben werden soll, die/der sie im NAS-Ordner ablegt (z. B. ueber
-// "Vom NAS laden" ist das nicht moeglich, da das nur vorhandene NAS-Dateien
+// weitergegeben werden soll, die/der sie im Server-Ordner ablegt (z. B. ueber
+// "Vom Server laden" ist das nicht moeglich, da das nur vorhandene Server-Dateien
 // abruft - das manuelle Ablegen selbst erfolgt ausserhalb der App, etwa
-// per File Station).
+// per Dateifreigabe).
 async function shareJson() {
     const blob = buildJsonBlob();
     const filename = jsonExportFilename();
@@ -3173,9 +3173,9 @@ document.addEventListener(
 
         const btnSaveNas = document.getElementById('btn-save-nas');
         const btnLoadNas = document.getElementById('btn-load-nas');
-        // save.php/list.php/load.php gibt es nur auf der Synology selbst,
+        // save.php/list.php/load.php gibt es nur auf dem Server selbst,
         // nicht auf GitHub Pages (dort laeuft kein PHP) - die beiden
-        // NAS-Buttons dort erst gar nicht anzeigen, statt sie klickbar zu
+        // Server-Buttons dort erst gar nicht anzeigen, statt sie klickbar zu
         // lassen und erst danach eine Fehlermeldung zu zeigen. AUSNAHME:
         // Wenn unter "Einstellungen" eine externe Server-Basis-Adresse
         // hinterlegt wurde, kann das auch von GitHub Pages aus funktionieren
@@ -3186,14 +3186,14 @@ document.addEventListener(
             if (laeuftAufGithubPages) {
                 btnSaveNas.style.display = 'none';
             } else {
-                btnSaveNas.addEventListener('click', saveStateToSynology);
+                btnSaveNas.addEventListener('click', saveStateToServer);
             }
         }
         if (btnLoadNas) {
             if (laeuftAufGithubPages) {
                 btnLoadNas.style.display = 'none';
             } else {
-                btnLoadNas.addEventListener('click', openSynologyLoadDialog);
+                btnLoadNas.addEventListener('click', openServerLoadDialog);
             }
         }
 

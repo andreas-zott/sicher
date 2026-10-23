@@ -273,7 +273,7 @@ async function exportAuswertungCsv() {
 }
 
 // Teilt die CSV-Rohdaten ueber das native Teilen-Menue (z. B. direkt an
-// die Mail-App) - fuer den Fall, dass kein Zugriff auf das NAS besteht und
+// die Mail-App) - fuer den Fall, dass kein Zugriff auf den Server besteht und
 // die Datei stattdessen manuell per Mail an eine Kollegin/einen Kollegen
 // weitergegeben werden soll, die/der sie im Team-Ordner ablegt.
 async function shareAuswertungCsv() {

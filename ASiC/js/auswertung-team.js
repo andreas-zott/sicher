@@ -2,14 +2,14 @@
 // ASiC Handel — Team-Auswertung (auswertung-team.html)
 // ==========================================================================
 //
-// Wertet alle im Team-Archiv (NAS) gefundenen Begehungen gemeinsam aus,
+// Wertet alle im Team-Archiv (Server) gefundenen Begehungen gemeinsam aus,
 // unabhaengig davon, wer sie gespeichert hat. Nutzt dieselbe gemeinsame
 // Berechnungslogik wie die normale Auswertungsseite (js/auswertung-logik.js),
-// laedt die Daten aber vom NAS statt aus dem lokalen Archiv.
+// laedt die Daten aber vom Server statt aus dem lokalen Archiv.
 //
 // list.php liefert nur Metadaten (PLZ/Ort, Datum, Marktnummer) - fuer eine
 // echte Auswertung werden die vollstaendigen Bewertungen benoetigt, daher
-// wird hier fuer JEDE gefundene Datei fetchSynologyRecord() aufgerufen.
+// wird hier fuer JEDE gefundene Datei fetchServerRecord() aufgerufen.
 // Einzelne fehlgeschlagene Dateien werden uebersprungen (Promise.allSettled),
 // statt die gesamte Auswertung an einer einzelnen defekten Datei scheitern
 // zu lassen.
@@ -38,7 +38,7 @@ async function ladeTeamAuswertungDaten() {
 
     let fileList;
     try {
-        fileList = await getSynologyFiles();
+        fileList = await getServerFiles();
     } catch (err) {
         console.error('Team-Archiv-Liste konnte nicht geladen werden:', err);
         zeigeInAllen('<p style="color:var(--mangel);">Team-Archiv konnte nicht geladen werden: ' + (err && err.message ? err.message : 'unbekannter Fehler') + '</p>');
@@ -52,7 +52,7 @@ async function ladeTeamAuswertungDaten() {
         return;
     }
 
-    const ergebnisse = await Promise.allSettled(fileList.map(f => fetchSynologyRecord(f.fileName)));
+    const ergebnisse = await Promise.allSettled(fileList.map(f => fetchServerRecord(f.fileName)));
     teamAuswertungAlleDaten = ergebnisse.filter(r => r.status === 'fulfilled').map(r => r.value);
     const fehlgeschlagen = ergebnisse.length - teamAuswertungAlleDaten.length;
 
@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ===== CSV- und PDF-Export ueber das Team-Archiv =====
 // Nutzt dieselben Bau-Funktionen wie die lokale Auswertungsseite
 // (js/auswertung.js, dort um einen optionalen Daten-Parameter erweitert),
-// nur mit den bereits vom NAS geladenen Team-Daten statt dem lokalen
+// nur mit den bereits vom Server geladenen Team-Daten statt dem lokalen
 // Archiv - so existiert die eigentliche CSV-/PDF-Erzeugung weiterhin nur
 // EINMAL im Code.
 

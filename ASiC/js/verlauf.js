@@ -138,10 +138,10 @@ async function onArchiveDelete(id) {
     }
 }
 
-// ===== Team-Archiv (alle auf dem NAS gespeicherten Begehungen) =====
-// Nutzt dieselben PHP-Endpunkte wie "Auf NAS speichern"/"Vom NAS laden" -
-// funktioniert deshalb nur, wenn diese Seite direkt ueber die Synology
-// selbst (bzw. deren Tailscale-Adresse) aufgerufen wird, nicht auf
+// ===== Team-Archiv (alle auf dem Server gespeicherten Begehungen) =====
+// Nutzt dieselben PHP-Endpunkte wie "Auf Server speichern"/"Vom Server laden" -
+// funktioniert deshalb nur, wenn diese Seite direkt ueber den Server
+// mit den PHP-Skripten aufgerufen wird, nicht auf
 // GitHub Pages (dort gibt es save.php/list.php/load.php nicht).
 
 async function loadAndRenderTeamArchive() {
@@ -164,7 +164,7 @@ async function loadAndRenderTeamArchive() {
     loadingEl.style.display = 'block';
 
     try {
-        teamArchiveCache = await getSynologyFiles();
+        teamArchiveCache = await getServerFiles();
         loadingEl.style.display = 'none';
 
         if (teamArchiveCache.length === 0) {
@@ -216,9 +216,9 @@ function renderTeamArchiveList() {
 async function onTeamArchiveExport(fileName) {
     try {
         showToast('Lade Begehung vom Server …');
-        const record = await fetchSynologyRecord(fileName);
+        const record = await fetchServerRecord(fileName);
         showToast('PDF wird erzeugt…');
-        // Team-Archiv-Datensaetze vom NAS enthalten keine Fotos (save.php
+        // Team-Archiv-Datensaetze vom Server enthalten keine Fotos (save.php
         // speichert nur die reinen Text-/Bewertungsdaten als JSON) - das PDF
         // enthaelt deshalb Checkliste/Massnahmen, aber keine Fotoabschnitte.
         await shareArchivedReportPdf(record, 'alle');
@@ -228,7 +228,7 @@ async function onTeamArchiveExport(fileName) {
     }
 }
 
-// Wie onArchiveRestore() (lokales Archiv), aber fuer eine vom NAS geladene
+// Wie onArchiveRestore() (lokales Archiv), aber fuer eine vom Server geladene
 // Team-Archiv-Begehung. WICHTIGER UNTERSCHIED: Team-Archiv-Datensaetze
 // enthalten keine Fotos (siehe onTeamArchiveExport) - ein evtl. lokal
 // vorhandener Fotobestand wird deshalb nur GELEERT, nicht durch etwas
@@ -241,7 +241,7 @@ async function onTeamArchiveRestore(fileName) {
 
     try {
         showToast('Lade Begehung vom Server …');
-        const record = await fetchSynologyRecord(fileName);
+        const record = await fetchServerRecord(fileName);
 
         const restoredState = {
             companyInfo: { ...record.companyInfo },
@@ -270,7 +270,7 @@ async function onTeamArchiveRestore(fileName) {
 async function onTeamArchiveFollowUp(fileName) {
     try {
         showToast('Lade Begehung vom Server …');
-        const record = await fetchSynologyRecord(fileName);
+        const record = await fetchServerRecord(fileName);
         const ergebnis = await startFollowUpAudit(record, 'team');
         if (!ergebnis) return;
         showToast('Wiederholungsbegehung angelegt' + (ergebnis.uebernommen ? ' – ' + ergebnis.uebernommen + ' offene Maßnahme(n) übernommen' : ''));
