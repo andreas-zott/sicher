@@ -2541,3 +2541,82 @@ body.is-searching .h-empty.is-visible { display: block; }
     .s-card { padding: 1rem; }
     .s-actions .btn { flex: 1 1 100%; }
 }
+
+/* ==========================================================================
+   Ladestatus Team-Auswertung (auswertung-team.html, ab Rev. 1.53)
+   Zustaende: .is-laden (Spinner + Fortschritt), .is-fertig (gruen),
+   .is-warnung (teilweise geladen), .is-fehler (rot, mit Erneut-Knopf)
+   ========================================================================== */
+.lade-status {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.9rem 1.1rem;
+    margin-bottom: 1.5rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    border-left: 5px solid var(--steel);
+    background: var(--card);
+    box-shadow: var(--shadow);
+}
+.lade-status-text { flex: 1 1 auto; min-width: 0; }
+.lade-status-titel { font-family: var(--font-display); font-weight: 600; color: var(--ink); }
+.lade-status-detail { font-size: 0.85rem; color: var(--ink-soft); margin-top: 0.15rem; }
+.lade-status-balken {
+    display: none;
+    height: 6px;
+    margin-top: 0.55rem;
+    border-radius: 3px;
+    background: var(--paper);
+    overflow: hidden;
+}
+.lade-status-balken span {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--brand-red);
+    border-radius: 3px;
+    transition: width 0.25s ease;
+}
+.lade-status-icon {
+    flex: 0 0 auto;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #fff;
+}
+.lade-status-btn { flex: 0 0 auto; }
+.lade-status-btn[hidden] { display: none !important; }
+
+.lade-status.is-laden { border-left-color: var(--brand-red); }
+.lade-status.is-laden .lade-status-balken { display: block; }
+.lade-status.is-laden .lade-status-icon {
+    border: 3px solid var(--brand-red-tint);
+    border-top-color: var(--brand-red);
+    animation: lade-dreh 0.9s linear infinite;
+}
+.lade-status.is-fertig { border-left-color: var(--ok); background: var(--ok-tint); }
+.lade-status.is-fertig .lade-status-icon { background: var(--ok); }
+.lade-status.is-fertig .lade-status-icon::before { content: "✓"; }
+.lade-status.is-warnung { border-left-color: #d08a12; background: #fdf4e3; }
+.lade-status.is-warnung .lade-status-icon { background: #d08a12; }
+.lade-status.is-warnung .lade-status-icon::before { content: "!"; }
+.lade-status.is-fehler { border-left-color: var(--mangel); background: var(--mangel-tint); }
+.lade-status.is-fehler .lade-status-icon { background: var(--mangel); }
+.lade-status.is-fehler .lade-status-icon::before { content: "✕"; }
+.lade-status.is-fehler .lade-status-titel { color: var(--brand-red-dark); }
+
+@keyframes lade-dreh { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+    /* statt Drehen: ruhiger Punkt, Fortschritt zeigt der Balken */
+    .lade-status.is-laden .lade-status-icon { animation: none; border-color: var(--brand-red); }
+}
+@media (max-width: 520px) {
+    .lade-status { flex-wrap: wrap; }
+    .lade-status-btn { flex: 1 1 100%; }
+}
