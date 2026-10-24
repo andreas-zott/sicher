@@ -204,6 +204,9 @@ async function loadAndRenderTeamArchive() {
         const dauer = ((Date.now() - start) / 1000).toLocaleString('de-DE', { maximumFractionDigits: 1 });
         const n = teamArchiveCache.length;
 
+        const sucheEl = document.getElementById('team-archiv-suche');
+        if (sucheEl) sucheEl.style.display = n > 0 ? 'flex' : 'none';
+
         if (n === 0) {
             listEl.style.display = 'none';
             emptyEl.style.display = 'block';
@@ -219,6 +222,10 @@ async function loadAndRenderTeamArchive() {
         const grund = err && err.message ? err.message : 'unbekannter Fehler';
         listEl.style.display = 'none';
         teamArchivFertigText = null;
+        ['team-archiv-suche', 'team-archiv-keine-treffer'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = 'none';
+        });
         setzeTeamArchivStatus('fehler', 'Team-Archiv konnte nicht geladen werden',
             grund + ' – Server erreichbar? Zugriffsschlüssel unter „Einstellungen“ korrekt?');
     } finally {
@@ -247,7 +254,25 @@ function renderTeamArchiveList() {
 
     // Neueste Begehung zuerst (list.php liefert bereits sortiert, hier zur
     // Sicherheit nochmal explizit nach Speicherzeitpunkt).
-    const sorted = [...teamArchiveCache].sort((a, b) => (b.savedAt || '').localeCompare(a.savedAt || ''));
+    const alle = [...teamArchiveCache].sort((a, b) => (b.savedAt || '').localeCompare(a.savedAt || ''));
+
+    // Suche (ab Ausgabestand 1.54-3): alle Suchwoerter muessen vorkommen,
+    // in Marktnummer, Ort/Firma, Begehungsdatum oder Dateiname.
+    const suchEl = document.getElementById('team-archiv-suchfeld');
+    const woerter = (suchEl ? suchEl.value : '').toLowerCase().split(/\s+/).filter(Boolean);
+    const sorted = woerter.length === 0 ? alle : alle.filter(entry => {
+        const text = [entry.marktnummer, entry.plzOrt, entry.firma, entry.datum, entry.fileName]
+            .map(v => String(v || '').toLowerCase()).join(' ');
+        return woerter.every(w => text.includes(w));
+    });
+    const trefferEl = document.getElementById('team-archiv-treffer');
+    if (trefferEl) {
+        trefferEl.textContent = woerter.length === 0
+            ? alle.length + ' Begehung' + (alle.length === 1 ? '' : 'en')
+            : sorted.length + ' von ' + alle.length;
+    }
+    const keineEl = document.getElementById('team-archiv-keine-treffer');
+    if (keineEl) keineEl.style.display = (woerter.length > 0 && sorted.length === 0) ? 'block' : 'none';
 
     container.innerHTML = sorted.map(entry => {
         const gespeichertAm = entry.savedAt
@@ -311,6 +336,9 @@ async function onTeamArchiveRestore(fileName) {
             subgroupNotApplicable: { ...(record.subgroupNotApplicable || {}) }
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(restoredState));
+        // gilt als im Team-Archiv gesichert (wird im Pruefkatalog nach dem
+        // Seitenaufbau als Sicherungsstand uebernommen, ab Ausgabestand 1.54-3)
+        try { localStorage.setItem('asicServerStandAusstehend', fileName); } catch (e) {}
 
         if (typeof deleteAllPhotos === 'function') {
             await deleteAllPhotos();
@@ -351,6 +379,10 @@ function switchVerlaufTab(tab) {
     document.getElementById('no-team-archive').style.display = 'none';
     document.getElementById('team-archive-loading').style.display = 'none';
     document.getElementById('team-archive-unavailable').style.display = 'none';
+    ['team-archiv-suche', 'team-archiv-keine-treffer'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+    });
 
     if (tab === 'team') {
         loadAndRenderTeamArchive();
@@ -368,6 +400,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const btn = document.getElementById('tab-' + tab);
         if (btn) btn.addEventListener('click', () => switchVerlaufTab(tab));
     });
+
+    const suchfeld = document.getElementById('team-archiv-suchfeld');
+    if (suchfeld) suchfeld.addEventListener('input', renderTeamArchiveList);
 
     const btnTeamNeu = document.getElementById('team-archiv-neu-laden');
     if (btnTeamNeu) btnTeamNeu.addEventListener('click', loadAndRenderTeamArchive);

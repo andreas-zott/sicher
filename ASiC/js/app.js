@@ -99,12 +99,210 @@ function loadState() {
 function saveState() {
     try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        planeSicherungsHinweis();
         return true;
     } catch (e) {
         console.error('ASiC Handel: Zustand konnte nicht gespeichert werden:', e);
         return false;
     }
 }
+
+// ===== Fehlerprotokoll (ab Ausgabestand 1.54-3) =====
+// Merkt sich auf diesem Geraet die letzten 10 Fehlermeldungen (rote
+// Hinweise und unerwartete Programmfehler) mit Zeit und Seite. Wird nur
+// in der Diagnose unter "Einstellungen" angezeigt - fuer die Fehlersuche
+// durch die EDV. Enthaelt keine Zugriffsschluessel.
+const FEHLER_LOG_KEY = 'asicFehlerLog';
+
+function merkeFehler(text) {
+    try {
+        const log = JSON.parse(localStorage.getItem(FEHLER_LOG_KEY) || '[]');
+        log.push({
+            zeit: new Date().toISOString(),
+            seite: (location.pathname.split('/').pop() || 'index.html'),
+            text: String(text || '').slice(0, 300)
+        });
+        while (log.length > 10) log.shift();
+        localStorage.setItem(FEHLER_LOG_KEY, JSON.stringify(log));
+    } catch (e) { /* ohne Speicher kein Protokoll */ }
+}
+
+function leseFehlerLog() {
+    try { return JSON.parse(localStorage.getItem(FEHLER_LOG_KEY) || '[]'); } catch (e) { return []; }
+}
+
+window.addEventListener('error', (e) => {
+    const ort = e && e.filename ? ' (' + e.filename.split('/').pop().split('?')[0] + ':' + e.lineno + ')' : '';
+    merkeFehler('Programmfehler: ' + (e && e.message ? e.message : 'unbekannt') + ort);
+});
+window.addEventListener('unhandledrejection', (e) => {
+    const r = e && e.reason;
+    merkeFehler('Programmfehler: ' + (r && r.message ? r.message : String(r)));
+});
+
+// Ausgabestand dieser Seite (aus dem ?v=-Zusatz der eingebundenen app.js),
+// z. B. '1.54-3'. Gleicher Wert wie BUILD in sw.js.
+function appAusgabestand() {
+    try {
+        const el = document.querySelector('script[src*="js/app.js"]');
+        const v = el ? new URL(el.src, location.href).searchParams.get('v') : '';
+        return v || APP_REVISION;
+    } catch (e) {
+        return APP_REVISION;
+    }
+}
+
+// Server-Funktionen (save.php/list.php/load.php) erreichbar? Auf GitHub
+// Pages nur, wenn unter "Einstellungen" eine Server-Adresse hinterlegt ist.
+function serverFunktionenVerfuegbar() {
+    return !(window.location.hostname.endsWith('.github.io') && !getNasBaseUrl());
+}
+
+// ===== Sicherungsstand der aktuellen Begehung (ab Ausgabestand 1.54-3) =====
+// Nach jedem erfolgreichen "Auf Server speichern" (und nach dem Laden einer
+// Begehung vom Server) wird ein Fingerabdruck des Bearbeitungsstands
+// gemerkt. Weicht der aktuelle Stand davon ab, ist die Begehung (noch oder
+// wieder) nur auf diesem Geraet vorhanden - dann zeigt der Pruefkatalog
+// einen Hinweis.
+const SERVER_STAND_KEY = 'asicServerStand';
+const SERVER_STAND_AUSSTEHEND_KEY = 'asicServerStandAusstehend';
+
+// JSON mit sortierten Schluesseln - damit die Reihenfolge der Felder den
+// Fingerabdruck nicht veraendert.
+function stabilesJson(wert) {
+    if (Array.isArray(wert)) return '[' + wert.map(stabilesJson).join(',') + ']';
+    if (wert && typeof wert === 'object') {
+        return '{' + Object.keys(wert).sort().map(k => JSON.stringify(k) + ':' + stabilesJson(wert[k])).join(',') + '}';
+    }
+    return JSON.stringify(wert === undefined ? null : wert);
+}
+
+function stateFingerabdruck() {
+    const text = stabilesJson(state);
+    let h = 0x811c9dc5;
+    for (let i = 0; i < text.length; i++) {
+        h ^= text.charCodeAt(i);
+        h = Math.imul(h, 0x01000193);
+    }
+    return (h >>> 0).toString(16) + '-' + text.length;
+}
+
+function leseServerStand() {
+    try { return JSON.parse(localStorage.getItem(SERVER_STAND_KEY) || 'null'); } catch (e) { return null; }
+}
+
+function markiereServerGesichert(dateiname) {
+    try {
+        localStorage.setItem(SERVER_STAND_KEY, JSON.stringify({
+            zeit: new Date().toISOString(),
+            datei: dateiname || '',
+            kennung: begehungsKennung(),
+            fp: stateFingerabdruck()
+        }));
+        localStorage.removeItem(SERVER_STAND_AUSSTEHEND_KEY);
+    } catch (e) { /* ohne Speicher kein Hinweis */ }
+    aktualisiereSicherungsHinweis();
+}
+
+// Markt + Datum: unterscheidet "dieselbe Begehung, geaendert" von "eine
+// ganz andere Begehung" (z. B. neue Begehung oder Wiederholungsbegehung).
+function begehungsKennung() {
+    const c = state.companyInfo || {};
+    return String(c.marktnummer || '').trim() + '|' + String(c.datum || '');
+}
+
+function begehungHatInhalt() {
+    return Object.keys(state.ratings || {}).length > 0
+        || (state.measures || []).length > 0
+        || !!(state.companyInfo && String(state.companyInfo.marktnummer || '').trim());
+}
+
+// 'leer' | 'gesichert' | 'geaendert' (schon mal gesichert, danach geaendert) | 'ungesichert'
+function sicherungsZustand() {
+    if (!begehungHatInhalt()) return 'leer';
+    const stand = leseServerStand();
+    if (!stand || stand.kennung !== begehungsKennung()) return 'ungesichert';
+    return stand.fp === stateFingerabdruck() ? 'gesichert' : 'geaendert';
+}
+
+function formatZeitpunkt(iso) {
+    try {
+        const d = new Date(iso);
+        return d.toLocaleDateString('de-DE') + ' ' + d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+    } catch (e) { return ''; }
+}
+
+// Hinweis auf der Maßnahmenseite unterhalb der Unterschriften und des
+// Foto-Hinweises (Platzhalter #sicherungs-hinweis-platz in massnahmen.html,
+// ab Ausgabestand 1.54-4 - vorher oben im Pruefkatalog). Nur wenn
+// Server-Funktionen verfuegbar sind. "Spaeter" blendet ihn fuer diese
+// Sitzung aus.
+function aktualisiereSicherungsHinweis() {
+    const anker = document.getElementById('sicherungs-hinweis-platz');
+    if (!anker) return;
+    let box = document.getElementById('sicherungs-hinweis');
+    const zustand = sicherungsZustand();
+    let spaeter = false;
+    try { spaeter = sessionStorage.getItem('asicHinweisSpaeter') === '1'; } catch (e) {}
+
+    if (!serverFunktionenVerfuegbar() || spaeter || zustand === 'leer' || zustand === 'gesichert') {
+        if (box) box.remove();
+        return;
+    }
+    if (!box) {
+        box = document.createElement('div');
+        box.id = 'sicherungs-hinweis';
+        box.className = 'lade-status is-warnung sicherungs-hinweis';
+        box.setAttribute('role', 'status');
+        box.innerHTML =
+            '<span class="lade-status-icon" aria-hidden="true"></span>' +
+            '<div class="lade-status-text">' +
+                '<div class="lade-status-titel">Noch nicht im Team-Archiv gesichert</div>' +
+                '<div class="lade-status-detail" data-hinweis-detail></div>' +
+            '</div>' +
+            '<div class="sicherungs-hinweis-knoepfe">' +
+                '<button type="button" class="btn btn-primary btn-small" data-hinweis-sichern>☁️ Jetzt sichern</button>' +
+                '<button type="button" class="btn btn-secondary btn-small" data-hinweis-spaeter>Später</button>' +
+            '</div>';
+        anker.appendChild(box);
+        box.querySelector('[data-hinweis-sichern]').addEventListener('click', async (ev) => {
+            ev.currentTarget.disabled = true;
+            await saveStateToServer();
+            const b = box.querySelector('[data-hinweis-sichern]');
+            if (b) b.disabled = false;
+        });
+        box.querySelector('[data-hinweis-spaeter]').addEventListener('click', () => {
+            try { sessionStorage.setItem('asicHinweisSpaeter', '1'); } catch (e) {}
+            box.remove();
+        });
+    }
+    const stand = leseServerStand();
+    box.querySelector('[data-hinweis-detail]').textContent = zustand === 'geaendert' && stand
+        ? 'Seit der letzten Sicherung (' + formatZeitpunkt(stand.zeit) + ') geändert – die Änderungen liegen bisher nur auf diesem Gerät.'
+        : 'Diese Begehung liegt bisher nur auf diesem Gerät. Geht das Gerät verloren oder wird es zurückgesetzt, ist sie weg.';
+}
+
+let sicherungsHinweisTimer = null;
+function planeSicherungsHinweis() {
+    if (!document.getElementById('sicherungs-hinweis-platz')) return;
+    clearTimeout(sicherungsHinweisTimer);
+    sicherungsHinweisTimer = setTimeout(aktualisiereSicherungsHinweis, 800);
+}
+
+// Nach dem vollstaendigen Seitenaufbau: eine aus dem Team-Archiv geoeffnete
+// Begehung (verlauf.html) gilt als gesichert. Erst hier, weil der
+// Pruefkatalog beim ersten Aufbau noch Kommentare nachtraegt.
+window.addEventListener('load', () => {
+    let ausstehend = null;
+    try { ausstehend = localStorage.getItem(SERVER_STAND_AUSSTEHEND_KEY); } catch (e) {}
+    // Uebernahme im Pruefkatalog (dorthin fuehrt "In App anzeigen"), notfalls
+    // auf der Maßnahmenseite
+    if (ausstehend !== null && (document.getElementById('btn-save-nas') || document.getElementById('sicherungs-hinweis-platz'))) {
+        markiereServerGesichert(ausstehend);
+    } else {
+        aktualisiereSicherungsHinweis();
+    }
+});
 
 // ===== Hilfsfunktionen =====
 function findItemById(itemId) {
@@ -129,6 +327,7 @@ function totalItemCount() {
 }
 
 function showToast(message, type = 'success') {
+    if (type === 'error') merkeFehler(message);
     document.querySelectorAll('.toast').forEach(t => t.remove());
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
@@ -290,6 +489,7 @@ async function saveStateToServer() {
         if (!res.ok || !result.ok) {
             throw new Error(result.message || `Fehler beim Speichern (HTTP ${res.status}).`);
         }
+        markiereServerGesichert(result.fileName);
         showToast('Auf Server gespeichert: ' + result.fileName);
     } catch (err) {
         console.error('Server-Speichern fehlgeschlagen:', err);
@@ -344,6 +544,7 @@ async function loadStateFromServer(filename) {
     // nachgetragene Kommentar beim naechsten Laden (z. B. auf der
     // Maßnahmenseite) wieder fehlen.
     saveState();
+    markiereServerGesichert(filename);
     if (typeof initCompanyForm === 'function') initCompanyForm();
     if (typeof renderCompanyInfoStrip === 'function') renderCompanyInfoStrip();
     if (typeof renderMeasures === 'function') await renderMeasures();
