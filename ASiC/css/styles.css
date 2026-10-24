@@ -2612,9 +2612,22 @@ body.is-searching .h-empty.is-visible { display: block; }
 .lade-status.is-fehler .lade-status-titel { color: var(--brand-red-dark); }
 
 @keyframes lade-dreh { to { transform: rotate(360deg); } }
+/* Unbestimmter Fortschritt (Team-Archiv: Liste kommt in einem Abruf) */
+.lade-status.is-laden.is-unbestimmt .lade-status-balken span {
+    width: 35%;
+    transition: none;
+    animation: lade-lauf 1.2s ease-in-out infinite;
+}
+@keyframes lade-lauf {
+    from { transform: translateX(-100%); }
+    to   { transform: translateX(290%); }
+}
+/* Team-Archiv: Status steht direkt über der Liste */
+#team-archive-loading { margin-bottom: 1rem; }
 @media (prefers-reduced-motion: reduce) {
     /* statt Drehen: ruhiger Punkt, Fortschritt zeigt der Balken */
     .lade-status.is-laden .lade-status-icon { animation: none; border-color: var(--brand-red); }
+    .lade-status.is-laden.is-unbestimmt .lade-status-balken span { animation: none; width: 100%; opacity: 0.5; }
 }
 @media (max-width: 520px) {
     .lade-status { flex-wrap: wrap; }
