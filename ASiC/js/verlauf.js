@@ -144,40 +144,100 @@ async function onArchiveDelete(id) {
 // mit den PHP-Skripten aufgerufen wird, nicht auf
 // GitHub Pages (dort gibt es save.php/list.php/load.php nicht).
 
+// ===== Ladestatus Team-Archiv (ab Rev. 1.54, gleiche Anzeige wie die
+// Team-Auswertung) =====
+// Zeigt ueber der Liste: wird geladen (Spinner + durchlaufender Balken,
+// da list.php die Liste in EINEM Abruf liefert), fertig (gruen, Anzahl +
+// Uhrzeit), Fehler (rot, Grund + "Erneut versuchen"). Auch die Knoepfe an
+// den Eintraegen (PDF, In App anzeigen, Wiederholungsbegehung) laden vom
+// Server und melden das hier.
+
+let teamArchivLaedt = false;
+let teamArchivFertigText = null;   // letzter "fertig"-Stand, nach Einzelaktionen wiederherstellen
+
+function setzeTeamArchivStatus(zustand, titel, detail) {
+    const box = document.getElementById('team-archive-loading');
+    if (!box) return;
+    box.style.display = 'flex';
+    box.classList.remove('is-laden', 'is-fertig', 'is-warnung', 'is-fehler');
+    box.classList.add('is-' + zustand, 'is-unbestimmt');
+    const titelEl = document.getElementById('team-archiv-lade-titel');
+    const detailEl = document.getElementById('team-archiv-lade-detail');
+    if (titelEl) titelEl.textContent = titel;
+    if (detailEl) detailEl.textContent = detail || '';
+    const btn = document.getElementById('team-archiv-neu-laden');
+    if (btn) {
+        btn.hidden = zustand === 'laden';
+        btn.textContent = zustand === 'fehler' ? '↻ Erneut versuchen' : '↻ Neu laden';
+    }
+    // Knoepfe an den Eintraegen waehrend des Ladens sperren (kein Doppelklick)
+    document.querySelectorAll('#team-archive-list button').forEach(b => { b.disabled = zustand === 'laden'; });
+}
+
+function teamArchivUhrzeit() {
+    return new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+}
+
 async function loadAndRenderTeamArchive() {
+    if (teamArchivLaedt) return;
     const listEl = document.getElementById('team-archive-list');
-    const loadingEl = document.getElementById('team-archive-loading');
+    const statusEl = document.getElementById('team-archive-loading');
     const emptyEl = document.getElementById('no-team-archive');
     const unavailableEl = document.getElementById('team-archive-unavailable');
 
     if (window.location.hostname.endsWith('.github.io') && !getNasBaseUrl()) {
         listEl.style.display = 'none';
-        loadingEl.style.display = 'none';
+        statusEl.style.display = 'none';
         emptyEl.style.display = 'none';
         unavailableEl.style.display = 'block';
         return;
     }
 
+    teamArchivLaedt = true;
     unavailableEl.style.display = 'none';
     emptyEl.style.display = 'none';
-    listEl.style.display = 'none';
-    loadingEl.style.display = 'block';
+    setzeTeamArchivStatus('laden', 'Team-Archiv wird geladen …', 'Dateiliste wird vom Server abgerufen');
+    const start = Date.now();
 
     try {
         teamArchiveCache = await getServerFiles();
-        loadingEl.style.display = 'none';
+        const dauer = ((Date.now() - start) / 1000).toLocaleString('de-DE', { maximumFractionDigits: 1 });
+        const n = teamArchiveCache.length;
 
-        if (teamArchiveCache.length === 0) {
+        if (n === 0) {
+            listEl.style.display = 'none';
             emptyEl.style.display = 'block';
-            return;
+            teamArchivFertigText = ['Team-Archiv geladen', 'Noch keine Begehung im Team-Archiv · Stand ' + teamArchivUhrzeit() + ' Uhr'];
+        } else {
+            listEl.style.display = 'block';
+            renderTeamArchiveList();
+            teamArchivFertigText = ['Team-Archiv geladen', n + ' Begehung' + (n === 1 ? '' : 'en') + ' in ' + dauer + ' s · Stand ' + teamArchivUhrzeit() + ' Uhr'];
         }
-
-        listEl.style.display = 'block';
-        renderTeamArchiveList();
+        setzeTeamArchivStatus('fertig', teamArchivFertigText[0], teamArchivFertigText[1]);
     } catch (err) {
-        loadingEl.style.display = 'none';
         console.error('Team-Archiv konnte nicht geladen werden:', err);
-        showToast('Team-Archiv konnte nicht geladen werden: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+        const grund = err && err.message ? err.message : 'unbekannter Fehler';
+        listEl.style.display = 'none';
+        teamArchivFertigText = null;
+        setzeTeamArchivStatus('fehler', 'Team-Archiv konnte nicht geladen werden',
+            grund + ' – Server erreichbar? Zugriffsschlüssel unter „Einstellungen“ korrekt?');
+    } finally {
+        teamArchivLaedt = false;
+    }
+}
+
+// Laedt eine einzelne Begehung fuer die Knoepfe an den Eintraegen und
+// zeigt das im Statusfeld an. Danach (Erfolg) wieder der letzte Listenstand.
+async function ladeTeamBegehungMitStatus(fileName, aktion) {
+    setzeTeamArchivStatus('laden', 'Begehung wird geladen …', aktion + ' · ' + fileName);
+    try {
+        const record = await fetchServerRecord(fileName);
+        if (teamArchivFertigText) setzeTeamArchivStatus('fertig', teamArchivFertigText[0], teamArchivFertigText[1]);
+        return record;
+    } catch (err) {
+        setzeTeamArchivStatus('fehler', 'Begehung konnte nicht geladen werden',
+            (err && err.message ? err.message : 'unbekannter Fehler') + ' · ' + fileName);
+        throw err;
     }
 }
 
@@ -215,8 +275,7 @@ function renderTeamArchiveList() {
 
 async function onTeamArchiveExport(fileName) {
     try {
-        showToast('Lade Begehung vom Server …');
-        const record = await fetchServerRecord(fileName);
+        const record = await ladeTeamBegehungMitStatus(fileName, 'PDF exportieren');
         showToast('PDF wird erzeugt…');
         // Team-Archiv-Datensaetze vom Server enthalten keine Fotos (save.php
         // speichert nur die reinen Text-/Bewertungsdaten als JSON) - das PDF
@@ -240,8 +299,7 @@ async function onTeamArchiveRestore(fileName) {
     if (!confirm('Diese Begehung vom Server in der App anzeigen? Der aktuell laufende, noch nicht archivierte Bearbeitungsstand auf diesem Gerät wird dabei überschrieben. Hinweis: Team-Archiv-Datensätze enthalten keine Fotos – ein evtl. vorhandener lokaler Fotobestand wird dabei geleert, nicht ersetzt.')) return;
 
     try {
-        showToast('Lade Begehung vom Server …');
-        const record = await fetchServerRecord(fileName);
+        const record = await ladeTeamBegehungMitStatus(fileName, 'In App anzeigen');
 
         const restoredState = {
             companyInfo: { ...record.companyInfo },
@@ -269,8 +327,7 @@ async function onTeamArchiveRestore(fileName) {
 // Wiederholungsbegehung aus einer Begehung im Team-Archiv (ab Rev. 1.52)
 async function onTeamArchiveFollowUp(fileName) {
     try {
-        showToast('Lade Begehung vom Server …');
-        const record = await fetchServerRecord(fileName);
+        const record = await ladeTeamBegehungMitStatus(fileName, 'Wiederholungsbegehung');
         const ergebnis = await startFollowUpAudit(record, 'team');
         if (!ergebnis) return;
         showToast('Wiederholungsbegehung angelegt' + (ergebnis.uebernommen ? ' – ' + ergebnis.uebernommen + ' offene Maßnahme(n) übernommen' : ''));
@@ -311,4 +368,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const btn = document.getElementById('tab-' + tab);
         if (btn) btn.addEventListener('click', () => switchVerlaufTab(tab));
     });
+
+    const btnTeamNeu = document.getElementById('team-archiv-neu-laden');
+    if (btnTeamNeu) btnTeamNeu.addEventListener('click', loadAndRenderTeamArchive);
 });
