@@ -5,9 +5,9 @@
 //
 // SERVICE-WORKER-VERSION: 1.54
 // Bei JEDEM Update gemeinsam hochzaehlen:
-//   - APP_VERSION / CACHE_NAME hier
-//   - APP_REVISION in js/app.js
-//   - das ?v=1.54 hinter allen js/css-Einbindungen in den HTML-Seiten
+//   - BUILD / CACHE_NAME hier (bei neuer Revision auch APP_VERSION)
+//   - APP_REVISION in js/app.js (nur bei neuer Revision)
+//   - das ?v=… hinter allen js/css-Einbindungen in den HTML-Seiten (= BUILD)
 //
 // Ladestrategie (ab Rev. 1.54):
 //   - Programmdateien mit Versionszusatz (js/…?v=1.54, css/…?v=1.54) und
@@ -31,7 +31,12 @@
 // ==========================================================================
 
 const APP_VERSION = '1.54';
-const CACHE_NAME = 'asic-handel-v' + APP_VERSION;
+// Ausgabestand innerhalb derselben Revision (ab Rev. 1.54): aendert sich
+// nur Code, aber nicht die sichtbare Revision, wird NUR dieser Zaehler
+// erhoeht ('1.54-2', '1.54-3' …). Er steht im Cache-Namen und im ?v=-Zusatz
+// der HTML-Seiten und sorgt dafuer, dass die Geraete die neuen Dateien holen.
+const BUILD = '1.54-2';
+const CACHE_NAME = 'asic-handel-v1.54-2';   // immer = 'asic-handel-v' + BUILD
 
 
 // ==========================================================================
@@ -82,7 +87,7 @@ const PRECACHE_VERSIONIERT = [
     './js/auswertung.js',
     './js/auswertung-team.js',
     './js/jspdf.umd.min.js'
-].map(url => url + '?v=' + APP_VERSION);
+].map(url => url + '?v=' + BUILD);
 
 
 // ==========================================================================
