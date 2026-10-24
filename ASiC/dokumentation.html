@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Technische Dokumentation – ASiC Handel</title>
-<link rel="stylesheet" href="css/styles.css?v=1.54-2">
+<link rel="stylesheet" href="css/styles.css?v=1.54-4">
 <script src="zugang-config.js"></script>
-<script src="js/access-gate.js?v=1.54-2"></script>
+<script src="js/access-gate.js?v=1.54-4"></script>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -313,7 +313,7 @@
                 <div class="doku-meta-label">
                     Service Worker
                 </div>
-                <div class="doku-meta-value"> <span data-zahl="cache_version">v1.54-2</span> </div>
+                <div class="doku-meta-value"> <span data-zahl="cache_version">v1.54-4</span> </div>
             </div>
 
             <div class="doku-meta-item">
@@ -562,7 +562,7 @@
 
             <p>
                 Die aktuelle technische Cache-Version lautet:
-                <strong><code><span data-zahl="cache">asic-handel-v1.54-2</span></code></strong>.
+                <strong><code><span data-zahl="cache">asic-handel-v1.54-4</span></code></strong>.
             </p>
 
             <ul>
@@ -1823,9 +1823,42 @@
             </p>
 
             <p>
+                <strong>Ausgabestand 1.54-3</strong>:
+                (1) <em>Diagnose</em> auf <code>einstellungen.html</code>
+                (<code>erstelleDiagnoseText()</code> in
+                <code>js/einstellungen.js</code>): Version/Ausgabestand,
+                Service-Worker-Cache (Abgleich mit dem Ausgabestand der Seite),
+                Aufruf-Adresse, Server-Adresse, ob ein Schlüssel hinterlegt ist
+                (nie der Inhalt), Verbindungstest (<code>pruefeServerVerbindung()</code>,
+                auch vom Knopf „Verbindung testen“ genutzt), Sicherungsstand,
+                lokales Archiv, Fotos, Speicher (<code>navigator.storage</code>),
+                Gerät/Browser und die letzten Fehlermeldungen. Kopieren
+                (Zwischenablage, Ersatzweg über Markieren) oder per
+                <code>mailto:</code>.
+                (2) <em>Fehlerprotokoll</em> in <code>js/app.js</code>
+                (<code>merkeFehler()</code>, localStorage
+                <code>asicFehlerLog</code>, letzte 10): rote Hinweise
+                (<code>showToast(…, 'error')</code>) und unerwartete
+                Programmfehler.
+                (3) <em>Sicherungshinweis</em> (ab Ausgabestand 1.54-4 auf
+                <code>massnahmen.html</code> unterhalb der Unterschriften und des
+                Foto-Hinweises, Platzhalter <code>#sicherungs-hinweis-platz</code>): Nach „Auf Server
+                speichern“, „Vom Server laden“ und „In App anzeigen“ aus dem
+                Team-Archiv wird ein Fingerabdruck des Bearbeitungsstands
+                gemerkt (localStorage <code>asicServerStand</code>, mit Markt
+                und Datum). Weicht der Stand ab, erscheint ein Hinweis mit
+                „Jetzt sichern“ und „Später“ (<code>aktualisiereSicherungsHinweis()</code>);
+                nur wenn Server-Funktionen verfügbar sind.
+                (4) <em>Suche im Team-Archiv</em> auf <code>verlauf.html</code>:
+                alle Suchwörter müssen in Marktnummer, Ort, Datum oder
+                Dateiname vorkommen; Trefferzahl daneben.
+                Die Änderungen je Revision stehen in <code>AENDERUNGEN.txt</code>.
+            </p>
+
+            <p>
                 <strong>Frische Dateien und schneller Seitenaufbau (ab Rev. 1.53/1.54)</strong>:
                 Alle Einbindungen von <code>js/…</code> und <code>css/…</code>
-                tragen den Zusatz <code>?v=1.54-2</code> (Ausgabestand <code>BUILD</code> aus <code>sw.js</code>). Diese Dateien (und die
+                tragen den Zusatz <code>?v=1.54-4</code> (Ausgabestand <code>BUILD</code> aus <code>sw.js</code>). Diese Dateien (und die
                 Schriften) liefert der Service Worker ab Rev. 1.54 sofort aus
                 dem Cache auf dem Gerät, ohne Rückfrage beim Server; nach einem
                 Update ändert sich der Zusatz, dadurch werden sie automatisch
@@ -2467,7 +2500,7 @@
                 <tr>
                     <td>sw.js</td>
                     <td class="zahl">296</td>
-                    <td>Service Worker, Offline-Fähigkeit, Cache-Version v1.54-2</td>
+                    <td>Service Worker, Offline-Fähigkeit, Cache-Version v1.54-4</td>
                 </tr>
                 <tr>
                     <td>manifest.json</td>
@@ -2617,9 +2650,9 @@
 </footer>
 
 
-<script src="js/audit-data.js?v=1.54-2"></script>
-<script src="js/text.js?v=1.54-2"></script>
-<script src="js/app.js?v=1.54-2"></script>
+<script src="js/audit-data.js?v=1.54-4"></script>
+<script src="js/text.js?v=1.54-4"></script>
+<script src="js/app.js?v=1.54-4"></script>
 
 <!-- Quellenverzeichnis ist für diesen Dokumentstand detailliert und statisch dokumentiert. -->
 
