@@ -5,6 +5,12 @@
 
 <meta charset="UTF-8">
 
+<!-- Sicherheitsrichtlinie (ab Rev. 1.54-5): nur eigene Skripte, keine eingebetteten
+     Skripte oder Inline-Handler. connect-src erlaubt https:, damit ein Team-Archiv
+     auf einem anderen Server (Einstellungen) erreichbar bleibt. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https:; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="same-origin">
+
 <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0, viewport-fit=cover"
@@ -16,12 +22,12 @@
 
 <link
     rel="stylesheet"
-    href="css/styles.css?v=1.54-4"
+    href="css/styles.css?v=1.54-7"
 >
 
 <script src="zugang-config.js"></script>
 
-<script src="js/access-gate.js?v=1.54-4"></script>
+<script src="js/access-gate.js?v=1.54-7"></script>
 
 <link
     rel="manifest"
@@ -43,7 +49,7 @@
     content="#1c2226"
 >
 
-<script src="js/jspdf.umd.min.js?v=1.54-4" defer></script>
+<script src="js/jspdf.umd.min.js?v=1.54-7" defer></script>
 
 
 <style>
@@ -865,35 +871,22 @@
 <!-- JAVASCRIPT                                                             -->
 <!-- ====================================================================== -->
 
-<script src="js/audit-data.js?v=1.54-4"></script>
+<script src="js/audit-data.js?v=1.54-7"></script>
 
-<script src="js/text.js?v=1.54-4"></script>
+<script src="js/text.js?v=1.54-7"></script>
 
-<script src="js/photos-store.js?v=1.54-4"></script>
+<script src="js/photos-store.js?v=1.54-7"></script>
 
-<script src="js/archive-store.js?v=1.54-4"></script>
+<script src="js/archive-store.js?v=1.54-7"></script>
 
-<script src="js/app.js?v=1.54-4"></script>
+<script src="js/app.js?v=1.54-7"></script>
 
-<script src="js/auswertung-logik.js?v=1.54-4"></script>
+<script src="js/auswertung-logik.js?v=1.54-7"></script>
 
-<script src="js/auswertung.js?v=1.54-4"></script>
+<script src="js/auswertung.js?v=1.54-7"></script>
 
-<script src="js/auswertung-team.js?v=1.54-4"></script>
-<script>
-// Selbstpruefung (ab Rev. 1.53): Fehlt die Ladestatus-Funktion, laeuft noch
-// eine veraltete js/auswertung-team.js aus dem Zwischenspeicher - dann
-// klar darauf hinweisen statt "wird geladen" stehen zu lassen.
-if (typeof setzeTeamLadeStatus !== 'function') {
-    (function () {
-        var box = document.getElementById('team-lade-status');
-        if (!box) return;
-        box.className = 'lade-status is-warnung';
-        document.getElementById('team-lade-titel').textContent = 'Veraltete Programmdatei im Zwischenspeicher';
-        document.getElementById('team-lade-detail').textContent = 'Die Daten werden trotzdem geladen. Für die neue Ladeanzeige die Seite bitte einmal neu laden.';
-    })();
-}
-</script>
+<script src="js/auswertung-team.js?v=1.54-7"></script>
+<script src="js/auswertung-team-pruefung.js?v=1.54-7"></script>
 
 
 </body>

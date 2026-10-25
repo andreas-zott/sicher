@@ -15,11 +15,11 @@
 //     Server. Das ist sicher, weil sich bei jedem Update der Zusatz ?v=
 //     aendert - dann ist es fuer den Browser eine neue Adresse und wird
 //     frisch geladen. (Rev. 1.53 hat jede Datei bei jedem Aufruf beim Server
-//     nachgefragt - ueber die Funnel-Adresse spuerbar langsam.)
+//     nachgefragt - bei entfernten Servern spuerbar langsam.)
 //   - HTML-Seiten, zugang-config.js, manifest, Icons: zuerst vom Server
 //     (cache: 'no-cache', damit nicht der HTTP-Cache des Browsers eine alte
 //     Fassung liefert), bei fehlender Verbindung aus dem Cache.
-//   - .php und fremde Adressen (z. B. NAS ueber Funnel): nie angefasst.
+//   - .php und fremde Adressen (anderer Server): nie angefasst.
 //
 // Bei einer neuen Version:
 //   1. Alle App-Dateien werden neu vom Server geladen (an ihren ?v-Adressen).
@@ -35,8 +35,8 @@ const APP_VERSION = '1.54';
 // nur Code, aber nicht die sichtbare Revision, wird NUR dieser Zaehler
 // erhoeht ('1.54-2', '1.54-3' …). Er steht im Cache-Namen und im ?v=-Zusatz
 // der HTML-Seiten und sorgt dafuer, dass die Geraete die neuen Dateien holen.
-const BUILD = '1.54-4';
-const CACHE_NAME = 'asic-handel-v1.54-4';   // immer = 'asic-handel-v' + BUILD
+const BUILD = '1.54-7';
+const CACHE_NAME = 'asic-handel-v1.54-7';   // immer = 'asic-handel-v' + BUILD
 
 
 // ==========================================================================
@@ -86,7 +86,10 @@ const PRECACHE_VERSIONIERT = [
     './js/auswertung-logik.js',
     './js/auswertung.js',
     './js/auswertung-team.js',
-    './js/jspdf.umd.min.js'
+    './js/jspdf.umd.min.js',
+    './js/hilfe-suche.js',
+    './js/seiten-jahr.js',
+    './js/auswertung-team-pruefung.js'
 ].map(url => url + '?v=' + BUILD);
 
 
