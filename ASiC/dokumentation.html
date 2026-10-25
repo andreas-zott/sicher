@@ -195,6 +195,11 @@
         min-width: 12rem;
     }
 
+    table.doku-table.pflege td:first-child {
+        white-space: normal;
+        min-width: 9rem;
+    }
+
     .doku-table-wrap {
         overflow-x: auto;
     }
@@ -408,7 +413,8 @@
         <a href="#cybersicherheit"> 10. App-Sicherheitsanalyse </a>
 
         <a href="#betrieb"> 11. Betrieb und Updates </a>
-        <a href="#dateien"> 12. Dateiübersicht </a>
+        <a href="#pflege"> 12. Pflege von Fragen, Antworten und Quellen </a>
+        <a href="#dateien"> 13. Dateiübersicht </a>
 
     </div>
 
@@ -2732,13 +2738,124 @@
 
 
     <!-- ================================================================ -->
-    <!-- 11. DATEIÜBERSICHT                                               -->
+    <!-- 12. PFLEGE VON FRAGEN, ANTWORTEN UND QUELLEN                     -->
+    <!-- ================================================================ -->
+
+    <section class="doku-section" id="pflege">
+
+        <div class="section-title">
+            Abschnitt 12
+        </div>
+
+        <h2>
+            Pflege von Fragen, Antworten und Quellen
+        </h2>
+
+        <div class="card doku-card">
+            <p>
+                Die Inhalte des Prüfkatalogs liegen in reinen
+                Datendateien. Die Seiten der App müssen bei Inhaltsänderungen nicht
+                angefasst werden. Danach sind immer drei Schritte nötig: Zahlen
+                aktualisieren, Versionsstand hochzählen, Pakete neu bauen.
+            </p>
+        </div>
+
+        <h3>
+            Begehung: betroffene Dateien
+        </h3>
+
+        <div class="card doku-card">
+            <div class="doku-table-wrap">
+            <table class="doku-table pflege">
+                <tr><th>Datei</th><th>Was drinsteht</th><th>Wann ändern</th></tr>
+                <tr><td><code>js/audit-data.js</code></td><td>Alle Prüffragen in <code>AUDIT_CATEGORIES</code>: Kategorie (<code>id</code>, <code>name</code>), je Frage <code>id</code> (z. B. <code>"1.1"</code>), <code>text</code> und optional <code>group</code> (Unterbereich, z. B. Flüssiggas, Beleuchtung)</td><td>Frage neu, geändert oder gelöscht; Kategorie oder Unterbereich neu</td></tr>
+                <tr><td><code>js/text.js</code></td><td><code>MEASURES_TEXT</code>: Maßnahmentext je Frage-ID in drei Sprachstilen (<code>einfach</code>, <code>bghw</code>, <code>rechtlich</code>). <code>MEASURE_SOURCES</code>: Quellenverzeichnis im PDF-Anhang (<code>bghw</code> = BGHW-/DGUV-/DIN-Regelwerke, <code>rechtsquellen</code> = Gesetze und Verordnungen)</td><td>Antwort- bzw. Maßnahmentext ändert sich; Regelwerk kommt hinzu, fällt weg oder wird umbenannt</td></tr>
+                <tr><td><code>dokumentation.html</code></td><td>Abschnitt 3, Unterpunkte „Maßnahmentexte in drei Sprachstilen“ und „Quellenverzeichnis der Maßnahmentexte“ (Tabellen „Quelle | Bezug im Maßnahmenkatalog“)</td><td>Regelwerk kommt hinzu, fällt weg oder wird umbenannt</td></tr>
+                <tr><td><code>js/app.js</code></td><td><code>OPTIONAL_CATEGORIES</code>: Kategorien mit Schalter „nicht vorhanden“</td><td>Nur wenn eine solche Kategorie dazukommt oder wegfällt</td></tr>
+                <tr><td><code>hilfe.html</code></td><td>Zwei Stellen nennen die Kategorien mit Schalter „nicht vorhanden“ namentlich: Frage „Was bedeutet der Schalter …“ und Problem „Eine Kategorie ist gesperrt …“</td><td>Nur zusammen mit <code>OPTIONAL_CATEGORIES</code></td></tr>
+            </table>
+            </div>
+            <div class="doku-box">
+                <div class="doku-box-title">Maßnahmentext immer mit anlegen</div>
+                <p>
+                    Die App sucht den Maßnahmentext über die Frage-ID. Fehlt zu einer
+                    neuen Frage der Eintrag in <code>js/text.js</code>, erscheint im Aktionsplan
+                    und im PDF nur ein allgemeiner Standardtext. Zu jeder neuen Frage
+                    daher alle drei Sprachstile anlegen.
+                </p>
+            </div>
+        </div>
+
+        <h3>
+            Typische Änderungen
+        </h3>
+
+        <div class="card doku-card">
+            <div class="doku-table-wrap">
+            <table class="doku-table pflege">
+                <tr><th>Änderung</th><th>Zu bearbeiten</th><th>Hinweis</th></tr>
+                <tr><td>Fragetext umformulieren</td><td><code>js/audit-data.js</code></td><td>ID bleibt; alte Begehungen bleiben voll auswertbar</td></tr>
+                <tr><td>Maßnahmentext ändern</td><td><code>js/text.js</code> (<code>MEASURES_TEXT</code>)</td><td>Alle drei Sprachstile prüfen</td></tr>
+                <tr><td>Neue Frage</td><td><code>js/audit-data.js</code> + <code>js/text.js</code></td><td>Neue, noch nie verwendete ID; Text in allen drei Stilen</td></tr>
+                <tr><td>Frage entfernen</td><td><code>js/audit-data.js</code></td><td>ID nie für eine andere Frage verwenden</td></tr>
+                <tr><td>Neues Regelwerk oder neue Fassung</td><td><code>js/text.js</code> (<code>MEASURE_SOURCES</code> und betroffene Texte) + <code>dokumentation.html</code></td><td>Ausgabe mit Monat/Jahr nennen, z. B. „Ausgabe 11/2024“</td></tr>
+                <tr><td>Regelwerk zurückgezogen</td><td>wie oben; alle Verweise ersetzen</td><td>Nach dem Kurztitel suchen (z. B. „100-500“); Ersatz und Grund in der Doku nennen</td></tr>
+                <tr><td>Neue Kategorie</td><td><code>js/audit-data.js</code> + <code>js/text.js</code></td><td>Kategorie-<code>id</code> klein und ohne Leerzeichen</td></tr>
+                <tr><td>Kategorie mit Schalter „nicht vorhanden“</td><td>zusätzlich <code>js/app.js</code> + zwei Stellen in <code>hilfe.html</code></td><td>Schlüssel = Kategorie-<code>id</code>, Wert = Text am Schalter</td></tr>
+                <tr><td>Neuer Unterbereich</td><td><code>js/audit-data.js</code> (<code>group</code>)</td><td>Schalter je Unterbereich entsteht automatisch (außer Beleuchtung)</td></tr>
+            </table>
+            </div>
+        </div>
+
+        <h3>
+            Danach immer
+        </h3>
+
+        <div class="card doku-card">
+            <p><strong>1. Zahlen und Dateiübersicht aktualisieren.</strong> Im Ordner <code>ASiC</code> <code>python tools/doku-zahlen.py</code> ausführen (nur prüfen: <code>--pruefen</code>). Das Skript zählt Kategorien und Fragen, liest Revision und Cache-Namen und trägt die Werte in <code>dokumentation.html</code> und <code>hilfe.html</code> ein. Es meldet doppelte Frage-IDs. Diese Zahlen nie von Hand ändern; nur in <code>datenschutz.html</code> und <code>impressum.html</code> den Stand von Hand angleichen.</p>
+            <p><strong>2. Versionsstand hochzählen</strong> – sonst laden die Geräte die neuen Texte nicht:</p>
+            <div class="doku-table-wrap">
+            <table class="doku-table pflege">
+                <tr><th>Art</th><th>Was ändern</th></tr>
+                <tr><td>Ausgabestand (Regelfall, z. B. 1.54-7 → 1.54-8)</td><td><code>BUILD</code> und <code>CACHE_NAME</code> in <code>sw.js</code> sowie den Zusatz <code>?v=…</code> hinter allen js- und css-Einbindungen der HTML-Seiten (gleicher Wert wie <code>BUILD</code>)</td></tr>
+                <tr><td>Neue Revision (z. B. 1.55)</td><td>zusätzlich <code>APP_REVISION</code> und <code>APP_REVISION_DATE</code> in <code>js/app.js</code> sowie <code>APP_VERSION</code> in <code>sw.js</code></td></tr>
+            </table>
+            </div>
+            <p><strong>3. Testen und Pakete neu bauen.</strong> Geänderte Frage im Prüfkatalog, Maßnahmentext in allen drei Sprachstilen und PDF mit Quellenverzeichnis prüfen; danach die Pakete für IT, GitHub und Synology neu erstellen (<code>config.php</code> und <code>zugang-config.js</code> der Betreiber nicht überschreiben).</p>
+        </div>
+
+        <h3>
+            Regeln für Frage-IDs
+        </h3>
+
+        <div class="card doku-card">
+            <p>
+                Archivierte Begehungen, das Team-Archiv, die Auswertungen, die
+                Wiederholungsbegehung und die Zuordnung der Maßnahmen
+                hängen an der Frage-ID, nicht am Fragetext.
+            </p>
+            <div class="doku-table-wrap">
+            <table class="doku-table pflege">
+                <tr><th>Fall</th><th>Regel</th></tr>
+                <tr><td>Text ändern</td><td>Unbedenklich – die ID bleibt.</td></tr>
+                <tr><td>Neue Frage</td><td>Immer eine neue, noch nie verwendete ID vergeben.</td></tr>
+                <tr><td>Frage löschen</td><td>ID nie für eine andere Frage wiederverwenden. Alte Begehungen bleiben auswertbar; die Auswertung zeigt die Frage als „nicht mehr im aktuellen Katalog“.</td></tr>
+                <tr><td>ID ändern</td><td>Vermeiden – Bewertungen und Maßnahmen alter Begehungen würden der Frage nicht mehr zugeordnet.</td></tr>
+                <tr><td>Lücken in der Nummerierung</td><td>Erlaubt – nicht nachträglich „aufrücken“.</td></tr>
+            </table>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- ================================================================ -->
+    <!-- 13. DATEIÜBERSICHT                                               -->
     <!-- ================================================================ -->
 
     <section class="doku-section" id="dateien">
 
         <div class="section-title">
-            Abschnitt 12
+            Abschnitt 13
         </div>
 
         <h2>
@@ -2814,7 +2931,7 @@
                 </tr>
                 <tr>
                     <td>dokumentation.html</td>
-                    <td class="zahl">3.090</td>
+                    <td class="zahl">3.207</td>
                     <td>Technische Dokumentation (diese Seite)</td>
                 </tr>
                 <tr>
@@ -3014,7 +3131,7 @@
 
             <p>
                 <strong>Gesamt (eigener Code, ohne jsPDF und Schrift):</strong>
-                <span data-zahl="zeilen_gesamt">23.835</span> Zeilen
+                <span data-zahl="zeilen_gesamt">23.952</span> Zeilen
             </p>
 
             <p style="font-size:0.82rem; color:var(--ink-soft);">
