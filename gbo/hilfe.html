@@ -2,17 +2,18 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<!-- Sicherheitsrichtlinie: nur eigene Skripte, keine eingebetteten Skripte oder
-     Inline-Handler. connect-src erlaubt https:, damit ein Team-Archiv auf einem
-     anderen Server (Einstellungen) erreichbar bleibt. -->
+
+<!-- Sicherheitsrichtlinie: nur eigene Skripte, keine eingebetteten
+     Skripte oder Inline-Handler. connect-src erlaubt https:, damit ein Team-Archiv
+     auf einem anderen Server (Einstellungen) erreichbar bleibt. -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https:; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="referrer" content="same-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Hilfe & FAQ – ASiC Handel</title>
 
-<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/styles.css?v=2.2.0">
 <script src="zugang-config.js"></script>
-<script src="js/access-gate.js"></script>
+<script src="js/access-gate.js?v=2.2.0"></script>
 
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -20,466 +21,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#1c2226">
 
-<style>
-    /* ====================================================================
-       Hilfe & FAQ - Aufbau:
-       Hero mit Suche -> Themen-Kacheln -> Abschnitte mit Fragen
-       (jede Frage: Kurzantwort, Details optional einklappbar)
-       ==================================================================== */
-
-    html { scroll-behavior: smooth; }
-
-    .h-hero {
-        background: linear-gradient(135deg, var(--brand-red) 0%, var(--brand-red-dark) 100%);
-        border-radius: var(--radius);
-        padding: 1.75rem 1.5rem 1.5rem;
-        color: #fff;
-        margin-bottom: 1.25rem;
-        box-shadow: var(--shadow);
-    }
-
-    .h-hero-badge {
-        display: inline-block;
-        background: rgba(255, 255, 255, 0.18);
-        border: 1px solid rgba(255, 255, 255, 0.5);
-        border-radius: 999px;
-        padding: 0.25rem 0.9rem;
-        font-size: 0.72rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        margin-bottom: 0.8rem;
-    }
-
-    .h-hero h1 {
-        font-family: var(--font-display);
-        font-size: 1.7rem;
-        margin: 0 0 0.3rem;
-        color: #fff;
-    }
-
-    .h-hero p {
-        margin: 0 0 1.1rem;
-        opacity: 0.92;
-        font-size: 0.95rem;
-    }
-
-    .h-search {
-        position: relative;
-        max-width: 640px;
-    }
-
-    .h-search input {
-        width: 100%;
-        box-sizing: border-box;
-        font: inherit;
-        font-size: 16px; /* verhindert das Hineinzoomen von Safari */
-        padding: 0.85rem 2.9rem 0.85rem 2.9rem;
-        border: 2px solid transparent;
-        border-radius: 999px;
-        background: #fff;
-        color: var(--ink);
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
-    }
-
-    .h-search input:focus {
-        outline: none;
-        border-color: var(--ink);
-    }
-
-    .h-search-icon {
-        position: absolute;
-        left: 1rem;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 1.05rem;
-        pointer-events: none;
-    }
-
-    .h-search-clear {
-        position: absolute;
-        right: 0.5rem;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 2.2rem;
-        height: 2.2rem;
-        border: none;
-        border-radius: 50%;
-        background: var(--paper);
-        color: var(--ink);
-        font-size: 1.1rem;
-        line-height: 1;
-        cursor: pointer;
-    }
-
-    /* ---------- Themen-Kacheln ---------- */
-
-    .h-tiles {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 0.75rem;
-        margin-bottom: 1.25rem;
-    }
-
-    .h-tile {
-        display: flex;
-        flex-direction: column;
-        gap: 0.2rem;
-        padding: 0.9rem 1rem;
-        background: var(--card);
-        border: 1px solid var(--line);
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-        text-decoration: none;
-        color: var(--ink);
-        min-height: 5.2rem;
-    }
-
-    .h-tile:hover,
-    .h-tile:focus-visible {
-        border-color: var(--brand-red);
-        outline: none;
-    }
-
-    .h-tile-icon { font-size: 1.35rem; }
-
-    .h-tile-title {
-        font-family: var(--font-display);
-        font-weight: 600;
-        font-size: 0.95rem;
-    }
-
-    .h-tile-sub {
-        font-size: 0.78rem;
-        color: var(--steel);
-    }
-
-    .h-tile.is-alert {
-        background: var(--brand-red-tint);
-        border-color: #f0c4c9;
-    }
-
-    body.is-searching .h-tiles,
-    body.is-searching .h-hint { display: none; }
-
-    /* ---------- Werkzeugleiste ---------- */
-
-    .h-tools {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 0.6rem 1rem;
-        margin: 0 0 1rem;
-        font-size: 0.88rem;
-        color: var(--ink-soft);
-    }
-
-    .h-tools button {
-        font: inherit;
-        font-size: 0.85rem;
-        padding: 0.45rem 1rem;
-        border: 1px solid var(--line);
-        border-radius: 999px;
-        background: var(--card);
-        color: var(--ink);
-        cursor: pointer;
-    }
-
-    .h-tools button:hover { border-color: var(--brand-red); }
-
-    .h-status { flex: 1 1 14rem; min-height: 1.3em; }
-
-    /* ---------- Abschnitte ---------- */
-
-    .h-section {
-        margin-bottom: 2rem;
-        scroll-margin-top: 1rem;
-    }
-
-    .h-section-label {
-        font-size: 0.72rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--steel);
-        margin-bottom: 0.2rem;
-    }
-
-    .h-section h2 {
-        font-family: var(--font-display);
-        font-size: 1.2rem;
-        margin: 0 0 0.35rem;
-        padding-bottom: 0.45rem;
-        border-bottom: 2px solid var(--brand-red);
-    }
-
-    .h-section-intro {
-        margin: 0.6rem 0 0.9rem;
-        font-size: 0.9rem;
-        color: var(--ink-soft);
-    }
-
-    /* ---------- Schnellstart: Schritt-Karten ---------- */
-
-    .h-steps {
-        list-style: none;
-        counter-reset: schritt;
-        margin: 0.9rem 0 0;
-        padding: 0;
-        display: grid;
-        gap: 0.7rem;
-    }
-
-    .h-step {
-        counter-increment: schritt;
-        position: relative;
-        padding: 0.9rem 1rem 0.9rem 3.6rem;
-        background: var(--card);
-        border: 1px solid var(--line);
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-        font-size: 0.92rem;
-    }
-
-    .h-step::before {
-        content: counter(schritt);
-        position: absolute;
-        left: 0.9rem;
-        top: 0.85rem;
-        width: 2rem;
-        height: 2rem;
-        border-radius: 50%;
-        background: var(--brand-red);
-        color: #fff;
-        font-family: var(--font-display);
-        font-weight: 700;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .h-step-title {
-        font-family: var(--font-display);
-        font-weight: 600;
-        font-size: 1rem;
-        display: block;
-        margin-bottom: 0.2rem;
-    }
-
-    .h-step p { margin: 0 0 0.35rem; }
-
-    .h-step p:last-child { margin-bottom: 0; }
-
-    .h-where {
-        display: inline-block;
-        font-size: 0.75rem;
-        padding: 0.12rem 0.6rem;
-        border-radius: 999px;
-        background: var(--paper);
-        color: var(--ink-soft);
-    }
-
-    /* ---------- Fragen (aufklappbar) ---------- */
-
-    .h-item {
-        background: var(--card);
-        border: 1px solid var(--line);
-        border-radius: var(--radius);
-        margin-bottom: 0.6rem;
-        box-shadow: var(--shadow);
-        overflow: hidden;
-    }
-
-    .h-item[hidden] { display: none; }
-
-    .h-item > summary {
-        list-style: none;
-        cursor: pointer;
-        padding: 0.9rem 2.8rem 0.9rem 1.1rem;
-        font-weight: 600;
-        font-size: 0.95rem;
-        position: relative;
-    }
-
-    .h-item > summary::-webkit-details-marker { display: none; }
-
-    .h-item > summary::after {
-        content: "+";
-        position: absolute;
-        right: 1.1rem;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 1.3rem;
-        color: var(--brand-red-dark);
-    }
-
-    .h-item[open] > summary::after { content: "–"; }
-
-    .h-item[open] > summary { border-bottom: 1px solid var(--line); }
-
-    .h-item > summary:focus-visible { outline: 2px solid var(--brand-red); outline-offset: -2px; }
-
-    .h-body {
-        padding: 0.9rem 1.1rem 1.1rem;
-        font-size: 0.9rem;
-        color: var(--ink-soft);
-    }
-
-    .h-body p { margin: 0 0 0.7rem; }
-
-    .h-body p:last-child { margin-bottom: 0; }
-
-    .h-body ul,
-    .h-body ol { margin: 0.4rem 0 0.8rem; padding-left: 1.3rem; }
-
-    .h-body li { margin: 0.3rem 0; }
-
-    .h-body code {
-        background: var(--paper);
-        padding: 0.05rem 0.35rem;
-        border-radius: 4px;
-        font-size: 0.85em;
-    }
-
-    .h-short {
-        color: var(--ink);
-        font-size: 0.95rem;
-    }
-
-    .h-more {
-        margin-top: 0.8rem;
-        border-top: 1px dashed var(--line);
-        padding-top: 0.6rem;
-    }
-
-    .h-more > summary {
-        list-style: none;
-        cursor: pointer;
-        font-size: 0.82rem;
-        font-weight: 600;
-        color: var(--brand-red-dark);
-    }
-
-    .h-more > summary::-webkit-details-marker { display: none; }
-
-    .h-more > summary::before { content: "▸ "; }
-
-    .h-more[open] > summary::before { content: "▾ "; }
-
-    .h-more > div { margin-top: 0.6rem; }
-
-    /* Problemlöser: Ursache / Lösung */
-
-    .h-problem { border-left: 4px solid var(--brand-red); }
-
-    .h-ps {
-        display: grid;
-        grid-template-columns: 5.5rem 1fr;
-        gap: 0.5rem 0.9rem;
-        margin: 0;
-    }
-
-    .h-ps dt {
-        font-weight: 700;
-        font-size: 0.78rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: var(--brand-red-dark);
-        padding-top: 0.15rem;
-    }
-
-    .h-ps dd { margin: 0; }
-
-    .h-ps dd ol,
-    .h-ps dd ul { margin: 0.2rem 0 0.2rem; }
-
-    .h-warn {
-        margin-top: 0.7rem;
-        padding: 0.65rem 0.9rem;
-        border-left: 3px solid var(--brand-red);
-        background: var(--brand-red-tint);
-        border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-        font-size: 0.86rem;
-        color: var(--ink);
-    }
-
-    /* Leer-Zustand der Suche */
-
-    .h-empty {
-        display: none;
-        text-align: center;
-        padding: 2rem 1rem;
-        background: var(--card);
-        border: 1px dashed var(--steel-light);
-        border-radius: var(--radius);
-        color: var(--ink-soft);
-    }
-
-    .h-empty button {
-        margin-top: 0.7rem;
-        font: inherit;
-        padding: 0.5rem 1.2rem;
-        border: none;
-        border-radius: 999px;
-        background: var(--brand-red-dark);
-        color: #fff;
-        cursor: pointer;
-    }
-
-    body.is-searching .h-empty.is-visible { display: block; }
-
-    /* Hinweisbox am Ende */
-
-    .h-help {
-        padding: 1.1rem 1.25rem;
-        background: var(--card);
-        border: 1px solid var(--line);
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-        font-size: 0.92rem;
-    }
-
-    .h-help p { margin: 0 0 0.6rem; }
-
-    .h-help p:last-child { margin: 0; }
-
-    /* Nach oben */
-
-    .h-top {
-        position: fixed;
-        right: 1rem;
-        bottom: calc(1rem + env(safe-area-inset-bottom));
-        width: 3rem;
-        height: 3rem;
-        border: none;
-        border-radius: 50%;
-        background: var(--brand-red-dark);
-        color: #fff;
-        font-size: 1.25rem;
-        box-shadow: var(--shadow-lg);
-        cursor: pointer;
-        display: none;
-        z-index: 50;
-    }
-
-    .h-top.is-visible { display: block; }
-
-    /* Schmale Bildschirme (iPhone) und iPad hochkant */
-
-    @media (max-width: 860px) {
-        .h-tiles { grid-template-columns: repeat(2, 1fr); }
-    }
-
-    @media (max-width: 520px) {
-        .h-hero { padding: 1.25rem 1rem 1.1rem; }
-        .h-hero h1 { font-size: 1.4rem; }
-        .h-ps { grid-template-columns: 1fr; gap: 0.1rem; }
-        .h-ps dd { margin-bottom: 0.6rem; }
-        .h-step { padding-left: 3.3rem; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-        html { scroll-behavior: auto; }
-    }
-</style>
 </head>
 
 <body>
@@ -528,7 +69,7 @@
             <input
                 type="search"
                 id="faq-search"
-                placeholder="z. B. Foto, NAS, PDF, Archiv"
+                placeholder="z. B. Foto, Server, PDF, Archiv"
                 autocomplete="off"
                 autocapitalize="off"
                 spellcheck="false"
@@ -545,10 +86,10 @@
 
     <nav class="h-tiles" aria-label="Themen">
 
-        <a class="h-tile" href="#start">
+        <a class="h-tile" href="#anleitung">
             <span class="h-tile-icon" aria-hidden="true">🚀</span>
-            <span class="h-tile-title">Begehung starten</span>
-            <span class="h-tile-sub">In 6 Schritten</span>
+            <span class="h-tile-title">Kurzanleitung</span>
+            <span class="h-tile-sub">Menüs, Einrichtung, Start</span>
         </a>
 
         <a class="h-tile" href="#pruefen">
@@ -571,7 +112,7 @@
 
         <a class="h-tile" href="#sichern">
             <span class="h-tile-icon" aria-hidden="true">💾</span>
-            <span class="h-tile-title">Sichern &amp; NAS</span>
+            <span class="h-tile-title">Sichern &amp; Server</span>
             <span class="h-tile-sub">Archiv, Backup, Team</span>
         </a>
 
@@ -603,9 +144,68 @@
 
     <div class="h-empty" id="faq-empty">
         <p><strong>Keine Treffer.</strong></p>
-        <p>Versuchen Sie ein kürzeres oder anderes Stichwort, z. B. „Foto“, „PDF“ oder „NAS“.</p>
+        <p>Versuchen Sie ein kürzeres oder anderes Stichwort, z. B. „Foto“, „PDF“ oder „Server“.</p>
         <button type="button" id="faq-empty-reset">Suche zurücksetzen</button>
     </div>
+
+
+    <!-- ================================================================ -->
+    <!-- 0. KURZANLEITUNG                                                 -->
+    <!-- ================================================================ -->
+
+    <section class="h-section" id="anleitung">
+
+        <div class="h-section-label">Kurzanleitung</div>
+
+        <h2>Die App auf einen Blick</h2>
+
+        <p class="h-section-intro">Oben wechseln Sie die Seite, unten bedienen Sie die Begehung, im Fuß finden Sie Hilfe und Einstellungen.</p>
+
+        <div class="card" style="padding: 0.9rem 1rem; margin-bottom: 0.7rem;" data-unit data-kw="menü menue übersicht leiste navigation oben unten fuß fusszeile bedienung aufbau">
+            <dl class="h-ps">
+                <dt>Oben</dt>
+                <dd>Auf jeder Seite: <strong>Prüfkatalog</strong> (Begehung bewerten), <strong>Aktionsplan</strong> (Mängel als Maßnahmen, Unterschriften), <strong>Fotos</strong> (Fotodokumentation), <strong>Verlauf</strong> (eigenes Archiv und Team-Archiv) und <strong>Gefährdungsbeurteilung</strong> (GBO, mit eigener <a href="gbo-hilfe.html">Hilfe zur GBO</a>).</dd>
+                <dt>Unten</dt>
+                <dd>Auf dem Prüfkatalog: <strong>Datei ▾</strong> (Speichern, Markt auf Server, Gesamtsicherung, JSON, Archiv, Zurücksetzen), <strong>Sprachstil</strong> (Einfach, BGHW, Rechtlich) und <strong>Exportieren ▾</strong> (Drucken, PDF teilen, Mail vorbereiten). <strong>Exportieren ▾</strong> gibt es auch auf Aktionsplan und Fotos.</dd>
+                <dt>Fuß</dt>
+                <dd><strong>Hilfe &amp; FAQ</strong>, <strong>Einstellungen</strong>, <strong>Auswertung</strong>, <strong>Auswertung Team</strong>, Impressum, Datenschutz, Technische Dokumentation und die aktuelle Revision.</dd>
+            </dl>
+        </div>
+
+        <details class="h-item" id="q-einrichten" data-unit data-kw="einrichten einrichtung erster start neues gerät ipad installieren home-bildschirm zugangscode einstellungen server schlüssel">
+            <summary>Wie richte ich die App auf einem neuen Gerät ein?</summary>
+            <div class="h-body">
+                <p class="h-short">Einmal pro Gerät, danach öffnet sich die App direkt:</p>
+                <ol>
+                    <li>App-Adresse in Safari (iPad) bzw. Edge oder Chrome (PC) öffnen.</li>
+                    <li>Installieren: iPad über <strong>Teilen → Zum Home-Bildschirm</strong>, PC über <strong>App installieren</strong> in der Adresszeile.</li>
+                    <li>Beim ersten Start der installierten App den <strong>Zugangscode</strong> eingeben. Den Code erhalten Sie von der Arbeitssicherheit.</li>
+                    <li>Im Fuß <strong>Einstellungen</strong> öffnen, Server-Adresse und Zugriffsschlüssel eintragen, <strong>Speichern</strong>, dann <strong>Verbindung testen</strong>.</li>
+                </ol>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Bleibt die Server-Adresse leer, nutzt die App den Server, von dem sie geladen wurde. Die Einstellungen gelten nur für dieses Gerät und diesen Browser.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-abschluss" data-unit data-kw="abschluss abschließen fertig ende begehung reihenfolge server speichern archivieren zurücksetzen nächster markt">
+            <summary>Wie schließe ich eine Begehung richtig ab?</summary>
+            <div class="h-body">
+                <p class="h-short">Am Ende in dieser Reihenfolge:</p>
+                <ol>
+                    <li><strong>Datei ▾ → Markt auf Server speichern</strong> – sichert Begehung und Gefährdungsbeurteilung des Markts zentral.</li>
+                    <li>Bericht über <strong>Exportieren ▾</strong> erstellen und versenden.</li>
+                    <li><strong>Datei ▾ → Begehung archivieren</strong> – legt einen festen Stand im Verlauf ab.</li>
+                    <li><strong>Datei ▾ → Zurücksetzen</strong> – leert die Begehung für den nächsten Markt.</li>
+                </ol>
+                <p class="h-warn">Zurücksetzen löscht die laufende Begehung samt Fotos auf diesem Gerät. Vorher speichern oder archivieren.</p>
+            </div>
+        </details>
+
+    </section>
 
 
     <!-- ================================================================ -->
@@ -622,7 +222,7 @@
 
             <li class="h-step">
                 <span class="h-step-title">Betriebsdaten eintragen</span>
-                <p>Oben auf der Seite <strong>Prüfkatalog</strong>: Marktnummer, PLZ/Ort, Straße, Datum, Prüfer, Marktleitung und Teilnehmer. Diese Angaben erscheinen in allen PDFs. Für das Speichern auf dem NAS werden Datum und Marktnummer zwingend gebraucht.</p>
+                <p>Oben auf der Seite <strong>Prüfkatalog</strong>: Marktnummer, PLZ/Ort, Straße, Datum, Prüfer, Marktleitung und Teilnehmer. Diese Angaben erscheinen in allen PDFs. Für das Speichern auf dem Server werden Datum und Marktnummer zwingend gebraucht.</p>
                 <span class="h-where">Prüfkatalog</span>
             </li>
 
@@ -878,12 +478,12 @@
 
 
     <!-- ================================================================ -->
-    <!-- 5. SICHERN, ARCHIV, NAS                                          -->
+    <!-- 5. SICHERN, ARCHIV, SERVER                                        -->
     <!-- ================================================================ -->
 
     <section class="h-section" id="sichern">
 
-        <div class="h-section-label">Sichern &amp; NAS</div>
+        <div class="h-section-label">Sichern &amp; Server</div>
 
         <h2>Daten sichern, archivieren und im Team teilen</h2>
 
@@ -894,7 +494,7 @@
                 <details class="h-more">
                     <summary>Mehr Details</summary>
                     <div>
-                        <p>Die laufende Begehung liegt im Browserspeicher, Fotos und Archiv in einer eigenen Datenbank (IndexedDB). Löschen Sie die Website-Daten des Browsers, kann alles verloren gehen. Sichern Sie wichtige Begehungen deshalb zusätzlich als PDF, als JSON-Datei oder auf dem NAS.</p>
+                        <p>Die laufende Begehung liegt im Browserspeicher, Fotos und Archiv in einer eigenen Datenbank (IndexedDB). Löschen Sie die Website-Daten des Browsers, kann alles verloren gehen. Sichern Sie wichtige Begehungen deshalb zusätzlich als PDF, als JSON-Datei oder auf dem Server.</p>
                     </div>
                 </details>
             </div>
@@ -906,7 +506,8 @@
                 <p class="h-short">Die laufende Begehung wird automatisch gespeichert. Unter <strong>Datei ▾</strong> auf dem Prüfkatalog stehen außerdem bereit:</p>
                 <ul>
                     <li><strong>Speichern</strong> – manueller Speichervorgang</li>
-                    <li><strong>Auf NAS speichern</strong> / <strong>Vom NAS laden</strong> – Sicherung auf der Synology</li>
+                    <li><strong>Markt auf Server speichern</strong> / <strong>Vom Server laden</strong> – Sicherung von Begehung und Gefährdungsbeurteilung auf dem Server</li>
+                    <li><strong>Gesamtsicherung Markt</strong> – Begehung und Gefährdungsbeurteilung als eine Datei</li>
                     <li><strong>JSON exportieren</strong> – Backup des aktuellen Begehungsstands als Datei</li>
                     <li><strong>JSON per Mail teilen</strong> – öffnet das Teilen-Menü mit der JSON-Datei im Anhang</li>
                     <li><strong>JSON laden</strong> – stellt einen exportierten Stand wieder her</li>
@@ -916,7 +517,7 @@
                 <details class="h-more">
                     <summary>Mehr Details</summary>
                     <div>
-                        <p>Die JSON-Datei ist verlustfrei: Sie enthält die vollständige Begehung mit Maßnahmen, Status und Unterschriften, aber keine Fotos. Legen Sie die Datei manuell in den NAS-Ordner (z. B. per File Station), erscheint sie automatisch im Team-Archiv.</p>
+                        <p>Die JSON-Datei ist verlustfrei: Sie enthält die vollständige Begehung mit Maßnahmen, Status und Unterschriften, aber keine Fotos. Legt der Administrator die Datei im Datenordner des Servers ab, erscheint sie automatisch im Team-Archiv.</p>
                     </div>
                 </details>
             </div>
@@ -956,24 +557,25 @@
                 <details class="h-more">
                     <summary>Mehr Details</summary>
                     <div>
-                        <p>Für die Fotos nutzen Sie das PDF oder die Archivfunktion, weil die Bilder nur auf dem Gerät gespeichert sind. Auch das NAS überträgt nur die Prüfdaten.</p>
+                        <p>Für die Fotos nutzen Sie das PDF oder die Archivfunktion, weil die Bilder nur auf dem Gerät gespeichert sind. Auch das Speichern auf dem Server überträgt nur die Prüfdaten.</p>
                     </div>
                 </details>
             </div>
         </details>
 
-        <details class="h-item" id="q-nas" data-unit data-kw="nas synology server speichern laden einstellungen zugriffsschlüssel cors versionen überschreiben">
-            <summary>Wie sichere ich auf der Synology (NAS)?</summary>
+        <details class="h-item" id="q-nas" data-unit data-kw="nas server speichern laden einstellungen zugriffsschlüssel cors versionen überschreiben">
+            <summary>Wie sichere ich auf dem Server?</summary>
             <div class="h-body">
-                <p class="h-short"><strong>Datei ▾ → Auf NAS speichern</strong>, später <strong>Vom NAS laden</strong>. Datum und Marktnummer müssen ausgefüllt sein, und die App muss über die Synology-Adresse geöffnet sein.</p>
+                <p class="h-short"><strong>Datei ▾ → Markt auf Server speichern</strong>, später <strong>Vom Server laden</strong>. Gespeichert werden Begehung und Gefährdungsbeurteilung des Markts gemeinsam. Datum und Marktnummer der Begehung müssen ausgefüllt sein, und die App muss über die Server-Adresse geöffnet sein.</p>
                 <details class="h-more">
                     <summary>Mehr Details</summary>
                     <div>
                         <ul>
-                            <li>Gespeichert werden nur die Prüfdaten, keine Fotos.</li>
-                            <li>Speichern Sie für denselben Markt am selben Tag erneut, wird die Datei ersetzt. Der vorherige Stand liegt als Kopie im Ordner <code>versionen</code> auf dem NAS (für Administratoren).</li>
+                            <li>Gespeichert werden die Prüfdaten und die Gefährdungsbeurteilung, keine Original-Fotos (Maßnahmen und GBO-Bildbelege enthalten kleine Vorschaubilder).</li>
+                            <li>Auf der Seite <strong>Aktionsplan</strong> erinnert ein Hinweis, solange der aktuelle Stand – auch eine Änderung in der Gefährdungsbeurteilung – noch nicht im Team-Archiv gesichert ist. <strong>Jetzt sichern</strong> speichert den Markt sofort.</li>
+                            <li>Speichern Sie für denselben Markt am selben Tag erneut, wird die Datei ersetzt. Der vorherige Stand liegt als Kopie im Ordner <code>versionen</code> auf dem Server (für Administratoren).</li>
                             <li>Läuft die App unter einer anderen Adresse (z. B. GitHub Pages), tragen Sie unter <strong>Einstellungen</strong> eine externe Server-Adresse ein. Der Server muss Anfragen von der App-Adresse ausdrücklich erlauben (CORS).</li>
-                            <li>Ein <strong>Zugriffsschlüssel</strong> wird bei jeder NAS-Anfrage mitgeschickt. Er wirkt nur, wenn auf dem Server derselbe Schlüssel eingerichtet ist.</li>
+                            <li>Ein <strong>Zugriffsschlüssel</strong> wird bei jeder Server-Anfrage mitgeschickt. Er wirkt nur, wenn auf dem Server derselbe Schlüssel eingerichtet ist.</li>
                         </ul>
                     </div>
                 </details>
@@ -983,11 +585,30 @@
         <details class="h-item" id="q-team" data-unit data-kw="team archiv nas kollegen alle märkte überblick">
             <summary>Was ist das Team-Archiv?</summary>
             <div class="h-body">
-                <p class="h-short">Auf der Seite <strong>Verlauf</strong> zeigt der Reiter <strong>Team-Archiv (NAS)</strong> alle Begehungen, die irgendjemand im Team auf dem NAS gespeichert hat – nicht nur Ihre eigenen.</p>
+                <p class="h-short">Auf der Seite <strong>Verlauf</strong> zeigt der Reiter <strong>Team-Archiv (Server)</strong> alle Begehungen, die irgendjemand im Team auf dem Server gespeichert hat – nicht nur Ihre eigenen.</p>
                 <details class="h-more">
                     <summary>Mehr Details</summary>
                     <div>
-                        <p>So behält das ganze Team den Überblick, welche Märkte schon geprüft wurden. Sie können jede Begehung als PDF exportieren oder in der App anzeigen. Fotos sind nicht enthalten. Der Reiter funktioniert nur, wenn die App über die Synology-Adresse läuft oder in den Einstellungen eine Server-Adresse hinterlegt ist.</p>
+                        <p>So behält das ganze Team den Überblick, welche Märkte schon geprüft wurden. Sie können jede Begehung als PDF exportieren oder in der App anzeigen; <strong>In App anzeigen</strong> übernimmt dabei auch die Gefährdungsbeurteilung des Markts. Original-Fotos sind nicht enthalten. Über das Suchfeld finden Sie Märkte nach Marktnummer, Ort oder Datum. Der Reiter funktioniert nur, wenn die App über die Server-Adresse läuft oder in den Einstellungen eine Server-Adresse hinterlegt ist.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-wiederholung" data-unit data-kw="wiederholungsbegehung nachbegehung wiederholung vorbegehung letzte begehung offene maßnahmen übernehmen nachkontrolle">
+            <summary>Wie lege ich eine Wiederholungsbegehung an?</summary>
+            <div class="h-body">
+                <p class="h-short">Auf der Seite <strong>Verlauf</strong> bei der letzten Begehung des Marktes <strong>🔁 Wiederholungsbegehung</strong> tippen – im eigenen Verlauf oder im Team-Archiv.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <ul>
+                            <li>Betriebsdaten und die als „nicht vorhanden“ geschalteten Bereiche werden übernommen, das Datum wird auf heute gesetzt.</li>
+                            <li>Alle Maßnahmen, die in der Vorbegehung nicht erledigt waren, werden als <strong>Mangel</strong> vorbelegt und mit „Offen aus Vorbegehung vom …“ gekennzeichnet – im Prüfkatalog, im Aktionsplan und im PDF.</li>
+                            <li>Ist ein Mangel inzwischen behoben, setzen Sie den Prüfpunkt einfach auf <strong>OK</strong>; die Maßnahme entfällt dann.</li>
+                            <li>Unterschriften und Fotos werden nicht übernommen. Der aktuell laufende, noch nicht archivierte Stand auf dem Gerät wird ersetzt – vorher archivieren, falls er noch gebraucht wird.</li>
+                            <li>Übernommen wird nur die Begehung. Die Gefährdungsbeurteilung auf dem Gerät bleibt unverändert.</li>
+                        </ul>
                     </div>
                 </details>
             </div>
@@ -1038,11 +659,11 @@
         <details class="h-item" id="q-aw-team" data-unit data-kw="auswertung verlauf team unterschied lokal nas">
             <summary>Was ist der Unterschied zwischen „Auswertung Verlauf“ und „Auswertung Team“?</summary>
             <div class="h-body">
-                <p class="h-short"><strong>Auswertung Verlauf</strong> wertet die auf diesem Gerät archivierten Begehungen aus, <strong>Auswertung Team</strong> alle im Team-Archiv auf dem NAS.</p>
+                <p class="h-short"><strong>Auswertung Verlauf</strong> wertet die auf diesem Gerät archivierten Begehungen aus, <strong>Auswertung Team</strong> alle im Team-Archiv auf dem Server.</p>
                 <details class="h-more">
                     <summary>Mehr Details</summary>
                     <div>
-                        <p>Beide Buttons stehen auf der Seite Verlauf. Die Team-Auswertung lädt im Hintergrund jede Datei einzeln vom NAS, das kann bei vielen Begehungen etwas dauern. Dateien, die sich nicht laden lassen, werden übersprungen. Sie hat einen eigenen Zeitraum-Filter, CSV-Export und PDF und funktioniert nur unter denselben Voraussetzungen wie das Team-Archiv.</p>
+                        <p>Beide Buttons stehen auf der Seite Verlauf. Die Team-Auswertung lädt im Hintergrund jede Datei einzeln vom Server, das kann bei vielen Begehungen etwas dauern. Ein Statusbalken oben auf der Seite zeigt, wie viele Begehungen schon geladen sind, und meldet grün, wenn alles da ist; bis dahin sind Filter und Export gesperrt. Mit „Neu laden“ holt man den aktuellen Stand erneut. Dieselbe Anzeige gibt es auf der Seite Verlauf im Reiter „Team-Archiv“. Dort hilft ein Suchfeld, eine Begehung nach Marktnummer, Ort oder Datum zu finden. Liegt die laufende Begehung noch nicht im Team-Archiv, weist der Aktionsplan unterhalb der Unterschriften darauf hin („Jetzt sichern“). Wenn etwas nicht funktioniert: unter „Einstellungen“ → „Diagnose erstellen“ den Text kopieren und an die EDV schicken. Dateien, die sich nicht laden lassen, werden übersprungen. Sie hat einen eigenen Zeitraum-Filter, CSV-Export und PDF und funktioniert nur unter denselben Voraussetzungen wie das Team-Archiv.</p>
                     </div>
                 </details>
             </div>
@@ -1104,7 +725,7 @@
                     <dt>Lösung</dt>
                     <dd>
                         <ol>
-                            <li>Die Begehung sichern (<strong>Datei ▾ → JSON exportieren</strong> oder <strong>Auf NAS speichern</strong>).</li>
+                            <li>Die Begehung sichern (<strong>Datei ▾ → JSON exportieren</strong> oder <strong>Markt auf Server speichern</strong>).</li>
                             <li>Nicht mehr benötigte Fotos löschen.</li>
                             <li>Fertige Begehungen archivieren und die laufende Begehung zurücksetzen.</li>
                         </ol>
@@ -1176,21 +797,21 @@
             </div>
         </details>
 
-        <details class="h-item h-problem" id="p-nas" data-unit data-kw="nas speichern laden funktioniert nicht synology fehler schlüssel zugriff server erreichbar github pages">
-            <summary>„Auf NAS speichern“ oder „Vom NAS laden“ funktioniert nicht</summary>
+        <details class="h-item h-problem" id="p-nas" data-unit data-kw="nas speichern laden funktioniert nicht fehler schlüssel zugriff server erreichbar github pages">
+            <summary>„Markt auf Server speichern“ oder „Vom Server laden“ funktioniert nicht</summary>
             <div class="h-body">
                 <dl class="h-ps">
                     <dt>Ursache</dt>
                     <dd>
                         <ul>
                             <li>Datum oder Marktnummer fehlen in den Betriebsdaten.</li>
-                            <li>Die App wurde nicht über die Synology-Adresse geöffnet (z. B. GitHub Pages) und in den Einstellungen ist keine Server-Adresse hinterlegt.</li>
-                            <li>Der Server ist nicht erreichbar (Netzwerk, VPN oder Synology ausgeschaltet).</li>
+                            <li>Die App wurde nicht über die Server-Adresse geöffnet (z. B. GitHub Pages) und in den Einstellungen ist keine Server-Adresse hinterlegt.</li>
+                            <li>Der Server ist nicht erreichbar (Netzwerk, VPN oder Server ausgeschaltet).</li>
                             <li>Die Meldung „Ungültiger oder fehlender Zugriffsschlüssel“: Der Schlüssel in den Einstellungen stimmt nicht mit dem Server überein.</li>
                         </ul>
                     </dd>
                     <dt>Lösung</dt>
-                    <dd>Die passende Ursache beheben: Betriebsdaten ausfüllen, die App über die Synology-Adresse öffnen oder die Server-Adresse unter <strong>Einstellungen</strong> eintragen, Verbindung prüfen, Schlüssel abgleichen. Ein NAS-Fehler hat keinen Einfluss auf Ihre lokal gespeicherten Daten.</dd>
+                    <dd>Die passende Ursache beheben: Betriebsdaten ausfüllen, die App über die Server-Adresse öffnen oder die Server-Adresse unter <strong>Einstellungen</strong> eintragen, Verbindung prüfen, Schlüssel abgleichen. Ein Server-Fehler hat keinen Einfluss auf Ihre lokal gespeicherten Daten.</dd>
                 </dl>
             </div>
         </details>
@@ -1211,7 +832,7 @@
         <details class="h-item" id="w-offline" data-unit data-kw="offline internet ohne netz service worker schrift datenschutz">
             <summary>Funktioniert die App ohne Internet?</summary>
             <div class="h-body">
-                <p class="h-short">Ja. Nach dem ersten erfolgreichen Laden stehen die App-Dateien auch ohne Netz zur Verfügung. Nur die NAS-Funktionen brauchen eine Verbindung.</p>
+                <p class="h-short">Ja. Nach dem ersten erfolgreichen Laden stehen die App-Dateien auch ohne Netz zur Verfügung. Nur die Server-Funktionen brauchen eine Verbindung.</p>
                 <details class="h-more">
                     <summary>Mehr Details</summary>
                     <div>
@@ -1224,7 +845,7 @@
         <details class="h-item" id="w-version" data-unit data-kw="version revision stand fußzeile">
             <summary>Welche Version der App nutze ich?</summary>
             <div class="h-body">
-                <p class="h-short">Die Revision steht in der Fußzeile jeder Seite und auf jedem PDF. Aktuell ist die Revision <span data-zahl="revision">2.1.2</span> vom <span data-zahl="revision_datum">25.10.2026</span>.</p>
+                <p class="h-short">Die Revision steht in der Fußzeile jeder Seite und auf jedem PDF. Aktuell ist die Revision <span data-zahl="revision">2.2.0</span> vom <span data-zahl="revision_datum">25.10.2026</span>.</p>
             </div>
         </details>
 
@@ -1232,6 +853,12 @@
             <summary>Warum sehe ich die Zugangscode-Abfrage nicht immer?</summary>
             <div class="h-body">
                 <p class="h-short">Sie erscheint nur in der installierten App-Ansicht, nicht im normalen Browser-Tab. Sie ist eine organisatorische Hürde und kein echter Zugriffsschutz.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Der Code wird nur einmal pro Gerät abgefragt. Ändert der Betreiber den Code (Datei <code>zugang-config.js</code>), fragt jedes Gerät beim nächsten Start einmal neu.</p>
+                    </div>
+                </details>
             </div>
         </details>
 
@@ -1262,7 +889,6 @@
         <h2>Ist Ihre Frage nicht dabei?</h2>
 
         <div class="h-help">
-            <p>Fragen zur Gefährdungsbeurteilung beantwortet die <a href="gbo-hilfe.html">Hilfe zur Gefährdungsbeurteilung</a>.</p>
             <p>Technische Details zu Aufbau, Speicherung, Fotodokumentation und Service Worker finden Sie in der <a href="dokumentation.html">Technischen Dokumentation</a>.</p>
             <p>Bei einem konkreten Problem hilft es, den genauen Wortlaut der Fehlermeldung und die betroffene Seite zu notieren. So lässt sich die Ursache deutlich schneller eingrenzen.</p>
         </div>
@@ -1324,11 +950,11 @@
 </footer>
 
 
-<script src="js/audit-data.js"></script>
-<script src="js/text.js"></script>
-<script src="js/app.js"></script>
+<script src="js/audit-data.js?v=2.2.0"></script>
+<script src="js/text.js?v=2.2.0"></script>
+<script src="js/app.js?v=2.2.0"></script>
 
-<script src="js/hilfe-suche.js"></script>
+<script src="js/hilfe-suche.js?v=2.2.0"></script>
 
 </body>
 </html>

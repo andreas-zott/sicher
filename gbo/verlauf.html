@@ -4,9 +4,10 @@
 <head>
 
 <meta charset="UTF-8">
-<!-- Sicherheitsrichtlinie: nur eigene Skripte, keine eingebetteten Skripte oder
-     Inline-Handler. connect-src erlaubt https:, damit ein Team-Archiv auf einem
-     anderen Server (Einstellungen) erreichbar bleibt. -->
+
+<!-- Sicherheitsrichtlinie: nur eigene Skripte, keine eingebetteten
+     Skripte oder Inline-Handler. connect-src erlaubt https:, damit ein Team-Archiv
+     auf einem anderen Server (Einstellungen) erreichbar bleibt. -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https:; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="referrer" content="same-origin">
 
@@ -21,11 +22,12 @@
 
 <link
     rel="stylesheet"
-    href="css/styles.css"
+    href="css/styles.css?v=2.2.0"
 >
 
 <script src="zugang-config.js"></script>
-<script src="js/access-gate.js"></script>
+
+<script src="js/access-gate.js?v=2.2.0"></script>
 
 <link
     rel="manifest"
@@ -47,7 +49,7 @@
     content="#1c2226"
 >
 
-<script src="js/jspdf.umd.min.js"></script>
+<script src="js/jspdf.umd.min.js?v=2.2.0" defer></script>
 
 </head>
 
@@ -103,8 +105,6 @@
             >
                 Verlauf
             </a>
-
-        
 
             <a href="gbo.html">
                 Gefährdungsbeurteilung
@@ -182,7 +182,7 @@
             class="btn btn-secondary btn-small verlauf-tab"
             type="button"
         >
-            👥 Team-Archiv (NAS)
+            👥 Team-Archiv (Server)
         </button>
 
         <a
@@ -215,8 +215,37 @@
 
 
     <!-- ================================================================== -->
-    <!-- TEAM-ARCHIVLISTE (NAS)                                              -->
+    <!-- TEAM-ARCHIVLISTE (Server)                                              -->
     <!-- ================================================================== -->
+
+    <!-- Ladestatus Team-Archiv (gleiche Anzeige wie Team-Auswertung) -->
+    <div
+        id="team-archive-loading"
+        class="lade-status is-laden is-unbestimmt"
+        role="status"
+        aria-live="polite"
+        style="display:none;"
+    >
+        <span class="lade-status-icon" aria-hidden="true"></span>
+        <div class="lade-status-text">
+            <div class="lade-status-titel" id="team-archiv-lade-titel">Team-Archiv wird geladen …</div>
+            <div class="lade-status-detail" id="team-archiv-lade-detail">Dateiliste wird vom Server abgerufen</div>
+            <div class="lade-status-balken" aria-hidden="true"><span></span></div>
+        </div>
+        <button type="button" class="btn btn-secondary btn-small lade-status-btn" id="team-archiv-neu-laden" hidden>↻ Neu laden</button>
+    </div>
+
+    <!-- Suche im Team-Archiv -->
+    <div id="team-archiv-suche" class="team-archiv-suche" style="display:none;">
+        <input
+            type="search"
+            id="team-archiv-suchfeld"
+            placeholder="Suchen: Marktnummer, Ort oder Datum"
+            autocomplete="off"
+            aria-label="Team-Archiv durchsuchen"
+        >
+        <span id="team-archiv-treffer" class="team-archiv-treffer" aria-live="polite"></span>
+    </div>
 
     <div
         id="team-archive-list"
@@ -224,13 +253,10 @@
         style="display:none;"
     ></div>
 
-    <div
-        id="team-archive-loading"
-        class="no-measures card"
-        style="display:none;"
-    >
-        <p style="margin:0;">Lade Team-Archiv vom NAS …</p>
+    <div id="team-archiv-keine-treffer" class="no-measures card" style="display:none;">
+        <p style="margin:0;">Keine Begehung passt zur Suche.</p>
     </div>
+
 
     <div
         id="no-team-archive"
@@ -240,7 +266,7 @@
         <h3>Noch keine Begehung im Team-Archiv</h3>
         <p>
             Begehungen, die Kolleginnen und Kollegen über
-            „Datei ▾ → Auf NAS speichern“ gesichert haben,
+            „Datei ▾ → Auf Server speichern“ gesichert haben,
             erscheinen hier.
         </p>
     </div>
@@ -252,9 +278,9 @@
     >
         <h3>Team-Archiv hier nicht verfügbar</h3>
         <p>
-            Das Team-Archiv funktioniert nur, wenn die App direkt
-            über die Synology selbst aufgerufen wird (bzw. deren
-            Tailscale-Adresse) — nicht über diese Adresse.
+            Das Team-Archiv funktioniert nur, wenn die App über die
+            Server-Adresse aufgerufen wird oder in den Einstellungen
+            eine Server-Adresse hinterlegt ist — nicht über diese Adresse.
         </p>
     </div>
 
@@ -350,18 +376,18 @@
 <!-- JAVASCRIPT                                                             -->
 <!-- ====================================================================== -->
 
-<script src="js/audit-data.js"></script>
+<script src="js/audit-data.js?v=2.2.0"></script>
 
-<script src="js/text.js"></script>
+<script src="js/text.js?v=2.2.0"></script>
 
-<script src="js/photos-store.js"></script>
+<script src="js/photos-store.js?v=2.2.0"></script>
 
-<script src="js/archive-store.js"></script>
+<script src="js/archive-store.js?v=2.2.0"></script>
 
 
-<script src="js/app.js"></script>
+<script src="js/app.js?v=2.2.0"></script>
 
-<script src="js/verlauf.js"></script>
+<script src="js/verlauf.js?v=2.2.0"></script>
 
 
 </body>

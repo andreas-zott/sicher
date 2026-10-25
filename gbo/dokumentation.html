@@ -2,16 +2,17 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<!-- Sicherheitsrichtlinie: nur eigene Skripte, keine eingebetteten Skripte oder
-     Inline-Handler. connect-src erlaubt https:, damit ein Team-Archiv auf einem
-     anderen Server (Einstellungen) erreichbar bleibt. -->
+
+<!-- Sicherheitsrichtlinie: nur eigene Skripte, keine eingebetteten
+     Skripte oder Inline-Handler. connect-src erlaubt https:, damit ein Team-Archiv
+     auf einem anderen Server (Einstellungen) erreichbar bleibt. -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https:; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="referrer" content="same-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Technische Dokumentation – ASiC Handel</title>
-<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/styles.css?v=2.2.0">
 <script src="zugang-config.js"></script>
-<script src="js/access-gate.js"></script>
+<script src="js/access-gate.js?v=2.2.0"></script>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -296,12 +297,7 @@
             <a href="massnahmen.html">Aktionsplan</a>
             <a href="fotos.html">Fotos</a>
             <a href="verlauf.html">Verlauf</a>
-        
-
-            <a href="gbo.html">
-                Gefährdungsbeurteilung
-            </a>
-
+            <a href="gbo.html">Gefährdungsbeurteilung</a>
         </nav>
     </div>
 </header>
@@ -338,14 +334,14 @@
                 <div class="doku-meta-label">
                     App-Revision
                 </div>
-                <div class="doku-meta-value"> <span data-zahl="revision">2.1.2</span> (<span data-zahl="revision_datum">25.10.2026</span>) </div>
+                <div class="doku-meta-value"> <span data-zahl="revision">2.2.0</span> (<span data-zahl="revision_datum">25.10.2026</span>) </div>
             </div>
 
             <div class="doku-meta-item">
                 <div class="doku-meta-label">
                     Service Worker
                 </div>
-                <div class="doku-meta-value"> <span data-zahl="cache_version">v2.1.2</span> </div>
+                <div class="doku-meta-value"> <span data-zahl="cache_version">v2.2.0</span> </div>
             </div>
 
             <div class="doku-meta-item">
@@ -408,9 +404,9 @@
 
         <a href="#cybersicherheit"> 10. App-Sicherheitsanalyse </a>
 
-        <a href="#gbo"> 11. Gefährdungsbeurteilung und Markt-Datensatz </a>
-
-        <a href="#dateien"> 12. Dateiübersicht </a>
+        <a href="#betrieb"> 11. Betrieb und Updates </a>
+        <a href="#gbo"> 12. Gefährdungsbeurteilung und Markt-Datensatz </a>
+        <a href="#dateien"> 13. Dateiübersicht </a>
 
     </div>
 
@@ -597,7 +593,7 @@
 
             <p>
                 Die aktuelle technische Cache-Version lautet:
-                <strong><code><span data-zahl="cache">asic-handel-v2.1.2</span></code></strong>.
+                <strong><code><span data-zahl="cache">asic-handel-v2.2.0</span></code></strong>.
             </p>
 
             <ul>
@@ -622,7 +618,7 @@
 
                 <li>
                     Nicht zwischengespeichert werden die
-                    NAS-Endpunkte (<code>*.php</code>) sowie Anfragen
+                    Server-Endpunkte (<code>*.php</code>) sowie Anfragen
                     an fremde Adressen. Dadurch erscheinen offline keine
                     veralteten Dateilisten oder Begehungsdaten aus dem Cache.
                 </li>
@@ -782,11 +778,18 @@
             </p>
 
             <p>
-                Der Code selbst steht nicht im Quelltext. Der Betreiber legt ihn
-                in <code>zugang-config.js</code> fest; dort steht nur seine
-                SHA-256-Prüfsumme (Anleitung in der Datei). Nach erfolgreicher
-                Eingabe merkt sich das Gerät die Prüfsumme; ändert der Betreiber
-                den Code, fragt die App einmal neu.
+                Der Code steht nicht im Quelltext, sondern als SHA-256-Prüfsumme
+                in <code>zugang-config.js</code> (Hauptordner). Dort kann der
+                Betreiber einen neuen Code hinterlegen oder die Abfrage mit
+                <code>aktiv: false</code> abschalten. Die Eingabe wird im Browser
+                gehasht (Web Crypto, ohne HTTPS mit eingebauter Ersatzfunktion)
+                und mit der Prüfsumme verglichen.
+            </p>
+
+            <p>
+                Nach erfolgreicher Eingabe wird die Prüfsumme des gültigen Codes
+                pro Gerät/Browser lokal gespeichert. Wird der Code geändert,
+                passt sie nicht mehr und die App fragt einmal neu.
             </p>
 
         </div>
@@ -798,11 +801,11 @@
                 Kein echter Zugriffsschutz
             </div>
 
-            Die Abfrage läuft nur im Browser und lässt sich über einen
-            normalen Browser-Tab oder den Browser-Speicher umgehen. Sie dient
-            als Hürde gegen zufälliges Herumstöbern, nicht als
-            Zugriffsschutz. Echten Schutz liefern Firmennetz,
-            Zugriffsschlüssel und ggf. eine Anmeldung am Webserver.
+            Die Prüfung findet im Browser statt. Der Code selbst ist zwar nicht
+            mehr lesbar, die Abfrage lässt sich von technisch versierten
+            Personen aber umgehen. Sie ersetzt deshalb keinen serverseitigen
+            Schutz (Firmennetz, Zugriffsschlüssel in <code>config.php</code>,
+            ggf. Anmeldung am Webserver).
 
         </div>
 
@@ -855,7 +858,7 @@
 
                 <tr>
                     <td>verlauf.html</td>
-                    <td>Mein Verlauf (lokales Archiv) und Team-Archiv (NAS)</td>
+                    <td>Mein Verlauf (lokales Archiv) und Team-Archiv (Server)</td>
                 </tr>
 
                 <tr>
@@ -866,6 +869,16 @@
                 <tr>
                     <td>auswertung-team.html</td>
                     <td>Auswertung aller Begehungen im Team-Archiv</td>
+                </tr>
+
+                <tr>
+                    <td>einstellungen.html</td>
+                    <td>Server-Adresse und Zugriffsschlüssel</td>
+                </tr>
+
+                <tr>
+                    <td>hilfe.html</td>
+                    <td>Bedienungsanleitung und FAQ</td>
                 </tr>
 
                 <tr>
@@ -884,13 +897,8 @@
                 </tr>
 
                 <tr>
-                    <td>einstellungen.html</td>
-                    <td>NAS-Server-Adresse und Zugriffsschlüssel</td>
-                </tr>
-
-                <tr>
-                    <td>hilfe.html</td>
-                    <td>Bedienungsanleitung und FAQ</td>
+                    <td>quellen.html</td>
+                    <td>Übersicht der Rechtsgrundlagen und Regelwerke mit Suche</td>
                 </tr>
 
                 <tr>
@@ -1688,12 +1696,11 @@
         <div class="doku-box ok">
 
             <div class="doku-box-title">
-                NAS-Speicherung (save.php / list.php / load.php)
+                Server-Speicherung (save.php / list.php / load.php)
             </div>
 
-            Über „Datei ▾ → Auf NAS speichern" bzw. „Vom NAS laden" lässt
-            sich der aktuelle Begehungsstand zusätzlich auf einer Synology
-            sichern, über drei serverseitige PHP-Skripte. Standardmäßig
+            Über „Datei ▾ → Auf Server speichern" bzw. „Vom Server laden" lässt
+            sich der aktuelle Begehungsstand zusätzlich auf einem Server sichern, über drei serverseitige PHP-Skripte. Standardmäßig
             wird eine relative Adresse im selben Verzeichnis wie die App
             verwendet; unter „Einstellungen" lässt sich stattdessen eine
             externe Server-Adresse hinterlegen (<code>nasUrl()</code> baut
@@ -1706,18 +1713,17 @@
                 <li>Voraussetzung zum Speichern: Datum und Marktnummer
                     müssen in den Betriebsdaten ausgefüllt sein</li>
                 <li>Von der lokalen Speicherung komplett getrennt – ein
-                    fehlgeschlagener NAS-Zugriff hat keinen Einfluss auf
+                    fehlgeschlagener Server-Zugriff hat keinen Einfluss auf
                     lokal gespeicherte Daten</li>
                 <li>Bei externer Adresse (andere Herkunft als die App
                     selbst) muss der Zielserver CORS für die App-Adresse
                     erlauben</li>
                 <li><code>list.php</code>/<code>load.php</code> erkennen
                     sowohl die von <code>save.php</code> selbst erzeugten
-                    Dateien als auch manuell (z. B. per File Station)
-                    eingespielte Exporte aus „JSON exportieren"/„JSON per
+                    Dateien als auch manuell in den Datenordner eingespielte Exporte aus „JSON exportieren"/„JSON per
                     Mail teilen" — beide erscheinen im Team-Archiv</li>
                 <li><code>list.php</code> liefert je Datei Datum, Marktnummer,
-                    Firma und PLZ/Ort für die Anzeige in „Vom NAS laden"
+                    Firma und PLZ/Ort für die Anzeige in „Vom Server laden"
                     und im Team-Archiv</li>
                 <li>Wird für denselben Markt am selben Tag erneut
                     gespeichert, ersetzt <code>save.php</code> die Datei.
@@ -1739,8 +1745,8 @@
             </div>
 
             Zwei Reiter: „Mein Verlauf" (lokal archivierte Begehungen,
-            IndexedDB) und „Team-Archiv (NAS)" (alle über <code>list.php</code>
-            gefundenen, von beliebigen Nutzern auf dem NAS gespeicherten
+            IndexedDB) und „Team-Archiv (Server)" (alle über <code>list.php</code>
+            gefundenen, von beliebigen Nutzern auf dem Server gespeicherten
             Begehungen). Beide bieten „PDF exportieren" sowie „In App
             anzeigen" — lädt die jeweilige Begehung zurück in den
             laufenden Arbeitsstand (nach Bestätigung, da der aktuell
@@ -1755,11 +1761,27 @@
                     Text-/Bewertungsdaten) — beim Wiederherstellen wird
                     ein vorhandener lokaler Fotobestand deshalb nur
                     geleert, nicht ersetzt</li>
-                <li>Beide Reiter nur verfügbar, wenn die App direkt über
-                    die Synology aufgerufen wird oder eine Server-Adresse
+                <li>Beide Reiter nur verfügbar, wenn die App direkt über die Server-Adresse aufgerufen wird oder eine Server-Adresse
                     in den Einstellungen hinterlegt wurde</li>
             </ul>
 
+        </div>
+
+
+        <div class="card doku-card">
+            <h3>Wiederholungsbegehung</h3>
+            <p>
+                Jeder Eintrag im eigenen Verlauf und im Team-Archiv hat den Knopf
+                „Wiederholungsbegehung“. <code>buildFollowUpState()</code> in
+                <code>js/app.js</code> erzeugt daraus einen neuen Arbeitsstand:
+            </p>
+            <ul>
+                <li>Betriebsdaten, <code>notApplicable</code> und <code>subgroupNotApplicable</code> werden übernommen, <code>datum</code> wird auf heute gesetzt.</li>
+                <li>Jede Maßnahme mit Status ungleich „erledigt“ wird übernommen; der zugehörige Prüfpunkt wird auf „Mangel“ gesetzt, der Kommentar übernommen.</li>
+                <li>Die übernommene Maßnahme trägt <code>vorbegehung: { datum, status }</code>. Prüfkatalog, Aktionsplan und PDF zeigen daraus „Offen aus Vorbegehung vom …“.</li>
+                <li>Unterschriften und Fotos werden nicht übernommen; der laufende Arbeitsstand und die lokalen Fotos werden nach Rückfrage ersetzt.</li>
+                <li>Übernommen wird nur die Begehung. Die Gefährdungsbeurteilung auf dem Gerät bleibt unverändert; bei einem Markt-Datensatz aus dem Team-Archiv wird der Begehungsteil verwendet.</li>
+            </ul>
         </div>
 
 
@@ -1771,7 +1793,7 @@
 
             Neben dem jeweiligen Download-Button („CSV herunterladen" /
             „JSON exportieren") gibt es „… per Mail teilen" — für den
-            Fall, dass kein NAS-Zugriff möglich ist und die Daten
+            Fall, dass kein Server-Zugriff möglich ist und die Daten
             stattdessen manuell weitergegeben werden sollen. Beide nutzen
             <code>navigator.share()</code> mit vorgefertigtem Betreff/Text
             und fallen ohne Unterstützung dafür automatisch auf den
@@ -1821,12 +1843,97 @@
                 <code>auswertung-team.html</code> bietet dieselben
                 Diagramme sowie ebenfalls Rohdaten-Export (CSV) und
                 Gesamtauswertung als PDF, nur bezogen auf alle im
-                Team-Archiv (NAS) gefundenen Begehungen statt nur die
+                Team-Archiv (Server) gefundenen Begehungen statt nur die
                 lokal auf diesem Gerät archivierten. Die eigentliche
                 Erzeugungslogik ist dieselbe wie bei
                 <code>auswertung.html</code> (<code>js/auswertung.js</code>
                 wird dafür auch auf dieser Seite mitgeladen) – nur die
                 Datenquelle unterscheidet sich.
+            </p>
+
+            <p>
+                <strong>Ladestatus</strong>: Oberhalb der
+                Filter zeigt <code>auswertung-team.html</code> einen
+                Statusbalken (<code>#team-lade-status</code>,
+                <code>setzeTeamLadeStatus()</code> in
+                <code>js/auswertung-team.js</code>). Während des Ladens:
+                Spinner, „x von y Begehungen geladen" und Fortschrittsbalken;
+                die Dateien werden weiterhin parallel geladen, jede fertige
+                Datei zählt hoch. Danach grün „vollständig geladen" mit
+                Anzahl, Dauer und Uhrzeit, gelb „teilweise geladen", wenn
+                Dateien übersprungen wurden, oder rot mit Fehlergrund. Ein
+                Knopf „Neu laden" bzw. „Erneut versuchen" lädt das
+                Team-Archiv ohne Seitenneuladen erneut. Filter und
+                Export-Knöpfe sind während des Ladens gesperrt.
+            </p>
+
+            <p>
+                <strong>Ladestatus im Team-Archiv</strong>:
+                Dieselbe Anzeige steht auf <code>verlauf.html</code> im Reiter
+                „Team-Archiv“ über der Liste (<code>#team-archive-loading</code>,
+                <code>setzeTeamArchivStatus()</code> in <code>js/verlauf.js</code>).
+                Da <code>list.php</code> die Liste in einem Abruf liefert, zeigt
+                der Balken einen durchlaufenden statt eines prozentualen
+                Fortschritts. Danach grün mit Anzahl, Dauer und Uhrzeit oder rot
+                mit Fehlergrund und „Erneut versuchen“. Auch die Knöpfe an den
+                Einträgen (PDF, In App anzeigen, Wiederholungsbegehung) melden
+                das Laden der einzelnen Begehung dort; während des Ladens sind
+                die Knöpfe gesperrt.
+            </p>
+
+            <p>
+                <strong>Diagnose, Fehlerprotokoll, Sicherungshinweis und Suche</strong>:
+                (1) <em>Diagnose</em> auf <code>einstellungen.html</code>
+                (<code>erstelleDiagnoseText()</code> in
+                <code>js/einstellungen.js</code>): Version/Ausgabestand,
+                Service-Worker-Cache (Abgleich mit dem Ausgabestand der Seite),
+                Aufruf-Adresse, Server-Adresse, ob ein Schlüssel hinterlegt ist
+                (nie der Inhalt), Verbindungstest (<code>pruefeServerVerbindung()</code>,
+                auch vom Knopf „Verbindung testen“ genutzt), Sicherungsstand,
+                lokales Archiv, Fotos, Speicher (<code>navigator.storage</code>),
+                Gerät/Browser und die letzten Fehlermeldungen. Kopieren
+                (Zwischenablage, Ersatzweg über Markieren) oder per
+                <code>mailto:</code>.
+                (2) <em>Fehlerprotokoll</em> in <code>js/app.js</code>
+                (<code>merkeFehler()</code>, localStorage
+                <code>asicFehlerLog</code>, letzte 10): rote Hinweise
+                (<code>showToast(…, 'error')</code>) und unerwartete
+                Programmfehler.
+                (3) <em>Sicherungshinweis</em> (auf
+                <code>massnahmen.html</code> unterhalb der Unterschriften und des
+                Foto-Hinweises, Platzhalter <code>#sicherungs-hinweis-platz</code>): Nach „Auf Server
+                speichern“, „Vom Server laden“ und „In App anzeigen“ aus dem
+                Team-Archiv wird ein Fingerabdruck des Bearbeitungsstands
+                gemerkt (localStorage <code>asicServerStand</code>, mit Markt
+                und Datum). Der Fingerabdruck umfasst Begehung und
+                Gefährdungsbeurteilung, weil beide gemeinsam als
+                Markt-Datensatz gespeichert werden; „Jetzt sichern“ speichert
+                den Markt-Datensatz. Weicht der Stand ab, erscheint ein Hinweis mit
+                „Jetzt sichern“ und „Später“ (<code>aktualisiereSicherungsHinweis()</code>);
+                nur wenn Server-Funktionen verfügbar sind.
+                (4) <em>Suche im Team-Archiv</em> auf <code>verlauf.html</code>:
+                alle Suchwörter müssen in Marktnummer, Ort, Datum oder
+                Dateiname vorkommen; Trefferzahl daneben.
+            </p>
+
+            <p>
+                <strong>Frische Dateien und schneller Seitenaufbau</strong>:
+                Alle Einbindungen von <code>js/…</code> und <code>css/…</code>
+                tragen den Zusatz <code>?v=2.2.0</code> (Ausgabestand <code>BUILD</code> aus <code>sw.js</code>), auch auf den Seiten der Gefährdungsbeurteilung. Diese Dateien (und die
+                Schriften) liefert der Service Worker sofort aus
+                dem Cache auf dem Gerät, ohne Rückfrage beim Server; nach einem
+                Update ändert sich der Zusatz, dadurch werden sie automatisch
+                neu geladen. HTML-Seiten, <code>zugang-config.js</code> (ohne
+                Zusatz, damit eine Änderung des Betreibers sofort greift),
+                Manifest und Icons werden zuerst beim Server nachgefragt
+                (<code>cache: 'no-cache'</code>), offline aus dem Cache.
+                <code>js/jspdf.umd.min.js</code> wird mit <code>defer</code>
+                geladen und blockiert den Seitenaufbau nicht mehr.
+                <code>js/auswertung.js</code> liest das lokale Archiv nur noch
+                auf <code>auswertung.html</code>, nicht mehr auf der
+                Team-Auswertung. Bei jedem Update <code>?v=</code>, <code>BUILD</code>/<code>CACHE_NAME</code>,
+                <code>APP_VERSION</code> in <code>sw.js</code> und
+                <code>APP_REVISION</code> gemeinsam hochzählen.
             </p>
 
             <p>
@@ -1881,7 +1988,7 @@
                     also garantiert identische Zahlen</li>
                 <li><code>zeitwertVonBegehung(r)</code> ermittelt einen
                     Zeitstempel unabhängig von der Datenquelle (lokale
-                    Datensätze: <code>createdAt</code>; NAS-Datensätze
+                    Datensätze: <code>createdAt</code>; Server-Datensätze
                     ohne dieses Feld: ersatzweise aus
                     <code>companyInfo.datum</code>)</li>
             </ul>
@@ -1896,7 +2003,7 @@
             </div>
 
             Zwei Buttons auf der Verlauf-Seite, neben „Mein Verlauf" und
-            „Team-Archiv (NAS)". Beide sind reine Links auf eigenständige
+            „Team-Archiv (Server)". Beide sind reine Links auf eigenständige
             Seiten, kein eingebettetes Panel — optisch identisch gestaltet
             (<code>&lt;a class="btn btn-secondary btn-small verlauf-tab"&gt;</code>).
 
@@ -1904,7 +2011,7 @@
                 <li>„Auswertung Verlauf" → <code>auswertung.html</code>
                     (lokales Archiv)</li>
                 <li>„Auswertung Team" → <code>auswertung-team.html</code>
-                    (Team-Archiv/NAS; dieselben drei Bereiche
+                    (Team-Archiv/Server; dieselben drei Bereiche
                     Kategorien-Schwachstellen/Auffällige Märkte/Verlauf
                     pro Markt, eigener Zeitraum-Filter; lädt jede
                     Team-Datei einzeln, defekte Dateien werden
@@ -1975,10 +2082,10 @@
                     <td>
                         Alle Nutzereingaben und von außen geladenen Werte
                         (Foto-Kommentare, Mängelbeschreibung, Maßnahmentexte,
-                        Marktnummer, NAS-Dateiliste, Fehlermeldungen) werden
+                        Marktnummer, Server-Dateiliste, Fehlermeldungen) werden
                         mit <code>escapeHtml()</code> aus <code>js/app.js</code>
                         maskiert, bevor sie in <code>innerHTML</code> gelangen.
-                        Importierte JSON-Dateien und NAS-Daten gelten als nicht
+                        Importierte JSON-Dateien und Server-Daten gelten als nicht
                         vertrauenswürdig.
                     </td>
                 </tr>
@@ -2017,9 +2124,7 @@
                     <td>
                         Vorschaubilder werden nur als
                         <code>data:image/…;base64</code> übernommen
-                        (<code>sicheresVorschaubild()</code>, in der GBO <code>safeImgSrc()</code>
-                        – nur eingebettete Bilder oder Gerätespeicher-Verweise),
-                        der Maßnahmen-Status
+                        (<code>sicheresVorschaubild()</code>), der Maßnahmen-Status
                         nur aus den drei bekannten Werten (<code>sichererStatus()</code>).
                         <code>escapeHtml()</code> in <code>js/auswertung-logik.js</code>
                         ist identisch mit der Fassung in <code>js/app.js</code>
@@ -2094,7 +2199,7 @@
                 </tr>
 
                 <tr>
-                    <td>NAS-Dateien</td>
+                    <td>Server-Dateien</td>
                     <td>
                         <code>load.php</code> akzeptiert nur Dateinamen, die einem der
                         beiden bekannten Muster entsprechen, und entfernt
@@ -2107,10 +2212,11 @@
                 <tr>
                     <td>Zugriffsschlüssel</td>
                     <td>
-                        Wird mit <code>hash_equals()</code> geprüft. Der Schlüssel
-                        steht zentral in <code>config.php</code> (standardmäßig
-                        leer) und muss in den App-Einstellungen jedes Geräts
-                        identisch hinterlegt werden.
+                        Optional. Wird mit <code>hash_equals()</code> geprüft.
+                        Der Schlüssel steht zentral in <code>config.php</code>
+                        (standardmäßig leer) und muss in den App-Einstellungen
+                        jedes Geräts identisch hinterlegt werden (siehe
+                        Abschnitt 11).
                     </td>
                 </tr>
 
@@ -2119,7 +2225,7 @@
                     <td>
                         Es werden weder Schriften noch Bibliotheken von Dritten
                         geladen. Die einzigen Netzwerkzugriffe sind die
-                        konfigurierten NAS-Endpunkte.
+                        konfigurierten Server-Endpunkte.
                     </td>
                 </tr>
 
@@ -2130,7 +2236,7 @@
                 <div class="doku-box-title">Bei zukünftigen Änderungen</div>
                 <p>
                     Jeden neuen Text aus Eingabefeldern, Dateien oder vom Server
-                    mit <code>escapeHtml()</code> (in der GBO <code>esc()</code>) ausgeben – auch Datumswerte und
+                    mit <code>escapeHtml()</code> ausgeben – auch Datumswerte und
                     IDs. Keine <code>onclick="…"</code> und keine
                     <code>&lt;script&gt;…&lt;/script&gt;</code> in Seiten schreiben,
                     sondern <code>aktionAttr()</code> bzw. eigene .js-Dateien
@@ -2174,7 +2280,7 @@
             <div class="doku-table-wrap">
             <table class="doku-table">
                 <tr><th>Angaben</th><th></th></tr>
-                <tr><td>Prüfgegenstand</td><td>ASiC Handel, Rev. <span data-zahl="revision">2.1.2</span> (Begehungsliste und Gefährdungsbeurteilung), Service Worker <code><span data-zahl="cache_version">v2.1.2</span></code></td></tr>
+                <tr><td>Prüfgegenstand</td><td>ASiC Handel, Rev. <span data-zahl="revision">2.2.0</span> (Begehungsliste und Gefährdungsbeurteilung), Service Worker <code><span data-zahl="cache_version">v2.2.0</span></code></td></tr>
                 <tr><td>Prüfdatum</td><td>25.10.2026</td></tr>
                 <tr><td>Methode</td><td>Quellcode-Durchsicht, Angriffstests im Browser (Chromium) mit präparierten Begehungsdaten, Tests der Server-Endpunkte (PHP 8.3)</td></tr>
                 <tr><td>Ergebnis</td><td>Alle Schwachstellen im Programmcode sind behoben und durch Tests belegt. Offen sind nur noch Punkte der Einrichtung und des Betriebs sowie bewertete Restrisiken (siehe unten).</td></tr>
@@ -2316,7 +2422,7 @@
 
             <p>
                 Ergebnisse für den aktuellen Stand
-                <code><span data-zahl="cache_version">v2.1.2</span></code> mit präparierten
+                <code><span data-zahl="cache_version">v2.2.0</span></code> mit präparierten
                 Daten bzw. gezielten Anfragen.
             </p>
 
@@ -2384,7 +2490,7 @@
                     <td>Abruf unterbleibt, Hinweis</td>
                 </tr>
                 <tr>
-                    <td>Bedienung: Prüfkatalog, Schalter, Maßnahmen mit Foto, Verlauf, Team-Archiv (Markt speichern und laden), GBO mit Antwort, Bildbeleg, Überprüfung und PDF, Hilfe- und Quellensuche, Offline-Cache</td>
+                    <td>Bedienung: Prüfkatalog, Schalter, Maßnahmen mit Foto, Verlauf, Team-Archiv (Markt speichern und laden, Suche, Ladestatus, Wiederholungsbegehung), Sicherungshinweis, Team-Auswertung, Diagnose, GBO mit Antwort, Bildbeleg, Überprüfung und PDF, Hilfe- und Quellensuche, Offline-Cache</td>
                     <td>funktioniert, keine Konsolenfehler</td>
                 </tr>
             </table>
@@ -2434,13 +2540,235 @@
 
 
     <!-- ================================================================ -->
-    <!-- 11. GEFÄHRDUNGSBEURTEILUNG UND MARKT-DATENSATZ                   -->
+    <!-- 11. BETRIEB, EINRICHTUNG UND UPDATES                             -->
+    <!-- ================================================================ -->
+
+    <section class="doku-section" id="betrieb">
+
+        <div class="section-title">
+            Abschnitt 11
+        </div>
+
+        <h2>
+            Betrieb, Einrichtung und Updates
+        </h2>
+
+        <div class="card doku-card">
+
+            <p>
+                Die App-Dateien laufen vollständig im Browser. Nur „Auf Server
+                speichern“, „Vom Server laden“, das Team-Archiv und die
+                Team-Auswertung sprechen die PHP-Endpunkte an. App und Endpunkte
+                können im selben Ordner liegen (Regelfall) oder auf
+                verschiedenen Servern, z. B. App über GitHub Pages und Endpunkte
+                auf einem eigenen Speicherserver.
+            </p>
+
+        </div>
+
+        <h3>
+            Konfiguration
+        </h3>
+
+        <div class="card doku-card">
+
+            <p>
+                Schlüssel und Codes stehen nicht in dieser Dokumentation und
+                gehören nicht in ein öffentliches Repository.
+            </p>
+
+            <div class="doku-table-wrap">
+            <table class="doku-table">
+                <tr>
+                    <th>Einstellung</th>
+                    <th>Ort</th>
+                    <th>Wirkung</th>
+                </tr>
+                <tr>
+                    <td><code>datenOrdner</code></td>
+                    <td>config.php</td>
+                    <td>Ablage der JSON-Dateien. Empfohlen außerhalb des Web-Verzeichnisses (z. B. <code>/srv/asic-daten</code>); alternativ Unterordner <code>daten</code> mit Sperrdateien für Apache (.htaccess) und IIS (web.config).</td>
+                </tr>
+                <tr>
+                    <td><code>apiKey</code> (Zugriffsschlüssel)</td>
+                    <td>config.php</td>
+                    <td>Leer = kein Schlüssel. Gesetzt: save/list/load antworten ohne passende Kopfzeile <code>X-Api-Key</code> mit HTTP 401; pruefen.php öffnet nur mit <code>?schluessel=…</code>.</td>
+                </tr>
+                <tr>
+                    <td>Zugangscode</td>
+                    <td>zugang-config.js (<code>aktiv</code>, <code>codeHash</code>)</td>
+                    <td>Einmalige Abfrage beim ersten Start der installierten App. Gespeichert ist nur die SHA-256-Prüfsumme.</td>
+                </tr>
+                <tr>
+                    <td>Server-Adresse, Zugriffsschlüssel</td>
+                    <td>Einstellungen-Seite (localStorage <code>nasBaseUrl</code>, <code>nasApiKey</code>)</td>
+                    <td>Je Gerät und Browser. Leer = Endpunkte im selben Ordner wie die App.</td>
+                </tr>
+            </table>
+            </div>
+
+            <p><strong>Zugriffsschlüssel erneuern</strong></p>
+            <ol>
+                <li>Neuen Wert erzeugen, z. B. <code>openssl rand -hex 24</code> (mindestens 32 Zeichen).</li>
+                <li>In config.php bei <code>apiKey</code> eintragen.</li>
+                <li>Auf jedem Gerät unter Einstellungen eintragen, speichern und „Verbindung testen“.</li>
+                <li>Mit <code>pruefen.php?schluessel=&lt;Schlüssel&gt;</code> kontrollieren.</li>
+            </ol>
+
+            <p><strong>Zugangscode ändern</strong></p>
+            <ol>
+                <li>Prüfsumme erzeugen: <code>printf '%s' 'NeuerCode' | sha256sum</code> (Groß-/Kleinschreibung zählt).</li>
+                <li>Den 64-stelligen Wert in zugang-config.js bei <code>codeHash</code> eintragen.</li>
+                <li>Alle Geräte fragen den neuen Code beim nächsten Start einmal ab; <code>aktiv: false</code> schaltet die Abfrage ab.</li>
+            </ol>
+
+        </div>
+
+        <h3>
+            Installation auf einem Server
+        </h3>
+
+        <div class="card doku-card">
+
+            <p>
+                Voraussetzungen: Webserver mit PHP 7.0 oder neuer (empfohlen
+                8.x), HTTPS mit gültigem Zertifikat, <code>post_max_size</code>
+                mindestens 20M. Apache, nginx und IIS sind möglich.
+            </p>
+
+            <ol>
+                <li>App-Ordner vollständig in das Web-Verzeichnis kopieren.</li>
+                <li>Datenordner anlegen; der Webserver-/PHP-Benutzer braucht Lese- und Schreibrecht.</li>
+                <li>In config.php <code>datenOrdner</code> und <code>apiKey</code> eintragen.</li>
+                <li>Liegt der Datenordner im Web-Verzeichnis: Apache braucht <code>AllowOverride</code> für die .htaccess, IIS die web.config, nginx eine eigene Sperrregel.</li>
+                <li><code>pruefen.php</code> aufrufen; alle Punkte müssen grün sein. Danach löschen oder umbenennen, da die Seite Server-Pfade anzeigt.</li>
+                <li>App auf dem iPad über „Zum Home-Bildschirm“, am PC über „App installieren“ einrichten.</li>
+            </ol>
+
+        </div>
+
+        <div class="doku-box">
+            <div class="doku-box-title">
+                App und Endpunkte auf verschiedenen Servern
+            </div>
+            Der Speicherserver muss CORS für die Adresse der App erlauben,
+            einschließlich der Kopfzeilen <code>Content-Type</code> und
+            <code>X-Api-Key</code> sowie der OPTIONS-Vorabanfrage. Die
+            PHP-Dateien setzen diese Kopfzeilen nicht selbst; die Freigabe
+            gehört in die Webserver-Konfiguration. Liegen App und Endpunkte im
+            selben Ordner, entfällt das.
+        </div>
+
+        <h3>
+            Updates
+        </h3>
+
+        <div class="card doku-card">
+
+            <p>
+                Jedes Update braucht eine neue Versionsnummer, sonst liefert der
+                Service Worker weiter die zwischengespeicherten Dateien aus.
+            </p>
+
+            <div class="doku-table-wrap">
+            <table class="doku-table">
+                <tr>
+                    <th>Stelle</th>
+                    <th>Aktuell</th>
+                </tr>
+                <tr>
+                    <td><code>APP_REVISION</code> / <code>APP_REVISION_DATE</code> in js/app.js</td>
+                    <td><span data-zahl="revision">2.2.0</span> / <span data-zahl="revision_datum">25.10.2026</span></td>
+                </tr>
+                <tr>
+                    <td><code>CACHE_NAME</code> und Kommentar <code>SERVICE-WORKER-VERSION</code> in sw.js</td>
+                    <td>asic-handel-v<span data-zahl="revision">2.2.0</span></td>
+                </tr>
+            </table>
+            </div>
+
+            <ol>
+                <li>Geänderte Dateien auf den Server bzw. in das Repository übertragen. config.php und zugang-config.js des Servers dabei nicht überschreiben.</li>
+                <li>Versionsnummer an allen Stellen erhöhen.</li>
+                <li>Neue Skriptdateien auf allen Seiten einbinden, die js/app.js nutzen.</li>
+                <li>Nach Änderungen am Prüfkatalog oder an Dateien <code>python tools/doku-zahlen.py</code> ausführen.</li>
+                <li>Gerät einmal online öffnen; die Fußzeile zeigt die aktive Revision.</li>
+            </ol>
+
+        </div>
+
+        <h3>
+            Datensicherung und Fehlerbehebung
+        </h3>
+
+        <div class="card doku-card">
+
+            <p>
+                Auf dem Server den Datenordner einschließlich
+                <code>versionen/</code> in die reguläre Sicherung aufnehmen. Auf
+                den Geräten liegen laufende Begehung, Fotos und Archiv im
+                Browser-Speicher; Fotos werden nicht auf den Server übertragen,
+                Vorschaubilder und Unterschriften schon.
+            </p>
+
+            <div class="doku-table-wrap">
+            <table class="doku-table">
+                <tr>
+                    <th>Meldung / Symptom</th>
+                    <th>Ursache</th>
+                    <th>Abhilfe</th>
+                </tr>
+                <tr>
+                    <td>„Ungültiger oder fehlender Zugriffsschlüssel“ (HTTP 401)</td>
+                    <td>Schlüssel im Gerät passt nicht zu config.php</td>
+                    <td>Schlüssel unter Einstellungen neu eintragen</td>
+                </tr>
+                <tr>
+                    <td>Verbindungstest ohne Antwort</td>
+                    <td>Server nicht erreichbar oder CORS fehlt</td>
+                    <td>Adresse im Browser öffnen; bei getrennten Servern CORS freigeben</td>
+                </tr>
+                <tr>
+                    <td>„Datenordner ist in config.php nicht eingetragen“</td>
+                    <td><code>datenOrdner</code> leer</td>
+                    <td>config.php ergänzen</td>
+                </tr>
+                <tr>
+                    <td>„Der Datenordner konnte nicht erstellt werden“</td>
+                    <td>Rechte fehlen</td>
+                    <td>Ordner anlegen, Schreibrecht für den PHP-Benutzer</td>
+                </tr>
+                <tr>
+                    <td>„Keine Daten empfangen“</td>
+                    <td><code>post_max_size</code> zu klein</td>
+                    <td>auf mindestens 20M setzen</td>
+                </tr>
+                <tr>
+                    <td>Geräte zeigen alten Stand</td>
+                    <td>Versionsnummer nicht erhöht</td>
+                    <td><code>CACHE_NAME</code> und <code>APP_REVISION</code> anheben</td>
+                </tr>
+                <tr>
+                    <td>App nicht installierbar, kein Offline-Betrieb</td>
+                    <td>kein HTTPS</td>
+                    <td>gültiges Zertifikat einrichten</td>
+                </tr>
+            </table>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================================================ -->
+    <!-- 12. GEFÄHRDUNGSBEURTEILUNG UND MARKT-DATENSATZ                   -->
     <!-- ================================================================ -->
 
     <section class="doku-section" id="gbo">
 
         <div class="section-title">
-            Abschnitt 11
+            Abschnitt 12
         </div>
 
         <h2>
@@ -2487,14 +2815,24 @@
                 fasst Begehung, GBO und Verknüpfungen zu einem Container
                 (Format <code>ASiC-Marktcontainer</code>, Formatversion 2) zusammen.
                 Beide Teilstände bleiben darin getrennt. Der Container wird als
-                JSON-Datei gesichert oder über <code>save.php</code> auf das NAS
+                JSON-Datei gesichert oder über <code>save.php</code> auf den Server
                 geschrieben; beim Laden erkennt die App das Format und stellt beide
                 Teile wieder her. Ältere Dateien nur mit Begehung oder nur mit GBO
                 bleiben ladbar.
             </p>
 
             <p>
-                Die Dateinamen auf dem NAS richten sich weiter nach
+                <strong>Team-Archiv:</strong> „Markt auf Server speichern“
+                (<code>saveStateToServer()</code>, auch „Jetzt sichern“ im
+                Sicherungshinweis) speichert immer den Markt-Datensatz.
+                Verlauf, Team-Auswertung und Wiederholungsbegehung lesen
+                daraus den Begehungsteil (<code>begehungAusDatensatz()</code>
+                in <code>js/app.js</code>); „In App anzeigen“ und „Vom Server
+                laden“ übernehmen zusätzlich die Gefährdungsbeurteilung.
+            </p>
+
+            <p>
+                Die Dateinamen auf dem Server richten sich weiter nach
                 Datum und Marktnummer aus den Betriebsdaten der Begehung.
             </p>
 
@@ -2504,13 +2842,13 @@
 
 
     <!-- ================================================================ -->
-    <!-- 11. DATEIÜBERSICHT                                               -->
+    <!-- 13. DATEIÜBERSICHT                                               -->
     <!-- ================================================================ -->
 
     <section class="doku-section" id="dateien">
 
         <div class="section-title">
-            Abschnitt 12
+            Abschnitt 13
         </div>
 
         <h2>
@@ -2541,7 +2879,7 @@
                 </tr>
                 <tr>
                     <td>massnahmen.html</td>
-                    <td class="zahl">710</td>
+                    <td class="zahl">720</td>
                     <td>Aktionsplan, Maßnahmenbearbeitung, Status und Unterschriften</td>
                 </tr>
                 <tr>
@@ -2571,8 +2909,8 @@
                 </tr>
                 <tr>
                     <td>verlauf.html</td>
-                    <td class="zahl">369</td>
-                    <td>Archivierte Begehungen (Mein Verlauf) und Team-Archiv (NAS)</td>
+                    <td class="zahl">395</td>
+                    <td>Archivierte Begehungen (Mein Verlauf) und Team-Archiv (Server)</td>
                 </tr>
                 <tr>
                     <td>auswertung.html</td>
@@ -2581,13 +2919,13 @@
                 </tr>
                 <tr>
                     <td>auswertung-team.html</td>
-                    <td class="zahl">879</td>
-                    <td>Auswertung aller Begehungen im Team-Archiv (NAS)</td>
+                    <td class="zahl">898</td>
+                    <td>Auswertung aller Begehungen im Team-Archiv (Server)</td>
                 </tr>
                 <tr>
                     <td>einstellungen.html</td>
-                    <td class="zahl">308</td>
-                    <td>Konfigurierbare externe NAS-Server-Adresse und Zugriffsschlüssel</td>
+                    <td class="zahl">372</td>
+                    <td>Server-Adresse, Zugriffsschlüssel, Verbindungstest und Diagnose</td>
                 </tr>
                 <tr>
                     <td>impressum.html</td>
@@ -2601,22 +2939,22 @@
                 </tr>
                 <tr>
                     <td>hilfe.html</td>
-                    <td class="zahl">1.334</td>
+                    <td class="zahl">939</td>
                     <td>Bedienungsanleitung und FAQ</td>
                 </tr>
                 <tr>
                     <td>dokumentation.html</td>
-                    <td class="zahl">2.965</td>
+                    <td class="zahl">3.315</td>
                     <td>Technische Dokumentation (diese Seite)</td>
                 </tr>
                 <tr>
                     <td>css/styles.css</td>
-                    <td class="zahl">1.905</td>
+                    <td class="zahl">2.683</td>
                     <td>Gesamtes gemeinsames Styling</td>
                 </tr>
                 <tr>
                     <td>js/app.js</td>
-                    <td class="zahl">3.329</td>
+                    <td class="zahl">3.650</td>
                     <td>Kernlogik, State-Verwaltung, Checkliste, PDF-Erzeugung, Export, Archivierung, NAS-Zugriff, Hilfsfunktionen (escapeHtml, todayIsoLocal) und Service-Worker-Registrierung</td>
                 </tr>
                 <tr>
@@ -2651,27 +2989,27 @@
                 </tr>
                 <tr>
                     <td>js/verlauf.js</td>
-                    <td class="zahl">280</td>
-                    <td>Bedienlogik der Archiv-/Verlaufseite inkl. Team-Archiv (NAS)</td>
+                    <td class="zahl">415</td>
+                    <td>Bedienlogik der Archiv-/Verlaufseite inkl. Team-Archiv (Server)</td>
                 </tr>
                 <tr>
                     <td>js/einstellungen.js</td>
-                    <td class="zahl">65</td>
+                    <td class="zahl">354</td>
                     <td>Bedienlogik der Einstellungsseite</td>
                 </tr>
                 <tr>
                     <td>js/auswertung-logik.js</td>
-                    <td class="zahl">493</td>
+                    <td class="zahl">494</td>
                     <td>Gemeinsame Auswertungs-Berechnungslogik (auswertung.html, auswertung-team.html, verlauf.html)</td>
                 </tr>
                 <tr>
                     <td>js/auswertung.js</td>
-                    <td class="zahl">792</td>
+                    <td class="zahl">797</td>
                     <td>Logik der Auswertungsseite</td>
                 </tr>
                 <tr>
                     <td>js/auswertung-team.js</td>
-                    <td class="zahl">233</td>
+                    <td class="zahl">334</td>
                     <td>Logik der Team-Auswertungsseite</td>
                 </tr>
                 <tr>
@@ -2701,8 +3039,8 @@
                 </tr>
                 <tr>
                     <td>sw.js</td>
-                    <td class="zahl">320</td>
-                    <td>Service Worker, Offline-Fähigkeit, Cache-Version v2.1.2</td>
+                    <td class="zahl">223</td>
+                    <td>Service Worker, Offline-Fähigkeit, Cache-Version v2.2.0</td>
                 </tr>
                 <tr>
                     <td>manifest.json</td>
@@ -2806,7 +3144,7 @@
                 </tr>
                 <tr>
                     <td>js/market-ui.js</td>
-                    <td class="zahl">9</td>
+                    <td class="zahl">25</td>
                     <td>Schaltflächen für die Gesamtsicherung des Marktes im Prüfkatalog</td>
                 </tr>
                 <tr>
@@ -2856,7 +3194,7 @@
                 </tr>
                 <tr>
                     <td>tools/doku-dateien.json</td>
-                    <td class="zahl">299</td>
+                    <td class="zahl">308</td>
                     <td>Dateiliste mit Beschreibungen für das Hilfsskript</td>
                 </tr>
                 <tr>
@@ -2884,6 +3222,16 @@
                     <td class="zahl">4,3 KB</td>
                     <td>Lizenztext der Schrift (SIL Open Font License 1.1)</td>
                 </tr>
+                <tr>
+                    <td>js/auswertung-team-pruefung.js</td>
+                    <td class="zahl">14</td>
+                    <td>Selbstprüfung der Team-Auswertung auf veraltete Programmdateien</td>
+                </tr>
+                <tr>
+                    <td>INSTALLATION.txt</td>
+                    <td class="zahl">9,8 KB</td>
+                    <td>Installationsanleitung für den Betrieb auf einem eigenen Server</td>
+                </tr>
                 <!-- DATEITABELLE:ENDE -->
 
             </table>
@@ -2891,7 +3239,7 @@
 
             <p>
                 <strong>Gesamt (eigener Code, ohne jsPDF und Schrift):</strong>
-                <span data-zahl="zeilen_gesamt">35.677</span> Zeilen
+                <span data-zahl="zeilen_gesamt">37.323</span> Zeilen
             </p>
 
             <p style="font-size:0.82rem; color:var(--ink-soft);">
@@ -2957,9 +3305,9 @@
 </footer>
 
 
-<script src="js/audit-data.js"></script>
-<script src="js/text.js"></script>
-<script src="js/app.js"></script>
+<script src="js/audit-data.js?v=2.2.0"></script>
+<script src="js/text.js?v=2.2.0"></script>
+<script src="js/app.js?v=2.2.0"></script>
 
 <!-- Quellenverzeichnis ist für diesen Dokumentstand detailliert und statisch dokumentiert. -->
 

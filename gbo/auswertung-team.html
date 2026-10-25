@@ -4,9 +4,10 @@
 <head>
 
 <meta charset="UTF-8">
-<!-- Sicherheitsrichtlinie: nur eigene Skripte, keine eingebetteten Skripte oder
-     Inline-Handler. connect-src erlaubt https:, damit ein Team-Archiv auf einem
-     anderen Server (Einstellungen) erreichbar bleibt. -->
+
+<!-- Sicherheitsrichtlinie: nur eigene Skripte, keine eingebetteten
+     Skripte oder Inline-Handler. connect-src erlaubt https:, damit ein Team-Archiv
+     auf einem anderen Server (Einstellungen) erreichbar bleibt. -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https:; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="referrer" content="same-origin">
 
@@ -21,11 +22,12 @@
 
 <link
     rel="stylesheet"
-    href="css/styles.css"
+    href="css/styles.css?v=2.2.0"
 >
 
 <script src="zugang-config.js"></script>
-<script src="js/access-gate.js"></script>
+
+<script src="js/access-gate.js?v=2.2.0"></script>
 
 <link
     rel="manifest"
@@ -47,7 +49,7 @@
     content="#1c2226"
 >
 
-<script src="js/jspdf.umd.min.js"></script>
+<script src="js/jspdf.umd.min.js?v=2.2.0" defer></script>
 
 
 <style>
@@ -445,8 +447,6 @@
                 Verlauf
             </a>
 
-        
-
             <a href="gbo.html">
                 Gefährdungsbeurteilung
             </a>
@@ -483,7 +483,7 @@
 
 
         <p>
-            Wertet alle im Team-Archiv (NAS) gefundenen Begehungen
+            Wertet alle im Team-Archiv (Server) gefundenen Begehungen
             gemeinsam aus — unabhängig davon, wer sie gespeichert hat
         </p>
 
@@ -491,7 +491,7 @@
         <div class="doku-meta">
 
             <span class="doku-meta-item">
-                App-Revision 2.1.2
+                App-Revision 2.2.0
             </span>
 
             <span class="doku-meta-item" id="team-anzahl-info">
@@ -515,13 +515,31 @@
         </div>
 
         Diese Seite lädt für jede im Team-Archiv gefundene Datei den
-        vollständigen Inhalt einzeln vom NAS und wertet alle gemeinsam
+        vollständigen Inhalt einzeln vom Server und wertet alle gemeinsam
         aus. Bei vielen Begehungen kann das einen Moment dauern.
         Einzelne nicht ladbare Dateien werden übersprungen, ohne die
         gesamte Auswertung zu blockieren. Für die Auswertung der nur
         lokal auf diesem Gerät archivierten Begehungen siehe stattdessen
         die <a href="auswertung.html">normale Auswertungsseite</a>.
 
+    </div>
+
+
+
+    <!-- ================================================================== -->
+    <!-- LADESTATUS                                          -->
+    <!-- Zeigt an, ob das Team-Archiv gerade geladen wird, wie weit es ist, -->
+    <!-- ob es fertig ist oder ob ein Fehler aufgetreten ist.               -->
+    <!-- ================================================================== -->
+
+    <div id="team-lade-status" class="lade-status is-laden" role="status" aria-live="polite">
+        <span class="lade-status-icon" aria-hidden="true"></span>
+        <div class="lade-status-text">
+            <div class="lade-status-titel" id="team-lade-titel">Team-Archiv wird geladen …</div>
+            <div class="lade-status-detail" id="team-lade-detail">Verbindung zum Server wird aufgebaut</div>
+            <div class="lade-status-balken" aria-hidden="true"><span id="team-lade-balken"></span></div>
+        </div>
+        <button type="button" class="btn btn-secondary btn-small lade-status-btn" id="team-btn-neu-laden" hidden>↻ Neu laden</button>
     </div>
 
 
@@ -715,7 +733,7 @@
         <div class="card doku-card">
 
             <p>
-                Lädt alle im Team-Archiv (NAS) gefundenen Begehungen als
+                Lädt alle im Team-Archiv (Server) gefundenen Begehungen als
                 strukturierte CSV-Datei herunter — unabhängig davon, wer
                 sie gespeichert hat. Die Datei enthält die für die
                 Auswertung verfügbaren Prüfdaten und kann anschließend
@@ -857,21 +875,22 @@
 <!-- JAVASCRIPT                                                             -->
 <!-- ====================================================================== -->
 
-<script src="js/audit-data.js"></script>
+<script src="js/audit-data.js?v=2.2.0"></script>
 
-<script src="js/text.js"></script>
+<script src="js/text.js?v=2.2.0"></script>
 
-<script src="js/photos-store.js"></script>
+<script src="js/photos-store.js?v=2.2.0"></script>
 
-<script src="js/archive-store.js"></script>
+<script src="js/archive-store.js?v=2.2.0"></script>
 
-<script src="js/app.js"></script>
+<script src="js/app.js?v=2.2.0"></script>
 
-<script src="js/auswertung-logik.js"></script>
+<script src="js/auswertung-logik.js?v=2.2.0"></script>
 
-<script src="js/auswertung.js"></script>
+<script src="js/auswertung.js?v=2.2.0"></script>
 
-<script src="js/auswertung-team.js"></script>
+<script src="js/auswertung-team.js?v=2.2.0"></script>
+<script src="js/auswertung-team-pruefung.js?v=2.2.0"></script>
 
 
 </body>

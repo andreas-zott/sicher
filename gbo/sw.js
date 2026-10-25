@@ -1,38 +1,52 @@
 // ==========================================================================
 // ASiC Handel — Service Worker
 // ==========================================================================
-// Offline-Unterstützung für die ASiC-Handel-App.
+// Offline-Unterstützung und schneller Seitenaufbau für die ASiC-Handel-App.
 //
-// SERVICE-WORKER-VERSION: 2.1.2 (immer identisch zu CACHE_NAME und APP_REVISION in js/app.js halten)
+// SERVICE-WORKER-VERSION: 2.2.0
+// Bei JEDEM Update gemeinsam hochzaehlen:
+//   - BUILD / CACHE_NAME hier (bei neuer Revision auch APP_VERSION)
+//   - APP_REVISION in js/app.js (nur bei neuer Revision)
+//   - das ?v=… hinter allen js/css-Einbindungen in den HTML-Seiten (= BUILD)
 //
-// Bei einer neuen technischen Version:
-//   1. Alle precachten App-Dateien werden neu vom Server geladen.
+// Ladestrategie:
+//   - Programmdateien mit Versionszusatz (js/…?v=2.2.0, css/…?v=2.2.0) und
+//     Schriften: SOFORT aus dem Cache auf dem Geraet, ohne Rueckfrage beim
+//     Server. Das ist sicher, weil sich bei jedem Update der Zusatz ?v=
+//     aendert - dann ist es fuer den Browser eine neue Adresse und wird
+//     frisch geladen. 
+//   - HTML-Seiten, zugang-config.js, manifest, Icons: zuerst vom Server
+//     (cache: 'no-cache', damit nicht der HTTP-Cache des Browsers eine alte
+//     Fassung liefert), bei fehlender Verbindung aus dem Cache.
+//   - .php und fremde Adressen (anderer Server): nie angefasst.
+//
+// Bei einer neuen Version:
+//   1. Alle App-Dateien werden neu vom Server geladen (an ihren ?v-Adressen).
 //   2. Alte ASiC-Handel-Caches werden gelöscht.
-//   3. Der neue Service Worker wird sofort aktiviert.
-//   4. Offene Tabs werden sofort übernommen.
+//   3. Der neue Service Worker wird sofort aktiviert und übernimmt offene Tabs.
 //
-// WICHTIG:
-// Dieser Service Worker löscht KEINE:
-//   - localStorage-Daten
-//   - IndexedDB-Daten
-//   - archivierten Begehungen
-//   - Fotos
+// WICHTIG: Dieser Service Worker löscht KEINE localStorage-/IndexedDB-Daten,
+// archivierten Begehungen oder Fotos.
 // ==========================================================================
 
-const CACHE_NAME = 'asic-handel-v2.1.2';
+const APP_VERSION = '2.2.0';
+// Ausgabestand innerhalb derselben Revision: aendert sich
+// nur Code, aber nicht die sichtbare Revision, wird NUR dieser Zaehler
+// erhoeht ('2.2.0-2', '2.2.0-3' …). Er steht im Cache-Namen und im ?v=-Zusatz
+// der HTML-Seiten und sorgt dafuer, dass die Geraete die neuen Dateien holen.
+const BUILD = '2.2.0';
+const CACHE_NAME = 'asic-handel-v2.2.0';   // immer = 'asic-handel-v' + BUILD
 
 
 // ==========================================================================
 // DATEIEN FÜR OFFLINE-BETRIEB
 // ==========================================================================
 
+// Ohne Versionszusatz (werden immer zuerst beim Server nachgefragt)
 const PRECACHE_URLS = [
     './',
     './index.html',
     './massnahmen.html',
-    './gbo.html',
-    './gbo-hilfe.html',
-    './gbo-dokumentation.html',
     './fotos.html',
     './verlauf.html',
     './einstellungen.html',
@@ -42,34 +56,28 @@ const PRECACHE_URLS = [
     './auswertung-team.html',
     './impressum.html',
     './datenschutz.html',
+    './gbo.html',
+    './gbo-hilfe.html',
+    './gbo-dokumentation.html',
+    './quellen.html',
 
     './manifest.json',
+    './zugang-config.js',
 
     './icon-192.png',
     './icon-512.png',
 
+    './fonts/space-grotesk-latin-500-normal.woff2',
+    './fonts/space-grotesk-latin-600-normal.woff2',
+    './fonts/space-grotesk-latin-700-normal.woff2'
+];
+
+// Mit Versionszusatz - genau so, wie die HTML-Seiten sie einbinden
+const PRECACHE_VERSIONIERT = [
     './css/styles.css',
     './css/gbo.css',
 
-    './fonts/space-grotesk-latin-500-normal.woff2',
-    './fonts/space-grotesk-latin-600-normal.woff2',
-    './fonts/space-grotesk-latin-700-normal.woff2',
-
     './js/app.js',
-    './js/market-store.js',
-    './js/market-ui.js',
-    './js/gbo-v2.js',
-    './js/gbo-photos.js',
-    './js/gbo-migrate.js',
-    './js/gbo-fristen.js',
-    './js/gbo-signatur.js',
-    './js/gbo-pdf.js',
-    './js/gbo-risk.js',
-    './js/storage-check.js',
-    './js/gbo-data.js',
-    './js/gbo-quellen.js',
-    './js/gbo-struktur.js',
-    './js/gbo.js',
     './js/access-gate.js',
     './js/audit-data.js',
     './js/text.js',
@@ -82,133 +90,72 @@ const PRECACHE_URLS = [
     './js/auswertung-logik.js',
     './js/auswertung.js',
     './js/auswertung-team.js',
-
     './js/jspdf.umd.min.js',
-    './js/seiten-jahr.js',
     './js/hilfe-suche.js',
+    './js/seiten-jahr.js',
+    './js/auswertung-team-pruefung.js',
     './js/quellen-suche.js',
-    './zugang-config.js'
-];
+    './js/market-store.js',
+    './js/market-ui.js',
+    './js/storage-check.js',
+    './js/gbo-data.js',
+    './js/gbo-photos.js',
+    './js/gbo-pdf.js',
+    './js/gbo-quellen.js',
+    './js/gbo-struktur.js',
+    './js/gbo-migrate.js',
+    './js/gbo.js',
+    './js/gbo-risk.js',
+    './js/gbo-fristen.js',
+    './js/gbo-signatur.js',
+    './js/gbo-v2.js'
+].map(url => url + '?v=' + BUILD);
 
 
 // ==========================================================================
 // INSTALL
 // ==========================================================================
-//
-// Die Dateien werden mit "cache: reload" direkt vom Server angefordert.
-// Dadurch wird beim Wechsel auf eine neue Service-Worker-Version der
-// normale HTTP-Cache für diese Dateien umgangen.
-// ==========================================================================
+// Mit "cache: reload" direkt vom Server, am HTTP-Cache des Browsers vorbei.
 
 self.addEventListener('install', event => {
-
     event.waitUntil(
-
         caches.open(CACHE_NAME)
-
             .then(async cache => {
-
-                console.log(
-                    '[SW] Installiere neuen Cache:',
-                    CACHE_NAME
-                );
-
-                for (const url of PRECACHE_URLS) {
-
-                    try {
-
-                        const request = new Request(url, {
-                            cache: 'reload'
-                        });
-
-                        const response =
-                            await fetch(request);
-
-                        if (!response.ok) {
-
-                            throw new Error(
-                                `HTTP ${response.status}`
-                            );
-                        }
-
-                        await cache.put(
-                            request,
-                            response
-                        );
-
-                        console.log(
-                            '[SW] Neu geladen:',
-                            url
-                        );
-
-                    } catch (error) {
-
-                        console.error(
-                            '[SW] Fehler beim Laden:',
-                            url,
-                            error
-                        );
-
-                        // Installation abbrechen, wenn eine wichtige
-                        // Datei nicht geladen werden konnte.
-                        throw error;
+                console.log('[SW] Installiere neuen Cache:', CACHE_NAME);
+                for (const url of PRECACHE_URLS.concat(PRECACHE_VERSIONIERT)) {
+                    const request = new Request(url, { cache: 'reload' });
+                    const response = await fetch(request);
+                    if (!response.ok) {
+                        console.error('[SW] Fehler beim Laden:', url, response.status);
+                        throw new Error(`HTTP ${response.status} bei ${url}`);
                     }
+                    await cache.put(request, response);
                 }
             })
-
-            // Neue Version sofort installieren
-            .then(() => {
-                return self.skipWaiting();
-            })
+            .then(() => self.skipWaiting())
     );
 });
 
 
 // ==========================================================================
-// ACTIVATE
-// ==========================================================================
-//
-// Alle älteren ASiC-Handel-Caches werden gelöscht.
-// Andere Caches fremder Anwendungen bleiben unangetastet.
+// ACTIVATE – alte Caches entfernen
 // ==========================================================================
 
 self.addEventListener('activate', event => {
-
     event.waitUntil(
-
         caches.keys()
-
-            .then(keys => {
-
-                return Promise.all(
-
-                    keys.map(key => {
-
-                        // Nur eigene Caches loeschen: ASiC Handel (v1.x) und GBO (v2.x)
-                        // nutzen beide das Praefix 'asic-handel-' auf derselben Domain
-                        // und haben sich frueher gegenseitig den Offline-Cache geloescht.
-                        if (
-                            key.startsWith('asic-handel-v2.') &&
-                            key !== CACHE_NAME
-                        ) {
-
-                            console.log(
-                                '[SW] Lösche alten Cache:',
-                                key
-                            );
-
-                            return caches.delete(key);
-                        }
-
-                        return Promise.resolve();
-                    })
-                );
-            })
-
-            // Neue Version sofort für alle offenen Tabs übernehmen
-            .then(() => {
-                return self.clients.claim();
-            })
+            .then(keys => Promise.all(
+                keys.map(key => {
+                    // Nur Caches der Version 2 entfernen - Version 1.54 kann unter derselben
+                    // Domain in einem Nachbarordner laufen und hat ihren eigenen Cache.
+                    if (key.startsWith('asic-handel-v2.') && key !== CACHE_NAME) {
+                        console.log('[SW] Lösche alten Cache:', key);
+                        return caches.delete(key);
+                    }
+                    return Promise.resolve();
+                })
+            ))
+            .then(() => self.clients.claim())
     );
 });
 
@@ -216,105 +163,61 @@ self.addEventListener('activate', event => {
 // ==========================================================================
 // FETCH
 // ==========================================================================
-//
-// ONLINE:
-//   Netzwerk wird bevorzugt.
-//
-// OFFLINE:
-//   Cache wird als Fallback verwendet.
-//
-// Erfolgreiche Netzwerkantworten werden zusätzlich im aktuellen Cache
-// gespeichert. Dadurch bleiben neu geladene Dateien auch offline verfügbar.
-// ==========================================================================
+
+function istSofortAusCache(url) {
+    // Versionierte Programmdateien und Schriften (aendern sich nie unter
+    // derselben Adresse)
+    return url.searchParams.has('v') || url.pathname.includes('/fonts/');
+}
+
+function inCacheLegen(request, response) {
+    if (response && response.status === 200 && response.type !== 'opaque') {
+        const copy = response.clone();
+        caches.open(CACHE_NAME)
+            .then(cache => cache.put(request, copy))
+            .catch(error => console.warn('[SW] Cache konnte nicht aktualisiert werden:', error));
+    }
+    return response;
+}
 
 self.addEventListener('fetch', event => {
+    if (event.request.method !== 'GET') return;
 
-    // Nur GET-Anfragen behandeln
-    if (event.request.method !== 'GET') {
+    const url = new URL(event.request.url);
+
+    // PHP (Server-Speicherung) und fremde Adressen nie über den Cache
+    if (url.origin !== self.location.origin || /\.php$/i.test(url.pathname)) return;
+
+    // 1) Versionierte Dateien: Cache zuerst, nur bei Fehlen vom Server
+    if (istSofortAusCache(url)) {
+        event.respondWith(
+            caches.match(event.request).then(cached => {
+                if (cached) return cached;
+                return fetch(event.request)
+                    .then(response => inCacheLegen(event.request, response))
+                    .catch(() => caches.match(event.request, { ignoreSearch: true }));
+            })
+        );
         return;
     }
 
-    // NAS-Endpunkte (list/load/save.php) und fremde Origins werden NIE
-    // gecacht: sonst wuerden offline veraltete Dateilisten bzw. Begehungs-
-    // daten aus dem Cache ausgeliefert.
-    const requestUrl = new URL(event.request.url);
-    if (
-        requestUrl.origin !== self.location.origin ||
-        /\.php$/i.test(requestUrl.pathname)
-    ) {
-        return;
-    }
+    // 2) Alles andere: Server zuerst, Cache als Rückfall (offline).
+    //    Seitenaufrufe (mode 'navigate') dürfen nicht umgebaut werden.
+    const netzRequest = event.request.mode === 'navigate'
+        ? event.request
+        : new Request(event.request, { cache: 'no-cache' });
 
     event.respondWith(
-
-        fetch(event.request)
-
-            .then(response => {
-
-                // Nur gültige Antworten cachen
-                if (
-                    response &&
-                    response.status === 200 &&
-                    response.type !== 'opaque'
-                ) {
-
-                    const copy =
-                        response.clone();
-
-                    caches.open(CACHE_NAME)
-                        .then(cache => {
-
-                            cache.put(
-                                event.request,
-                                copy
-                            );
-
-                        })
-                        .catch(error => {
-
-                            console.warn(
-                                '[SW] Cache konnte nicht aktualisiert werden:',
-                                error
-                            );
-
-                        });
-                }
-
-                return response;
-            })
-
-            // ==================================================================
-            // KEIN NETZWERK
-            // ==================================================================
-
-            .catch(() => {
-
-                return caches.match(
-                    event.request
-                )
-
-                // Dateien mit Versionsanhang (?v=…) auch ohne Anhang finden
-                .then(hit => hit || caches.match(event.request, { ignoreSearch: true }))
-
-                .then(cachedResponse => {
-
-                    if (cachedResponse) {
-                        return cachedResponse;
+        fetch(netzRequest)
+            .then(response => inCacheLegen(event.request, response))
+            .catch(() =>
+                caches.match(event.request, { ignoreSearch: true }).then(cached => {
+                    if (cached) return cached;
+                    if (event.request.mode === 'navigate') {
+                        return caches.match('./index.html');
                     }
-
-                    // Bei Navigation auf die Startseite zurückfallen
-                    if (
-                        event.request.mode ===
-                        'navigate'
-                    ) {
-
-                        return caches.match(
-                            './index.html'
-                        );
-                    }
-
                     return undefined;
-                });
-            })
+                })
+            )
     );
 });
