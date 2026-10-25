@@ -131,7 +131,7 @@ async function renderMeasures() {
         // Foto-Vorschauen
         // Alle Fotos werden gleich dargestellt: 180 × 180 px
         // Fallback: liegen lokal (IndexedDB) keine Fotos zu dieser Maßnahme
-        // vor - z. B. weil die Begehung gerade erst vom NAS geladen wurde,
+        // vor - z. B. weil die Begehung gerade erst vom Server geladen wurde,
         // auf einem anderen Geraet gespeichert - werden die im JSON
         // mitgelieferten kleinen Vorschaubilder gezeigt (nur Ansicht, kein
         // Löschen möglich, da kein echtes Foto in IndexedDB dahinter steht).
@@ -189,6 +189,7 @@ async function renderMeasures() {
 
                     <span class="measure-question-text">
                         ${escapeHtml(questionText)}
+                        ${measure.vorbegehung ? `<br><span class="vorbegehung-badge">↻ ${escapeHtml(vorbegehungHinweis(measure))}</span>` : ''}
                     </span>
 
                 </div>
@@ -476,7 +477,7 @@ async function onMeasurePhotosCaptured(
                 await resizeImageFile(file);
 
             // Platz vorher pruefen: bei zu wenig Speicher nicht speichern,
-            // bei knappem Speicher einmal warnen.
+            // bei knappem Speicher einmal warnen (js/storage-check.js).
             if (window.ASiCStorage) {
                 const pruefung = await ASiCStorage.check(blob.size);
                 if (!pruefung.ok) {
@@ -491,7 +492,6 @@ async function onMeasurePhotosCaptured(
                 }
             }
 
-
             const record =
                 await addPhoto(
                     blob,
@@ -500,7 +500,7 @@ async function onMeasurePhotosCaptured(
                 );
 
             // Kleines Vorschaubild zusaetzlich im state.measures ablegen
-            // (Teil des JSON-Exports/NAS-Speicherns) - im Unterschied zum
+            // (Teil des JSON-Exports/Server-Speicherns) - im Unterschied zum
             // Blob in IndexedDB ist das die einzige Version, die beim
             // Laden einer Begehung auf einem ANDEREN Geraet (z. B. aus dem
             // Team-Archiv) ueberhaupt verfuegbar ist, da IndexedDB

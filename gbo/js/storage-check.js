@@ -66,7 +66,7 @@
                 message:
                     'Achtung: Der App-Speicher ist zu etwa ' + Math.round(danach * 100) +
                     ' % belegt (frei: ' + mb(e.free) + '). Bitte bald sichern ' +
-                    '(Datei ▾ → JSON exportieren oder Auf NAS speichern) und alte Fotos aufräumen.'
+                    '(Datei ▾ → JSON exportieren oder Markt auf Server speichern) und alte Fotos aufräumen.'
             };
         }
         return { ok: true, warn: false, message: '' };

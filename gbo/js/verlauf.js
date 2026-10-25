@@ -52,6 +52,7 @@ function renderArchiveList() {
                 <div class="archive-item-actions-primary">
                     <button class="btn btn-secondary btn-small" ${aktionAttr('click', 'onArchiveExport', record.id)}>📤 PDF exportieren</button>
                     <button class="btn btn-secondary btn-small" ${aktionAttr('click', 'onArchiveRestore', record.id)}>📂 In App anzeigen</button>
+                    <button class="btn btn-secondary btn-small" ${aktionAttr('click', 'onArchiveFollowUp', record.id)} title="Neue Begehung für diesen Markt mit den offenen Maßnahmen dieser Begehung">🔁 Wiederholungsbegehung</button>
                 </div>
                 <button class="btn-link photo-delete" ${aktionAttr('click', 'onArchiveDelete', record.id)}>🗑️ Löschen</button>
             </div>
@@ -89,7 +90,8 @@ async function onArchiveRestore(id) {
             comments: { ...(record.comments || {}) },
             measures: JSON.parse(JSON.stringify(record.measures || [])),
             signatures: { ...(record.signatures || {}) },
-            notApplicable: { ...(record.notApplicable || {}) }
+            notApplicable: { ...(record.notApplicable || {}) },
+            subgroupNotApplicable: { ...(record.subgroupNotApplicable || {}) }
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(restoredState));
 
@@ -108,6 +110,21 @@ async function onArchiveRestore(id) {
     }
 }
 
+// Wiederholungsbegehung aus einer archivierten Begehung
+async function onArchiveFollowUp(id) {
+    const record = archiveCache.find(r => r.id === id);
+    if (!record) return;
+    try {
+        const ergebnis = await startFollowUpAudit(record, 'lokal');
+        if (!ergebnis) return;
+        showToast('Wiederholungsbegehung angelegt' + (ergebnis.uebernommen ? ' – ' + ergebnis.uebernommen + ' offene Maßnahme(n) übernommen' : ''));
+        window.location.href = 'index.html';
+    } catch (err) {
+        console.error('Wiederholungsbegehung konnte nicht angelegt werden:', err);
+        showToast('Wiederholungsbegehung fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+    }
+}
+
 async function onArchiveDelete(id) {
     if (!confirm('Diese archivierte Begehung wirklich unwiderruflich löschen?')) return;
     try {
@@ -121,46 +138,113 @@ async function onArchiveDelete(id) {
     }
 }
 
-// ===== Team-Archiv (alle auf dem NAS gespeicherten Begehungen) =====
-// Nutzt dieselben PHP-Endpunkte wie "Auf NAS speichern"/"Vom NAS laden" -
-// funktioniert deshalb nur, wenn diese Seite direkt ueber die Synology
-// selbst (bzw. deren Tailscale-Adresse) aufgerufen wird, nicht auf
+// ===== Team-Archiv (alle auf dem Server gespeicherten Begehungen) =====
+// Nutzt dieselben PHP-Endpunkte wie "Auf Server speichern"/"Vom Server laden" -
+// funktioniert deshalb nur, wenn diese Seite direkt ueber den Server
+// mit den PHP-Skripten aufgerufen wird, nicht auf
 // GitHub Pages (dort gibt es save.php/list.php/load.php nicht).
 
+// ===== Ladestatus Team-Archiv (gleiche Anzeige wie die
+// Team-Auswertung) =====
+// Zeigt ueber der Liste: wird geladen (Spinner + durchlaufender Balken,
+// da list.php die Liste in EINEM Abruf liefert), fertig (gruen, Anzahl +
+// Uhrzeit), Fehler (rot, Grund + "Erneut versuchen"). Auch die Knoepfe an
+// den Eintraegen (PDF, In App anzeigen, Wiederholungsbegehung) laden vom
+// Server und melden das hier.
+
+let teamArchivLaedt = false;
+let teamArchivFertigText = null;   // letzter "fertig"-Stand, nach Einzelaktionen wiederherstellen
+
+function setzeTeamArchivStatus(zustand, titel, detail) {
+    const box = document.getElementById('team-archive-loading');
+    if (!box) return;
+    box.style.display = 'flex';
+    box.classList.remove('is-laden', 'is-fertig', 'is-warnung', 'is-fehler');
+    box.classList.add('is-' + zustand, 'is-unbestimmt');
+    const titelEl = document.getElementById('team-archiv-lade-titel');
+    const detailEl = document.getElementById('team-archiv-lade-detail');
+    if (titelEl) titelEl.textContent = titel;
+    if (detailEl) detailEl.textContent = detail || '';
+    const btn = document.getElementById('team-archiv-neu-laden');
+    if (btn) {
+        btn.hidden = zustand === 'laden';
+        btn.textContent = zustand === 'fehler' ? '↻ Erneut versuchen' : '↻ Neu laden';
+    }
+    // Knoepfe an den Eintraegen waehrend des Ladens sperren (kein Doppelklick)
+    document.querySelectorAll('#team-archive-list button').forEach(b => { b.disabled = zustand === 'laden'; });
+}
+
+function teamArchivUhrzeit() {
+    return new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+}
+
 async function loadAndRenderTeamArchive() {
+    if (teamArchivLaedt) return;
     const listEl = document.getElementById('team-archive-list');
-    const loadingEl = document.getElementById('team-archive-loading');
+    const statusEl = document.getElementById('team-archive-loading');
     const emptyEl = document.getElementById('no-team-archive');
     const unavailableEl = document.getElementById('team-archive-unavailable');
 
     if (window.location.hostname.endsWith('.github.io') && !getNasBaseUrl()) {
         listEl.style.display = 'none';
-        loadingEl.style.display = 'none';
+        statusEl.style.display = 'none';
         emptyEl.style.display = 'none';
         unavailableEl.style.display = 'block';
         return;
     }
 
+    teamArchivLaedt = true;
     unavailableEl.style.display = 'none';
     emptyEl.style.display = 'none';
-    listEl.style.display = 'none';
-    loadingEl.style.display = 'block';
+    setzeTeamArchivStatus('laden', 'Team-Archiv wird geladen …', 'Dateiliste wird vom Server abgerufen');
+    const start = Date.now();
 
     try {
-        teamArchiveCache = await getSynologyFiles();
-        loadingEl.style.display = 'none';
+        teamArchiveCache = await getServerFiles();
+        const dauer = ((Date.now() - start) / 1000).toLocaleString('de-DE', { maximumFractionDigits: 1 });
+        const n = teamArchiveCache.length;
 
-        if (teamArchiveCache.length === 0) {
+        const sucheEl = document.getElementById('team-archiv-suche');
+        if (sucheEl) sucheEl.style.display = n > 0 ? 'flex' : 'none';
+
+        if (n === 0) {
+            listEl.style.display = 'none';
             emptyEl.style.display = 'block';
-            return;
+            teamArchivFertigText = ['Team-Archiv geladen', 'Noch keine Begehung im Team-Archiv · Stand ' + teamArchivUhrzeit() + ' Uhr'];
+        } else {
+            listEl.style.display = 'block';
+            renderTeamArchiveList();
+            teamArchivFertigText = ['Team-Archiv geladen', n + ' Begehung' + (n === 1 ? '' : 'en') + ' in ' + dauer + ' s · Stand ' + teamArchivUhrzeit() + ' Uhr'];
         }
-
-        listEl.style.display = 'block';
-        renderTeamArchiveList();
+        setzeTeamArchivStatus('fertig', teamArchivFertigText[0], teamArchivFertigText[1]);
     } catch (err) {
-        loadingEl.style.display = 'none';
         console.error('Team-Archiv konnte nicht geladen werden:', err);
-        showToast('Team-Archiv konnte nicht geladen werden: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+        const grund = err && err.message ? err.message : 'unbekannter Fehler';
+        listEl.style.display = 'none';
+        teamArchivFertigText = null;
+        ['team-archiv-suche', 'team-archiv-keine-treffer'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = 'none';
+        });
+        setzeTeamArchivStatus('fehler', 'Team-Archiv konnte nicht geladen werden',
+            grund + ' – Server erreichbar? Zugriffsschlüssel unter „Einstellungen“ korrekt?');
+    } finally {
+        teamArchivLaedt = false;
+    }
+}
+
+// Laedt eine einzelne Begehung fuer die Knoepfe an den Eintraegen und
+// zeigt das im Statusfeld an. Danach (Erfolg) wieder der letzte Listenstand.
+async function ladeTeamBegehungMitStatus(fileName, aktion) {
+    setzeTeamArchivStatus('laden', 'Begehung wird geladen …', aktion + ' · ' + fileName);
+    try {
+        const record = await fetchServerRecord(fileName);
+        if (teamArchivFertigText) setzeTeamArchivStatus('fertig', teamArchivFertigText[0], teamArchivFertigText[1]);
+        return record;
+    } catch (err) {
+        setzeTeamArchivStatus('fehler', 'Begehung konnte nicht geladen werden',
+            (err && err.message ? err.message : 'unbekannter Fehler') + ' · ' + fileName);
+        throw err;
     }
 }
 
@@ -170,7 +254,25 @@ function renderTeamArchiveList() {
 
     // Neueste Begehung zuerst (list.php liefert bereits sortiert, hier zur
     // Sicherheit nochmal explizit nach Speicherzeitpunkt).
-    const sorted = [...teamArchiveCache].sort((a, b) => (b.savedAt || '').localeCompare(a.savedAt || ''));
+    const alle = [...teamArchiveCache].sort((a, b) => (b.savedAt || '').localeCompare(a.savedAt || ''));
+
+    // Suche: alle Suchwoerter muessen vorkommen,
+    // in Marktnummer, Ort/Firma, Begehungsdatum oder Dateiname.
+    const suchEl = document.getElementById('team-archiv-suchfeld');
+    const woerter = (suchEl ? suchEl.value : '').toLowerCase().split(/\s+/).filter(Boolean);
+    const sorted = woerter.length === 0 ? alle : alle.filter(entry => {
+        const text = [entry.marktnummer, entry.plzOrt, entry.firma, entry.datum, entry.fileName]
+            .map(v => String(v || '').toLowerCase()).join(' ');
+        return woerter.every(w => text.includes(w));
+    });
+    const trefferEl = document.getElementById('team-archiv-treffer');
+    if (trefferEl) {
+        trefferEl.textContent = woerter.length === 0
+            ? alle.length + ' Begehung' + (alle.length === 1 ? '' : 'en')
+            : sorted.length + ' von ' + alle.length;
+    }
+    const keineEl = document.getElementById('team-archiv-keine-treffer');
+    if (keineEl) keineEl.style.display = (woerter.length > 0 && sorted.length === 0) ? 'block' : 'none';
 
     container.innerHTML = sorted.map(entry => {
         const gespeichertAm = entry.savedAt
@@ -182,13 +284,14 @@ function renderTeamArchiveList() {
             <div class="archive-item-head">
                 <div>
                     <div class="archive-item-firma">${escapeHtml(entry.plzOrt || entry.firma || 'Ohne Markt-Angabe')}${entry.marktnummer ? ' (Nr. ' + escapeHtml(entry.marktnummer) + ')' : ''}</div>
-                    <div class="archive-item-meta">Begehung vom ${escapeHtml(entry.datum || '-')} · auf NAS gespeichert am ${escapeHtml(gespeichertAm)}</div>
+                    <div class="archive-item-meta">Begehung vom ${escapeHtml(entry.datum || '-')} · auf dem Server gespeichert am ${escapeHtml(gespeichertAm)}</div>
                 </div>
             </div>
             <div class="archive-item-actions">
                 <div class="archive-item-actions-primary">
                     <button class="btn btn-secondary btn-small" ${aktionAttr('click', 'onTeamArchiveExport', '$closest-filename')}>📤 PDF exportieren</button>
                     <button class="btn btn-secondary btn-small" ${aktionAttr('click', 'onTeamArchiveRestore', '$closest-filename')}>📂 In App anzeigen</button>
+                    <button class="btn btn-secondary btn-small" ${aktionAttr('click', 'onTeamArchiveFollowUp', '$closest-filename')} title="Neue Begehung für diesen Markt mit den offenen Maßnahmen dieser Begehung">🔁 Wiederholungsbegehung</button>
                 </div>
             </div>
         </div>`;
@@ -197,10 +300,9 @@ function renderTeamArchiveList() {
 
 async function onTeamArchiveExport(fileName) {
     try {
-        showToast('Lade Begehung vom NAS …');
-        const record = await fetchSynologyRecord(fileName);
+        const record = await ladeTeamBegehungMitStatus(fileName, 'PDF exportieren');
         showToast('PDF wird erzeugt…');
-        // Team-Archiv-Datensaetze vom NAS enthalten keine Fotos (save.php
+        // Team-Archiv-Datensaetze vom Server enthalten keine Fotos (save.php
         // speichert nur die reinen Text-/Bewertungsdaten als JSON) - das PDF
         // enthaelt deshalb Checkliste/Massnahmen, aber keine Fotoabschnitte.
         await shareArchivedReportPdf(record, 'alle');
@@ -210,7 +312,7 @@ async function onTeamArchiveExport(fileName) {
     }
 }
 
-// Wie onArchiveRestore() (lokales Archiv), aber fuer eine vom NAS geladene
+// Wie onArchiveRestore() (lokales Archiv), aber fuer eine vom Server geladene
 // Team-Archiv-Begehung. WICHTIGER UNTERSCHIED: Team-Archiv-Datensaetze
 // enthalten keine Fotos (siehe onTeamArchiveExport) - ein evtl. lokal
 // vorhandener Fotobestand wird deshalb nur GELEERT, nicht durch etwas
@@ -219,11 +321,10 @@ async function onTeamArchiveExport(fileName) {
 // obwohl die urspruengliche Kollegin/der urspruengliche Kollege welche
 // hatte.
 async function onTeamArchiveRestore(fileName) {
-    if (!confirm('Diese Begehung vom NAS in der App anzeigen? Der aktuell laufende, noch nicht archivierte Bearbeitungsstand auf diesem Gerät wird dabei überschrieben. Hinweis: Team-Archiv-Datensätze enthalten keine Fotos – ein evtl. vorhandener lokaler Fotobestand wird dabei geleert, nicht ersetzt.')) return;
+    if (!confirm('Diesen Markt vom Server in der App anzeigen? Der aktuell laufende, noch nicht archivierte Bearbeitungsstand auf diesem Gerät (Begehung und – falls im Datensatz enthalten – Gefährdungsbeurteilung) wird dabei überschrieben. Hinweis: Team-Archiv-Datensätze enthalten keine Original-Fotos – ein evtl. vorhandener lokaler Fotobestand der Begehung wird dabei geleert, nicht ersetzt.')) return;
 
     try {
-        showToast('Lade Begehung vom NAS …');
-        const record = await fetchSynologyRecord(fileName);
+        const record = await ladeTeamBegehungMitStatus(fileName, 'In App anzeigen');
 
         const restoredState = {
             companyInfo: { ...record.companyInfo },
@@ -231,9 +332,19 @@ async function onTeamArchiveRestore(fileName) {
             comments: { ...(record.comments || {}) },
             measures: JSON.parse(JSON.stringify(record.measures || [])),
             signatures: { ...(record.signatures || {}) },
-            notApplicable: { ...(record.notApplicable || {}) }
+            notApplicable: { ...(record.notApplicable || {}) },
+            subgroupNotApplicable: { ...(record.subgroupNotApplicable || {}) }
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(restoredState));
+        // Markt-Datensatz: Gefaehrdungsbeurteilung ebenfalls uebernehmen
+        const markt = record.__markt;
+        if (markt && markt.gbo) {
+            localStorage.setItem('asicGboStateV1', JSON.stringify(markt.gbo));
+            if (Array.isArray(markt.links)) localStorage.setItem('asicMarketLinksV2', JSON.stringify(markt.links));
+        }
+        // gilt als im Team-Archiv gesichert (wird im Pruefkatalog nach dem
+        // Seitenaufbau als Sicherungsstand uebernommen)
+        try { localStorage.setItem('asicServerStandAusstehend', fileName); } catch (e) {}
 
         if (typeof deleteAllPhotos === 'function') {
             await deleteAllPhotos();
@@ -244,6 +355,20 @@ async function onTeamArchiveRestore(fileName) {
     } catch (err) {
         console.error('Team-Archiv-Begehung konnte nicht geöffnet werden:', err);
         showToast('Laden fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+    }
+}
+
+// Wiederholungsbegehung aus einer Begehung im Team-Archiv
+async function onTeamArchiveFollowUp(fileName) {
+    try {
+        const record = await ladeTeamBegehungMitStatus(fileName, 'Wiederholungsbegehung');
+        const ergebnis = await startFollowUpAudit(record, 'team');
+        if (!ergebnis) return;
+        showToast('Wiederholungsbegehung angelegt' + (ergebnis.uebernommen ? ' – ' + ergebnis.uebernommen + ' offene Maßnahme(n) übernommen' : ''));
+        window.location.href = 'index.html';
+    } catch (err) {
+        console.error('Wiederholungsbegehung konnte nicht angelegt werden:', err);
+        showToast('Wiederholungsbegehung fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
     }
 }
 
@@ -260,6 +385,10 @@ function switchVerlaufTab(tab) {
     document.getElementById('no-team-archive').style.display = 'none';
     document.getElementById('team-archive-loading').style.display = 'none';
     document.getElementById('team-archive-unavailable').style.display = 'none';
+    ['team-archiv-suche', 'team-archiv-keine-treffer'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+    });
 
     if (tab === 'team') {
         loadAndRenderTeamArchive();
@@ -277,4 +406,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const btn = document.getElementById('tab-' + tab);
         if (btn) btn.addEventListener('click', () => switchVerlaufTab(tab));
     });
+
+    const suchfeld = document.getElementById('team-archiv-suchfeld');
+    if (suchfeld) suchfeld.addEventListener('input', renderTeamArchiveList);
+
+    const btnTeamNeu = document.getElementById('team-archiv-neu-laden');
+    if (btnTeamNeu) btnTeamNeu.addEventListener('click', loadAndRenderTeamArchive);
 });

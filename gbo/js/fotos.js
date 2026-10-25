@@ -83,8 +83,8 @@ async function onPhotosCaptured(fileList) {
         try {
             const blob = await resizeImageFile(file);
 
-            // Platz vorher prüfen: bei zu wenig Speicher nicht speichern,
-            // bei knappem Speicher einmal warnen.
+            // Platz vorher pruefen: bei zu wenig Speicher nicht speichern,
+            // bei knappem Speicher einmal warnen (js/storage-check.js).
             if (window.ASiCStorage) {
                 const pruefung = await ASiCStorage.check(blob.size);
                 if (!pruefung.ok) {

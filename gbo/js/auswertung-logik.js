@@ -11,10 +11,11 @@
 // Voraussetzung: findItemById() und formatDate() aus js/app.js muessen
 // bereits geladen sein.
 
-// Identisch mit escapeHtml() in js/app.js. Eine Fassung ueber
-// textContent -> innerHTML maskiert KEINE Anfuehrungszeichen und wuerde -
-// weil diese Datei nach app.js geladen wird - auf den Auswertungsseiten
-// die sichere Fassung ersetzen (Ausbruch aus Attributwerten).
+// identisch mit escapeHtml() in js/app.js. Die fruehere
+// Fassung (textContent -> innerHTML) maskierte KEINE Anfuehrungszeichen und
+// ersetzte - weil diese Datei nach app.js geladen wird - auf den
+// Auswertungsseiten die sichere Fassung. In Attributwerten
+// (value="...", data-...="...") war dadurch ein Ausbruch moeglich.
 function escapeHtml(value) {
     return String(value === null || value === undefined ? '' : value)
         .replace(/&/g, '&amp;')
@@ -26,7 +27,7 @@ function escapeHtml(value) {
 
 // Liefert einen Zeitstempel fuer eine Begehung, unabhaengig von der
 // Datenquelle: lokale Archivdatensaetze haben createdAt direkt gesetzt,
-// vom NAS geladene Datensaetze (fetchSynologyRecord()) haben das NICHT -
+// vom Server geladene Datensaetze (fetchServerRecord()) haben das NICHT -
 // dort wird ersatzweise aus companyInfo.datum ermittelt.
 function zeitwertVonBegehung(r) {
     if (r.createdAt) return r.createdAt;
@@ -36,7 +37,7 @@ function zeitwertVonBegehung(r) {
 
 // Reine Filterfunktion (kein Zugriff auf Modulvariablen) - wird von
 // auswertung.js (lokales Archiv, Modulvariable auswertungArchiv) UND von
-// auswertung-team.js (Team-Archiv/NAS, keine Modulvariable, immer frisch
+// auswertung-team.js (Team-Archiv/Server, keine Modulvariable, immer frisch
 // geladene Daten) genutzt. monate=null bedeutet "alle".
 function filterNachZeitraum(daten, monate) {
     if (monate === null) return daten;
@@ -125,7 +126,7 @@ function berechneAuffaelligeMaerkte(daten, modus) {
 // Robust fuer zwei unterschiedliche Datenquellen gebaut:
 // - Lokale Archivdatensaetze (saveArchivedAudit()) haben createdAt/stats
 //   direkt gesetzt.
-// - Vom NAS geladene Datensaetze (fetchSynologyRecord()) haben das NICHT -
+// - Vom Server geladene Datensaetze (fetchServerRecord()) haben das NICHT -
 //   dort wird ersatzweise aus companyInfo.datum sortiert und die
 //   Mangel-Zahl direkt aus den Bewertungen gezaehlt, statt sich auf ein
 //   vorab gespeichertes Feld zu verlassen.

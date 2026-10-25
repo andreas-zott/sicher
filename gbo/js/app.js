@@ -8,7 +8,7 @@ const STORAGE_KEY = 'begehungState';
 
 // Revisionsstand der App/Checkliste (in Fusszeile und PDF sichtbar,
 // bei inhaltlichen Aenderungen an Fragenkatalog/Massnahmen hochzaehlen)
-const APP_REVISION = '2.1.2';
+const APP_REVISION = '2.2.0';
 const APP_REVISION_DATE = '2026-10-25';
 
 // Heutiges Datum als JJJJ-MM-TT in LOKALER Zeit. toISOString() liefert UTC,
@@ -32,7 +32,7 @@ function escapeHtml(value) {
 }
 
 // --------------------------------------------------------------------------
-// Ereignis-Verteilung ohne Inline-Handler 
+// Ereignis-Verteilung ohne Inline-Handler
 // --------------------------------------------------------------------------
 // Frueher standen in den erzeugten HTML-Bausteinen Handler wie
 //   onclick="setRating('<ID aus der Datei>', 'ok')"
@@ -178,12 +178,220 @@ function loadState() {
 function saveState() {
     try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        planeSicherungsHinweis();
         return true;
     } catch (e) {
         console.error('ASiC Handel: Zustand konnte nicht gespeichert werden:', e);
         return false;
     }
 }
+
+// ===== Fehlerprotokoll =====
+// Merkt sich auf diesem Geraet die letzten 10 Fehlermeldungen (rote
+// Hinweise und unerwartete Programmfehler) mit Zeit und Seite. Wird nur
+// in der Diagnose unter "Einstellungen" angezeigt - fuer die Fehlersuche
+// durch die EDV. Enthaelt keine Zugriffsschluessel.
+const FEHLER_LOG_KEY = 'asicFehlerLog';
+
+function merkeFehler(text) {
+    try {
+        const log = JSON.parse(localStorage.getItem(FEHLER_LOG_KEY) || '[]');
+        log.push({
+            zeit: new Date().toISOString(),
+            seite: (location.pathname.split('/').pop() || 'index.html'),
+            text: String(text || '').slice(0, 300)
+        });
+        while (log.length > 10) log.shift();
+        localStorage.setItem(FEHLER_LOG_KEY, JSON.stringify(log));
+    } catch (e) { /* ohne Speicher kein Protokoll */ }
+}
+
+function leseFehlerLog() {
+    try { return JSON.parse(localStorage.getItem(FEHLER_LOG_KEY) || '[]'); } catch (e) { return []; }
+}
+
+window.addEventListener('error', (e) => {
+    const ort = e && e.filename ? ' (' + e.filename.split('/').pop().split('?')[0] + ':' + e.lineno + ')' : '';
+    merkeFehler('Programmfehler: ' + (e && e.message ? e.message : 'unbekannt') + ort);
+});
+window.addEventListener('unhandledrejection', (e) => {
+    const r = e && e.reason;
+    merkeFehler('Programmfehler: ' + (r && r.message ? r.message : String(r)));
+});
+
+// Ausgabestand dieser Seite (aus dem ?v=-Zusatz der eingebundenen app.js),
+// z. B. '2.2.0'. Gleicher Wert wie BUILD in sw.js.
+function appAusgabestand() {
+    try {
+        const el = document.querySelector('script[src*="js/app.js"]');
+        const v = el ? new URL(el.src, location.href).searchParams.get('v') : '';
+        return v || APP_REVISION;
+    } catch (e) {
+        return APP_REVISION;
+    }
+}
+
+// Server-Funktionen (save.php/list.php/load.php) erreichbar? Auf GitHub
+// Pages nur, wenn unter "Einstellungen" eine Server-Adresse hinterlegt ist.
+function serverFunktionenVerfuegbar() {
+    return !(window.location.hostname.endsWith('.github.io') && !getNasBaseUrl());
+}
+
+// ===== Sicherungsstand der aktuellen Begehung =====
+// Nach jedem erfolgreichen "Auf Server speichern" (und nach dem Laden einer
+// Begehung vom Server) wird ein Fingerabdruck des Bearbeitungsstands
+// gemerkt. Weicht der aktuelle Stand davon ab, ist die Begehung (noch oder
+// wieder) nur auf diesem Geraet vorhanden - dann zeigt der Pruefkatalog
+// einen Hinweis.
+const SERVER_STAND_KEY = 'asicServerStand';
+const SERVER_STAND_AUSSTEHEND_KEY = 'asicServerStandAusstehend';
+
+// JSON mit sortierten Schluesseln - damit die Reihenfolge der Felder den
+// Fingerabdruck nicht veraendert.
+function stabilesJson(wert) {
+    if (Array.isArray(wert)) return '[' + wert.map(stabilesJson).join(',') + ']';
+    if (wert && typeof wert === 'object') {
+        return '{' + Object.keys(wert).sort().map(k => JSON.stringify(k) + ':' + stabilesJson(wert[k])).join(',') + '}';
+    }
+    return JSON.stringify(wert === undefined ? null : wert);
+}
+
+// GBO-Stand dieses Geraets (gbo.html). Gehoert zum Markt-Datensatz, der im
+// Team-Archiv gemeinsam mit der Begehung gespeichert wird.
+const GBO_STATE_KEY = 'asicGboStateV1';
+function leseGboStand() {
+    try { return JSON.parse(localStorage.getItem(GBO_STATE_KEY) || 'null'); } catch (e) { return null; }
+}
+
+function stateFingerabdruck() {
+    const text = stabilesJson({ begehung: state, gbo: leseGboStand() });
+    let h = 0x811c9dc5;
+    for (let i = 0; i < text.length; i++) {
+        h ^= text.charCodeAt(i);
+        h = Math.imul(h, 0x01000193);
+    }
+    return (h >>> 0).toString(16) + '-' + text.length;
+}
+
+function leseServerStand() {
+    try { return JSON.parse(localStorage.getItem(SERVER_STAND_KEY) || 'null'); } catch (e) { return null; }
+}
+
+function markiereServerGesichert(dateiname) {
+    try {
+        localStorage.setItem(SERVER_STAND_KEY, JSON.stringify({
+            zeit: new Date().toISOString(),
+            datei: dateiname || '',
+            kennung: begehungsKennung(),
+            fp: stateFingerabdruck()
+        }));
+        localStorage.removeItem(SERVER_STAND_AUSSTEHEND_KEY);
+    } catch (e) { /* ohne Speicher kein Hinweis */ }
+    aktualisiereSicherungsHinweis();
+}
+
+// Markt + Datum: unterscheidet "dieselbe Begehung, geaendert" von "eine
+// ganz andere Begehung" (z. B. neue Begehung oder Wiederholungsbegehung).
+function begehungsKennung() {
+    const c = state.companyInfo || {};
+    return String(c.marktnummer || '').trim() + '|' + String(c.datum || '');
+}
+
+function begehungHatInhalt() {
+    const gbo = leseGboStand();
+    const gboInhalt = !!(gbo && gbo.answers && Object.keys(gbo.answers).length > 0);
+    return gboInhalt
+        || Object.keys(state.ratings || {}).length > 0
+        || (state.measures || []).length > 0
+        || !!(state.companyInfo && String(state.companyInfo.marktnummer || '').trim());
+}
+
+// 'leer' | 'gesichert' | 'geaendert' (schon mal gesichert, danach geaendert) | 'ungesichert'
+function sicherungsZustand() {
+    if (!begehungHatInhalt()) return 'leer';
+    const stand = leseServerStand();
+    if (!stand || stand.kennung !== begehungsKennung()) return 'ungesichert';
+    return stand.fp === stateFingerabdruck() ? 'gesichert' : 'geaendert';
+}
+
+function formatZeitpunkt(iso) {
+    try {
+        const d = new Date(iso);
+        return d.toLocaleDateString('de-DE') + ' ' + d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+    } catch (e) { return ''; }
+}
+
+// Hinweis auf der Maßnahmenseite unterhalb der Unterschriften und des
+// Foto-Hinweises (Platzhalter #sicherungs-hinweis-platz in massnahmen.html).
+// Nur wenn
+// Server-Funktionen verfuegbar sind. "Spaeter" blendet ihn fuer diese
+// Sitzung aus.
+function aktualisiereSicherungsHinweis() {
+    const anker = document.getElementById('sicherungs-hinweis-platz');
+    if (!anker) return;
+    let box = document.getElementById('sicherungs-hinweis');
+    const zustand = sicherungsZustand();
+    let spaeter = false;
+    try { spaeter = sessionStorage.getItem('asicHinweisSpaeter') === '1'; } catch (e) {}
+
+    if (!serverFunktionenVerfuegbar() || spaeter || zustand === 'leer' || zustand === 'gesichert') {
+        if (box) box.remove();
+        return;
+    }
+    if (!box) {
+        box = document.createElement('div');
+        box.id = 'sicherungs-hinweis';
+        box.className = 'lade-status is-warnung sicherungs-hinweis';
+        box.setAttribute('role', 'status');
+        box.innerHTML =
+            '<span class="lade-status-icon" aria-hidden="true"></span>' +
+            '<div class="lade-status-text">' +
+                '<div class="lade-status-titel">Noch nicht im Team-Archiv gesichert</div>' +
+                '<div class="lade-status-detail" data-hinweis-detail></div>' +
+            '</div>' +
+            '<div class="sicherungs-hinweis-knoepfe">' +
+                '<button type="button" class="btn btn-primary btn-small" data-hinweis-sichern>☁️ Jetzt sichern</button>' +
+                '<button type="button" class="btn btn-secondary btn-small" data-hinweis-spaeter>Später</button>' +
+            '</div>';
+        anker.appendChild(box);
+        box.querySelector('[data-hinweis-sichern]').addEventListener('click', async (ev) => {
+            ev.currentTarget.disabled = true;
+            await saveStateToServer();
+            const b = box.querySelector('[data-hinweis-sichern]');
+            if (b) b.disabled = false;
+        });
+        box.querySelector('[data-hinweis-spaeter]').addEventListener('click', () => {
+            try { sessionStorage.setItem('asicHinweisSpaeter', '1'); } catch (e) {}
+            box.remove();
+        });
+    }
+    const stand = leseServerStand();
+    box.querySelector('[data-hinweis-detail]').textContent = zustand === 'geaendert' && stand
+        ? 'Seit der letzten Sicherung (' + formatZeitpunkt(stand.zeit) + ') geändert – die Änderungen liegen bisher nur auf diesem Gerät.'
+        : 'Diese Begehung liegt bisher nur auf diesem Gerät. Geht das Gerät verloren oder wird es zurückgesetzt, ist sie weg.';
+}
+
+let sicherungsHinweisTimer = null;
+function planeSicherungsHinweis() {
+    if (!document.getElementById('sicherungs-hinweis-platz')) return;
+    clearTimeout(sicherungsHinweisTimer);
+    sicherungsHinweisTimer = setTimeout(aktualisiereSicherungsHinweis, 800);
+}
+
+// Nach dem vollstaendigen Seitenaufbau: eine aus dem Team-Archiv geoeffnete
+// Begehung (verlauf.html) gilt als gesichert. Erst hier, weil der
+// Pruefkatalog beim ersten Aufbau noch Kommentare nachtraegt.
+window.addEventListener('load', () => {
+    let ausstehend = null;
+    try { ausstehend = localStorage.getItem(SERVER_STAND_AUSSTEHEND_KEY); } catch (e) {}
+    // Uebernahme im Pruefkatalog (dorthin fuehrt "In App anzeigen"), notfalls
+    // auf der Maßnahmenseite
+    if (ausstehend !== null && (document.getElementById('btn-save-nas') || document.getElementById('sicherungs-hinweis-platz'))) {
+        markiereServerGesichert(ausstehend);
+    } else {
+        aktualisiereSicherungsHinweis();
+    }
+});
 
 // ===== Hilfsfunktionen =====
 function findItemById(itemId) {
@@ -208,6 +416,7 @@ function totalItemCount() {
 }
 
 function showToast(message, type = 'success') {
+    if (type === 'error') merkeFehler(message);
     document.querySelectorAll('.toast').forEach(t => t.remove());
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
@@ -296,9 +505,9 @@ let exportMode = document.getElementById('measures-container') ? 'massnahmen'
     : document.getElementById('photo-grid') ? 'fotos'
     : 'checkliste';
 
-// ===== Synology-NAS-Speicherung (save.php / list.php / load.php) =====
-// Setzt voraus, dass die App direkt ueber die Synology selbst (bzw. deren
-// Tailscale-Adresse) aufgerufen wird - die drei PHP-Skripte muessen im
+// ===== Server-Speicherung (save.php / list.php / load.php) =====
+// Setzt voraus, dass die App direkt ueber den Server aufgerufen
+// wird - die drei PHP-Skripte muessen im
 // selben Verzeichnis wie diese Seite liegen. Ueber eine andere Adresse
 // (z. B. GitHub Pages) sind diese Endpunkte nicht erreichbar, da dort
 // keine serverseitigen Skripte laufen koennen.
@@ -307,7 +516,7 @@ async function parseJsonResponse(res) {
     try {
         return await res.json();
     } catch (parseErr) {
-        throw new Error('Ungültige Antwort vom NAS (kein gültiges JSON).');
+        throw new Error('Ungültige Antwort vom Server (kein gültiges JSON).');
     }
 }
 
@@ -357,22 +566,36 @@ function withNasAuthHeaders(options) {
     };
 }
 
-async function saveStateToSynology() {
+// Speichert den Markt-Datensatz (Begehung + Gefaehrdungsbeurteilung) ueber
+// js/market-store.js. Ist das Modul auf einer Seite nicht geladen, wird nur
+// die Begehung gespeichert (bisheriges Format, von save.php ebenso angenommen).
+async function saveStateToServer() {
     try {
         saveState();
+        let result;
         if (window.ASiCMarket) {
-            const result = await ASiCMarket.saveServer();
-            showToast('Markt auf NAS gespeichert: ' + (result.fileName || 'OK'));
-            return;
+            result = await ASiCMarket.saveServer();
+        } else {
+            const res = await fetch(nasUrl('save.php'), withNasAuthHeaders({
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                cache: 'no-store',
+                body: JSON.stringify(state)
+            }));
+            result = await parseJsonResponse(res);
+            if (!res.ok || !result.ok) {
+                throw new Error(result.message || `Fehler beim Speichern (HTTP ${res.status}).`);
+            }
         }
-        throw new Error('Markt-Speichermodul nicht geladen.');
+        markiereServerGesichert(result.fileName);
+        showToast((window.ASiCMarket ? 'Markt auf Server gespeichert: ' : 'Auf Server gespeichert: ') + result.fileName);
     } catch (err) {
-        console.error('NAS-Speichern fehlgeschlagen:', err);
-        showToast('NAS-Speichern fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+        console.error('Server-Speichern fehlgeschlagen:', err);
+        showToast('Speichern auf dem Server fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
     }
 }
 
-async function getSynologyFiles() {
+async function getServerFiles() {
     const res = await fetch(nasUrl('list.php'), withNasAuthHeaders({ cache: 'no-store' }));
     const result = await parseJsonResponse(res);
     if (!res.ok || !result.ok) {
@@ -381,35 +604,52 @@ async function getSynologyFiles() {
     return result.files || [];
 }
 
-// Wie loadStateFromSynology(), aendert aber NICHT den globalen state - gibt
+// Wie loadStateFromServer(), aendert aber NICHT den globalen state - gibt
 // den geladenen Datensatz einfach zurueck. Wird fuer das Team-Archiv
-// (verlauf.html) genutzt, um eine fremde, auf dem NAS gespeicherte Begehung
+// (verlauf.html) genutzt, um eine fremde, auf dem Server gespeicherte Begehung
 // anzusehen/zu exportieren, ohne die gerade laufende eigene Begehung zu
 // ueberschreiben.
-async function fetchSynologyRecord(filename) {
-    const res = await fetch(nasUrl('load.php') + '?filename=' + encodeURIComponent(filename), withNasAuthHeaders({ cache: 'no-store' }));
-    const result = await parseJsonResponse(res);
-    if (!res.ok) {
-        throw new Error((result && result.message) || `Fehler beim Laden (HTTP ${res.status}).`);
-    }
-    return result;
+// Ist ein vom Server geladener Datensatz ein Markt-Datensatz (Begehung + GBO,
+// js/market-store.js), liefert diese Funktion den Begehungsteil in der
+// gewohnten Form (companyInfo, ratings, measures ...). Der vollstaendige
+// Datensatz bleibt unter .__markt erreichbar (z. B. fuer die GBO beim
+// "In App anzeigen"). Aeltere Dateien (nur Begehung) bleiben unveraendert.
+function istMarktDatensatz(x) {
+    return !!x && x.format === 'ASiC-Marktcontainer' && Number(x.formatVersion) >= 2 && !!x.audit;
 }
 
-async function loadStateFromSynology(filename) {
+function begehungAusDatensatz(x) {
+    if (!istMarktDatensatz(x)) return x;
+    const b = Object.assign({}, x.audit);
+    if (!b.companyInfo) b.companyInfo = x.companyInfo || {};
+    if (x._nas) b._nas = x._nas;
+    Object.defineProperty(b, '__markt', { value: x, enumerable: false });
+    return b;
+}
+
+async function fetchServerRecord(filename) {
     const res = await fetch(nasUrl('load.php') + '?filename=' + encodeURIComponent(filename), withNasAuthHeaders({ cache: 'no-store' }));
     const result = await parseJsonResponse(res);
     if (!res.ok) {
         throw new Error((result && result.message) || `Fehler beim Laden (HTTP ${res.status}).`);
     }
+    return begehungAusDatensatz(result);
+}
 
-    if (window.ASiCMarket && ASiCMarket.isContainer(result)) {
-        ASiCMarket.apply(result, 'all');
-        loadState();
-        if (typeof renderChecklist === 'function') renderChecklist();
-        renderCompanyInfoStrip();
-        showToast('Markt-Datensatz vom NAS geladen');
-        return;
+async function loadStateFromServer(filename) {
+    const res = await fetch(nasUrl('load.php') + '?filename=' + encodeURIComponent(filename), withNasAuthHeaders({ cache: 'no-store' }));
+    const roh = await parseJsonResponse(res);
+    if (!res.ok) {
+        throw new Error((roh && roh.message) || `Fehler beim Laden (HTTP ${res.status}).`);
     }
+    // Markt-Datensatz: GBO-Teil auf diesem Geraet uebernehmen, Begehungsteil
+    // wie gewohnt weiterverarbeiten.
+    const markt = istMarktDatensatz(roh);
+    if (markt && roh.gbo) {
+        try { localStorage.setItem(GBO_STATE_KEY, JSON.stringify(roh.gbo)); } catch (e) { console.error('GBO-Stand konnte nicht übernommen werden:', e); }
+        if (Array.isArray(roh.links)) { try { localStorage.setItem('asicMarketLinksV2', JSON.stringify(roh.links)); } catch (e) {} }
+    }
+    const result = begehungAusDatensatz(roh);
 
     // Defensiv mit defaultState() zusammenfuehren, aehnlich wie beim JSON-Import,
     // damit eine unvollstaendige/aeltere Datei die App nicht zum Absturz bringt.
@@ -420,6 +660,7 @@ async function loadStateFromSynology(filename) {
     state.measures = result.measures || [];
     state.signatures = Object.assign({}, leer.signatures, result.signatures || {});
     state.notApplicable = result.notApplicable || {};
+    state.subgroupNotApplicable = result.subgroupNotApplicable || {};
 
     saveState();
     if (typeof renderChecklist === 'function') renderChecklist();
@@ -428,22 +669,23 @@ async function loadStateFromSynology(filename) {
     // nachgetragene Kommentar beim naechsten Laden (z. B. auf der
     // Maßnahmenseite) wieder fehlen.
     saveState();
+    markiereServerGesichert(filename);
     if (typeof initCompanyForm === 'function') initCompanyForm();
     if (typeof renderCompanyInfoStrip === 'function') renderCompanyInfoStrip();
     if (typeof renderMeasures === 'function') await renderMeasures();
     if (typeof restoreSignatures === 'function') restoreSignatures();
 
-    showToast('Begehung vom NAS geladen: ' + filename);
+    showToast((markt ? 'Markt vom Server geladen: ' : 'Begehung vom Server geladen: ') + filename);
 }
 
-// Einfacher Auswahl-Dialog: listet alle auf dem NAS gespeicherten Begehungen
+// Einfacher Auswahl-Dialog: listet alle auf dem Server gespeicherten Begehungen
 // auf, per Klick wird die jeweilige geladen.
-async function openSynologyLoadDialog() {
+async function openServerLoadDialog() {
     const overlay = document.createElement('div');
     overlay.className = 'access-gate-overlay';
     overlay.innerHTML = `
         <div class="access-gate-box" style="max-width:420px; text-align:left;">
-            <div class="access-gate-brand" style="margin-bottom:0.75rem;">Vom NAS laden</div>
+            <div class="access-gate-brand" style="margin-bottom:0.75rem;">Vom Server laden</div>
             <div id="nas-load-list">
                 <p class="auswertung-empty">Lade Dateiliste …</p>
             </div>
@@ -455,9 +697,9 @@ async function openSynologyLoadDialog() {
 
     const listEl = document.getElementById('nas-load-list');
     try {
-        const files = await getSynologyFiles();
+        const files = await getServerFiles();
         if (files.length === 0) {
-            listEl.innerHTML = '<p class="auswertung-empty">Noch keine Begehung auf dem NAS gespeichert.</p>';
+            listEl.innerHTML = '<p class="auswertung-empty">Noch keine Begehung auf dem Server gespeichert.</p>';
             return;
         }
         listEl.innerHTML = files.map(f => `
@@ -468,10 +710,10 @@ async function openSynologyLoadDialog() {
             btn.addEventListener('click', async () => {
                 overlay.remove();
                 try {
-                    await loadStateFromSynology(btn.dataset.filename);
+                    await loadStateFromServer(btn.dataset.filename);
                 } catch (err) {
-                    console.error('NAS-Laden fehlgeschlagen:', err);
-                    showToast('NAS-Laden fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+                    console.error('Server-Laden fehlgeschlagen:', err);
+                    showToast('Laden vom Server fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
                 }
             });
         });
@@ -1432,9 +1674,10 @@ async function buildPdf(includeChecklist, includeFotos) {
                 findItemById(measure.itemId);
 
             const questionText =
-                found
+                (found
                     ? `${index + 1}. [${measure.itemId}] ${found.item.text}`
-                    : `${index + 1}. Manuell erfasste Maßnahme`;
+                    : `${index + 1}. Manuell erfasste Maßnahme`) +
+                (measure.vorbegehung ? ` (${vorbegehungHinweis(measure)})` : '');
 
             let photos = [];
 
@@ -1449,7 +1692,7 @@ async function buildPdf(includeChecklist, includeFotos) {
 
             // Fallback: liegen lokal (IndexedDB) keine Fotos zu dieser
             // Maßnahme vor - z. B. weil die Begehung gerade erst importiert
-            // oder vom NAS geladen wurde, auf einem anderen Geraet
+            // oder vom Server geladen wurde, auf einem anderen Geraet
             // gespeichert - werden ersatzweise die im JSON mitgelieferten
             // kleinen Vorschaubilder gedruckt. Qualitativ schlechter als das
             // Original, aber besser als gar kein Foto im Ausdruck.
@@ -2385,6 +2628,10 @@ function renderItem(item, locked) {
     const isMangel =
         rating === 'mangel';
 
+    const vorMassnahme = isMangel
+        ? state.measures.find(m => m.itemId === item.id && m.vorbegehung)
+        : null;
+
     return `
     <div class="item ${isMangel ? 'is-mangel' : ''}" data-item-id="${escapeHtml(item.id)}">
         <div class="item-row">
@@ -2397,6 +2644,7 @@ function renderItem(item, locked) {
         </div>
         ${isMangel ? `
         <div class="item-detail">
+            ${vorMassnahme ? `<div class="vorbegehung-hinweis">↻ ${escapeHtml(vorbegehungHinweis(vorMassnahme))} – bitte prüfen; ist der Mangel behoben, auf „OK“ setzen.</div>` : ''}
             <label for="comment-${escapeHtml(item.id)}">Beschreibung des Mangels</label>
             <textarea id="comment-${escapeHtml(item.id)}" placeholder="Was wurde festgestellt? (optional)" ${aktionAttr('input', 'updateComment', item.id, '$value')}>${escapeHtml(comment)}</textarea>
             <div class="measure-preview">
@@ -2702,17 +2950,17 @@ function exportJson() {
 }
 
 // Teilt die JSON-Datei ueber das native Teilen-Menue (z. B. direkt an
-// die Mail-App) - fuer den Fall, dass kein Zugriff auf das NAS besteht und
+// die Mail-App) - fuer den Fall, dass kein Zugriff auf den Server besteht und
 // die Datei stattdessen manuell per Mail an eine Kollegin/einen Kollegen
-// weitergegeben werden soll, die/der sie im NAS-Ordner ablegt (z. B. ueber
-// "Vom NAS laden" ist das nicht moeglich, da das nur vorhandene NAS-Dateien
+// weitergegeben werden soll, die/der sie im Server-Ordner ablegt (z. B. ueber
+// "Vom Server laden" ist das nicht moeglich, da das nur vorhandene Server-Dateien
 // abruft - das manuelle Ablegen selbst erfolgt ausserhalb der App, etwa
-// per File Station).
+// per Dateifreigabe).
 async function shareJson() {
     const blob = buildJsonBlob();
     const filename = jsonExportFilename();
     const markt = state.companyInfo.marktnummer || '-';
-    const text = `Anbei die JSON-Datei der Begehung „${markt}" zur Weiterleitung/Ablage auf dem NAS, falls der direkte NAS-Zugriff gerade nicht möglich war.`;
+    const text = `Anbei die JSON-Datei der Begehung „${markt}" zur Weiterleitung/Ablage auf dem Server, falls der direkte Server-Zugriff gerade nicht möglich war.`;
 
     try {
         if (navigator.canShare && typeof File !== 'undefined') {
@@ -2831,6 +3079,72 @@ function importJson(file) {
 // Zeitpunkt der Archivierung) inklusive der zu diesem Zeitpunkt vorhandenen
 // Fotos. Archivieren loescht NICHT die aktuelle Begehung - beides bleibt
 // parallel bestehen, bis man separat "Zurücksetzen" nutzt.
+// ===== Wiederholungsbegehung =====
+// Kennzeichnung einer Massnahme, die aus der Vorbegehung uebernommen wurde.
+function vorbegehungHinweis(measure) {
+    const v = measure && measure.vorbegehung;
+    if (!v) return '';
+    return 'Offen aus Vorbegehung' + (v.datum ? ' vom ' + formatDate(v.datum) : '') +
+        (v.status === 'bearbeitung' ? ' (dort in Bearbeitung)' : '');
+}
+
+// Baut aus einer frueheren Begehung (lokales Archiv oder Team-Archiv) den
+// Startstand einer Wiederholungsbegehung: Betriebsdaten und N.V.-Schalter
+// werden uebernommen, das Datum auf heute gesetzt. Nicht erledigte
+// Massnahmen werden als Mangel vorbelegt und mit Hinweis auf die
+// Vorbegehung versehen - ist der Mangel inzwischen behoben, setzt der
+// Pruefer einfach "OK", dann entfaellt die Massnahme wie gewohnt.
+// Unterschriften und Fotos werden bewusst nicht uebernommen.
+function buildFollowUpState(record) {
+    const neu = defaultState();
+    const ci = (record && record.companyInfo) || {};
+    const vorDatum = ci.datum || '';
+    neu.companyInfo = { ...neu.companyInfo, ...ci, datum: todayIsoLocal() };
+    neu.notApplicable = { ...((record && record.notApplicable) || {}) };
+    neu.subgroupNotApplicable = { ...((record && record.subgroupNotApplicable) || {}) };
+    const alteKommentare = (record && record.comments) || {};
+    let n = 0;
+    ((record && record.measures) || []).forEach(m => {
+        if (!m || m.status === 'erledigt') return;
+        const found = m.itemId ? findItemById(m.itemId) : null;
+        if (m.itemId && !found) return;
+        const kommentar = (m.comment || alteKommentare[m.itemId] || '').trim();
+        if (found) {
+            neu.ratings[m.itemId] = 'mangel';
+            if (kommentar) neu.comments[m.itemId] = kommentar;
+        }
+        neu.measures.push({
+            id: Date.now().toString() + Math.random().toString(36).slice(2, 7) + n,
+            itemId: m.itemId,
+            description: (found && typeof getMeasureText === 'function' ? getMeasureText(m.itemId) : '') || m.description || '',
+            comment: kommentar,
+            responsible: m.responsible || '',
+            dueDate: m.dueDate || '',
+            status: m.status === 'bearbeitung' ? 'bearbeitung' : 'offen',
+            photoThumbnails: [],
+            vorbegehung: { datum: vorDatum, status: m.status || 'offen' }
+        });
+        n++;
+    });
+    return { state: neu, uebernommen: n, vorDatum: vorDatum };
+}
+
+async function startFollowUpAudit(record, quelle) {
+    const ci = (record && record.companyInfo) || {};
+    const offen = ((record && record.measures) || []).filter(m => m && m.status !== 'erledigt').length;
+    const text = 'Wiederholungsbegehung für Markt ' + (ci.marktnummer || '–') +
+        ' anlegen?\n\nBetriebsdaten werden übernommen, das Datum wird auf heute gesetzt. ' +
+        (offen ? offen + ' nicht erledigte Maßnahme(n) der Begehung vom ' + (ci.datum ? formatDate(ci.datum) : '–') + ' werden als Mangel vorbelegt.' : 'Die Vorbegehung hat keine offenen Maßnahmen.') +
+        '\n\nDer aktuell laufende, noch nicht archivierte Bearbeitungsstand auf diesem Gerät wird dabei ersetzt. ' + (quelle === 'team' ? '' : 'Archivierte Begehungen bleiben unverändert.');
+    if (!confirm(text)) return false;
+    const ergebnis = buildFollowUpState(record);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(ergebnis.state));
+    if (typeof deleteAllPhotos === 'function') {
+        try { await deleteAllPhotos(); } catch (e) { console.error('Fotos konnten nicht geleert werden:', e); }
+    }
+    return ergebnis;
+}
+
 async function archiveCurrentAudit() {
     if (!confirm('Aktuelle Begehung jetzt archivieren? Die laufende Begehung bleibt zusätzlich unverändert bestehen, bis Sie „Zurücksetzen“ nutzen.')) return;
 
@@ -2891,6 +3205,13 @@ async function archiveCurrentAudit() {
                 JSON.parse(
                     JSON.stringify(
                         state.notApplicable || {}
+                    )
+                ),
+
+            subgroupNotApplicable:
+                JSON.parse(
+                    JSON.stringify(
+                        state.subgroupNotApplicable || {}
                     )
                 ),
 
@@ -3178,9 +3499,9 @@ document.addEventListener(
 
         const btnSaveNas = document.getElementById('btn-save-nas');
         const btnLoadNas = document.getElementById('btn-load-nas');
-        // save.php/list.php/load.php gibt es nur auf der Synology selbst,
+        // save.php/list.php/load.php gibt es nur auf dem Server selbst,
         // nicht auf GitHub Pages (dort laeuft kein PHP) - die beiden
-        // NAS-Buttons dort erst gar nicht anzeigen, statt sie klickbar zu
+        // Server-Buttons dort erst gar nicht anzeigen, statt sie klickbar zu
         // lassen und erst danach eine Fehlermeldung zu zeigen. AUSNAHME:
         // Wenn unter "Einstellungen" eine externe Server-Basis-Adresse
         // hinterlegt wurde, kann das auch von GitHub Pages aus funktionieren
@@ -3191,14 +3512,14 @@ document.addEventListener(
             if (laeuftAufGithubPages) {
                 btnSaveNas.style.display = 'none';
             } else {
-                btnSaveNas.addEventListener('click', saveStateToSynology);
+                btnSaveNas.addEventListener('click', saveStateToServer);
             }
         }
         if (btnLoadNas) {
             if (laeuftAufGithubPages) {
                 btnLoadNas.style.display = 'none';
             } else {
-                btnLoadNas.addEventListener('click', openSynologyLoadDialog);
+                btnLoadNas.addEventListener('click', openServerLoadDialog);
             }
         }
 

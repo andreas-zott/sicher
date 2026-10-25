@@ -273,7 +273,7 @@ async function exportAuswertungCsv() {
 }
 
 // Teilt die CSV-Rohdaten ueber das native Teilen-Menue (z. B. direkt an
-// die Mail-App) - fuer den Fall, dass kein Zugriff auf das NAS besteht und
+// die Mail-App) - fuer den Fall, dass kein Zugriff auf den Server besteht und
 // die Datei stattdessen manuell per Mail an eine Kollegin/einen Kollegen
 // weitergegeben werden soll, die/der sie im Team-Ordner ablegt.
 async function shareAuswertungCsv() {
@@ -282,7 +282,7 @@ async function shareAuswertungCsv() {
 
     const blob = csvRowsToBlob(rows);
     const filename = csvExportFilename();
-    const text = 'Anbei der aktuelle Rohdaten-Export (CSV) der archivierten Begehungen aus ASiC Handel.\n\nBitte im gemeinsamen Team-Ordner ablegen, falls der direkte NAS-Zugriff gerade nicht möglich war.';
+    const text = 'Anbei der aktuelle Rohdaten-Export (CSV) der archivierten Begehungen aus ASiC Handel.\n\nBitte im gemeinsamen Team-Ordner ablegen, falls der direkte Server-Zugriff gerade nicht möglich war.';
 
     try {
         if (navigator.canShare && typeof File !== 'undefined') {
@@ -754,6 +754,11 @@ function renderOffeneMassnahmen() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Das lokale Archiv nur auf auswertung.html laden.
+    // Diese Datei wird auch auf auswertung-team.html eingebunden (fuer die
+    // gemeinsamen CSV-/PDF-Funktionen) - dort hat sie bisher beim Start
+    // unnoetig das komplette lokale Archiv aus der IndexedDB gelesen.
+    if (!document.getElementById('markt-filter')) return;
     loadAuswertungData();
     const btnCsv = document.getElementById('btn-export-csv');
     if (btnCsv) btnCsv.addEventListener('click', exportAuswertungCsv);
