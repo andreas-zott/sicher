@@ -133,15 +133,15 @@ function renderWiederkehrend() {
     const vorherDatum = formatDate(previous.companyInfo.datum) || new Date(previous.createdAt).toLocaleDateString('de-DE');
 
     if (recurring.length === 0) {
-        container.innerHTML = `<div class="auswertung-good">✓ Keine wiederkehrenden Mängel gegenüber der letzten Begehung von „${escapeHtml(marktnummer)}“ am ${vorherDatum}.</div>`;
+        container.innerHTML = `<div class="auswertung-good">✓ Keine wiederkehrenden Mängel gegenüber der letzten Begehung von „${escapeHtml(marktnummer)}“ am ${escapeHtml(vorherDatum)}.</div>`;
         return;
     }
 
     container.innerHTML = `
-        <p class="auswertung-hint">Diese Punkte waren bei der letzten Begehung von „${escapeHtml(marktnummer)}“ am ${vorherDatum} bereits ein Mangel:</p>
+        <p class="auswertung-hint">Diese Punkte waren bei der letzten Begehung von „${escapeHtml(marktnummer)}“ am ${escapeHtml(vorherDatum)} bereits ein Mangel:</p>
         <table class="doku-table">
             <tr><th>Frage</th><th>Aktueller Status</th></tr>
-            ${recurring.map(r => `<tr><td>[${r.itemId}] ${escapeHtml(r.text)}</td><td>${escapeHtml(r.currentRating)}</td></tr>`).join('')}
+            ${recurring.map(r => `<tr><td>[${escapeHtml(r.itemId)}] ${escapeHtml(r.text)}</td><td>${escapeHtml(r.currentRating)}</td></tr>`).join('')}
         </table>`;
 }
 

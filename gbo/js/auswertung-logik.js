@@ -11,10 +11,17 @@
 // Voraussetzung: findItemById() und formatDate() aus js/app.js muessen
 // bereits geladen sein.
 
-function escapeHtml(str) {
-    const div = document.createElement('div');
-    div.textContent = str === undefined || str === null ? '' : String(str);
-    return div.innerHTML;
+// Identisch mit escapeHtml() in js/app.js. Eine Fassung ueber
+// textContent -> innerHTML maskiert KEINE Anfuehrungszeichen und wuerde -
+// weil diese Datei nach app.js geladen wird - auf den Auswertungsseiten
+// die sichere Fassung ersetzen (Ausbruch aus Attributwerten).
+function escapeHtml(value) {
+    return String(value === null || value === undefined ? '' : value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
 }
 
 // Liefert einen Zeitstempel fuer eine Begehung, unabhaengig von der
@@ -197,7 +204,7 @@ function svgBalkendiagramm(rows, opts) {
         const labelY = hoehe - margin.unten + 14;
         const kurzName = r.name.length > 14 ? r.name.slice(0, 13) + '…' : r.name;
         return `
-            <g class="auswertung-balken-klickbar" data-kategorie="${escapeHtml(r.name)}" onclick="onKategorieBalkenKlick(this)" style="cursor:pointer;">
+            <g class="auswertung-balken-klickbar" data-kategorie="${escapeHtml(r.name)}" ${aktionAttr('click', 'onKategorieBalkenKlick', '$el')} style="cursor:pointer;">
                 <rect x="${x - 3}" y="${margin.oben - 2}" width="${balkenBreite + 6}" height="${plotHoehe + 4}" fill="transparent"></rect>
                 <rect x="${x}" y="${y}" width="${balkenBreite}" height="${balkenHoehe}" rx="3" fill="${farbe}"></rect>
                 <text x="${x + balkenBreite / 2}" y="${y - 4}" text-anchor="middle" font-size="10" font-weight="700" fill="#1c2226">${r.pct}%</text>
@@ -476,7 +483,7 @@ function renderVerlaufProMarktHtml(daten) {
     const trendSymbol = { besser: '<span class="trend-besser">▼ besser</span>', schlechter: '<span class="trend-schlechter">▲ schlechter</span>', gleich: '<span class="trend-gleich">– gleich</span>' };
     const markets = berechneVerlaufProMarkt(daten);
     return markets.map(({ marktnummer, entries }) => {
-        const items = entries.map(e => `<li>${e.datum} — ${e.mangel} Mangel/Mängel ${e.trend ? trendSymbol[e.trend] : ''}</li>`).join('');
+        const items = entries.map(e => `<li>${escapeHtml(e.datum)} — ${escapeHtml(e.mangel)} Mangel/Mängel ${e.trend ? trendSymbol[e.trend] : ''}</li>`).join('');
         return `
             <div class="auswertung-market-block">
                 <h4>${escapeHtml(marktnummer)} <span class="auswertung-market-count">(${entries.length} Begehung${entries.length === 1 ? '' : 'en'})</span></h4>
