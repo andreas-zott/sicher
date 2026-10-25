@@ -38,11 +38,11 @@ function renderPhotoGrid() {
         const url = URL.createObjectURL(photo.blob);
         photoObjectUrls.push(url);
         return `
-        <div class="photo-tile card" data-id="${photo.id}">
+        <div class="photo-tile card" data-id="${escapeHtml(photo.id)}">
             <img src="${url}" alt="Foto" class="photo-preview">
-            <textarea class="photo-comment" placeholder="Kommentar zu diesem Foto…" onchange="onPhotoCommentChange('${photo.id}', this.value)">${escapeHtml(photo.comment || '')}</textarea>
+            <textarea class="photo-comment" placeholder="Kommentar zu diesem Foto…" ${aktionAttr('change', 'onPhotoCommentChange', photo.id, '$value')}>${escapeHtml(photo.comment || '')}</textarea>
             <div class="photo-tile-actions">
-                <button class="btn-link photo-delete" onclick="onPhotoDelete('${photo.id}')">🗑️ Löschen</button>
+                <button class="btn-link photo-delete" ${aktionAttr('click', 'onPhotoDelete', photo.id)}>🗑️ Löschen</button>
             </div>
         </div>`;
     }).join('');

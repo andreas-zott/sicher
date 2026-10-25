@@ -35,11 +35,11 @@ function renderArchiveList() {
         const fotoAnzahl = (record.photos || []).length;
 
         return `
-        <div class="archive-item card" data-id="${record.id}">
+        <div class="archive-item card" data-id="${escapeHtml(record.id)}">
             <div class="archive-item-head">
                 <div>
                     <div class="archive-item-firma">${escapeHtml(ci.marktnummer || 'Ohne Markt-Angabe')}</div>
-                    <div class="archive-item-meta">Begehung vom ${auditDatum} · archiviert am ${archiviertAm}${fotoAnzahl ? ' · ' + fotoAnzahl + ' Foto(s)' : ''}</div>
+                    <div class="archive-item-meta">Begehung vom ${escapeHtml(auditDatum)} · archiviert am ${escapeHtml(archiviertAm)}${fotoAnzahl ? ' · ' + fotoAnzahl + ' Foto(s)' : ''}</div>
                 </div>
             </div>
             <div class="stat-pills">
@@ -50,11 +50,11 @@ function renderArchiveList() {
             </div>
             <div class="archive-item-actions">
                 <div class="archive-item-actions-primary">
-                    <button class="btn btn-secondary btn-small" onclick="onArchiveExport('${record.id}')">📤 PDF exportieren</button>
-                    <button class="btn btn-secondary btn-small" onclick="onArchiveRestore('${record.id}')">📂 In App anzeigen</button>
-                    <button class="btn btn-secondary btn-small" onclick="onArchiveFollowUp('${record.id}')" title="Neue Begehung für diesen Markt mit den offenen Maßnahmen dieser Begehung">🔁 Wiederholungsbegehung</button>
+                    <button class="btn btn-secondary btn-small" ${aktionAttr('click', 'onArchiveExport', record.id)}>📤 PDF exportieren</button>
+                    <button class="btn btn-secondary btn-small" ${aktionAttr('click', 'onArchiveRestore', record.id)}>📂 In App anzeigen</button>
+                    <button class="btn btn-secondary btn-small" ${aktionAttr('click', 'onArchiveFollowUp', record.id)} title="Neue Begehung für diesen Markt mit den offenen Maßnahmen dieser Begehung">🔁 Wiederholungsbegehung</button>
                 </div>
-                <button class="btn-link photo-delete" onclick="onArchiveDelete('${record.id}')">🗑️ Löschen</button>
+                <button class="btn-link photo-delete" ${aktionAttr('click', 'onArchiveDelete', record.id)}>🗑️ Löschen</button>
             </div>
         </div>`;
     }).join('');
@@ -284,14 +284,14 @@ function renderTeamArchiveList() {
             <div class="archive-item-head">
                 <div>
                     <div class="archive-item-firma">${escapeHtml(entry.plzOrt || entry.firma || 'Ohne Markt-Angabe')}${entry.marktnummer ? ' (Nr. ' + escapeHtml(entry.marktnummer) + ')' : ''}</div>
-                    <div class="archive-item-meta">Begehung vom ${escapeHtml(entry.datum || '-')} · auf dem Server gespeichert am ${gespeichertAm}</div>
+                    <div class="archive-item-meta">Begehung vom ${escapeHtml(entry.datum || '-')} · auf dem Server gespeichert am ${escapeHtml(gespeichertAm)}</div>
                 </div>
             </div>
             <div class="archive-item-actions">
                 <div class="archive-item-actions-primary">
-                    <button class="btn btn-secondary btn-small" onclick="onTeamArchiveExport(this.closest('[data-filename]').dataset.filename)">📤 PDF exportieren</button>
-                    <button class="btn btn-secondary btn-small" onclick="onTeamArchiveRestore(this.closest('[data-filename]').dataset.filename)">📂 In App anzeigen</button>
-                    <button class="btn btn-secondary btn-small" onclick="onTeamArchiveFollowUp(this.closest('[data-filename]').dataset.filename)" title="Neue Begehung für diesen Markt mit den offenen Maßnahmen dieser Begehung">🔁 Wiederholungsbegehung</button>
+                    <button class="btn btn-secondary btn-small" ${aktionAttr('click', 'onTeamArchiveExport', '$closest-filename')}>📤 PDF exportieren</button>
+                    <button class="btn btn-secondary btn-small" ${aktionAttr('click', 'onTeamArchiveRestore', '$closest-filename')}>📂 In App anzeigen</button>
+                    <button class="btn btn-secondary btn-small" ${aktionAttr('click', 'onTeamArchiveFollowUp', '$closest-filename')} title="Neue Begehung für diesen Markt mit den offenen Maßnahmen dieser Begehung">🔁 Wiederholungsbegehung</button>
                 </div>
             </div>
         </div>`;

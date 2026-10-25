@@ -9,7 +9,7 @@ const STORAGE_KEY = 'begehungState';
 // Revisionsstand der App/Checkliste (in Fusszeile und PDF sichtbar,
 // bei inhaltlichen Aenderungen an Fragenkatalog/Massnahmen hochzaehlen)
 const APP_REVISION = '1.54';
-const APP_REVISION_DATE = '2026-10-24';
+const APP_REVISION_DATE = '2026-10-25';
 
 // Heutiges Datum als JJJJ-MM-TT in LOKALER Zeit. toISOString() liefert UTC,
 // dadurch stand zwischen 0 und 2 Uhr (deutsche Zeit) das Vortagsdatum drin.
@@ -30,6 +30,85 @@ function escapeHtml(value) {
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
 }
+
+// --------------------------------------------------------------------------
+// Ereignis-Verteilung ohne Inline-Handler (ab Rev. 1.54-5)
+// --------------------------------------------------------------------------
+// Frueher standen in den erzeugten HTML-Bausteinen Handler wie
+//   onclick="setRating('<ID aus der Datei>', 'ok')"
+// Werte aus importierten JSON-Dateien oder vom Server konnten dort aus der
+// Zeichenkette ausbrechen und eigenen Programmcode ausfuehren. Ausserdem
+// verhindern Inline-Handler eine wirksame Content-Security-Policy.
+//
+// Jetzt: aktionAttr('click', 'setRating', item.id, 'ok') erzeugt
+//   data-click="setRating" data-click-args="[...JSON...]"
+// Die Argumente sind reine Daten (JSON) und werden nie als Code ausgewertet.
+// Platzhalter in den Argumenten:
+//   '$el'      das Element selbst          '$value'   el.value
+//   '$checked' el.checked                  '$files'   el.files
+//   '$closest-filename'  data-filename des naechsten Elternelements
+// data-stop-click auf einem Element entspricht event.stopPropagation() fuer
+// Klicks innerhalb dieses Elements. data-reset-value leert nach dem Aufruf
+// das Feld (Datei-Auswahl erneut moeglich).
+//
+// Aufgerufen werden NUR die in AKTION_ERLAUBT genannten Funktionen.
+const AKTION_ERLAUBT = new Set([
+    'toggleSubgroupByIndex', 'toggleSubgroupNotApplicable', 'toggleCategory',
+    'toggleNotApplicable', 'setRating', 'updateComment',
+    'onKategorieBalkenKlick',
+    'onPhotoCommentChange', 'onPhotoDelete',
+    'onMeasurePhotoDelete', 'openMeasureCamera', 'onMeasurePhotosCaptured',
+    'updateMeasureField', 'onMeasureStatusChange',
+    'onArchiveExport', 'onArchiveRestore', 'onArchiveFollowUp', 'onArchiveDelete',
+    'onTeamArchiveExport', 'onTeamArchiveRestore', 'onTeamArchiveFollowUp'
+]);
+
+function aktionAttr(ereignis, funktion, ...args) {
+    return `data-${ereignis}="${escapeHtml(funktion)}" data-${ereignis}-args="${escapeHtml(JSON.stringify(args))}"`;
+}
+
+(function () {
+    function argumentWert(arg, el) {
+        if (arg === '$el') return el;
+        if (arg === '$value') return el.value;
+        if (arg === '$checked') return el.checked;
+        if (arg === '$files') return el.files;
+        if (arg === '$closest-filename') {
+            const t = el.closest('[data-filename]');
+            return t ? t.dataset.filename : '';
+        }
+        return arg;
+    }
+
+    function verteile(ereignis, ev) {
+        const attr = 'data-' + ereignis;
+        let el = ev.target;
+        while (el && el.nodeType === 1) {
+            if (el.hasAttribute(attr)) {
+                const name = el.getAttribute(attr);
+                const fn = window[name];
+                if (!AKTION_ERLAUBT.has(name) || typeof fn !== 'function') {
+                    console.warn('Unbekannte Aktion ignoriert:', name);
+                    return;
+                }
+                let args = [];
+                try {
+                    const roh = JSON.parse(el.getAttribute(attr + '-args') || '[]');
+                    if (Array.isArray(roh)) args = roh;
+                } catch (e) { args = []; }
+                const ergebnis = fn.apply(null, args.map(a => argumentWert(a, el)));
+                if (el.hasAttribute('data-reset-value')) el.value = '';
+                return ergebnis;
+            }
+            if (ereignis === 'click' && el.hasAttribute('data-stop-click')) return;
+            el = el.parentElement;
+        }
+    }
+
+    ['click', 'change', 'input'].forEach(ereignis => {
+        document.addEventListener(ereignis, ev => verteile(ereignis, ev));
+    });
+})();
 
 function renderFooterMeta() {
     const el = document.getElementById('footer-version');
@@ -2367,20 +2446,20 @@ function renderCategoryItems(category, locked, forceOpenAll) {
         return `
         <div class="audit-subgroup ${groupOpen ? 'open' : ''}">
             <button type="button" class="audit-subgroup-header"
-                onclick="toggleSubgroupByIndex('${category.id}', ${index})">
+                ${aktionAttr('click', 'toggleSubgroupByIndex', category.id, index)}>
                 <span class="audit-subgroup-left">
                     <svg class="audit-subgroup-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-                    <span>${group.name}</span>
+                    <span>${escapeHtml(group.name)}</span>
                 </span>
                 <span class="category-count ${complete ? 'complete' : ''}">${answered} / ${group.items.length}</span>
             </button>
             <div class="audit-subgroup-body">
                 ${showSubgroupToggle ? `
-                <div class="category-toggle-row subgroup-toggle-row" onclick="event.stopPropagation()">
+                <div class="category-toggle-row subgroup-toggle-row" data-stop-click>
                     <label class="toggle-switch">
                         <input type="checkbox" ${state.subgroupNotApplicable[key] ? 'checked' : ''}
                             ${locked ? 'disabled' : ''}
-                            onchange="toggleSubgroupNotApplicable('${category.id}', ${index}, this.checked)">
+                            ${aktionAttr('change', 'toggleSubgroupNotApplicable', category.id, index, '$checked')}>
                         <span class="toggle-slider"></span>
                     </label>
                     <span class="toggle-label">Unterbereich nicht vorhanden / nicht anwendbar – alle Fragen automatisch als „N.V." markieren</span>
@@ -2443,19 +2522,19 @@ function buildChecklistHtml(forceOpenAll) {
             answered === category.items.length;
 
         return `
-        <section class="category card ${isOpen ? 'open' : ''}" id="cat-${category.id}">
-            <div class="category-header" onclick="toggleCategory('${category.id}')">
+        <section class="category card ${isOpen ? 'open' : ''}" id="cat-${escapeHtml(category.id)}">
+            <div class="category-header" ${aktionAttr('click', 'toggleCategory', category.id)}>
                 <div class="category-header-left">
                     <svg class="category-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-                    <span class="category-name">${category.name}</span>
+                    <span class="category-name">${escapeHtml(category.name)}</span>
                 </div>
                 <span class="category-count ${complete ? 'complete' : ''}">${answered} / ${category.items.length}</span>
             </div>
             <div class="category-body">
                 ${toggleLabel ? `
-                <div class="category-toggle-row" onclick="event.stopPropagation()">
+                <div class="category-toggle-row" data-stop-click>
                     <label class="toggle-switch">
-                        <input type="checkbox" ${locked ? 'checked' : ''} onchange="toggleNotApplicable('${category.id}', this.checked)">
+                        <input type="checkbox" ${locked ? 'checked' : ''} ${aktionAttr('change', 'toggleNotApplicable', category.id, '$checked')}>
                         <span class="toggle-slider"></span>
                     </label>
                     <span class="toggle-label">${toggleLabel} – alle Fragen automatisch als „N.V." markieren</span>
@@ -2508,20 +2587,20 @@ function renderItem(item, locked) {
         : null;
 
     return `
-    <div class="item ${isMangel ? 'is-mangel' : ''}" data-item-id="${item.id}">
+    <div class="item ${isMangel ? 'is-mangel' : ''}" data-item-id="${escapeHtml(item.id)}">
         <div class="item-row">
             <div class="item-text"><span class="item-id">${item.id}</span>${item.text}</div>
             <div class="item-actions">
-                <button class="rating-btn ok ${rating === 'ok' ? 'selected' : ''}" ${locked ? 'disabled' : ''} onclick="setRating('${item.id}', 'ok')" aria-label="In Ordnung">OK</button>
-                <button class="rating-btn mangel ${rating === 'mangel' ? 'selected' : ''}" ${locked ? 'disabled' : ''} onclick="setRating('${item.id}', 'mangel')" aria-label="Mangel">!</button>
-                <button class="rating-btn na ${rating === 'na' ? 'selected' : ''}" ${locked ? 'disabled' : ''} onclick="setRating('${item.id}', 'na')" aria-label="Nicht vorhanden">N.V.</button>
+                <button class="rating-btn ok ${rating === 'ok' ? 'selected' : ''}" ${locked ? 'disabled' : ''} ${aktionAttr('click', 'setRating', item.id, 'ok')} aria-label="In Ordnung">OK</button>
+                <button class="rating-btn mangel ${rating === 'mangel' ? 'selected' : ''}" ${locked ? 'disabled' : ''} ${aktionAttr('click', 'setRating', item.id, 'mangel')} aria-label="Mangel">!</button>
+                <button class="rating-btn na ${rating === 'na' ? 'selected' : ''}" ${locked ? 'disabled' : ''} ${aktionAttr('click', 'setRating', item.id, 'na')} aria-label="Nicht vorhanden">N.V.</button>
             </div>
         </div>
         ${isMangel ? `
         <div class="item-detail">
             ${vorMassnahme ? `<div class="vorbegehung-hinweis">↻ ${escapeHtml(vorbegehungHinweis(vorMassnahme))} – bitte prüfen; ist der Mangel behoben, auf „OK“ setzen.</div>` : ''}
-            <label for="comment-${item.id}">Beschreibung des Mangels</label>
-            <textarea id="comment-${item.id}" placeholder="Was wurde festgestellt? (optional)" oninput="updateComment('${item.id}', this.value)">${escapeHtml(comment)}</textarea>
+            <label for="comment-${escapeHtml(item.id)}">Beschreibung des Mangels</label>
+            <textarea id="comment-${escapeHtml(item.id)}" placeholder="Was wurde festgestellt? (optional)" ${aktionAttr('input', 'updateComment', item.id, '$value')}>${escapeHtml(comment)}</textarea>
             <div class="measure-preview">
                 <span class="label">Empfohlene Maßnahme</span>
                 ${getMeasureText(item.id)}

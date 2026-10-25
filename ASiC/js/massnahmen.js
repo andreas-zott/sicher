@@ -154,7 +154,7 @@ async function renderMeasures() {
                         <button
                             type="button"
                             class="measure-photo-delete"
-                            onclick="onMeasurePhotoDelete('${photo.id}', '${measure.id}')"
+                            ${aktionAttr('click', 'onMeasurePhotoDelete', photo.id, measure.id)}
                             title="Foto löschen">
                             ✕
                         </button>
@@ -165,7 +165,7 @@ async function renderMeasures() {
             }).join('')
             : (measure.photoThumbnails || []).map(t => `
                 <div class="measure-photo-thumb measure-photo-thumb-readonly" title="Nur Vorschau — Originalfoto liegt auf einem anderen Gerät">
-                    <img src="${t.dataUrl}" alt="Vorschaubild zur Maßnahme">
+                    <img src="${escapeHtml(sicheresVorschaubild(t && t.dataUrl))}" alt="Vorschaubild zur Maßnahme">
                 </div>
             `).join('');
 
@@ -215,7 +215,7 @@ async function renderMeasures() {
                         <button
                             type="button"
                             class="btn-link"
-                            onclick="openMeasureCamera('${measure.id}')">
+                            ${aktionAttr('click', 'openMeasureCamera', measure.id)}>
                             📷 Kamera öffnen
                         </button>
 
@@ -226,18 +226,18 @@ async function renderMeasures() {
 
                         <label
                             class="btn-link"
-                            for="photo-input-${measure.id}">
+                            for="photo-input-${escapeHtml(measure.id)}">
                             🖼️ Aus Fotos auswählen
                         </label>
 
 
                         <input
                             type="file"
-                            id="photo-input-${measure.id}"
+                            id="photo-input-${escapeHtml(measure.id)}"
                             accept="image/*"
                             multiple
                             style="display:none;"
-                            onchange="onMeasurePhotosCaptured('${measure.id}', this.files); this.value='';">
+                            ${aktionAttr('change', 'onMeasurePhotosCaptured', measure.id, '$files')} data-reset-value>
 
                     </div>
 
@@ -270,18 +270,14 @@ async function renderMeasures() {
                     </span>
 
                     <textarea
-                        oninput="updateMeasureField(
-                            '${measure.id}',
-                            'description',
-                            this.value
-                        )">${escapeHtml(measure.description || '')}</textarea>
+                        ${aktionAttr('input', 'updateMeasureField', measure.id, 'description', '$value')}>${escapeHtml(measure.description || '')}</textarea>
 
 
                     ${
                         (state.comments && state.comments[measure.itemId])
                             ? `
                                 <p class="measure-comment">
-                                    Kommentar: ${state.comments[measure.itemId]}
+                                    Kommentar: ${escapeHtml(state.comments[measure.itemId])}
                                 </p>
                               `
                             : ''
@@ -301,16 +297,8 @@ async function renderMeasures() {
                     </span>
 
                     <select
-                        class="status-badge ${measure.status}"
-                        onchange="
-                            updateMeasureField(
-                                '${measure.id}',
-                                'status',
-                                this.value
-                            );
-                            this.className =
-                                'status-badge ' + this.value;
-                        ">
+                        class="status-badge ${escapeHtml(sichererStatus(measure.status))}"
+                        ${aktionAttr('change', 'onMeasureStatusChange', measure.id, '$el')}>
 
                         <option
                             value="offen"
@@ -338,6 +326,31 @@ async function renderMeasures() {
         `;
 
     }).join('');
+}
+
+
+// --------------------------------------------------------------------------
+// Absicherung von Werten aus importierten Dateien / Team-Archiv (1.54-5)
+// --------------------------------------------------------------------------
+
+// Nur echte eingebettete Bilder als Vorschau zulassen. Alles andere (z. B.
+// ein praeparierter Wert mit Anfuehrungszeichen oder javascript:) wird
+// verworfen.
+function sicheresVorschaubild(dataUrl) {
+    const s = String(dataUrl || '');
+    return /^data:image\/(png|jpe?g|webp|gif);base64,[A-Za-z0-9+/=\s]+$/i.test(s) ? s : '';
+}
+
+// Status nur aus den bekannten Werten - wird auch als CSS-Klasse genutzt.
+function sichererStatus(status) {
+    return ['offen', 'bearbeitung', 'erledigt'].includes(status) ? status : 'offen';
+}
+
+// Ersetzt den frueheren Inline-Handler am Status-Auswahlfeld.
+function onMeasureStatusChange(measureId, selectEl) {
+    const wert = sichererStatus(selectEl.value);
+    updateMeasureField(measureId, 'status', wert);
+    selectEl.className = 'status-badge ' + wert;
 }
 
 
