@@ -2,6 +2,11 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
+<!-- Sicherheitsrichtlinie: nur eigene Skripte, keine eingebetteten Skripte oder
+     Inline-Handler. connect-src erlaubt https:, damit ein Team-Archiv auf einem
+     anderen Server (Einstellungen) erreichbar bleibt. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https:; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="same-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Quellen — Arbeitssicherheit</title>
 <link rel="icon" href="favicon.ico" type="image/x-icon">
@@ -354,26 +359,7 @@
 </footer>
 
 <script src="js/common.js"></script>
-<script>
-(function () {
-    const feld = document.getElementById('quellenSuche');
-    const anzeige = document.getElementById('quellenTreffer');
-    const zeilen = Array.from(document.querySelectorAll('.q-table tbody tr'));
-    const gruppen = Array.from(document.querySelectorAll('.q-gruppe'));
-    function filtern() {
-        const q = feld.value.trim().toLowerCase();
-        let n = 0;
-        zeilen.forEach(tr => {
-            const treffer = !q || tr.textContent.toLowerCase().includes(q);
-            tr.hidden = !treffer;
-            if (treffer) n++;
-        });
-        gruppen.forEach(g => { g.hidden = !g.querySelector('tbody tr:not([hidden])'); });
-        anzeige.textContent = q ? n + ' Treffer' : '';
-    }
-    feld.addEventListener('input', filtern);
-})();
-</script>
+<script src="js/quellen-suche.js"></script>
 
 </body>
 </html>

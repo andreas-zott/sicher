@@ -2,9 +2,15 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
+<!-- Sicherheitsrichtlinie: nur eigene Skripte, keine eingebetteten Skripte oder
+     Inline-Handler. connect-src erlaubt https:, damit ein Team-Archiv auf einem
+     anderen Server (Einstellungen) erreichbar bleibt. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https:; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="same-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Technische Dokumentation – ASiC Handel</title>
 <link rel="stylesheet" href="css/styles.css">
+<script src="zugang-config.js"></script>
 <script src="js/access-gate.js"></script>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -202,6 +208,27 @@
         font-size: 0.9rem;
     }
 
+    .sev {
+        display: inline-block;
+        border-radius: 999px;
+        padding: 0.1rem 0.6rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+        white-space: nowrap;
+        letter-spacing: 0.02em;
+    }
+    .sev-kritisch { background: #cc071e; color: #fff; }
+    .sev-hoch     { background: #e8590c; color: #fff; }
+    .sev-mittel   { background: #f2c94c; color: #3d2f00; }
+    .sev-gering   { background: #dfe5e8; color: #2b3a42; }
+    .st-ok        { background: var(--ok-tint); color: #1d6b42; }
+    .st-betrieb   { background: #e7eef6; color: #2c4f73; }
+    .st-rest      { background: #fff3d6; color: #7a5300; }
+    table.doku-table.befunde td:first-child { white-space: nowrap; }
+    table.doku-table.tests td:first-child { white-space: normal; min-width: 14rem; }
+    table.doku-table.tests td:last-child { min-width: 12rem; }
+    table.doku-table.befunde td:nth-child(3) { min-width: 14rem; }
+
     .doku-box.ok {
         border-left-color: var(--ok);
         background: var(--ok-tint);
@@ -304,21 +331,21 @@
                 <div class="doku-meta-label">
                     Dokumentstand
                 </div>
-                <div class="doku-meta-value"> <span data-zahl="stand">12.10.2026</span> </div>
+                <div class="doku-meta-value"> <span data-zahl="stand">25.10.2026</span> </div>
             </div>
 
             <div class="doku-meta-item">
                 <div class="doku-meta-label">
                     App-Revision
                 </div>
-                <div class="doku-meta-value"> <span data-zahl="revision">2.1.1</span> (<span data-zahl="revision_datum">12.10.2026</span>) </div>
+                <div class="doku-meta-value"> <span data-zahl="revision">2.1.2</span> (<span data-zahl="revision_datum">25.10.2026</span>) </div>
             </div>
 
             <div class="doku-meta-item">
                 <div class="doku-meta-label">
                     Service Worker
                 </div>
-                <div class="doku-meta-value"> <span data-zahl="cache_version">v2.1.1</span> </div>
+                <div class="doku-meta-value"> <span data-zahl="cache_version">v2.1.2</span> </div>
             </div>
 
             <div class="doku-meta-item">
@@ -379,9 +406,11 @@
 
         <a href="#sicherheit"> 9. Sicherheit im Code </a>
 
-        <a href="#gbo"> 10. Gefährdungsbeurteilung und Markt-Datensatz </a>
+        <a href="#cybersicherheit"> 10. App-Sicherheitsanalyse </a>
 
-        <a href="#dateien"> 11. Dateiübersicht </a>
+        <a href="#gbo"> 11. Gefährdungsbeurteilung und Markt-Datensatz </a>
+
+        <a href="#dateien"> 12. Dateiübersicht </a>
 
     </div>
 
@@ -568,7 +597,7 @@
 
             <p>
                 Die aktuelle technische Cache-Version lautet:
-                <strong><code><span data-zahl="cache">asic-handel-v2.1.1</span></code></strong>.
+                <strong><code><span data-zahl="cache">asic-handel-v2.1.2</span></code></strong>.
             </p>
 
             <ul>
@@ -753,8 +782,11 @@
             </p>
 
             <p>
-                Nach erfolgreicher Eingabe wird die Freigabe pro Gerät/Browser
-                lokal gespeichert.
+                Der Code selbst steht nicht im Quelltext. Der Betreiber legt ihn
+                in <code>zugang-config.js</code> fest; dort steht nur seine
+                SHA-256-Prüfsumme (Anleitung in der Datei). Nach erfolgreicher
+                Eingabe merkt sich das Gerät die Prüfsumme; ändert der Betreiber
+                den Code, fragt die App einmal neu.
             </p>
 
         </div>
@@ -766,11 +798,11 @@
                 Kein echter Zugriffsschutz
             </div>
 
-            Da die App als statische Webseite ohne eigenen
-            Authentifizierungsserver läuft, ist der Zugangscode letztlich
-            Bestandteil des Client-Codes und kann von technisch versierten
-            Personen ausgelesen werden. Die Zugangshürde dient daher nicht
-            als kryptografischer Zugriffsschutz.
+            Die Abfrage läuft nur im Browser und lässt sich über einen
+            normalen Browser-Tab oder den Browser-Speicher umgehen. Sie dient
+            als Hürde gegen zufälliges Herumstöbern, nicht als
+            Zugriffsschutz. Echten Schutz liefern Firmennetz,
+            Zugriffsschlüssel und ggf. eine Anmeldung am Webserver.
 
         </div>
 
@@ -1952,11 +1984,85 @@
                 </tr>
 
                 <tr>
+                    <td>Ereignisse</td>
+                    <td>
+                        Erzeugte HTML-Bausteine enthalten keine Inline-Handler
+                        (<code>onclick="…"</code>) mehr. <code>aktionAttr()</code>
+                        in <code>js/app.js</code> schreibt
+                        <code>data-click</code>/<code>data-change</code>/<code>data-input</code>
+                        mit den Argumenten als JSON; eine zentrale Verteilung ruft
+                        nur Funktionen aus der Liste <code>AKTION_ERLAUBT</code>
+                        auf. Werte aus Dateien können so nie als Programmcode
+                        ausgeführt werden.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Content-Security-Policy</td>
+                    <td>
+                        Jede Seite setzt per <code>&lt;meta&gt;</code>
+                        <code>script-src 'self'</code>: nur Skriptdateien vom
+                        eigenen Server, keine eingebetteten Skripte, kein
+                        <code>eval</code>. Eingebettete Skripte wurden nach
+                        <code>js/hilfe-suche.js</code>, <code>js/seiten-jahr.js</code>
+                        und <code>js/auswertung-team-pruefung.js</code> ausgelagert.
+                        Zusätzliche Header (inkl. <code>frame-ancestors</code>) über
+                        <code>.htaccess</code> (Apache), <code>web.config</code> (IIS)
+                        bzw. für PHP-Antworten in <code>config.php</code>.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Werte aus Dateien</td>
+                    <td>
+                        Vorschaubilder werden nur als
+                        <code>data:image/…;base64</code> übernommen
+                        (<code>sicheresVorschaubild()</code>, in der GBO <code>safeImgSrc()</code>
+                        – nur eingebettete Bilder oder Gerätespeicher-Verweise),
+                        der Maßnahmen-Status
+                        nur aus den drei bekannten Werten (<code>sichererStatus()</code>).
+                        <code>escapeHtml()</code> in <code>js/auswertung-logik.js</code>
+                        ist identisch mit der Fassung in <code>js/app.js</code>
+                        (maskiert auch Anführungszeichen).
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Missbrauchsschutz Server</td>
+                    <td>
+                        <code>schutz.php</code> (eingebunden von <code>save.php</code>,
+                        <code>list.php</code>, <code>load.php</code>, <code>pruefen.php</code>):
+                        nach zu vielen falschen Zugriffsschlüsseln je Absender
+                        HTTP 429 (Voreinstellung 20 in 15 Min.), Speicher-Bremse
+                        (60 Speichervorgänge in 10 Min.), Größengrenze je
+                        Begehung (20 MB) und höchstens 20 ältere Stände je
+                        Begehung in <code>versionen/</code>; noch ältere Stände wandern komprimiert (<code>.json.gz</code>) nach
+                        <code>versionen/archiv/</code> (Obergrenze
+                        <code>maxArchivMB</code>, Voreinstellung 500 MB – darüber
+                        fallen die ältesten Archivstände weg). Werte optional in
+                        <code>config.php</code> unter <code>grenzen</code>; Zähler im
+                        Unterordner <code>_schutz/</code> des Datenordners.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Prüfseite</td>
+                    <td>
+                        Schlüssel per Formular (POST) statt in der Adresse, mit
+                        derselben Fehlversuch-Bremse. Der Selbsttest des
+                        Datenordners ruft nur Adressen auf, die auf den eigenen
+                        Server zeigen (kein Missbrauch über einen gefälschten
+                        Host-Header).
+                    </td>
+                </tr>
+
+                <tr>
                     <td>Team-Archiv</td>
                     <td>
                         Dateinamen stehen im <code>data-filename</code>-Attribut;
-                        die Schaltflächen lesen sie von dort und setzen sie nicht
-                        in den JavaScript-Code des <code>onclick</code> ein.
+                        die Schaltflächen lesen sie von dort
+                        (<code>'$closest-filename'</code>) und setzen sie nicht
+                        in Programmcode ein.
                     </td>
                 </tr>
 
@@ -2001,11 +2107,10 @@
                 <tr>
                     <td>Zugriffsschlüssel</td>
                     <td>
-                        Optional. Wird mit <code>hash_equals()</code> geprüft. In
-                        <code>save.php</code>, <code>list.php</code> und
-                        <code>load.php</code> ist standardmäßig kein Schlüssel
-                        gesetzt; er muss in allen drei Dateien und in den
-                        App-Einstellungen identisch hinterlegt werden.
+                        Wird mit <code>hash_equals()</code> geprüft. Der Schlüssel
+                        steht zentral in <code>config.php</code> (standardmäßig
+                        leer) und muss in den App-Einstellungen jedes Geräts
+                        identisch hinterlegt werden.
                     </td>
                 </tr>
 
@@ -2025,7 +2130,12 @@
                 <div class="doku-box-title">Bei zukünftigen Änderungen</div>
                 <p>
                     Jeden neuen Text aus Eingabefeldern, Dateien oder vom Server
-                    mit <code>escapeHtml()</code> ausgeben. Das Tagesdatum immer
+                    mit <code>escapeHtml()</code> (in der GBO <code>esc()</code>) ausgeben – auch Datumswerte und
+                    IDs. Keine <code>onclick="…"</code> und keine
+                    <code>&lt;script&gt;…&lt;/script&gt;</code> in Seiten schreiben,
+                    sondern <code>aktionAttr()</code> bzw. eigene .js-Dateien
+                    (sonst blockiert die CSP); neue Handler-Funktionen in
+                    <code>AKTION_ERLAUBT</code> eintragen. Das Tagesdatum immer
                     über <code>todayIsoLocal()</code> bilden. Neue Dateien in
                     <code>tools/doku-dateien.json</code> eintragen.
                 </p>
@@ -2037,13 +2147,300 @@
 
 
     <!-- ================================================================ -->
-    <!-- 10. GEFÄHRDUNGSBEURTEILUNG UND MARKT-DATENSATZ                   -->
+    <!-- 10. APP-SICHERHEITSANALYSE (CYBER-SICHERHEIT)                    -->
+    <!-- ================================================================ -->
+
+    <section class="doku-section" id="cybersicherheit">
+
+        <div class="section-title">
+            Abschnitt 10
+        </div>
+
+        <h2>
+            App-Sicherheitsanalyse (Cyber-Sicherheit)
+        </h2>
+
+        <div class="card doku-card">
+
+            <p>
+                Die App wurde auf Schwachstellen und Angriffspunkte untersucht.
+                Geprüft wurden alle Dateien des Pakets (HTML, JavaScript, PHP,
+                Konfiguration, Lieferumfang). Jeder Befund wurde anschließend
+                praktisch nachgestellt: im Browser mit präparierten
+                Begehungsdateien und am Server mit gezielten Anfragen an die
+                PHP-Endpunkte.
+            </p>
+
+            <div class="doku-table-wrap">
+            <table class="doku-table">
+                <tr><th>Angaben</th><th></th></tr>
+                <tr><td>Prüfgegenstand</td><td>ASiC Handel, Rev. <span data-zahl="revision">2.1.2</span> (Begehungsliste und Gefährdungsbeurteilung), Service Worker <code><span data-zahl="cache_version">v2.1.2</span></code></td></tr>
+                <tr><td>Prüfdatum</td><td>25.10.2026</td></tr>
+                <tr><td>Methode</td><td>Quellcode-Durchsicht, Angriffstests im Browser (Chromium) mit präparierten Begehungsdaten, Tests der Server-Endpunkte (PHP 8.3)</td></tr>
+                <tr><td>Ergebnis</td><td>Alle Schwachstellen im Programmcode sind behoben und durch Tests belegt. Offen sind nur noch Punkte der Einrichtung und des Betriebs sowie bewertete Restrisiken (siehe unten).</td></tr>
+                <tr><td>Einordnung</td><td>Interne Prüfung durch den Entwickler. Ersetzt keinen Penetrationstest durch einen externen Dienstleister.</td></tr>
+            </table>
+            </div>
+
+        </div>
+
+
+        <h3>
+            Angriffsfläche
+        </h3>
+
+        <div class="card doku-card">
+
+            <div class="doku-table-wrap">
+            <table class="doku-table">
+                <tr><th>Bereich</th><th>Mögliche Angriffe</th></tr>
+                <tr><td>Daten aus Dateien</td><td>Präparierte JSON-Dateien (Begehungs-Import, GBO-Sicherung, Markt-Gesamtsicherung, Team-Archiv, von Hand in den Datenordner gelegt) mit eingeschleustem HTML/JavaScript</td></tr>
+                <tr><td>Team-Archiv-Server</td><td>Lesen und Überschreiben von Begehungen über <code>save.php</code>, <code>list.php</code>, <code>load.php</code>; Durchprobieren des Schlüssels; Vollschreiben des Datenträgers</td></tr>
+                <tr><td>Prüfseite</td><td>Ausspähen von Server-Pfaden, Schlüssel in Protokollen, Missbrauch für Abrufe fremder Adressen</td></tr>
+                <tr><td>Gerät und Browser</td><td>Auslesen des Browser-Speichers (Begehungen, Fotos, Unterschriften, Schlüssel), Umgehen der Zugangssperre</td></tr>
+                <tr><td>Lieferpaket</td><td>Mitgelieferte Hilfsdateien, die über den Webserver abrufbar wären</td></tr>
+            </table>
+            </div>
+
+        </div>
+
+
+        <h3>
+            Offene Punkte und Aufgaben des Betreibers
+        </h3>
+
+        <div class="card doku-card">
+
+            <p>
+                Alle übrigen Befunde der Analyse sind im Code behoben; die
+                Schutzmaßnahmen stehen im folgenden Unterabschnitt. Die Nummern
+                entsprechen dem Sicherheitsbericht für die IT.
+            </p>
+
+            <div class="doku-table-wrap">
+            <table class="doku-table befunde">
+
+                <tr>
+                    <th>Nr.</th>
+                    <th>Schwere</th>
+                    <th>Ist-Zustand</th>
+                    <th>Status und Aufgabe</th>
+                </tr>
+
+                <tr>
+                    <td>S1</td>
+                    <td><span class="sev sev-kritisch">Kritisch</span></td>
+                    <td><strong>Zugriffsschlüssel für das Team-Archiv</strong><br>In der ausgelieferten <code>config.php</code> ist kein <code>apiKey</code> gesetzt. Ohne Schlüssel kann jeder, der den Server erreicht, Begehungen lesen und überschreiben.</td>
+                    <td><span class="sev st-betrieb">Betreiber</span><br>Langen Zufallswert als <code>apiKey</code> setzen (z. B. <code>openssl rand -hex 24</code>) und auf allen Geräten eintragen. <code>pruefen.php</code> meldet einen fehlenden oder kurzen Schlüssel.</td>
+                </tr>
+                <tr>
+                    <td>S2</td>
+                    <td><span class="sev sev-hoch">Hoch</span></td>
+                    <td><strong>Zugriffsschlüssel im Browser-Speicher</strong><br>Der Schlüssel steht im Klartext im <code>localStorage</code> des Geräts. Über eingeschleusten Code ist er nicht mehr erreichbar (Maskierung, keine Inline-Handler, CSP); wer das entsperrte Gerät in der Hand hat, kann ihn auslesen.</td>
+                    <td><span class="sev st-rest">Restrisiko</span><br>Gerätesperre und Geräteverwaltung (S6). Bei Geräteverlust Schlüssel tauschen.</td>
+                </tr>
+                <tr>
+                    <td>S3</td>
+                    <td><span class="sev sev-mittel">Mittel</span></td>
+                    <td><strong>Zugangssperre wirkt nur im Browser</strong><br>Die Code-Abfrage greift nur in der installierten App und lässt sich über einen normalen Browser-Tab oder den Browser-Speicher umgehen.</td>
+                    <td><span class="sev st-rest">Bewusst</span><br>Ist eine Hürde gegen zufälliges Herumstöbern, kein Zugriffsschutz. Eigenen Code festlegen; echten Schutz liefern Firmennetz, <code>apiKey</code> und ggf. eine Anmeldung am Webserver.</td>
+                </tr>
+                <tr>
+                    <td>S4</td>
+                    <td><span class="sev sev-mittel">Mittel</span></td>
+                    <td><strong>Prüfseite zeigt Server-Angaben</strong><br><code>pruefen.php</code> zeigt Server-Pfade, Benutzer und Einstellungen (Schlüssel per Formular, mit Fehlversuch-Sperre).</td>
+                    <td><span class="sev st-betrieb">Betreiber</span><br>Nach der Einrichtung löschen; für eine spätere Kontrolle wieder hochladen.</td>
+                </tr>
+                <tr>
+                    <td>S5</td>
+                    <td><span class="sev sev-gering">Gering</span></td>
+                    <td><strong>Server-Adresse nicht auf HTTPS beschränkt</strong><br>In den Einstellungen der App wird auch eine <code>http://</code>-Adresse angenommen; der Schlüssel ginge dann unverschlüsselt über das Netz.</td>
+                    <td><span class="sev st-rest">Offen</span><br>Nur <code>https://</code>-Adressen eintragen. Der Offline-Betrieb setzt HTTPS ohnehin voraus.</td>
+                </tr>
+                <tr>
+                    <td>S6</td>
+                    <td><span class="sev sev-gering">Gering</span></td>
+                    <td><strong>Daten unverschlüsselt auf dem Gerät</strong><br>Begehungen, Fotos und Unterschriften liegen im Browser-Speicher (localStorage/IndexedDB).</td>
+                    <td><span class="sev st-betrieb">Betrieb</span><br>Gerätesperre mit Code, Geräteverwaltung (MDM), keine gemeinsam genutzten Geräte ohne Sperre.</td>
+                </tr>
+                <tr>
+                    <td>S7</td>
+                    <td><span class="sev sev-gering">Gering</span></td>
+                    <td><strong>Lage des Datenordners</strong><br>Liegt der Datenordner im Web-Verzeichnis (Variante B), hängt sein Schutz an Sperrdateien bzw. einer nginx-Regel.</td>
+                    <td><span class="sev st-betrieb">Betreiber</span><br>Variante A (außerhalb des Web-Verzeichnisses) verwenden; <code>pruefen.php</code> prüft die Sperre automatisch.</td>
+                </tr>
+
+            </table>
+            </div>
+
+            <div class="doku-box ok">
+                <div class="doku-box-title">Legende</div>
+                <p>
+                    <span class="sev st-betrieb">Betreiber</span> / <span class="sev st-betrieb">Betrieb</span> durch Einrichtung oder organisatorisch zu erfüllen ·
+                    <span class="sev st-rest">Restrisiko</span> / <span class="sev st-rest">Bewusst</span> bekannt und bewertet, im Code nicht weiter zu schließen ·
+                    <span class="sev st-rest">Offen</span> noch nicht im Code umgesetzt, Hinweis für den Betrieb.
+                </p>
+            </div>
+
+        </div>
+
+
+        <h3>
+            Wirksame Schutzmaßnahmen
+        </h3>
+
+        <div class="card doku-card">
+
+            <div class="doku-table-wrap">
+            <table class="doku-table">
+                <tr><th>Ebene</th><th>Schutz</th></tr>
+                <tr><td>Ausgabe</td><td>Alle Werte aus Eingaben, Dateien und vom Server werden mit <code>escapeHtml()</code> maskiert. Vorschaubilder und Status werden zusätzlich auf erlaubte Werte geprüft.</td></tr>
+                <tr><td>Ereignisse</td><td>Keine Inline-Handler. <code>aktionAttr()</code> legt Argumente als JSON-Daten ab; eine zentrale Verteilung ruft nur Funktionen aus <code>AKTION_ERLAUBT</code> auf.</td></tr>
+                <tr><td>Browser-Richtlinie</td><td>Content-Security-Policy in jeder Seite: nur eigene Skriptdateien, keine eingebetteten Skripte, kein <code>eval</code>, keine Plugins, keine fremden Bilder oder Schriften. Verbindungen nur zum eigenen Server und zu HTTPS-Adressen (für ein Team-Archiv auf einem anderen Server).</td></tr>
+                <tr><td>HTTP-Header</td><td><code>X-Content-Type-Options: nosniff</code>, Schutz vor Einbetten (<code>X-Frame-Options</code>, <code>frame-ancestors</code>), <code>Referrer-Policy: same-origin</code>; JSON-Antworten zusätzlich <code>Cache-Control: no-store</code>.</td></tr>
+                <tr><td>Zugriff Server</td><td>Zugriffsschlüssel (zeitkonstanter Vergleich), Sperre nach 20 Fehlversuchen für 15 Minuten je Absender (HTTP 429).</td></tr>
+                <tr><td>Missbrauchsschutz</td><td>Höchstens 60 Speichervorgänge in 10 Minuten je Absender, höchstens 20 MB je Begehung, 20 Stände je Begehung in <code>versionen/</code>, ältere komprimiert in <code>versionen/archiv/</code> (Obergrenze 500 MB). Alle Werte in <code>config.php</code> unter <code>grenzen</code> anpassbar.</td></tr>
+                <tr><td>Dateizugriff</td><td><code>load.php</code> nimmt nur Dateinamen der beiden bekannten Muster an (kein Verzeichnis-Ausbruch); Schreiben über temporäre Datei; Datenordner per Sperrdatei bzw. außerhalb des Web-Verzeichnisses.</td></tr>
+                <tr><td>Lieferumfang</td><td>Keine Zwischendateien; Entwickler-Werkzeuge gesperrt. Keine Bibliotheken oder Schriften von Drittanbietern zur Laufzeit.</td></tr>
+            </table>
+            </div>
+
+        </div>
+
+
+        <h3>
+            Testergebnisse
+        </h3>
+
+        <div class="card doku-card">
+
+            <p>
+                Ergebnisse für den aktuellen Stand
+                <code><span data-zahl="cache_version">v2.1.2</span></code> mit präparierten
+                Daten bzw. gezielten Anfragen.
+            </p>
+
+            <div class="doku-table-wrap">
+            <table class="doku-table tests">
+                <tr><th>Test</th><th>Ergebnis</th></tr>
+                <tr>
+                    <td>Kommentar mit Schadcode (Maßnahmen-Seite)</td>
+                    <td>nicht ausgeführt, Text sichtbar</td>
+                </tr>
+                <tr>
+                    <td>Vorschaubild mit präparierter Adresse</td>
+                    <td>verworfen</td>
+                </tr>
+                <tr>
+                    <td>Maßnahmen-Status mit Attribut-Ausbruch</td>
+                    <td>verworfen</td>
+                </tr>
+                <tr>
+                    <td>Maßnahmen-ID mit Code (Klick auf „Kamera öffnen“)</td>
+                    <td>nicht ausgeführt, Bedienung normal</td>
+                </tr>
+                <tr>
+                    <td>Ungültiges Datum mit HTML (Team-Auswertung)</td>
+                    <td>maskiert</td>
+                </tr>
+                <tr>
+                    <td>Marktnummer mit Anführungszeichen (Auswertung)</td>
+                    <td>maskiert</td>
+                </tr>
+                <tr>
+                    <td>GBO: Testcode in allen rund 2.800 Feldern eines vollständigen GBO-Stands (wie beim Import), alle Ansichten aufgerufen</td>
+                    <td>in keinem Feld ausgeführt – auch bei abgeschalteter CSP</td>
+                </tr>
+                <tr>
+                    <td>GBO-Bildbeleg mit präparierter Adresse bzw. <code>javascript:</code>-Link</td>
+                    <td>verworfen</td>
+                </tr>
+                <tr>
+                    <td>GBO-Überprüfungsdatum mit HTML</td>
+                    <td>maskiert</td>
+                </tr>
+                <tr>
+                    <td>Gegenprobe CSP: Inline-Skript nachträglich einfügen</td>
+                    <td>vom Browser blockiert</td>
+                </tr>
+                <tr>
+                    <td>Zugriffsschlüssel durchprobieren (Testgrenze 3)</td>
+                    <td>401, 401, 401, danach 429</td>
+                </tr>
+                <tr>
+                    <td>Massenhaftes Speichern (Testgrenze 5)</td>
+                    <td>6. Vorgang 429</td>
+                </tr>
+                <tr>
+                    <td>Begehung über Größengrenze</td>
+                    <td>413 mit Meldung</td>
+                </tr>
+                <tr>
+                    <td>Überlauf <code>versionen/</code></td>
+                    <td>neueste Stände bleiben, ältere als .json.gz im Archiv, Obergrenze greift</td>
+                </tr>
+                <tr>
+                    <td>Prüfseite mit gefälschtem Host-Header</td>
+                    <td>Abruf unterbleibt, Hinweis</td>
+                </tr>
+                <tr>
+                    <td>Bedienung: Prüfkatalog, Schalter, Maßnahmen mit Foto, Verlauf, Team-Archiv (Markt speichern und laden), GBO mit Antwort, Bildbeleg, Überprüfung und PDF, Hilfe- und Quellensuche, Offline-Cache</td>
+                    <td>funktioniert, keine Konsolenfehler</td>
+                </tr>
+            </table>
+            </div>
+
+        </div>
+
+
+        <h3>
+            Pflichten des Betreibers
+        </h3>
+
+        <div class="card doku-card">
+
+            <div class="doku-box">
+                <div class="doku-box-title">Vor dem Produktivbetrieb</div>
+                <p>
+                    1. In <code>config.php</code> einen langen Zufallswert als <code>apiKey</code> setzen
+                    (z. B. <code>openssl rand -hex 24</code>) und auf den Geräten eintragen.<br>
+                    2. Eigenen Zugangscode festlegen (<code>zugang-config.js</code>, nur die Prüfsumme) und den Nutzern direkt mitteilen.<br>
+                    3. Datenordner außerhalb des Web-Verzeichnisses anlegen (Variante A).<br>
+                    4. Nur über HTTPS mit gültigem Zertifikat betreiben; in den Einstellungen nur <code>https://</code>-Adressen eintragen.<br>
+                    5. <code>pruefen.php</code> aufrufen, alle roten Punkte beheben, danach löschen.<br>
+                    6. Ordner <code>tools/</code> nicht auf den Webserver kopieren.<br>
+                    7. Datenordner einschließlich <code>versionen/archiv/</code> in die Server-Sicherung aufnehmen.<br>
+                    8. Geräte mit Code sperren, möglichst über eine Geräteverwaltung (MDM).
+                </p>
+            </div>
+
+            <div class="doku-box ok">
+                <div class="doku-box-title">Gemeinsame IP-Adresse</div>
+                <p>
+                    Die Bremsen zählen je IP-Adresse. Laufen alle Geräte über
+                    einen Proxy oder eine gemeinsame Adresse, teilen sie sich
+                    die Zähler. Dann <code>speichernMax</code> erhöhen. Bei einem
+                    aus dem Internet erreichbaren Server kann ein Angreifer mit
+                    falschen Schlüsseln alle Geräte hinter derselben Adresse für
+                    15 Minuten sperren; bei einem langen Schlüssel ist
+                    Durchprobieren aussichtslos, <code>fehlversuchMax</code> darf
+                    dann höher stehen (z. B. 100).
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================================================ -->
+    <!-- 11. GEFÄHRDUNGSBEURTEILUNG UND MARKT-DATENSATZ                   -->
     <!-- ================================================================ -->
 
     <section class="doku-section" id="gbo">
 
         <div class="section-title">
-            Abschnitt 10
+            Abschnitt 11
         </div>
 
         <h2>
@@ -2113,7 +2510,7 @@
     <section class="doku-section" id="dateien">
 
         <div class="section-title">
-            Abschnitt 11
+            Abschnitt 12
         </div>
 
         <h2>
@@ -2139,12 +2536,12 @@
                 <!-- DATEITABELLE:START -->
                 <tr>
                     <td>index.html</td>
-                    <td class="zahl">795</td>
+                    <td class="zahl">801</td>
                     <td>Prüfkatalog und Eingabe der Begehungsdaten</td>
                 </tr>
                 <tr>
                     <td>massnahmen.html</td>
-                    <td class="zahl">704</td>
+                    <td class="zahl">710</td>
                     <td>Aktionsplan, Maßnahmenbearbeitung, Status und Unterschriften</td>
                 </tr>
                 <tr>
@@ -2154,67 +2551,72 @@
                 </tr>
                 <tr>
                     <td>gbo-hilfe.html</td>
-                    <td class="zahl">541</td>
+                    <td class="zahl">547</td>
                     <td>Hilfe und FAQ zur Gefährdungsbeurteilung</td>
                 </tr>
                 <tr>
                     <td>gbo-dokumentation.html</td>
-                    <td class="zahl">535</td>
+                    <td class="zahl">541</td>
                     <td>Technische Dokumentation der Gefährdungsbeurteilung</td>
                 </tr>
                 <tr>
+                    <td>quellen.html</td>
+                    <td class="zahl">365</td>
+                    <td>Übersicht der Rechtsgrundlagen und Regelwerke mit Suche</td>
+                </tr>
+                <tr>
                     <td>fotos.html</td>
-                    <td class="zahl">548</td>
+                    <td class="zahl">554</td>
                     <td>Aufnahme, Einfügen, Kommentieren und Verwaltung von Fotos</td>
                 </tr>
                 <tr>
                     <td>verlauf.html</td>
-                    <td class="zahl">363</td>
+                    <td class="zahl">369</td>
                     <td>Archivierte Begehungen (Mein Verlauf) und Team-Archiv (NAS)</td>
                 </tr>
                 <tr>
                     <td>auswertung.html</td>
-                    <td class="zahl">941</td>
+                    <td class="zahl">947</td>
                     <td>Auswertung der lokal archivierten Begehungen</td>
                 </tr>
                 <tr>
                     <td>auswertung-team.html</td>
-                    <td class="zahl">873</td>
+                    <td class="zahl">879</td>
                     <td>Auswertung aller Begehungen im Team-Archiv (NAS)</td>
                 </tr>
                 <tr>
                     <td>einstellungen.html</td>
-                    <td class="zahl">302</td>
+                    <td class="zahl">308</td>
                     <td>Konfigurierbare externe NAS-Server-Adresse und Zugriffsschlüssel</td>
                 </tr>
                 <tr>
                     <td>impressum.html</td>
-                    <td class="zahl">166</td>
+                    <td class="zahl">171</td>
                     <td>Impressum</td>
                 </tr>
                 <tr>
                     <td>datenschutz.html</td>
-                    <td class="zahl">258</td>
+                    <td class="zahl">263</td>
                     <td>Datenschutzerklärung</td>
                 </tr>
                 <tr>
                     <td>hilfe.html</td>
-                    <td class="zahl">1.526</td>
+                    <td class="zahl">1.334</td>
                     <td>Bedienungsanleitung und FAQ</td>
                 </tr>
                 <tr>
                     <td>dokumentation.html</td>
-                    <td class="zahl">2.510</td>
+                    <td class="zahl">2.965</td>
                     <td>Technische Dokumentation (diese Seite)</td>
                 </tr>
                 <tr>
                     <td>css/styles.css</td>
-                    <td class="zahl">1.904</td>
+                    <td class="zahl">1.905</td>
                     <td>Gesamtes gemeinsames Styling</td>
                 </tr>
                 <tr>
                     <td>js/app.js</td>
-                    <td class="zahl">3.250</td>
+                    <td class="zahl">3.329</td>
                     <td>Kernlogik, State-Verwaltung, Checkliste, PDF-Erzeugung, Export, Archivierung, NAS-Zugriff, Hilfsfunktionen (escapeHtml, todayIsoLocal) und Service-Worker-Registrierung</td>
                 </tr>
                 <tr>
@@ -2229,7 +2631,7 @@
                 </tr>
                 <tr>
                     <td>js/massnahmen.js</td>
-                    <td class="zahl">1.082</td>
+                    <td class="zahl">1.095</td>
                     <td>Logik der Aktionsplan-Seite</td>
                 </tr>
                 <tr>
@@ -2259,7 +2661,7 @@
                 </tr>
                 <tr>
                     <td>js/auswertung-logik.js</td>
-                    <td class="zahl">486</td>
+                    <td class="zahl">493</td>
                     <td>Gemeinsame Auswertungs-Berechnungslogik (auswertung.html, auswertung-team.html, verlauf.html)</td>
                 </tr>
                 <tr>
@@ -2274,13 +2676,33 @@
                 </tr>
                 <tr>
                     <td>js/access-gate.js</td>
-                    <td class="zahl">62</td>
+                    <td class="zahl">149</td>
                     <td>Clientseitige Zugangshürde für die installierte App-Ansicht</td>
                 </tr>
                 <tr>
+                    <td>zugang-config.js</td>
+                    <td class="zahl">24</td>
+                    <td>Betreiber-Einstellung: Prüfsumme (SHA-256) des Zugangscodes, Abfrage ein/aus</td>
+                </tr>
+                <tr>
+                    <td>js/seiten-jahr.js</td>
+                    <td class="zahl">3</td>
+                    <td>Aktuelles Jahr in den Fußzeilen</td>
+                </tr>
+                <tr>
+                    <td>js/hilfe-suche.js</td>
+                    <td class="zahl">200</td>
+                    <td>Suche, Auf-/Zuklappen und „Nach oben“ der Hilfeseite</td>
+                </tr>
+                <tr>
+                    <td>js/quellen-suche.js</td>
+                    <td class="zahl">20</td>
+                    <td>Suche in der Quellenübersicht</td>
+                </tr>
+                <tr>
                     <td>sw.js</td>
-                    <td class="zahl">313</td>
-                    <td>Service Worker, Offline-Fähigkeit, Cache-Version v2.1.1</td>
+                    <td class="zahl">320</td>
+                    <td>Service Worker, Offline-Fähigkeit, Cache-Version v2.1.2</td>
                 </tr>
                 <tr>
                     <td>manifest.json</td>
@@ -2289,12 +2711,12 @@
                 </tr>
                 <tr>
                     <td>save.php</td>
-                    <td class="zahl">578</td>
+                    <td class="zahl">603</td>
                     <td>NAS: Begehung speichern (sichert den Vorgängerstand im Unterordner versionen)</td>
                 </tr>
                 <tr>
                     <td>list.php</td>
-                    <td class="zahl">342</td>
+                    <td class="zahl">352</td>
                     <td>NAS: Liste aller gespeicherten Begehungen für das Team-Archiv</td>
                 </tr>
                 <tr>
@@ -2314,7 +2736,7 @@
                 </tr>
                 <tr>
                     <td>css/gbo.css</td>
-                    <td class="zahl">524</td>
+                    <td class="zahl">712</td>
                     <td>Gestaltung der Gefährdungsbeurteilung</td>
                 </tr>
                 <tr>
@@ -2344,12 +2766,12 @@
                 </tr>
                 <tr>
                     <td>js/gbo-risk.js</td>
-                    <td class="zahl">595</td>
+                    <td class="zahl">624</td>
                     <td>GBO: Risikobewertung je Modul (Schwere x Wahrscheinlichkeit, Ausgangs- und Restrisiko, Wirksamkeitskontrolle), Risikoübersicht und Fortschreibung der GBO</td>
                 </tr>
                 <tr>
                     <td>js/gbo-pdf.js</td>
-                    <td class="zahl">1.336</td>
+                    <td class="zahl">1.372</td>
                     <td>PDF-Ausgabe der Gefährdungsbeurteilung: Gesamt-GBO und Maßnahmenliste, Drucken, Teilen, Mail-Text</td>
                 </tr>
                 <tr>
@@ -2359,7 +2781,7 @@
                 </tr>
                 <tr>
                     <td>js/gbo-fristen.js</td>
-                    <td class="zahl">117</td>
+                    <td class="zahl">113</td>
                     <td>Fristüberwachung der GBO: überfällige Maßnahmen, Hinweisleiste, Mailentwurf an den Markt</td>
                 </tr>
                 <tr>
@@ -2389,8 +2811,43 @@
                 </tr>
                 <tr>
                     <td>load.php</td>
-                    <td class="zahl">176</td>
+                    <td class="zahl">173</td>
                     <td>NAS: einzelne gespeicherte Begehung laden</td>
+                </tr>
+                <tr>
+                    <td>config.php</td>
+                    <td class="zahl">130</td>
+                    <td>Einzige Server-Einstellung: Datenordner, Zugriffsschlüssel, CORS, Grenzwerte, Sicherheits-Header</td>
+                </tr>
+                <tr>
+                    <td>schutz.php</td>
+                    <td class="zahl">286</td>
+                    <td>Missbrauchsschutz für das Team-Archiv: Bremse für Fehlversuche und Speichern, Größengrenze, Begrenzung von versionen/ mit Archiv</td>
+                </tr>
+                <tr>
+                    <td>pruefen.php</td>
+                    <td class="zahl">404</td>
+                    <td>Prüfseite für die Server-Einrichtung (nach der Einrichtung löschen)</td>
+                </tr>
+                <tr>
+                    <td>.htaccess</td>
+                    <td class="zahl">23</td>
+                    <td>Sicherheits-Header für Apache (CSP inkl. frame-ancestors, nosniff), Sperre der Hilfsdateien</td>
+                </tr>
+                <tr>
+                    <td>web.config</td>
+                    <td class="zahl">25</td>
+                    <td>Sicherheits-Header für IIS, Sperre des Ordners tools</td>
+                </tr>
+                <tr>
+                    <td>daten/.htaccess</td>
+                    <td class="zahl">3</td>
+                    <td>Sperre des mitgelieferten Datenordners (Apache)</td>
+                </tr>
+                <tr>
+                    <td>daten/web.config</td>
+                    <td class="zahl">12</td>
+                    <td>Sperre des mitgelieferten Datenordners (IIS)</td>
                 </tr>
                 <tr>
                     <td>tools/doku-zahlen.py</td>
@@ -2399,7 +2856,7 @@
                 </tr>
                 <tr>
                     <td>tools/doku-dateien.json</td>
-                    <td class="zahl">66</td>
+                    <td class="zahl">299</td>
                     <td>Dateiliste mit Beschreibungen für das Hilfsskript</td>
                 </tr>
                 <tr>
@@ -2434,11 +2891,11 @@
 
             <p>
                 <strong>Gesamt (eigener Code, ohne jsPDF und Schrift):</strong>
-                <span data-zahl="zeilen_gesamt">33.147</span> Zeilen
+                <span data-zahl="zeilen_gesamt">35.677</span> Zeilen
             </p>
 
             <p style="font-size:0.82rem; color:var(--ink-soft);">
-                Stand der Zeilenzahlen: <span data-zahl="zeilen_stand">12.10.2026</span>.
+                Stand der Zeilenzahlen: <span data-zahl="zeilen_stand">25.10.2026</span>.
                 Die Werte wurden aus den tatsächlich enthaltenen Dateien gezählt.
             </p>
 

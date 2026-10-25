@@ -4,6 +4,11 @@
 <head>
 
 <meta charset="UTF-8">
+<!-- Sicherheitsrichtlinie: nur eigene Skripte, keine eingebetteten Skripte oder
+     Inline-Handler. connect-src erlaubt https:, damit ein Team-Archiv auf einem
+     anderen Server (Einstellungen) erreichbar bleibt. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https:; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="same-origin">
 
 <meta
     name="viewport"
@@ -19,6 +24,7 @@
     href="css/styles.css"
 >
 
+<script src="zugang-config.js"></script>
 <script src="js/access-gate.js"></script>
 
 <link
@@ -485,7 +491,7 @@
         <div class="doku-meta">
 
             <span class="doku-meta-item">
-                App-Revision 2.1.1
+                App-Revision 2.1.2
             </span>
 
             <span class="doku-meta-item">
