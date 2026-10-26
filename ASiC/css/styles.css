@@ -1480,22 +1480,36 @@ a.btn {
 }
 
 .menu-mode-row {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 0.3rem;
-    padding: 0.35rem;
-    background: var(--paper);
+    padding: 0.45rem;
+    background: var(--brand-red-tint);
+    border: 1px solid #f2c4ca;
     border-radius: 10px;
     margin: 0.15rem;
+}
+
+/* Ueberschrift der Inhaltswahl im Export-Menue */
+.menu-mode-row::before {
+    content: "Inhalt des Exports";
+    grid-column: 1 / -1;
+    padding: 0 0.2rem 0.1rem;
+    color: var(--brand-red-dark);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
 }
 
 .mode-btn {
     flex: 1;
     height: 34px;
     padding: 0 0.5rem;
-    border: none;
+    border: 1px solid var(--line);
     border-radius: 8px;
-    background: transparent;
-    color: var(--steel);
+    background: var(--card);
+    color: var(--ink-soft);
     font-size: 0.76rem;
     font-weight: 700;
     cursor: pointer;
@@ -1504,8 +1518,9 @@ a.btn {
 }
 
 .mode-btn.active {
-    background: var(--card);
-    color: var(--ink);
+    background: var(--brand-red-dark);
+    border-color: var(--brand-red-dark);
+    color: #fff;
     box-shadow: var(--shadow);
 }
 
