@@ -488,12 +488,9 @@ function initDropdownMenu(toggleId, panelId) {
     });
 }
 
-// ===== Export-Menü: Modus-Auswahl (Checkliste / Maßnahmen / Beide) + Aktionen =====
-// Auf beiden Seiten identisch nutzbar - Vorauswahl richtet sich danach, auf
-// welcher Seite man sich gerade befindet (erkennbar an den vorhandenen Elementen).
-let exportMode = document.getElementById('measures-container') ? 'massnahmen'
-    : document.getElementById('photo-grid') ? 'fotos'
-    : 'checkliste';
+// ===== Export-Menü: Modus-Auswahl (Checkliste / Maßnahmen / Fotos / Alles) + Aktionen =====
+// Auf allen Seiten gleich: Vorauswahl ist "Alles" (vollstaendiger Bericht).
+let exportMode = 'alle';
 
 // ===== Server-Speicherung (save.php / list.php / load.php) =====
 // Setzt voraus, dass die App direkt ueber den Server aufgerufen
