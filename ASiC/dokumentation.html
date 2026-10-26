@@ -10,9 +10,9 @@
 <meta name="referrer" content="same-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Technische Dokumentation – ASiC Handel</title>
-<link rel="stylesheet" href="css/styles.css?v=1.54-7">
+<link rel="stylesheet" href="css/styles.css?v=1.54-8">
 <script src="zugang-config.js"></script>
-<script src="js/access-gate.js?v=1.54-7"></script>
+<script src="js/access-gate.js?v=1.54-8"></script>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -349,7 +349,7 @@
                 <div class="doku-meta-label">
                     Service Worker
                 </div>
-                <div class="doku-meta-value"> <span data-zahl="cache_version">v1.54-7</span> </div>
+                <div class="doku-meta-value"> <span data-zahl="cache_version">v1.54-8</span> </div>
             </div>
 
             <div class="doku-meta-item">
@@ -601,7 +601,7 @@
 
             <p>
                 Die aktuelle technische Cache-Version lautet:
-                <strong><code><span data-zahl="cache">asic-handel-v1.54-7</span></code></strong>.
+                <strong><code><span data-zahl="cache">asic-handel-v1.54-8</span></code></strong>.
             </p>
 
             <ul>
@@ -1691,7 +1691,12 @@
             </div>
 
             Über „Datei ▾ → Auf Server speichern" bzw. „Vom Server laden" lässt
-            sich der aktuelle Begehungsstand zusätzlich auf einem Server sichern, über drei serverseitige PHP-Skripte. Standardmäßig
+            sich der aktuelle Begehungsstand zusätzlich auf einem Server sichern, über drei serverseitige PHP-Skripte. „Vom Server laden“ öffnet einen Dialog mit Suche
+            (<code>openServerLoadDialog()</code>). Ist eine Begehung mit Eingaben geöffnet, fragt
+            er vor dem Ersetzen nach und kann sie zuerst im Verlauf archivieren
+            (<code>archiviereAktuelleBegehung()</code>). Übernommen wird wie bei „In App anzeigen“
+            im Team-Archiv (<code>applyServerRecord()</code>): einschließlich der
+            Unterbereich-Schalter; der lokale Fotobestand wird geleert. Standardmäßig
             wird eine relative Adresse im selben Verzeichnis wie die App
             verwendet; unter „Einstellungen" lässt sich stattdessen eine
             externe Server-Adresse hinterlegen (<code>nasUrl()</code> baut
@@ -1907,7 +1912,7 @@
             <p>
                 <strong>Frische Dateien und schneller Seitenaufbau (ab Rev. 1.53/1.54)</strong>:
                 Alle Einbindungen von <code>js/…</code> und <code>css/…</code>
-                tragen den Zusatz <code>?v=1.54-7</code> (Ausgabestand <code>BUILD</code> aus <code>sw.js</code>). Diese Dateien (und die
+                tragen den Zusatz <code>?v=1.54-8</code> (Ausgabestand <code>BUILD</code> aus <code>sw.js</code>). Diese Dateien (und die
                 Schriften) liefert der Service Worker ab Rev. 1.54 sofort aus
                 dem Cache auf dem Gerät, ohne Rückfrage beim Server; nach einem
                 Update ändert sich der Zusatz, dadurch werden sie automatisch
@@ -2268,7 +2273,7 @@
             <div class="doku-table-wrap">
             <table class="doku-table">
                 <tr><th>Angaben</th><th></th></tr>
-                <tr><td>Prüfgegenstand</td><td>ASiC Handel, Rev. <span data-zahl="revision">1.54</span>, Ausgabestand <code><span data-zahl="cache_version">v1.54-7</span></code></td></tr>
+                <tr><td>Prüfgegenstand</td><td>ASiC Handel, Rev. <span data-zahl="revision">1.54</span>, Ausgabestand <code><span data-zahl="cache_version">v1.54-8</span></code></td></tr>
                 <tr><td>Prüfdatum</td><td>25.10.2026</td></tr>
                 <tr><td>Methode</td><td>Quellcode-Durchsicht, Angriffstests im Browser (Chromium) mit präparierten Begehungsdaten, Tests der Server-Endpunkte (PHP 8.3)</td></tr>
                 <tr><td>Ergebnis</td><td>Alle Schwachstellen im Programmcode sind behoben und durch Tests belegt. Offen sind nur noch Punkte der Einrichtung und des Betriebs sowie bewertete Restrisiken (siehe unten).</td></tr>
@@ -2410,7 +2415,7 @@
 
             <p>
                 Ergebnisse für den aktuellen Ausgabestand
-                <code><span data-zahl="cache_version">v1.54-7</span></code> mit präparierten
+                <code><span data-zahl="cache_version">v1.54-8</span></code> mit präparierten
                 Daten bzw. gezielten Anfragen.
             </p>
 
@@ -2959,22 +2964,22 @@
                 </tr>
                 <tr>
                     <td>hilfe.html</td>
-                    <td class="zahl">938</td>
+                    <td class="zahl">939</td>
                     <td>Bedienungsanleitung und FAQ</td>
                 </tr>
                 <tr>
                     <td>dokumentation.html</td>
-                    <td class="zahl">3.240</td>
+                    <td class="zahl">3.245</td>
                     <td>Technische Dokumentation (diese Seite)</td>
                 </tr>
                 <tr>
                     <td>css/styles.css</td>
-                    <td class="zahl">2.682</td>
+                    <td class="zahl">2.911</td>
                     <td>Gesamtes gemeinsames Styling</td>
                 </tr>
                 <tr>
                     <td>js/app.js</td>
-                    <td class="zahl">3.604</td>
+                    <td class="zahl">3.754</td>
                     <td>Kernlogik, State-Verwaltung, Checkliste, PDF-Erzeugung, Export, Archivierung, Server-Zugriff, Hilfsfunktionen (escapeHtml, todayIsoLocal) und Service-Worker-Registrierung</td>
                 </tr>
                 <tr>
@@ -3060,7 +3065,7 @@
                 <tr>
                     <td>sw.js</td>
                     <td class="zahl">202</td>
-                    <td>Service Worker, Offline-Fähigkeit, Cache-Version v1.54-7</td>
+                    <td>Service Worker, Offline-Fähigkeit, Cache-Version v1.54-8</td>
                 </tr>
                 <tr>
                     <td>manifest.json</td>
@@ -3164,11 +3169,11 @@
 
             <p>
                 <strong>Gesamt (eigener Code, ohne jsPDF und Schrift):</strong>
-                <span data-zahl="zeilen_gesamt">23.985</span> Zeilen
+                <span data-zahl="zeilen_gesamt">24.370</span> Zeilen
             </p>
 
             <p style="font-size:0.82rem; color:var(--ink-soft);">
-                Stand der Zeilenzahlen: <span data-zahl="zeilen_stand">25.10.2026</span>.
+                Stand der Zeilenzahlen: <span data-zahl="zeilen_stand">26.10.2026</span>.
                 Die Werte wurden aus den tatsächlich enthaltenen Dateien gezählt.
             </p>
 
@@ -3230,9 +3235,9 @@
 </footer>
 
 
-<script src="js/audit-data.js?v=1.54-7"></script>
-<script src="js/text.js?v=1.54-7"></script>
-<script src="js/app.js?v=1.54-7"></script>
+<script src="js/audit-data.js?v=1.54-8"></script>
+<script src="js/text.js?v=1.54-8"></script>
+<script src="js/app.js?v=1.54-8"></script>
 
 <!-- Quellenverzeichnis ist für diesen Dokumentstand detailliert und statisch dokumentiert. -->
 
