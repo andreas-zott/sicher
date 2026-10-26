@@ -599,15 +599,12 @@ async function fetchServerRecord(filename) {
     return result;
 }
 
-async function loadStateFromServer(filename) {
-    const res = await fetch(nasUrl('load.php') + '?filename=' + encodeURIComponent(filename), withNasAuthHeaders({ cache: 'no-store' }));
-    const result = await parseJsonResponse(res);
-    if (!res.ok) {
-        throw new Error((result && result.message) || `Fehler beim Laden (HTTP ${res.status}).`);
-    }
-
-    // Defensiv mit defaultState() zusammenfuehren, aehnlich wie beim JSON-Import,
-    // damit eine unvollstaendige/aeltere Datei die App nicht zum Absturz bringt.
+// Uebernimmt einen vom Server geladenen Datensatz als laufende Begehung.
+// Wie "In App anzeigen" im Team-Archiv: auch die Unterbereich-Schalter
+// werden uebernommen und der lokale Fotobestand geleert (Server-Datensaetze
+// enthalten keine Fotos) - sonst blieben Schalter und Fotos der vorherigen
+// Begehung stehen (ab Ausgabestand 1.54-8).
+async function applyServerRecord(result, filename) {
     const leer = defaultState();
     state.companyInfo = Object.assign({}, leer.companyInfo, result.companyInfo || {});
     state.ratings = result.ratings || {};
@@ -615,6 +612,11 @@ async function loadStateFromServer(filename) {
     state.measures = result.measures || [];
     state.signatures = Object.assign({}, leer.signatures, result.signatures || {});
     state.notApplicable = result.notApplicable || {};
+    state.subgroupNotApplicable = result.subgroupNotApplicable || {};
+
+    if (typeof deleteAllPhotos === 'function') {
+        try { await deleteAllPhotos(); } catch (e) { console.error('Fotos konnten nicht geleert werden:', e); }
+    }
 
     saveState();
     if (typeof renderChecklist === 'function') renderChecklist();
@@ -628,53 +630,193 @@ async function loadStateFromServer(filename) {
     if (typeof renderCompanyInfoStrip === 'function') renderCompanyInfoStrip();
     if (typeof renderMeasures === 'function') await renderMeasures();
     if (typeof restoreSignatures === 'function') restoreSignatures();
+}
 
+async function loadStateFromServer(filename) {
+    const result = await fetchServerRecord(filename);
+    await applyServerRecord(result, filename);
     showToast('Begehung vom Server geladen: ' + filename);
 }
 
-// Einfacher Auswahl-Dialog: listet alle auf dem Server gespeicherten Begehungen
-// auf, per Klick wird die jeweilige geladen.
+// ===== Dialog "Vom Server laden" (ab Ausgabestand 1.54-8) =====
+// Liste mit Suche, Rueckfrage vor dem Ersetzen einer offenen Begehung
+// (wahlweise vorher im Verlauf archivieren), Lade- und Fehlerzustaende.
 async function openServerLoadDialog() {
+    if (document.getElementById('srv-dialog')) return;
     const overlay = document.createElement('div');
-    overlay.className = 'access-gate-overlay';
+    overlay.className = 'srv-overlay';
+    overlay.id = 'srv-dialog';
     overlay.innerHTML = `
-        <div class="access-gate-box" style="max-width:420px; text-align:left;">
-            <div class="access-gate-brand" style="margin-bottom:0.75rem;">Vom Server laden</div>
-            <div id="nas-load-list">
-                <p class="auswertung-empty">Lade Dateiliste …</p>
+        <div class="srv-box" role="dialog" aria-modal="true" aria-labelledby="srv-titel">
+            <div class="srv-kopf">
+                <div>
+                    <h2 class="srv-titel" id="srv-titel">Vom Server laden</h2>
+                    <p class="srv-sub">Begehungen aus dem Team-Archiv</p>
+                </div>
+                <button type="button" class="srv-x" aria-label="Schließen">×</button>
             </div>
-            <button class="btn btn-secondary btn-small" id="nas-load-cancel" style="width:100%; margin-top:1rem;">Abbrechen</button>
+            <div class="srv-inhalt"></div>
         </div>`;
     document.body.appendChild(overlay);
+    document.documentElement.classList.add('srv-offen');
 
-    document.getElementById('nas-load-cancel').addEventListener('click', () => overlay.remove());
+    const inhalt = overlay.querySelector('.srv-inhalt');
+    let dateien = [];
+    let suchtext = '';
 
-    const listEl = document.getElementById('nas-load-list');
-    try {
-        const files = await getServerFiles();
-        if (files.length === 0) {
-            listEl.innerHTML = '<p class="auswertung-empty">Noch keine Begehung auf dem Server gespeichert.</p>';
+    function schliessen() {
+        overlay.remove();
+        document.documentElement.classList.remove('srv-offen');
+        document.removeEventListener('keydown', taste);
+    }
+    function taste(e) { if (e.key === 'Escape') schliessen(); }
+    document.addEventListener('keydown', taste);
+    overlay.addEventListener('click', e => { if (e.target === overlay) schliessen(); });
+    overlay.querySelector('.srv-x').addEventListener('click', schliessen);
+
+    const fehlerText = err => escapeHtml(err && err.message ? err.message : 'unbekannter Fehler');
+    const formatGespeichert = iso => {
+        const d = iso ? new Date(iso) : null;
+        if (!d || isNaN(d)) return '';
+        return 'gespeichert ' + d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' }) +
+            ', ' + d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) + ' Uhr';
+    };
+
+    function zeigeFehler(titel, err, nochmal) {
+        inhalt.innerHTML = `
+            <div class="srv-meldung srv-meldung-fehler">
+                <strong>${escapeHtml(titel)}</strong>
+                <p>${fehlerText(err)}</p>
+                <p class="srv-klein">Kein Netz? Sonst bitte Server-Adresse und Zugriffsschlüssel unter <a href="einstellungen.html">Einstellungen</a> prüfen.</p>
+            </div>
+            <div class="srv-aktionen"><button type="button" class="btn btn-primary btn-small" data-srv="nochmal">Erneut versuchen</button></div>`;
+        inhalt.querySelector('[data-srv="nochmal"]').addEventListener('click', nochmal);
+    }
+
+    async function ladeListe() {
+        inhalt.innerHTML = '<div class="srv-meldung"><span class="srv-spinner" aria-hidden="true"></span> Dateiliste wird geladen …</div>';
+        try {
+            dateien = await getServerFiles();
+        } catch (err) {
+            console.error('Dateiliste konnte nicht geladen werden:', err);
+            zeigeFehler('Dateiliste konnte nicht geladen werden', err, ladeListe);
             return;
         }
-        listEl.innerHTML = files.map(f => `
-            <button class="btn btn-secondary btn-small" style="width:100%; text-align:left; margin-bottom:0.5rem;" data-filename="${escapeHtml(f.fileName)}">
-                ${escapeHtml(f.datum || '?')} — ${escapeHtml(f.plzOrt || f.firma || 'ohne Angabe')}${f.marktnummer ? ' (Nr. ' + escapeHtml(f.marktnummer) + ')' : ''}
-            </button>`).join('');
-        listEl.querySelectorAll('button[data-filename]').forEach(btn => {
-            btn.addEventListener('click', async () => {
-                overlay.remove();
-                try {
-                    await loadStateFromServer(btn.dataset.filename);
-                } catch (err) {
-                    console.error('Server-Laden fehlgeschlagen:', err);
-                    showToast('Laden vom Server fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
-                }
-            });
-        });
-    } catch (err) {
-        console.error('Dateiliste konnte nicht geladen werden:', err);
-        listEl.innerHTML = `<p style="color:var(--mangel);">Dateiliste konnte nicht geladen werden: ${escapeHtml(err && err.message ? err.message : 'unbekannter Fehler')}</p>`;
+        zeigeListe();
     }
+
+    function passt(f, q) {
+        if (!q) return true;
+        const text = [f.marktnummer, f.plzOrt, f.firma, f.datum, f.datumISO, f.fileName].join(' ').toLowerCase();
+        return q.split(/\s+/).every(w => text.includes(w));
+    }
+
+    function zeigeListe() {
+        if (!dateien.length) {
+            inhalt.innerHTML = '<div class="srv-meldung"><strong>Noch keine Begehung auf dem Server.</strong><p>Eine Begehung gelangt über „Auf Server speichern“ ins Team-Archiv.</p></div>';
+            return;
+        }
+        inhalt.innerHTML = `
+            <div class="srv-suche">
+                <input type="search" class="srv-suchfeld" placeholder="Marktnummer, Ort oder Datum suchen" aria-label="Begehungen durchsuchen" value="${escapeHtml(suchtext)}" autocomplete="off">
+            </div>
+            <p class="srv-anzahl" aria-live="polite"></p>
+            <div class="srv-liste"></div>`;
+        const feld = inhalt.querySelector('.srv-suchfeld');
+        feld.addEventListener('input', () => { suchtext = feld.value; fuelleListe(); });
+        if (window.matchMedia && window.matchMedia('(pointer: fine)').matches) feld.focus();
+        fuelleListe();
+    }
+
+    function fuelleListe() {
+        const q = suchtext.trim().toLowerCase();
+        const treffer = dateien.filter(f => passt(f, q));
+        const stand = leseServerStand();
+        const offen = stand && sicherungsZustand() !== 'leer' ? stand.datei : '';
+        inhalt.querySelector('.srv-anzahl').textContent = q
+            ? `${treffer.length} von ${dateien.length} Begehungen`
+            : `${dateien.length} ${dateien.length === 1 ? 'Begehung' : 'Begehungen'}, neueste zuerst`;
+        const liste = inhalt.querySelector('.srv-liste');
+        if (!treffer.length) {
+            liste.innerHTML = '<p class="srv-leer">Keine Begehung passt zur Suche.</p>';
+            return;
+        }
+        liste.innerHTML = treffer.map(f => {
+            const ort = f.plzOrt || f.firma || 'ohne Ortsangabe';
+            const zusatz = f.plzOrt && f.firma ? f.firma : '';
+            return `
+            <button type="button" class="srv-eintrag" data-datei="${escapeHtml(f.fileName)}">
+                <span class="srv-markt">${f.marktnummer ? 'Markt ' + escapeHtml(f.marktnummer) : 'ohne Marktnummer'}</span>
+                <span class="srv-datum">${escapeHtml(f.datum || '–')}</span>
+                <span class="srv-ort">${escapeHtml(ort)}${zusatz ? ' · ' + escapeHtml(zusatz) : ''}</span>
+                <span class="srv-meta">${escapeHtml(formatGespeichert(f.savedAt))}${f.fileName === offen ? '<span class="srv-badge">auf diesem Gerät geöffnet</span>' : ''}</span>
+            </button>`;
+        }).join('');
+        liste.querySelectorAll('.srv-eintrag').forEach(b => b.addEventListener('click', () => {
+            const f = dateien.find(x => x.fileName === b.dataset.datei);
+            if (f) waehle(f);
+        }));
+    }
+
+    function waehle(f) {
+        if (!begehungHatInhalt()) { lade(f, false); return; }
+        const c = state.companyInfo || {};
+        const zustand = sicherungsZustand();
+        const aktuell = (c.marktnummer ? 'Markt ' + c.marktnummer : 'ohne Marktnummer') + (c.datum ? ' vom ' + formatDatumDe(c.datum) : '');
+        const sicherung = zustand === 'gesichert'
+            ? 'Sie ist auf dem Server gesichert – Fotos gibt es aber nur auf diesem Gerät.'
+            : (zustand === 'geaendert' ? 'Sie wurde nach dem letzten Speichern auf dem Server geändert.' : 'Sie ist noch nicht auf dem Server gesichert.');
+        inhalt.innerHTML = `
+            <div class="srv-meldung srv-meldung-warnung">
+                <strong>Offene Begehung wird ersetzt</strong>
+                <p>Auf diesem Gerät ist die Begehung <b>${escapeHtml(aktuell)}</b> geöffnet. ${escapeHtml(sicherung)}</p>
+                <p>Geladen wird <b>${escapeHtml(f.marktnummer ? 'Markt ' + f.marktnummer : 'ohne Marktnummer')}${f.datum ? ' vom ' + escapeHtml(f.datum) : ''}</b>. Daten vom Server enthalten keine Fotos; die Fotos auf diesem Gerät werden entfernt.</p>
+            </div>
+            <div class="srv-aktionen srv-aktionen-spalte">
+                <button type="button" class="btn btn-primary" data-srv="archiv">Erst im Verlauf archivieren, dann laden</button>
+                <button type="button" class="btn btn-secondary srv-btn-warn" data-srv="ersetzen">Ohne Archivieren ersetzen</button>
+                <button type="button" class="btn btn-secondary" data-srv="zurueck">Zurück zur Liste</button>
+            </div>`;
+        inhalt.querySelector('[data-srv="archiv"]').addEventListener('click', () => lade(f, true));
+        inhalt.querySelector('[data-srv="ersetzen"]').addEventListener('click', () => lade(f, false));
+        inhalt.querySelector('[data-srv="zurueck"]').addEventListener('click', zeigeListe);
+    }
+
+    async function lade(f, vorherArchivieren) {
+        inhalt.innerHTML = `<div class="srv-meldung"><span class="srv-spinner" aria-hidden="true"></span> ${vorherArchivieren ? 'Aktuelle Begehung wird archiviert, dann ' : ''}Begehung wird geladen …</div>`;
+        let datensatz;
+        try {
+            datensatz = await fetchServerRecord(f.fileName);
+        } catch (err) {
+            console.error('Server-Laden fehlgeschlagen:', err);
+            zeigeFehler('Begehung konnte nicht geladen werden', err, () => lade(f, vorherArchivieren));
+            return;
+        }
+        if (vorherArchivieren) {
+            const ok = await archiviereAktuelleBegehung();
+            if (!ok) {
+                zeigeFehler('Archivieren fehlgeschlagen – es wurde nichts ersetzt', new Error('Die aktuelle Begehung ist unverändert geöffnet.'), () => waehle(f));
+                return;
+            }
+        }
+        try {
+            await applyServerRecord(datensatz, f.fileName);
+        } catch (err) {
+            console.error('Übernehmen fehlgeschlagen:', err);
+            zeigeFehler('Begehung konnte nicht übernommen werden', err, () => lade(f, false));
+            return;
+        }
+        schliessen();
+        showToast((vorherArchivieren ? 'Archiviert und geladen: ' : 'Vom Server geladen: ') +
+            (f.marktnummer ? 'Markt ' + f.marktnummer : f.fileName) + (f.datum ? ' vom ' + f.datum : ''));
+    }
+
+    ladeListe();
+}
+
+function formatDatumDe(iso) {
+    const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(iso || ''));
+    return m ? `${m[3]}.${m[2]}.${m[1]}` : String(iso || '');
 }
 
 function initExportMenu() {
@@ -3101,7 +3243,12 @@ async function startFollowUpAudit(record, quelle) {
 
 async function archiveCurrentAudit() {
     if (!confirm('Aktuelle Begehung jetzt archivieren? Die laufende Begehung bleibt zusätzlich unverändert bestehen, bis Sie „Zurücksetzen“ nutzen.')) return;
+    await archiviereAktuelleBegehung();
+}
 
+// Archiviert die laufende Begehung ohne Rueckfrage (auch fuer den Dialog
+// "Vom Server laden"). Liefert true bei Erfolg.
+async function archiviereAktuelleBegehung() {
     try {
 
         const photos =
@@ -3181,6 +3328,7 @@ async function archiveCurrentAudit() {
         showToast(
             'Begehung archiviert'
         );
+        return true;
 
     } catch (err) {
 
@@ -3199,6 +3347,8 @@ async function archiveCurrentAudit() {
             ),
             'error'
         );
+
+        return false;
     }
 }
 
