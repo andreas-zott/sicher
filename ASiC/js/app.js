@@ -559,7 +559,7 @@ async function saveStateToServer() {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             cache: 'no-store',
-            body: JSON.stringify(state)
+            body: JSON.stringify(serverNutzdaten())
         }));
         const result = await parseJsonResponse(res);
         if (!res.ok || !result.ok) {
@@ -593,7 +593,63 @@ async function fetchServerRecord(filename) {
     if (!res.ok) {
         throw new Error((result && result.message) || `Fehler beim Laden (HTTP ${res.status}).`);
     }
-    return result;
+    return begehungAusDatensatz(result);
+}
+
+// ===== Markt-Datensaetze der Version 2 (gemeinsamer Datenordner) =====
+// Version 2 speichert Begehung und Gefaehrdungsbeurteilung (GBO) gemeinsam
+// als "ASiC-Marktcontainer" (Begehung unter "audit"). Die 1.54 liest daraus
+// die Begehung. Wird so ein Datensatz hier geoeffnet und wieder gespeichert,
+// bleiben GBO-Teil und Verknuepfungen erhalten (merkeMarktContainer /
+// saveStateToServer) - sonst wuerde die Datei ohne GBO ueberschrieben.
+const MARKT_CONTAINER_KEY = 'asicMarktContainerV2';
+
+function istMarktDatensatz(x) {
+    return !!x && x.format === 'ASiC-Marktcontainer' && Number(x.formatVersion) >= 2 && !!x.audit;
+}
+
+function begehungAusDatensatz(x) {
+    if (!istMarktDatensatz(x)) return x;
+    const b = Object.assign({}, x.audit);
+    if (!b.companyInfo) b.companyInfo = x.companyInfo || {};
+    if (x._nas) b._nas = x._nas;
+    Object.defineProperty(b, '__markt', { value: x, enumerable: false });
+    return b;
+}
+
+// Merkt sich beim Oeffnen eines Markt-Datensatzes dessen uebrige Teile
+// (ohne Begehung). Bei einer normalen Begehung wird der Merker geloescht.
+function merkeMarktContainer(record) {
+    try {
+        const m = record && record.__markt;
+        if (!m) { localStorage.removeItem(MARKT_CONTAINER_KEY); return; }
+        const rest = Object.assign({}, m);
+        delete rest.audit;
+        delete rest._nas;
+        const c = record.companyInfo || {};
+        localStorage.setItem(MARKT_CONTAINER_KEY, JSON.stringify({
+            kennung: String(c.marktnummer || '').trim() + '|' + String(c.datum || ''),
+            rest
+        }));
+    } catch (e) { /* ohne Speicher: wird als normale Begehung gespeichert */ }
+}
+
+// Nutzdaten fuer save.php: bei einem geoeffneten Markt-Datensatz derselben
+// Begehung (Markt + Datum) wieder als Markt-Datensatz, sonst die Begehung.
+function serverNutzdaten() {
+    try {
+        const g = JSON.parse(localStorage.getItem(MARKT_CONTAINER_KEY) || 'null');
+        if (g && g.rest && g.kennung === begehungsKennung()) {
+            const c = state.companyInfo || {};
+            return Object.assign({}, g.rest, {
+                savedAt: new Date().toISOString(),
+                market: Object.assign({}, g.rest.market || {}, { marktnummer: c.marktnummer || '', plzOrt: c.plzOrt || '', strasse: c.strasse || '' }),
+                companyInfo: c,
+                audit: state
+            });
+        }
+    } catch (e) { /* normale Begehung */ }
+    return state;
 }
 
 // Uebernimmt einen vom Server geladenen Datensatz als laufende Begehung.
@@ -610,6 +666,7 @@ async function applyServerRecord(result, filename) {
     state.signatures = Object.assign({}, leer.signatures, result.signatures || {});
     state.notApplicable = result.notApplicable || {};
     state.subgroupNotApplicable = result.subgroupNotApplicable || {};
+    merkeMarktContainer(result);
 
     if (typeof deleteAllPhotos === 'function') {
         try { await deleteAllPhotos(); } catch (e) { console.error('Fotos konnten nicht geleert werden:', e); }
@@ -814,7 +871,8 @@ async function openServerLoadDialog() {
 // Rueckfrage vor dem Ersetzen der offenen Begehung (Team-Archiv "In App
 // anzeigen"). Liefert 'archiv', 'ersetzen' oder null (abgebrochen). Ist
 // keine Begehung mit Eingaben offen, gilt sofort 'ersetzen'.
-function frageVorErsetzen(ziel) {
+function frageVorErsetzen(ziel, opt) {
+    opt = opt || {};
     if (!begehungHatInhalt()) return Promise.resolve('ersetzen');
     return new Promise(resolve => {
         const c = state.companyInfo || {};
@@ -828,19 +886,80 @@ function frageVorErsetzen(ziel) {
         overlay.className = 'srv-overlay';
         overlay.innerHTML = `
             <div class="srv-box" role="dialog" aria-modal="true" aria-labelledby="srv-r-titel">
-                <div class="srv-kopf"><div><h2 class="srv-titel" id="srv-r-titel">In App anzeigen</h2><p class="srv-sub">Begehung aus dem Team-Archiv öffnen</p></div>
+                <div class="srv-kopf"><div><h2 class="srv-titel" id="srv-r-titel">In App anzeigen</h2><p class="srv-sub">${escapeHtml(opt.sub || 'Begehung aus dem Team-Archiv öffnen')}</p></div>
                 <button type="button" class="srv-x" aria-label="Schließen">×</button></div>
                 <div class="srv-inhalt">
                     <div class="srv-meldung srv-meldung-warnung">
                         <strong>Offene Begehung wird ersetzt</strong>
                         <p>Auf diesem Gerät ist die Begehung <b>${escapeHtml(aktuell)}</b> geöffnet. ${escapeHtml(sicherung)}</p>
-                        <p>Geöffnet wird <b>${escapeHtml(zielText)}</b>. Daten vom Server enthalten keine Fotos; die Fotos auf diesem Gerät werden entfernt.</p>
+                        <p>Geöffnet wird <b>${escapeHtml(zielText)}</b>. ${escapeHtml(opt.fotoText || 'Daten vom Server enthalten keine Fotos; die Fotos auf diesem Gerät werden entfernt.')}</p>
                     </div>
                     <div class="srv-aktionen srv-aktionen-spalte">
                         <button type="button" class="btn btn-primary" data-w="archiv">Erst im Verlauf archivieren, dann öffnen</button>
                         <button type="button" class="btn btn-secondary srv-btn-warn" data-w="ersetzen">Ohne Archivieren ersetzen</button>
                         <button type="button" class="btn btn-secondary" data-w="">Abbrechen</button>
                     </div>
+                </div>
+            </div>`;
+        document.body.appendChild(overlay);
+        document.documentElement.classList.add('srv-offen');
+        const ende = w => { overlay.remove(); document.documentElement.classList.remove('srv-offen'); document.removeEventListener('keydown', taste); resolve(w || null); };
+        function taste(e) { if (e.key === 'Escape') ende(null); }
+        document.addEventListener('keydown', taste);
+        overlay.addEventListener('click', e => { if (e.target === overlay) ende(null); });
+        overlay.querySelector('.srv-x').addEventListener('click', () => ende(null));
+        overlay.querySelectorAll('[data-w]').forEach(b => b.addEventListener('click', () => ende(b.dataset.w)));
+    });
+}
+
+// Rueckfrage "Wiederholungsbegehung anlegen" im Stil des Dialogs "Vom Server
+// laden". Liefert 'archiv', 'anlegen' oder null (abgebrochen).
+function frageWiederholung(record, quelle) {
+    return new Promise(resolve => {
+        const ci = (record && record.companyInfo) || {};
+        const offen = ((record && record.measures) || []).filter(m => m && m.status !== 'erledigt').length;
+        const markt = ci.marktnummer ? 'Markt ' + ci.marktnummer : 'ohne Marktnummer';
+        const vorDatum = ci.datum ? formatDate(ci.datum) : '–';
+        const ort = [ci.plzOrt, ci.firma].filter(Boolean).join(' · ');
+        const ersetzt = begehungHatInhalt();
+        let warnung = '';
+        if (ersetzt) {
+            const c = state.companyInfo || {};
+            const zustand = sicherungsZustand();
+            const aktuell = (c.marktnummer ? 'Markt ' + c.marktnummer : 'ohne Marktnummer') + (c.datum ? ' vom ' + formatDatumDe(c.datum) : '');
+            const sicherung = zustand === 'gesichert'
+                ? 'Sie ist auf dem Server gesichert – Fotos gibt es aber nur auf diesem Gerät.'
+                : (zustand === 'geaendert' ? 'Sie wurde nach dem letzten Speichern auf dem Server geändert.' : 'Sie ist noch nicht auf dem Server gesichert.');
+            warnung = `
+                <div class="srv-meldung srv-meldung-warnung" style="margin-top:0.75rem">
+                    <strong>Offene Begehung wird ersetzt</strong>
+                    <p>Auf diesem Gerät ist die Begehung <b>${escapeHtml(aktuell)}</b> geöffnet. ${escapeHtml(sicherung)} Ihre Fotos werden vom Gerät entfernt.</p>
+                </div>`;
+        }
+        const knoepfe = ersetzt
+            ? `<button type="button" class="btn btn-primary" data-w="archiv">Erst im Verlauf archivieren, dann anlegen</button>
+               <button type="button" class="btn btn-secondary srv-btn-warn" data-w="anlegen">Ohne Archivieren anlegen</button>
+               <button type="button" class="btn btn-secondary" data-w="">Abbrechen</button>`
+            : `<button type="button" class="btn btn-primary" data-w="anlegen">Wiederholungsbegehung anlegen</button>
+               <button type="button" class="btn btn-secondary" data-w="">Abbrechen</button>`;
+        const overlay = document.createElement('div');
+        overlay.className = 'srv-overlay';
+        overlay.innerHTML = `
+            <div class="srv-box" role="dialog" aria-modal="true" aria-labelledby="wb-titel">
+                <div class="srv-kopf"><div><h2 class="srv-titel" id="wb-titel">Wiederholungsbegehung</h2><p class="srv-sub">Neue Begehung auf Grundlage der Vorbegehung${quelle === 'team' ? ' aus dem Team-Archiv' : ' aus dem Verlauf'}</p></div>
+                <button type="button" class="srv-x" aria-label="Schließen">×</button></div>
+                <div class="srv-inhalt">
+                    <div class="wb-karte">
+                        <div class="ta-kopf"><span class="srv-markt">${escapeHtml(markt)}</span><span class="srv-datum">Vorbegehung ${escapeHtml(vorDatum)}</span></div>
+                        ${ort ? `<div class="srv-ort">${escapeHtml(ort)}</div>` : ''}
+                    </div>
+                    <ul class="wb-liste">
+                        <li>Betriebsdaten werden übernommen, das Datum wird auf <b>heute</b> gesetzt.</li>
+                        <li>${offen ? `<b>${offen}</b> nicht erledigte Maßnahme${offen === 1 ? '' : 'n'} werden als Mangel vorbelegt.` : 'Die Vorbegehung hat keine offenen Maßnahmen.'}</li>
+                        ${quelle === 'team' ? '' : '<li>Archivierte Begehungen bleiben unverändert.</li>'}
+                    </ul>
+                    ${warnung}
+                    <div class="srv-aktionen srv-aktionen-spalte">${knoepfe}</div>
                 </div>
             </div>`;
         document.body.appendChild(overlay);
@@ -3135,10 +3254,11 @@ function importJson(file) {
 
         try {
 
+            // Markt-Datensatz der Version 2: Begehungsteil verwenden
             const data =
-                JSON.parse(
+                begehungAusDatensatz(JSON.parse(
                     e.target.result
-                );
+                ));
 
             state = {
 
@@ -3165,6 +3285,7 @@ function importJson(file) {
                     data.notApplicable || {}
             };
 
+            merkeMarktContainer(data);
             initCompanyForm();
             renderChecklist();
             renderCompanyInfoStrip();
@@ -3266,13 +3387,9 @@ function buildFollowUpState(record) {
 }
 
 async function startFollowUpAudit(record, quelle) {
-    const ci = (record && record.companyInfo) || {};
-    const offen = ((record && record.measures) || []).filter(m => m && m.status !== 'erledigt').length;
-    const text = 'Wiederholungsbegehung für Markt ' + (ci.marktnummer || '–') +
-        ' anlegen?\n\nBetriebsdaten werden übernommen, das Datum wird auf heute gesetzt. ' +
-        (offen ? offen + ' nicht erledigte Maßnahme(n) der Begehung vom ' + (ci.datum ? formatDate(ci.datum) : '–') + ' werden als Mangel vorbelegt.' : 'Die Vorbegehung hat keine offenen Maßnahmen.') +
-        '\n\nDer aktuell laufende, noch nicht archivierte Bearbeitungsstand auf diesem Gerät wird dabei ersetzt. ' + (quelle === 'team' ? '' : 'Archivierte Begehungen bleiben unverändert.');
-    if (!confirm(text)) return false;
+    const wahl = await frageWiederholung(record, quelle);
+    if (!wahl) return false;
+    if (wahl === 'archiv' && !(await archiviereAktuelleBegehung())) return false;
     const ergebnis = buildFollowUpState(record);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(ergebnis.state));
     if (typeof deleteAllPhotos === 'function') {

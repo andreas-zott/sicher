@@ -81,9 +81,14 @@ async function onArchiveRestore(id) {
     const record = archiveCache.find(r => r.id === id);
     if (!record) return;
 
-    if (!confirm('Diese archivierte Begehung in der App anzeigen? Der aktuell laufende, noch nicht archivierte Bearbeitungsstand auf diesem Gerät wird dabei überschrieben. Bereits archivierte Begehungen bleiben davon unberührt.')) return;
+    const wahl = await frageVorErsetzen(
+        { marktnummer: (record.companyInfo || {}).marktnummer, datum: (record.companyInfo || {}).datum ? formatDatumDe(record.companyInfo.datum) : '' },
+        { sub: 'Begehung aus „Mein Verlauf“ öffnen', fotoText: 'Die Fotos dieser archivierten Begehung werden wiederhergestellt und ersetzen die Fotos auf diesem Gerät. Archivierte Begehungen bleiben unverändert.' });
+    if (!wahl) return;
 
     try {
+        if (wahl === 'archiv' && !(await archiviereAktuelleBegehung())) return;
+        try { localStorage.removeItem(MARKT_CONTAINER_KEY); } catch (e) { /* egal */ }
         const restoredState = {
             companyInfo: { ...record.companyInfo },
             ratings: { ...(record.ratings || {}) },
@@ -343,6 +348,7 @@ async function onTeamArchiveRestore(fileName) {
             subgroupNotApplicable: { ...(record.subgroupNotApplicable || {}) }
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(restoredState));
+        merkeMarktContainer(record);
         // gilt als im Team-Archiv gesichert (wird im Pruefkatalog nach dem
         // Seitenaufbau als Sicherungsstand uebernommen, ab Ausgabestand 1.54-3)
         try { localStorage.setItem('asicServerStandAusstehend', fileName); } catch (e) {}
