@@ -2680,3 +2680,232 @@ body.is-searching .h-empty.is-visible { display: block; }
     user-select: text;
     -webkit-user-select: text;
 }
+
+/* ==========================================================================
+   Dialog "Vom Server laden" (ab Ausgabestand 1.54-8)
+   ========================================================================== */
+html.srv-offen, html.srv-offen body { overflow: hidden; }
+
+.srv-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    background: rgba(28, 34, 38, 0.55);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 6vh 1rem 1rem;
+}
+
+.srv-box {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    width: 100%;
+    max-width: 560px;
+    max-height: 88vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.srv-kopf {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.1rem 1.25rem 0.9rem;
+    border-bottom: 3px solid var(--brand-red);
+}
+
+.srv-titel {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0;
+}
+
+.srv-sub {
+    color: var(--steel);
+    font-size: 0.85rem;
+    margin-top: 0.15rem;
+}
+
+.srv-x {
+    width: 40px;
+    height: 40px;
+    flex: none;
+    border: 1.5px solid var(--line);
+    border-radius: 999px;
+    background: var(--card);
+    color: var(--ink-soft);
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.srv-x:hover { border-color: var(--steel-light); }
+
+.srv-inhalt {
+    padding: 1rem 1.25rem 1.25rem;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.srv-suchfeld {
+    width: 100%;
+    height: var(--tap);
+    padding: 0 1rem;
+    border: 1.5px solid var(--line);
+    border-radius: 999px;
+    font-size: 1rem;
+    background: var(--paper-raised);
+    color: var(--ink);
+}
+
+.srv-suchfeld:focus {
+    outline: none;
+    border-color: var(--brand-red);
+    background: var(--card);
+}
+
+.srv-anzahl {
+    color: var(--steel);
+    font-size: 0.8rem;
+    margin: 0.6rem 0.25rem 0.5rem;
+}
+
+.srv-liste {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.srv-eintrag {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.15rem 0.75rem;
+    width: 100%;
+    min-height: var(--tap);
+    padding: 0.75rem 0.95rem;
+    text-align: left;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    border-left: 4px solid var(--brand-red);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font: inherit;
+    color: var(--ink);
+    -webkit-tap-highlight-color: transparent;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.srv-eintrag:hover,
+.srv-eintrag:focus-visible {
+    border-color: var(--steel-light);
+    border-left-color: var(--brand-red-dark);
+    background: var(--paper-raised);
+    outline: none;
+}
+
+.srv-markt {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+}
+
+.srv-datum {
+    font-weight: 700;
+    color: var(--ink-soft);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.srv-ort {
+    grid-column: 1 / -1;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+}
+
+.srv-meta {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--steel);
+    font-size: 0.78rem;
+}
+
+.srv-badge {
+    background: var(--ok-tint);
+    color: var(--ok);
+    border-radius: 999px;
+    padding: 0.1rem 0.55rem;
+    font-weight: 700;
+}
+
+.srv-leer {
+    color: var(--steel);
+    text-align: center;
+    padding: 1.25rem 0;
+}
+
+.srv-meldung {
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 0.9rem 1rem;
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+    display: block;
+}
+
+.srv-meldung p { margin-top: 0.4rem; }
+.srv-meldung strong { color: var(--ink); }
+
+.srv-meldung-fehler {
+    background: var(--mangel-tint);
+    border-color: #f1c4c2;
+}
+
+.srv-meldung-warnung {
+    background: var(--brand-red-tint);
+    border-color: #f2c4ca;
+    border-left: 4px solid var(--brand-red);
+}
+
+.srv-klein { font-size: 0.82rem; color: var(--steel); }
+.srv-klein a { color: var(--brand-red-dark); }
+
+.srv-aktionen {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+.srv-aktionen-spalte { flex-direction: column; }
+.srv-aktionen-spalte .btn { width: 100%; white-space: normal; height: auto; min-height: var(--tap); padding: 0.6rem 1.25rem; }
+
+.srv-btn-warn { color: var(--brand-red-dark); }
+
+.srv-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-right: 0.5rem;
+    vertical-align: -3px;
+    border: 2px solid var(--line);
+    border-top-color: var(--brand-red);
+    border-radius: 50%;
+    animation: srv-dreh 0.8s linear infinite;
+}
+
+@keyframes srv-dreh { to { transform: rotate(360deg); } }
+
+@media (max-width: 480px) {
+    .srv-overlay { padding: 0; align-items: stretch; }
+    .srv-box { max-width: none; max-height: none; border-radius: 0; }
+}
