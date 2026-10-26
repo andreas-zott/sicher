@@ -814,6 +814,49 @@ async function openServerLoadDialog() {
     ladeListe();
 }
 
+// Rueckfrage vor dem Ersetzen der offenen Begehung (Team-Archiv "In App
+// anzeigen"). Liefert 'archiv', 'ersetzen' oder null (abgebrochen). Ist
+// keine Begehung mit Eingaben offen, gilt sofort 'ersetzen'.
+function frageVorErsetzen(ziel) {
+    if (!begehungHatInhalt()) return Promise.resolve('ersetzen');
+    return new Promise(resolve => {
+        const c = state.companyInfo || {};
+        const zustand = sicherungsZustand();
+        const aktuell = (c.marktnummer ? 'Markt ' + c.marktnummer : 'ohne Marktnummer') + (c.datum ? ' vom ' + formatDatumDe(c.datum) : '');
+        const sicherung = zustand === 'gesichert'
+            ? 'Sie ist auf dem Server gesichert – Fotos gibt es aber nur auf diesem Gerät.'
+            : (zustand === 'geaendert' ? 'Sie wurde nach dem letzten Speichern auf dem Server geändert.' : 'Sie ist noch nicht auf dem Server gesichert.');
+        const zielText = (ziel && ziel.marktnummer ? 'Markt ' + ziel.marktnummer : 'die gewählte Begehung') + (ziel && ziel.datum ? ' vom ' + ziel.datum : '');
+        const overlay = document.createElement('div');
+        overlay.className = 'srv-overlay';
+        overlay.innerHTML = `
+            <div class="srv-box" role="dialog" aria-modal="true" aria-labelledby="srv-r-titel">
+                <div class="srv-kopf"><div><h2 class="srv-titel" id="srv-r-titel">In App anzeigen</h2><p class="srv-sub">Begehung aus dem Team-Archiv öffnen</p></div>
+                <button type="button" class="srv-x" aria-label="Schließen">×</button></div>
+                <div class="srv-inhalt">
+                    <div class="srv-meldung srv-meldung-warnung">
+                        <strong>Offene Begehung wird ersetzt</strong>
+                        <p>Auf diesem Gerät ist die Begehung <b>${escapeHtml(aktuell)}</b> geöffnet. ${escapeHtml(sicherung)}</p>
+                        <p>Geöffnet wird <b>${escapeHtml(zielText)}</b>. Daten vom Server enthalten keine Fotos; die Fotos auf diesem Gerät werden entfernt.</p>
+                    </div>
+                    <div class="srv-aktionen srv-aktionen-spalte">
+                        <button type="button" class="btn btn-primary" data-w="archiv">Erst im Verlauf archivieren, dann öffnen</button>
+                        <button type="button" class="btn btn-secondary srv-btn-warn" data-w="ersetzen">Ohne Archivieren ersetzen</button>
+                        <button type="button" class="btn btn-secondary" data-w="">Abbrechen</button>
+                    </div>
+                </div>
+            </div>`;
+        document.body.appendChild(overlay);
+        document.documentElement.classList.add('srv-offen');
+        const ende = w => { overlay.remove(); document.documentElement.classList.remove('srv-offen'); document.removeEventListener('keydown', taste); resolve(w || null); };
+        function taste(e) { if (e.key === 'Escape') ende(null); }
+        document.addEventListener('keydown', taste);
+        overlay.addEventListener('click', e => { if (e.target === overlay) ende(null); });
+        overlay.querySelector('.srv-x').addEventListener('click', () => ende(null));
+        overlay.querySelectorAll('[data-w]').forEach(b => b.addEventListener('click', () => ende(b.dataset.w)));
+    });
+}
+
 function formatDatumDe(iso) {
     const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(iso || ''));
     return m ? `${m[3]}.${m[2]}.${m[1]}` : String(iso || '');

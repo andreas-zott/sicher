@@ -276,17 +276,21 @@ function renderTeamArchiveList() {
 
     container.innerHTML = sorted.map(entry => {
         const gespeichertAm = entry.savedAt
-            ? new Date(entry.savedAt).toLocaleDateString('de-DE') + ' ' + new Date(entry.savedAt).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })
+            ? new Date(entry.savedAt).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' }) + ', ' + new Date(entry.savedAt).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })
             : '-';
 
+        const stand = (typeof leseServerStand === 'function') ? leseServerStand() : null;
+        const offen = stand && typeof sicherungsZustand === 'function' && sicherungsZustand() !== 'leer' && stand.datei === entry.fileName;
+        const ort = entry.plzOrt || entry.firma || 'ohne Ortsangabe';
+        const zusatz = entry.plzOrt && entry.firma ? ' · ' + entry.firma : '';
         return `
-        <div class="archive-item card" data-filename="${escapeHtml(entry.fileName)}">
-            <div class="archive-item-head">
-                <div>
-                    <div class="archive-item-firma">${escapeHtml(entry.plzOrt || entry.firma || 'Ohne Markt-Angabe')}${entry.marktnummer ? ' (Nr. ' + escapeHtml(entry.marktnummer) + ')' : ''}</div>
-                    <div class="archive-item-meta">Begehung vom ${escapeHtml(entry.datum || '-')} · auf dem Server gespeichert am ${escapeHtml(gespeichertAm)}</div>
-                </div>
+        <div class="archive-item card ta-karte" data-filename="${escapeHtml(entry.fileName)}">
+            <div class="ta-kopf">
+                <span class="srv-markt">${entry.marktnummer ? 'Markt ' + escapeHtml(entry.marktnummer) : 'ohne Marktnummer'}</span>
+                <span class="srv-datum">${escapeHtml(entry.datum || '–')}</span>
             </div>
+            <div class="srv-ort">${escapeHtml(ort)}${escapeHtml(zusatz)}</div>
+            <div class="srv-meta">gespeichert ${escapeHtml(gespeichertAm)} Uhr${offen ? '<span class="srv-badge">auf diesem Gerät geöffnet</span>' : ''}</div>
             <div class="archive-item-actions">
                 <div class="archive-item-actions-primary">
                     <button class="btn btn-secondary btn-small" ${aktionAttr('click', 'onTeamArchiveExport', '$closest-filename')}>📤 PDF exportieren</button>
@@ -321,10 +325,13 @@ async function onTeamArchiveExport(fileName) {
 // obwohl die urspruengliche Kollegin/der urspruengliche Kollege welche
 // hatte.
 async function onTeamArchiveRestore(fileName) {
-    if (!confirm('Diese Begehung vom Server in der App anzeigen? Der aktuell laufende, noch nicht archivierte Bearbeitungsstand auf diesem Gerät wird dabei überschrieben. Hinweis: Team-Archiv-Datensätze enthalten keine Fotos – ein evtl. vorhandener lokaler Fotobestand wird dabei geleert, nicht ersetzt.')) return;
+    const eintrag = (teamArchiveCache || []).find(e => e.fileName === fileName) || {};
+    const wahl = await frageVorErsetzen(eintrag);
+    if (!wahl) return;
 
     try {
         const record = await ladeTeamBegehungMitStatus(fileName, 'In App anzeigen');
+        if (wahl === 'archiv' && !(await archiviereAktuelleBegehung())) return;
 
         const restoredState = {
             companyInfo: { ...record.companyInfo },
