@@ -1699,7 +1699,19 @@
             Unterbereich-Schalter; der lokale Fotobestand wird geleert. „In App anzeigen“ im
             Team-Archiv nutzt dieselbe Rückfrage (<code>frageVorErsetzen()</code>); die Einträge des
             Team-Archivs sind wie im Dialog aufgebaut (Marktnummer, Begehungsdatum, Ort und Firma,
-            Speicherzeit, Hinweis auf die auf diesem Gerät geöffnete Begehung). Standardmäßig
+            Speicherzeit, Hinweis auf die auf diesem Gerät geöffnete Begehung).
+            Version 1.54 und Version 2 nutzen denselben Datenordner. Version 2
+            speichert Begehung und Gefährdungsbeurteilung gemeinsam als
+            „ASiC-Marktcontainer“ (Begehung unter <code>audit</code>).
+            <code>fetchServerRecord()</code> liest daraus die Begehung
+            (<code>begehungAusDatensatz()</code>), auch beim JSON-Import; so
+            zählen diese Begehungen in der Team-Auswertung mit. Wird ein solcher
+            Datensatz geöffnet, merkt sich die App die übrigen Teile
+            (localStorage <code>asicMarktContainerV2</code>,
+            <code>merkeMarktContainer()</code>); „Auf Server speichern“ schreibt
+            dieselbe Begehung (Markt und Datum) wieder als Markt-Datensatz
+            (<code>serverNutzdaten()</code>), damit die Gefährdungsbeurteilung
+            nicht verloren geht. Standardmäßig
             wird eine relative Adresse im selben Verzeichnis wie die App
             verwendet; unter „Einstellungen" lässt sich stattdessen eine
             externe Server-Adresse hinterlegen (<code>nasUrl()</code> baut
@@ -2967,22 +2979,22 @@
                 </tr>
                 <tr>
                     <td>hilfe.html</td>
-                    <td class="zahl">939</td>
+                    <td class="zahl">940</td>
                     <td>Bedienungsanleitung und FAQ</td>
                 </tr>
                 <tr>
                     <td>dokumentation.html</td>
-                    <td class="zahl">3.248</td>
+                    <td class="zahl">3.260</td>
                     <td>Technische Dokumentation (diese Seite)</td>
                 </tr>
                 <tr>
                     <td>css/styles.css</td>
-                    <td class="zahl">2.933</td>
+                    <td class="zahl">2.949</td>
                     <td>Gesamtes gemeinsames Styling</td>
                 </tr>
                 <tr>
                     <td>js/app.js</td>
-                    <td class="zahl">3.794</td>
+                    <td class="zahl">3.911</td>
                     <td>Kernlogik, State-Verwaltung, Checkliste, PDF-Erzeugung, Export, Archivierung, Server-Zugriff, Hilfsfunktionen (escapeHtml, todayIsoLocal) und Service-Worker-Registrierung</td>
                 </tr>
                 <tr>
@@ -3017,7 +3029,7 @@
                 </tr>
                 <tr>
                     <td>js/verlauf.js</td>
-                    <td class="zahl">416</td>
+                    <td class="zahl">422</td>
                     <td>Bedienlogik der Archiv-/Verlaufseite inkl. Team-Archiv (Server)</td>
                 </tr>
                 <tr>
@@ -3172,7 +3184,7 @@
 
             <p>
                 <strong>Gesamt (eigener Code, ohne jsPDF und Schrift):</strong>
-                <span data-zahl="zeilen_gesamt">24.442</span> Zeilen
+                <span data-zahl="zeilen_gesamt">24.594</span> Zeilen
             </p>
 
             <p style="font-size:0.82rem; color:var(--ink-soft);">
