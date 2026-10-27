@@ -19,8 +19,10 @@ function initSettingsPage() {
     if (!input) return;
 
     // Aktuelle Werte beim Laden anzeigen
+    const nameInput = document.getElementById('geraet-name');
     input.value = getNasBaseUrl();
     keyInput.value = getNasApiKey();
+    if (nameInput) nameInput.value = geraetName();
     updateTiles();
     setStatus('', '');
 
@@ -51,11 +53,13 @@ function initSettingsPage() {
 
     // Unterschied zwischen Eingabe und gespeichertem Stand anzeigen
     function markDirty() {
-        const geaendert = input.value.trim() !== getNasBaseUrl() || keyInput.value !== getNasApiKey();
+        const geaendert = input.value.trim() !== getNasBaseUrl() || keyInput.value !== getNasApiKey()
+            || (nameInput && nameInput.value.trim() !== geraetName());
         setStatus(geaendert ? 'Noch nicht gespeichert.' : '', '');
     }
     input.addEventListener('input', markDirty);
     keyInput.addEventListener('input', markDirty);
+    if (nameInput) nameInput.addEventListener('input', markDirty);
 
     btnToggle.addEventListener('click', () => {
         const zeigen = keyInput.type === 'password';
@@ -77,6 +81,11 @@ function initSettingsPage() {
                 localStorage.setItem('nasApiKey', key);
             } else {
                 localStorage.removeItem('nasApiKey');
+            }
+            if (nameInput) {
+                const name = nameInput.value.trim().slice(0, 40);
+                if (name) localStorage.setItem('asicGeraetName', name); else localStorage.removeItem('asicGeraetName');
+                nameInput.value = name;
             }
             input.value = value;
             showToast('Einstellungen gespeichert');
@@ -241,6 +250,22 @@ async function erstelleDiagnoseText() {
     } else {
         z('Verbindungstest', 'nicht möglich – App läuft auf GitHub Pages ohne eingetragene Server-Adresse');
     }
+
+    // Hinweis "gerade geoeffnet" (ab 1.54-12)
+    z('Gerätename', geraetName() || 'nicht eingetragen');
+    if (serverFunktionenVerfuegbar()) {
+        const offen = await sicher(async () => {
+            const res = await fetch(nasUrl('offen.php'), withNasAuthHeaders({ cache: 'no-store' }));
+            if (res.status === 404) return 'offen.php fehlt auf dem Server (HTTP 404)';
+            if (!res.ok) return 'HTTP ' + res.status;
+            const j = await res.json();
+            const n = Array.isArray(j.offen) ? j.offen.length : 0;
+            return 'erreichbar ✓ · ' + n + (n === 1 ? ' Begehung' : ' Begehungen') + ' gerade geöffnet';
+        }, 'nicht erreichbar');
+        z('Hinweis „geöffnet“', offen);
+    }
+    const letzte = (() => { try { return JSON.parse(localStorage.getItem('asicOffenLetzteMeldung') || 'null'); } catch (e) { return null; } })();
+    z('Letzte Öffnen-Meldung', letzte ? formatZeitpunkt(letzte.zeit) + ' · ' + letzte.aktion + ' · ' + letzte.ergebnis : 'noch keine');
 
     // Aktuelle Begehung (nur Zustand, keine Inhalte)
     loadState();

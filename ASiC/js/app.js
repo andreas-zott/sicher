@@ -469,9 +469,23 @@ function initDropdownMenu(toggleId, panelId) {
     const panel = document.getElementById(panelId);
     if (!toggle || !panel) return;
 
+    // Unterebenen (Datei-Menue ab 1.54-9): "menu-weiter" oeffnet die Ebene
+    // aus data-ziel, "menu-zurueck" fuehrt zur Hauptebene zurueck.
+    function zeigeEbene(name) {
+        const ebenen = panel.querySelectorAll('.menu-ebene');
+        if (!ebenen.length) return;
+        ebenen.forEach(e => { e.hidden = e.dataset.ebene !== name; });
+        const erstes = panel.querySelector(`.menu-ebene[data-ebene="${name}"] button`);
+        if (erstes && name !== 'haupt' && window.matchMedia && window.matchMedia('(pointer: fine)').matches) erstes.focus();
+    }
+    panel.querySelectorAll('.menu-weiter, .menu-zurueck').forEach(b => {
+        b.addEventListener('click', e => { e.stopPropagation(); zeigeEbene(b.dataset.ziel); });
+    });
+
     function closeMenu() {
         panel.classList.remove('open');
         document.removeEventListener('click', onOutsideClick);
+        zeigeEbene('haupt');
     }
 
     function onOutsideClick(e) {
@@ -490,7 +504,7 @@ function initDropdownMenu(toggleId, panelId) {
     });
 
     // Menü nach Auswahl eines Punktes automatisch wieder schliessen
-    panel.querySelectorAll('.menu-item').forEach(item => {
+    panel.querySelectorAll('.menu-item:not(.menu-weiter)').forEach(item => {
         item.addEventListener('click', closeMenu);
     });
 }
@@ -596,6 +610,7 @@ async function saveStateToServer(modus) {
             throw new Error(result.message || `Fehler beim Speichern (HTTP ${res.status}).`);
         }
         markiereServerGesichert(result.fileName, result.savedAt);
+        meldeGeschlossen();
         showToast(result.fassung
             ? 'Als eigene Fassung gespeichert (Fassung ' + result.fassung + ')'
             : 'Auf Server gespeichert: ' + result.fileName);
@@ -712,6 +727,7 @@ async function applyServerRecord(result, filename) {
     // Maßnahmenseite) wieder fehlen.
     saveState();
     markiereServerGesichert(filename, (result && result._nas && result._nas.savedAt) || '');
+    meldeGeoeffnet(filename);
     if (typeof initCompanyForm === 'function') initCompanyForm();
     if (typeof renderCompanyInfoStrip === 'function') renderCompanyInfoStrip();
     if (typeof renderMeasures === 'function') await renderMeasures();
@@ -748,6 +764,7 @@ async function openServerLoadDialog() {
 
     const inhalt = overlay.querySelector('.srv-inhalt');
     let dateien = [];
+    let offenListe = [];
     let suchtext = '';
 
     function schliessen() {
@@ -782,7 +799,7 @@ async function openServerLoadDialog() {
     async function ladeListe() {
         inhalt.innerHTML = '<div class="srv-meldung"><span class="srv-spinner" aria-hidden="true"></span> Dateiliste wird geladen …</div>';
         try {
-            dateien = await getServerFiles();
+            [dateien, offenListe] = await Promise.all([getServerFiles(), ladeOffenListe()]);
         } catch (err) {
             console.error('Dateiliste konnte nicht geladen werden:', err);
             zeigeFehler('Dateiliste konnte nicht geladen werden', err, ladeListe);
@@ -835,7 +852,7 @@ async function openServerLoadDialog() {
                 <span class="srv-markt">${f.marktnummer ? 'Markt ' + escapeHtml(f.marktnummer) : 'ohne Marktnummer'}${fassungVon(f.fileName) ? ' <span class="srv-fassung">Fassung ' + fassungVon(f.fileName) + '</span>' : ''}</span>
                 <span class="srv-datum">${escapeHtml(f.datum || '–')}</span>
                 <span class="srv-ort">${escapeHtml(ort)}${zusatz ? ' · ' + escapeHtml(zusatz) : ''}</span>
-                <span class="srv-meta">${escapeHtml(formatGespeichert(f.savedAt))}${vorWieLange(f.savedAt) ? ' · ' + escapeHtml(vorWieLange(f.savedAt)) : ''}${kuerzlichGespeichert(f.savedAt) && f.fileName !== offen ? '<span class="srv-badge srv-badge-frisch">kürzlich gespeichert</span>' : ''}${f.fileName === offen ? '<span class="srv-badge">auf diesem Gerät geöffnet</span>' : ''}</span>
+                <span class="srv-meta">${escapeHtml(formatGespeichert(f.savedAt))}${vorWieLange(f.savedAt) ? ' · ' + escapeHtml(vorWieLange(f.savedAt)) : ''}${offenAnderswo(offenListe, f.fileName) ? '<span class="srv-badge srv-badge-offen">' + escapeHtml(offenKurztext(offenAnderswo(offenListe, f.fileName))) + '</span>' : (kuerzlichGespeichert(f.savedAt) && f.fileName !== offen ? '<span class="srv-badge srv-badge-frisch">kürzlich gespeichert</span>' : '')}${f.fileName === offen ? '<span class="srv-badge">auf diesem Gerät geöffnet</span>' : ''}</span>
             </button>`;
         }).join('');
         liste.querySelectorAll('.srv-eintrag').forEach(b => b.addEventListener('click', () => {
@@ -844,7 +861,26 @@ async function openServerLoadDialog() {
         }));
     }
 
-    function waehle(f) {
+    function waehle(f, offenBestaetigt) {
+        const anderswo = offenAnderswo(offenListe, f.fileName);
+        if (anderswo && !offenBestaetigt) {
+            inhalt.innerHTML = `
+                <div class="wb-karte">
+                    <div class="ta-kopf"><span class="srv-markt">${escapeHtml(f.marktnummer ? 'Markt ' + f.marktnummer : 'ohne Marktnummer')}</span><span class="srv-datum">${escapeHtml(f.datum || '–')}</span></div>
+                    ${(f.plzOrt || f.firma) ? `<div class="srv-ort">${escapeHtml([f.plzOrt, f.firma].filter(Boolean).join(' · '))}</div>` : ''}
+                </div>
+                <div class="srv-meldung srv-meldung-offen" style="margin-top:0.75rem">
+                    <strong>Wird gerade bearbeitet?</strong>
+                    <p>${escapeHtml(offenSatz(anderswo))}</p>
+                </div>
+                <div class="srv-aktionen srv-aktionen-spalte">
+                    <button type="button" class="btn btn-primary" data-srv="trotzdem">Trotzdem öffnen</button>
+                    <button type="button" class="btn btn-secondary" data-srv="zurueck">Zurück zur Liste</button>
+                </div>`;
+            inhalt.querySelector('[data-srv="trotzdem"]').addEventListener('click', () => waehle(f, true));
+            inhalt.querySelector('[data-srv="zurueck"]').addEventListener('click', zeigeListe);
+            return;
+        }
         if (!begehungHatInhalt()) { lade(f, false); return; }
         const c = state.companyInfo || {};
         const zustand = sicherungsZustand();
@@ -951,6 +987,7 @@ function frageVorErsetzen(ziel, opt) {
                         <div class="ta-kopf"><span class="srv-markt">${escapeHtml(markt)}</span><span class="srv-datum">${escapeHtml(ziel.datum || '–')}</span></div>
                         ${ort ? `<div class="srv-ort">${escapeHtml(ort)}</div>` : ''}
                     </div>
+                    ${opt.hinweis ? `<div class="srv-meldung srv-meldung-offen" style="margin-top:0.75rem"><strong>${escapeHtml(opt.hinweis.titel)}</strong><p>${escapeHtml(opt.hinweis.text)}</p></div>` : ''}
                     <ul class="wb-liste">${punkte.map(t => `<li>${escapeHtml(t)}</li>`).join('')}</ul>
                     ${warnung}
                     <div class="srv-aktionen srv-aktionen-spalte">${knoepfe}</div>
@@ -965,6 +1002,177 @@ function frageVorErsetzen(ziel, opt) {
         overlay.querySelector('.srv-x').addEventListener('click', () => ende(null));
         overlay.querySelectorAll('[data-w]').forEach(b => b.addEventListener('click', () => ende(b.dataset.w)));
     });
+}
+
+// ===== Hinweis "gerade geoeffnet" (ab 1.54-11) =====
+// Reiner Hinweis, keine Sperre: Wer eine Begehung aus dem Team-Archiv
+// oeffnet, meldet das an offen.php. Andere Geraete sehen dann "geoeffnet auf
+// <Geraetename>". Abmeldung beim Speichern auf dem Server, Archivieren,
+// Zuruecksetzen, JSON laden, Oeffnen aus "Mein Verlauf" und beim Anlegen
+// einer Wiederholungsbegehung; ohne Abmeldung laeuft der Hinweis auf dem
+// Server nach 4 Stunden ab. Fehlt offen.php (aelterer Server) oder ist man
+// offline, passiert einfach nichts.
+const GERAET_ID_KEY = 'asicGeraetId';
+const GERAET_NAME_KEY = 'asicGeraetName';
+const OFFEN_GEMELDET_KEY = 'asicOffenGemeldet';
+const OFFEN_LETZTE_KEY = 'asicOffenLetzteMeldung';   // fuer die Diagnose
+
+function merkeOffenMeldung(aktion, ergebnis) {
+    try { localStorage.setItem(OFFEN_LETZTE_KEY, JSON.stringify({ zeit: new Date().toISOString(), aktion, ergebnis })); } catch (e) {}
+}
+
+function geraetName() {
+    try { return localStorage.getItem(GERAET_NAME_KEY) || ''; } catch (e) { return ''; }
+}
+
+function geraetId() {
+    try {
+        let id = localStorage.getItem(GERAET_ID_KEY);
+        if (!id || !/^[a-z0-9]{8,40}$/.test(id)) {
+            const zufall = (window.crypto && crypto.getRandomValues) ? crypto.getRandomValues(new Uint8Array(16)) : Array.from({ length: 16 }, () => Math.floor(Math.random() * 256));
+            id = Array.from(zufall, b => (b % 36).toString(36)).join('');
+            localStorage.setItem(GERAET_ID_KEY, id);
+        }
+        return id;
+    } catch (e) { return ''; }
+}
+
+function serverFunktionenAktiv() {
+    return !(window.location.hostname.endsWith('.github.io') && !getNasBaseUrl());
+}
+
+async function meldeOffen(aktion, fileName) {
+    if (!serverFunktionenAktiv()) return;
+    const id = geraetId();
+    if (!id) return;
+    try {
+        const res = await fetch(nasUrl('offen.php'), withNasAuthHeaders({
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            cache: 'no-store',
+            body: JSON.stringify({ aktion, fileName: fileName || '', geraetId: id, geraet: geraetName() })
+        }));
+        // kein "keepalive": Safari verwirft solche Anfragen an eine andere
+        // Server-Adresse (Vorabanfrage wegen des Zugriffsschluessels)
+        if (res.ok) {
+            if (aktion === 'oeffnen') localStorage.setItem(OFFEN_GEMELDET_KEY, fileName);
+            else localStorage.removeItem(OFFEN_GEMELDET_KEY);
+            merkeOffenMeldung(aktion, 'ok');
+        } else {
+            merkeOffenMeldung(aktion, 'HTTP ' + res.status + (res.status === 404 ? ' – offen.php fehlt auf dem Server' : ''));
+        }
+    } catch (e) {
+        // offline oder Server nicht erreichbar: nur ein Hinweis
+        merkeOffenMeldung(aktion, 'nicht gesendet (' + (e && e.message ? e.message : 'keine Verbindung') + ')');
+    }
+}
+
+function meldeGeoeffnet(fileName) {
+    return meldeOffen('oeffnen', fileName);
+}
+
+// Nur wenn dieses Geraet etwas als geoeffnet gemeldet hat
+function meldeGeschlossen() {
+    let gemeldet = null;
+    try { gemeldet = localStorage.getItem(OFFEN_GEMELDET_KEY); } catch (e) {}
+    if (!gemeldet) return Promise.resolve();
+    return meldeOffen('schliessen', '');
+}
+
+// Liste der auf ANDEREN Geraeten geoeffneten Begehungen ([] bei Fehler)
+async function ladeOffenListe() {
+    if (!serverFunktionenAktiv()) return [];
+    try {
+        const res = await fetch(nasUrl('offen.php'), withNasAuthHeaders({ cache: 'no-store' }));
+        if (!res.ok) return [];
+        const j = await res.json();
+        const id = geraetId();
+        return (j && Array.isArray(j.offen) ? j.offen : []).filter(e => e && e.geraetId !== id);
+    } catch (e) { return []; }
+}
+
+function offenAnderswo(liste, fileName) {
+    return (liste || []).filter(e => e.fileName === fileName)
+        .sort((a, b) => String(b.seit).localeCompare(String(a.seit)))[0] || null;
+}
+
+function offenKurztext(e) {
+    const wie = vorWieLange(e.seit);
+    return 'geöffnet auf ' + (e.geraet || 'einem anderen Gerät') + (wie ? ' · ' + wie : '');
+}
+
+function offenSatz(e) {
+    const d = new Date(e.seit);
+    const uhr = isNaN(d) ? '' : d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+    return 'Gerade geöffnet auf ' + (e.geraet || 'einem anderen Gerät') + (uhr ? ' (seit ' + uhr + ' Uhr)' : '') +
+        ' – dort wird sie möglicherweise bearbeitet. Öffnen ist trotzdem möglich; beim Speichern meldet die App, falls inzwischen ein neuerer Stand im Team-Archiv liegt.';
+}
+
+// ===== Einheitliche Hinweisfenster (ab 1.54-9) =====
+// Gleicher Aufbau wie "In App anzeigen" / Wiederholungsbegehung.
+// opt: { titel, sub, karte: {markt, datum, ort}, punkte: [Text], warnung:
+//        {titel, text}, knoepfe: [{w, text, art: 'primaer'|'warn'|''}] }
+// Liefert den Wert w des gewaehlten Knopfs oder null (abgebrochen).
+function zeigeHinweisFenster(opt) {
+    return new Promise(resolve => {
+        const k = opt.karte;
+        const karte = k ? `
+            <div class="wb-karte">
+                <div class="ta-kopf"><span class="srv-markt">${escapeHtml(k.markt || 'ohne Marktnummer')}</span><span class="srv-datum">${escapeHtml(k.datum || '–')}</span></div>
+                ${k.ort ? `<div class="srv-ort">${escapeHtml(k.ort)}</div>` : ''}
+            </div>` : '';
+        const punkte = (opt.punkte || []).length ? `<ul class="wb-liste">${opt.punkte.map(t => `<li>${escapeHtml(t)}</li>`).join('')}</ul>` : '';
+        const warnung = opt.warnung ? `
+            <div class="srv-meldung srv-meldung-warnung" style="margin-top:0.75rem">
+                <strong>${escapeHtml(opt.warnung.titel)}</strong>
+                <p>${escapeHtml(opt.warnung.text)}</p>
+            </div>` : '';
+        const knoepfe = (opt.knoepfe || []).map(b =>
+            `<button type="button" class="btn ${b.art === 'primaer' ? 'btn-primary' : 'btn-secondary'}${b.art === 'warn' ? ' srv-btn-warn' : ''}" data-w="${escapeHtml(b.w || '')}">${escapeHtml(b.text)}</button>`).join('');
+        const overlay = document.createElement('div');
+        overlay.className = 'srv-overlay';
+        overlay.innerHTML = `
+            <div class="srv-box" role="dialog" aria-modal="true" aria-labelledby="srv-h-titel">
+                <div class="srv-kopf"><div><h2 class="srv-titel" id="srv-h-titel">${escapeHtml(opt.titel)}</h2>${opt.sub ? `<p class="srv-sub">${escapeHtml(opt.sub)}</p>` : ''}</div>
+                <button type="button" class="srv-x" aria-label="Schließen">×</button></div>
+                <div class="srv-inhalt">${karte}${punkte}${warnung}
+                    <div class="srv-aktionen srv-aktionen-spalte">${knoepfe}</div>
+                </div>
+            </div>`;
+        document.body.appendChild(overlay);
+        document.documentElement.classList.add('srv-offen');
+        const ende = w => { overlay.remove(); document.documentElement.classList.remove('srv-offen'); document.removeEventListener('keydown', taste); resolve(w || null); };
+        function taste(e) { if (e.key === 'Escape') ende(null); }
+        document.addEventListener('keydown', taste);
+        overlay.addEventListener('click', e => { if (e.target === overlay) ende(null); });
+        overlay.querySelector('.srv-x').addEventListener('click', () => ende(null));
+        overlay.querySelectorAll('[data-w]').forEach(b => b.addEventListener('click', () => ende(b.dataset.w)));
+    });
+}
+
+// Karte der gerade geoeffneten Begehung
+function karteAktuelleBegehung() {
+    const c = state.companyInfo || {};
+    return {
+        markt: c.marktnummer ? 'Markt ' + c.marktnummer : 'ohne Marktnummer',
+        datum: c.datum ? formatDatumDe(c.datum) : '–',
+        ort: [c.plzOrt, c.firma].filter(Boolean).join(' · ')
+    };
+}
+
+async function anzahlFotosAufGeraet() {
+    try { return typeof getAllPhotos === 'function' ? (await getAllPhotos()).length : 0; } catch (e) { return 0; }
+}
+
+function fotosText(n) {
+    return n === 0 ? 'keine Fotos' : (n === 1 ? '1 Foto' : n + ' Fotos');
+}
+
+function sicherungsSatz() {
+    const zustand = sicherungsZustand();
+    return zustand === 'gesichert' ? 'Sie ist auf dem Server gesichert (ohne Fotos).'
+        : (zustand === 'geaendert' ? 'Sie wurde nach dem letzten Speichern auf dem Server geändert.'
+            : 'Sie ist nicht auf dem Server gesichert.');
 }
 
 // Eigene Fassungen (ab 1.54-9): Begehung_<Datum>_Markt<Nr>_Fassung-<n>.json
@@ -1004,7 +1212,8 @@ function kuerzlichGespeichert(iso) {
     return ms >= 0 && ms < 2 * 60 * 60 * 1000;
 }
 
-function formatZeitpunkt(iso) {
+// "27.10.2026 um 14:10 Uhr" (Rueckfrage beim Speichern)
+function formatZeitpunktLang(iso) {
     const d = iso ? new Date(iso) : null;
     if (!d || isNaN(d)) return '';
     return d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' }) +
@@ -1019,7 +1228,7 @@ function frageBeiKonflikt(info) {
         const c = state.companyInfo || {};
         const markt = c.marktnummer ? 'Markt ' + c.marktnummer : 'ohne Marktnummer';
         const ort = [c.plzOrt, c.firma].filter(Boolean).join(' · ');
-        const wann = formatZeitpunkt(info.savedAt);
+        const wann = formatZeitpunktLang(info.savedAt);
         const wieLange = vorWieLange(info.savedAt);
         const text = info.fremd
             ? `Für diesen Markt und dieses Datum liegt im Team-Archiv bereits eine Begehung${wann ? ', gespeichert am ' + wann : ''}${wieLange ? ' (' + wieLange + ')' : ''}. Sie wurde nicht auf diesem Gerät geöffnet.`
@@ -3395,20 +3604,71 @@ async function shareJson() {
     }
 }
 
+// Rueckfrage vor dem Laden einer JSON-Datei (ab 1.54-9). Fotos bleiben nur,
+// wenn die Datei dieselbe Begehung (Markt + Datum) enthaelt.
+async function frageVorJsonLaden(data, dateiname) {
+    const ci = data.companyInfo || {};
+    const gleich = (String(ci.marktnummer || '').trim() + '|' + String(ci.datum || '')) === begehungsKennung();
+    const fotos = await anzahlFotosAufGeraet();
+    const punkte = [
+        'Die Begehung aus der Datei „' + dateiname + '“ wird auf diesem Gerät geöffnet und kann weiterbearbeitet werden.',
+        gleich
+            ? 'Es ist dieselbe Begehung wie die geöffnete – die Fotos auf diesem Gerät bleiben erhalten.'
+            : 'JSON-Dateien enthalten keine Fotos.' + (fotos ? ' Die ' + fotosText(fotos) + ' auf diesem Gerät werden entfernt.' : '')
+    ];
+    const ersetzt = begehungHatInhalt();
+    let warnung = null;
+    if (ersetzt) {
+        const a = karteAktuelleBegehung();
+        warnung = {
+            titel: 'Offene Begehung wird ersetzt',
+            text: 'Auf diesem Gerät ist die Begehung ' + a.markt + (a.datum !== '–' ? ' vom ' + a.datum : '') + ' geöffnet. ' + sicherungsSatz()
+        };
+    }
+    const w = await zeigeHinweisFenster({
+        titel: 'JSON laden',
+        sub: 'Begehung aus einer Datei öffnen',
+        karte: {
+            markt: ci.marktnummer ? 'Markt ' + ci.marktnummer : 'ohne Marktnummer',
+            datum: ci.datum ? formatDatumDe(ci.datum) : '–',
+            ort: [ci.plzOrt, ci.firma].filter(Boolean).join(' · ')
+        },
+        punkte,
+        warnung,
+        knoepfe: ersetzt ? [
+            { w: 'archiv', text: 'Erst im Verlauf archivieren, dann öffnen', art: 'primaer' },
+            { w: 'ersetzen', text: 'Ohne Archivieren ersetzen', art: 'warn' },
+            { w: '', text: 'Abbrechen' }
+        ] : [
+            { w: 'ersetzen', text: 'Öffnen', art: 'primaer' },
+            { w: '', text: 'Abbrechen' }
+        ]
+    });
+    return w ? { wahl: w, fotosBehalten: gleich } : null;
+}
+
 function importJson(file) {
     const reader =
         new FileReader();
-
-    reader.onload = (e) => {
-
+    reader.onload = async (e) => {
+        let data;
         try {
-
             // Markt-Datensatz der Version 2: Begehungsteil verwenden
-            const data =
-                begehungAusDatensatz(JSON.parse(
-                    e.target.result
-                ));
-
+            data = begehungAusDatensatz(JSON.parse(e.target.result));
+            if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('kein Begehungs-Datensatz');
+        } catch (err) {
+            console.error(err);
+            showToast('Datei konnte nicht gelesen werden', 'error');
+            return;
+        }
+        const antwort = await frageVorJsonLaden(data, file.name || 'Datei');
+        if (!antwort) return;
+        if (antwort.wahl === 'archiv' && !(await archiviereAktuelleBegehung())) return;
+        meldeGeschlossen();
+        try {
+            if (!antwort.fotosBehalten && typeof deleteAllPhotos === 'function') {
+                try { await deleteAllPhotos(); } catch (err) { console.error('Fotos konnten nicht geleert werden:', err); }
+            }
             state = {
 
                 companyInfo: {
@@ -3431,7 +3691,10 @@ function importJson(file) {
                 },
 
                 notApplicable:
-                    data.notApplicable || {}
+                    data.notApplicable || {},
+
+                subgroupNotApplicable:
+                    data.subgroupNotApplicable || {}
             };
 
             merkeMarktContainer(data);
@@ -3544,12 +3807,28 @@ async function startFollowUpAudit(record, quelle) {
     if (typeof deleteAllPhotos === 'function') {
         try { await deleteAllPhotos(); } catch (e) { console.error('Fotos konnten nicht geleert werden:', e); }
     }
+    await meldeGeschlossen();
     return ergebnis;
 }
 
 async function archiveCurrentAudit() {
-    if (!confirm('Aktuelle Begehung jetzt archivieren? Die laufende Begehung bleibt zusätzlich unverändert bestehen, bis Sie „Zurücksetzen“ nutzen.')) return;
-    await archiviereAktuelleBegehung();
+    const fotos = await anzahlFotosAufGeraet();
+    const wahl = await zeigeHinweisFenster({
+        titel: 'Begehung archivieren',
+        sub: 'Schnappschuss in „Mein Verlauf“ ablegen',
+        karte: karteAktuelleBegehung(),
+        punkte: [
+            'Ein vollständiger Schnappschuss mit Bewertungen, Maßnahmen, Unterschriften' + (fotos ? ' und ' + fotosText(fotos) : '') + ' wird unter „Verlauf → Mein Verlauf“ abgelegt.',
+            'Die Begehung bleibt geöffnet und kann weiterbearbeitet werden.',
+            'Das Archiv liegt nur auf diesem Gerät. Fürs Team bitte zusätzlich „Auf Server speichern“.'
+        ],
+        knoepfe: [
+            { w: 'ja', text: 'Archivieren', art: 'primaer' },
+            { w: '', text: 'Abbrechen' }
+        ]
+    });
+    if (wahl !== 'ja') return;
+    if (await archiviereAktuelleBegehung()) meldeGeschlossen();
 }
 
 // Archiviert die laufende Begehung ohne Rueckfrage (auch fuer den Dialog
@@ -3777,8 +4056,30 @@ async function shareArchivedReportPdf(record, mode) {
     }
 }
 
-function resetAll() {
-    if (!confirm('Wirklich alle Eingaben zurücksetzen? Dies kann nicht rückgängig gemacht werden.')) return;
+async function resetAll() {
+    const fotos = await anzahlFotosAufGeraet();
+    const leer = !begehungHatInhalt() && fotos === 0;
+    const wahl = await zeigeHinweisFenster({
+        titel: 'Zurücksetzen',
+        sub: 'Neue, leere Begehung beginnen',
+        karte: leer ? null : karteAktuelleBegehung(),
+        punkte: leer ? ['Auf diesem Gerät ist keine Begehung mit Eingaben geöffnet.'] : [],
+        warnung: leer ? null : {
+            titel: 'Eingaben werden gelöscht',
+            text: (fotos ? 'Betriebsdaten, Bewertungen, Maßnahmen, Unterschriften und ' + fotosText(fotos) : 'Betriebsdaten, Bewertungen, Maßnahmen und Unterschriften') + ' werden von diesem Gerät gelöscht. ' + sicherungsSatz() + ' Das lässt sich nicht rückgängig machen.'
+        },
+        knoepfe: leer ? [
+            { w: 'ersetzen', text: 'Zurücksetzen', art: 'primaer' },
+            { w: '', text: 'Abbrechen' }
+        ] : [
+            { w: 'archiv', text: 'Erst im Verlauf archivieren, dann zurücksetzen', art: 'primaer' },
+            { w: 'ersetzen', text: 'Ohne Archivieren zurücksetzen', art: 'warn' },
+            { w: '', text: 'Abbrechen' }
+        ]
+    });
+    if (!wahl) return;
+    if (wahl === 'archiv' && !(await archiviereAktuelleBegehung())) return;
+    meldeGeschlossen();
 
     state =
         defaultState();
@@ -3917,6 +4218,9 @@ document.addEventListener(
         // hinterlegt wurde, kann das auch von GitHub Pages aus funktionieren
         // (sofern der Zielserver CORS fuer diese Adresse erlaubt).
         const laeuftAufGithubPages = window.location.hostname.endsWith('.github.io') && !getNasBaseUrl();
+
+        const btnMenuTeam = document.getElementById('btn-menu-team');
+        if (btnMenuTeam && laeuftAufGithubPages) btnMenuTeam.style.display = 'none';
 
         if (btnSaveNas) {
             if (laeuftAufGithubPages) {

@@ -4,6 +4,7 @@
 
 let archiveCache = [];
 let teamArchiveCache = [];
+let teamOffenListe = [];   // auf anderen Geraeten geoeffnet (ab 1.54-11)
 
 async function loadAndRenderArchive() {
     try {
@@ -93,6 +94,7 @@ async function onArchiveRestore(id) {
 
     try {
         if (wahl === 'archiv' && !(await archiviereAktuelleBegehung())) return;
+        await meldeGeschlossen();
         try { localStorage.removeItem(MARKT_CONTAINER_KEY); } catch (e) { /* egal */ }
         const restoredState = {
             companyInfo: { ...record.companyInfo },
@@ -210,7 +212,7 @@ async function loadAndRenderTeamArchive() {
     const start = Date.now();
 
     try {
-        teamArchiveCache = await getServerFiles();
+        [teamArchiveCache, teamOffenListe] = await Promise.all([getServerFiles(), ladeOffenListe()]);
         const dauer = ((Date.now() - start) / 1000).toLocaleString('de-DE', { maximumFractionDigits: 1 });
         const n = teamArchiveCache.length;
 
@@ -300,7 +302,7 @@ function renderTeamArchiveList() {
                 <span class="srv-datum">${escapeHtml(entry.datum || '–')}</span>
             </div>
             <div class="srv-ort">${escapeHtml(ort)}${escapeHtml(zusatz)}</div>
-            <div class="srv-meta">gespeichert ${escapeHtml(gespeichertAm)} Uhr${vorWieLange(entry.savedAt) ? ' · ' + escapeHtml(vorWieLange(entry.savedAt)) : ''}${kuerzlichGespeichert(entry.savedAt) && !offen ? '<span class="srv-badge srv-badge-frisch">kürzlich gespeichert</span>' : ''}${offen ? '<span class="srv-badge">auf diesem Gerät geöffnet</span>' : ''}</div>
+            <div class="srv-meta">gespeichert ${escapeHtml(gespeichertAm)} Uhr${vorWieLange(entry.savedAt) ? ' · ' + escapeHtml(vorWieLange(entry.savedAt)) : ''}${offenAnderswo(teamOffenListe, entry.fileName) ? '<span class="srv-badge srv-badge-offen">' + escapeHtml(offenKurztext(offenAnderswo(teamOffenListe, entry.fileName))) + '</span>' : (kuerzlichGespeichert(entry.savedAt) && !offen ? '<span class="srv-badge srv-badge-frisch">kürzlich gespeichert</span>' : '')}${offen ? '<span class="srv-badge">auf diesem Gerät geöffnet</span>' : ''}</div>
             <div class="archive-item-actions">
                 <div class="archive-item-actions-primary">
                     <button class="btn btn-secondary btn-small" ${aktionAttr('click', 'onTeamArchiveExport', '$closest-filename')}>📤 PDF exportieren</button>
@@ -344,10 +346,15 @@ async function onTeamArchiveRestore(fileName) {
     ];
     const standJetzt = (typeof leseServerStand === 'function') ? leseServerStand() : null;
     const hierGeoeffnet = !!(standJetzt && standJetzt.datei === fileName && sicherungsZustand() !== 'leer');
-    if (kuerzlichGespeichert(eintrag.savedAt) && !hierGeoeffnet) {
+    // Liste frisch holen - sie kann seit dem Laden des Team-Archivs veraltet sein
+    teamOffenListe = await ladeOffenListe();
+    if (typeof renderTeamArchiveList === 'function' && teamArchiveCache.length) renderTeamArchiveList();
+    const anderswo = offenAnderswo(teamOffenListe, fileName);
+    const hinweis = anderswo ? { titel: 'Wird gerade bearbeitet?', text: offenSatz(anderswo) } : null;
+    if (!anderswo && kuerzlichGespeichert(eintrag.savedAt) && !hierGeoeffnet) {
         punkte.push('Zuletzt gespeichert ' + vorWieLange(eintrag.savedAt) + ' – möglicherweise bearbeitet sie gerade jemand anderes. Beim Speichern meldet die App, falls inzwischen ein neuerer Stand im Team-Archiv liegt.');
     }
-    const wahl = await frageVorErsetzen(eintrag, { punkte });
+    const wahl = await frageVorErsetzen(eintrag, { punkte, hinweis });
     if (!wahl) return;
 
     try {
@@ -378,6 +385,7 @@ async function onTeamArchiveRestore(fileName) {
             await deleteAllPhotos();
         }
 
+        await meldeGeoeffnet(fileName);
         showToast('Begehung wird geöffnet…');
         window.location.href = 'index.html';
     } catch (err) {
@@ -440,4 +448,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const btnTeamNeu = document.getElementById('team-archiv-neu-laden');
     if (btnTeamNeu) btnTeamNeu.addEventListener('click', loadAndRenderTeamArchive);
+});
+
+
+// Hinweis "geoeffnet auf …" aktuell halten: beim Zurueckkehren zur Seite
+// (z. B. iPad entsperrt, App wieder im Vordergrund) die Liste neu holen.
+document.addEventListener('visibilitychange', async () => {
+    if (document.visibilityState !== 'visible' || !teamArchiveCache.length || typeof ladeOffenListe !== 'function') return;
+    const listEl = document.getElementById('team-archive-list');
+    if (!listEl || listEl.style.display === 'none') return;
+    teamOffenListe = await ladeOffenListe();
+    renderTeamArchiveList();
 });
