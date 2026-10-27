@@ -107,6 +107,10 @@ async function ladeTeamAuswertungDaten() {
             return;
         }
 
+        // Eigene Fassungen (ab 1.54-9) derselben Begehung nur einmal zaehlen:
+        // je Markt und Datum gilt die zuletzt gespeicherte Fassung.
+        fileList = nurNeuesteFassung(fileList);
+
         if (fileList.length === 0) {
             teamAuswertungAlleDaten = [];
             zeigeInAllen('<p class="auswertung-empty">Noch keine Begehung im Team-Archiv.</p>');

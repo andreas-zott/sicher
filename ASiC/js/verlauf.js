@@ -81,9 +81,14 @@ async function onArchiveRestore(id) {
     const record = archiveCache.find(r => r.id === id);
     if (!record) return;
 
+    const ci = record.companyInfo || {};
     const wahl = await frageVorErsetzen(
-        { marktnummer: (record.companyInfo || {}).marktnummer, datum: (record.companyInfo || {}).datum ? formatDatumDe(record.companyInfo.datum) : '' },
-        { sub: 'Begehung aus „Mein Verlauf“ öffnen', fotoText: 'Die Fotos dieser archivierten Begehung werden wiederhergestellt und ersetzen die Fotos auf diesem Gerät. Archivierte Begehungen bleiben unverändert.' });
+        { marktnummer: ci.marktnummer, datum: ci.datum ? formatDatumDe(ci.datum) : '', plzOrt: ci.plzOrt, firma: ci.firma },
+        { sub: 'Begehung aus „Mein Verlauf“ öffnen', punkte: [
+            'Die Begehung wird auf diesem Gerät geöffnet und kann weiterbearbeitet werden.',
+            (record.photos && record.photos.length ? record.photos.length + ' Foto' + (record.photos.length === 1 ? '' : 's') + ' dieser Begehung werden wiederhergestellt.' : 'Zu dieser Begehung sind keine Fotos archiviert.'),
+            'Archivierte Begehungen bleiben unverändert.'
+        ] });
     if (!wahl) return;
 
     try {
@@ -291,11 +296,11 @@ function renderTeamArchiveList() {
         return `
         <div class="archive-item card ta-karte" data-filename="${escapeHtml(entry.fileName)}">
             <div class="ta-kopf">
-                <span class="srv-markt">${entry.marktnummer ? 'Markt ' + escapeHtml(entry.marktnummer) : 'ohne Marktnummer'}</span>
+                <span class="srv-markt">${entry.marktnummer ? 'Markt ' + escapeHtml(entry.marktnummer) : 'ohne Marktnummer'}${fassungVon(entry.fileName) ? ' <span class="srv-fassung">Fassung ' + fassungVon(entry.fileName) + '</span>' : ''}</span>
                 <span class="srv-datum">${escapeHtml(entry.datum || '–')}</span>
             </div>
             <div class="srv-ort">${escapeHtml(ort)}${escapeHtml(zusatz)}</div>
-            <div class="srv-meta">gespeichert ${escapeHtml(gespeichertAm)} Uhr${offen ? '<span class="srv-badge">auf diesem Gerät geöffnet</span>' : ''}</div>
+            <div class="srv-meta">gespeichert ${escapeHtml(gespeichertAm)} Uhr${vorWieLange(entry.savedAt) ? ' · ' + escapeHtml(vorWieLange(entry.savedAt)) : ''}${kuerzlichGespeichert(entry.savedAt) && !offen ? '<span class="srv-badge srv-badge-frisch">kürzlich gespeichert</span>' : ''}${offen ? '<span class="srv-badge">auf diesem Gerät geöffnet</span>' : ''}</div>
             <div class="archive-item-actions">
                 <div class="archive-item-actions-primary">
                     <button class="btn btn-secondary btn-small" ${aktionAttr('click', 'onTeamArchiveExport', '$closest-filename')}>📤 PDF exportieren</button>
@@ -331,7 +336,18 @@ async function onTeamArchiveExport(fileName) {
 // hatte.
 async function onTeamArchiveRestore(fileName) {
     const eintrag = (teamArchiveCache || []).find(e => e.fileName === fileName) || {};
-    const wahl = await frageVorErsetzen(eintrag);
+    // Kuerzlich gespeichert: Hinweis, dass gerade jemand anderes daran
+    // arbeiten koennte (ab 1.54-9)
+    const punkte = [
+        'Die Begehung wird auf diesem Gerät geöffnet und kann weiterbearbeitet werden.',
+        'Daten aus dem Team-Archiv enthalten keine Fotos.'
+    ];
+    const standJetzt = (typeof leseServerStand === 'function') ? leseServerStand() : null;
+    const hierGeoeffnet = !!(standJetzt && standJetzt.datei === fileName && sicherungsZustand() !== 'leer');
+    if (kuerzlichGespeichert(eintrag.savedAt) && !hierGeoeffnet) {
+        punkte.push('Zuletzt gespeichert ' + vorWieLange(eintrag.savedAt) + ' – möglicherweise bearbeitet sie gerade jemand anderes. Beim Speichern meldet die App, falls inzwischen ein neuerer Stand im Team-Archiv liegt.');
+    }
+    const wahl = await frageVorErsetzen(eintrag, { punkte });
     if (!wahl) return;
 
     try {
@@ -351,7 +367,12 @@ async function onTeamArchiveRestore(fileName) {
         merkeMarktContainer(record);
         // gilt als im Team-Archiv gesichert (wird im Pruefkatalog nach dem
         // Seitenaufbau als Sicherungsstand uebernommen, ab Ausgabestand 1.54-3)
-        try { localStorage.setItem('asicServerStandAusstehend', fileName); } catch (e) {}
+        try {
+            localStorage.setItem('asicServerStandAusstehend', JSON.stringify({
+                datei: fileName,
+                serverZeit: (record._nas && record._nas.savedAt) || eintrag.savedAt || ''
+            }));
+        } catch (e) {}
 
         if (typeof deleteAllPhotos === 'function') {
             await deleteAllPhotos();

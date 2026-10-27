@@ -270,11 +270,15 @@ function leseServerStand() {
     try { return JSON.parse(localStorage.getItem(SERVER_STAND_KEY) || 'null'); } catch (e) { return null; }
 }
 
-function markiereServerGesichert(dateiname) {
+// serverZeit: savedAt der Datei auf dem Server (ab 1.54-9) - Grundlage, um
+// beim naechsten Speichern zu erkennen, ob inzwischen jemand anderes
+// dieselbe Begehung gespeichert hat.
+function markiereServerGesichert(dateiname, serverZeit) {
     try {
         localStorage.setItem(SERVER_STAND_KEY, JSON.stringify({
             zeit: new Date().toISOString(),
             datei: dateiname || '',
+            serverZeit: serverZeit || '',
             kennung: begehungsKennung(),
             fp: stateFingerabdruck()
         }));
@@ -377,7 +381,10 @@ window.addEventListener('load', () => {
     // Uebernahme im Pruefkatalog (dorthin fuehrt "In App anzeigen"), notfalls
     // auf der Maßnahmenseite
     if (ausstehend !== null && (document.getElementById('btn-save-nas') || document.getElementById('sicherungs-hinweis-platz'))) {
-        markiereServerGesichert(ausstehend);
+        // ab 1.54-9 als JSON { datei, serverZeit }, vorher nur der Dateiname
+        let a = { datei: ausstehend, serverZeit: '' };
+        try { if (ausstehend.charAt(0) === '{') a = Object.assign(a, JSON.parse(ausstehend)); } catch (e) { /* Dateiname */ }
+        markiereServerGesichert(a.datei, a.serverZeit);
     } else {
         aktualisiereSicherungsHinweis();
     }
@@ -553,20 +560,45 @@ function withNasAuthHeaders(options) {
     };
 }
 
-async function saveStateToServer() {
+// Angaben fuer save.php, um gleichzeitiges Bearbeiten zu erkennen (ab
+// 1.54-9): welche Datei mit welchem Stand dieses Geraet zuletzt vom Server
+// hatte. Gehoert der Merker zu einer anderen Begehung (Markt + Datum), gilt
+// die Begehung als neu - liegt fuer Markt und Datum schon eine Datei vor,
+// fragt die App nach.
+function speicherSteuerung(modus) {
+    const stand = leseServerStand();
+    const passt = stand && stand.kennung === begehungsKennung() && stand.datei;
+    return {
+        modus: modus || 'normal',
+        basisDatei: passt ? stand.datei : null,
+        basisStand: passt && stand.serverZeit ? stand.serverZeit : null,
+        basisUnbekannt: !!(passt && !stand.serverZeit)
+    };
+}
+
+async function saveStateToServer(modus) {
+    if (typeof modus !== 'string') modus = 'normal';
     try {
         const res = await fetch(nasUrl('save.php'), withNasAuthHeaders({
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             cache: 'no-store',
-            body: JSON.stringify(serverNutzdaten())
+            body: JSON.stringify(Object.assign({}, serverNutzdaten(), { _speichern: speicherSteuerung(modus) }))
         }));
         const result = await parseJsonResponse(res);
+        if (res.status === 409 && result && result.konflikt) {
+            const wahl = await frageBeiKonflikt(result);
+            if (wahl) return saveStateToServer(wahl);
+            showToast('Nicht gespeichert – der Stand im Team-Archiv bleibt unverändert.');
+            return;
+        }
         if (!res.ok || !result.ok) {
             throw new Error(result.message || `Fehler beim Speichern (HTTP ${res.status}).`);
         }
-        markiereServerGesichert(result.fileName);
-        showToast('Auf Server gespeichert: ' + result.fileName);
+        markiereServerGesichert(result.fileName, result.savedAt);
+        showToast(result.fassung
+            ? 'Als eigene Fassung gespeichert (Fassung ' + result.fassung + ')'
+            : 'Auf Server gespeichert: ' + result.fileName);
     } catch (err) {
         console.error('Server-Speichern fehlgeschlagen:', err);
         showToast('Speichern auf dem Server fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
@@ -679,7 +711,7 @@ async function applyServerRecord(result, filename) {
     // nachgetragene Kommentar beim naechsten Laden (z. B. auf der
     // Maßnahmenseite) wieder fehlen.
     saveState();
-    markiereServerGesichert(filename);
+    markiereServerGesichert(filename, (result && result._nas && result._nas.savedAt) || '');
     if (typeof initCompanyForm === 'function') initCompanyForm();
     if (typeof renderCompanyInfoStrip === 'function') renderCompanyInfoStrip();
     if (typeof renderMeasures === 'function') await renderMeasures();
@@ -800,10 +832,10 @@ async function openServerLoadDialog() {
             const zusatz = f.plzOrt && f.firma ? f.firma : '';
             return `
             <button type="button" class="srv-eintrag" data-datei="${escapeHtml(f.fileName)}">
-                <span class="srv-markt">${f.marktnummer ? 'Markt ' + escapeHtml(f.marktnummer) : 'ohne Marktnummer'}</span>
+                <span class="srv-markt">${f.marktnummer ? 'Markt ' + escapeHtml(f.marktnummer) : 'ohne Marktnummer'}${fassungVon(f.fileName) ? ' <span class="srv-fassung">Fassung ' + fassungVon(f.fileName) + '</span>' : ''}</span>
                 <span class="srv-datum">${escapeHtml(f.datum || '–')}</span>
                 <span class="srv-ort">${escapeHtml(ort)}${zusatz ? ' · ' + escapeHtml(zusatz) : ''}</span>
-                <span class="srv-meta">${escapeHtml(formatGespeichert(f.savedAt))}${f.fileName === offen ? '<span class="srv-badge">auf diesem Gerät geöffnet</span>' : ''}</span>
+                <span class="srv-meta">${escapeHtml(formatGespeichert(f.savedAt))}${vorWieLange(f.savedAt) ? ' · ' + escapeHtml(vorWieLange(f.savedAt)) : ''}${kuerzlichGespeichert(f.savedAt) && f.fileName !== offen ? '<span class="srv-badge srv-badge-frisch">kürzlich gespeichert</span>' : ''}${f.fileName === offen ? '<span class="srv-badge">auf diesem Gerät geöffnet</span>' : ''}</span>
             </button>`;
         }).join('');
         liste.querySelectorAll('.srv-eintrag').forEach(b => b.addEventListener('click', () => {
@@ -871,17 +903,43 @@ async function openServerLoadDialog() {
 // Rueckfrage vor dem Ersetzen der offenen Begehung (Team-Archiv "In App
 // anzeigen"). Liefert 'archiv', 'ersetzen' oder null (abgebrochen). Ist
 // keine Begehung mit Eingaben offen, gilt sofort 'ersetzen'.
+// Dialog "In App anzeigen" (Team-Archiv und Mein Verlauf), im Stil der
+// Wiederholungsbegehung: zeigt immer, welche Begehung geoeffnet wird. Ist auf
+// dem Geraet eine Begehung mit Eingaben offen, zusaetzlich der Hinweis und die
+// Wahl "erst archivieren". Liefert 'archiv', 'ersetzen' oder null (abgebrochen).
+// ziel: { marktnummer, datum (TT.MM.JJJJ), plzOrt, firma }
+// opt:  { sub, punkte: [Text, ...] }
 function frageVorErsetzen(ziel, opt) {
     opt = opt || {};
-    if (!begehungHatInhalt()) return Promise.resolve('ersetzen');
+    ziel = ziel || {};
     return new Promise(resolve => {
-        const c = state.companyInfo || {};
-        const zustand = sicherungsZustand();
-        const aktuell = (c.marktnummer ? 'Markt ' + c.marktnummer : 'ohne Marktnummer') + (c.datum ? ' vom ' + formatDatumDe(c.datum) : '');
-        const sicherung = zustand === 'gesichert'
-            ? 'Sie ist auf dem Server gesichert – Fotos gibt es aber nur auf diesem Gerät.'
-            : (zustand === 'geaendert' ? 'Sie wurde nach dem letzten Speichern auf dem Server geändert.' : 'Sie ist noch nicht auf dem Server gesichert.');
-        const zielText = (ziel && ziel.marktnummer ? 'Markt ' + ziel.marktnummer : 'die gewählte Begehung') + (ziel && ziel.datum ? ' vom ' + ziel.datum : '');
+        const markt = ziel.marktnummer ? 'Markt ' + ziel.marktnummer : 'ohne Marktnummer';
+        const ort = [ziel.plzOrt, ziel.firma].filter(Boolean).join(' · ');
+        const punkte = opt.punkte || [
+            'Die Begehung wird auf diesem Gerät geöffnet und kann weiterbearbeitet werden.',
+            'Daten aus dem Team-Archiv enthalten keine Fotos.'
+        ];
+        const ersetzt = begehungHatInhalt();
+        let warnung = '';
+        if (ersetzt) {
+            const c = state.companyInfo || {};
+            const zustand = sicherungsZustand();
+            const aktuell = (c.marktnummer ? 'Markt ' + c.marktnummer : 'ohne Marktnummer') + (c.datum ? ' vom ' + formatDatumDe(c.datum) : '');
+            const sicherung = zustand === 'gesichert'
+                ? 'Sie ist auf dem Server gesichert – Fotos gibt es aber nur auf diesem Gerät.'
+                : (zustand === 'geaendert' ? 'Sie wurde nach dem letzten Speichern auf dem Server geändert.' : 'Sie ist noch nicht auf dem Server gesichert.');
+            warnung = `
+                <div class="srv-meldung srv-meldung-warnung" style="margin-top:0.75rem">
+                    <strong>Offene Begehung wird ersetzt</strong>
+                    <p>Auf diesem Gerät ist die Begehung <b>${escapeHtml(aktuell)}</b> geöffnet. ${escapeHtml(sicherung)} Ihre Fotos werden vom Gerät entfernt.</p>
+                </div>`;
+        }
+        const knoepfe = ersetzt
+            ? `<button type="button" class="btn btn-primary" data-w="archiv">Erst im Verlauf archivieren, dann öffnen</button>
+               <button type="button" class="btn btn-secondary srv-btn-warn" data-w="ersetzen">Ohne Archivieren ersetzen</button>
+               <button type="button" class="btn btn-secondary" data-w="">Abbrechen</button>`
+            : `<button type="button" class="btn btn-primary" data-w="ersetzen">In App anzeigen</button>
+               <button type="button" class="btn btn-secondary" data-w="">Abbrechen</button>`;
         const overlay = document.createElement('div');
         overlay.className = 'srv-overlay';
         overlay.innerHTML = `
@@ -889,14 +947,105 @@ function frageVorErsetzen(ziel, opt) {
                 <div class="srv-kopf"><div><h2 class="srv-titel" id="srv-r-titel">In App anzeigen</h2><p class="srv-sub">${escapeHtml(opt.sub || 'Begehung aus dem Team-Archiv öffnen')}</p></div>
                 <button type="button" class="srv-x" aria-label="Schließen">×</button></div>
                 <div class="srv-inhalt">
-                    <div class="srv-meldung srv-meldung-warnung">
-                        <strong>Offene Begehung wird ersetzt</strong>
-                        <p>Auf diesem Gerät ist die Begehung <b>${escapeHtml(aktuell)}</b> geöffnet. ${escapeHtml(sicherung)}</p>
-                        <p>Geöffnet wird <b>${escapeHtml(zielText)}</b>. ${escapeHtml(opt.fotoText || 'Daten vom Server enthalten keine Fotos; die Fotos auf diesem Gerät werden entfernt.')}</p>
+                    <div class="wb-karte">
+                        <div class="ta-kopf"><span class="srv-markt">${escapeHtml(markt)}</span><span class="srv-datum">${escapeHtml(ziel.datum || '–')}</span></div>
+                        ${ort ? `<div class="srv-ort">${escapeHtml(ort)}</div>` : ''}
                     </div>
+                    <ul class="wb-liste">${punkte.map(t => `<li>${escapeHtml(t)}</li>`).join('')}</ul>
+                    ${warnung}
+                    <div class="srv-aktionen srv-aktionen-spalte">${knoepfe}</div>
+                </div>
+            </div>`;
+        document.body.appendChild(overlay);
+        document.documentElement.classList.add('srv-offen');
+        const ende = w => { overlay.remove(); document.documentElement.classList.remove('srv-offen'); document.removeEventListener('keydown', taste); resolve(w || null); };
+        function taste(e) { if (e.key === 'Escape') ende(null); }
+        document.addEventListener('keydown', taste);
+        overlay.addEventListener('click', e => { if (e.target === overlay) ende(null); });
+        overlay.querySelector('.srv-x').addEventListener('click', () => ende(null));
+        overlay.querySelectorAll('[data-w]').forEach(b => b.addEventListener('click', () => ende(b.dataset.w)));
+    });
+}
+
+// Eigene Fassungen (ab 1.54-9): Begehung_<Datum>_Markt<Nr>_Fassung-<n>.json
+function fassungVon(dateiname) {
+    const m = /_Fassung-(\d+)\.json$/.exec(String(dateiname || ''));
+    return m ? Number(m[1]) : 0;
+}
+
+// Je Begehung (Datei ohne "_Fassung-n") nur die zuletzt gespeicherte Fassung
+function nurNeuesteFassung(liste) {
+    const beste = new Map();
+    (liste || []).forEach(f => {
+        const schluessel = String(f.fileName || '').replace(/_Fassung-\d+\.json$/, '.json');
+        const bisher = beste.get(schluessel);
+        if (!bisher || String(f.savedAt || '') > String(bisher.savedAt || '')) beste.set(schluessel, f);
+    });
+    return (liste || []).filter(f => beste.get(String(f.fileName || '').replace(/_Fassung-\d+\.json$/, '.json')) === f);
+}
+
+// "vor 5 Minuten" / "vor 3 Stunden" (bis 24 Stunden), sonst ''
+function vorWieLange(iso) {
+    const d = iso ? new Date(iso) : null;
+    if (!d || isNaN(d)) return '';
+    const min = Math.round((Date.now() - d.getTime()) / 60000);
+    if (min < 0 || min >= 24 * 60) return '';
+    if (min < 1) return 'gerade eben';
+    if (min < 60) return 'vor ' + min + (min === 1 ? ' Minute' : ' Minuten');
+    const h = Math.floor(min / 60);
+    return 'vor ' + h + (h === 1 ? ' Stunde' : ' Stunden');
+}
+
+// Kuerzlich gespeichert = in den letzten 2 Stunden (Hinweis im Team-Archiv)
+function kuerzlichGespeichert(iso) {
+    const d = iso ? new Date(iso) : null;
+    if (!d || isNaN(d)) return false;
+    const ms = Date.now() - d.getTime();
+    return ms >= 0 && ms < 2 * 60 * 60 * 1000;
+}
+
+function formatZeitpunkt(iso) {
+    const d = iso ? new Date(iso) : null;
+    if (!d || isNaN(d)) return '';
+    return d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' }) +
+        ' um ' + d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) + ' Uhr';
+}
+
+// Rueckfrage, wenn save.php einen neueren Stand im Team-Archiv meldet (409).
+// Liefert 'neueFassung', 'ueberschreiben' oder null (abgebrochen).
+function frageBeiKonflikt(info) {
+    info = info || {};
+    return new Promise(resolve => {
+        const c = state.companyInfo || {};
+        const markt = c.marktnummer ? 'Markt ' + c.marktnummer : 'ohne Marktnummer';
+        const ort = [c.plzOrt, c.firma].filter(Boolean).join(' · ');
+        const wann = formatZeitpunkt(info.savedAt);
+        const wieLange = vorWieLange(info.savedAt);
+        const text = info.fremd
+            ? `Für diesen Markt und dieses Datum liegt im Team-Archiv bereits eine Begehung${wann ? ', gespeichert am ' + wann : ''}${wieLange ? ' (' + wieLange + ')' : ''}. Sie wurde nicht auf diesem Gerät geöffnet.`
+            : `Diese Begehung wurde im Team-Archiv erneut gespeichert, nachdem sie auf diesem Gerät geöffnet wurde${wann ? ' – am ' + wann : ''}${wieLange ? ' (' + wieLange + ')' : ''}. Vermutlich hat jemand sie gleichzeitig auf einem anderen Gerät bearbeitet.`;
+        const overlay = document.createElement('div');
+        overlay.className = 'srv-overlay';
+        overlay.innerHTML = `
+            <div class="srv-box" role="dialog" aria-modal="true" aria-labelledby="srv-k-titel">
+                <div class="srv-kopf"><div><h2 class="srv-titel" id="srv-k-titel">Auf Server speichern</h2><p class="srv-sub">Neuerer Stand im Team-Archiv</p></div>
+                <button type="button" class="srv-x" aria-label="Schließen">×</button></div>
+                <div class="srv-inhalt">
+                    <div class="wb-karte">
+                        <div class="ta-kopf"><span class="srv-markt">${escapeHtml(markt)}</span><span class="srv-datum">${escapeHtml(c.datum ? formatDatumDe(c.datum) : '–')}</span></div>
+                        ${ort ? `<div class="srv-ort">${escapeHtml(ort)}</div>` : ''}
+                    </div>
+                    <div class="srv-meldung srv-meldung-warnung" style="margin-top:0.75rem">
+                        <strong>Achtung: Stand im Team-Archiv ist neuer</strong>
+                        <p>${escapeHtml(text)}</p>
+                    </div>
+                    <ul class="wb-liste">
+                        <li><b>Als eigene Fassung speichern:</b> Ihr Stand kommt zusätzlich ins Team-Archiv, der andere bleibt unverändert. Beide sind danach im Team-Archiv zu sehen.</li>
+                        <li><b>Trotzdem überschreiben:</b> Ihr Stand ersetzt den anderen. Der bisherige Stand wird auf dem Server gesichert, ist in der App aber nicht mehr zu sehen.</li>
+                    </ul>
                     <div class="srv-aktionen srv-aktionen-spalte">
-                        <button type="button" class="btn btn-primary" data-w="archiv">Erst im Verlauf archivieren, dann öffnen</button>
-                        <button type="button" class="btn btn-secondary srv-btn-warn" data-w="ersetzen">Ohne Archivieren ersetzen</button>
+                        <button type="button" class="btn btn-primary" data-w="neueFassung">Als eigene Fassung speichern</button>
+                        <button type="button" class="btn btn-secondary srv-btn-warn" data-w="ueberschreiben">Trotzdem überschreiben</button>
                         <button type="button" class="btn btn-secondary" data-w="">Abbrechen</button>
                     </div>
                 </div>
