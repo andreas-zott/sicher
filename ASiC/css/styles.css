@@ -1524,6 +1524,81 @@ a.btn {
     box-shadow: var(--shadow);
 }
 
+/* Zweistufiges Datei-Menue (ab 1.54-9) */
+.menu-ebene {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 270px;
+}
+
+.menu-ebene[hidden] {
+    display: none;
+}
+
+.menu-pfeil {
+    margin-left: auto;
+    padding-left: 1rem;
+    color: var(--steel-light);
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1;
+}
+
+.menu-zurueck {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    width: 100%;
+    height: 40px;
+    padding: 0 0.7rem;
+    margin-bottom: 0.2rem;
+    border: none;
+    border-bottom: 1px solid var(--line);
+    border-radius: 10px 10px 0 0;
+    background: transparent;
+    color: var(--brand-red-dark);
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.menu-zurueck span[aria-hidden] {
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1;
+}
+
+.menu-ebene-titel {
+    margin-left: auto;
+    color: var(--steel);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.menu-item-zweizeilig {
+    line-height: 1.25;
+    height: auto;
+    min-height: 52px;
+    padding-top: 0.45rem;
+    padding-bottom: 0.45rem;
+}
+
+.menu-item-zweizeilig > span:nth-child(2) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+}
+
+.menu-item-sub {
+    color: var(--steel);
+    font-size: 0.74rem;
+    font-weight: 500;
+    white-space: normal;
+}
+
 .menu-item-danger {
     color: var(--mangel);
 }
@@ -2867,6 +2942,12 @@ html.srv-offen, html.srv-offen body { overflow: hidden; }
     color: #8a5a00;
 }
 
+/* gerade auf einem anderen Geraet geoeffnet (ab 1.54-11) */
+.srv-badge-offen {
+    background: #e6eefb;
+    color: #1f4f9a;
+}
+
 /* eigene Fassung einer Begehung (ab 1.54-9) */
 .srv-fassung {
     display: inline-block;
@@ -2910,6 +2991,14 @@ html.srv-offen, html.srv-offen body { overflow: hidden; }
     border-color: #f2c4ca;
     border-left: 4px solid var(--brand-red);
 }
+
+/* gerade auf einem anderen Geraet geoeffnet (ab 1.54-11) */
+.srv-meldung-offen {
+    background: #fdf6e7;
+    border-color: #f0d9a8;
+    border-left: 4px solid #d99a1e;
+}
+
 
 .srv-klein { font-size: 0.82rem; color: var(--steel); }
 .srv-klein a { color: var(--brand-red-dark); }
