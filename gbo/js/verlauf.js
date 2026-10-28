@@ -4,6 +4,7 @@
 
 let archiveCache = [];
 let teamArchiveCache = [];
+let teamOffenListe = [];   // auf anderen Geraeten geoeffnet
 
 async function loadAndRenderArchive() {
     try {
@@ -81,9 +82,20 @@ async function onArchiveRestore(id) {
     const record = archiveCache.find(r => r.id === id);
     if (!record) return;
 
-    if (!confirm('Diese archivierte Begehung in der App anzeigen? Der aktuell laufende, noch nicht archivierte Bearbeitungsstand auf diesem Gerät wird dabei überschrieben. Bereits archivierte Begehungen bleiben davon unberührt.')) return;
+    const ci = record.companyInfo || {};
+    const wahl = await frageVorErsetzen(
+        { marktnummer: ci.marktnummer, datum: ci.datum ? formatDatumDe(ci.datum) : '', plzOrt: ci.plzOrt, firma: ci.firma },
+        { sub: 'Begehung aus „Mein Verlauf“ öffnen', punkte: [
+            'Die Begehung wird auf diesem Gerät geöffnet und kann weiterbearbeitet werden.',
+            (record.photos && record.photos.length ? record.photos.length + ' Foto' + (record.photos.length === 1 ? '' : 's') + ' dieser Begehung werden wiederhergestellt.' : 'Zu dieser Begehung sind keine Fotos archiviert.'),
+            'Archivierte Begehungen bleiben unverändert.',
+            'Die Gefährdungsbeurteilung auf diesem Gerät bleibt unverändert.'
+        ] });
+    if (!wahl) return;
 
     try {
+        if (wahl === 'archiv' && !(await archiviereAktuelleBegehung())) return;
+        await meldeGeschlossen();
         const restoredState = {
             companyInfo: { ...record.companyInfo },
             ratings: { ...(record.ratings || {}) },
@@ -200,7 +212,7 @@ async function loadAndRenderTeamArchive() {
     const start = Date.now();
 
     try {
-        teamArchiveCache = await getServerFiles();
+        [teamArchiveCache, teamOffenListe] = await Promise.all([getServerFiles(), ladeOffenListe()]);
         const dauer = ((Date.now() - start) / 1000).toLocaleString('de-DE', { maximumFractionDigits: 1 });
         const n = teamArchiveCache.length;
 
@@ -276,17 +288,21 @@ function renderTeamArchiveList() {
 
     container.innerHTML = sorted.map(entry => {
         const gespeichertAm = entry.savedAt
-            ? new Date(entry.savedAt).toLocaleDateString('de-DE') + ' ' + new Date(entry.savedAt).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })
+            ? new Date(entry.savedAt).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' }) + ', ' + new Date(entry.savedAt).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })
             : '-';
 
+        const stand = (typeof leseServerStand === 'function') ? leseServerStand() : null;
+        const offen = stand && typeof sicherungsZustand === 'function' && sicherungsZustand() !== 'leer' && stand.datei === entry.fileName;
+        const ort = entry.plzOrt || entry.firma || 'ohne Ortsangabe';
+        const zusatz = entry.plzOrt && entry.firma ? ' · ' + entry.firma : '';
         return `
-        <div class="archive-item card" data-filename="${escapeHtml(entry.fileName)}">
-            <div class="archive-item-head">
-                <div>
-                    <div class="archive-item-firma">${escapeHtml(entry.plzOrt || entry.firma || 'Ohne Markt-Angabe')}${entry.marktnummer ? ' (Nr. ' + escapeHtml(entry.marktnummer) + ')' : ''}</div>
-                    <div class="archive-item-meta">Begehung vom ${escapeHtml(entry.datum || '-')} · auf dem Server gespeichert am ${escapeHtml(gespeichertAm)}</div>
-                </div>
+        <div class="archive-item card ta-karte" data-filename="${escapeHtml(entry.fileName)}">
+            <div class="ta-kopf">
+                <span class="srv-markt">${entry.marktnummer ? 'Markt ' + escapeHtml(entry.marktnummer) : 'ohne Marktnummer'}${fassungVon(entry.fileName) ? ' <span class="srv-fassung">Fassung ' + fassungVon(entry.fileName) + '</span>' : ''}</span>
+                <span class="srv-datum">${escapeHtml(entry.datum || '–')}</span>
             </div>
+            <div class="srv-ort">${escapeHtml(ort)}${escapeHtml(zusatz)}</div>
+            <div class="srv-meta">gespeichert ${escapeHtml(gespeichertAm)} Uhr${vorWieLange(entry.savedAt) ? ' · ' + escapeHtml(vorWieLange(entry.savedAt)) : ''}${offenAnderswo(teamOffenListe, entry.fileName) ? '<span class="srv-badge srv-badge-offen">' + escapeHtml(offenKurztext(offenAnderswo(teamOffenListe, entry.fileName))) + '</span>' : (kuerzlichGespeichert(entry.savedAt) && !offen ? '<span class="srv-badge srv-badge-frisch">kürzlich gespeichert</span>' : '')}${offen ? '<span class="srv-badge">auf diesem Gerät geöffnet</span>' : ''}</div>
             <div class="archive-item-actions">
                 <div class="archive-item-actions-primary">
                     <button class="btn btn-secondary btn-small" ${aktionAttr('click', 'onTeamArchiveExport', '$closest-filename')}>📤 PDF exportieren</button>
@@ -321,10 +337,30 @@ async function onTeamArchiveExport(fileName) {
 // obwohl die urspruengliche Kollegin/der urspruengliche Kollege welche
 // hatte.
 async function onTeamArchiveRestore(fileName) {
-    if (!confirm('Diesen Markt vom Server in der App anzeigen? Der aktuell laufende, noch nicht archivierte Bearbeitungsstand auf diesem Gerät (Begehung und – falls im Datensatz enthalten – Gefährdungsbeurteilung) wird dabei überschrieben. Hinweis: Team-Archiv-Datensätze enthalten keine Original-Fotos – ein evtl. vorhandener lokaler Fotobestand der Begehung wird dabei geleert, nicht ersetzt.')) return;
+    const eintrag = (teamArchiveCache || []).find(e => e.fileName === fileName) || {};
+    // Kuerzlich gespeichert / gerade geoeffnet: Hinweis, dass gerade jemand
+    // anderes daran arbeiten koennte
+    const punkte = [
+        'Der Markt wird auf diesem Gerät geöffnet und kann weiterbearbeitet werden.',
+        'Enthält der Datensatz eine Gefährdungsbeurteilung, wird sie ebenfalls übernommen.',
+        'Daten aus dem Team-Archiv enthalten keine Original-Fotos.'
+    ];
+    const standJetzt = (typeof leseServerStand === 'function') ? leseServerStand() : null;
+    const hierGeoeffnet = !!(standJetzt && standJetzt.datei === fileName && sicherungsZustand() !== 'leer');
+    // Liste frisch holen - sie kann seit dem Laden des Team-Archivs veraltet sein
+    teamOffenListe = await ladeOffenListe();
+    if (typeof renderTeamArchiveList === 'function' && teamArchiveCache.length) renderTeamArchiveList();
+    const anderswo = offenAnderswo(teamOffenListe, fileName);
+    const hinweis = anderswo ? { titel: 'Wird gerade bearbeitet?', text: offenSatz(anderswo) } : null;
+    if (!anderswo && kuerzlichGespeichert(eintrag.savedAt) && !hierGeoeffnet) {
+        punkte.push('Zuletzt gespeichert ' + vorWieLange(eintrag.savedAt) + ' – möglicherweise bearbeitet sie gerade jemand anderes. Beim Speichern meldet die App, falls inzwischen ein neuerer Stand im Team-Archiv liegt.');
+    }
+    const wahl = await frageVorErsetzen(eintrag, { punkte, hinweis });
+    if (!wahl) return;
 
     try {
         const record = await ladeTeamBegehungMitStatus(fileName, 'In App anzeigen');
+        if (wahl === 'archiv' && !(await archiviereAktuelleBegehung())) return;
 
         const restoredState = {
             companyInfo: { ...record.companyInfo },
@@ -337,19 +373,21 @@ async function onTeamArchiveRestore(fileName) {
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(restoredState));
         // Markt-Datensatz: Gefaehrdungsbeurteilung ebenfalls uebernehmen
-        const markt = record.__markt;
-        if (markt && markt.gbo) {
-            localStorage.setItem('asicGboStateV1', JSON.stringify(markt.gbo));
-            if (Array.isArray(markt.links)) localStorage.setItem('asicMarketLinksV2', JSON.stringify(markt.links));
-        }
+        uebernehmeGboAusDatensatz(record);
         // gilt als im Team-Archiv gesichert (wird im Pruefkatalog nach dem
         // Seitenaufbau als Sicherungsstand uebernommen)
-        try { localStorage.setItem('asicServerStandAusstehend', fileName); } catch (e) {}
+        try {
+            localStorage.setItem('asicServerStandAusstehend', JSON.stringify({
+                datei: fileName,
+                serverZeit: (record._nas && record._nas.savedAt) || eintrag.savedAt || ''
+            }));
+        } catch (e) {}
 
         if (typeof deleteAllPhotos === 'function') {
             await deleteAllPhotos();
         }
 
+        await meldeGeoeffnet(fileName);
         showToast('Begehung wird geöffnet…');
         window.location.href = 'index.html';
     } catch (err) {
@@ -412,4 +450,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const btnTeamNeu = document.getElementById('team-archiv-neu-laden');
     if (btnTeamNeu) btnTeamNeu.addEventListener('click', loadAndRenderTeamArchive);
+});
+
+
+// Hinweis "geoeffnet auf …" aktuell halten: beim Zurueckkehren zur Seite
+// (z. B. iPad entsperrt, App wieder im Vordergrund) die Liste neu holen.
+document.addEventListener('visibilitychange', async () => {
+    if (document.visibilityState !== 'visible' || !teamArchiveCache.length || typeof ladeOffenListe !== 'function') return;
+    const listEl = document.getElementById('team-archive-list');
+    if (!listEl || listEl.style.display === 'none') return;
+    teamOffenListe = await ladeOffenListe();
+    renderTeamArchiveList();
 });

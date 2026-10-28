@@ -277,11 +277,15 @@ function leseServerStand() {
     try { return JSON.parse(localStorage.getItem(SERVER_STAND_KEY) || 'null'); } catch (e) { return null; }
 }
 
-function markiereServerGesichert(dateiname) {
+// serverZeit: savedAt der Datei auf dem Server - Grundlage, um
+// beim naechsten Speichern zu erkennen, ob inzwischen jemand anderes
+// dieselbe Begehung gespeichert hat.
+function markiereServerGesichert(dateiname, serverZeit) {
     try {
         localStorage.setItem(SERVER_STAND_KEY, JSON.stringify({
             zeit: new Date().toISOString(),
             datei: dateiname || '',
+            serverZeit: serverZeit || '',
             kennung: begehungsKennung(),
             fp: stateFingerabdruck()
         }));
@@ -387,7 +391,10 @@ window.addEventListener('load', () => {
     // Uebernahme im Pruefkatalog (dorthin fuehrt "In App anzeigen"), notfalls
     // auf der Maßnahmenseite
     if (ausstehend !== null && (document.getElementById('btn-save-nas') || document.getElementById('sicherungs-hinweis-platz'))) {
-        markiereServerGesichert(ausstehend);
+        // als JSON { datei, serverZeit }, bei aelteren Merkern nur der Dateiname
+        let a = { datei: ausstehend, serverZeit: '' };
+        try { if (ausstehend.charAt(0) === '{') a = Object.assign(a, JSON.parse(ausstehend)); } catch (e) { /* Dateiname */ }
+        markiereServerGesichert(a.datei, a.serverZeit);
     } else {
         aktualisiereSicherungsHinweis();
     }
@@ -472,9 +479,23 @@ function initDropdownMenu(toggleId, panelId) {
     const panel = document.getElementById(panelId);
     if (!toggle || !panel) return;
 
+    // Unterebenen (Datei-Menue): "menu-weiter" oeffnet die Ebene
+    // aus data-ziel, "menu-zurueck" fuehrt zur Hauptebene zurueck.
+    function zeigeEbene(name) {
+        const ebenen = panel.querySelectorAll('.menu-ebene');
+        if (!ebenen.length) return;
+        ebenen.forEach(e => { e.hidden = e.dataset.ebene !== name; });
+        const erstes = panel.querySelector(`.menu-ebene[data-ebene="${name}"] button`);
+        if (erstes && name !== 'haupt' && window.matchMedia && window.matchMedia('(pointer: fine)').matches) erstes.focus();
+    }
+    panel.querySelectorAll('.menu-weiter, .menu-zurueck').forEach(b => {
+        b.addEventListener('click', e => { e.stopPropagation(); zeigeEbene(b.dataset.ziel); });
+    });
+
     function closeMenu() {
         panel.classList.remove('open');
         document.removeEventListener('click', onOutsideClick);
+        zeigeEbene('haupt');
     }
 
     function onOutsideClick(e) {
@@ -493,17 +514,16 @@ function initDropdownMenu(toggleId, panelId) {
     });
 
     // Menü nach Auswahl eines Punktes automatisch wieder schliessen
-    panel.querySelectorAll('.menu-item').forEach(item => {
-        item.addEventListener('click', closeMenu);
+    // ueber den Kasten, damit auch spaeter eingefuegte Punkte (z. B.
+    // "Gesamtsicherung Markt" aus js/market-ui.js) das Menue schliessen
+    panel.addEventListener('click', e => {
+        if (e.target.closest('.menu-item') && !e.target.closest('.menu-weiter')) closeMenu();
     });
 }
 
-// ===== Export-Menü: Modus-Auswahl (Checkliste / Maßnahmen / Beide) + Aktionen =====
-// Auf beiden Seiten identisch nutzbar - Vorauswahl richtet sich danach, auf
-// welcher Seite man sich gerade befindet (erkennbar an den vorhandenen Elementen).
-let exportMode = document.getElementById('measures-container') ? 'massnahmen'
-    : document.getElementById('photo-grid') ? 'fotos'
-    : 'checkliste';
+// ===== Export-Menü: Modus-Auswahl (Checkliste / Maßnahmen / Fotos / Alles) + Aktionen =====
+// Auf allen Seiten gleich: Vorauswahl ist "Alles" (vollstaendiger Bericht).
+let exportMode = 'alle';
 
 // ===== Server-Speicherung (save.php / list.php / load.php) =====
 // Setzt voraus, dass die App direkt ueber den Server aufgerufen
@@ -566,29 +586,50 @@ function withNasAuthHeaders(options) {
     };
 }
 
-// Speichert den Markt-Datensatz (Begehung + Gefaehrdungsbeurteilung) ueber
-// js/market-store.js. Ist das Modul auf einer Seite nicht geladen, wird nur
+// Angaben fuer save.php, um gleichzeitiges Bearbeiten zu erkennen: welche
+// Datei mit welchem Stand dieses Geraet zuletzt vom Server hatte. Gehoert
+// der Merker zu einer anderen Begehung (Markt + Datum), gilt die Begehung
+// als neu - liegt fuer Markt und Datum schon eine Datei vor, fragt die App nach.
+function speicherSteuerung(modus) {
+    const stand = leseServerStand();
+    const passt = stand && stand.kennung === begehungsKennung() && stand.datei;
+    return {
+        modus: modus || 'normal',
+        basisDatei: passt ? stand.datei : null,
+        basisStand: passt && stand.serverZeit ? stand.serverZeit : null,
+        basisUnbekannt: !!(passt && !stand.serverZeit)
+    };
+}
+
+// Speichert den Markt-Datensatz (Begehung + Gefaehrdungsbeurteilung, aus
+// js/market-store.js). Ist das Modul auf einer Seite nicht geladen, wird nur
 // die Begehung gespeichert (bisheriges Format, von save.php ebenso angenommen).
-async function saveStateToServer() {
+async function saveStateToServer(modus) {
+    if (typeof modus !== 'string') modus = 'normal';
     try {
         saveState();
-        let result;
-        if (window.ASiCMarket) {
-            result = await ASiCMarket.saveServer();
-        } else {
-            const res = await fetch(nasUrl('save.php'), withNasAuthHeaders({
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                cache: 'no-store',
-                body: JSON.stringify(state)
-            }));
-            result = await parseJsonResponse(res);
-            if (!res.ok || !result.ok) {
-                throw new Error(result.message || `Fehler beim Speichern (HTTP ${res.status}).`);
-            }
+        const nutzdaten = window.ASiCMarket ? ASiCMarket.container() : state;
+        const res = await fetch(nasUrl('save.php'), withNasAuthHeaders({
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            cache: 'no-store',
+            body: JSON.stringify(Object.assign({}, nutzdaten, { _speichern: speicherSteuerung(modus) }))
+        }));
+        const result = await parseJsonResponse(res);
+        if (res.status === 409 && result && result.konflikt) {
+            const wahl = await frageBeiKonflikt(result);
+            if (wahl) return saveStateToServer(wahl);
+            showToast('Nicht gespeichert – der Stand im Team-Archiv bleibt unverändert.');
+            return;
         }
-        markiereServerGesichert(result.fileName);
-        showToast((window.ASiCMarket ? 'Markt auf Server gespeichert: ' : 'Auf Server gespeichert: ') + result.fileName);
+        if (!res.ok || !result.ok) {
+            throw new Error(result.message || `Fehler beim Speichern (HTTP ${res.status}).`);
+        }
+        markiereServerGesichert(result.fileName, result.savedAt);
+        meldeGeschlossen();
+        showToast(result.fassung
+            ? 'Als eigene Fassung gespeichert (Fassung ' + result.fassung + ')'
+            : (window.ASiCMarket ? 'Markt auf Server gespeichert: ' : 'Auf Server gespeichert: ') + result.fileName);
     } catch (err) {
         console.error('Server-Speichern fehlgeschlagen:', err);
         showToast('Speichern auf dem Server fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
@@ -636,23 +677,27 @@ async function fetchServerRecord(filename) {
     return begehungAusDatensatz(result);
 }
 
-async function loadStateFromServer(filename) {
-    const res = await fetch(nasUrl('load.php') + '?filename=' + encodeURIComponent(filename), withNasAuthHeaders({ cache: 'no-store' }));
-    const roh = await parseJsonResponse(res);
-    if (!res.ok) {
-        throw new Error((roh && roh.message) || `Fehler beim Laden (HTTP ${res.status}).`);
-    }
-    // Markt-Datensatz: GBO-Teil auf diesem Geraet uebernehmen, Begehungsteil
-    // wie gewohnt weiterverarbeiten.
-    const markt = istMarktDatensatz(roh);
-    if (markt && roh.gbo) {
-        try { localStorage.setItem(GBO_STATE_KEY, JSON.stringify(roh.gbo)); } catch (e) { console.error('GBO-Stand konnte nicht übernommen werden:', e); }
-        if (Array.isArray(roh.links)) { try { localStorage.setItem('asicMarketLinksV2', JSON.stringify(roh.links)); } catch (e) {} }
-    }
-    const result = begehungAusDatensatz(roh);
+// Markt-Datensatz: Gefaehrdungsbeurteilung und Verknuepfungen auf diesem
+// Geraet uebernehmen - nur wenn der Datensatz eine GBO enthaelt (sonst bleibt
+// die GBO auf dem Geraet unveraendert, wie beim Zuruecksetzen der Begehung).
+function uebernehmeGboAusDatensatz(record) {
+    const m = record && record.__markt;
+    if (!m || !m.gbo) return false;
+    try {
+        localStorage.setItem(GBO_STATE_KEY, JSON.stringify(window.GBOMigrate ? GBOMigrate.state(m.gbo) : m.gbo));
+        if (Array.isArray(m.links)) {
+            localStorage.setItem('asicMarketLinksV2', JSON.stringify(window.GBOMigrate ? GBOMigrate.links(m.links) : m.links));
+        }
+    } catch (e) { console.error('GBO-Stand konnte nicht übernommen werden:', e); }
+    return true;
+}
 
-    // Defensiv mit defaultState() zusammenfuehren, aehnlich wie beim JSON-Import,
-    // damit eine unvollstaendige/aeltere Datei die App nicht zum Absturz bringt.
+// Uebernimmt einen vom Server geladenen Datensatz als laufende Begehung.
+// Wie "In App anzeigen" im Team-Archiv: auch die Unterbereich-Schalter
+// werden uebernommen und der lokale Fotobestand geleert (Server-Datensaetze
+// enthalten keine Fotos) - sonst blieben Schalter und Fotos der vorherigen
+// Begehung stehen.
+async function applyServerRecord(result, filename) {
     const leer = defaultState();
     state.companyInfo = Object.assign({}, leer.companyInfo, result.companyInfo || {});
     state.ratings = result.ratings || {};
@@ -661,6 +706,11 @@ async function loadStateFromServer(filename) {
     state.signatures = Object.assign({}, leer.signatures, result.signatures || {});
     state.notApplicable = result.notApplicable || {};
     state.subgroupNotApplicable = result.subgroupNotApplicable || {};
+    uebernehmeGboAusDatensatz(result);
+
+    if (typeof deleteAllPhotos === 'function') {
+        try { await deleteAllPhotos(); } catch (e) { console.error('Fotos konnten nicht geleert werden:', e); }
+    }
 
     saveState();
     if (typeof renderChecklist === 'function') renderChecklist();
@@ -669,58 +719,616 @@ async function loadStateFromServer(filename) {
     // nachgetragene Kommentar beim naechsten Laden (z. B. auf der
     // Maßnahmenseite) wieder fehlen.
     saveState();
-    markiereServerGesichert(filename);
+    markiereServerGesichert(filename, (result && result._nas && result._nas.savedAt) || '');
+    meldeGeoeffnet(filename);
     if (typeof initCompanyForm === 'function') initCompanyForm();
     if (typeof renderCompanyInfoStrip === 'function') renderCompanyInfoStrip();
     if (typeof renderMeasures === 'function') await renderMeasures();
     if (typeof restoreSignatures === 'function') restoreSignatures();
-
-    showToast((markt ? 'Markt vom Server geladen: ' : 'Begehung vom Server geladen: ') + filename);
+    // z. B. fuer die GBO-Seite, die danach neu aufbaut
+    document.dispatchEvent(new CustomEvent('asic:server-geladen', { detail: { fileName: filename } }));
 }
 
-// Einfacher Auswahl-Dialog: listet alle auf dem Server gespeicherten Begehungen
-// auf, per Klick wird die jeweilige geladen.
+async function loadStateFromServer(filename) {
+    const result = await fetchServerRecord(filename);
+    await applyServerRecord(result, filename);
+    showToast((result.__markt ? 'Markt vom Server geladen: ' : 'Begehung vom Server geladen: ') + filename);
+}
+
+// ===== Dialog "Vom Server laden" =====
+// Liste mit Suche, Rueckfrage vor dem Ersetzen einer offenen Begehung
+// (wahlweise vorher im Verlauf archivieren), Lade- und Fehlerzustaende.
 async function openServerLoadDialog() {
+    if (document.getElementById('srv-dialog')) return;
     const overlay = document.createElement('div');
-    overlay.className = 'access-gate-overlay';
+    overlay.className = 'srv-overlay';
+    overlay.id = 'srv-dialog';
     overlay.innerHTML = `
-        <div class="access-gate-box" style="max-width:420px; text-align:left;">
-            <div class="access-gate-brand" style="margin-bottom:0.75rem;">Vom Server laden</div>
-            <div id="nas-load-list">
-                <p class="auswertung-empty">Lade Dateiliste …</p>
+        <div class="srv-box" role="dialog" aria-modal="true" aria-labelledby="srv-titel">
+            <div class="srv-kopf">
+                <div>
+                    <h2 class="srv-titel" id="srv-titel">Vom Server laden</h2>
+                    <p class="srv-sub">Begehungen aus dem Team-Archiv</p>
+                </div>
+                <button type="button" class="srv-x" aria-label="Schließen">×</button>
             </div>
-            <button class="btn btn-secondary btn-small" id="nas-load-cancel" style="width:100%; margin-top:1rem;">Abbrechen</button>
+            <div class="srv-inhalt"></div>
         </div>`;
     document.body.appendChild(overlay);
+    document.documentElement.classList.add('srv-offen');
 
-    document.getElementById('nas-load-cancel').addEventListener('click', () => overlay.remove());
+    const inhalt = overlay.querySelector('.srv-inhalt');
+    let dateien = [];
+    let offenListe = [];
+    let suchtext = '';
 
-    const listEl = document.getElementById('nas-load-list');
-    try {
-        const files = await getServerFiles();
-        if (files.length === 0) {
-            listEl.innerHTML = '<p class="auswertung-empty">Noch keine Begehung auf dem Server gespeichert.</p>';
+    function schliessen() {
+        overlay.remove();
+        document.documentElement.classList.remove('srv-offen');
+        document.removeEventListener('keydown', taste);
+    }
+    function taste(e) { if (e.key === 'Escape') schliessen(); }
+    document.addEventListener('keydown', taste);
+    overlay.addEventListener('click', e => { if (e.target === overlay) schliessen(); });
+    overlay.querySelector('.srv-x').addEventListener('click', schliessen);
+
+    const fehlerText = err => escapeHtml(err && err.message ? err.message : 'unbekannter Fehler');
+    const formatGespeichert = iso => {
+        const d = iso ? new Date(iso) : null;
+        if (!d || isNaN(d)) return '';
+        return 'gespeichert ' + d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' }) +
+            ', ' + d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) + ' Uhr';
+    };
+
+    function zeigeFehler(titel, err, nochmal) {
+        inhalt.innerHTML = `
+            <div class="srv-meldung srv-meldung-fehler">
+                <strong>${escapeHtml(titel)}</strong>
+                <p>${fehlerText(err)}</p>
+                <p class="srv-klein">Kein Netz? Sonst bitte Server-Adresse und Zugriffsschlüssel unter <a href="einstellungen.html">Einstellungen</a> prüfen.</p>
+            </div>
+            <div class="srv-aktionen"><button type="button" class="btn btn-primary btn-small" data-srv="nochmal">Erneut versuchen</button></div>`;
+        inhalt.querySelector('[data-srv="nochmal"]').addEventListener('click', nochmal);
+    }
+
+    async function ladeListe() {
+        inhalt.innerHTML = '<div class="srv-meldung"><span class="srv-spinner" aria-hidden="true"></span> Dateiliste wird geladen …</div>';
+        try {
+            [dateien, offenListe] = await Promise.all([getServerFiles(), ladeOffenListe()]);
+        } catch (err) {
+            console.error('Dateiliste konnte nicht geladen werden:', err);
+            zeigeFehler('Dateiliste konnte nicht geladen werden', err, ladeListe);
             return;
         }
-        listEl.innerHTML = files.map(f => `
-            <button class="btn btn-secondary btn-small" style="width:100%; text-align:left; margin-bottom:0.5rem;" data-filename="${escapeHtml(f.fileName)}">
-                ${escapeHtml(f.datum || '?')} — ${escapeHtml(f.plzOrt || f.firma || 'ohne Angabe')}${f.marktnummer ? ' (Nr. ' + escapeHtml(f.marktnummer) + ')' : ''}
-            </button>`).join('');
-        listEl.querySelectorAll('button[data-filename]').forEach(btn => {
-            btn.addEventListener('click', async () => {
-                overlay.remove();
-                try {
-                    await loadStateFromServer(btn.dataset.filename);
-                } catch (err) {
-                    console.error('Server-Laden fehlgeschlagen:', err);
-                    showToast('Laden vom Server fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
-                }
-            });
-        });
-    } catch (err) {
-        console.error('Dateiliste konnte nicht geladen werden:', err);
-        listEl.innerHTML = `<p style="color:var(--mangel);">Dateiliste konnte nicht geladen werden: ${escapeHtml(err && err.message ? err.message : 'unbekannter Fehler')}</p>`;
+        zeigeListe();
     }
+
+    function passt(f, q) {
+        if (!q) return true;
+        const text = [f.marktnummer, f.plzOrt, f.firma, f.datum, f.datumISO, f.fileName].join(' ').toLowerCase();
+        return q.split(/\s+/).every(w => text.includes(w));
+    }
+
+    function zeigeListe() {
+        if (!dateien.length) {
+            inhalt.innerHTML = '<div class="srv-meldung"><strong>Noch keine Begehung auf dem Server.</strong><p>Eine Begehung gelangt über „Auf Server speichern“ ins Team-Archiv.</p></div>';
+            return;
+        }
+        inhalt.innerHTML = `
+            <div class="srv-suche">
+                <input type="search" class="srv-suchfeld" placeholder="Marktnummer, Ort oder Datum suchen" aria-label="Begehungen durchsuchen" value="${escapeHtml(suchtext)}" autocomplete="off">
+            </div>
+            <p class="srv-anzahl" aria-live="polite"></p>
+            <div class="srv-liste"></div>`;
+        const feld = inhalt.querySelector('.srv-suchfeld');
+        feld.addEventListener('input', () => { suchtext = feld.value; fuelleListe(); });
+        if (window.matchMedia && window.matchMedia('(pointer: fine)').matches) feld.focus();
+        fuelleListe();
+    }
+
+    function fuelleListe() {
+        const q = suchtext.trim().toLowerCase();
+        const treffer = dateien.filter(f => passt(f, q));
+        const stand = leseServerStand();
+        const offen = stand && sicherungsZustand() !== 'leer' ? stand.datei : '';
+        inhalt.querySelector('.srv-anzahl').textContent = q
+            ? `${treffer.length} von ${dateien.length} Begehungen`
+            : `${dateien.length} ${dateien.length === 1 ? 'Begehung' : 'Begehungen'}, neueste zuerst`;
+        const liste = inhalt.querySelector('.srv-liste');
+        if (!treffer.length) {
+            liste.innerHTML = '<p class="srv-leer">Keine Begehung passt zur Suche.</p>';
+            return;
+        }
+        liste.innerHTML = treffer.map(f => {
+            const ort = f.plzOrt || f.firma || 'ohne Ortsangabe';
+            const zusatz = f.plzOrt && f.firma ? f.firma : '';
+            return `
+            <button type="button" class="srv-eintrag" data-datei="${escapeHtml(f.fileName)}">
+                <span class="srv-markt">${f.marktnummer ? 'Markt ' + escapeHtml(f.marktnummer) : 'ohne Marktnummer'}${fassungVon(f.fileName) ? ' <span class="srv-fassung">Fassung ' + fassungVon(f.fileName) + '</span>' : ''}</span>
+                <span class="srv-datum">${escapeHtml(f.datum || '–')}</span>
+                <span class="srv-ort">${escapeHtml(ort)}${zusatz ? ' · ' + escapeHtml(zusatz) : ''}</span>
+                <span class="srv-meta">${escapeHtml(formatGespeichert(f.savedAt))}${vorWieLange(f.savedAt) ? ' · ' + escapeHtml(vorWieLange(f.savedAt)) : ''}${offenAnderswo(offenListe, f.fileName) ? '<span class="srv-badge srv-badge-offen">' + escapeHtml(offenKurztext(offenAnderswo(offenListe, f.fileName))) + '</span>' : (kuerzlichGespeichert(f.savedAt) && f.fileName !== offen ? '<span class="srv-badge srv-badge-frisch">kürzlich gespeichert</span>' : '')}${f.fileName === offen ? '<span class="srv-badge">auf diesem Gerät geöffnet</span>' : ''}</span>
+            </button>`;
+        }).join('');
+        liste.querySelectorAll('.srv-eintrag').forEach(b => b.addEventListener('click', () => {
+            const f = dateien.find(x => x.fileName === b.dataset.datei);
+            if (f) waehle(f);
+        }));
+    }
+
+    function waehle(f, offenBestaetigt) {
+        const anderswo = offenAnderswo(offenListe, f.fileName);
+        if (anderswo && !offenBestaetigt) {
+            inhalt.innerHTML = `
+                <div class="wb-karte">
+                    <div class="ta-kopf"><span class="srv-markt">${escapeHtml(f.marktnummer ? 'Markt ' + f.marktnummer : 'ohne Marktnummer')}</span><span class="srv-datum">${escapeHtml(f.datum || '–')}</span></div>
+                    ${(f.plzOrt || f.firma) ? `<div class="srv-ort">${escapeHtml([f.plzOrt, f.firma].filter(Boolean).join(' · '))}</div>` : ''}
+                </div>
+                <div class="srv-meldung srv-meldung-offen" style="margin-top:0.75rem">
+                    <strong>Wird gerade bearbeitet?</strong>
+                    <p>${escapeHtml(offenSatz(anderswo))}</p>
+                </div>
+                <div class="srv-aktionen srv-aktionen-spalte">
+                    <button type="button" class="btn btn-primary" data-srv="trotzdem">Trotzdem öffnen</button>
+                    <button type="button" class="btn btn-secondary" data-srv="zurueck">Zurück zur Liste</button>
+                </div>`;
+            inhalt.querySelector('[data-srv="trotzdem"]').addEventListener('click', () => waehle(f, true));
+            inhalt.querySelector('[data-srv="zurueck"]').addEventListener('click', zeigeListe);
+            return;
+        }
+        if (!begehungHatInhalt()) { lade(f, false); return; }
+        const c = state.companyInfo || {};
+        const zustand = sicherungsZustand();
+        const aktuell = (c.marktnummer ? 'Markt ' + c.marktnummer : 'ohne Marktnummer') + (c.datum ? ' vom ' + formatDatumDe(c.datum) : '');
+        const sicherung = zustand === 'gesichert'
+            ? 'Sie ist auf dem Server gesichert – Fotos gibt es aber nur auf diesem Gerät.'
+            : (zustand === 'geaendert' ? 'Sie wurde nach dem letzten Speichern auf dem Server geändert.' : 'Sie ist noch nicht auf dem Server gesichert.');
+        inhalt.innerHTML = `
+            <div class="srv-meldung srv-meldung-warnung">
+                <strong>Offene Begehung wird ersetzt</strong>
+                <p>Auf diesem Gerät ist die Begehung <b>${escapeHtml(aktuell)}</b> geöffnet. ${escapeHtml(sicherung)}</p>
+                <p>Geladen wird <b>${escapeHtml(f.marktnummer ? 'Markt ' + f.marktnummer : 'ohne Marktnummer')}${f.datum ? ' vom ' + escapeHtml(f.datum) : ''}</b>. Daten vom Server enthalten keine Fotos; die Fotos auf diesem Gerät werden entfernt. Enthält der Datensatz eine Gefährdungsbeurteilung, ersetzt sie die auf diesem Gerät.</p>
+            </div>
+            <div class="srv-aktionen srv-aktionen-spalte">
+                <button type="button" class="btn btn-primary" data-srv="archiv">Erst im Verlauf archivieren, dann laden</button>
+                <button type="button" class="btn btn-secondary srv-btn-warn" data-srv="ersetzen">Ohne Archivieren ersetzen</button>
+                <button type="button" class="btn btn-secondary" data-srv="zurueck">Zurück zur Liste</button>
+            </div>`;
+        inhalt.querySelector('[data-srv="archiv"]').addEventListener('click', () => lade(f, true));
+        inhalt.querySelector('[data-srv="ersetzen"]').addEventListener('click', () => lade(f, false));
+        inhalt.querySelector('[data-srv="zurueck"]').addEventListener('click', zeigeListe);
+    }
+
+    async function lade(f, vorherArchivieren) {
+        inhalt.innerHTML = `<div class="srv-meldung"><span class="srv-spinner" aria-hidden="true"></span> ${vorherArchivieren ? 'Aktuelle Begehung wird archiviert, dann ' : ''}Begehung wird geladen …</div>`;
+        let datensatz;
+        try {
+            datensatz = await fetchServerRecord(f.fileName);
+        } catch (err) {
+            console.error('Server-Laden fehlgeschlagen:', err);
+            zeigeFehler('Begehung konnte nicht geladen werden', err, () => lade(f, vorherArchivieren));
+            return;
+        }
+        if (vorherArchivieren) {
+            const ok = await archiviereAktuelleBegehung();
+            if (!ok) {
+                zeigeFehler('Archivieren fehlgeschlagen – es wurde nichts ersetzt', new Error('Die aktuelle Begehung ist unverändert geöffnet.'), () => waehle(f));
+                return;
+            }
+        }
+        try {
+            await applyServerRecord(datensatz, f.fileName);
+        } catch (err) {
+            console.error('Übernehmen fehlgeschlagen:', err);
+            zeigeFehler('Begehung konnte nicht übernommen werden', err, () => lade(f, false));
+            return;
+        }
+        schliessen();
+        showToast((vorherArchivieren ? 'Archiviert und geladen: ' : 'Vom Server geladen: ') +
+            (f.marktnummer ? 'Markt ' + f.marktnummer : f.fileName) + (f.datum ? ' vom ' + f.datum : ''));
+    }
+
+    ladeListe();
+}
+
+// Rueckfrage vor dem Ersetzen der offenen Begehung (Team-Archiv "In App
+// anzeigen"). Liefert 'archiv', 'ersetzen' oder null (abgebrochen). Ist
+// keine Begehung mit Eingaben offen, gilt sofort 'ersetzen'.
+// Dialog "In App anzeigen" (Team-Archiv und Mein Verlauf), im Stil der
+// Wiederholungsbegehung: zeigt immer, welche Begehung geoeffnet wird. Ist auf
+// dem Geraet eine Begehung mit Eingaben offen, zusaetzlich der Hinweis und die
+// Wahl "erst archivieren". Liefert 'archiv', 'ersetzen' oder null (abgebrochen).
+// ziel: { marktnummer, datum (TT.MM.JJJJ), plzOrt, firma }
+// opt:  { sub, punkte: [Text, ...] }
+function frageVorErsetzen(ziel, opt) {
+    opt = opt || {};
+    ziel = ziel || {};
+    return new Promise(resolve => {
+        const markt = ziel.marktnummer ? 'Markt ' + ziel.marktnummer : 'ohne Marktnummer';
+        const ort = [ziel.plzOrt, ziel.firma].filter(Boolean).join(' · ');
+        const punkte = opt.punkte || [
+            'Die Begehung wird auf diesem Gerät geöffnet und kann weiterbearbeitet werden.',
+            'Daten aus dem Team-Archiv enthalten keine Fotos.'
+        ];
+        const ersetzt = begehungHatInhalt();
+        let warnung = '';
+        if (ersetzt) {
+            const c = state.companyInfo || {};
+            const zustand = sicherungsZustand();
+            const aktuell = (c.marktnummer ? 'Markt ' + c.marktnummer : 'ohne Marktnummer') + (c.datum ? ' vom ' + formatDatumDe(c.datum) : '');
+            const sicherung = zustand === 'gesichert'
+                ? 'Sie ist auf dem Server gesichert – Fotos gibt es aber nur auf diesem Gerät.'
+                : (zustand === 'geaendert' ? 'Sie wurde nach dem letzten Speichern auf dem Server geändert.' : 'Sie ist noch nicht auf dem Server gesichert.');
+            warnung = `
+                <div class="srv-meldung srv-meldung-warnung" style="margin-top:0.75rem">
+                    <strong>Offene Begehung wird ersetzt</strong>
+                    <p>Auf diesem Gerät ist die Begehung <b>${escapeHtml(aktuell)}</b> geöffnet. ${escapeHtml(sicherung)} Ihre Fotos werden vom Gerät entfernt.</p>
+                </div>`;
+        }
+        const knoepfe = ersetzt
+            ? `<button type="button" class="btn btn-primary" data-w="archiv">Erst im Verlauf archivieren, dann öffnen</button>
+               <button type="button" class="btn btn-secondary srv-btn-warn" data-w="ersetzen">Ohne Archivieren ersetzen</button>
+               <button type="button" class="btn btn-secondary" data-w="">Abbrechen</button>`
+            : `<button type="button" class="btn btn-primary" data-w="ersetzen">In App anzeigen</button>
+               <button type="button" class="btn btn-secondary" data-w="">Abbrechen</button>`;
+        const overlay = document.createElement('div');
+        overlay.className = 'srv-overlay';
+        overlay.innerHTML = `
+            <div class="srv-box" role="dialog" aria-modal="true" aria-labelledby="srv-r-titel">
+                <div class="srv-kopf"><div><h2 class="srv-titel" id="srv-r-titel">In App anzeigen</h2><p class="srv-sub">${escapeHtml(opt.sub || 'Markt aus dem Team-Archiv öffnen')}</p></div>
+                <button type="button" class="srv-x" aria-label="Schließen">×</button></div>
+                <div class="srv-inhalt">
+                    <div class="wb-karte">
+                        <div class="ta-kopf"><span class="srv-markt">${escapeHtml(markt)}</span><span class="srv-datum">${escapeHtml(ziel.datum || '–')}</span></div>
+                        ${ort ? `<div class="srv-ort">${escapeHtml(ort)}</div>` : ''}
+                    </div>
+                    ${opt.hinweis ? `<div class="srv-meldung srv-meldung-offen" style="margin-top:0.75rem"><strong>${escapeHtml(opt.hinweis.titel)}</strong><p>${escapeHtml(opt.hinweis.text)}</p></div>` : ''}
+                    <ul class="wb-liste">${punkte.map(t => `<li>${escapeHtml(t)}</li>`).join('')}</ul>
+                    ${warnung}
+                    <div class="srv-aktionen srv-aktionen-spalte">${knoepfe}</div>
+                </div>
+            </div>`;
+        document.body.appendChild(overlay);
+        document.documentElement.classList.add('srv-offen');
+        const ende = w => { overlay.remove(); document.documentElement.classList.remove('srv-offen'); document.removeEventListener('keydown', taste); resolve(w || null); };
+        function taste(e) { if (e.key === 'Escape') ende(null); }
+        document.addEventListener('keydown', taste);
+        overlay.addEventListener('click', e => { if (e.target === overlay) ende(null); });
+        overlay.querySelector('.srv-x').addEventListener('click', () => ende(null));
+        overlay.querySelectorAll('[data-w]').forEach(b => b.addEventListener('click', () => ende(b.dataset.w)));
+    });
+}
+
+// ===== Hinweis "gerade geoeffnet" =====
+// Reiner Hinweis, keine Sperre: Wer eine Begehung aus dem Team-Archiv
+// oeffnet, meldet das an offen.php. Andere Geraete sehen dann "geoeffnet auf
+// <Geraetename>". Abmeldung beim Speichern auf dem Server, Archivieren,
+// Zuruecksetzen, JSON laden, Oeffnen aus "Mein Verlauf" und beim Anlegen
+// einer Wiederholungsbegehung; ohne Abmeldung laeuft der Hinweis auf dem
+// Server nach 4 Stunden ab. Fehlt offen.php (aelterer Server) oder ist man
+// offline, passiert einfach nichts.
+const GERAET_ID_KEY = 'asicGeraetId';
+const GERAET_NAME_KEY = 'asicGeraetName';
+const OFFEN_GEMELDET_KEY = 'asicOffenGemeldet';
+const OFFEN_LETZTE_KEY = 'asicOffenLetzteMeldung';   // fuer die Diagnose
+
+function merkeOffenMeldung(aktion, ergebnis) {
+    try { localStorage.setItem(OFFEN_LETZTE_KEY, JSON.stringify({ zeit: new Date().toISOString(), aktion, ergebnis })); } catch (e) {}
+}
+
+function geraetName() {
+    try { return localStorage.getItem(GERAET_NAME_KEY) || ''; } catch (e) { return ''; }
+}
+
+function geraetId() {
+    try {
+        let id = localStorage.getItem(GERAET_ID_KEY);
+        if (!id || !/^[a-z0-9]{8,40}$/.test(id)) {
+            const zufall = (window.crypto && crypto.getRandomValues) ? crypto.getRandomValues(new Uint8Array(16)) : Array.from({ length: 16 }, () => Math.floor(Math.random() * 256));
+            id = Array.from(zufall, b => (b % 36).toString(36)).join('');
+            localStorage.setItem(GERAET_ID_KEY, id);
+        }
+        return id;
+    } catch (e) { return ''; }
+}
+
+function serverFunktionenAktiv() {
+    return !(window.location.hostname.endsWith('.github.io') && !getNasBaseUrl());
+}
+
+async function meldeOffen(aktion, fileName) {
+    if (!serverFunktionenAktiv()) return;
+    const id = geraetId();
+    if (!id) return;
+    try {
+        const res = await fetch(nasUrl('offen.php'), withNasAuthHeaders({
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            cache: 'no-store',
+            body: JSON.stringify({ aktion, fileName: fileName || '', geraetId: id, geraet: geraetName() })
+        }));
+        // kein "keepalive": Safari verwirft solche Anfragen an eine andere
+        // Server-Adresse (Vorabanfrage wegen des Zugriffsschluessels)
+        if (res.ok) {
+            if (aktion === 'oeffnen') localStorage.setItem(OFFEN_GEMELDET_KEY, fileName);
+            else localStorage.removeItem(OFFEN_GEMELDET_KEY);
+            merkeOffenMeldung(aktion, 'ok');
+        } else {
+            merkeOffenMeldung(aktion, 'HTTP ' + res.status + (res.status === 404 ? ' – offen.php fehlt auf dem Server' : ''));
+        }
+    } catch (e) {
+        // offline oder Server nicht erreichbar: nur ein Hinweis
+        merkeOffenMeldung(aktion, 'nicht gesendet (' + (e && e.message ? e.message : 'keine Verbindung') + ')');
+    }
+}
+
+function meldeGeoeffnet(fileName) {
+    return meldeOffen('oeffnen', fileName);
+}
+
+// Nur wenn dieses Geraet etwas als geoeffnet gemeldet hat
+function meldeGeschlossen() {
+    let gemeldet = null;
+    try { gemeldet = localStorage.getItem(OFFEN_GEMELDET_KEY); } catch (e) {}
+    if (!gemeldet) return Promise.resolve();
+    return meldeOffen('schliessen', '');
+}
+
+// Liste der auf ANDEREN Geraeten geoeffneten Begehungen ([] bei Fehler)
+async function ladeOffenListe() {
+    if (!serverFunktionenAktiv()) return [];
+    try {
+        const res = await fetch(nasUrl('offen.php'), withNasAuthHeaders({ cache: 'no-store' }));
+        if (!res.ok) return [];
+        const j = await res.json();
+        const id = geraetId();
+        return (j && Array.isArray(j.offen) ? j.offen : []).filter(e => e && e.geraetId !== id);
+    } catch (e) { return []; }
+}
+
+function offenAnderswo(liste, fileName) {
+    return (liste || []).filter(e => e.fileName === fileName)
+        .sort((a, b) => String(b.seit).localeCompare(String(a.seit)))[0] || null;
+}
+
+function offenKurztext(e) {
+    const wie = vorWieLange(e.seit);
+    return 'geöffnet auf ' + (e.geraet || 'einem anderen Gerät') + (wie ? ' · ' + wie : '');
+}
+
+function offenSatz(e) {
+    const d = new Date(e.seit);
+    const uhr = isNaN(d) ? '' : d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+    return 'Gerade geöffnet auf ' + (e.geraet || 'einem anderen Gerät') + (uhr ? ' (seit ' + uhr + ' Uhr)' : '') +
+        ' – dort wird sie möglicherweise bearbeitet. Öffnen ist trotzdem möglich; beim Speichern meldet die App, falls inzwischen ein neuerer Stand im Team-Archiv liegt.';
+}
+
+// ===== Einheitliche Hinweisfenster =====
+// Gleicher Aufbau wie "In App anzeigen" / Wiederholungsbegehung.
+// opt: { titel, sub, karte: {markt, datum, ort}, punkte: [Text], warnung:
+//        {titel, text}, knoepfe: [{w, text, art: 'primaer'|'warn'|''}] }
+// Liefert den Wert w des gewaehlten Knopfs oder null (abgebrochen).
+function zeigeHinweisFenster(opt) {
+    return new Promise(resolve => {
+        const k = opt.karte;
+        const karte = k ? `
+            <div class="wb-karte">
+                <div class="ta-kopf"><span class="srv-markt">${escapeHtml(k.markt || 'ohne Marktnummer')}</span>${k.datum === '' ? '' : `<span class="srv-datum">${escapeHtml(k.datum || '–')}</span>`}</div>
+                ${k.ort ? `<div class="srv-ort">${escapeHtml(k.ort)}</div>` : ''}
+            </div>` : '';
+        const punkte = (opt.punkte || []).length ? `<ul class="wb-liste">${opt.punkte.map(t => `<li>${escapeHtml(t)}</li>`).join('')}</ul>` : '';
+        const warnung = opt.warnung ? `
+            <div class="srv-meldung srv-meldung-warnung" style="margin-top:0.75rem">
+                <strong>${escapeHtml(opt.warnung.titel)}</strong>
+                <p>${escapeHtml(opt.warnung.text)}</p>
+            </div>` : '';
+        const knoepfe = (opt.knoepfe || []).map(b =>
+            `<button type="button" class="btn ${b.art === 'primaer' ? 'btn-primary' : 'btn-secondary'}${b.art === 'warn' ? ' srv-btn-warn' : ''}" data-w="${escapeHtml(b.w || '')}">${escapeHtml(b.text)}</button>`).join('');
+        const overlay = document.createElement('div');
+        overlay.className = 'srv-overlay';
+        overlay.innerHTML = `
+            <div class="srv-box" role="dialog" aria-modal="true" aria-labelledby="srv-h-titel">
+                <div class="srv-kopf"><div><h2 class="srv-titel" id="srv-h-titel">${escapeHtml(opt.titel)}</h2>${opt.sub ? `<p class="srv-sub">${escapeHtml(opt.sub)}</p>` : ''}</div>
+                <button type="button" class="srv-x" aria-label="Schließen">×</button></div>
+                <div class="srv-inhalt">${karte}${punkte}${warnung}
+                    <div class="srv-aktionen srv-aktionen-spalte">${knoepfe}</div>
+                </div>
+            </div>`;
+        document.body.appendChild(overlay);
+        document.documentElement.classList.add('srv-offen');
+        const ende = w => { overlay.remove(); document.documentElement.classList.remove('srv-offen'); document.removeEventListener('keydown', taste); resolve(w || null); };
+        function taste(e) { if (e.key === 'Escape') ende(null); }
+        document.addEventListener('keydown', taste);
+        overlay.addEventListener('click', e => { if (e.target === overlay) ende(null); });
+        overlay.querySelector('.srv-x').addEventListener('click', () => ende(null));
+        overlay.querySelectorAll('[data-w]').forEach(b => b.addEventListener('click', () => ende(b.dataset.w)));
+    });
+}
+
+// Karte der gerade geoeffneten Begehung
+function karteAktuelleBegehung() {
+    const c = state.companyInfo || {};
+    return {
+        markt: c.marktnummer ? 'Markt ' + c.marktnummer : 'ohne Marktnummer',
+        datum: c.datum ? formatDatumDe(c.datum) : '–',
+        ort: [c.plzOrt, c.firma].filter(Boolean).join(' · ')
+    };
+}
+
+async function anzahlFotosAufGeraet() {
+    try { return typeof getAllPhotos === 'function' ? (await getAllPhotos()).length : 0; } catch (e) { return 0; }
+}
+
+function fotosText(n) {
+    return n === 0 ? 'keine Fotos' : (n === 1 ? '1 Foto' : n + ' Fotos');
+}
+
+function sicherungsSatz() {
+    const zustand = sicherungsZustand();
+    return zustand === 'gesichert' ? 'Sie ist auf dem Server gesichert (ohne Fotos).'
+        : (zustand === 'geaendert' ? 'Sie wurde nach dem letzten Speichern auf dem Server geändert.'
+            : 'Sie ist nicht auf dem Server gesichert.');
+}
+
+// Eigene Fassungen: Begehung_<Datum>_Markt<Nr>_Fassung-<n>.json
+function fassungVon(dateiname) {
+    const m = /_Fassung-(\d+)\.json$/.exec(String(dateiname || ''));
+    return m ? Number(m[1]) : 0;
+}
+
+// Je Begehung (Datei ohne "_Fassung-n") nur die zuletzt gespeicherte Fassung
+function nurNeuesteFassung(liste) {
+    const beste = new Map();
+    (liste || []).forEach(f => {
+        const schluessel = String(f.fileName || '').replace(/_Fassung-\d+\.json$/, '.json');
+        const bisher = beste.get(schluessel);
+        if (!bisher || String(f.savedAt || '') > String(bisher.savedAt || '')) beste.set(schluessel, f);
+    });
+    return (liste || []).filter(f => beste.get(String(f.fileName || '').replace(/_Fassung-\d+\.json$/, '.json')) === f);
+}
+
+// "vor 5 Minuten" / "vor 3 Stunden" (bis 24 Stunden), sonst ''
+function vorWieLange(iso) {
+    const d = iso ? new Date(iso) : null;
+    if (!d || isNaN(d)) return '';
+    const min = Math.round((Date.now() - d.getTime()) / 60000);
+    if (min < 0 || min >= 24 * 60) return '';
+    if (min < 1) return 'gerade eben';
+    if (min < 60) return 'vor ' + min + (min === 1 ? ' Minute' : ' Minuten');
+    const h = Math.floor(min / 60);
+    return 'vor ' + h + (h === 1 ? ' Stunde' : ' Stunden');
+}
+
+// Kuerzlich gespeichert = in den letzten 2 Stunden (Hinweis im Team-Archiv)
+function kuerzlichGespeichert(iso) {
+    const d = iso ? new Date(iso) : null;
+    if (!d || isNaN(d)) return false;
+    const ms = Date.now() - d.getTime();
+    return ms >= 0 && ms < 2 * 60 * 60 * 1000;
+}
+
+// "27.10.2026 um 14:10 Uhr" (Rueckfrage beim Speichern)
+function formatZeitpunktLang(iso) {
+    const d = iso ? new Date(iso) : null;
+    if (!d || isNaN(d)) return '';
+    return d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' }) +
+        ' um ' + d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) + ' Uhr';
+}
+
+// Rueckfrage, wenn save.php einen neueren Stand im Team-Archiv meldet (409).
+// Liefert 'neueFassung', 'ueberschreiben' oder null (abgebrochen).
+function frageBeiKonflikt(info) {
+    info = info || {};
+    return new Promise(resolve => {
+        const c = state.companyInfo || {};
+        const markt = c.marktnummer ? 'Markt ' + c.marktnummer : 'ohne Marktnummer';
+        const ort = [c.plzOrt, c.firma].filter(Boolean).join(' · ');
+        const wann = formatZeitpunktLang(info.savedAt);
+        const wieLange = vorWieLange(info.savedAt);
+        const text = info.fremd
+            ? `Für diesen Markt und dieses Datum liegt im Team-Archiv bereits eine Begehung${wann ? ', gespeichert am ' + wann : ''}${wieLange ? ' (' + wieLange + ')' : ''}. Sie wurde nicht auf diesem Gerät geöffnet.`
+            : `Diese Begehung wurde im Team-Archiv erneut gespeichert, nachdem sie auf diesem Gerät geöffnet wurde${wann ? ' – am ' + wann : ''}${wieLange ? ' (' + wieLange + ')' : ''}. Vermutlich hat jemand sie gleichzeitig auf einem anderen Gerät bearbeitet.`;
+        const overlay = document.createElement('div');
+        overlay.className = 'srv-overlay';
+        overlay.innerHTML = `
+            <div class="srv-box" role="dialog" aria-modal="true" aria-labelledby="srv-k-titel">
+                <div class="srv-kopf"><div><h2 class="srv-titel" id="srv-k-titel">Auf Server speichern</h2><p class="srv-sub">Neuerer Stand im Team-Archiv</p></div>
+                <button type="button" class="srv-x" aria-label="Schließen">×</button></div>
+                <div class="srv-inhalt">
+                    <div class="wb-karte">
+                        <div class="ta-kopf"><span class="srv-markt">${escapeHtml(markt)}</span><span class="srv-datum">${escapeHtml(c.datum ? formatDatumDe(c.datum) : '–')}</span></div>
+                        ${ort ? `<div class="srv-ort">${escapeHtml(ort)}</div>` : ''}
+                    </div>
+                    <div class="srv-meldung srv-meldung-warnung" style="margin-top:0.75rem">
+                        <strong>Achtung: Stand im Team-Archiv ist neuer</strong>
+                        <p>${escapeHtml(text)}</p>
+                    </div>
+                    <ul class="wb-liste">
+                        <li><b>Als eigene Fassung speichern:</b> Ihr Stand kommt zusätzlich ins Team-Archiv, der andere bleibt unverändert. Beide sind danach im Team-Archiv zu sehen.</li>
+                        <li><b>Trotzdem überschreiben:</b> Ihr Stand ersetzt den anderen. Der bisherige Stand wird auf dem Server gesichert, ist in der App aber nicht mehr zu sehen.</li>
+                    </ul>
+                    <div class="srv-aktionen srv-aktionen-spalte">
+                        <button type="button" class="btn btn-primary" data-w="neueFassung">Als eigene Fassung speichern</button>
+                        <button type="button" class="btn btn-secondary srv-btn-warn" data-w="ueberschreiben">Trotzdem überschreiben</button>
+                        <button type="button" class="btn btn-secondary" data-w="">Abbrechen</button>
+                    </div>
+                </div>
+            </div>`;
+        document.body.appendChild(overlay);
+        document.documentElement.classList.add('srv-offen');
+        const ende = w => { overlay.remove(); document.documentElement.classList.remove('srv-offen'); document.removeEventListener('keydown', taste); resolve(w || null); };
+        function taste(e) { if (e.key === 'Escape') ende(null); }
+        document.addEventListener('keydown', taste);
+        overlay.addEventListener('click', e => { if (e.target === overlay) ende(null); });
+        overlay.querySelector('.srv-x').addEventListener('click', () => ende(null));
+        overlay.querySelectorAll('[data-w]').forEach(b => b.addEventListener('click', () => ende(b.dataset.w)));
+    });
+}
+
+// Rueckfrage "Wiederholungsbegehung anlegen" im Stil des Dialogs "Vom Server
+// laden". Liefert 'archiv', 'anlegen' oder null (abgebrochen).
+function frageWiederholung(record, quelle) {
+    return new Promise(resolve => {
+        const ci = (record && record.companyInfo) || {};
+        const offen = ((record && record.measures) || []).filter(m => m && m.status !== 'erledigt').length;
+        const markt = ci.marktnummer ? 'Markt ' + ci.marktnummer : 'ohne Marktnummer';
+        const vorDatum = ci.datum ? formatDate(ci.datum) : '–';
+        const ort = [ci.plzOrt, ci.firma].filter(Boolean).join(' · ');
+        const ersetzt = begehungHatInhalt();
+        let warnung = '';
+        if (ersetzt) {
+            const c = state.companyInfo || {};
+            const zustand = sicherungsZustand();
+            const aktuell = (c.marktnummer ? 'Markt ' + c.marktnummer : 'ohne Marktnummer') + (c.datum ? ' vom ' + formatDatumDe(c.datum) : '');
+            const sicherung = zustand === 'gesichert'
+                ? 'Sie ist auf dem Server gesichert – Fotos gibt es aber nur auf diesem Gerät.'
+                : (zustand === 'geaendert' ? 'Sie wurde nach dem letzten Speichern auf dem Server geändert.' : 'Sie ist noch nicht auf dem Server gesichert.');
+            warnung = `
+                <div class="srv-meldung srv-meldung-warnung" style="margin-top:0.75rem">
+                    <strong>Offene Begehung wird ersetzt</strong>
+                    <p>Auf diesem Gerät ist die Begehung <b>${escapeHtml(aktuell)}</b> geöffnet. ${escapeHtml(sicherung)} Ihre Fotos werden vom Gerät entfernt.</p>
+                </div>`;
+        }
+        const knoepfe = ersetzt
+            ? `<button type="button" class="btn btn-primary" data-w="archiv">Erst im Verlauf archivieren, dann anlegen</button>
+               <button type="button" class="btn btn-secondary srv-btn-warn" data-w="anlegen">Ohne Archivieren anlegen</button>
+               <button type="button" class="btn btn-secondary" data-w="">Abbrechen</button>`
+            : `<button type="button" class="btn btn-primary" data-w="anlegen">Wiederholungsbegehung anlegen</button>
+               <button type="button" class="btn btn-secondary" data-w="">Abbrechen</button>`;
+        const overlay = document.createElement('div');
+        overlay.className = 'srv-overlay';
+        overlay.innerHTML = `
+            <div class="srv-box" role="dialog" aria-modal="true" aria-labelledby="wb-titel">
+                <div class="srv-kopf"><div><h2 class="srv-titel" id="wb-titel">Wiederholungsbegehung</h2><p class="srv-sub">Neue Begehung auf Grundlage der Vorbegehung${quelle === 'team' ? ' aus dem Team-Archiv' : ' aus dem Verlauf'}</p></div>
+                <button type="button" class="srv-x" aria-label="Schließen">×</button></div>
+                <div class="srv-inhalt">
+                    <div class="wb-karte">
+                        <div class="ta-kopf"><span class="srv-markt">${escapeHtml(markt)}</span><span class="srv-datum">Vorbegehung ${escapeHtml(vorDatum)}</span></div>
+                        ${ort ? `<div class="srv-ort">${escapeHtml(ort)}</div>` : ''}
+                    </div>
+                    <ul class="wb-liste">
+                        <li>Betriebsdaten werden übernommen, das Datum wird auf <b>heute</b> gesetzt.</li>
+                        <li>${offen ? `<b>${offen}</b> nicht erledigte Maßnahme${offen === 1 ? '' : 'n'} werden als Mangel vorbelegt.` : 'Die Vorbegehung hat keine offenen Maßnahmen.'}</li>
+                        ${quelle === 'team' ? '' : '<li>Archivierte Begehungen bleiben unverändert.</li>'}
+                    </ul>
+                    ${warnung}
+                    <div class="srv-aktionen srv-aktionen-spalte">${knoepfe}</div>
+                </div>
+            </div>`;
+        document.body.appendChild(overlay);
+        document.documentElement.classList.add('srv-offen');
+        const ende = w => { overlay.remove(); document.documentElement.classList.remove('srv-offen'); document.removeEventListener('keydown', taste); resolve(w || null); };
+        function taste(e) { if (e.key === 'Escape') ende(null); }
+        document.addEventListener('keydown', taste);
+        overlay.addEventListener('click', e => { if (e.target === overlay) ende(null); });
+        overlay.querySelector('.srv-x').addEventListener('click', () => ende(null));
+        overlay.querySelectorAll('[data-w]').forEach(b => b.addEventListener('click', () => ende(b.dataset.w)));
+    });
+}
+
+function formatDatumDe(iso) {
+    const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(iso || ''));
+    return m ? `${m[3]}.${m[2]}.${m[1]}` : String(iso || '');
 }
 
 function initExportMenu() {
@@ -2991,19 +3599,74 @@ async function shareJson() {
     }
 }
 
+// Rueckfrage vor dem Laden einer JSON-Datei. Fotos bleiben nur,
+// wenn die Datei dieselbe Begehung (Markt + Datum) enthaelt.
+async function frageVorJsonLaden(data, dateiname) {
+    const ci = data.companyInfo || {};
+    const gleich = (String(ci.marktnummer || '').trim() + '|' + String(ci.datum || '')) === begehungsKennung();
+    const fotos = await anzahlFotosAufGeraet();
+    const punkte = [
+        'Die Begehung aus der Datei „' + dateiname + '“ wird auf diesem Gerät geöffnet und kann weiterbearbeitet werden.',
+        data.__markt && data.__markt.gbo
+            ? 'Die Datei enthält auch eine Gefährdungsbeurteilung – sie ersetzt die auf diesem Gerät.'
+            : 'Die Gefährdungsbeurteilung auf diesem Gerät bleibt unverändert.',
+        gleich
+            ? 'Es ist dieselbe Begehung wie die geöffnete – die Fotos auf diesem Gerät bleiben erhalten.'
+            : 'JSON-Dateien enthalten keine Fotos.' + (fotos ? ' Die ' + fotosText(fotos) + ' auf diesem Gerät werden entfernt.' : '')
+    ];
+    const ersetzt = begehungHatInhalt();
+    let warnung = null;
+    if (ersetzt) {
+        const a = karteAktuelleBegehung();
+        warnung = {
+            titel: 'Offene Begehung wird ersetzt',
+            text: 'Auf diesem Gerät ist die Begehung ' + a.markt + (a.datum !== '–' ? ' vom ' + a.datum : '') + ' geöffnet. ' + sicherungsSatz()
+        };
+    }
+    const w = await zeigeHinweisFenster({
+        titel: 'JSON laden',
+        sub: 'Begehung aus einer Datei öffnen',
+        karte: {
+            markt: ci.marktnummer ? 'Markt ' + ci.marktnummer : 'ohne Marktnummer',
+            datum: ci.datum ? formatDatumDe(ci.datum) : '–',
+            ort: [ci.plzOrt, ci.firma].filter(Boolean).join(' · ')
+        },
+        punkte,
+        warnung,
+        knoepfe: ersetzt ? [
+            { w: 'archiv', text: 'Erst im Verlauf archivieren, dann öffnen', art: 'primaer' },
+            { w: 'ersetzen', text: 'Ohne Archivieren ersetzen', art: 'warn' },
+            { w: '', text: 'Abbrechen' }
+        ] : [
+            { w: 'ersetzen', text: 'Öffnen', art: 'primaer' },
+            { w: '', text: 'Abbrechen' }
+        ]
+    });
+    return w ? { wahl: w, fotosBehalten: gleich } : null;
+}
+
 function importJson(file) {
     const reader =
         new FileReader();
-
-    reader.onload = (e) => {
-
+    reader.onload = async (e) => {
+        let data;
         try {
-
-            const data =
-                JSON.parse(
-                    e.target.result
-                );
-
+            // Markt-Datensatz der Version 2: Begehungsteil verwenden
+            data = begehungAusDatensatz(JSON.parse(e.target.result));
+            if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('kein Begehungs-Datensatz');
+        } catch (err) {
+            console.error(err);
+            showToast('Datei konnte nicht gelesen werden', 'error');
+            return;
+        }
+        const antwort = await frageVorJsonLaden(data, file.name || 'Datei');
+        if (!antwort) return;
+        if (antwort.wahl === 'archiv' && !(await archiviereAktuelleBegehung())) return;
+        meldeGeschlossen();
+        try {
+            if (!antwort.fotosBehalten && typeof deleteAllPhotos === 'function') {
+                try { await deleteAllPhotos(); } catch (err) { console.error('Fotos konnten nicht geleert werden:', err); }
+            }
             state = {
 
                 companyInfo: {
@@ -3026,9 +3689,13 @@ function importJson(file) {
                 },
 
                 notApplicable:
-                    data.notApplicable || {}
+                    data.notApplicable || {},
+
+                subgroupNotApplicable:
+                    data.subgroupNotApplicable || {}
             };
 
+            uebernehmeGboAusDatensatz(data);
             initCompanyForm();
             renderChecklist();
             renderCompanyInfoStrip();
@@ -3130,24 +3797,42 @@ function buildFollowUpState(record) {
 }
 
 async function startFollowUpAudit(record, quelle) {
-    const ci = (record && record.companyInfo) || {};
-    const offen = ((record && record.measures) || []).filter(m => m && m.status !== 'erledigt').length;
-    const text = 'Wiederholungsbegehung für Markt ' + (ci.marktnummer || '–') +
-        ' anlegen?\n\nBetriebsdaten werden übernommen, das Datum wird auf heute gesetzt. ' +
-        (offen ? offen + ' nicht erledigte Maßnahme(n) der Begehung vom ' + (ci.datum ? formatDate(ci.datum) : '–') + ' werden als Mangel vorbelegt.' : 'Die Vorbegehung hat keine offenen Maßnahmen.') +
-        '\n\nDer aktuell laufende, noch nicht archivierte Bearbeitungsstand auf diesem Gerät wird dabei ersetzt. ' + (quelle === 'team' ? '' : 'Archivierte Begehungen bleiben unverändert.');
-    if (!confirm(text)) return false;
+    const wahl = await frageWiederholung(record, quelle);
+    if (!wahl) return false;
+    if (wahl === 'archiv' && !(await archiviereAktuelleBegehung())) return false;
     const ergebnis = buildFollowUpState(record);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(ergebnis.state));
     if (typeof deleteAllPhotos === 'function') {
         try { await deleteAllPhotos(); } catch (e) { console.error('Fotos konnten nicht geleert werden:', e); }
     }
+    await meldeGeschlossen();
     return ergebnis;
 }
 
 async function archiveCurrentAudit() {
-    if (!confirm('Aktuelle Begehung jetzt archivieren? Die laufende Begehung bleibt zusätzlich unverändert bestehen, bis Sie „Zurücksetzen“ nutzen.')) return;
+    const fotos = await anzahlFotosAufGeraet();
+    const wahl = await zeigeHinweisFenster({
+        titel: 'Begehung archivieren',
+        sub: 'Schnappschuss in „Mein Verlauf“ ablegen',
+        karte: karteAktuelleBegehung(),
+        punkte: [
+            'Ein vollständiger Schnappschuss mit Bewertungen, Maßnahmen, Unterschriften' + (fotos ? ' und ' + fotosText(fotos) : '') + ' wird unter „Verlauf → Mein Verlauf“ abgelegt.',
+            'Die Begehung bleibt geöffnet und kann weiterbearbeitet werden.',
+            'Die Gefährdungsbeurteilung gehört nicht zum Archiv – sie wird mit „Markt auf Server speichern“ oder „Gesamtsicherung Markt“ gesichert.',
+            'Das Archiv liegt nur auf diesem Gerät. Fürs Team bitte zusätzlich „Markt auf Server speichern“.'
+        ],
+        knoepfe: [
+            { w: 'ja', text: 'Archivieren', art: 'primaer' },
+            { w: '', text: 'Abbrechen' }
+        ]
+    });
+    if (wahl !== 'ja') return;
+    if (await archiviereAktuelleBegehung()) meldeGeschlossen();
+}
 
+// Archiviert die laufende Begehung ohne Rueckfrage (auch fuer den Dialog
+// "Vom Server laden"). Liefert true bei Erfolg.
+async function archiviereAktuelleBegehung() {
     try {
 
         const photos =
@@ -3227,6 +3912,7 @@ async function archiveCurrentAudit() {
         showToast(
             'Begehung archiviert'
         );
+        return true;
 
     } catch (err) {
 
@@ -3245,6 +3931,8 @@ async function archiveCurrentAudit() {
             ),
             'error'
         );
+
+        return false;
     }
 }
 
@@ -3367,8 +4055,36 @@ async function shareArchivedReportPdf(record, mode) {
     }
 }
 
-function resetAll() {
-    if (!confirm('Wirklich alle Eingaben zurücksetzen? Dies kann nicht rückgängig gemacht werden.')) return;
+async function resetAll() {
+    const fotos = await anzahlFotosAufGeraet();
+    // Nur die Begehung zaehlt - die Gefaehrdungsbeurteilung bleibt erhalten
+    // (sie wird auf der GBO-Seite zurueckgesetzt).
+    const c0 = state.companyInfo || {};
+    const leer = fotos === 0 && !(Object.keys(state.ratings || {}).length > 0
+        || (state.measures || []).length > 0 || String(c0.marktnummer || '').trim());
+    const wahl = await zeigeHinweisFenster({
+        titel: 'Zurücksetzen',
+        sub: 'Neue, leere Begehung beginnen',
+        karte: leer ? null : karteAktuelleBegehung(),
+        punkte: leer
+            ? ['Auf diesem Gerät ist keine Begehung mit Eingaben geöffnet.', 'Die Gefährdungsbeurteilung bleibt unverändert.']
+            : ['Die Gefährdungsbeurteilung bleibt erhalten – sie wird auf der GBO-Seite zurückgesetzt.'],
+        warnung: leer ? null : {
+            titel: 'Eingaben werden gelöscht',
+            text: (fotos ? 'Betriebsdaten, Bewertungen, Maßnahmen, Unterschriften und ' + fotosText(fotos) : 'Betriebsdaten, Bewertungen, Maßnahmen und Unterschriften') + ' werden von diesem Gerät gelöscht. ' + sicherungsSatz() + ' Das lässt sich nicht rückgängig machen.'
+        },
+        knoepfe: leer ? [
+            { w: 'ersetzen', text: 'Zurücksetzen', art: 'primaer' },
+            { w: '', text: 'Abbrechen' }
+        ] : [
+            { w: 'archiv', text: 'Erst im Verlauf archivieren, dann zurücksetzen', art: 'primaer' },
+            { w: 'ersetzen', text: 'Ohne Archivieren zurücksetzen', art: 'warn' },
+            { w: '', text: 'Abbrechen' }
+        ]
+    });
+    if (!wahl) return;
+    if (wahl === 'archiv' && !(await archiviereAktuelleBegehung())) return;
+    meldeGeschlossen();
 
     state =
         defaultState();
@@ -3507,6 +4223,9 @@ document.addEventListener(
         // hinterlegt wurde, kann das auch von GitHub Pages aus funktionieren
         // (sofern der Zielserver CORS fuer diese Adresse erlaubt).
         const laeuftAufGithubPages = window.location.hostname.endsWith('.github.io') && !getNasBaseUrl();
+
+        const btnMenuTeam = document.getElementById('btn-menu-team');
+        if (btnMenuTeam && laeuftAufGithubPages) btnMenuTeam.style.display = 'none';
 
         if (btnSaveNas) {
             if (laeuftAufGithubPages) {
