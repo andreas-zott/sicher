@@ -10,9 +10,9 @@
 <meta name="referrer" content="same-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Technische Dokumentation – ASiC Handel</title>
-<link rel="stylesheet" href="css/styles.css?v=1.54-12">
+<link rel="stylesheet" href="css/styles.css?v=1.54-13">
 <script src="zugang-config.js"></script>
-<script src="js/access-gate.js?v=1.54-12"></script>
+<script src="js/access-gate.js?v=1.54-13"></script>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -349,7 +349,7 @@
                 <div class="doku-meta-label">
                     Service Worker
                 </div>
-                <div class="doku-meta-value"> <span data-zahl="cache_version">v1.54-12</span> </div>
+                <div class="doku-meta-value"> <span data-zahl="cache_version">v1.54-13</span> </div>
             </div>
 
             <div class="doku-meta-item">
@@ -601,7 +601,7 @@
 
             <p>
                 Die aktuelle technische Cache-Version lautet:
-                <strong><code><span data-zahl="cache">asic-handel-v1.54-12</span></code></strong>.
+                <strong><code><span data-zahl="cache">asic-handel-v1.54-13</span></code></strong>.
             </p>
 
             <ul>
@@ -1107,6 +1107,18 @@
                 abgeglichen. Die Quellen werden hier bewusst einzeln und mit
                 ihrem jeweiligen fachlichen Bezug dargestellt
                 (Stand der fachlichen Vollprüfung: 01.10.2026).
+            </p>
+
+            <p>
+                Im PDF erscheint bei „BGHW“ und „Rechtlich“ das vollständige Verzeichnis
+                (<code>MEASURE_SOURCES</code>, <code>renderSourcesAppendix()</code>). Bei „Einfach“
+                nennen die Texte keine Regelwerke; dort hängt
+                <code>renderMassnahmenQuellenAnhang()</code> die Seite „Quellen zu den Maßnahmen“
+                an: je Maßnahme der Begehung (gleiche Nummer wie im Maßnahmenplan) die Fundstellen,
+                die <code>quellenZuMassnahme()</code> aus dem BGHW- und dem Rechtlich-Text desselben
+                Prüfpunkts ausliest (Gesetze mit Paragraphen je Gesetz zusammengefasst, ASR/TRGS/TRBS,
+                DGUV-Regelwerke, DIN/VDE). Änderungen an den Maßnahmentexten wirken sich deshalb
+                automatisch aus; manuell erfasste Maßnahmen ohne Prüfpunkt erscheinen nicht.
             </p>
 
             <p><strong>1. DGUV-/BGHW-Regelwerk und Unfallverhütungsvorschriften</strong></p>
@@ -1967,7 +1979,7 @@
             <p>
                 <strong>Frische Dateien und schneller Seitenaufbau (ab Rev. 1.53/1.54)</strong>:
                 Alle Einbindungen von <code>js/…</code> und <code>css/…</code>
-                tragen den Zusatz <code>?v=1.54-12</code> (Ausgabestand <code>BUILD</code> aus <code>sw.js</code>). Diese Dateien (und die
+                tragen den Zusatz <code>?v=1.54-13</code> (Ausgabestand <code>BUILD</code> aus <code>sw.js</code>). Diese Dateien (und die
                 Schriften) liefert der Service Worker ab Rev. 1.54 sofort aus
                 dem Cache auf dem Gerät, ohne Rückfrage beim Server; nach einem
                 Update ändert sich der Zusatz, dadurch werden sie automatisch
@@ -2328,7 +2340,7 @@
             <div class="doku-table-wrap">
             <table class="doku-table">
                 <tr><th>Angaben</th><th></th></tr>
-                <tr><td>Prüfgegenstand</td><td>ASiC Handel, Rev. <span data-zahl="revision">1.54</span>, Ausgabestand <code><span data-zahl="cache_version">v1.54-12</span></code></td></tr>
+                <tr><td>Prüfgegenstand</td><td>ASiC Handel, Rev. <span data-zahl="revision">1.54</span>, Ausgabestand <code><span data-zahl="cache_version">v1.54-13</span></code></td></tr>
                 <tr><td>Prüfdatum</td><td>25.10.2026</td></tr>
                 <tr><td>Methode</td><td>Quellcode-Durchsicht, Angriffstests im Browser (Chromium) mit präparierten Begehungsdaten, Tests der Server-Endpunkte (PHP 8.3)</td></tr>
                 <tr><td>Ergebnis</td><td>Alle Schwachstellen im Programmcode sind behoben und durch Tests belegt. Offen sind nur noch Punkte der Einrichtung und des Betriebs sowie bewertete Restrisiken (siehe unten).</td></tr>
@@ -2470,7 +2482,7 @@
 
             <p>
                 Ergebnisse für den aktuellen Ausgabestand
-                <code><span data-zahl="cache_version">v1.54-12</span></code> mit präparierten
+                <code><span data-zahl="cache_version">v1.54-13</span></code> mit präparierten
                 Daten bzw. gezielten Anfragen.
             </p>
 
@@ -3024,7 +3036,7 @@
                 </tr>
                 <tr>
                     <td>dokumentation.html</td>
-                    <td class="zahl">3.305</td>
+                    <td class="zahl">3.317</td>
                     <td>Technische Dokumentation (diese Seite)</td>
                 </tr>
                 <tr>
@@ -3034,7 +3046,7 @@
                 </tr>
                 <tr>
                     <td>js/app.js</td>
-                    <td class="zahl">4.364</td>
+                    <td class="zahl">4.501</td>
                     <td>Kernlogik, State-Verwaltung, Checkliste, PDF-Erzeugung, Export, Archivierung, Server-Zugriff, Hilfsfunktionen (escapeHtml, todayIsoLocal) und Service-Worker-Registrierung</td>
                 </tr>
                 <tr>
@@ -3120,7 +3132,7 @@
                 <tr>
                     <td>sw.js</td>
                     <td class="zahl">202</td>
-                    <td>Service Worker, Offline-Fähigkeit, Cache-Version v1.54-12</td>
+                    <td>Service Worker, Offline-Fähigkeit, Cache-Version v1.54-13</td>
                 </tr>
                 <tr>
                     <td>manifest.json</td>
@@ -3229,11 +3241,11 @@
 
             <p>
                 <strong>Gesamt (eigener Code, ohne jsPDF und Schrift):</strong>
-                <span data-zahl="zeilen_gesamt">25.594</span> Zeilen
+                <span data-zahl="zeilen_gesamt">25.743</span> Zeilen
             </p>
 
             <p style="font-size:0.82rem; color:var(--ink-soft);">
-                Stand der Zeilenzahlen: <span data-zahl="zeilen_stand">27.10.2026</span>.
+                Stand der Zeilenzahlen: <span data-zahl="zeilen_stand">28.10.2026</span>.
                 Die Werte wurden aus den tatsächlich enthaltenen Dateien gezählt.
             </p>
 
@@ -3295,9 +3307,9 @@
 </footer>
 
 
-<script src="js/audit-data.js?v=1.54-12"></script>
-<script src="js/text.js?v=1.54-12"></script>
-<script src="js/app.js?v=1.54-12"></script>
+<script src="js/audit-data.js?v=1.54-13"></script>
+<script src="js/text.js?v=1.54-13"></script>
+<script src="js/app.js?v=1.54-13"></script>
 
 <!-- Quellenverzeichnis ist für diesen Dokumentstand detailliert und statisch dokumentiert. -->
 
