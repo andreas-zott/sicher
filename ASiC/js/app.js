@@ -2071,6 +2071,142 @@ function pdfFilename() {
     return `Massnahmenplan_${marktnummer}_${datum}.pdf`;
 }
 
+// ===== Quellen je Massnahme (Sprachstil "Einfach", ab Ausgabestand 1.54-13) =====
+// Die einfachen Massnahmentexte nennen keine Regelwerke. Fuer den PDF-Anhang
+// werden die Fundstellen deshalb aus dem BGHW- und dem Rechtlich-Text
+// derselben Massnahme (js/text.js) ausgelesen.
+const QUELLEN_GESETZE = ['ArbSchG', 'ArbStättV', 'BetrSichV', 'GefStoffV', 'ArbMedVV', 'ArbZG', 'JArbSchG',
+    'MuSchG', 'BioStoffV', 'ASiG', 'BetrVG', 'LMHV', 'LasthandhabV', 'SGB VII', 'SGB IX', 'BGB', 'ProdSG'];
+const QUELLEN_NAMEN = {
+    'PSA-Benutzungsverordnung': 'PSA-Benutzungsverordnung',
+    'Lastenhandhabungsverordnung': 'LasthandhabV',
+    'Lebensmittelhygiene-Verordnung': 'LMHV',
+    'Arbeitsschutzgesetz': 'ArbSchG',
+    'REACH-Verordnung': 'REACH-Verordnung',
+    'CLP-Verordnung': 'CLP-Verordnung',
+    'Aufzugsrichtlinie': 'Aufzugsrichtlinie 2014/33/EU',
+    'Maschinenrichtlinie': 'Maschinenrichtlinie'
+};
+
+function quellenAusText(text) {
+    const t = String(text || '').replace(/ /g, ' ');
+    const gefunden = [];
+    const add = q => { q = q.replace(/\s+/g, ' ').trim(); if (q && !gefunden.includes(q)) gefunden.push(q); };
+    const gesetzMuster = QUELLEN_GESETZE.map(g => g.replace(/ /g, '\\s')).join('|');
+    let m;
+    // Paragraphen mit Gesetz: "§ 16 BetrSichV", "§ 3 Abs. 1 Satz 2 ArbSchG", "§§ 3, 4 ArbStättV"
+    const reParagraph = new RegExp('§§?\\s?\\d+[a-z]?(?:\\s?(?:Abs\\.|Absatz)\\s?\\d+)?(?:\\s?Satz\\s?\\d+)?(?:\\s?Nr\\.\\s?\\d+)?(?:\\s?(?:,|und|bis|ff\\.)\\s?\\d*[a-z]?)*\\s(?:' + gesetzMuster + ')\\b', 'g');
+    while ((m = reParagraph.exec(t))) add(m[0].replace(/\s?ff\.\s?$/, ' ff.'));
+    // Anhang: "BetrSichV Anhang 1 Nr. 4.1"
+    const reAnhang = new RegExp('(?:' + gesetzMuster + '|DGUV Vorschrift \\d+)\\sAnhang\\s\\d+(?:\\sAbschnitt\\s\\d+)?(?:\\sNr\\.\\s?[\\d.]*\\d)?', 'g');
+    while ((m = reAnhang.exec(t))) add(m[0]);
+    // DGUV, ASR, TRGS/TRBS/TRBA, DIN/VDE
+    const reRegeln = /DGUV (?:Vorschrift|Regel|Information|Grundsatz) \d+(?:-\d+)?(?: Kapitel [\d.]*\d)?|ASR A\d\.\d+|TR(?:GS|BS|BA) \d+|DIN(?: EN| ISO| V| VDE| V)* \d+(?:-\d+)*(?: \/ DIN(?: EN)? \d+(?:-\d+)*)?|VDE \d+(?:-\d+)*/g;
+    while ((m = reRegeln.exec(t))) add(m[0]);
+    // ausgeschriebene Namen und bloße Abkuerzungen
+    Object.keys(QUELLEN_NAMEN).forEach(n => { if (t.includes(n)) add(QUELLEN_NAMEN[n]); });
+    QUELLEN_GESETZE.forEach(g => { if (new RegExp('(^|[^A-Za-zÄÖÜäöü])' + g.replace(/ /g, '\\s') + '(?![A-Za-zÄÖÜäöü])').test(t)) add(g); });
+    // Paragraphen je Gesetz zusammenfassen: "§ 5 ArbSchG", "§§ 3, 5 ArbSchG"
+    const jeGesetz = {};
+    const rest = [];
+    gefunden.forEach(q => {
+        const g = q.match(new RegExp('^§§?\\s?(.+?)\\s(' + gesetzMuster + ')$'));
+        if (!g) { rest.push(q); return; }
+        const nummern = jeGesetz[g[2]] = jeGesetz[g[2]] || [];
+        g[1].replace(/(?:Abs\.|Absatz|Satz|Nr\.)\s?\d+/g, '').split(/,|und|bis/).forEach(teil => {
+            const n = (teil.match(/\d+[a-z]?(?:\s?ff\.)?/) || [])[0];
+            if (n && !nummern.includes(n.replace(/\s?ff\./, ' ff.'))) nummern.push(n.replace(/\s?ff\./, ' ff.'));
+        });
+    });
+    Object.keys(jeGesetz).forEach(gesetz => {
+        const n = jeGesetz[gesetz].sort((a, b) => parseInt(a, 10) - parseInt(b, 10) || a.localeCompare(b));
+        if (n.length) rest.unshift((n.length > 1 || /ff\./.test(n[0]) ? '§§ ' : '§ ') + n.join(', ') + ' ' + gesetz);
+    });
+    gefunden.length = 0;
+    rest.forEach(q => gefunden.push(q));
+    // Bloßes Gesetz weglassen, wenn es schon mit Paragraph/Anhang genannt ist
+    return gefunden.filter(q => !(QUELLEN_GESETZE.includes(q) || Object.values(QUELLEN_NAMEN).includes(q))
+        || !gefunden.some(a => a !== q && a.endsWith(' ' + q) || a.startsWith(q + ' Anhang')))
+        .filter(q => !(q === 'DGUV Vorschrift 3' && gefunden.some(a => a.startsWith('DGUV Vorschrift 3 Anhang'))));
+}
+
+// Quellen zu einer Massnahme (Pruefpunkt-ID): aus BGHW- und Rechtlich-Text
+function quellenZuMassnahme(itemId) {
+    const e = (typeof MEASURES_BY_ID !== 'undefined' && MEASURES_BY_ID[itemId]) || (typeof MEASURES_TEXT !== 'undefined' ? MEASURES_TEXT.default : null);
+    if (!e) return [];
+    const liste = quellenAusText((e.bghw || '') + ' ' + (e.rechtlich || ''));
+    // Reihenfolge: Gesetze/Verordnungen, ASR/TR, DGUV, DIN/VDE
+    const rang = q => /^§|ArbSchG|ArbStättV|BetrSichV|GefStoffV|ArbMedVV|ArbZG|JArbSchG|SGB|BGB|BetrVG|LMHV|Lasthandhab|PSA|REACH|CLP|richtlinie/i.test(q) ? 0
+        : /^ASR|^TR/.test(q) ? 1 : /^DGUV/.test(q) ? 2 : 3;
+    return liste.sort((a, b) => rang(a) - rang(b));
+}
+
+// PDF-Anhang "Quellen zu den Maßnahmen" (Sprachstil "Einfach"): je Massnahme
+// dieser Begehung Nummer, Pruefpunkt und die zugehoerigen Fundstellen - mit
+// derselben laufenden Nummer wie im Massnahmenteil. Liefert false, wenn
+// keine Massnahme hinterlegte Quellen hat (dann entfaellt die Seite).
+function renderMassnahmenQuellenAnhang(doc, margin, contentWidth, pageHeight, measures) {
+    const eintraege = [];
+    (measures || []).forEach((measure, index) => {
+        const found = findItemById(measure.itemId);
+        if (!found) return;
+        const quellen = quellenZuMassnahme(measure.itemId);
+        if (quellen.length) eintraege.push({ nummer: index + 1, found, quellen });
+    });
+    if (!eintraege.length) return false;
+
+    doc.addPage();
+    let y = 18;
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(14);
+    doc.setTextColor(28, 34, 38);
+    doc.text('Quellen zu den Maßnahmen', margin, y);
+    y += 9;
+
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(8.5);
+    doc.setTextColor(100, 116, 139);
+    const intro = doc.splitTextToSize(
+        'Die Maßnahmentexte sind in einfacher Sprache formuliert und nennen keine Regelwerke. Hier stehen zu jeder Maßnahme dieser Begehung die zugehörigen Gesetze, Verordnungen, Technischen Regeln, DGUV-Regelwerke und Normen. Die Nummern entsprechen dem Maßnahmenplan.',
+        contentWidth
+    );
+    doc.text(intro, margin, y);
+    y += intro.length * 4 + 6;
+
+    eintraege.forEach(e => {
+        doc.setFontSize(8.5);
+        const titel = doc.splitTextToSize(`${e.nummer}. [${e.found.item.id}] ${e.found.item.text}`, contentWidth);
+        const quellen = doc.splitTextToSize(e.quellen.join('  ·  '), contentWidth - 4);
+        const hoehe = titel.length * 4 + quellen.length * 4 + 6;
+        if (y + hoehe > pageHeight - 20) {
+            doc.addPage();
+            y = 18;
+        }
+        doc.setFont(undefined, 'bold');
+        doc.setTextColor(30, 41, 59);
+        doc.text(titel, margin, y);
+        y += titel.length * 4 + 0.5;
+        doc.setFont(undefined, 'normal');
+        doc.setTextColor(163, 5, 23);
+        doc.text(quellen, margin + 4, y);
+        y += quellen.length * 4 + 4;
+    });
+
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(7.5);
+    doc.setTextColor(140);
+    const hinweis = doc.splitTextToSize(
+        'Die Fundstellen stammen aus den Maßnahmentexten der Sprachstile „BGHW“ und „Rechtlich“; dort stehen sie im Zusammenhang. DGUV-Regeln und DGUV-Informationen konkretisieren die praktische Umsetzung; sie sind rechtlich nicht mit staatlichen Rechtsvorschriften gleichzusetzen. Gesetzliche und technische Regelwerke können sich ändern.',
+        contentWidth
+    );
+    if (y + hinweis.length * 3.6 > pageHeight - 15) {
+        doc.addPage();
+        y = 18;
+    }
+    doc.text(hinweis, margin, y + 2);
+    return true;
+}
+
 // Quellenverzeichnis als PDF-Anhang: listet die in MEASURE_SOURCES
 // hinterlegten BGHW-/DGUV-/DIN-Regelwerke sowie gesetzlichen Rechtsquellen
 // auf, mit automatischem Zeilenumbruch bei laengeren Eintraegen und
@@ -2783,15 +2919,16 @@ async function buildPdf(includeChecklist, includeFotos) {
         state.measures
     );
 
-    // Quellenverzeichnis als Anhang - nur sinnvoll, wenn ueberhaupt
-    // Massnahmen vorhanden sind UND der gewaehlte Sprachstil tatsaechlich
-    // Regelwerke/Gesetze zitiert (nicht bei "einfach").
-    if (
-        state.measures.length > 0 &&
-        MEASURE_STYLE !== 'einfach' &&
-        typeof MEASURE_SOURCES !== 'undefined'
-    ) {
-        renderSourcesAppendix(doc, margin, contentWidth, pageHeight);
+    // Quellen als Anhang - nur wenn ueberhaupt Massnahmen vorhanden sind.
+    // "BGHW"/"Rechtlich": Gesamtliste (die Texte zitieren die Fundstellen
+    // selbst). "Einfach": nur die Quellen zu den Massnahmen dieser Begehung,
+    // je Massnahme (ab Ausgabestand 1.54-13).
+    if (state.measures.length > 0) {
+        if (MEASURE_STYLE === 'einfach') {
+            renderMassnahmenQuellenAnhang(doc, margin, contentWidth, pageHeight, state.measures);
+        } else if (typeof MEASURE_SOURCES !== 'undefined') {
+            renderSourcesAppendix(doc, margin, contentWidth, pageHeight);
+        }
     }
 
     const totalPages =
