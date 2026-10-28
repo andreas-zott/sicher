@@ -10,9 +10,9 @@
 <meta name="referrer" content="same-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Technische Dokumentation – ASiC Handel</title>
-<link rel="stylesheet" href="css/styles.css?v=2.2.0">
+<link rel="stylesheet" href="css/styles.css?v=2.2.0-2">
 <script src="zugang-config.js"></script>
-<script src="js/access-gate.js?v=2.2.0"></script>
+<script src="js/access-gate.js?v=2.2.0-2"></script>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -352,7 +352,7 @@
                 <div class="doku-meta-label">
                     Service Worker
                 </div>
-                <div class="doku-meta-value"> <span data-zahl="cache_version">v2.2.0</span> </div>
+                <div class="doku-meta-value"> <span data-zahl="cache_version">v2.2.0-2</span> </div>
             </div>
 
             <div class="doku-meta-item">
@@ -605,7 +605,7 @@
 
             <p>
                 Die aktuelle technische Cache-Version lautet:
-                <strong><code><span data-zahl="cache">asic-handel-v2.2.0</span></code></strong>.
+                <strong><code><span data-zahl="cache">asic-handel-v2.2.0-2</span></code></strong>.
             </p>
 
             <ul>
@@ -1721,8 +1721,54 @@
                 Server-Speicherung (save.php / list.php / load.php)
             </div>
 
-            Über „Datei ▾ → Auf Server speichern" bzw. „Vom Server laden" lässt
-            sich der aktuelle Begehungsstand zusätzlich auf einem Server sichern, über drei serverseitige PHP-Skripte. Standardmäßig
+            Über „Datei ▾ → Team-Archiv › → Markt auf Server speichern" bzw. „Vom Server laden" lässt
+            sich der aktuelle Markt (Begehung und Gefährdungsbeurteilung, <code>ASiCMarket.container()</code>) zusätzlich auf einem Server sichern, über drei serverseitige PHP-Skripte. „Vom Server laden“ öffnet einen Dialog mit Suche
+            (<code>openServerLoadDialog()</code>). Ist eine Begehung mit Eingaben geöffnet, fragt
+            er vor dem Ersetzen nach und kann sie zuerst im Verlauf archivieren
+            (<code>archiviereAktuelleBegehung()</code>). Übernommen wird wie bei „In App anzeigen“
+            im Team-Archiv (<code>applyServerRecord()</code>): einschließlich der
+            Unterbereich-Schalter und – wenn im Datensatz enthalten – der Gefährdungsbeurteilung mit
+            Verknüpfungen (<code>uebernehmeGboAusDatensatz()</code>); der lokale Fotobestand der
+            Begehung wird geleert. Danach sendet <code>applyServerRecord()</code> das Ereignis
+            <code>asic:server-geladen</code>; die GBO-Seite baut darauf neu auf. Die GBO-Seite lädt
+            dafür <code>js/app.js</code> mit und nutzt für „Markt auf Server speichern“, „Markt vom
+            Server laden“ und „GBO zurücksetzen“ dieselben Dialoge. „In App anzeigen“ im
+            Team-Archiv und in „Mein Verlauf“ zeigt immer einen Hinweis (<code>frageVorErsetzen()</code>)
+            mit Markt, Datum, Ort und Firma der gewählten Begehung; die Archivieren-Möglichkeit
+            erscheint nur, wenn eine Begehung mit Eingaben geöffnet ist. Die Einträge des
+            Team-Archivs sind wie im Dialog aufgebaut (Marktnummer, Begehungsdatum, Ort und Firma,
+            Speicherzeit, Hinweis auf die auf diesem Gerät geöffnete Begehung).
+            Gleichzeitiges Bearbeiten: <code>saveStateToServer()</code> sendet zusätzlich
+            <code>_speichern</code> (<code>speicherSteuerung()</code>) mit der Datei und deren
+            <code>_nas.savedAt</code>, die das Gerät zuletzt vom Server geladen oder dorthin gespeichert
+            hat (gemerkt in <code>asicServerStand.serverZeit</code>). <code>save.php</code> entfernt das
+            Feld, prüft unter einer Dateisperre (<code>.speichern.lock</code> im Datenordner) und
+            antwortet bei abweichendem Stand oder fremder Datei mit HTTP 409 und
+            <code>konflikt: true</code>. Die App fragt dann nach (<code>frageBeiKonflikt()</code>):
+            Modus <code>neueFassung</code> legt <code>Begehung_&lt;Datum&gt;_Markt&lt;Nr&gt;_Fassung-&lt;n&gt;.json</code>
+            an, in die das Gerät danach weiter speichert; <code>ueberschreiben</code> ersetzt die Datei
+            (vorheriger Stand wie immer in <code>versionen/</code>). Anfragen ohne
+            <code>_speichern</code> (ältere Ausgabestände) werden wie bisher ohne Prüfung
+            gespeichert. Team-Archiv und Ladedialog zeigen die Fassung, das Alter der Speicherung
+            (<code>vorWieLange()</code>) und „kürzlich gespeichert“ (unter zwei Stunden); die
+            Team-Auswertung zählt je Markt und Datum nur die zuletzt gespeicherte Fassung
+            (<code>nurNeuesteFassung()</code>).
+            Hinweis „gerade geöffnet“ (keine Sperre): <code>offen.php</code> führt im Datenordner
+            <code>_offen/offen.json</code> (Dateiname, Gerätename aus den Einstellungen, zufällige
+            Gerätekennung <code>asicGeraetId</code>, Zeitpunkt; je Gerät ein Eintrag, Ablauf nach
+            4 Stunden). <code>applyServerRecord()</code> und „In App anzeigen“ im Team-Archiv melden
+            <code>oeffnen</code> (<code>meldeGeoeffnet()</code>); Speichern auf dem Server, Archivieren,
+            Zurücksetzen, JSON laden, Öffnen aus „Mein Verlauf“ und Wiederholungsbegehung melden
+            <code>schliessen</code> (<code>meldeGeschlossen()</code>). Team-Archiv und Ladedialog lesen die
+            Liste mit <code>ladeOffenListe()</code> und zeigen „geöffnet auf …“; fehlt
+            <code>offen.php</code> oder ist das Gerät offline, entfällt der Hinweis ohne Fehlermeldung.
+            Vor „In App anzeigen“ und beim Zurückkehren zur Seite wird die Liste neu geholt. Die
+            Meldung wird ohne <code>keepalive</code> gesendet (Safari verwirft solche Anfragen an eine
+            andere Server-Adresse); das Ergebnis der letzten Meldung und die Erreichbarkeit von
+            <code>offen.php</code> stehen in der Diagnose (Einstellungen).
+            <code>fetchServerRecord()</code> liest aus dem Markt-Datensatz die Begehung
+            (<code>begehungAusDatensatz()</code>), auch beim JSON-Import (z. B. einer
+            „Gesamtsicherung Markt“). Standardmäßig
             wird eine relative Adresse im selben Verzeichnis wie die App
             verwendet; unter „Einstellungen" lässt sich stattdessen eine
             externe Server-Adresse hinterlegen (<code>nasUrl()</code> baut
@@ -1822,6 +1868,19 @@
             normalen Download zurück. Der JSON-Export ist verlustfrei
             (vollständige Begehung inkl. Maßnahmen/Status/Unterschriften),
             der CSV-Export enthält nur die reinen Bewertungsdaten.
+            Das Datei-Menü auf <code>index.html</code> ist zweistufig: Speichern,
+            „Team-Archiv ›“, „JSON-Datei ›“, Begehung archivieren und Zurücksetzen auf der
+            Hauptebene; die Unterebenen sind <code>.menu-ebene</code>-Blöcke, die
+            <code>initDropdownMenu()</code> über <code>.menu-weiter</code> / <code>.menu-zurueck</code>
+            umschaltet (beim Schließen wieder Hauptebene). Archivieren, Zurücksetzen und
+            JSON-Laden fragen über <code>zeigeHinweisFenster()</code> im Stil der übrigen
+            Dialoge statt über <code>confirm()</code>; Zurücksetzen und JSON-Laden bieten
+            vorher „Erst im Verlauf archivieren“ an. <code>importJson()</code> übernimmt auch
+            die Unterbereich-Schalter und leert die Fotos auf dem Gerät, außer die Datei
+            enthält dieselbe Begehung (Markt und Datum). <code>js/market-ui.js</code> beschriftet
+            „Markt auf Server speichern“ und fügt „Gesamtsicherung Markt“ in die Unterebene
+            „JSON-Datei“ ein. Zurücksetzen und Archivieren betreffen nur die Begehung; die
+            Gefährdungsbeurteilung bleibt unverändert.
 
             <p>
                 <strong>Wichtig:</strong> Der CSV-Export sowie
@@ -1941,7 +2000,7 @@
             <p>
                 <strong>Frische Dateien und schneller Seitenaufbau</strong>:
                 Alle Einbindungen von <code>js/…</code> und <code>css/…</code>
-                tragen den Zusatz <code>?v=2.2.0</code> (Ausgabestand <code>BUILD</code> aus <code>sw.js</code>), auch auf den Seiten der Gefährdungsbeurteilung. Diese Dateien (und die
+                tragen den Zusatz <code>?v=2.2.0-2</code> (Ausgabestand <code>BUILD</code> aus <code>sw.js</code>), auch auf den Seiten der Gefährdungsbeurteilung. Diese Dateien (und die
                 Schriften) liefert der Service Worker sofort aus
                 dem Cache auf dem Gerät, ohne Rückfrage beim Server; nach einem
                 Update ändert sich der Zusatz, dadurch werden sie automatisch
@@ -2302,7 +2361,7 @@
             <div class="doku-table-wrap">
             <table class="doku-table">
                 <tr><th>Angaben</th><th></th></tr>
-                <tr><td>Prüfgegenstand</td><td>ASiC Handel, Rev. <span data-zahl="revision">2.2.0</span> (Begehungsliste und Gefährdungsbeurteilung), Service Worker <code><span data-zahl="cache_version">v2.2.0</span></code></td></tr>
+                <tr><td>Prüfgegenstand</td><td>ASiC Handel, Rev. <span data-zahl="revision">2.2.0</span> (Begehungsliste und Gefährdungsbeurteilung), Service Worker <code><span data-zahl="cache_version">v2.2.0-2</span></code></td></tr>
                 <tr><td>Prüfdatum</td><td>25.10.2026</td></tr>
                 <tr><td>Methode</td><td>Quellcode-Durchsicht, Angriffstests im Browser (Chromium) mit präparierten Begehungsdaten, Tests der Server-Endpunkte (PHP 8.3)</td></tr>
                 <tr><td>Ergebnis</td><td>Alle Schwachstellen im Programmcode sind behoben und durch Tests belegt. Offen sind nur noch Punkte der Einrichtung und des Betriebs sowie bewertete Restrisiken (siehe unten).</td></tr>
@@ -2444,7 +2503,7 @@
 
             <p>
                 Ergebnisse für den aktuellen Stand
-                <code><span data-zahl="cache_version">v2.2.0</span></code> mit präparierten
+                <code><span data-zahl="cache_version">v2.2.0-2</span></code> mit präparierten
                 Daten bzw. gezielten Anfragen.
             </p>
 
@@ -3029,7 +3088,7 @@
                 <!-- DATEITABELLE:START -->
                 <tr>
                     <td>index.html</td>
-                    <td class="zahl">801</td>
+                    <td class="zahl">761</td>
                     <td>Prüfkatalog und Eingabe der Begehungsdaten</td>
                 </tr>
                 <tr>
@@ -3044,7 +3103,7 @@
                 </tr>
                 <tr>
                     <td>gbo-hilfe.html</td>
-                    <td class="zahl">547</td>
+                    <td class="zahl">548</td>
                     <td>Hilfe und FAQ zur Gefährdungsbeurteilung</td>
                 </tr>
                 <tr>
@@ -3079,7 +3138,7 @@
                 </tr>
                 <tr>
                     <td>einstellungen.html</td>
-                    <td class="zahl">372</td>
+                    <td class="zahl">378</td>
                     <td>Server-Adresse, Zugriffsschlüssel, Verbindungstest und Diagnose</td>
                 </tr>
                 <tr>
@@ -3089,27 +3148,27 @@
                 </tr>
                 <tr>
                     <td>datenschutz.html</td>
-                    <td class="zahl">263</td>
+                    <td class="zahl">264</td>
                     <td>Datenschutzerklärung</td>
                 </tr>
                 <tr>
                     <td>hilfe.html</td>
-                    <td class="zahl">960</td>
+                    <td class="zahl">979</td>
                     <td>Bedienungsanleitung und FAQ</td>
                 </tr>
                 <tr>
                     <td>dokumentation.html</td>
-                    <td class="zahl">3.470</td>
+                    <td class="zahl">3.534</td>
                     <td>Technische Dokumentation (diese Seite)</td>
                 </tr>
                 <tr>
                     <td>css/styles.css</td>
-                    <td class="zahl">2.682</td>
+                    <td class="zahl">3.058</td>
                     <td>Gesamtes gemeinsames Styling</td>
                 </tr>
                 <tr>
                     <td>js/app.js</td>
-                    <td class="zahl">3.650</td>
+                    <td class="zahl">4.369</td>
                     <td>Kernlogik, State-Verwaltung, Checkliste, PDF-Erzeugung, Export, Archivierung, NAS-Zugriff, Hilfsfunktionen (escapeHtml, todayIsoLocal) und Service-Worker-Registrierung</td>
                 </tr>
                 <tr>
@@ -3144,12 +3203,12 @@
                 </tr>
                 <tr>
                     <td>js/verlauf.js</td>
-                    <td class="zahl">415</td>
+                    <td class="zahl">464</td>
                     <td>Bedienlogik der Archiv-/Verlaufseite inkl. Team-Archiv (Server)</td>
                 </tr>
                 <tr>
                     <td>js/einstellungen.js</td>
-                    <td class="zahl">354</td>
+                    <td class="zahl">379</td>
                     <td>Bedienlogik der Einstellungsseite</td>
                 </tr>
                 <tr>
@@ -3164,7 +3223,7 @@
                 </tr>
                 <tr>
                     <td>js/auswertung-team.js</td>
-                    <td class="zahl">334</td>
+                    <td class="zahl">338</td>
                     <td>Logik der Team-Auswertungsseite</td>
                 </tr>
                 <tr>
@@ -3195,7 +3254,7 @@
                 <tr>
                     <td>sw.js</td>
                     <td class="zahl">223</td>
-                    <td>Service Worker, Offline-Fähigkeit, Cache-Version v2.2.0</td>
+                    <td>Service Worker, Offline-Fähigkeit, Cache-Version v2.2.0-2</td>
                 </tr>
                 <tr>
                     <td>manifest.json</td>
@@ -3204,7 +3263,7 @@
                 </tr>
                 <tr>
                     <td>save.php</td>
-                    <td class="zahl">603</td>
+                    <td class="zahl">761</td>
                     <td>NAS: Begehung speichern (sichert den Vorgängerstand im Unterordner versionen)</td>
                 </tr>
                 <tr>
@@ -3214,7 +3273,7 @@
                 </tr>
                 <tr>
                     <td>nas-test.html</td>
-                    <td class="zahl">167</td>
+                    <td class="zahl">0</td>
                     <td>Eigenständige Testseite für die NAS-Anbindung (wird von den App-Seiten nicht verlinkt)</td>
                 </tr>
                 <tr>
@@ -3254,7 +3313,7 @@
                 </tr>
                 <tr>
                     <td>js/gbo-v2.js</td>
-                    <td class="zahl">49</td>
+                    <td class="zahl">62</td>
                     <td>Verknüpfung von Begehungsfeststellungen mit der Gefährdungsbeurteilung</td>
                 </tr>
                 <tr>
@@ -3299,7 +3358,7 @@
                 </tr>
                 <tr>
                     <td>js/market-ui.js</td>
-                    <td class="zahl">25</td>
+                    <td class="zahl">34</td>
                     <td>Schaltflächen für die Gesamtsicherung des Marktes im Prüfkatalog</td>
                 </tr>
                 <tr>
@@ -3311,6 +3370,11 @@
                     <td>config.php</td>
                     <td class="zahl">130</td>
                     <td>Einzige Server-Einstellung: Datenordner, Zugriffsschlüssel, CORS, Grenzwerte, Sicherheits-Header</td>
+                </tr>
+                <tr>
+                    <td>offen.php</td>
+                    <td class="zahl">176</td>
+                    <td>Server: Hinweis „gerade geöffnet“ für das Team-Archiv (nur Dateiname, Gerätename, Zeitpunkt; läuft nach 4 Stunden ab)</td>
                 </tr>
                 <tr>
                     <td>schutz.php</td>
@@ -3344,12 +3408,12 @@
                 </tr>
                 <tr>
                     <td>tools/doku-zahlen.py</td>
-                    <td class="zahl">292</td>
+                    <td class="zahl">293</td>
                     <td>Hilfsskript: aktualisiert Zahlen und Dateitabelle in dokumentation.html und hilfe.html</td>
                 </tr>
                 <tr>
                     <td>tools/doku-dateien.json</td>
-                    <td class="zahl">308</td>
+                    <td class="zahl">312</td>
                     <td>Dateiliste mit Beschreibungen für das Hilfsskript</td>
                 </tr>
                 <tr>
@@ -3384,7 +3448,7 @@
                 </tr>
                 <tr>
                     <td>INSTALLATION.txt</td>
-                    <td class="zahl">9,8 KB</td>
+                    <td class="zahl">10,7 KB</td>
                     <td>Installationsanleitung für den Betrieb auf einem eigenen Server</td>
                 </tr>
                 <!-- DATEITABELLE:ENDE -->
@@ -3394,11 +3458,11 @@
 
             <p>
                 <strong>Gesamt (eigener Code, ohne jsPDF und Schrift):</strong>
-                <span data-zahl="zeilen_gesamt">37.498</span> Zeilen
+                <span data-zahl="zeilen_gesamt">38.916</span> Zeilen
             </p>
 
             <p style="font-size:0.82rem; color:var(--ink-soft);">
-                Stand der Zeilenzahlen: <span data-zahl="zeilen_stand">25.10.2026</span>.
+                Stand der Zeilenzahlen: <span data-zahl="zeilen_stand">27.10.2026</span>.
                 Die Werte wurden aus den tatsächlich enthaltenen Dateien gezählt.
             </p>
 
@@ -3460,9 +3524,9 @@
 </footer>
 
 
-<script src="js/audit-data.js?v=2.2.0"></script>
-<script src="js/text.js?v=2.2.0"></script>
-<script src="js/app.js?v=2.2.0"></script>
+<script src="js/audit-data.js?v=2.2.0-2"></script>
+<script src="js/text.js?v=2.2.0-2"></script>
+<script src="js/app.js?v=2.2.0-2"></script>
 
 <!-- Quellenverzeichnis ist für diesen Dokumentstand detailliert und statisch dokumentiert. -->
 

@@ -22,12 +22,12 @@
 
 <link
     rel="stylesheet"
-    href="css/styles.css?v=2.2.0"
+    href="css/styles.css?v=2.2.0-2"
 >
 
 <script src="zugang-config.js"></script>
 
-<script src="js/access-gate.js?v=2.2.0"></script>
+<script src="js/access-gate.js?v=2.2.0-2"></script>
 
 <link
     rel="manifest"
@@ -54,7 +54,7 @@
     content="#1c2226"
 >
 
-<script src="js/jspdf.umd.min.js?v=2.2.0" defer></script>
+<script src="js/jspdf.umd.min.js?v=2.2.0-2" defer></script>
 
 </head>
 
@@ -482,124 +482,84 @@
                     id="file-menu-panel"
                 >
 
-                    <!-- -------------------------------------------------- -->
-                    <!-- LOKAL SPEICHERN                                    -->
-                    <!-- -------------------------------------------------- -->
+                    <!-- Zweistufiges Datei-Menue:                            -->
+                    <!-- Hauptebene mit den haeufigen Aktionen, Team-Archiv     -->
+                    <!-- und JSON-Datei als Unterebenen ("›" / "‹ Zurück").     -->
 
-                    <button
-                        class="menu-item"
-                        id="btn-save"
-                        type="button"
-                    >
-                        💾 Speichern
-                    </button>
+                    <div class="menu-ebene" data-ebene="haupt">
 
+                        <button class="menu-item" id="btn-save" type="button">
+                            💾 Speichern
+                        </button>
 
-                    <div class="menu-divider"></div>
+                        <!-- Nur mit Server (save.php/list.php/load.php) - auf GitHub Pages ohne Server-Adresse ausgeblendet -->
+                        <button class="menu-item menu-weiter" id="btn-menu-team" type="button" data-ziel="team">
+                            ☁️ Team-Archiv <span class="menu-pfeil" aria-hidden="true">›</span>
+                        </button>
 
+                        <button class="menu-item menu-weiter" id="btn-menu-json" type="button" data-ziel="json">
+                            📄 JSON-Datei <span class="menu-pfeil" aria-hidden="true">›</span>
+                        </button>
 
-                    <!-- -------------------------------------------------- -->
-                    <!-- SERVER SPEICHERN/LADEN                             -->
-                    <!-- Funktioniert nur, wenn die App direkt ueber den    -->
-                    <!-- Server mit den PHP-Skripten aufgerufen wird -      -->
-                    <!-- ueber GitHub Pages sind save.php/list.php/load.php -->
-                    <!-- nicht erreichbar (keine serverseitigen Skripte).  -->
-                    <!-- -------------------------------------------------- -->
+                        <div class="menu-divider"></div>
 
-                    <button
-                        class="menu-item"
-                        id="btn-save-nas"
-                        type="button"
-                    >
-                        ☁️ Auf Server speichern
-                    </button>
+                        <button class="menu-item" id="btn-archive" type="button">
+                            📦 Begehung archivieren
+                        </button>
 
-                    <button
-                        class="menu-item"
-                        id="btn-load-nas"
-                        type="button"
-                    >
-                        📂 Vom Server laden
-                    </button>
+                        <div class="menu-divider"></div>
 
+                        <button class="menu-item menu-item-danger" id="btn-reset" type="button">
+                            🗑️ Zurücksetzen
+                        </button>
+                    </div>
 
-                    <div class="menu-divider"></div>
+                    <div class="menu-ebene" data-ebene="team" hidden>
 
+                        <button class="menu-zurueck" type="button" data-ziel="haupt">
+                            <span aria-hidden="true">‹</span> Zurück
+                            <span class="menu-ebene-titel">Team-Archiv</span>
+                        </button>
 
-                    <!-- -------------------------------------------------- -->
-                    <!-- JSON EXPORT                                        -->
-                    <!-- -------------------------------------------------- -->
+                        <button class="menu-item menu-item-zweizeilig" id="btn-save-nas" type="button">
+                            <span>☁️</span>
+                            <span><span class="menu-item-text">Auf Server speichern</span>
+                            <span class="menu-item-sub">Stand fürs Team sichern</span></span>
+                        </button>
 
-                    <button
-                        class="menu-item"
-                        id="btn-json-export"
-                        type="button"
-                    >
-                        ⬆️ JSON exportieren
-                    </button>
+                        <button class="menu-item menu-item-zweizeilig" id="btn-load-nas" type="button">
+                            <span>📂</span>
+                            <span><span class="menu-item-text">Vom Server laden</span>
+                            <span class="menu-item-sub">Begehung eines Kollegen öffnen</span></span>
+                        </button>
+                    </div>
 
-                    <button
-                        class="menu-item"
-                        id="btn-json-share"
-                        type="button"
-                    >
-                        📧 JSON per Mail teilen
-                    </button>
+                    <div class="menu-ebene" data-ebene="json" hidden>
 
+                        <button class="menu-zurueck" type="button" data-ziel="haupt">
+                            <span aria-hidden="true">‹</span> Zurück
+                            <span class="menu-ebene-titel">JSON-Datei</span>
+                        </button>
 
-                    <!-- -------------------------------------------------- -->
-                    <!-- JSON IMPORT                                        -->
-                    <!-- -------------------------------------------------- -->
+                        <button class="menu-item menu-item-zweizeilig" id="btn-json-export" type="button">
+                            <span>⬆️</span>
+                            <span><span class="menu-item-text">Exportieren</span>
+                            <span class="menu-item-sub">Als Datei auf dem Gerät ablegen</span></span>
+                        </button>
 
-                    <label
-                        class="menu-item"
-                        for="json-import-input"
-                        style="cursor:pointer;"
-                    >
+                        <button class="menu-item menu-item-zweizeilig" id="btn-json-share" type="button">
+                            <span>📧</span>
+                            <span><span class="menu-item-text">Per Mail teilen</span>
+                            <span class="menu-item-sub">Datei an eine Mail anhängen</span></span>
+                        </button>
 
-                        ⬇️ JSON laden
-
-
-                        <input
-                            type="file"
-                            id="json-import-input"
-                            accept="application/json"
-                            style="display:none;"
-                        >
-
-                    </label>
-
-
-                    <div class="menu-divider"></div>
-
-
-                    <!-- -------------------------------------------------- -->
-                    <!-- ARCHIV                                              -->
-                    <!-- -------------------------------------------------- -->
-
-                    <button
-                        class="menu-item"
-                        id="btn-archive"
-                        type="button"
-                    >
-                        📦 Begehung archivieren
-                    </button>
-
-
-                    <div class="menu-divider"></div>
-
-
-                    <!-- -------------------------------------------------- -->
-                    <!-- ZURÜCKSETZEN                                       -->
-                    <!-- -------------------------------------------------- -->
-
-                    <button
-                        class="menu-item menu-item-danger"
-                        id="btn-reset"
-                        type="button"
-                    >
-                        🗑️ Zurücksetzen
-                    </button>
+                        <label class="menu-item menu-item-zweizeilig" for="json-import-input" style="cursor:pointer;">
+                            <span>⬇️</span>
+                            <span><span class="menu-item-text">Laden</span>
+                            <span class="menu-item-sub">Begehung aus Datei öffnen</span></span>
+                            <input type="file" id="json-import-input" accept="application/json" style="display:none;">
+                        </label>
+                    </div>
 
                 </div>
 
@@ -782,18 +742,18 @@
 <!-- JAVASCRIPT                                                             -->
 <!-- ====================================================================== -->
 
-<script src="js/audit-data.js?v=2.2.0"></script>
+<script src="js/audit-data.js?v=2.2.0-2"></script>
 
-<script src="js/text.js?v=2.2.0"></script>
+<script src="js/text.js?v=2.2.0-2"></script>
 
-<script src="js/photos-store.js?v=2.2.0"></script>
+<script src="js/photos-store.js?v=2.2.0-2"></script>
 
-<script src="js/archive-store.js?v=2.2.0"></script>
+<script src="js/archive-store.js?v=2.2.0-2"></script>
 
 
-<script src="js/market-store.js?v=2.2.0"></script>
-<script src="js/app.js?v=2.2.0"></script>
-<script src="js/market-ui.js?v=2.2.0"></script>
+<script src="js/market-store.js?v=2.2.0-2"></script>
+<script src="js/app.js?v=2.2.0-2"></script>
+<script src="js/market-ui.js?v=2.2.0-2"></script>
 
 
 </body>
