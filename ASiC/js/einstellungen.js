@@ -2,7 +2,7 @@
 // ASiC Handel — Einstellungen (Server-Adresse + Zugriffsschlüssel)
 // ==========================================================================
 // Ab Rev. 1.52 im Design der Hilfe-Seite: Statuskacheln, Verbindungstest
-// und Anzeigen/Verbergen des Schlüssels. Gespeichert wird weiterhin nur im
+// und Eintragen des Schlüssels (gespeicherter Wert wird nicht mehr angezeigt). Gespeichert wird weiterhin nur im
 // localStorage dieses Geräts (Schlüssel 'nasBaseUrl' und 'nasApiKey' bleiben
 // aus Kompatibilitätsgründen unverändert).
 // ==========================================================================
@@ -15,13 +15,25 @@ function initSettingsPage() {
     const btnReset = document.getElementById('btn-reset-settings');
     const btnTest = document.getElementById('btn-test-connection');
     const btnToggle = document.getElementById('btn-toggle-key');
+    const keyHinterlegt = document.getElementById('key-hinterlegt');
+    const keyHinterlegtText = document.getElementById('key-hinterlegt-text');
+    const keyEingabe = document.getElementById('key-eingabe');
+    const btnKeyAendern = document.getElementById('btn-key-aendern');
+    const btnKeyEntfernen = document.getElementById('btn-key-entfernen');
+    const btnKeyAbbrechen = document.getElementById('btn-key-abbrechen');
+
+    // Ein gespeicherter Schluessel wird nie wieder ins Feld geladen oder
+    // angezeigt (nur "hinterlegt · endet auf …1234"). Das Feld dient nur
+    // zum Eintragen eines NEUEN Werts.
+    let keyBearbeiten = false;
 
     if (!input) return;
 
     // Aktuelle Werte beim Laden anzeigen
     const nameInput = document.getElementById('geraet-name');
     input.value = getNasBaseUrl();
-    keyInput.value = getNasApiKey();
+    keyInput.value = '';
+    zeigeKeyZustand();
     if (nameInput) nameInput.value = geraetName();
     updateTiles();
     setStatus('', '');
@@ -45,6 +57,32 @@ function initSettingsPage() {
             : '–', '');
     }
 
+    function keyVerbergen() {
+        keyInput.type = 'password';
+        btnToggle.setAttribute('aria-pressed', 'false');
+        btnToggle.setAttribute('aria-label', 'Eingabe anzeigen');
+    }
+
+    function zeigeKeyZustand() {
+        const key = getNasApiKey();
+        const hinterlegt = !!key && !keyBearbeiten;
+        keyHinterlegt.hidden = !hinterlegt;
+        keyEingabe.hidden = hinterlegt;
+        btnKeyAbbrechen.hidden = !(key && keyBearbeiten);
+        if (key) {
+            keyHinterlegtText.textContent = '✓ Schlüssel hinterlegt' + (key.length > 8 ? ' · endet auf\u00a0…' + key.slice(-4) : '');
+        }
+        if (!keyBearbeiten) {
+            keyInput.value = '';
+            keyVerbergen();
+        }
+    }
+
+    // Schluessel fuer Speichern/Test: neu eingetragener Wert, sonst der gespeicherte
+    function wirksamerKey() {
+        return keyBearbeiten || !getNasApiKey() ? keyInput.value : getNasApiKey();
+    }
+
     function setStatus(text, state) {
         status.textContent = text;
         status.classList.remove('is-ok', 'is-error');
@@ -53,7 +91,7 @@ function initSettingsPage() {
 
     // Unterschied zwischen Eingabe und gespeichertem Stand anzeigen
     function markDirty() {
-        const geaendert = input.value.trim() !== getNasBaseUrl() || keyInput.value !== getNasApiKey()
+        const geaendert = input.value.trim() !== getNasBaseUrl() || keyInput.value !== ''
             || (nameInput && nameInput.value.trim() !== geraetName());
         setStatus(geaendert ? 'Noch nicht gespeichert.' : '', '');
     }
@@ -65,12 +103,36 @@ function initSettingsPage() {
         const zeigen = keyInput.type === 'password';
         keyInput.type = zeigen ? 'text' : 'password';
         btnToggle.setAttribute('aria-pressed', zeigen ? 'true' : 'false');
-        btnToggle.setAttribute('aria-label', zeigen ? 'Schlüssel verbergen' : 'Schlüssel anzeigen');
+        btnToggle.setAttribute('aria-label', zeigen ? 'Eingabe verbergen' : 'Eingabe anzeigen');
+    });
+
+    btnKeyAendern.addEventListener('click', () => {
+        keyBearbeiten = true;
+        keyInput.value = '';
+        zeigeKeyZustand();
+        keyInput.focus();
+    });
+
+    btnKeyAbbrechen.addEventListener('click', () => {
+        keyBearbeiten = false;
+        zeigeKeyZustand();
+        markDirty();
+    });
+
+    btnKeyEntfernen.addEventListener('click', () => {
+        if (!confirm('Zugriffsschlüssel auf diesem Gerät entfernen? Das Team-Archiv ist danach erst wieder nach Eintragen des Schlüssels erreichbar.')) return;
+        try { localStorage.removeItem('nasApiKey'); } catch (e) {}
+        keyBearbeiten = false;
+        zeigeKeyZustand();
+        updateTiles();
+        setTile('st-conn', 'noch nicht getestet', '');
+        setStatus('Schlüssel entfernt.', '');
+        showToast('Schlüssel entfernt');
     });
 
     btnSave.addEventListener('click', () => {
         const value = input.value.trim().replace(/\/+$/, '');
-        const key = keyInput.value; // bewusst nicht getrimmt, Schlüssel könnten führende/folgende Zeichen enthalten
+        const key = wirksamerKey(); // bewusst nicht getrimmt, Schlüssel könnten führende/folgende Zeichen enthalten
         try {
             if (value) {
                 localStorage.setItem('nasBaseUrl', value);
@@ -88,6 +150,8 @@ function initSettingsPage() {
                 nameInput.value = name;
             }
             input.value = value;
+            keyBearbeiten = false;
+            zeigeKeyZustand();
             showToast('Einstellungen gespeichert');
             updateTiles();
             setStatus('Gespeichert.', 'is-ok');
@@ -100,11 +164,12 @@ function initSettingsPage() {
     btnReset.addEventListener('click', () => {
         if (!confirm('Server-Adresse und Zugriffsschlüssel auf diesem Gerät zurücksetzen? Begehungen, Fotos und Archiv bleiben unverändert.')) return;
         input.value = '';
-        keyInput.value = '';
         try {
             localStorage.removeItem('nasBaseUrl');
             localStorage.removeItem('nasApiKey');
         } catch (e) {}
+        keyBearbeiten = false;
+        zeigeKeyZustand();
         updateTiles();
         setTile('st-conn', 'noch nicht getestet', '');
         setStatus('Zurückgesetzt.', '');
@@ -115,7 +180,7 @@ function initSettingsPage() {
     // (auch wenn sie noch nicht gespeichert sind). Liest und verändert nichts.
     btnTest.addEventListener('click', async () => {
         const base = input.value.trim().replace(/\/+$/, '');
-        const key = keyInput.value;
+        const key = wirksamerKey();
         btnTest.disabled = true;
         setTile('st-conn', 'wird getestet …', '');
         setStatus('Verbindung wird getestet …', '');

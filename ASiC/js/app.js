@@ -453,6 +453,183 @@ function buildShareEmailText(mode) {
     return `Sehr geehrte Damen und Herren,\n\nim Rahmen der turnusmäßigen Arbeitssicherheitsbegehung übersende ich Ihnen anbei ${inhalt} des Marktes ${markt}${adresse} zur sachlichen Prüfung.\n\nIch bitte Sie, die im Protokoll dokumentierten Feststellungen zu prüfen und die erforderlichen Maßnahmen zur Behebung der festgestellten Mängel zu veranlassen.\n\nVielen Dank für Ihre Unterstützung.\n\nMit freundlichen Grüßen\n${pruefer}Fachkraft für Arbeitssicherheit (SiFa)`;
 }
 
+// ===== Desktop-App (Tauri, Windows/WebView2) (ab Ausgabestand 1.54-14, Ablage ab 1.54-15) =====
+// Laeuft die App in einer Tauri-Huelle, gibt es dort weder neue Fenster
+// (window.open wird geblockt) noch das Teilen-Menue (navigator.share) noch
+// gespeicherte Downloads; Mail-Links (mailto:) koennen grundsaetzlich keinen
+// Anhang mitgeben. Deshalb unter Tauri: Drucken ueber einen unsichtbaren
+// Rahmen auf derselben Seite, "PDF teilen" ausgeblendet, Downloads ueber den
+// Desktop-Befehl datei_ablegen (Downloads\ASiC Handel), "Mail mit PDF
+// vorbereiten" oeffnet die Mail und zeigt das gespeicherte PDF im Explorer.
+// Browser und iPad verhalten sich unveraendert.
+function laeuftInTauri() {
+    try {
+        return !!(window.__TAURI_INTERNALS__ || window.__TAURI__ || window.__TAURI_IPC__)
+            || /(^|\.)tauri\.localhost$/i.test(location.hostname) || location.protocol === 'tauri:';
+    } catch (e) { return false; }
+}
+
+// PDF in einem unsichtbaren Rahmen laden und dessen Druckdialog oeffnen.
+// Liefert false, wenn das nicht moeglich ist (dann laedt der Aufrufer herunter).
+function druckePdfImRahmen(blob) {
+    return new Promise(resolve => {
+        const alt = document.getElementById('druck-rahmen');
+        if (alt) alt.remove();
+        const url = URL.createObjectURL(blob);
+        const rahmen = document.createElement('iframe');
+        rahmen.id = 'druck-rahmen';
+        rahmen.setAttribute('aria-hidden', 'true');
+        rahmen.style.cssText = 'position:fixed;right:0;bottom:0;width:1px;height:1px;border:0;opacity:0;pointer-events:none;';
+        let fertig = false;
+        const ende = ok => { if (fertig) return; fertig = true; resolve(ok); };
+        rahmen.addEventListener('load', () => {
+            // dem PDF-Betrachter kurz Zeit zum Aufbauen geben
+            setTimeout(() => {
+                try {
+                    rahmen.contentWindow.focus();
+                    rahmen.contentWindow.print();
+                    ende(true);
+                } catch (e) {
+                    console.error('Drucken im Rahmen nicht möglich:', e);
+                    ende(false);
+                }
+                // Rahmen und Adresse spaeter aufraeumen (Druckdialog braucht sie noch)
+                setTimeout(() => { rahmen.remove(); URL.revokeObjectURL(url); }, 120000);
+            }, 700);
+        });
+        setTimeout(() => ende(false), 15000);
+        rahmen.src = url;
+        document.body.appendChild(rahmen);
+    });
+}
+
+// Datei ueber den Desktop-Befehl `datei_ablegen` (src-tauri/src/main.rs)
+// unter Downloads\ASiC Handel speichern; liefert den vollstaendigen Pfad.
+// zeigen = true: Datei anschliessend im Explorer markiert anzeigen.
+async function tauriDateiAblegen(blob, dateiname, zeigen) {
+    const core = window.__TAURI__ && window.__TAURI__.core;
+    if (!core || typeof core.invoke !== 'function') {
+        throw new Error('Speichern ist in dieser Version der Desktop-App nicht vorgesehen');
+    }
+    const bytes = new Uint8Array(await blob.arrayBuffer());
+    return core.invoke('datei_ablegen', bytes, {
+        headers: { 'asic-dateiname': encodeURIComponent(dateiname || 'ASiC-Handel-Datei'), 'asic-zeigen': zeigen ? '1' : '0' }
+    });
+}
+
+function dateinameAusPfad(pfad) {
+    return String(pfad || '').split(/[\\/]/).pop();
+}
+
+// Downloads in der Desktop-App: Die Webansicht speichert keine Downloads.
+// Links mit download-Attribut (auch die von jsPDF doc.save()) werden deshalb
+// abgefangen und ueber tauriDateiAblegen() gespeichert.
+// Inhalt zu blob:-Adressen (fetch() darauf verbietet die Content-Security-
+// Policy, und manche Exporte geben die Adresse sofort wieder frei)
+const tauriBlobInhalte = new Map();
+
+function blobAusAdresse(href) {
+    if (/^blob:/i.test(href)) {
+        const blob = tauriBlobInhalte.get(href);
+        return blob ? Promise.resolve(blob) : Promise.reject(new Error('Dateiinhalt nicht mehr verfügbar'));
+    }
+    // data:[<typ>][;base64],<daten>
+    const m = /^data:([^,]*?)(;base64)?,(.*)$/is.exec(href);
+    if (!m) return Promise.reject(new Error('Unbekanntes Adressformat'));
+    const roh = m[2] ? atob(m[3]) : decodeURIComponent(m[3]);
+    const bytes = new Uint8Array(roh.length);
+    for (let i = 0; i < roh.length; i++) bytes[i] = roh.charCodeAt(i) & 0xff;
+    return Promise.resolve(new Blob([bytes], { type: m[1] || 'application/octet-stream' }));
+}
+
+function tauriDownloadAbfangen(a) {
+    const href = (a && a.getAttribute('href')) || '';
+    if (!a || !a.hasAttribute('download') || !/^(blob:|data:)/i.test(href)) return false;
+    const name = a.getAttribute('download') || 'ASiC-Handel-Datei';
+    blobAusAdresse(href)
+        .then(blob => tauriDateiAblegen(blob, name, true))
+        .then(pfad => showToast('Gespeichert unter Downloads\\ASiC Handel: ' + dateinameAusPfad(pfad)))
+        .catch(err => showToast('Speichern fehlgeschlagen: ' + (err && err.message ? err.message : err), 'error'));
+    return true;
+}
+
+if (laeuftInTauri()) {
+    const erzeugenOriginal = URL.createObjectURL.bind(URL);
+    URL.createObjectURL = function (obj) {
+        const url = erzeugenOriginal(obj);
+        if (obj instanceof Blob) {
+            tauriBlobInhalte.set(url, obj);
+            // nach 5 Minuten vergessen (Speicher)
+            setTimeout(() => tauriBlobInhalte.delete(url), 300000);
+        }
+        return url;
+    };
+    const klickOriginal = HTMLAnchorElement.prototype.click;
+    HTMLAnchorElement.prototype.click = function () {
+        if (tauriDownloadAbfangen(this)) return;
+        return klickOriginal.call(this);
+    };
+    const ereignisOriginal = HTMLAnchorElement.prototype.dispatchEvent;
+    HTMLAnchorElement.prototype.dispatchEvent = function (ev) {
+        if (ev && ev.type === 'click' && tauriDownloadAbfangen(this)) return false;
+        return ereignisOriginal.call(this, ev);
+    };
+    document.addEventListener('click', e => {
+        const a = e.target && e.target.closest ? e.target.closest('a[download]') : null;
+        if (a && tauriDownloadAbfangen(a)) e.preventDefault();
+    }, true);
+}
+
+function dateiHerunterladen(blob, dateiname) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = dateiname;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+}
+
+function oeffneMailLink(url) {
+    window.location.href = url;
+}
+
+// Desktop-App: Das (neue) Outlook laesst sich von aussen keine Mail mit
+// Anhang vorbereiten. Deshalb: PDF unter Downloads\ASiC Handel speichern und
+// im Explorer markiert zeigen, danach die Mail mit Betreff und Text oeffnen -
+// das PDF wird in die Mail gezogen.
+async function mailMitPdfDesktop(betreff, text, pdfBlob, pdfName) {
+    let pfad = null;
+    let fehler = null;
+    try {
+        pfad = await tauriDateiAblegen(pdfBlob, pdfName, true);
+    } catch (err) {
+        fehler = err;
+        console.error('PDF konnte nicht gespeichert werden:', err);
+    }
+    const url = 'mailto:?subject=' + encodeURIComponent(betreff) + '&body=' + encodeURIComponent(text);
+    // kurz warten, damit die Mail ueber dem Explorer-Fenster erscheint
+    setTimeout(() => oeffneMailLink(url), pfad ? 800 : 0);
+    if (pfad) {
+        showToast('PDF im Explorer markiert (Downloads\\ASiC Handel) – in die Mail ziehen');
+    } else {
+        showToast('Mail geöffnet, PDF nicht gespeichert: ' + (fehler && fehler.message ? fehler.message : fehler), 'error');
+    }
+}
+
+// "Mail mit PDF vorbereiten" in der Desktop-App
+async function mailEntwurfMitPdf(mode) {
+    try {
+        showToast('PDF wird erstellt …');
+        const doc = await buildReportPdf(mode);
+        await mailMitPdfDesktop(buildShareEmailSubject(mode), buildShareEmailText(mode), doc.output('blob'), reportFilename(mode));
+    } catch (err) {
+        console.error('Mail mit PDF fehlgeschlagen:', err);
+        showToast('PDF-Fehler: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+    }
+}
+
 // Zuverlaessige Alternative zu navigator.share() fuer Betreff/Text:
 // iOS uebernimmt title/text beim Teilen an die Mail-App oft nicht zuverlaessig.
 // mailto: oeffnet eine neue Mail mit korrekt befuelltem Betreff/Text - kann aber
@@ -1360,11 +1537,23 @@ function initExportMenu() {
     const btnPrint = panel.querySelector('[data-action="print"]');
     if (btnPrint) btnPrint.addEventListener('click', () => printReport(exportMode));
 
+    const tauri = laeuftInTauri();
     const btnShare = panel.querySelector('[data-action="share"]');
-    if (btnShare) btnShare.addEventListener('click', () => shareReportPdf(exportMode));
+    if (btnShare) {
+        // Teilen-Menue gibt es in der Desktop-App (WebView2) nicht
+        if (tauri) btnShare.style.display = 'none';
+        else btnShare.addEventListener('click', () => shareReportPdf(exportMode));
+    }
 
     const btnMail = panel.querySelector('[data-action="mail"]');
-    if (btnMail) btnMail.addEventListener('click', () => openPrefilledMail(exportMode));
+    if (btnMail) {
+        if (tauri) {
+            btnMail.textContent = '✉️ Mail mit PDF vorbereiten';
+            btnMail.addEventListener('click', () => mailEntwurfMitPdf(exportMode));
+        } else {
+            btnMail.addEventListener('click', () => openPrefilledMail(exportMode));
+        }
+    }
 }
 
 // ===== PDF teilen (iPad-Teilen-Menü, inkl. AirPrint) mit Download-Fallback =====
@@ -2097,6 +2286,9 @@ function quellenAusText(text) {
     // Paragraphen mit Gesetz: "§ 16 BetrSichV", "§ 3 Abs. 1 Satz 2 ArbSchG", "§§ 3, 4 ArbStättV"
     const reParagraph = new RegExp('§§?\\s?\\d+[a-z]?(?:\\s?(?:Abs\\.|Absatz)\\s?\\d+)?(?:\\s?Satz\\s?\\d+)?(?:\\s?Nr\\.\\s?\\d+)?(?:\\s?(?:,|und|bis|ff\\.)\\s?\\d*[a-z]?)*\\s(?:' + gesetzMuster + ')\\b', 'g');
     while ((m = reParagraph.exec(t))) add(m[0].replace(/\s?ff\.\s?$/, ' ff.'));
+    // Gesetz vor Paragraph: "BetrSichV §§ 6, 10 und 14" -> "§§ 6, 10 und 14 BetrSichV"
+    const reGesetzVorn = new RegExp('(' + gesetzMuster + ')\\s(§§?\\s?\\d+[a-z]?(?:\\s?(?:Abs\\.|Absatz)\\s?\\d+)?(?:\\s?(?:,|und|bis)\\s?\\d+[a-z]?)*)', 'g');
+    while ((m = reGesetzVorn.exec(t))) add(m[2] + ' ' + m[1]);
     // Anhang: "BetrSichV Anhang 1 Nr. 4.1"
     const reAnhang = new RegExp('(?:' + gesetzMuster + '|DGUV Vorschrift \\d+)\\sAnhang\\s\\d+(?:\\sAbschnitt\\s\\d+)?(?:\\sNr\\.\\s?[\\d.]*\\d)?', 'g');
     while ((m = reAnhang.exec(t))) add(m[0]);
@@ -3029,6 +3221,17 @@ async function printReport(mode) {
 
         const blob =
             doc.output('blob');
+
+        // Desktop-App (Tauri): kein neues Fenster moeglich - im Rahmen drucken
+        if (laeuftInTauri()) {
+            if (await druckePdfImRahmen(blob)) {
+                showToast('Druckdialog geöffnet');
+            } else {
+                doc.save(reportFilename(mode));
+                showToast('Drucken nicht möglich – PDF heruntergeladen');
+            }
+            return;
+        }
 
         const url =
             URL.createObjectURL(blob);
@@ -4388,7 +4591,9 @@ document.addEventListener(
 
         const btnShareJson = document.getElementById('btn-json-share');
         if (btnShareJson) {
-            btnShareJson.addEventListener('click', shareJson);
+            // nutzt das Teilen-Menue - in der Desktop-App (Tauri) nicht vorhanden
+            if (laeuftInTauri()) btnShareJson.style.display = 'none';
+            else btnShareJson.addEventListener('click', shareJson);
         }
 
         const importInput =
