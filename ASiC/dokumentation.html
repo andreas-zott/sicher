@@ -2192,8 +2192,8 @@
                 <tr>
                     <td>S1</td>
                     <td><span class="sev sev-kritisch">Kritisch</span></td>
-                    <td><strong>Zugriffsschlüssel für das Team-Archiv</strong><br>In der ausgelieferten <code>config.php</code> ist kein <code>apiKey</code> gesetzt. Ohne Schlüssel kann jeder, der den Server erreicht, Begehungen lesen und überschreiben.</td>
-                    <td><span class="sev st-betrieb">Betreiber</span><br>Langen Zufallswert als <code>apiKey</code> setzen (z. B. <code>openssl rand -hex 24</code>) und auf allen Geräten eintragen. <code>pruefen.php</code> meldet einen fehlenden oder kurzen Schlüssel.</td>
+                    <td><strong>Zugriffsschlüssel für das Team-Archiv</strong><br>Im Betrieb ist in <code>config.php</code> ein <code>apiKey</code> gesetzt; <code>save.php</code>, <code>list.php</code>, <code>load.php</code> und <code>offen.php</code> beantworten Anfragen nur mit diesem Schlüssel. Die Vorlage-<code>config.php</code> im Installationspaket enthält bewusst keinen Schlüssel – ohne Schlüssel könnte jeder, der den Server erreicht, Begehungen lesen und überschreiben.</td>
+                    <td><span class="sev st-ok">Umgesetzt</span><br>Schlüssel auf allen Geräten unter „Einstellungen“ eintragen; bei Geräteverlust tauschen. Bei einer neuen Installation einen langen Zufallswert setzen (z. B. <code>openssl rand -hex 24</code>); <code>pruefen.php</code> meldet einen fehlenden oder kurzen Schlüssel.</td>
                 </tr>
                 <tr>
                     <td>S2</td>
@@ -2238,6 +2238,7 @@
             <div class="doku-box ok">
                 <div class="doku-box-title">Legende</div>
                 <p>
+                    <span class="sev st-ok">Umgesetzt</span> im Betrieb erledigt, bei neuen Installationen zu beachten ·
                     <span class="sev st-betrieb">Betreiber</span> / <span class="sev st-betrieb">Betrieb</span> durch Einrichtung oder organisatorisch zu erfüllen ·
                     <span class="sev st-rest">Restrisiko</span> / <span class="sev st-rest">Bewusst</span> bekannt und bewertet, im Code nicht weiter zu schließen ·
                     <span class="sev st-rest">Offen</span> noch nicht im Code umgesetzt, Hinweis für den Betrieb.
@@ -2436,7 +2437,7 @@
                 <tr>
                     <td><code>apiKey</code> (Zugriffsschlüssel)</td>
                     <td>config.php</td>
-                    <td>Leer = kein Schlüssel. Gesetzt: save/list/load antworten ohne passende Kopfzeile <code>X-Api-Key</code> mit HTTP 401; pruefen.php öffnet nur mit <code>?schluessel=…</code>.</td>
+                    <td>Leer = kein Schlüssel. Gesetzt: save/list/load/offen antworten ohne passende Kopfzeile <code>X-Api-Key</code> mit HTTP 401; pruefen.php fragt den Schlüssel in einem Formular ab.</td>
                 </tr>
                 <tr>
                     <td>Zugangscode</td>
