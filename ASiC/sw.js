@@ -35,8 +35,8 @@ const APP_VERSION = '1.54';
 // nur Code, aber nicht die sichtbare Revision, wird NUR dieser Zaehler
 // erhoeht ('1.54-2', '1.54-3' …). Er steht im Cache-Namen und im ?v=-Zusatz
 // der HTML-Seiten und sorgt dafuer, dass die Geraete die neuen Dateien holen.
-const BUILD = '1.54-13';
-const CACHE_NAME = 'asic-handel-v1.54-13';   // immer = 'asic-handel-v' + BUILD
+const BUILD = '1.54-15';
+const CACHE_NAME = 'asic-handel-v1.54-15';   // immer = 'asic-handel-v' + BUILD
 
 
 // ==========================================================================
