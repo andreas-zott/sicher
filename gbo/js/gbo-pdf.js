@@ -1295,9 +1295,31 @@
     // ----------------------------------------------------------------------
 
     // ctx: { collect(measuresOnly) -> Promise<data>, guidance(q) }
+    // Desktop-App (Tauri unter Windows): kein Pop-up, kein Teilen-Menue,
+    // Ablage ueber die Desktop-Huelle - Helfer aus js/app.js
+    function desktop() {
+        return typeof laeuftInTauri === 'function' && laeuftInTauri();
+    }
+
     async function run(action, measuresOnly, ctx, variant) {
         const mode = variant === 'plan' ? 'plan' : measuresOnly ? 'massnahmen' : 'gesamt';
         const opts = printOpts();
+        const tauri = desktop();
+
+        // Desktop-App: PDF unter Downloads\ASiC Handel ablegen, im Explorer
+        // zeigen und die Mail mit Betreff und Text oeffnen (js/app.js)
+        if (action === 'mail' && tauri) {
+            try {
+                toast('PDF wird erstellt …');
+                const data = await ctx.collect(measuresOnly, { images: mode === 'plan' ? false : !(mode === 'gesamt' && opts.noImages) });
+                const doc = await build(data, mode, ctx.guidance, opts);
+                await mailMitPdfDesktop(mailSubject(data.meta, mode), mailText(data, mode), doc.output('blob'), filename(data, mode));
+            } catch (err) {
+                console.error(err);
+                toast('PDF-Fehler: ' + (err && err.message ? err.message : 'Fehler'), 'error');
+            }
+            return;
+        }
 
         // Mail ohne PDF: nur Entwurf mit Betreff und Text
         if (action === 'mail') {
@@ -1315,7 +1337,7 @@
 
         // Fenster sofort öffnen (Klick), damit der Pop-up-Blocker nicht eingreift
         let win = null;
-        if (action === 'print') {
+        if (action === 'print' && !tauri) {
             try { win = window.open('', '_blank'); } catch (e) { win = null; }
         }
 
@@ -1325,6 +1347,16 @@
             const doc = await build(data, mode, ctx.guidance, opts);
             const name = filename(data, mode);
             const blob = doc.output('blob');
+
+            if (action === 'print' && tauri) {
+                if (await druckePdfImRahmen(blob)) {
+                    toast('Druckdialog geöffnet');
+                } else {
+                    doc.save(name);
+                    toast('Drucken nicht möglich – PDF heruntergeladen');
+                }
+                return;
+            }
 
             if (action === 'print') {
                 const url = URL.createObjectURL(blob);
@@ -1347,7 +1379,8 @@
                         await navigator.share({
                             files: [file],
                             title: mailSubject(data.meta, mode),
-                            text: mailText(data, mode)
+                            // erste Zeile = Betreff (Outlook uebernimmt sie als Betreff)
+                            text: mailSubject(data.meta, mode) + '\n\n' + mailText(data, mode)
                         });
                         toast('PDF geteilt');
                         return;
@@ -1366,7 +1399,17 @@
         }
     }
 
+    // Desktop-App: "PDF teilen" ausblenden, Mail-Knoepfe beschriften
+    function desktopKnoepfe() {
+        if (!desktop()) return;
+        document.querySelectorAll('[data-gbo-output^="share:"]').forEach(b => { b.style.display = 'none'; });
+        document.querySelectorAll('[data-gbo-output^="mail:"]').forEach(b => {
+            if (!/PDF/.test(b.textContent)) b.textContent = b.textContent.replace(/Mail/, 'Mail mit PDF');
+        });
+    }
+
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindPrintOpts); else bindPrintOpts();
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', desktopKnoepfe); else desktopKnoepfe();
 
     window.GBOPdf = { run, printOpts, build, mailSubject, mailText, filename, clean };
 })();

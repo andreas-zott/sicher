@@ -125,7 +125,7 @@ function renderWiederkehrend() {
         if (previous.ratings[itemId] !== 'mangel') return;
         const currentRating = state.ratings[itemId];
         if (currentRating === 'mangel' || !currentRating) {
-            const found = findItemById(itemId);
+            const found = findItemById(itemId, previous);
             if (found) recurring.push({ itemId, text: found.item.text, currentRating: currentRating || 'noch nicht bewertet' });
         }
     });
@@ -198,7 +198,7 @@ function buildAuswertungCsvRows(daten) {
         Object.keys(record.ratings || {}).forEach(itemId => {
             const rating = record.ratings[itemId];
             if (!rating) return;
-            const found = findItemById(itemId);
+            const found = findItemById(itemId, record);
             rows.push([
                 record.companyInfo.marktnummer || '',
                 record.companyInfo.datum || '',
@@ -289,7 +289,7 @@ async function shareAuswertungCsv() {
             const file = new File([blob], filename, { type: 'text/csv' });
             if (navigator.canShare({ files: [file] })) {
                 try {
-                    await navigator.share({ files: [file], title: 'ASiC Handel – Rohdaten-Export', text });
+                    await navigator.share({ files: [file], title: 'ASiC Handel – Rohdaten-Export', text: teilenText('ASiC Handel – Rohdaten-Export', text) });
                     showToast('CSV geteilt');
                     return;
                 } catch (err) {
@@ -647,7 +647,7 @@ async function shareAuswertungPdf() {
             const file = new File([blob], filename, { type: 'application/pdf' });
             if (navigator.canShare({ files: [file] })) {
                 try {
-                    await navigator.share({ files: [file], title: 'ASiC Handel – Gesamtauswertung', text });
+                    await navigator.share({ files: [file], title: 'ASiC Handel – Gesamtauswertung', text: teilenText('ASiC Handel – Gesamtauswertung', text) });
                     showToast('PDF geteilt');
                     return;
                 } catch (err) {

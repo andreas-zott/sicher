@@ -1139,6 +1139,8 @@ function setMeasureStyle(style) {
 // Helfer: liefert den vordefinierten Massnahmen-Text zu einer Pruefpunkt-ID im aktuell gewaehlten Stil.
 // style kann optional explizit angegeben werden, sonst wird MEASURE_STYLE verwendet.
 function getMeasureText(itemId, style) {
+    // Freie Pruefpunkte ("Sonstiges"): kein Vorschlag, Maßnahme frei eintragen
+    if (typeof FREIE_PUNKT_IDS !== 'undefined' && FREIE_PUNKT_IDS.indexOf(itemId) !== -1) return '';
     const s = style || MEASURE_STYLE;
     const entry = MEASURES_BY_ID[itemId];
     if (entry && entry[s]) return entry[s];

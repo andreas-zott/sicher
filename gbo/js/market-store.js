@@ -4,9 +4,10 @@
   const read=(k,f={})=>{try{return JSON.parse(localStorage.getItem(k)||'null')||f}catch(e){return f}};
   const write=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
   function baseUrl(){try{return (localStorage.getItem('nasBaseUrl')||'').trim()}catch(e){return ''}}
-  function apiKey(){try{return localStorage.getItem('nasApiKey')||''}catch(e){return ''}}
   function url(path){const b=baseUrl();return b?b.replace(/\/+$/,'')+'/'+path:'./'+path}
-  function opts(o={}){const k=apiKey();return k?{...o,headers:{...(o.headers||{}),'X-Api-Key':k}}:o}
+  // Server-Anfragen unterschrieben ueber nasFetch (app.js); der Schluessel
+  // selbst wird nie mitgeschickt.
+  function req(ep,q,o){if(typeof nasFetch!=='function')throw new Error('Server-Funktionen nicht geladen.');return nasFetch(ep,q,o)}
   async function json(res){try{return await res.json()}catch(e){throw new Error('Ungültige Serverantwort (kein JSON).')}}
   function audit(){return read(AUDIT_KEY,{})}
   function gbo(){return read(GBO_KEY,{})}
@@ -24,9 +25,9 @@
     if(x?.companyInfo||x?.ratings||x?.measures){if(scope!=='gbo')write(AUDIT_KEY,x);return 'audit'}
     throw new Error('Unbekanntes ASiC-Datenformat.');
   }
-  async function saveServer(){const payload=container();const res=await fetch(url('save.php'),opts({method:'POST',headers:{'Content-Type':'application/json'},cache:'no-store',body:JSON.stringify(payload)}));const r=await json(res);if(!res.ok||!r.ok)throw new Error(r.message||`Fehler beim Speichern (HTTP ${res.status}).`);return r}
-  async function listServer(){const res=await fetch(url('list.php'),opts({cache:'no-store'}));const r=await json(res);if(!res.ok||!r.ok)throw new Error(r.message||`Fehler beim Abrufen (HTTP ${res.status}).`);return r.files||[]}
-  async function loadServer(filename){const res=await fetch(url('load.php')+'?filename='+encodeURIComponent(filename),opts({cache:'no-store'}));const r=await json(res);if(!res.ok)throw new Error(r?.message||`Fehler beim Laden (HTTP ${res.status}).`);apply(r,'all');return r}
+  async function saveServer(){const payload=container();const res=await req('save.php','',{method:'POST',headers:{'Content-Type':'application/json'},cache:'no-store',body:JSON.stringify(payload)});const r=await json(res);if(!res.ok||!r.ok)throw new Error(r.message||`Fehler beim Speichern (HTTP ${res.status}).`);return r}
+  async function listServer(){const res=await req('list.php','',{cache:'no-store'});const r=await json(res);if(!res.ok||!r.ok)throw new Error(r.message||`Fehler beim Abrufen (HTTP ${res.status}).`);return r.files||[]}
+  async function loadServer(filename){const res=await req('load.php','filename='+encodeURIComponent(filename),{cache:'no-store'});const r=await json(res);if(!res.ok)throw new Error(r?.message||`Fehler beim Laden (HTTP ${res.status}).`);apply(r,'all');return r}
   function safe(v,f='ohne-Marktnummer'){return String(v||f).trim().replace(/[^a-z0-9äöüß_-]+/gi,'-').replace(/^-+|-+$/g,'')||f}
   function filename(){return `ASiC_Markt_${safe(marketNo())}_${(typeof todayIsoLocal==='function'?todayIsoLocal():new Date().toISOString().slice(0,10))}.json`}
   function download(){const data=JSON.stringify(container(),null,2),blob=new Blob([data],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename();a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}

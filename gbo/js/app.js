@@ -54,7 +54,7 @@ function escapeHtml(value) {
 // Aufgerufen werden NUR die in AKTION_ERLAUBT genannten Funktionen.
 const AKTION_ERLAUBT = new Set([
     'toggleSubgroupByIndex', 'toggleSubgroupNotApplicable', 'toggleCategory',
-    'toggleNotApplicable', 'setRating', 'updateComment',
+    'toggleNotApplicable', 'setRating', 'updateComment', 'updateFreierText',
     'onKategorieBalkenKlick',
     'onPhotoCommentChange', 'onPhotoDelete',
     'onMeasurePhotoDelete', 'openMeasureCamera', 'onMeasurePhotosCaptured',
@@ -147,7 +147,8 @@ function defaultState() {
             marktleitung: null
         },
         notApplicable: {},
-        subgroupNotApplicable: {}
+        subgroupNotApplicable: {},
+        freieTexte: {}
     };
 }
 
@@ -168,7 +169,8 @@ function loadState() {
             measures: data.measures || [],
             signatures: { ...defaultState().signatures, ...(data.signatures || {}) },
             notApplicable: data.notApplicable || {},
-            subgroupNotApplicable: data.subgroupNotApplicable || {}
+            subgroupNotApplicable: data.subgroupNotApplicable || {},
+            freieTexte: data.freieTexte || {}
         };
     } catch (e) {
         console.error('ASiC Handel: Zustand konnte nicht geladen werden:', e);
@@ -401,12 +403,65 @@ window.addEventListener('load', () => {
 });
 
 // ===== Hilfsfunktionen =====
-function findItemById(itemId) {
+// quelle: Begehung, aus der der Text freier Pruefpunkte stammt (Vorgabe:
+// laufende Begehung). Freie Pruefpunkte ("Sonstiges") liefern eine Kopie
+// mit dem eingetragenen Text.
+function findItemById(itemId, quelle) {
     for (const category of AUDIT_CATEGORIES) {
         const item = category.items.find(i => i.id === itemId);
-        if (item) return { item, category };
+        if (item) {
+            if (!item.frei) return { item, category };
+            const text = freierText(item.id, quelle);
+            return { item: Object.assign({}, item, { text: text || 'Sonstiges (ohne Text)' }), category };
+        }
     }
     return null;
+}
+
+// ===== Freie Pruefpunkte (Kategorie "Sonstiges") =====
+function freierText(itemId, quelle) {
+    const q = quelle || state;
+    return String(((q && q.freieTexte) || {})[itemId] || '').trim();
+}
+
+// Zaehlt der Pruefpunkt mit? Freie Pruefpunkte nur, wenn Text eingetragen
+// oder bewertet ist - ein leeres Feld gilt nicht als "offen".
+function punktZaehlt(item, quelle) {
+    if (!item.frei) return true;
+    const q = quelle || state;
+    return !!freierText(item.id, q) || !!((q && q.ratings) || {})[item.id];
+}
+
+function punktText(item, quelle) {
+    return item.frei ? (freierText(item.id, quelle) || 'Sonstiges (ohne Text)') : item.text;
+}
+
+function updateFreierText(itemId, value) {
+    if (FREIE_PUNKT_IDS.indexOf(itemId) === -1) return;
+    if (!state.freieTexte) state.freieTexte = {};
+    const text = String(value || '').slice(0, 300);
+    if (text.trim()) state.freieTexte[itemId] = text; else delete state.freieTexte[itemId];
+    saveState();
+    // Bewertungsknoepfe freigeben/sperren, ohne die Eingabe neu zu zeichnen
+    const el = document.querySelector('.item[data-item-id="' + itemId + '"]');
+    if (el) {
+        const gesperrt = !text.trim() && !state.ratings[itemId];
+        el.querySelectorAll('.rating-btn').forEach(b => {
+            if (!b.hasAttribute('data-gesperrt-kategorie')) b.disabled = gesperrt;
+        });
+    }
+    aktualisiereKategorieZaehler('sonstiges');
+    updateStats();
+}
+
+function aktualisiereKategorieZaehler(categoryId) {
+    const category = AUDIT_CATEGORIES.find(c => c.id === categoryId);
+    const el = document.querySelector('#cat-' + categoryId + ' > .category-header .category-count');
+    if (!category || !el) return;
+    const relevant = category.items.filter(i => punktZaehlt(i));
+    const answered = relevant.filter(i => state.ratings[i.id]).length;
+    el.textContent = answered + ' / ' + relevant.length;
+    el.classList.toggle('complete', answered === relevant.length);
 }
 
 // getMeasureText(itemId, style) und setMeasureStyle(style) werden von js/text.js bereitgestellt.
@@ -419,7 +474,7 @@ function formatDate(dateStr) {
 }
 
 function totalItemCount() {
-    return AUDIT_CATEGORIES.reduce((sum, c) => sum + c.items.length, 0);
+    return AUDIT_CATEGORIES.reduce((sum, c) => sum + c.items.filter(i => punktZaehlt(i)).length, 0);
 }
 
 function showToast(message, type = 'success') {
@@ -442,7 +497,14 @@ function buildShareEmailSubject(mode) {
     const zusatz = mode === 'massnahmen' ? 'Maßnahmenplan – '
         : mode === 'fotos' ? 'Fotodokumentation – '
         : '';
-    return `${zusatz}Arbeitssicherheitsbegehung Markt ${markt}`;
+    return `${zusatz}Begehung Markt ${markt}`;
+}
+
+// Text fuer das Teilen-Menue (navigator.share): Es gibt dort kein eigenes
+// Betreff-Feld. Outlook uebernimmt die erste Zeile des Textes als Betreff,
+// deshalb steht der Betreff in der ersten Zeile, danach der Mail-Text.
+function teilenText(betreff, text) {
+    return betreff + '\n\n' + text;
 }
 
 function buildShareEmailText(mode) {
@@ -461,6 +523,183 @@ function buildShareEmailText(mode) {
                 : 'das Begehungsprotokoll';
 
     return `Sehr geehrte Damen und Herren,\n\nim Rahmen der turnusmäßigen Arbeitssicherheitsbegehung übersende ich Ihnen anbei ${inhalt} des Marktes ${markt}${adresse} zur sachlichen Prüfung.\n\nIch bitte Sie, die im Protokoll dokumentierten Feststellungen zu prüfen und die erforderlichen Maßnahmen zur Behebung der festgestellten Mängel zu veranlassen.\n\nVielen Dank für Ihre Unterstützung.\n\nMit freundlichen Grüßen\n${pruefer}Fachkraft für Arbeitssicherheit (SiFa)`;
+}
+
+// ===== Desktop-App (Tauri, Windows/WebView2) =====
+// Laeuft die App in einer Tauri-Huelle, gibt es dort weder neue Fenster
+// (window.open wird geblockt) noch das Teilen-Menue (navigator.share) noch
+// gespeicherte Downloads; Mail-Links (mailto:) koennen grundsaetzlich keinen
+// Anhang mitgeben. Deshalb unter Tauri: Drucken ueber einen unsichtbaren
+// Rahmen auf derselben Seite, "PDF teilen" ausgeblendet, Downloads ueber den
+// Desktop-Befehl datei_ablegen (Downloads\ASiC Handel), "Mail mit PDF
+// vorbereiten" oeffnet die Mail und zeigt das gespeicherte PDF im Explorer.
+// Browser und iPad verhalten sich unveraendert.
+function laeuftInTauri() {
+    try {
+        return !!(window.__TAURI_INTERNALS__ || window.__TAURI__ || window.__TAURI_IPC__)
+            || /(^|\.)tauri\.localhost$/i.test(location.hostname) || location.protocol === 'tauri:';
+    } catch (e) { return false; }
+}
+
+// PDF in einem unsichtbaren Rahmen laden und dessen Druckdialog oeffnen.
+// Liefert false, wenn das nicht moeglich ist (dann laedt der Aufrufer herunter).
+function druckePdfImRahmen(blob) {
+    return new Promise(resolve => {
+        const alt = document.getElementById('druck-rahmen');
+        if (alt) alt.remove();
+        const url = URL.createObjectURL(blob);
+        const rahmen = document.createElement('iframe');
+        rahmen.id = 'druck-rahmen';
+        rahmen.setAttribute('aria-hidden', 'true');
+        rahmen.style.cssText = 'position:fixed;right:0;bottom:0;width:1px;height:1px;border:0;opacity:0;pointer-events:none;';
+        let fertig = false;
+        const ende = ok => { if (fertig) return; fertig = true; resolve(ok); };
+        rahmen.addEventListener('load', () => {
+            // dem PDF-Betrachter kurz Zeit zum Aufbauen geben
+            setTimeout(() => {
+                try {
+                    rahmen.contentWindow.focus();
+                    rahmen.contentWindow.print();
+                    ende(true);
+                } catch (e) {
+                    console.error('Drucken im Rahmen nicht möglich:', e);
+                    ende(false);
+                }
+                // Rahmen und Adresse spaeter aufraeumen (Druckdialog braucht sie noch)
+                setTimeout(() => { rahmen.remove(); URL.revokeObjectURL(url); }, 120000);
+            }, 700);
+        });
+        setTimeout(() => ende(false), 15000);
+        rahmen.src = url;
+        document.body.appendChild(rahmen);
+    });
+}
+
+// Datei ueber den Desktop-Befehl `datei_ablegen` (src-tauri/src/main.rs)
+// unter Downloads\ASiC Handel speichern; liefert den vollstaendigen Pfad.
+// zeigen = true: Datei anschliessend im Explorer markiert anzeigen.
+async function tauriDateiAblegen(blob, dateiname, zeigen) {
+    const core = window.__TAURI__ && window.__TAURI__.core;
+    if (!core || typeof core.invoke !== 'function') {
+        throw new Error('Speichern ist in dieser Version der Desktop-App nicht vorgesehen');
+    }
+    const bytes = new Uint8Array(await blob.arrayBuffer());
+    return core.invoke('datei_ablegen', bytes, {
+        headers: { 'asic-dateiname': encodeURIComponent(dateiname || 'ASiC-Handel-Datei'), 'asic-zeigen': zeigen ? '1' : '0' }
+    });
+}
+
+function dateinameAusPfad(pfad) {
+    return String(pfad || '').split(/[\\/]/).pop();
+}
+
+// Downloads in der Desktop-App: Die Webansicht speichert keine Downloads.
+// Links mit download-Attribut (auch die von jsPDF doc.save()) werden deshalb
+// abgefangen und ueber tauriDateiAblegen() gespeichert.
+// Inhalt zu blob:-Adressen (fetch() darauf verbietet die Content-Security-
+// Policy, und manche Exporte geben die Adresse sofort wieder frei)
+const tauriBlobInhalte = new Map();
+
+function blobAusAdresse(href) {
+    if (/^blob:/i.test(href)) {
+        const blob = tauriBlobInhalte.get(href);
+        return blob ? Promise.resolve(blob) : Promise.reject(new Error('Dateiinhalt nicht mehr verfügbar'));
+    }
+    // data:[<typ>][;base64],<daten>
+    const m = /^data:([^,]*?)(;base64)?,(.*)$/is.exec(href);
+    if (!m) return Promise.reject(new Error('Unbekanntes Adressformat'));
+    const roh = m[2] ? atob(m[3]) : decodeURIComponent(m[3]);
+    const bytes = new Uint8Array(roh.length);
+    for (let i = 0; i < roh.length; i++) bytes[i] = roh.charCodeAt(i) & 0xff;
+    return Promise.resolve(new Blob([bytes], { type: m[1] || 'application/octet-stream' }));
+}
+
+function tauriDownloadAbfangen(a) {
+    const href = (a && a.getAttribute('href')) || '';
+    if (!a || !a.hasAttribute('download') || !/^(blob:|data:)/i.test(href)) return false;
+    const name = a.getAttribute('download') || 'ASiC-Handel-Datei';
+    blobAusAdresse(href)
+        .then(blob => tauriDateiAblegen(blob, name, true))
+        .then(pfad => showToast('Gespeichert unter Downloads\\ASiC Handel: ' + dateinameAusPfad(pfad)))
+        .catch(err => showToast('Speichern fehlgeschlagen: ' + (err && err.message ? err.message : err), 'error'));
+    return true;
+}
+
+if (laeuftInTauri()) {
+    const erzeugenOriginal = URL.createObjectURL.bind(URL);
+    URL.createObjectURL = function (obj) {
+        const url = erzeugenOriginal(obj);
+        if (obj instanceof Blob) {
+            tauriBlobInhalte.set(url, obj);
+            // nach 5 Minuten vergessen (Speicher)
+            setTimeout(() => tauriBlobInhalte.delete(url), 300000);
+        }
+        return url;
+    };
+    const klickOriginal = HTMLAnchorElement.prototype.click;
+    HTMLAnchorElement.prototype.click = function () {
+        if (tauriDownloadAbfangen(this)) return;
+        return klickOriginal.call(this);
+    };
+    const ereignisOriginal = HTMLAnchorElement.prototype.dispatchEvent;
+    HTMLAnchorElement.prototype.dispatchEvent = function (ev) {
+        if (ev && ev.type === 'click' && tauriDownloadAbfangen(this)) return false;
+        return ereignisOriginal.call(this, ev);
+    };
+    document.addEventListener('click', e => {
+        const a = e.target && e.target.closest ? e.target.closest('a[download]') : null;
+        if (a && tauriDownloadAbfangen(a)) e.preventDefault();
+    }, true);
+}
+
+function dateiHerunterladen(blob, dateiname) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = dateiname;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+}
+
+function oeffneMailLink(url) {
+    window.location.href = url;
+}
+
+// Desktop-App: Das (neue) Outlook laesst sich von aussen keine Mail mit
+// Anhang vorbereiten. Deshalb: PDF unter Downloads\ASiC Handel speichern und
+// im Explorer markiert zeigen, danach die Mail mit Betreff und Text oeffnen -
+// das PDF wird in die Mail gezogen.
+async function mailMitPdfDesktop(betreff, text, pdfBlob, pdfName) {
+    let pfad = null;
+    let fehler = null;
+    try {
+        pfad = await tauriDateiAblegen(pdfBlob, pdfName, true);
+    } catch (err) {
+        fehler = err;
+        console.error('PDF konnte nicht gespeichert werden:', err);
+    }
+    const url = 'mailto:?subject=' + encodeURIComponent(betreff) + '&body=' + encodeURIComponent(text);
+    // kurz warten, damit die Mail ueber dem Explorer-Fenster erscheint
+    setTimeout(() => oeffneMailLink(url), pfad ? 800 : 0);
+    if (pfad) {
+        showToast('PDF im Explorer markiert (Downloads\\ASiC Handel) – in die Mail ziehen');
+    } else {
+        showToast('Mail geöffnet, PDF nicht gespeichert: ' + (fehler && fehler.message ? fehler.message : fehler), 'error');
+    }
+}
+
+// "Mail mit PDF vorbereiten" in der Desktop-App
+async function mailEntwurfMitPdf(mode) {
+    try {
+        showToast('PDF wird erstellt …');
+        const doc = await buildReportPdf(mode);
+        await mailMitPdfDesktop(buildShareEmailSubject(mode), buildShareEmailText(mode), doc.output('blob'), reportFilename(mode));
+    } catch (err) {
+        console.error('Mail mit PDF fehlgeschlagen:', err);
+        showToast('PDF-Fehler: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+    }
 }
 
 // Zuverlaessige Alternative zu navigator.share() fuer Betreff/Text:
@@ -562,29 +801,191 @@ function nasUrl(path) {
     return base.replace(/\/+$/, '') + '/' + path;
 }
 
-// Liest den optional in den Einstellungen hinterlegten Zugriffsschluessel.
-// Wird als Kopfzeile mitgeschickt, falls gesetzt - hat serverseitig nur
-// Wirkung, wenn dort ueberhaupt ein Schluessel erwartet wird (siehe
-// save.php/list.php/load.php). Ohne Konfiguration: keine Kopfzeile,
-// unveraendertes bisheriges Verhalten.
-function getNasApiKey() {
+// ===== Zugriffsschluessel =====
+// Der Schluessel wird NICHT mehr als Text gespeichert. Beim Eintragen legt
+// die App ihn ueber Web Crypto als nicht exportierbaren HMAC-Schluessel in
+// IndexedDB ab ("gesperrt"): Der Browser kann damit unterschreiben, gibt
+// den Schluessel selbst aber nicht heraus - auch nicht ueber die
+// Entwicklerwerkzeuge. Jede Server-Anfrage wird unterschrieben (siehe
+// schutz.php, asicSignaturGrund); der Schluessel geht nie ueber das Netz.
+// In localStorage steht nur 'nasApiKeyInfo' (Laenge, letzte 4 Zeichen).
+// Schluessel und Server-Adresse nur ueber HTTPS: Ohne HTTPS gibt es kein
+// Web Crypto - dann wird kein Schluessel gespeichert oder verschickt.
+// Ein noch als Text gespeicherter Schluessel ('nasApiKey', aeltere
+// App-Staende) wird beim ersten Aufruf automatisch umgestellt.
+// Ohne HTTPS bleibt ein alter Text-Schluessel liegen, wird aber nicht
+// verwendet, bis die App ueber HTTPS geoeffnet wird.
+const NAS_KEY_TEXT = 'nasApiKey';
+const NAS_KEY_INFO = 'nasApiKeyInfo';
+let nasKeyCache;            // undefined = noch nicht geladen, null = keiner
+let nasZeitVersatz = 0;     // Sekunden: Serverzeit minus Geraetezeit
+
+// Server-Adresse sicher? https:// oder lokale Testadresse; leer = wie die App
+function adresseSicher(adresse) {
+    if (!adresse) return true;
     try {
-        return localStorage.getItem('nasApiKey') || '';
+        const u = new URL(adresse, location.href);
+        if (u.protocol === 'https:') return true;
+        return u.protocol === 'http:' && /^(localhost|127\.0\.0\.1|\[::1\])$/.test(u.hostname);
     } catch (e) {
-        return '';
+        return false;
     }
 }
 
-// Fuegt bestehenden Fetch-Optionen die Zugriffsschluessel-Kopfzeile hinzu,
-// sofern ein Schluessel hinterlegt ist. Ohne Schluessel unveraendert.
-function withNasAuthHeaders(options) {
-    const key = getNasApiKey();
-    if (!key) return options;
-    return {
-        ...options,
-        headers: { ...(options && options.headers), 'X-Api-Key': key }
-    };
+function kryptoSchluesselMoeglich() {
+    try {
+        return !!(window.isSecureContext !== false && window.crypto && window.crypto.subtle && window.indexedDB);
+    } catch (e) {
+        return false;
+    }
 }
+
+function schluesselDb(aktion, wert) {
+    return new Promise((resolve, reject) => {
+        let anfrage;
+        try { anfrage = indexedDB.open('asic-sicherheit', 1); } catch (e) { reject(e); return; }
+        anfrage.onupgradeneeded = () => anfrage.result.createObjectStore('schluessel');
+        anfrage.onerror = () => reject(anfrage.error);
+        anfrage.onsuccess = () => {
+            const db = anfrage.result;
+            try {
+                const tx = db.transaction('schluessel', aktion === 'lesen' ? 'readonly' : 'readwrite');
+                const st = tx.objectStore('schluessel');
+                const r = aktion === 'lesen' ? st.get('nas') : aktion === 'schreiben' ? st.put(wert, 'nas') : st.delete('nas');
+                tx.oncomplete = () => { db.close(); resolve(aktion === 'lesen' ? r.result : true); };
+                tx.onerror = tx.onabort = () => { db.close(); reject(tx.error); };
+            } catch (e) { db.close(); reject(e); }
+        };
+    });
+}
+
+// Nur Angaben zur Anzeige: { laenge, ende, art: 'gesperrt' | 'klartext' } oder null
+function nasSchluesselInfo() {
+    try {
+        const text = localStorage.getItem(NAS_KEY_TEXT);
+        if (text) return { laenge: text.length, ende: text.slice(-4), art: 'klartext' };
+        const info = JSON.parse(localStorage.getItem(NAS_KEY_INFO) || 'null');
+        return info && info.laenge ? info : null;
+    } catch (e) {
+        return null;
+    }
+}
+
+function nasSchluesselImportieren(text) {
+    return crypto.subtle.importKey('raw', new TextEncoder().encode(text),
+        { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+}
+
+// Speichert einen neu eingetragenen Schluessel. Ergebnis: 'gesperrt' oder
+// 'klartext' (Geraet/Browser ohne Web Crypto bzw. ohne HTTPS).
+async function nasSchluesselSpeichern(text) {
+    if (!text) { await nasSchluesselLoeschen(); return null; }
+    if (!kryptoSchluesselMoeglich()) {
+        throw new Error('Der Zugriffsschlüssel lässt sich nur verwenden, wenn die App über HTTPS geöffnet ist.');
+    }
+    let key;
+    try {
+        key = await nasSchluesselImportieren(text);
+        await schluesselDb('schreiben', key);
+    } catch (e) {
+        console.warn('Schlüssel konnte nicht geschützt abgelegt werden:', e);
+        throw new Error('Der Schlüssel konnte auf diesem Gerät nicht geschützt gespeichert werden (Browser-Speicher nicht verfügbar).');
+    }
+    localStorage.setItem(NAS_KEY_INFO, JSON.stringify({ laenge: text.length, ende: text.slice(-4), art: 'gesperrt' }));
+    localStorage.removeItem(NAS_KEY_TEXT);
+    nasKeyCache = { art: 'gesperrt', key };
+    return 'gesperrt';
+}
+
+async function nasSchluesselLoeschen() {
+    try { localStorage.removeItem(NAS_KEY_TEXT); localStorage.removeItem(NAS_KEY_INFO); } catch (e) {}
+    nasKeyCache = null;
+    if (kryptoSchluesselMoeglich()) {
+        try { await schluesselDb('loeschen'); } catch (e) {}
+    }
+}
+
+// Schluessel fuer Anfragen: { art: 'gesperrt', key } | null
+async function nasSchluesselHolen() {
+    if (nasKeyCache !== undefined) return nasKeyCache;
+    let text = '';
+    try { text = localStorage.getItem(NAS_KEY_TEXT) || ''; } catch (e) {}
+    if (text) {
+        if (kryptoSchluesselMoeglich()) {
+            try {
+                await nasSchluesselSpeichern(text);   // einmalige Umstellung
+                return nasKeyCache;
+            } catch (e) {
+                return null;
+            }
+        }
+        return null;   // ohne HTTPS: Klartext nie verschicken
+    }
+    const info = nasSchluesselInfo();
+    if (!info || !kryptoSchluesselMoeglich()) { nasKeyCache = null; return null; }
+    try {
+        const key = await schluesselDb('lesen');
+        if (key) { nasKeyCache = { art: 'gesperrt', key }; return nasKeyCache; }
+    } catch (e) {
+        return null;   // voruebergehend nicht lesbar: nicht zwischenspeichern
+    }
+    // Browser-Speicher wurde geleert: Anzeige bereinigen
+    try { localStorage.removeItem(NAS_KEY_INFO); } catch (e) {}
+    nasKeyCache = null;
+    return null;
+}
+
+function hexAus(puffer) {
+    return Array.from(new Uint8Array(puffer), b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// Wert der Kopfzeile X-Api-Key: unterschrieben ("asic1:…") oder Klartext
+async function nasAuthKopf(methode, endpunkt, abfrage, inhalt, schluessel) {
+    if (!schluessel || schluessel.art !== 'gesperrt') return null;
+    const enc = new TextEncoder();
+    const zeit = String(Math.floor(Date.now() / 1000) + nasZeitVersatz);
+    const nonce = hexAus(crypto.getRandomValues(new Uint8Array(16)));
+    const inhaltHash = hexAus(await crypto.subtle.digest('SHA-256', enc.encode(inhalt || '')));
+    const nachricht = ['asic1', methode, endpunkt, abfrage || '', zeit, nonce, inhaltHash].join('\n');
+    const sig = hexAus(await crypto.subtle.sign('HMAC', schluessel.key, enc.encode(nachricht)));
+    return 'asic1:' + zeit + ':' + nonce + ':' + sig;
+}
+
+// Anfrage an einen Server-Endpunkt (save.php, list.php, load.php, offen.php).
+//   abfrage    Teil nach dem "?" (bereits kodiert), z. B. 'filename=…'
+//   schluessel undefined = gespeicherter Schluessel, null = ohne,
+//              sonst ein Objekt wie von nasSchluesselHolen()
+//   base       undefined = eingestellte Server-Adresse
+// Weicht die Geraeteuhr ab, gleicht die App sie einmal an und wiederholt.
+async function nasFetch(endpunkt, abfrage, options, schluessel, base, wiederholt) {
+    const opts = Object.assign({}, options || {});
+    if (schluessel === undefined) schluessel = await nasSchluesselHolen();
+    const basis = base === undefined ? getNasBaseUrl() : base;
+    if (!adresseSicher(basis)) {
+        throw new Error('Die Server-Adresse muss mit https:// beginnen (Einstellungen).');
+    }
+    const url = (base === undefined ? nasUrl(endpunkt) : (base ? base.replace(/\/+$/, '') + '/' : './') + endpunkt)
+        + (abfrage ? '?' + abfrage : '');
+    const methode = String(opts.method || 'GET').toUpperCase();
+    const kopf = await nasAuthKopf(methode, endpunkt, abfrage, typeof opts.body === 'string' ? opts.body : '', schluessel);
+    if (kopf) opts.headers = Object.assign({}, opts.headers, { 'X-Api-Key': kopf });
+    const res = await fetch(url, opts);
+    if (res.status === 401 && kopf && kopf.indexOf('asic1:') === 0 && !wiederholt) {
+        let j = null;
+        try { j = await res.clone().json(); } catch (e) {}
+        if (j && j.grund === 'zeit' && Number.isFinite(j.serverZeit)) {
+            nasZeitVersatz = j.serverZeit - Math.floor(Date.now() / 1000);
+            return nasFetch(endpunkt, abfrage, options, schluessel, base, true);
+        }
+    }
+    return res;
+}
+
+// Noch als Text gespeicherten Schluessel gleich beim Start umstellen
+try {
+    const i = nasSchluesselInfo();
+    if (i && i.art === 'klartext' && kryptoSchluesselMoeglich()) nasSchluesselHolen();
+} catch (e) {}
 
 // Angaben fuer save.php, um gleichzeitiges Bearbeiten zu erkennen: welche
 // Datei mit welchem Stand dieses Geraet zuletzt vom Server hatte. Gehoert
@@ -609,12 +1010,12 @@ async function saveStateToServer(modus) {
     try {
         saveState();
         const nutzdaten = window.ASiCMarket ? ASiCMarket.container() : state;
-        const res = await fetch(nasUrl('save.php'), withNasAuthHeaders({
+        const res = await nasFetch('save.php', '', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             cache: 'no-store',
             body: JSON.stringify(Object.assign({}, nutzdaten, { _speichern: speicherSteuerung(modus) }))
-        }));
+        });
         const result = await parseJsonResponse(res);
         if (res.status === 409 && result && result.konflikt) {
             const wahl = await frageBeiKonflikt(result);
@@ -637,7 +1038,7 @@ async function saveStateToServer(modus) {
 }
 
 async function getServerFiles() {
-    const res = await fetch(nasUrl('list.php'), withNasAuthHeaders({ cache: 'no-store' }));
+    const res = await nasFetch('list.php', '', { cache: 'no-store' });
     const result = await parseJsonResponse(res);
     if (!res.ok || !result.ok) {
         throw new Error(result.message || `Fehler beim Abrufen der Dateiliste (HTTP ${res.status}).`);
@@ -669,7 +1070,7 @@ function begehungAusDatensatz(x) {
 }
 
 async function fetchServerRecord(filename) {
-    const res = await fetch(nasUrl('load.php') + '?filename=' + encodeURIComponent(filename), withNasAuthHeaders({ cache: 'no-store' }));
+    const res = await nasFetch('load.php', 'filename=' + encodeURIComponent(filename), { cache: 'no-store' });
     const result = await parseJsonResponse(res);
     if (!res.ok) {
         throw new Error((result && result.message) || `Fehler beim Laden (HTTP ${res.status}).`);
@@ -706,6 +1107,7 @@ async function applyServerRecord(result, filename) {
     state.signatures = Object.assign({}, leer.signatures, result.signatures || {});
     state.notApplicable = result.notApplicable || {};
     state.subgroupNotApplicable = result.subgroupNotApplicable || {};
+    state.freieTexte = result.freieTexte || {};
     uebernehmeGboAusDatensatz(result);
 
     if (typeof deleteAllPhotos === 'function') {
@@ -1041,12 +1443,12 @@ async function meldeOffen(aktion, fileName) {
     const id = geraetId();
     if (!id) return;
     try {
-        const res = await fetch(nasUrl('offen.php'), withNasAuthHeaders({
+        const res = await nasFetch('offen.php', '', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             cache: 'no-store',
             body: JSON.stringify({ aktion, fileName: fileName || '', geraetId: id, geraet: geraetName() })
-        }));
+        });
         // kein "keepalive": Safari verwirft solche Anfragen an eine andere
         // Server-Adresse (Vorabanfrage wegen des Zugriffsschluessels)
         if (res.ok) {
@@ -1078,7 +1480,7 @@ function meldeGeschlossen() {
 async function ladeOffenListe() {
     if (!serverFunktionenAktiv()) return [];
     try {
-        const res = await fetch(nasUrl('offen.php'), withNasAuthHeaders({ cache: 'no-store' }));
+        const res = await nasFetch('offen.php', '', { cache: 'no-store' });
         if (!res.ok) return [];
         const j = await res.json();
         const id = geraetId();
@@ -1355,11 +1757,23 @@ function initExportMenu() {
     const btnPrint = panel.querySelector('[data-action="print"]');
     if (btnPrint) btnPrint.addEventListener('click', () => printReport(exportMode));
 
+    const tauri = laeuftInTauri();
     const btnShare = panel.querySelector('[data-action="share"]');
-    if (btnShare) btnShare.addEventListener('click', () => shareReportPdf(exportMode));
+    if (btnShare) {
+        // Teilen-Menue gibt es in der Desktop-App (WebView2) nicht
+        if (tauri) btnShare.style.display = 'none';
+        else btnShare.addEventListener('click', () => shareReportPdf(exportMode));
+    }
 
     const btnMail = panel.querySelector('[data-action="mail"]');
-    if (btnMail) btnMail.addEventListener('click', () => openPrefilledMail(exportMode));
+    if (btnMail) {
+        if (tauri) {
+            btnMail.textContent = '✉️ Mail mit PDF vorbereiten';
+            btnMail.addEventListener('click', () => mailEntwurfMitPdf(exportMode));
+        } else {
+            btnMail.addEventListener('click', () => openPrefilledMail(exportMode));
+        }
+    }
 }
 
 // ===== PDF teilen (iPad-Teilen-Menü, inkl. AirPrint) mit Download-Fallback =====
@@ -1384,7 +1798,7 @@ async function sharePdfDoc(doc, filename, shareTitle, mode) {
                     await navigator.share({
                         files: [file],
                         title: shareTitle,
-                        text: buildShareEmailText(mode)
+                        text: teilenText(buildShareEmailSubject(mode), buildShareEmailText(mode))
                     });
                     showToast('PDF geteilt');
                     return;
@@ -1415,6 +1829,10 @@ function renderChecklistPdfSection(doc, yStart, margin, contentWidth, pageHeight
     const textWidth = contentWidth - 20;
 
     AUDIT_CATEGORIES.forEach(category => {
+        // Freie Pruefpunkte ohne Text und ohne Bewertung entfallen
+        const punkte = category.items.filter(i => punktZaehlt(i));
+        if (!punkte.length) return;
+
         if (y + 12 > pageHeight - 18) {
             doc.addPage();
             y = 18;
@@ -1429,13 +1847,13 @@ function renderChecklistPdfSection(doc, yStart, margin, contentWidth, pageHeight
         doc.line(margin, y, margin + contentWidth, y);
         y += 5.5;
 
-        category.items.forEach(item => {
+        punkte.forEach(item => {
             const rating = state.ratings[item.id] || '';
             const comment = state.comments[item.id] || '';
 
             doc.setFont(undefined, 'normal');
             doc.setFontSize(8.5);
-            const lines = doc.splitTextToSize(`${item.id}  ${item.text}`, textWidth);
+            const lines = doc.splitTextToSize(`${item.id}  ${punktText(item)}`, textWidth);
             const commentLines = (rating === 'mangel' && comment)
                 ? doc.splitTextToSize('→ ' + comment, textWidth - 4)
                 : [];
@@ -2064,6 +2482,146 @@ function pdfFilename() {
         todayIsoLocal();
 
     return `Massnahmenplan_${marktnummer}_${datum}.pdf`;
+}
+
+// ===== Quellen je Massnahme (Sprachstil "Einfach") =====
+// Die einfachen Massnahmentexte nennen keine Regelwerke. Fuer den PDF-Anhang
+// werden die Fundstellen deshalb aus dem BGHW- und dem Rechtlich-Text
+// derselben Massnahme (js/text.js) ausgelesen.
+const QUELLEN_GESETZE = ['ArbSchG', 'ArbStättV', 'BetrSichV', 'GefStoffV', 'ArbMedVV', 'ArbZG', 'JArbSchG',
+    'MuSchG', 'BioStoffV', 'ASiG', 'BetrVG', 'LMHV', 'LasthandhabV', 'SGB VII', 'SGB IX', 'BGB', 'ProdSG'];
+const QUELLEN_NAMEN = {
+    'PSA-Benutzungsverordnung': 'PSA-Benutzungsverordnung',
+    'Lastenhandhabungsverordnung': 'LasthandhabV',
+    'Lebensmittelhygiene-Verordnung': 'LMHV',
+    'Arbeitsschutzgesetz': 'ArbSchG',
+    'REACH-Verordnung': 'REACH-Verordnung',
+    'CLP-Verordnung': 'CLP-Verordnung',
+    'Aufzugsrichtlinie': 'Aufzugsrichtlinie 2014/33/EU',
+    'Maschinenrichtlinie': 'Maschinenrichtlinie'
+};
+
+function quellenAusText(text) {
+    const t = String(text || '').replace(/ /g, ' ');
+    const gefunden = [];
+    const add = q => { q = q.replace(/\s+/g, ' ').trim(); if (q && !gefunden.includes(q)) gefunden.push(q); };
+    const gesetzMuster = QUELLEN_GESETZE.map(g => g.replace(/ /g, '\\s')).join('|');
+    let m;
+    // Paragraphen mit Gesetz: "§ 16 BetrSichV", "§ 3 Abs. 1 Satz 2 ArbSchG", "§§ 3, 4 ArbStättV"
+    const reParagraph = new RegExp('§§?\\s?\\d+[a-z]?(?:\\s?(?:Abs\\.|Absatz)\\s?\\d+)?(?:\\s?Satz\\s?\\d+)?(?:\\s?Nr\\.\\s?\\d+)?(?:\\s?(?:,|und|bis|ff\\.)\\s?\\d*[a-z]?)*\\s(?:' + gesetzMuster + ')\\b', 'g');
+    while ((m = reParagraph.exec(t))) add(m[0].replace(/\s?ff\.\s?$/, ' ff.'));
+    // Gesetz vor Paragraph: "BetrSichV §§ 6, 10 und 14" -> "§§ 6, 10 und 14 BetrSichV"
+    const reGesetzVorn = new RegExp('(' + gesetzMuster + ')\\s(§§?\\s?\\d+[a-z]?(?:\\s?(?:Abs\\.|Absatz)\\s?\\d+)?(?:\\s?(?:,|und|bis)\\s?\\d+[a-z]?)*)', 'g');
+    while ((m = reGesetzVorn.exec(t))) add(m[2] + ' ' + m[1]);
+    // Anhang: "BetrSichV Anhang 1 Nr. 4.1"
+    const reAnhang = new RegExp('(?:' + gesetzMuster + '|DGUV Vorschrift \\d+)\\sAnhang\\s\\d+(?:\\sAbschnitt\\s\\d+)?(?:\\sNr\\.\\s?[\\d.]*\\d)?', 'g');
+    while ((m = reAnhang.exec(t))) add(m[0]);
+    // DGUV, ASR, TRGS/TRBS/TRBA, DIN/VDE
+    const reRegeln = /DGUV (?:Vorschrift|Regel|Information|Grundsatz) \d+(?:-\d+)?(?: Kapitel [\d.]*\d)?|ASR A\d\.\d+|TR(?:GS|BS|BA) \d+|DIN(?: EN| ISO| V| VDE| V)* \d+(?:-\d+)*(?: \/ DIN(?: EN)? \d+(?:-\d+)*)?|VDE \d+(?:-\d+)*/g;
+    while ((m = reRegeln.exec(t))) add(m[0]);
+    // ausgeschriebene Namen und bloße Abkuerzungen
+    Object.keys(QUELLEN_NAMEN).forEach(n => { if (t.includes(n)) add(QUELLEN_NAMEN[n]); });
+    QUELLEN_GESETZE.forEach(g => { if (new RegExp('(^|[^A-Za-zÄÖÜäöü])' + g.replace(/ /g, '\\s') + '(?![A-Za-zÄÖÜäöü])').test(t)) add(g); });
+    // Paragraphen je Gesetz zusammenfassen: "§ 5 ArbSchG", "§§ 3, 5 ArbSchG"
+    const jeGesetz = {};
+    const rest = [];
+    gefunden.forEach(q => {
+        const g = q.match(new RegExp('^§§?\\s?(.+?)\\s(' + gesetzMuster + ')$'));
+        if (!g) { rest.push(q); return; }
+        const nummern = jeGesetz[g[2]] = jeGesetz[g[2]] || [];
+        g[1].replace(/(?:Abs\.|Absatz|Satz|Nr\.)\s?\d+/g, '').split(/,|und|bis/).forEach(teil => {
+            const n = (teil.match(/\d+[a-z]?(?:\s?ff\.)?/) || [])[0];
+            if (n && !nummern.includes(n.replace(/\s?ff\./, ' ff.'))) nummern.push(n.replace(/\s?ff\./, ' ff.'));
+        });
+    });
+    Object.keys(jeGesetz).forEach(gesetz => {
+        const n = jeGesetz[gesetz].sort((a, b) => parseInt(a, 10) - parseInt(b, 10) || a.localeCompare(b));
+        if (n.length) rest.unshift((n.length > 1 || /ff\./.test(n[0]) ? '§§ ' : '§ ') + n.join(', ') + ' ' + gesetz);
+    });
+    gefunden.length = 0;
+    rest.forEach(q => gefunden.push(q));
+    // Bloßes Gesetz weglassen, wenn es schon mit Paragraph/Anhang genannt ist
+    return gefunden.filter(q => !(QUELLEN_GESETZE.includes(q) || Object.values(QUELLEN_NAMEN).includes(q))
+        || !gefunden.some(a => a !== q && a.endsWith(' ' + q) || a.startsWith(q + ' Anhang')))
+        .filter(q => !(q === 'DGUV Vorschrift 3' && gefunden.some(a => a.startsWith('DGUV Vorschrift 3 Anhang'))));
+}
+
+// Quellen zu einer Massnahme (Pruefpunkt-ID): aus BGHW- und Rechtlich-Text
+function quellenZuMassnahme(itemId) {
+    if (FREIE_PUNKT_IDS.indexOf(itemId) !== -1) return [];   // freie Pruefpunkte ohne Quellen
+    const e = (typeof MEASURES_BY_ID !== 'undefined' && MEASURES_BY_ID[itemId]) || (typeof MEASURES_TEXT !== 'undefined' ? MEASURES_TEXT.default : null);
+    if (!e) return [];
+    const liste = quellenAusText((e.bghw || '') + ' ' + (e.rechtlich || ''));
+    // Reihenfolge: Gesetze/Verordnungen, ASR/TR, DGUV, DIN/VDE
+    const rang = q => /^§|ArbSchG|ArbStättV|BetrSichV|GefStoffV|ArbMedVV|ArbZG|JArbSchG|SGB|BGB|BetrVG|LMHV|Lasthandhab|PSA|REACH|CLP|richtlinie/i.test(q) ? 0
+        : /^ASR|^TR/.test(q) ? 1 : /^DGUV/.test(q) ? 2 : 3;
+    return liste.sort((a, b) => rang(a) - rang(b));
+}
+
+// PDF-Anhang "Quellen zu den Maßnahmen" (Sprachstil "Einfach"): je Massnahme
+// dieser Begehung Nummer, Pruefpunkt und die zugehoerigen Fundstellen - mit
+// derselben laufenden Nummer wie im Massnahmenteil. Liefert false, wenn
+// keine Massnahme hinterlegte Quellen hat (dann entfaellt die Seite).
+function renderMassnahmenQuellenAnhang(doc, margin, contentWidth, pageHeight, measures) {
+    const eintraege = [];
+    (measures || []).forEach((measure, index) => {
+        const found = findItemById(measure.itemId);
+        if (!found) return;
+        const quellen = quellenZuMassnahme(measure.itemId);
+        if (quellen.length) eintraege.push({ nummer: index + 1, found, quellen });
+    });
+    if (!eintraege.length) return false;
+
+    doc.addPage();
+    let y = 18;
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(14);
+    doc.setTextColor(28, 34, 38);
+    doc.text('Quellen zu den Maßnahmen', margin, y);
+    y += 9;
+
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(8.5);
+    doc.setTextColor(100, 116, 139);
+    const intro = doc.splitTextToSize(
+        'Die Maßnahmentexte sind in einfacher Sprache formuliert und nennen keine Regelwerke. Hier stehen zu jeder Maßnahme dieser Begehung die zugehörigen Gesetze, Verordnungen, Technischen Regeln, DGUV-Regelwerke und Normen. Die Nummern entsprechen dem Maßnahmenplan.',
+        contentWidth
+    );
+    doc.text(intro, margin, y);
+    y += intro.length * 4 + 6;
+
+    eintraege.forEach(e => {
+        doc.setFontSize(8.5);
+        const titel = doc.splitTextToSize(`${e.nummer}. [${e.found.item.id}] ${e.found.item.text}`, contentWidth);
+        const quellen = doc.splitTextToSize(e.quellen.join('  ·  '), contentWidth - 4);
+        const hoehe = titel.length * 4 + quellen.length * 4 + 6;
+        if (y + hoehe > pageHeight - 20) {
+            doc.addPage();
+            y = 18;
+        }
+        doc.setFont(undefined, 'bold');
+        doc.setTextColor(30, 41, 59);
+        doc.text(titel, margin, y);
+        y += titel.length * 4 + 0.5;
+        doc.setFont(undefined, 'normal');
+        doc.setTextColor(163, 5, 23);
+        doc.text(quellen, margin + 4, y);
+        y += quellen.length * 4 + 4;
+    });
+
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(7.5);
+    doc.setTextColor(140);
+    const hinweis = doc.splitTextToSize(
+        'Die Fundstellen stammen aus den Maßnahmentexten der Sprachstile „BGHW“ und „Rechtlich“; dort stehen sie im Zusammenhang. DGUV-Regeln und DGUV-Informationen konkretisieren die praktische Umsetzung; sie sind rechtlich nicht mit staatlichen Rechtsvorschriften gleichzusetzen. Gesetzliche und technische Regelwerke können sich ändern.',
+        contentWidth
+    );
+    if (y + hinweis.length * 3.6 > pageHeight - 15) {
+        doc.addPage();
+        y = 18;
+    }
+    doc.text(hinweis, margin, y + 2);
+    return true;
 }
 
 // Quellenverzeichnis als PDF-Anhang: listet die in MEASURE_SOURCES
@@ -2778,15 +3336,16 @@ async function buildPdf(includeChecklist, includeFotos) {
         state.measures
     );
 
-    // Quellenverzeichnis als Anhang - nur sinnvoll, wenn ueberhaupt
-    // Massnahmen vorhanden sind UND der gewaehlte Sprachstil tatsaechlich
-    // Regelwerke/Gesetze zitiert (nicht bei "einfach").
-    if (
-        state.measures.length > 0 &&
-        MEASURE_STYLE !== 'einfach' &&
-        typeof MEASURE_SOURCES !== 'undefined'
-    ) {
-        renderSourcesAppendix(doc, margin, contentWidth, pageHeight);
+    // Quellen als Anhang - nur wenn ueberhaupt Massnahmen vorhanden sind.
+    // "BGHW"/"Rechtlich": Gesamtliste (die Texte zitieren die Fundstellen
+    // selbst). "Einfach": nur die Quellen zu den Massnahmen dieser Begehung,
+    // je Massnahme.
+    if (state.measures.length > 0) {
+        if (MEASURE_STYLE === 'einfach') {
+            renderMassnahmenQuellenAnhang(doc, margin, contentWidth, pageHeight, state.measures);
+        } else if (typeof MEASURE_SOURCES !== 'undefined') {
+            renderSourcesAppendix(doc, margin, contentWidth, pageHeight);
+        }
     }
 
     const totalPages =
@@ -2887,6 +3446,17 @@ async function printReport(mode) {
 
         const blob =
             doc.output('blob');
+
+        // Desktop-App (Tauri): kein neues Fenster moeglich - im Rahmen drucken
+        if (laeuftInTauri()) {
+            if (await druckePdfImRahmen(blob)) {
+                showToast('Druckdialog geöffnet');
+            } else {
+                doc.save(reportFilename(mode));
+                showToast('Drucken nicht möglich – PDF heruntergeladen');
+            }
+            return;
+        }
 
         const url =
             URL.createObjectURL(blob);
@@ -3036,7 +3606,10 @@ const OPTIONAL_CATEGORIES = {
         'Keine CO2-Kühleinrichtungen im Markt vorhanden',
 
     'fluessiggasflaschen':
-        'Keine Flüssiggasflaschen im Markt vorhanden'
+        'Keine Flüssiggasflaschen im Markt vorhanden',
+
+    'sonstiges':
+        'Keine sonstigen Feststellungen'
 };
 
 // ===== Checkliste rendern (index.html) =====
@@ -3167,13 +3740,18 @@ function buildChecklistHtml(forceOpenAll) {
             !!toggleLabel &&
             !!state.notApplicable[category.id];
 
-        const answered =
+        const relevant =
             category.items.filter(
+                i => punktZaehlt(i)
+            );
+
+        const answered =
+            relevant.filter(
                 i => state.ratings[i.id]
             ).length;
 
         const complete =
-            answered === category.items.length;
+            answered === relevant.length;
 
         return `
         <section class="category card ${isOpen ? 'open' : ''}" id="cat-${escapeHtml(category.id)}">
@@ -3182,7 +3760,7 @@ function buildChecklistHtml(forceOpenAll) {
                     <svg class="category-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
                     <span class="category-name">${escapeHtml(category.name)}</span>
                 </div>
-                <span class="category-count ${complete ? 'complete' : ''}">${answered} / ${category.items.length}</span>
+                <span class="category-count ${complete ? 'complete' : ''}">${answered} / ${relevant.length}</span>
             </div>
             <div class="category-body">
                 ${toggleLabel ? `
@@ -3240,14 +3818,21 @@ function renderItem(item, locked) {
         ? state.measures.find(m => m.itemId === item.id && m.vorbegehung)
         : null;
 
+    // Freier Pruefpunkt: Textfeld statt Fragetext; bewertbar erst mit Text
+    const freiLeer = item.frei && !freierText(item.id) && !rating;
+    const btnAttr = locked ? 'disabled data-gesperrt-kategorie' : (freiLeer ? 'disabled' : '');
+    const textHtml = item.frei
+        ? `<input type="text" class="frei-text" maxlength="300" placeholder="Eigenen Prüfpunkt eintragen …" aria-label="Freier Prüfpunkt ${escapeHtml(item.id)}" value="${escapeHtml((state.freieTexte || {})[item.id] || '')}" ${locked ? 'disabled' : ''} ${aktionAttr('input', 'updateFreierText', item.id, '$value')}>`
+        : item.text;
+
     return `
-    <div class="item ${isMangel ? 'is-mangel' : ''}" data-item-id="${escapeHtml(item.id)}">
+    <div class="item ${isMangel ? 'is-mangel' : ''} ${item.frei ? 'is-frei' : ''}" data-item-id="${escapeHtml(item.id)}">
         <div class="item-row">
-            <div class="item-text"><span class="item-id">${item.id}</span>${item.text}</div>
+            <div class="item-text"><span class="item-id">${item.id}</span>${textHtml}</div>
             <div class="item-actions">
-                <button class="rating-btn ok ${rating === 'ok' ? 'selected' : ''}" ${locked ? 'disabled' : ''} ${aktionAttr('click', 'setRating', item.id, 'ok')} aria-label="In Ordnung">OK</button>
-                <button class="rating-btn mangel ${rating === 'mangel' ? 'selected' : ''}" ${locked ? 'disabled' : ''} ${aktionAttr('click', 'setRating', item.id, 'mangel')} aria-label="Mangel">!</button>
-                <button class="rating-btn na ${rating === 'na' ? 'selected' : ''}" ${locked ? 'disabled' : ''} ${aktionAttr('click', 'setRating', item.id, 'na')} aria-label="Nicht vorhanden">N.V.</button>
+                <button class="rating-btn ok ${rating === 'ok' ? 'selected' : ''}" ${btnAttr} ${aktionAttr('click', 'setRating', item.id, 'ok')} aria-label="In Ordnung">OK</button>
+                <button class="rating-btn mangel ${rating === 'mangel' ? 'selected' : ''}" ${btnAttr} ${aktionAttr('click', 'setRating', item.id, 'mangel')} aria-label="Mangel">!</button>
+                <button class="rating-btn na ${rating === 'na' ? 'selected' : ''}" ${btnAttr} ${aktionAttr('click', 'setRating', item.id, 'na')} aria-label="Nicht vorhanden">N.V.</button>
             </div>
         </div>
         ${isMangel ? `
@@ -3255,10 +3840,13 @@ function renderItem(item, locked) {
             ${vorMassnahme ? `<div class="vorbegehung-hinweis">↻ ${escapeHtml(vorbegehungHinweis(vorMassnahme))} – bitte prüfen; ist der Mangel behoben, auf „OK“ setzen.</div>` : ''}
             <label for="comment-${escapeHtml(item.id)}">Beschreibung des Mangels</label>
             <textarea id="comment-${escapeHtml(item.id)}" placeholder="Was wurde festgestellt? (optional)" ${aktionAttr('input', 'updateComment', item.id, '$value')}>${escapeHtml(comment)}</textarea>
-            <div class="measure-preview">
+            ${item.frei ? `<div class="measure-preview">
+                <span class="label">Maßnahme</span>
+                Im Aktionsplan frei eintragen.
+            </div>` : `<div class="measure-preview">
                 <span class="label">Empfohlene Maßnahme</span>
                 ${getMeasureText(item.id)}
-            </div>
+            </div>`}
         </div>` : ''}
     </div>`;
 }
@@ -3320,6 +3908,8 @@ function toggleNotApplicable(categoryId, checked) {
 }
 
 function setRating(itemId, rating) {
+    // Freier Pruefpunkt ohne Text: erst Text eintragen
+    if (FREIE_PUNKT_IDS.indexOf(itemId) !== -1 && !freierText(itemId) && !state.ratings[itemId]) return;
 
     // Schutz: waehrend eine Kategorie per Schalter als "nicht vorhanden" markiert ist,
     // bleiben ihre Fragen gesperrt auf N.V. (Buttons sind zusaetzlich disabled).
@@ -3575,7 +4165,7 @@ async function shareJson() {
             const file = new File([blob], filename, { type: 'application/json' });
             if (navigator.canShare({ files: [file] })) {
                 try {
-                    await navigator.share({ files: [file], title: 'ASiC Handel – Begehungsdaten (JSON)', text });
+                    await navigator.share({ files: [file], title: 'ASiC Handel – Begehungsdaten (JSON)', text: teilenText('Begehungsdaten Markt ' + markt, text) });
                     showToast('JSON geteilt');
                     return;
                 } catch (err) {
@@ -3692,7 +4282,10 @@ function importJson(file) {
                     data.notApplicable || {},
 
                 subgroupNotApplicable:
-                    data.subgroupNotApplicable || {}
+                    data.subgroupNotApplicable || {},
+
+                freieTexte:
+                    data.freieTexte || {}
             };
 
             uebernehmeGboAusDatensatz(data);
@@ -3769,6 +4362,8 @@ function buildFollowUpState(record) {
     neu.companyInfo = { ...neu.companyInfo, ...ci, datum: todayIsoLocal() };
     neu.notApplicable = { ...((record && record.notApplicable) || {}) };
     neu.subgroupNotApplicable = { ...((record && record.subgroupNotApplicable) || {}) };
+    // Freie Pruefpunkte: Text immer uebernehmen (auch wenn zuletzt OK)
+    neu.freieTexte = { ...((record && record.freieTexte) || {}) };
     const alteKommentare = (record && record.comments) || {};
     let n = 0;
     ((record && record.measures) || []).forEach(m => {
@@ -3900,6 +4495,13 @@ async function archiviereAktuelleBegehung() {
                     )
                 ),
 
+            freieTexte:
+                JSON.parse(
+                    JSON.stringify(
+                        state.freieTexte || {}
+                    )
+                ),
+
             stats:
                 computeStats(),
 
@@ -3967,7 +4569,10 @@ async function buildArchivedReportPdf(record, mode) {
             record.signatures,
 
         notApplicable:
-            record.notApplicable || {}
+            record.notApplicable || {},
+
+        freieTexte:
+            record.freieTexte || {}
     };
 
     getAllPhotos =
@@ -4020,7 +4625,10 @@ async function shareArchivedReportPdf(record, mode) {
             record.signatures,
 
         notApplicable:
-            record.notApplicable || {}
+            record.notApplicable || {},
+
+        freieTexte:
+            record.freieTexte || {}
     };
 
     getAllPhotos =
@@ -4256,7 +4864,9 @@ document.addEventListener(
 
         const btnShareJson = document.getElementById('btn-json-share');
         if (btnShareJson) {
-            btnShareJson.addEventListener('click', shareJson);
+            // nutzt das Teilen-Menue - in der Desktop-App (Tauri) nicht vorhanden
+            if (laeuftInTauri()) btnShareJson.style.display = 'none';
+            else btnShareJson.addEventListener('click', shareJson);
         }
 
         const importInput =
