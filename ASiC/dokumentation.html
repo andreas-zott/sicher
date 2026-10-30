@@ -10,9 +10,9 @@
 <meta name="referrer" content="same-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Technische Dokumentation – ASiC Handel</title>
-<link rel="stylesheet" href="css/styles.css?v=1.54-15">
+<link rel="stylesheet" href="css/styles.css?v=1.54-18">
 <script src="zugang-config.js"></script>
-<script src="js/access-gate.js?v=1.54-15"></script>
+<script src="js/access-gate.js?v=1.54-18"></script>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -349,7 +349,7 @@
                 <div class="doku-meta-label">
                     Service Worker
                 </div>
-                <div class="doku-meta-value"> <span data-zahl="cache_version">v1.54-15</span> </div>
+                <div class="doku-meta-value"> <span data-zahl="cache_version">v1.54-18</span> </div>
             </div>
 
             <div class="doku-meta-item">
@@ -365,7 +365,7 @@
                 <div class="doku-meta-label">
                     Umfang
                 </div>
-                <div class="doku-meta-value"> <span data-zahl="kategorien">24</span> Kategorien · <span data-zahl="fragen">199</span> Prüfpunkte </div>
+                <div class="doku-meta-value"> <span data-zahl="kategorien">25</span> Kategorien · <span data-zahl="fragen">201</span> Prüfpunkte </div>
             </div>
 
         </div>
@@ -601,7 +601,7 @@
 
             <p>
                 Die aktuelle technische Cache-Version lautet:
-                <strong><code><span data-zahl="cache">asic-handel-v1.54-15</span></code></strong>.
+                <strong><code><span data-zahl="cache">asic-handel-v1.54-18</span></code></strong>.
             </p>
 
             <ul>
@@ -934,7 +934,7 @@
 
 
         <h3>
-            Prüfkatalog – <span data-zahl="kategorien">24</span> Kategorien, <span data-zahl="fragen">199</span> Einzelfragen
+            Prüfkatalog – <span data-zahl="kategorien">25</span> Kategorien, <span data-zahl="fragen">201</span> Einzelfragen
         </h3>
 
         <div class="card doku-card">
@@ -965,6 +965,7 @@
                 <span class="doku-pill">Lastenaufzug (9)</span>
                 <span class="doku-pill">Flüssiggasflaschen (24 · 5 Unterbereiche)</span>
                 <span class="doku-pill">Beleuchtung (3 · 3 Unterbereiche)</span>
+                <span class="doku-pill">Sonstiges (2 freie Prüfpunkte)</span>
 
             </div>
 
@@ -980,6 +981,22 @@
                 Beleuchtung nach der tatsächlichen Tätigkeit und Sehaufgabe;
                 die Begehung ersetzt keine vollständige lichttechnische
                 Gefährdungsbeurteilung.
+            </p>
+
+            <p>
+                Die Kategorie <strong>Sonstiges</strong> steht am Ende des
+                Katalogs und enthält zwei freie Prüfpunkte (25.1, 25.2). Den
+                Prüfpunkt-Text trägt der Prüfer selbst ein (gespeichert in
+                <code>state.freieTexte</code>); bewertbar ist ein Punkt erst
+                mit Text. Leere Felder zählen weder als offen noch erscheinen
+                sie im PDF. Bei einem Mangel entsteht die Maßnahme ohne
+                Textvorschlag und ohne Quellenangabe; der Maßnahmentext wird
+                im Aktionsplan frei eingetragen. Der Schalter „Keine sonstigen
+                Feststellungen“ setzt beide Punkte auf N.V. Bei einer
+                Wiederholungsbegehung werden die Texte übernommen. In der
+                Auswertung werden freie Prüfpunkte als „Freie Prüfpunkte
+                (Sonstiges)“ zusammengefasst, weil sie je Begehung etwas
+                anderes bedeuten.
             </p>
 
             <p>
@@ -1704,8 +1721,9 @@
                     (Grenzen in <code>config.php</code>, siehe Abschnitt 11).</li>
                 <li>Standard ist eine relative Adresse neben der App; unter „Einstellungen“
                     lässt sich eine andere Server-Adresse (dann CORS auf dem Server nötig) und
-                    ein Zugriffsschlüssel hinterlegen, den die Skripte mit
-                    <code>hash_equals()</code> prüfen.</li>
+                    ein Zugriffsschlüssel hinterlegen. Die App legt ihn geschützt ab und
+                    unterschreibt damit jede Anfrage; die Skripte prüfen die Unterschrift
+                    (Abschnitt 10).</li>
                 <li>Server-Daten enthalten keine Fotos. Fehler beim Server-Zugriff berühren
                     die lokalen Daten nicht.</li>
                 <li>Version 1.54 und Version 2 nutzen denselben Datenordner. Datensätze der
@@ -1874,7 +1892,7 @@
 
             Alle Einbindungen von <code>js/…</code> und <code>css/…</code> tragen den
             Ausgabestand als Zusatz <code>?v=</code> (<code>BUILD</code> in
-            <code>sw.js</code>, derzeit <code><span data-zahl="cache_version">v1.54-15</span></code>).
+            <code>sw.js</code>, derzeit <code><span data-zahl="cache_version">v1.54-18</span></code>).
             Diese Dateien und die Schriften liefert der Service Worker sofort aus dem Cache;
             nach einem Update ändert sich der Zusatz, und die Geräte laden sie neu.
             HTML-Seiten, <code>zugang-config.js</code>, Manifest und Icons werden zuerst beim
@@ -2068,7 +2086,14 @@
                 <tr>
                     <td>Zugriffsschlüssel</td>
                     <td>
-                        Optional. Wird mit <code>hash_equals()</code> geprüft.
+                        Optional. Die App speichert den Schlüssel als nicht
+                        auslesbaren Krypto-Schlüssel (Web Crypto, IndexedDB) und
+                        unterschreibt jede Anfrage (HMAC-SHA-256 über Methode,
+                        Endpunkt, Adresszusatz, Zeit, Zufallswert und Inhalt);
+                        der Schlüssel selbst geht nicht über das Netz. Der
+                        Server prüft die Unterschrift mit <code>hash_equals()</code>,
+                        lässt 5 Minuten Zeitabweichung zu und nimmt jeden
+                        Zufallswert nur einmal an.
                         Der Schlüssel steht zentral in <code>config.php</code>
                         (standardmäßig leer) und muss in den App-Einstellungen
                         jedes Geräts identisch hinterlegt werden (siehe
@@ -2136,7 +2161,7 @@
             <div class="doku-table-wrap">
             <table class="doku-table">
                 <tr><th>Angaben</th><th></th></tr>
-                <tr><td>Prüfgegenstand</td><td>ASiC Handel, Rev. <span data-zahl="revision">1.54</span>, Ausgabestand <code><span data-zahl="cache_version">v1.54-15</span></code></td></tr>
+                <tr><td>Prüfgegenstand</td><td>ASiC Handel, Rev. <span data-zahl="revision">1.54</span>, Ausgabestand <code><span data-zahl="cache_version">v1.54-18</span></code></td></tr>
                 <tr><td>Prüfdatum</td><td>25.10.2026</td></tr>
                 <tr><td>Methode</td><td>Quellcode-Durchsicht, Angriffstests im Browser (Chromium) mit präparierten Begehungsdaten, Tests der Server-Endpunkte (PHP 8.3)</td></tr>
                 <tr><td>Ergebnis</td><td>Alle Schwachstellen im Programmcode sind behoben und durch Tests belegt. Offen sind nur noch Punkte der Einrichtung und des Betriebs sowie bewertete Restrisiken (siehe unten).</td></tr>
@@ -2197,9 +2222,9 @@
                 </tr>
                 <tr>
                     <td>S2</td>
-                    <td><span class="sev sev-hoch">Hoch</span></td>
-                    <td><strong>Zugriffsschlüssel im Browser-Speicher</strong><br>Der Schlüssel steht im Klartext im <code>localStorage</code> des Geräts. In der App wird er nach dem Speichern nicht mehr angezeigt (Einstellungen zeigen nur „hinterlegt · endet auf …“ und „Schlüssel ändern“). Über eingeschleusten Code ist er nicht mehr erreichbar (Maskierung, keine Inline-Handler, CSP); wer das entsperrte Gerät in der Hand hat, kann ihn auslesen.</td>
-                    <td><span class="sev st-rest">Restrisiko</span><br>Gerätesperre und Geräteverwaltung (S6). Bei Geräteverlust Schlüssel tauschen.</td>
+                    <td><span class="sev sev-mittel">Mittel</span></td>
+                    <td><strong>Zugriff über ein entsperrtes Gerät</strong><br>Der Schlüssel liegt nicht mehr als Text auf dem Gerät, sondern als nicht auslesbarer Krypto-Schlüssel; die App unterschreibt damit jede Anfrage, der Schlüssel selbst geht nicht über das Netz. Er lässt sich weder in den Einstellungen (dort nur „hinterlegt · endet auf …“) noch über die Entwicklerwerkzeuge herauskopieren. Wer das entsperrte Gerät in der Hand hat, kann über die App aber weiterhin auf das Team-Archiv zugreifen. Ohne HTTPS (kein Web Crypto) speichert und verschickt die App keinen Schlüssel.</td>
+                    <td><span class="sev st-rest">Restrisiko</span><br>Gerätesperre und Geräteverwaltung (S6). Bei Geräteverlust Schlüssel tauschen. Nach Umstellung aller Geräte <code>'klartextSchluessel' =&gt; false</code> setzen.</td>
                 </tr>
                 <tr>
                     <td>S3</td>
@@ -2216,8 +2241,8 @@
                 <tr>
                     <td>S5</td>
                     <td><span class="sev sev-gering">Gering</span></td>
-                    <td><strong>Server-Adresse nicht auf HTTPS beschränkt</strong><br>In den Einstellungen der App wird auch eine <code>http://</code>-Adresse angenommen; der Schlüssel ginge dann unverschlüsselt über das Netz.</td>
-                    <td><span class="sev st-rest">Offen</span><br>Nur <code>https://</code>-Adressen eintragen. Der Offline-Betrieb setzt HTTPS ohnehin voraus.</td>
+                    <td><strong>Server-Adresse nur über HTTPS</strong><br>Die App nimmt in den Einstellungen nur <code>https://</code>-Adressen an (lokale Testadressen ausgenommen) und verwendet eine früher eingetragene <code>http://</code>-Adresse nicht. Ohne HTTPS speichert und verschickt sie keinen Zugriffsschlüssel.</td>
+                    <td><span class="sev st-ok">Behoben</span><br>Server per HTTPS mit gültigem Zertifikat bereitstellen.</td>
                 </tr>
                 <tr>
                     <td>S6</td>
@@ -2239,9 +2264,9 @@
                 <div class="doku-box-title">Legende</div>
                 <p>
                     <span class="sev st-ok">Umgesetzt</span> im Betrieb erledigt, bei neuen Installationen zu beachten ·
+                    <span class="sev st-ok">Behoben</span> im Code geschlossen ·
                     <span class="sev st-betrieb">Betreiber</span> / <span class="sev st-betrieb">Betrieb</span> durch Einrichtung oder organisatorisch zu erfüllen ·
-                    <span class="sev st-rest">Restrisiko</span> / <span class="sev st-rest">Bewusst</span> bekannt und bewertet, im Code nicht weiter zu schließen ·
-                    <span class="sev st-rest">Offen</span> noch nicht im Code umgesetzt, Hinweis für den Betrieb.
+                    <span class="sev st-rest">Restrisiko</span> / <span class="sev st-rest">Bewusst</span> bekannt und bewertet, im Code nicht weiter zu schließen.
                 </p>
             </div>
 
@@ -2261,7 +2286,8 @@
                 <tr><td>Ereignisse</td><td>Keine Inline-Handler. <code>aktionAttr()</code> legt Argumente als JSON-Daten ab; eine zentrale Verteilung ruft nur Funktionen aus <code>AKTION_ERLAUBT</code> auf.</td></tr>
                 <tr><td>Browser-Richtlinie</td><td>Content-Security-Policy in jeder Seite: nur eigene Skriptdateien, keine eingebetteten Skripte, kein <code>eval</code>, keine Plugins, keine fremden Bilder oder Schriften; eingebettete Rahmen nur mit eigenen Inhalten (<code>frame-src 'self' blob:</code>, für das Drucken in der Desktop-App); zusätzlich die Verbindung zur Desktop-Hülle (<code>ipc:</code>, <code>http://ipc.localhost</code>). Verbindungen nur zum eigenen Server und zu HTTPS-Adressen (für ein Team-Archiv auf einem anderen Server).</td></tr>
                 <tr><td>HTTP-Header</td><td><code>X-Content-Type-Options: nosniff</code>, Schutz vor Einbetten (<code>X-Frame-Options</code>, <code>frame-ancestors</code>), <code>Referrer-Policy: same-origin</code>; JSON-Antworten zusätzlich <code>Cache-Control: no-store</code>.</td></tr>
-                <tr><td>Zugriff Server</td><td>Zugriffsschlüssel (zeitkonstanter Vergleich), Sperre nach 20 Fehlversuchen für 15 Minuten je Absender (HTTP 429).</td></tr>
+                <tr><td>Zugriff Server</td><td>Unterschriebene Anfragen (HMAC-SHA-256, zeitkonstanter Vergleich, 5 Minuten Zeitfenster, jeder Zufallswert nur einmal); der Schlüssel geht nicht über das Netz. Sperre nach 20 Fehlversuchen für 15 Minuten je Absender (HTTP 429).</td></tr>
+                <tr><td>Schlüssel auf dem Gerät</td><td>Als nicht exportierbarer Krypto-Schlüssel in IndexedDB; in <code>localStorage</code> nur Länge und letzte vier Zeichen zur Anzeige. Ein früher als Text gespeicherter Schlüssel wird beim ersten Start automatisch umgestellt und gelöscht.</td></tr>
                 <tr><td>Missbrauchsschutz</td><td>Höchstens 60 Speichervorgänge in 10 Minuten je Absender, höchstens 20 MB je Begehung, 20 Stände je Begehung in <code>versionen/</code>, ältere komprimiert in <code>versionen/archiv/</code> (Obergrenze 500 MB). Alle Werte in <code>config.php</code> unter <code>grenzen</code> anpassbar.</td></tr>
                 <tr><td>Dateizugriff</td><td><code>load.php</code> nimmt nur Dateinamen der beiden bekannten Muster an (kein Verzeichnis-Ausbruch); Schreiben über temporäre Datei; Datenordner per Sperrdatei bzw. außerhalb des Web-Verzeichnisses.</td></tr>
                 <tr><td>Lieferumfang</td><td>Keine Zwischendateien; Entwickler-Werkzeuge gesperrt. Keine Bibliotheken oder Schriften von Drittanbietern zur Laufzeit.</td></tr>
@@ -2279,7 +2305,7 @@
 
             <p>
                 Ergebnisse für den aktuellen Ausgabestand
-                <code><span data-zahl="cache_version">v1.54-15</span></code> mit präparierten
+                <code><span data-zahl="cache_version">v1.54-18</span></code> mit präparierten
                 Daten bzw. gezielten Anfragen.
             </p>
 
@@ -2317,6 +2343,38 @@
                 <tr>
                     <td>Zugriffsschlüssel durchprobieren (Testgrenze 3)</td>
                     <td>401, 401, 401, danach 429</td>
+                </tr>
+                <tr>
+                    <td>Mitgeschnittene Anfrage erneut senden</td>
+                    <td>401 „bereits verarbeitet“</td>
+                </tr>
+                <tr>
+                    <td>Unterschriebene Anfrage mit verändertem Inhalt oder anderer Datei</td>
+                    <td>401</td>
+                </tr>
+                <tr>
+                    <td>Geräteuhr 10 Minuten falsch</td>
+                    <td>App gleicht mit der Serverzeit ab, Anfrage gelingt</td>
+                </tr>
+                <tr>
+                    <td>Klartext-Schlüssel bei <code>klartextSchluessel</code> = false</td>
+                    <td>401, kein Fehlversuch gezählt</td>
+                </tr>
+                <tr>
+                    <td>Schlüssel über Entwicklerwerkzeuge auslesen</td>
+                    <td>nicht möglich (nicht exportierbar), kein Text im Browser-Speicher</td>
+                </tr>
+                <tr>
+                    <td>Server-Adresse mit <code>http://</code> eintragen</td>
+                    <td>nicht gespeichert, Hinweis „muss mit https:// beginnen“</td>
+                </tr>
+                <tr>
+                    <td>Zugriffsschlüssel ohne HTTPS eintragen</td>
+                    <td>nicht gespeichert, kein Klartext auf dem Gerät oder im Netz</td>
+                </tr>
+                <tr>
+                    <td><code>pruefen.php?schluessel=…</code> in der Adresse</td>
+                    <td>nicht angenommen, Formular mit Hinweis, kein Fehlversuch gezählt</td>
                 </tr>
                 <tr>
                     <td>Massenhaftes Speichern (Testgrenze 5)</td>
@@ -2437,7 +2495,12 @@
                 <tr>
                     <td><code>apiKey</code> (Zugriffsschlüssel)</td>
                     <td>config.php</td>
-                    <td>Leer = kein Schlüssel. Gesetzt: save/list/load/offen antworten ohne passende Kopfzeile <code>X-Api-Key</code> mit HTTP 401; pruefen.php fragt den Schlüssel in einem Formular ab.</td>
+                    <td>Leer = kein Schlüssel. Gesetzt: save/list/load/offen antworten ohne gültige Unterschrift in der Kopfzeile <code>X-Api-Key</code> mit HTTP 401; pruefen.php fragt den Schlüssel in einem Formular ab.</td>
+                </tr>
+                <tr>
+                    <td><code>klartextSchluessel</code></td>
+                    <td>config.php</td>
+                    <td><code>false</code> = nur unterschriebene Anfragen (empfohlen, Vorlage). <code>true</code> oder Eintrag fehlt = auch ältere App-Stände annehmen, die den Schlüssel im Klartext schicken. pruefen.php zeigt, wann zuletzt so eine Anfrage kam.</td>
                 </tr>
                 <tr>
                     <td>Zugangscode</td>
@@ -2446,7 +2509,7 @@
                 </tr>
                 <tr>
                     <td>Server-Adresse, Zugriffsschlüssel</td>
-                    <td>Einstellungen-Seite (localStorage <code>nasBaseUrl</code>, <code>nasApiKey</code>)</td>
+                    <td>Einstellungen-Seite (localStorage <code>nasBaseUrl</code>; Schlüssel geschützt in IndexedDB <code>asic-sicherheit</code>, Anzeige-Angaben in <code>nasApiKeyInfo</code>)</td>
                     <td>Je Gerät und Browser. Leer = Endpunkte im selben Ordner wie die App.</td>
                 </tr>
             </table>
@@ -2456,8 +2519,8 @@
             <ol>
                 <li>Neuen Wert erzeugen, z. B. <code>openssl rand -hex 24</code> (mindestens 32 Zeichen).</li>
                 <li>In config.php bei <code>apiKey</code> eintragen.</li>
-                <li>Auf jedem Gerät unter Einstellungen eintragen, speichern und „Verbindung testen“.</li>
-                <li>Mit <code>pruefen.php?schluessel=&lt;Schlüssel&gt;</code> kontrollieren.</li>
+                <li>Auf jedem Gerät unter Einstellungen „Schlüssel ändern“ wählen, neuen Wert eintragen, speichern und „Verbindung testen“.</li>
+                <li>Mit <code>pruefen.php</code> kontrollieren (Schlüssel im Formular eingeben).</li>
             </ol>
 
             <p><strong>Zugangscode ändern</strong></p>
@@ -2566,7 +2629,17 @@
                 <tr>
                     <td>„Ungültiger oder fehlender Zugriffsschlüssel“ (HTTP 401)</td>
                     <td>Schlüssel im Gerät passt nicht zu config.php</td>
-                    <td>Schlüssel unter Einstellungen neu eintragen</td>
+                    <td>Unter Einstellungen „Schlüssel ändern“ und neu eintragen</td>
+                </tr>
+                <tr>
+                    <td>„Dieses Gerät schickt den Zugriffsschlüssel noch im Klartext“ (HTTP 401)</td>
+                    <td>Gerät hat noch einen älteren App-Stand; der Server nimmt nur unterschriebene Anfragen an</td>
+                    <td>App neu laden bzw. neu öffnen; der Schlüssel wird dabei automatisch umgestellt</td>
+                </tr>
+                <tr>
+                    <td>„Die Uhrzeit des Geräts weicht zu stark ab“ (HTTP 401)</td>
+                    <td>Geräte- oder Serveruhr falsch; die App gleicht einmal automatisch ab</td>
+                    <td>Automatische Uhrzeit am Gerät und Zeitabgleich (NTP) am Server prüfen</td>
                 </tr>
                 <tr>
                     <td>Verbindungstest ohne Antwort</td>
@@ -2670,7 +2743,7 @@
             <div class="doku-table-wrap">
             <table class="doku-table pflege">
                 <tr><th>Datei</th><th>Was drinsteht</th><th>Wann ändern</th></tr>
-                <tr><td><code>js/audit-data.js</code></td><td>Alle Prüffragen in <code>AUDIT_CATEGORIES</code>: Kategorie (<code>id</code>, <code>name</code>), je Frage <code>id</code> (z. B. <code>"1.1"</code>), <code>text</code> und optional <code>group</code> (Unterbereich, z. B. Flüssiggas, Beleuchtung)</td><td>Frage neu, geändert oder gelöscht; Kategorie oder Unterbereich neu</td></tr>
+                <tr><td><code>js/audit-data.js</code></td><td>Alle Prüffragen in <code>AUDIT_CATEGORIES</code>: Kategorie (<code>id</code>, <code>name</code>), je Frage <code>id</code> (z. B. <code>"1.1"</code>), <code>text</code> und optional <code>group</code> (Unterbereich, z. B. Flüssiggas, Beleuchtung) bzw. <code>frei: true</code> (freier Prüfpunkt, Text aus <code>state.freieTexte</code>)</td><td>Frage neu, geändert oder gelöscht; Kategorie oder Unterbereich neu</td></tr>
                 <tr><td><code>js/text.js</code></td><td><code>MEASURES_TEXT</code>: Maßnahmentext je Frage-ID in drei Sprachstilen (<code>einfach</code>, <code>bghw</code>, <code>rechtlich</code>). <code>MEASURE_SOURCES</code>: Quellenverzeichnis im PDF-Anhang (<code>bghw</code> = BGHW-/DGUV-/DIN-Regelwerke, <code>rechtsquellen</code> = Gesetze und Verordnungen)</td><td>Antwort- bzw. Maßnahmentext ändert sich; Regelwerk kommt hinzu, fällt weg oder wird umbenannt</td></tr>
                 <tr><td><code>dokumentation.html</code></td><td>Abschnitt 3, Unterpunkte „Maßnahmentexte in drei Sprachstilen“ und „Quellenverzeichnis der Maßnahmentexte“ (Tabellen „Quelle | Bezug im Maßnahmenkatalog“)</td><td>Regelwerk kommt hinzu, fällt weg oder wird umbenannt</td></tr>
                 <tr><td><code>js/app.js</code></td><td><code>OPTIONAL_CATEGORIES</code>: Kategorien mit Schalter „nicht vorhanden“</td><td>Nur wenn eine solche Kategorie dazukommt oder wegfällt</td></tr>
@@ -2813,7 +2886,7 @@
                 </tr>
                 <tr>
                     <td>einstellungen.html</td>
-                    <td class="zahl">374</td>
+                    <td class="zahl">382</td>
                     <td>Konfigurierbare Server-Adresse und Zugriffsschlüssel</td>
                 </tr>
                 <tr>
@@ -2828,37 +2901,37 @@
                 </tr>
                 <tr>
                     <td>hilfe.html</td>
-                    <td class="zahl">960</td>
+                    <td class="zahl">979</td>
                     <td>Bedienungsanleitung und FAQ</td>
                 </tr>
                 <tr>
                     <td>dokumentation.html</td>
-                    <td class="zahl">3.113</td>
+                    <td class="zahl">3.187</td>
                     <td>Technische Dokumentation (diese Seite)</td>
                 </tr>
                 <tr>
                     <td>css/styles.css</td>
-                    <td class="zahl">3.058</td>
+                    <td class="zahl">3.095</td>
                     <td>Gesamtes gemeinsames Styling</td>
                 </tr>
                 <tr>
                     <td>js/app.js</td>
-                    <td class="zahl">4.706</td>
+                    <td class="zahl">4.968</td>
                     <td>Kernlogik, State-Verwaltung, Checkliste, PDF-Erzeugung, Export, Archivierung, Server-Zugriff, Hilfsfunktionen (escapeHtml, todayIsoLocal) und Service-Worker-Registrierung</td>
                 </tr>
                 <tr>
                     <td>js/audit-data.js</td>
-                    <td class="zahl">348</td>
-                    <td>Prüfkatalog: 24 Kategorien / 199 Prüfpunkte</td>
+                    <td class="zahl">362</td>
+                    <td>Prüfkatalog: 25 Kategorien / 201 Prüfpunkte</td>
                 </tr>
                 <tr>
                     <td>js/text.js</td>
-                    <td class="zahl">1.146</td>
+                    <td class="zahl">1.148</td>
                     <td>Hinterlegte Maßnahmentexte und Sprachstile</td>
                 </tr>
                 <tr>
                     <td>js/massnahmen.js</td>
-                    <td class="zahl">1.073</td>
+                    <td class="zahl">1.074</td>
                     <td>Logik der Aktionsplan-Seite</td>
                 </tr>
                 <tr>
@@ -2878,17 +2951,17 @@
                 </tr>
                 <tr>
                     <td>js/verlauf.js</td>
-                    <td class="zahl">462</td>
+                    <td class="zahl">464</td>
                     <td>Bedienlogik der Archiv-/Verlaufseite inkl. Team-Archiv (Server)</td>
                 </tr>
                 <tr>
                     <td>js/einstellungen.js</td>
-                    <td class="zahl">379</td>
+                    <td class="zahl">479</td>
                     <td>Bedienlogik der Einstellungsseite</td>
                 </tr>
                 <tr>
                     <td>js/auswertung-logik.js</td>
-                    <td class="zahl">494</td>
+                    <td class="zahl">495</td>
                     <td>Gemeinsame Auswertungs-Berechnungslogik (auswertung.html, auswertung-team.html, verlauf.html)</td>
                 </tr>
                 <tr>
@@ -2929,7 +3002,7 @@
                 <tr>
                     <td>sw.js</td>
                     <td class="zahl">202</td>
-                    <td>Service Worker, Offline-Fähigkeit, Cache-Version v1.54-15</td>
+                    <td>Service Worker, Offline-Fähigkeit, Cache-Version v1.54-18</td>
                 </tr>
                 <tr>
                     <td>manifest.json</td>
@@ -2938,12 +3011,12 @@
                 </tr>
                 <tr>
                     <td>config.php</td>
-                    <td class="zahl">130</td>
+                    <td class="zahl">139</td>
                     <td>Server: Datenordner und Zugriffsschlüssel, zentral für alle PHP-Skripte</td>
                 </tr>
                 <tr>
                     <td>pruefen.php</td>
-                    <td class="zahl">404</td>
+                    <td class="zahl">408</td>
                     <td>Server: Prüfseite für die Einrichtung (PHP, Rechte, Schutz des Datenordners, HTTPS, Schlüssel)</td>
                 </tr>
                 <tr>
@@ -2968,7 +3041,7 @@
                 </tr>
                 <tr>
                     <td>schutz.php</td>
-                    <td class="zahl">286</td>
+                    <td class="zahl">466</td>
                     <td>Missbrauchsschutz für das Team-Archiv: Bremse für Fehlversuche und Speichern, Größengrenze, Begrenzung von versionen/ mit Archiv (versionen/archiv/)</td>
                 </tr>
                 <tr>
@@ -3008,7 +3081,7 @@
                 </tr>
                 <tr>
                     <td>INSTALLATION.txt</td>
-                    <td class="zahl">10,8 KB</td>
+                    <td class="zahl">12,4 KB</td>
                     <td>Installationsanleitung für den Betrieb auf einem eigenen Server</td>
                 </tr>
                 <tr>
@@ -3038,11 +3111,11 @@
 
             <p>
                 <strong>Gesamt (eigener Code, ohne jsPDF und Schrift):</strong>
-                <span data-zahl="zeilen_gesamt">25.745</span> Zeilen
+                <span data-zahl="zeilen_gesamt">26.458</span> Zeilen
             </p>
 
             <p style="font-size:0.82rem; color:var(--ink-soft);">
-                Stand der Zeilenzahlen: <span data-zahl="zeilen_stand">29.10.2026</span>.
+                Stand der Zeilenzahlen: <span data-zahl="zeilen_stand">30.10.2026</span>.
                 Die Werte wurden aus den tatsächlich enthaltenen Dateien gezählt.
             </p>
 
@@ -3104,9 +3177,9 @@
 </footer>
 
 
-<script src="js/audit-data.js?v=1.54-15"></script>
-<script src="js/text.js?v=1.54-15"></script>
-<script src="js/app.js?v=1.54-15"></script>
+<script src="js/audit-data.js?v=1.54-18"></script>
+<script src="js/text.js?v=1.54-18"></script>
+<script src="js/app.js?v=1.54-18"></script>
 
 <!-- Quellenverzeichnis ist für diesen Dokumentstand detailliert und statisch dokumentiert. -->
 
