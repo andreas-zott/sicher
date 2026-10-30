@@ -3,8 +3,8 @@
 // ==========================================================================
 // Ab Rev. 1.52 im Design der Hilfe-Seite: Statuskacheln, Verbindungstest
 // und Eintragen des Schlüssels (gespeicherter Wert wird nicht mehr angezeigt). Gespeichert wird weiterhin nur im
-// localStorage dieses Geräts (Schlüssel 'nasBaseUrl' und 'nasApiKey' bleiben
-// aus Kompatibilitätsgründen unverändert).
+// localStorage dieses Geräts ('nasBaseUrl'); der Zugriffsschlüssel ab 1.54-16
+// geschützt (siehe nasSchluesselSpeichern in app.js).
 // ==========================================================================
 
 function initSettingsPage() {
@@ -34,6 +34,8 @@ function initSettingsPage() {
     input.value = getNasBaseUrl();
     keyInput.value = '';
     zeigeKeyZustand();
+    // Ein noch als Text gespeicherter Schluessel wird hier umgestellt
+    nasSchluesselHolen().then(() => { zeigeKeyZustand(); updateTiles(); }).catch(() => {});
     if (nameInput) nameInput.value = geraetName();
     updateTiles();
     setStatus('', '');
@@ -49,9 +51,9 @@ function initSettingsPage() {
 
     function updateTiles() {
         const base = getNasBaseUrl();
-        const key = getNasApiKey();
-        setTile('st-server', base ? base : 'gleiche Adresse wie die App', '');
-        setTile('st-key', key ? 'hinterlegt (' + key.length + ' Zeichen)' : 'nicht hinterlegt', '');
+        const info = nasSchluesselInfo();
+        setTile('st-server', base ? base + (adresseSicher(base) ? '' : ' – nicht HTTPS, wird nicht verwendet') : 'gleiche Adresse wie die App', adresseSicher(base) ? '' : 'is-alert');
+        setTile('st-key', info ? 'hinterlegt (' + info.laenge + ' Zeichen' + (info.art === 'gesperrt' ? ', geschützt)' : ', ungeschützt)') : 'nicht hinterlegt', '');
         setTile('st-version', typeof APP_REVISION !== 'undefined'
             ? 'Rev. ' + APP_REVISION + ' · Ausgabestand ' + appAusgabestand() + (typeof APP_REVISION_DATE !== 'undefined' ? ' · ' + formatDate(APP_REVISION_DATE) : '')
             : '–', '');
@@ -64,13 +66,15 @@ function initSettingsPage() {
     }
 
     function zeigeKeyZustand() {
-        const key = getNasApiKey();
-        const hinterlegt = !!key && !keyBearbeiten;
+        const info = nasSchluesselInfo();
+        const hinterlegt = !!info && !keyBearbeiten;
         keyHinterlegt.hidden = !hinterlegt;
         keyEingabe.hidden = hinterlegt;
-        btnKeyAbbrechen.hidden = !(key && keyBearbeiten);
-        if (key) {
-            keyHinterlegtText.textContent = '✓ Schlüssel hinterlegt' + (key.length > 8 ? ' · endet auf\u00a0…' + key.slice(-4) : '');
+        btnKeyAbbrechen.hidden = !(info && keyBearbeiten);
+        if (info) {
+            keyHinterlegtText.textContent = '✓ Schlüssel hinterlegt'
+                + (info.laenge > 8 && info.ende ? ' · endet auf\u00a0…' + info.ende : '')
+                + (info.art === 'klartext' ? ' · noch nicht geschützt – wird beim Öffnen über HTTPS umgestellt' : '');
         }
         if (!keyBearbeiten) {
             keyInput.value = '';
@@ -78,9 +82,20 @@ function initSettingsPage() {
         }
     }
 
-    // Schluessel fuer Speichern/Test: neu eingetragener Wert, sonst der gespeicherte
-    function wirksamerKey() {
-        return keyBearbeiten || !getNasApiKey() ? keyInput.value : getNasApiKey();
+    // Neu eingetragener Schluessel (Text) oder '' = gespeicherten verwenden
+    function neuerKey() {
+        return keyBearbeiten || !nasSchluesselInfo() ? keyInput.value : '';
+    }
+
+    // Schluessel fuer den Verbindungstest: neu eingetragener Wert (nur fuer
+    // diesen Test, nicht gespeichert) oder der gespeicherte
+    async function testSchluessel() {
+        const neu = neuerKey();
+        if (!neu) return nasSchluesselInfo() ? undefined : null;
+        if (!kryptoSchluesselMoeglich()) {
+            throw new Error('Der Zugriffsschlüssel lässt sich nur verwenden, wenn die App über HTTPS geöffnet ist.');
+        }
+        return { art: 'gesperrt', key: await nasSchluesselImportieren(neu) };
     }
 
     function setStatus(text, state) {
@@ -119,9 +134,9 @@ function initSettingsPage() {
         markDirty();
     });
 
-    btnKeyEntfernen.addEventListener('click', () => {
+    btnKeyEntfernen.addEventListener('click', async () => {
         if (!confirm('Zugriffsschlüssel auf diesem Gerät entfernen? Das Team-Archiv ist danach erst wieder nach Eintragen des Schlüssels erreichbar.')) return;
-        try { localStorage.removeItem('nasApiKey'); } catch (e) {}
+        await nasSchluesselLoeschen();
         keyBearbeiten = false;
         zeigeKeyZustand();
         updateTiles();
@@ -130,20 +145,22 @@ function initSettingsPage() {
         showToast('Schlüssel entfernt');
     });
 
-    btnSave.addEventListener('click', () => {
+    btnSave.addEventListener('click', async () => {
         const value = input.value.trim().replace(/\/+$/, '');
-        const key = wirksamerKey(); // bewusst nicht getrimmt, Schlüssel könnten führende/folgende Zeichen enthalten
+        const key = neuerKey(); // bewusst nicht getrimmt, Schlüssel könnten führende/folgende Zeichen enthalten
+        let ablage = null;
+        if (!adresseSicher(value)) {
+            setStatus('Nicht gespeichert: Die Server-Adresse muss mit https:// beginnen.', 'is-error');
+            return;
+        }
         try {
             if (value) {
                 localStorage.setItem('nasBaseUrl', value);
             } else {
                 localStorage.removeItem('nasBaseUrl');
             }
-            if (key) {
-                localStorage.setItem('nasApiKey', key);
-            } else {
-                localStorage.removeItem('nasApiKey');
-            }
+            // Leeres Feld = bisherigen Schluessel behalten (Entfernen eigens)
+            if (key) ablage = await nasSchluesselSpeichern(key);
             if (nameInput) {
                 const name = nameInput.value.trim().slice(0, 40);
                 if (name) localStorage.setItem('asicGeraetName', name); else localStorage.removeItem('asicGeraetName');
@@ -152,22 +169,23 @@ function initSettingsPage() {
             input.value = value;
             keyBearbeiten = false;
             zeigeKeyZustand();
+            keyInput.value = '';
             showToast('Einstellungen gespeichert');
             updateTiles();
-            setStatus('Gespeichert.', 'is-ok');
+            setStatus(ablage === 'gesperrt' ? 'Gespeichert. Der Schlüssel ist geschützt abgelegt und lässt sich nicht mehr auslesen.' : 'Gespeichert.', 'is-ok');
         } catch (e) {
             showToast('Speichern fehlgeschlagen: ' + (e && e.message ? e.message : 'unbekannter Fehler'), 'error');
-            setStatus('Speichern fehlgeschlagen.', 'is-error');
+            setStatus('Speichern fehlgeschlagen' + (e && e.message ? ': ' + e.message : '.'), 'is-error');
         }
     });
 
-    btnReset.addEventListener('click', () => {
+    btnReset.addEventListener('click', async () => {
         if (!confirm('Server-Adresse und Zugriffsschlüssel auf diesem Gerät zurücksetzen? Begehungen, Fotos und Archiv bleiben unverändert.')) return;
         input.value = '';
         try {
             localStorage.removeItem('nasBaseUrl');
-            localStorage.removeItem('nasApiKey');
         } catch (e) {}
+        await nasSchluesselLoeschen();
         keyBearbeiten = false;
         zeigeKeyZustand();
         updateTiles();
@@ -180,7 +198,18 @@ function initSettingsPage() {
     // (auch wenn sie noch nicht gespeichert sind). Liest und verändert nichts.
     btnTest.addEventListener('click', async () => {
         const base = input.value.trim().replace(/\/+$/, '');
-        const key = wirksamerKey();
+        if (!adresseSicher(base)) {
+            setTile('st-conn', 'unsichere Adresse', 'is-alert');
+            setStatus('Die Server-Adresse muss mit https:// beginnen.', 'is-error');
+            return;
+        }
+        let key;
+        try {
+            key = await testSchluessel();
+        } catch (e) {
+            setStatus(e.message, 'is-error');
+            return;
+        }
         btnTest.disabled = true;
         setTile('st-conn', 'wird getestet …', '');
         setStatus('Verbindung wird getestet …', '');
@@ -196,17 +225,21 @@ function initSettingsPage() {
 
 // ===== Verbindungstest (gemeinsam fuer Knopf und Diagnose) =====
 // Fragt list.php mit den uebergebenen Werten ab. Liest und veraendert nichts.
-async function pruefeServerVerbindung(base, key) {
-    const url = (base ? base + '/' : './') + 'list.php';
+// schluessel: undefined = gespeicherter, null = ohne, sonst Objekt (siehe nasFetch)
+async function pruefeServerVerbindung(base, schluessel) {
+    if (!adresseSicher(base)) {
+        return { ok: false, kachel: 'unsichere Adresse', kachelZustand: 'is-alert',
+            meldung: 'Die Server-Adresse muss mit https:// beginnen.', meldungZustand: 'is-error',
+            kurz: 'nicht geprüft – Server-Adresse ohne https://' };
+    }
     const opts = { cache: 'no-store' };
-    if (key) opts.headers = { 'X-Api-Key': key };
 
     const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
     const timer = ctrl ? setTimeout(() => ctrl.abort(), 10000) : null;
     if (ctrl) opts.signal = ctrl.signal;
 
     try {
-        const res = await fetch(url, opts);
+        const res = await nasFetch('list.php', '', opts, schluessel, base || '');
         let data = null;
         try { data = await res.json(); } catch (e) { data = null; }
 
@@ -305,12 +338,14 @@ async function erstelleDiagnoseText() {
     z('Aufgerufen über', location.origin + location.pathname.replace(/[^/]*$/, '') + ' · installierte App: ' + (installiert ? 'ja' : 'nein'));
 
     const base = getNasBaseUrl();
-    const key = getNasApiKey();
+    const info = nasSchluesselInfo();
     z('Server-Adresse', base || 'gleiche Adresse wie die App');
-    z('Zugriffsschlüssel', key ? 'hinterlegt (' + key.length + ' Zeichen, Inhalt nicht angezeigt)' : 'nicht hinterlegt');
+    z('Zugriffsschlüssel', info
+        ? 'hinterlegt (' + info.laenge + ' Zeichen, ' + (info.art === 'gesperrt' ? 'geschützt abgelegt, Anfragen unterschrieben' : 'noch als Text – wird erst über HTTPS umgestellt und verwendet') + ')'
+        : 'nicht hinterlegt');
 
     if (serverFunktionenVerfuegbar()) {
-        const r = await pruefeServerVerbindung(base, key);
+        const r = await pruefeServerVerbindung(base);
         z('Verbindungstest', r.kurz);
     } else {
         z('Verbindungstest', 'nicht möglich – App läuft auf GitHub Pages ohne eingetragene Server-Adresse');
@@ -320,7 +355,7 @@ async function erstelleDiagnoseText() {
     z('Gerätename', geraetName() || 'nicht eingetragen');
     if (serverFunktionenVerfuegbar()) {
         const offen = await sicher(async () => {
-            const res = await fetch(nasUrl('offen.php'), withNasAuthHeaders({ cache: 'no-store' }));
+            const res = await nasFetch('offen.php', '', { cache: 'no-store' });
             if (res.status === 404) return 'offen.php fehlt auf dem Server (HTTP 404)';
             if (!res.ok) return 'HTTP ' + res.status;
             const j = await res.json();

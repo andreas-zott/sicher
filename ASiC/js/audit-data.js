@@ -344,5 +344,19 @@ const AUDIT_CATEGORIES = [
             { id: "24.3", group: "Servicebereich", text: "Ist die Beleuchtung im Servicebereich ausreichend, funktionsfähig und für die dort ausgeführten Tätigkeiten und Sehaufgaben geeignet?" }
         ]
     }
+    ,
+    {
+        // Zwei freie Pruefpunkte: Text traegt der Pruefer selbst ein
+        // (state.freieTexte), Maßnahme ohne Textvorschlag.
+        id: "sonstiges",
+        name: "Sonstiges",
+        items: [
+            { id: "25.1", frei: true, text: "" },
+            { id: "25.2", frei: true, text: "" }
+        ]
+    }
 
 ];
+
+// IDs der freien Pruefpunkte (Kategorie "Sonstiges")
+const FREIE_PUNKT_IDS = AUDIT_CATEGORIES.reduce((ids, c) => ids.concat(c.items.filter(i => i.frei).map(i => i.id)), []);

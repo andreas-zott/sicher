@@ -125,7 +125,7 @@ function renderWiederkehrend() {
         if (previous.ratings[itemId] !== 'mangel') return;
         const currentRating = state.ratings[itemId];
         if (currentRating === 'mangel' || !currentRating) {
-            const found = findItemById(itemId);
+            const found = findItemById(itemId, previous);
             if (found) recurring.push({ itemId, text: found.item.text, currentRating: currentRating || 'noch nicht bewertet' });
         }
     });
@@ -198,7 +198,7 @@ function buildAuswertungCsvRows(daten) {
         Object.keys(record.ratings || {}).forEach(itemId => {
             const rating = record.ratings[itemId];
             if (!rating) return;
-            const found = findItemById(itemId);
+            const found = findItemById(itemId, record);
             rows.push([
                 record.companyInfo.marktnummer || '',
                 record.companyInfo.datum || '',

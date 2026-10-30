@@ -270,6 +270,7 @@ async function renderMeasures() {
                     </span>
 
                     <textarea
+                        ${FREIE_PUNKT_IDS.indexOf(measure.itemId) !== -1 ? 'placeholder="Maßnahme frei eintragen …"' : ''}
                         ${aktionAttr('input', 'updateMeasureField', measure.id, 'description', '$value')}>${escapeHtml(measure.description || '')}</textarea>
 
 

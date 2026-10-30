@@ -286,7 +286,8 @@ function berechneEinzelfragenSchwachstellen(daten, kategorieName) {
             const eigeneKategorie = found ? found.category.name : '(Kategorie nicht mehr im aktuellen Katalog)';
             if (eigeneKategorie !== kategorieName) return;
 
-            const frageText = found ? found.item.text : itemId;
+            // Freie Pruefpunkte bedeuten je Begehung etwas anderes: zusammengefasst
+            const frageText = found ? (found.item.frei ? 'Freie Prüfpunkte (Sonstiges)' : found.item.text) : itemId;
             if (!counts[frageText]) counts[frageText] = { mangel: 0, total: 0 };
             counts[frageText].total++;
             if (rating === 'mangel') counts[frageText].mangel++;

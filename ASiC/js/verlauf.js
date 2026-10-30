@@ -103,7 +103,8 @@ async function onArchiveRestore(id) {
             measures: JSON.parse(JSON.stringify(record.measures || [])),
             signatures: { ...(record.signatures || {}) },
             notApplicable: { ...(record.notApplicable || {}) },
-            subgroupNotApplicable: { ...(record.subgroupNotApplicable || {}) }
+            subgroupNotApplicable: { ...(record.subgroupNotApplicable || {}) },
+            freieTexte: { ...(record.freieTexte || {}) }
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(restoredState));
 
@@ -368,7 +369,8 @@ async function onTeamArchiveRestore(fileName) {
             measures: JSON.parse(JSON.stringify(record.measures || [])),
             signatures: { ...(record.signatures || {}) },
             notApplicable: { ...(record.notApplicable || {}) },
-            subgroupNotApplicable: { ...(record.subgroupNotApplicable || {}) }
+            subgroupNotApplicable: { ...(record.subgroupNotApplicable || {}) },
+            freieTexte: { ...(record.freieTexte || {}) }
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(restoredState));
         merkeMarktContainer(record);
