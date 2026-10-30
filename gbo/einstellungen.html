@@ -8,7 +8,7 @@
 <!-- Sicherheitsrichtlinie: nur eigene Skripte, keine eingebetteten
      Skripte oder Inline-Handler. connect-src erlaubt https:, damit ein Team-Archiv
      auf einem anderen Server (Einstellungen) erreichbar bleibt. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https:; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https: ipc: http://ipc.localhost; worker-src 'self'; manifest-src 'self'; object-src 'none'; frame-src 'self' blob:; base-uri 'self'; form-action 'self'">
 <meta name="referrer" content="same-origin">
 
 <meta
@@ -22,12 +22,12 @@
 
 <link
     rel="stylesheet"
-    href="css/styles.css?v=2.2.0-2"
+    href="css/styles.css?v=2.2.0-9"
 >
 
 <script src="zugang-config.js"></script>
 
-<script src="js/access-gate.js?v=2.2.0-2"></script>
+<script src="js/access-gate.js?v=2.2.0-9"></script>
 
 <link
     rel="manifest"
@@ -170,16 +170,24 @@
             <div class="s-field">
                 <label for="nas-base-url">Server-Adresse <span class="s-optional">optional</span></label>
                 <input type="url" id="nas-base-url" inputmode="url" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="leer lassen = gleiche Adresse wie die App">
-                <p class="s-hint">Nur nötig, wenn die App über eine andere Adresse geöffnet wird als der Server. Ohne abschließenden Schrägstrich, z. B. <code>https://server.firma.de/asic</code>.</p>
+                <p class="s-hint">Nur nötig, wenn die App über eine andere Adresse geöffnet wird als der Server. Nur <code>https://</code>-Adressen, ohne abschließenden Schrägstrich, z. B. <code>https://server.firma.de/asic</code>.</p>
             </div>
 
             <div class="s-field">
                 <label for="nas-api-key">Zugriffsschlüssel <span class="s-optional">optional</span></label>
-                <div class="s-key">
-                    <input type="password" id="nas-api-key" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="nur nötig, wenn der Server einen Schlüssel verlangt">
-                    <button type="button" class="s-key-toggle" id="btn-toggle-key" aria-label="Schlüssel anzeigen" aria-pressed="false">👁️</button>
+                <div class="s-key-hinterlegt" id="key-hinterlegt" hidden>
+                    <span class="s-key-info" id="key-hinterlegt-text">✓ Schlüssel hinterlegt</span>
+                    <span class="s-key-aktionen">
+                        <button class="btn btn-secondary" id="btn-key-aendern" type="button">Schlüssel ändern</button>
+                        <button class="btn btn-secondary" id="btn-key-entfernen" type="button">Entfernen</button>
+                    </span>
                 </div>
-                <p class="s-hint">Den Wert erhalten Sie von der EDV. Er wird bei jeder Server-Anfrage mitgeschickt.</p>
+                <div class="s-key" id="key-eingabe">
+                    <input type="password" id="nas-api-key" autocomplete="new-password" autocapitalize="off" spellcheck="false" placeholder="nur nötig, wenn der Server einen Schlüssel verlangt">
+                    <button type="button" class="s-key-toggle" id="btn-toggle-key" aria-label="Eingabe anzeigen" aria-pressed="false">👁️</button>
+                </div>
+                <button class="btn btn-secondary s-key-abbrechen" id="btn-key-abbrechen" type="button" hidden>Abbrechen – bisherigen Schlüssel behalten</button>
+                <p class="s-hint">Den Wert erhalten Sie von der EDV. Er wird bei jeder Server-Anfrage mitgeschickt. Nach dem Speichern wird er aus Sicherheitsgründen nicht mehr angezeigt.</p>
             </div>
 
             <div class="s-field">
@@ -248,7 +256,7 @@
                 <details class="h-more">
                     <summary>Mehr Details</summary>
                     <div>
-                        <p>Der Schlüssel muss exakt übereinstimmen – auch Groß-/Kleinschreibung und Leerzeichen zählen. Mit dem Auge-Symbol lässt er sich zur Kontrolle anzeigen. Ist auf dem Server kein Schlüssel eingerichtet, hat dieses Feld keine Wirkung.</p>
+                        <p>Der Schlüssel muss exakt übereinstimmen – auch Groß-/Kleinschreibung und Leerzeichen zählen. Beim Eintippen lässt er sich mit dem Auge-Symbol zur Kontrolle anzeigen; nach dem Speichern zeigt die App nur noch die letzten vier Zeichen. Bei Zweifeln „Schlüssel ändern“ wählen und den Wert neu eintragen. Ist auf dem Server kein Schlüssel eingerichtet, hat dieses Feld keine Wirkung.</p>
                     </div>
                 </details>
             </div>
@@ -360,17 +368,17 @@
 </footer>
 
 
-<script src="js/audit-data.js?v=2.2.0-2"></script>
+<script src="js/audit-data.js?v=2.2.0-9"></script>
 
-<script src="js/text.js?v=2.2.0-2"></script>
+<script src="js/text.js?v=2.2.0-9"></script>
 
-<script src="js/photos-store.js?v=2.2.0-2"></script>
+<script src="js/photos-store.js?v=2.2.0-9"></script>
 
-<script src="js/archive-store.js?v=2.2.0-2"></script>
+<script src="js/archive-store.js?v=2.2.0-9"></script>
 
-<script src="js/app.js?v=2.2.0-2"></script>
+<script src="js/app.js?v=2.2.0-9"></script>
 
-<script src="js/einstellungen.js?v=2.2.0-2"></script>
+<script src="js/einstellungen.js?v=2.2.0-9"></script>
 
 
 </body>

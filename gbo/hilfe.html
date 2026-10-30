@@ -6,14 +6,14 @@
 <!-- Sicherheitsrichtlinie: nur eigene Skripte, keine eingebetteten
      Skripte oder Inline-Handler. connect-src erlaubt https:, damit ein Team-Archiv
      auf einem anderen Server (Einstellungen) erreichbar bleibt. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https:; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https: ipc: http://ipc.localhost; worker-src 'self'; manifest-src 'self'; object-src 'none'; frame-src 'self' blob:; base-uri 'self'; form-action 'self'">
 <meta name="referrer" content="same-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Hilfe & FAQ – ASiC Handel</title>
 
-<link rel="stylesheet" href="css/styles.css?v=2.2.0-2">
+<link rel="stylesheet" href="css/styles.css?v=2.2.0-9">
 <script src="zugang-config.js"></script>
-<script src="js/access-gate.js?v=2.2.0-2"></script>
+<script src="js/access-gate.js?v=2.2.0-9"></script>
 
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -228,7 +228,7 @@
 
             <li class="h-step">
                 <span class="h-step-title">Fragen bewerten</span>
-                <p>Alle <span data-zahl="fragen">199</span> Fragen in <span data-zahl="kategorien">24</span> Kategorien mit <strong>OK</strong>, <strong>!</strong> (Mangel) oder <strong>N.V.</strong> (nicht vorhanden) bewerten. Bei einem Mangel können Sie die Situation kurz beschreiben.</p>
+                <p>Alle <span data-zahl="fragen">201</span> Fragen in <span data-zahl="kategorien">25</span> Kategorien mit <strong>OK</strong>, <strong>!</strong> (Mangel) oder <strong>N.V.</strong> (nicht vorhanden) bewerten. Bei einem Mangel können Sie die Situation kurz beschreiben.</p>
                 <span class="h-where">Prüfkatalog</span>
             </li>
 
@@ -291,7 +291,7 @@
             </div>
         </details>
 
-        <details class="h-item" id="q-sprachstil" data-unit data-kw="sprachstil einfach bghw rechtlich maßnahmentext formulierung">
+        <details class="h-item" id="q-sprachstil" data-unit data-kw="sprachstil einfach bghw rechtlich maßnahmentext formulierung quellen quellenverzeichnis fundstellen anhang">
             <summary>Wie wechsle ich den Sprachstil der Maßnahmentexte?</summary>
             <div class="h-body">
                 <p class="h-short">Unten auf der Seite Prüfkatalog, zwischen den Bereichen <strong>Datei</strong> und <strong>Exportieren</strong>, wählen Sie <strong>Einfach</strong>, <strong>BGHW</strong> oder <strong>Rechtlich</strong>.</p>
@@ -303,7 +303,7 @@
                             <li><strong>BGHW:</strong> fachlich orientierte Formulierungen</li>
                             <li><strong>Rechtlich:</strong> ausführlichere Formulierungen mit Verweisen auf Vorschriften</li>
                         </ul>
-                        <p>Der gewählte Stil gilt für die angezeigten Maßnahmentexte und für das PDF.</p>
+                        <p>Der gewählte Stil gilt für die angezeigten Maßnahmentexte und für das PDF. Am Ende des PDF stehen die Quellen: bei <strong>BGHW</strong> und <strong>Rechtlich</strong> das vollständige Quellenverzeichnis, bei <strong>Einfach</strong> nur die Quellen zu den Maßnahmen dieser Begehung, jeweils unter der Nummer der Maßnahme.</p>
                     </div>
                 </details>
             </div>
@@ -344,6 +344,23 @@
                 </details>
             </div>
         </details>
+
+        <details class="h-item" id="q-sonstiges" data-unit data-kw="sonstiges frei freie prüfpunkte eigener prüfpunkt feld text eigene frage">
+            <summary>Wie funktioniert die Kategorie „Sonstiges“?</summary>
+            <div class="h-body">
+                <p class="h-short">Ganz unten im Prüfkatalog gibt es zwei freie Prüfpunkte (25.1 und 25.2) für Feststellungen, die in keiner anderen Kategorie vorkommen. Den Text tragen Sie selbst ein.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <ul>
+                            <li>Text in das Feld schreiben, z. B. „Kinderspielecke: Polster beschädigt“. Erst dann lassen sich <strong>OK</strong>, <strong>!</strong> und <strong>N.V.</strong> wählen.</li>
+                            <li>Ein leeres Feld zählt nicht als offen und erscheint nicht im PDF.</li>
+                            <li>Bei <strong>!</strong> landet der Punkt wie jeder andere im Aktionsplan, mit Ihrem Text als Prüfpunkt. Das Feld „Maßnahme“ bleibt leer zum freien Ausfüllen; es gibt keinen Textvorschlag und keine Quellenangabe.</li>
+                            <li>Der Schalter <strong>Keine sonstigen Feststellungen</strong> setzt beide Punkte auf N.V.</li>
+                            <li>Bei einer Wiederholungsbegehung werden die eingetragenen Texte übernommen.</li>
+                        </ul>
+                    </div>
+                </details>
 
         <details class="h-item" id="q-mehrere" data-unit data-kw="mehrere märkte gleichzeitig parallel zurücksetzen neuer markt">
             <summary>Kann ich mehrere Märkte gleichzeitig bearbeiten?</summary>
@@ -445,15 +462,16 @@
             </div>
         </details>
 
-        <details class="h-item" id="q-pdf-aktion" data-unit data-kw="drucken pdf teilen mail vorbereiten e-mail versenden download">
+        <details class="h-item" id="q-pdf-aktion" data-unit data-kw="drucken pdf teilen mail vorbereiten e-mail versenden download desktop windows tauri outlook eml anhang">
             <summary>Was machen Drucken, PDF teilen und Mail vorbereiten?</summary>
             <div class="h-body">
                 <ul>
                     <li><strong>Drucken</strong> – erzeugt das PDF und öffnet es in einem neuen Tab</li>
-                    <li><strong>PDF teilen</strong> – öffnet das Teilen-Menü Ihres Geräts</li>
+                    <li><strong>PDF teilen</strong> – öffnet das Teilen-Menü Ihres Geräts. Wählen Sie dort Outlook, steht der Betreff (z. B. „Begehung Markt 1234“) automatisch in der Betreffzeile und der Mail-Text darunter.</li>
                     <li><strong>Mail vorbereiten</strong> – öffnet eine Mail mit vorausgefülltem Text (Markt, Prüfer, Betreff)</li>
                 </ul>
                 <p>Unterstützt Ihr Gerät das Teilen nicht, lädt die App das PDF stattdessen herunter.</p>
+                <p><strong>Desktop-App unter Windows:</strong> Dort öffnet <strong>Drucken</strong> direkt den Druckdialog, und <strong>PDF teilen</strong> gibt es nicht. <strong>Mail mit PDF vorbereiten</strong> speichert das PDF im Ordner <strong>Downloads\ASiC Handel</strong>, zeigt es im Explorer markiert an und öffnet die Mail mit Betreff und Text – das PDF einfach in die Mail ziehen. Auch alle anderen Exporte (PDF, JSON, CSV, Gesamtsicherung) landen in der Desktop-App in diesem Ordner. Das gilt auch für die Gefährdungsbeurteilung.</p>
             </div>
         </details>
 
@@ -574,7 +592,7 @@
                             <li><strong>Vom Server laden</strong> zeigt alle Märkte im Team-Archiv, neueste zuerst, mit Suche nach Marktnummer, Ort oder Datum. Ist auf dem Gerät eine Begehung geöffnet, fragt die App vorher nach und bietet an, sie zuerst im <strong>Verlauf</strong> zu archivieren. Die Fotos der Begehung auf dem Gerät werden beim Laden entfernt; enthält der Datensatz eine Gefährdungsbeurteilung, ersetzt sie die auf dem Gerät.</li>
                             <li>Speichern Sie für denselben Markt am selben Tag erneut, wird die Datei ersetzt. Der vorherige Stand liegt als Kopie im Ordner <code>versionen</code> auf dem Server (für Administratoren).</li>
                             <li>Läuft die App unter einer anderen Adresse (z. B. GitHub Pages), tragen Sie unter <strong>Einstellungen</strong> eine externe Server-Adresse ein. Der Server muss Anfragen von der App-Adresse ausdrücklich erlauben (CORS).</li>
-                            <li>Ein <strong>Zugriffsschlüssel</strong> wird bei jeder Server-Anfrage mitgeschickt. Er wirkt nur, wenn auf dem Server derselbe Schlüssel eingerichtet ist.</li>
+                            <li>Mit dem <strong>Zugriffsschlüssel</strong> unterschreibt die App jede Server-Anfrage. Er wird geschützt auf dem Gerät abgelegt, lässt sich danach nicht mehr anzeigen und geht nicht über das Netz. Er wirkt nur, wenn auf dem Server derselbe Schlüssel eingerichtet ist.</li>
                         </ul>
                     </div>
                 </details>
@@ -622,7 +640,7 @@
                     <summary>Mehr Details</summary>
                     <div>
                         <ul>
-                            <li>Betriebsdaten und die als „nicht vorhanden“ geschalteten Bereiche werden übernommen, das Datum wird auf heute gesetzt.</li>
+                            <li>Betriebsdaten, die als „nicht vorhanden“ geschalteten Bereiche und die Texte unter „Sonstiges“ werden übernommen, das Datum wird auf heute gesetzt.</li>
                             <li>Alle Maßnahmen, die in der Vorbegehung nicht erledigt waren, werden als <strong>Mangel</strong> vorbelegt und mit „Offen aus Vorbegehung vom …“ gekennzeichnet – im Prüfkatalog, im Aktionsplan und im PDF.</li>
                             <li>Ist ein Mangel inzwischen behoben, setzen Sie den Prüfpunkt einfach auf <strong>OK</strong>; die Maßnahme entfällt dann.</li>
                             <li>Unterschriften und Fotos werden nicht übernommen. Der aktuell laufende, noch nicht archivierte Stand auf dem Gerät wird ersetzt – vorher archivieren, falls er noch gebraucht wird.</li>
@@ -789,7 +807,7 @@
             <div class="h-body">
                 <dl class="h-ps">
                     <dt>Ursache</dt>
-                    <dd>Der Schalter „nicht vorhanden“ der Kategorie ist eingeschaltet (Kundenaufzug, Lastenaufzug, Barrierefreies WC, Praktikanten, CO2-Kühleinrichtungen, Flüssiggasflaschen). Bei Flüssiggas und Beleuchtung kann auch der Schalter eines Unterbereichs aktiv sein.</dd>
+                    <dd>Der Schalter „nicht vorhanden“ der Kategorie ist eingeschaltet (Kundenaufzug, Lastenaufzug, Barrierefreies WC, Praktikanten, CO2-Kühleinrichtungen, Flüssiggasflaschen, Sonstiges). Bei Flüssiggas und Beleuchtung kann auch der Schalter eines Unterbereichs aktiv sein.</dd>
                     <dt>Lösung</dt>
                     <dd>Den Schalter ausschalten. Danach lassen sich die Fragen wieder bewerten.</dd>
                 </dl>
@@ -969,11 +987,11 @@
 </footer>
 
 
-<script src="js/audit-data.js?v=2.2.0-2"></script>
-<script src="js/text.js?v=2.2.0-2"></script>
-<script src="js/app.js?v=2.2.0-2"></script>
+<script src="js/audit-data.js?v=2.2.0-9"></script>
+<script src="js/text.js?v=2.2.0-9"></script>
+<script src="js/app.js?v=2.2.0-9"></script>
 
-<script src="js/hilfe-suche.js?v=2.2.0-2"></script>
+<script src="js/hilfe-suche.js?v=2.2.0-9"></script>
 
 </body>
 </html>

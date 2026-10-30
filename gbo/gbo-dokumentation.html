@@ -5,13 +5,13 @@
 <!-- Sicherheitsrichtlinie: nur eigene Skripte, keine eingebetteten Skripte oder
      Inline-Handler. connect-src erlaubt https:, damit ein Team-Archiv auf einem
      anderen Server (Einstellungen) erreichbar bleibt. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https:; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https: ipc: http://ipc.localhost; worker-src 'self'; manifest-src 'self'; object-src 'none'; frame-src 'self' blob:; base-uri 'self'; form-action 'self'">
 <meta name="referrer" content="same-origin">
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <title>Technische Dokumentation GBO – ASiC Handel</title>
-<link href="css/styles.css?v=2.2.0-2" rel="stylesheet"/>
+<link href="css/styles.css?v=2.2.0-9" rel="stylesheet"/>
 <script src="zugang-config.js"></script>
-<script src="js/access-gate.js?v=2.2.0-2"></script>
+<script src="js/access-gate.js?v=2.2.0-9"></script>
 <style>
 /* Kopfbereich */
 .doku-hero{background:linear-gradient(135deg,#294d68 0%,#416b88 100%);border-radius:var(--radius);padding:1.75rem 1.5rem;color:#fff;margin-bottom:1.5rem;box-shadow:var(--shadow)}
@@ -113,7 +113,7 @@
       <tr><td>Speicherprüfung</td><td><code>js/storage-check.js</code> prüft vor dem Speichern eines Fotos den verfügbaren Platz und gibt Warnungen aus (Abschnitt 8).</td></tr>
       <tr><td>Begehungs-Teilstand</td><td>Daten des Prüfkatalogs. Bleibt von der GBO getrennt; eine neue Begehung setzt die GBO nicht zurück.</td></tr>
       <tr><td>ASiC-Marktcontainer</td><td>Fasst beide Teilstände für die gemeinsame Sicherung bzw. Server-Speicherung zusammen, ohne sie inhaltlich zu vermischen. Formatversion 2.</td></tr>
-      <tr><td>Server / NAS</td><td>Beide Bereiche verwenden dieselbe in den Einstellungen hinterlegte Server-Basis-Adresse und denselben optionalen Zugriffsschlüssel.</td></tr>
+      <tr><td>Server / NAS</td><td>Beide Bereiche verwenden dieselbe in den Einstellungen hinterlegte Server-Basis-Adresse und denselben optionalen Zugriffsschlüssel; die Anfragen werden damit unterschrieben, der Schlüssel selbst geht nicht über das Netz.</td></tr>
     </table></div>
     <div class="doku-box"><div class="doku-box-title">Datenstand</div><span data-zahl="gbo_fragen">1054</span> GBO-Fragen mit <span data-zahl="gbo_eindeutig">1054</span> eindeutigen Fragen-IDs in <span data-zahl="gbo_module">92</span> Modulen. Die Zahlen werden aus der ausgelieferten Datendatei <code>js/gbo-data.js</code> gelesen. Das ist der Rohbestand; <code>js/gbo-struktur.js</code> baut ihn beim Laden zu 974 Fragen um (287 Kern, 687 Vertiefung, Abschnitt 2).</div>
   </div>
@@ -536,6 +536,6 @@
   <div class="app-footer-links"><a href="gbo.html">Gefährdungsbeurteilung</a><a href="gbo-hilfe.html">FAQ GBO</a><a href="gbo-dokumentation.html">Technische Dokumentation GBO</a><a href="hilfe.html">FAQ Begehung</a></div>
   <div class="app-footer-meta"><div>Rev. 2.2.0 · Stand 25.10.2026</div><div>© <span class="js-current-year">2026</span> Andreas Zott – Alle Rechte vorbehalten</div></div>
 </footer>
-<script src="js/seiten-jahr.js?v=2.2.0-2"></script>
+<script src="js/seiten-jahr.js?v=2.2.0-9"></script>
 </body>
 </html>
