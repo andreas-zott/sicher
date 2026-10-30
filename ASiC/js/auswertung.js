@@ -289,7 +289,7 @@ async function shareAuswertungCsv() {
             const file = new File([blob], filename, { type: 'text/csv' });
             if (navigator.canShare({ files: [file] })) {
                 try {
-                    await navigator.share({ files: [file], title: 'ASiC Handel – Rohdaten-Export', text });
+                    await navigator.share({ files: [file], title: 'ASiC Handel – Rohdaten-Export', text: teilenText('ASiC Handel – Rohdaten-Export', text) });
                     showToast('CSV geteilt');
                     return;
                 } catch (err) {
@@ -647,7 +647,7 @@ async function shareAuswertungPdf() {
             const file = new File([blob], filename, { type: 'application/pdf' });
             if (navigator.canShare({ files: [file] })) {
                 try {
-                    await navigator.share({ files: [file], title: 'ASiC Handel – Gesamtauswertung', text });
+                    await navigator.share({ files: [file], title: 'ASiC Handel – Gesamtauswertung', text: teilenText('ASiC Handel – Gesamtauswertung', text) });
                     showToast('PDF geteilt');
                     return;
                 } catch (err) {

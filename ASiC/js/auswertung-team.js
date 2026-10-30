@@ -265,7 +265,7 @@ async function shareTeamAuswertungCsv() {
             const file = new File([blob], filename, { type: 'text/csv' });
             if (navigator.canShare({ files: [file] })) {
                 try {
-                    await navigator.share({ files: [file], title: 'ASiC Handel – Team-Rohdaten-Export', text });
+                    await navigator.share({ files: [file], title: 'ASiC Handel – Team-Rohdaten-Export', text: teilenText('ASiC Handel – Team-Rohdaten-Export', text) });
                     showToast('CSV geteilt');
                     return;
                 } catch (err) {
@@ -324,7 +324,7 @@ async function shareTeamAuswertungPdf() {
         if (navigator.canShare && typeof File !== 'undefined') {
             const file = new File([blob], filename, { type: 'application/pdf' });
             if (navigator.canShare({ files: [file] })) {
-                await navigator.share({ files: [file], title: 'ASiC Handel – Team-Gesamtauswertung', text });
+                await navigator.share({ files: [file], title: 'ASiC Handel – Team-Gesamtauswertung', text: teilenText('ASiC Handel – Team-Gesamtauswertung', text) });
                 showToast('PDF geteilt');
                 return;
             }

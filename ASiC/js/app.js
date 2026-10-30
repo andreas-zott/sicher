@@ -487,7 +487,14 @@ function buildShareEmailSubject(mode) {
     const zusatz = mode === 'massnahmen' ? 'Maßnahmenplan – '
         : mode === 'fotos' ? 'Fotodokumentation – '
         : '';
-    return `${zusatz}Arbeitssicherheitsbegehung Markt ${markt}`;
+    return `${zusatz}Begehung Markt ${markt}`;
+}
+
+// Text fuer das Teilen-Menue (navigator.share): Es gibt dort kein eigenes
+// Betreff-Feld. Outlook uebernimmt die erste Zeile des Textes als Betreff,
+// deshalb steht der Betreff in der ersten Zeile, danach der Mail-Text.
+function teilenText(betreff, text) {
+    return betreff + '\n\n' + text;
 }
 
 function buildShareEmailText(mode) {
@@ -1796,7 +1803,7 @@ async function sharePdfDoc(doc, filename, shareTitle, mode) {
                     await navigator.share({
                         files: [file],
                         title: shareTitle,
-                        text: buildShareEmailText(mode)
+                        text: teilenText(buildShareEmailSubject(mode), buildShareEmailText(mode))
                     });
                     showToast('PDF geteilt');
                     return;
@@ -4164,7 +4171,7 @@ async function shareJson() {
             const file = new File([blob], filename, { type: 'application/json' });
             if (navigator.canShare({ files: [file] })) {
                 try {
-                    await navigator.share({ files: [file], title: 'ASiC Handel – Begehungsdaten (JSON)', text });
+                    await navigator.share({ files: [file], title: 'ASiC Handel – Begehungsdaten (JSON)', text: teilenText('Begehungsdaten Markt ' + markt, text) });
                     showToast('JSON geteilt');
                     return;
                 } catch (err) {
