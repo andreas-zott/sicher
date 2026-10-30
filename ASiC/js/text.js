@@ -18,7 +18,7 @@
 // - DGUV Vorschrift 25 "Überfallprävention" und DGUV Regel 108-010
 // - DGUV Vorschrift 1, 2, 3, 68 sowie DGUV Informationen 204-020/204-022,
 //   208-016, 208-043, 208-061
-// - DGUV Regel 100-500 Kapitel 2.35 (Kälteanlagen), soweit einschlägig
+// - BetrSichV und DIN EN 378 (Kälteanlagen). DGUV Regel 100-500 Kapitel 2.35 ist laut DGUV seit 04/2023 zurückgezogen
 // - ASR A1.2, A1.3, A1.5, A1.7, A1.8, A2.1, A2.2, A2.3, A3.4, A4.1, A4.2, A4.3
 // - ArbSchG, ArbStättV, BetrSichV, GefStoffV, ArbMedVV, ArbZG, JArbSchG,
 //   SGB VII und SGB IX sowie einschlägige TRBS/TRGS
@@ -48,7 +48,7 @@ const MEASURE_SOURCES = {
         'DGUV Information 204-022 – Erste-Hilfe im Betrieb',
         'DGUV Information 208-016 – Handlungsanleitung für den Umgang mit Leitern und Tritten',
         'DGUV Information 208-061 – Lagereinrichtungen und Ladungsträger',
-        'DGUV Regel 100-500 Kapitel 2.35 – Betreiben von Kälteanlagen, Wärmepumpen und Kühleinrichtungen',
+        'DIN EN 378 – Kälteanlagen und Wärmepumpen, sicherheitstechnische und umweltrelevante Anforderungen',
         'TRBS 3121 – Betrieb von Aufzugsanlagen',
         'DIN 14406-4 – Tragbare Feuerlöscher, Instandhaltung',
         'DIN EN 15635 – Ortsfeste Regalsysteme aus Stahl, Nutzung und Instandhaltung',
@@ -304,13 +304,13 @@ const MEASURES_TEXT = {
         },
         "6.2": {
             einfach: 'Prüfen Sie, ob sich die Notentriegelung leicht öffnen lässt.',
-            bghw: 'Prüfen Sie die Notentriegelung an Kühlanlagen gemäß DGUV Regel 100-500 Kapitel 2.35 (Betreiben von Kälteanlagen, Wärmepumpen und Kühleinrichtungen) und der DGUV Regel 108-601 regelmäßig auf Funktion.',
-            rechtlich: 'Die Notentriegelung ist regelmäßig auf Vorhandensein und Funktionsfähigkeit zu prüfen (vgl. DGUV Regel 100-500 Kapitel 2.35 (Betreiben von Kälteanlagen, Wärmepumpen und Kühleinrichtungen)). Die Funktionsprüfung ist in die regelmäßige technische Prüfung der Kälteanlage einzubeziehen und zu dokumentieren.'
+            bghw: 'Prüfen Sie die Notentriegelung an Kühlanlagen gemäß BetrSichV §§ 6, 10 und 14 sowie DIN EN 378 und der DGUV Regel 108-601 regelmäßig auf Funktion.',
+            rechtlich: 'Die Notentriegelung ist regelmäßig auf Vorhandensein und Funktionsfähigkeit zu prüfen (vgl. BetrSichV §§ 6, 10 und 14 sowie DIN EN 378). Die Funktionsprüfung ist in die regelmäßige technische Prüfung der Kälteanlage einzubeziehen und zu dokumentieren.'
         },
         "6.3": {
             einfach: 'Stellen Sie keine Kisten oder Waren vor die Gas-Sensoren.',
-            bghw: 'Halten Sie Gassensoren der Kälteanlage (z. B. CO2) nach Herstellerangaben, DGUV Regel 100-500 Kapitel 2.35 (Betreiben von Kälteanlagen, Wärmepumpen und Kühleinrichtungen) und der DGUV Regel 108-601 frei von Verstellungen, damit die Warnfunktion jederzeit gewährleistet ist.',
-            rechtlich: 'Sensoren der Gaswarnanlage dürfen nicht durch Material oder Gegenstände verstellt werden, damit die Funktionsfähigkeit sichergestellt ist. Alarmstufen und Prüfumfang richten sich nach Herstellerangaben und Anlagenkonzept (vgl. DGUV Regel 100-500 Kapitel 2.35 (Betreiben von Kälteanlagen, Wärmepumpen und Kühleinrichtungen)); die Sensoren sind regelmäßig auf Funktion und freie Zugänglichkeit zu prüfen.'
+            bghw: 'Halten Sie Gassensoren der Kälteanlage (z. B. CO2) nach Herstellerangaben, BetrSichV §§ 6, 10 und 14 sowie DIN EN 378 und der DGUV Regel 108-601 frei von Verstellungen, damit die Warnfunktion jederzeit gewährleistet ist.',
+            rechtlich: 'Sensoren der Gaswarnanlage dürfen nicht durch Material oder Gegenstände verstellt werden, damit die Funktionsfähigkeit sichergestellt ist. Alarmstufen und Prüfumfang richten sich nach Herstellerangaben und Anlagenkonzept (vgl. BetrSichV §§ 6, 10 und 14 sowie DIN EN 378); die Sensoren sind regelmäßig auf Funktion und freie Zugänglichkeit zu prüfen.'
         },
         "6.4": {
             einfach: 'Prüfen Sie, ob die Beleuchtung im Kühlbereich einwandfrei funktioniert.',
@@ -319,8 +319,8 @@ const MEASURES_TEXT = {
         },
         "6.5": {
             einfach: 'Kontrollieren Sie Alarmleuchten, Kennzeichnungen und Türen der Kühlanlage regelmäßig.',
-            bghw: 'Kontrollieren Sie alle Sicherheitsvorrichtungen (Alarmleuchten, Kennzeichnungen, Kühlhaustüren) gemäß DGUV Regel 100-500 Kapitel 2.35 (Betreiben von Kälteanlagen, Wärmepumpen und Kühleinrichtungen) und der DGUV Regel 108-601 auf Funktionsfähigkeit.',
-            rechtlich: 'Sämtliche Sicherheitsvorrichtungen (Alarmleuchten, Kennzeichnungen, Kühlhaustüren) sind auf Funktionsfähigkeit zu prüfen (vgl. DGUV Regel 100-500 Kapitel 2.35 (Betreiben von Kälteanlagen, Wärmepumpen und Kühleinrichtungen)). Die Prüfung ist in die wiederkehrende Anlagenprüfung einzubeziehen und zu dokumentieren.'
+            bghw: 'Kontrollieren Sie alle Sicherheitsvorrichtungen (Alarmleuchten, Kennzeichnungen, Kühlhaustüren) gemäß BetrSichV §§ 6, 10 und 14 sowie DIN EN 378 und der DGUV Regel 108-601 auf Funktionsfähigkeit.',
+            rechtlich: 'Sämtliche Sicherheitsvorrichtungen (Alarmleuchten, Kennzeichnungen, Kühlhaustüren) sind auf Funktionsfähigkeit zu prüfen (vgl. BetrSichV §§ 6, 10 und 14 sowie DIN EN 378). Die Prüfung ist in die wiederkehrende Anlagenprüfung einzubeziehen und zu dokumentieren.'
         }
     },
     "Kühlhaus": {        "7.1": {
@@ -330,8 +330,8 @@ const MEASURES_TEXT = {
         },
         "7.2": {
             einfach: 'Prüfen Sie, ob sich die Notentriegelung im Kühlhaus leicht öffnen lässt.',
-            bghw: 'Prüfen Sie die Notentriegelung im Kühlhaus gemäß DGUV Regel 100-500 Kapitel 2.35 (Betreiben von Kälteanlagen, Wärmepumpen und Kühleinrichtungen) und der DGUV Regel 108-601 regelmäßig auf Funktion.',
-            rechtlich: 'Die Notentriegelung im Kühlhaus ist regelmäßig auf Vorhandensein und Funktionsfähigkeit zu prüfen und in die regelmäßige technische Prüfung einzubeziehen (vgl. DGUV Regel 100-500 Kapitel 2.35 (Betreiben von Kälteanlagen, Wärmepumpen und Kühleinrichtungen)).'
+            bghw: 'Prüfen Sie die Notentriegelung im Kühlhaus gemäß BetrSichV §§ 6, 10 und 14 sowie DIN EN 378 und der DGUV Regel 108-601 regelmäßig auf Funktion.',
+            rechtlich: 'Die Notentriegelung im Kühlhaus ist regelmäßig auf Vorhandensein und Funktionsfähigkeit zu prüfen und in die regelmäßige technische Prüfung einzubeziehen (vgl. BetrSichV §§ 6, 10 und 14 sowie DIN EN 378).'
         },
         "7.3": {
             einfach: 'Kennzeichnen Sie die Innenseite der Kühlhaustüren mit dem Rettungswegschild.',
@@ -345,8 +345,8 @@ const MEASURES_TEXT = {
         },
         "7.5": {
             einfach: 'Prüfen Sie, ob die Notruf-Funktion im Kühlhaus (falls vorhanden) funktioniert und unbeschädigt ist.',
-            bghw: 'Prüfen Sie eine vorhandene Notruf-Funktion im Kühlhaus gemäß DGUV Regel 100-500 Kapitel 2.35 (Betreiben von Kälteanlagen, Wärmepumpen und Kühleinrichtungen) und der DGUV Regel 108-601 regelmäßig auf Funktionsfähigkeit.',
-            rechtlich: 'Die Notruf-Funktion im Kühlhaus ist, sofern vorhanden, regelmäßig auf Funktionsfähigkeit und Unversehrtheit zu prüfen und in die regelmäßige Anlagenprüfung einzubeziehen (vgl. DGUV Regel 100-500 Kapitel 2.35 (Betreiben von Kälteanlagen, Wärmepumpen und Kühleinrichtungen)).'
+            bghw: 'Prüfen Sie eine vorhandene Notruf-Funktion im Kühlhaus gemäß BetrSichV §§ 6, 10 und 14 sowie DIN EN 378 und der DGUV Regel 108-601 regelmäßig auf Funktionsfähigkeit.',
+            rechtlich: 'Die Notruf-Funktion im Kühlhaus ist, sofern vorhanden, regelmäßig auf Funktionsfähigkeit und Unversehrtheit zu prüfen und in die regelmäßige Anlagenprüfung einzubeziehen (vgl. BetrSichV §§ 6, 10 und 14 sowie DIN EN 378).'
         }
     },
     "Lager und Regale": {        "8.1": {
