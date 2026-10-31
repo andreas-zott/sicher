@@ -754,7 +754,7 @@ function renderOffeneMassnahmen() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Ab Rev. 1.54: Das lokale Archiv nur auf auswertung.html laden.
+    // Das lokale Archiv nur auf auswertung.html laden.
     // Diese Datei wird auch auf auswertung-team.html eingebunden (fuer die
     // gemeinsamen CSV-/PDF-Funktionen) - dort hat sie bisher beim Start
     // unnoetig das komplette lokale Archiv aus der IndexedDB gelesen.

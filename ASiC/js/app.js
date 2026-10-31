@@ -8,7 +8,7 @@ const STORAGE_KEY = 'begehungState';
 
 // Revisionsstand der App/Checkliste (in Fusszeile und PDF sichtbar,
 // bei inhaltlichen Aenderungen an Fragenkatalog/Massnahmen hochzaehlen)
-const APP_REVISION = '1.54';
+const APP_REVISION = '2.2.0';
 const APP_REVISION_DATE = '2026-10-25';
 
 // Heutiges Datum als JJJJ-MM-TT in LOKALER Zeit. toISOString() liefert UTC,
@@ -32,7 +32,7 @@ function escapeHtml(value) {
 }
 
 // --------------------------------------------------------------------------
-// Ereignis-Verteilung ohne Inline-Handler (ab Rev. 1.54-5)
+// Ereignis-Verteilung ohne Inline-Handler
 // --------------------------------------------------------------------------
 // Frueher standen in den erzeugten HTML-Bausteinen Handler wie
 //   onclick="setRating('<ID aus der Datei>', 'ok')"
@@ -188,7 +188,7 @@ function saveState() {
     }
 }
 
-// ===== Fehlerprotokoll (ab Ausgabestand 1.54-3) =====
+// ===== Fehlerprotokoll =====
 // Merkt sich auf diesem Geraet die letzten 10 Fehlermeldungen (rote
 // Hinweise und unerwartete Programmfehler) mit Zeit und Seite. Wird nur
 // in der Diagnose unter "Einstellungen" angezeigt - fuer die Fehlersuche
@@ -222,7 +222,7 @@ window.addEventListener('unhandledrejection', (e) => {
 });
 
 // Ausgabestand dieser Seite (aus dem ?v=-Zusatz der eingebundenen app.js),
-// z. B. '1.54-3'. Gleicher Wert wie BUILD in sw.js.
+// z. B. '2.2.0'. Gleicher Wert wie BUILD in sw.js.
 function appAusgabestand() {
     try {
         const el = document.querySelector('script[src*="js/app.js"]');
@@ -239,7 +239,7 @@ function serverFunktionenVerfuegbar() {
     return !(window.location.hostname.endsWith('.github.io') && !getNasBaseUrl());
 }
 
-// ===== Sicherungsstand der aktuellen Begehung (ab Ausgabestand 1.54-3) =====
+// ===== Sicherungsstand der aktuellen Begehung =====
 // Nach jedem erfolgreichen "Auf Server speichern" (und nach dem Laden einer
 // Begehung vom Server) wird ein Fingerabdruck des Bearbeitungsstands
 // gemerkt. Weicht der aktuelle Stand davon ab, ist die Begehung (noch oder
@@ -258,8 +258,15 @@ function stabilesJson(wert) {
     return JSON.stringify(wert === undefined ? null : wert);
 }
 
+// GBO-Stand dieses Geraets (gbo.html). Gehoert zum Markt-Datensatz, der im
+// Team-Archiv gemeinsam mit der Begehung gespeichert wird.
+const GBO_STATE_KEY = 'asicGboStateV1';
+function leseGboStand() {
+    try { return JSON.parse(localStorage.getItem(GBO_STATE_KEY) || 'null'); } catch (e) { return null; }
+}
+
 function stateFingerabdruck() {
-    const text = stabilesJson(state);
+    const text = stabilesJson({ begehung: state, gbo: leseGboStand() });
     let h = 0x811c9dc5;
     for (let i = 0; i < text.length; i++) {
         h ^= text.charCodeAt(i);
@@ -272,7 +279,7 @@ function leseServerStand() {
     try { return JSON.parse(localStorage.getItem(SERVER_STAND_KEY) || 'null'); } catch (e) { return null; }
 }
 
-// serverZeit: savedAt der Datei auf dem Server (ab 1.54-9) - Grundlage, um
+// serverZeit: savedAt der Datei auf dem Server - Grundlage, um
 // beim naechsten Speichern zu erkennen, ob inzwischen jemand anderes
 // dieselbe Begehung gespeichert hat.
 function markiereServerGesichert(dateiname, serverZeit) {
@@ -297,7 +304,10 @@ function begehungsKennung() {
 }
 
 function begehungHatInhalt() {
-    return Object.keys(state.ratings || {}).length > 0
+    const gbo = leseGboStand();
+    const gboInhalt = !!(gbo && gbo.answers && Object.keys(gbo.answers).length > 0);
+    return gboInhalt
+        || Object.keys(state.ratings || {}).length > 0
         || (state.measures || []).length > 0
         || !!(state.companyInfo && String(state.companyInfo.marktnummer || '').trim());
 }
@@ -318,8 +328,8 @@ function formatZeitpunkt(iso) {
 }
 
 // Hinweis auf der Maßnahmenseite unterhalb der Unterschriften und des
-// Foto-Hinweises (Platzhalter #sicherungs-hinweis-platz in massnahmen.html,
-// ab Ausgabestand 1.54-4 - vorher oben im Pruefkatalog). Nur wenn
+// Foto-Hinweises (Platzhalter #sicherungs-hinweis-platz in massnahmen.html).
+// Nur wenn
 // Server-Funktionen verfuegbar sind. "Spaeter" blendet ihn fuer diese
 // Sitzung aus.
 function aktualisiereSicherungsHinweis() {
@@ -383,7 +393,7 @@ window.addEventListener('load', () => {
     // Uebernahme im Pruefkatalog (dorthin fuehrt "In App anzeigen"), notfalls
     // auf der Maßnahmenseite
     if (ausstehend !== null && (document.getElementById('btn-save-nas') || document.getElementById('sicherungs-hinweis-platz'))) {
-        // ab 1.54-9 als JSON { datei, serverZeit }, vorher nur der Dateiname
+        // als JSON { datei, serverZeit }, bei aelteren Merkern nur der Dateiname
         let a = { datei: ausstehend, serverZeit: '' };
         try { if (ausstehend.charAt(0) === '{') a = Object.assign(a, JSON.parse(ausstehend)); } catch (e) { /* Dateiname */ }
         markiereServerGesichert(a.datei, a.serverZeit);
@@ -515,7 +525,7 @@ function buildShareEmailText(mode) {
     return `Sehr geehrte Damen und Herren,\n\nim Rahmen der turnusmäßigen Arbeitssicherheitsbegehung übersende ich Ihnen anbei ${inhalt} des Marktes ${markt}${adresse} zur sachlichen Prüfung.\n\nIch bitte Sie, die im Protokoll dokumentierten Feststellungen zu prüfen und die erforderlichen Maßnahmen zur Behebung der festgestellten Mängel zu veranlassen.\n\nVielen Dank für Ihre Unterstützung.\n\nMit freundlichen Grüßen\n${pruefer}Fachkraft für Arbeitssicherheit (SiFa)`;
 }
 
-// ===== Desktop-App (Tauri, Windows/WebView2) (ab Ausgabestand 1.54-14, Ablage ab 1.54-15) =====
+// ===== Desktop-App (Tauri, Windows/WebView2) =====
 // Laeuft die App in einer Tauri-Huelle, gibt es dort weder neue Fenster
 // (window.open wird geblockt) noch das Teilen-Menue (navigator.share) noch
 // gespeicherte Downloads; Mail-Links (mailto:) koennen grundsaetzlich keinen
@@ -708,7 +718,7 @@ function initDropdownMenu(toggleId, panelId) {
     const panel = document.getElementById(panelId);
     if (!toggle || !panel) return;
 
-    // Unterebenen (Datei-Menue ab 1.54-9): "menu-weiter" oeffnet die Ebene
+    // Unterebenen (Datei-Menue): "menu-weiter" oeffnet die Ebene
     // aus data-ziel, "menu-zurueck" fuehrt zur Hauptebene zurueck.
     function zeigeEbene(name) {
         const ebenen = panel.querySelectorAll('.menu-ebene');
@@ -743,8 +753,10 @@ function initDropdownMenu(toggleId, panelId) {
     });
 
     // Menü nach Auswahl eines Punktes automatisch wieder schliessen
-    panel.querySelectorAll('.menu-item:not(.menu-weiter)').forEach(item => {
-        item.addEventListener('click', closeMenu);
+    // ueber den Kasten, damit auch spaeter eingefuegte Punkte (z. B.
+    // "Gesamtsicherung Markt" aus js/market-ui.js) das Menue schliessen
+    panel.addEventListener('click', e => {
+        if (e.target.closest('.menu-item') && !e.target.closest('.menu-weiter')) closeMenu();
     });
 }
 
@@ -789,7 +801,7 @@ function nasUrl(path) {
     return base.replace(/\/+$/, '') + '/' + path;
 }
 
-// ===== Zugriffsschluessel (ab Ausgabestand 1.54-16) =====
+// ===== Zugriffsschluessel =====
 // Der Schluessel wird NICHT mehr als Text gespeichert. Beim Eintragen legt
 // die App ihn ueber Web Crypto als nicht exportierbaren HMAC-Schluessel in
 // IndexedDB ab ("gesperrt"): Der Browser kann damit unterschreiben, gibt
@@ -800,7 +812,7 @@ function nasUrl(path) {
 // Schluessel und Server-Adresse nur ueber HTTPS: Ohne HTTPS gibt es kein
 // Web Crypto - dann wird kein Schluessel gespeichert oder verschickt.
 // Ein noch als Text gespeicherter Schluessel ('nasApiKey', aeltere
-// Ausgabestaende) wird beim ersten Aufruf automatisch umgestellt.
+// App-Staende) wird beim ersten Aufruf automatisch umgestellt.
 // Ohne HTTPS bleibt ein alter Text-Schluessel liegen, wird aber nicht
 // verwendet, bis die App ueber HTTPS geoeffnet wird.
 const NAS_KEY_TEXT = 'nasApiKey';
@@ -975,11 +987,10 @@ try {
     if (i && i.art === 'klartext' && kryptoSchluesselMoeglich()) nasSchluesselHolen();
 } catch (e) {}
 
-// Angaben fuer save.php, um gleichzeitiges Bearbeiten zu erkennen (ab
-// 1.54-9): welche Datei mit welchem Stand dieses Geraet zuletzt vom Server
-// hatte. Gehoert der Merker zu einer anderen Begehung (Markt + Datum), gilt
-// die Begehung als neu - liegt fuer Markt und Datum schon eine Datei vor,
-// fragt die App nach.
+// Angaben fuer save.php, um gleichzeitiges Bearbeiten zu erkennen: welche
+// Datei mit welchem Stand dieses Geraet zuletzt vom Server hatte. Gehoert
+// der Merker zu einer anderen Begehung (Markt + Datum), gilt die Begehung
+// als neu - liegt fuer Markt und Datum schon eine Datei vor, fragt die App nach.
 function speicherSteuerung(modus) {
     const stand = leseServerStand();
     const passt = stand && stand.kennung === begehungsKennung() && stand.datei;
@@ -991,14 +1002,19 @@ function speicherSteuerung(modus) {
     };
 }
 
+// Speichert den Markt-Datensatz (Begehung + Gefaehrdungsbeurteilung, aus
+// js/market-store.js). Ist das Modul auf einer Seite nicht geladen, wird nur
+// die Begehung gespeichert (bisheriges Format, von save.php ebenso angenommen).
 async function saveStateToServer(modus) {
     if (typeof modus !== 'string') modus = 'normal';
     try {
+        saveState();
+        const nutzdaten = window.ASiCMarket ? ASiCMarket.container() : state;
         const res = await nasFetch('save.php', '', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             cache: 'no-store',
-            body: JSON.stringify(Object.assign({}, serverNutzdaten(), { _speichern: speicherSteuerung(modus) }))
+            body: JSON.stringify(Object.assign({}, nutzdaten, { _speichern: speicherSteuerung(modus) }))
         });
         const result = await parseJsonResponse(res);
         if (res.status === 409 && result && result.konflikt) {
@@ -1014,7 +1030,7 @@ async function saveStateToServer(modus) {
         meldeGeschlossen();
         showToast(result.fassung
             ? 'Als eigene Fassung gespeichert (Fassung ' + result.fassung + ')'
-            : 'Auf Server gespeichert: ' + result.fileName);
+            : (window.ASiCMarket ? 'Markt auf Server gespeichert: ' : 'Auf Server gespeichert: ') + result.fileName);
     } catch (err) {
         console.error('Server-Speichern fehlgeschlagen:', err);
         showToast('Speichern auf dem Server fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
@@ -1035,23 +1051,11 @@ async function getServerFiles() {
 // (verlauf.html) genutzt, um eine fremde, auf dem Server gespeicherte Begehung
 // anzusehen/zu exportieren, ohne die gerade laufende eigene Begehung zu
 // ueberschreiben.
-async function fetchServerRecord(filename) {
-    const res = await nasFetch('load.php', 'filename=' + encodeURIComponent(filename), { cache: 'no-store' });
-    const result = await parseJsonResponse(res);
-    if (!res.ok) {
-        throw new Error((result && result.message) || `Fehler beim Laden (HTTP ${res.status}).`);
-    }
-    return begehungAusDatensatz(result);
-}
-
-// ===== Markt-Datensaetze der Version 2 (gemeinsamer Datenordner) =====
-// Version 2 speichert Begehung und Gefaehrdungsbeurteilung (GBO) gemeinsam
-// als "ASiC-Marktcontainer" (Begehung unter "audit"). Die 1.54 liest daraus
-// die Begehung. Wird so ein Datensatz hier geoeffnet und wieder gespeichert,
-// bleiben GBO-Teil und Verknuepfungen erhalten (merkeMarktContainer /
-// saveStateToServer) - sonst wuerde die Datei ohne GBO ueberschrieben.
-const MARKT_CONTAINER_KEY = 'asicMarktContainerV2';
-
+// Ist ein vom Server geladener Datensatz ein Markt-Datensatz (Begehung + GBO,
+// js/market-store.js), liefert diese Funktion den Begehungsteil in der
+// gewohnten Form (companyInfo, ratings, measures ...). Der vollstaendige
+// Datensatz bleibt unter .__markt erreichbar (z. B. fuer die GBO beim
+// "In App anzeigen"). Aeltere Dateien (nur Begehung) bleiben unveraendert.
 function istMarktDatensatz(x) {
     return !!x && x.format === 'ASiC-Marktcontainer' && Number(x.formatVersion) >= 2 && !!x.audit;
 }
@@ -1065,46 +1069,35 @@ function begehungAusDatensatz(x) {
     return b;
 }
 
-// Merkt sich beim Oeffnen eines Markt-Datensatzes dessen uebrige Teile
-// (ohne Begehung). Bei einer normalen Begehung wird der Merker geloescht.
-function merkeMarktContainer(record) {
-    try {
-        const m = record && record.__markt;
-        if (!m) { localStorage.removeItem(MARKT_CONTAINER_KEY); return; }
-        const rest = Object.assign({}, m);
-        delete rest.audit;
-        delete rest._nas;
-        const c = record.companyInfo || {};
-        localStorage.setItem(MARKT_CONTAINER_KEY, JSON.stringify({
-            kennung: String(c.marktnummer || '').trim() + '|' + String(c.datum || ''),
-            rest
-        }));
-    } catch (e) { /* ohne Speicher: wird als normale Begehung gespeichert */ }
+async function fetchServerRecord(filename) {
+    const res = await nasFetch('load.php', 'filename=' + encodeURIComponent(filename), { cache: 'no-store' });
+    const result = await parseJsonResponse(res);
+    if (!res.ok) {
+        throw new Error((result && result.message) || `Fehler beim Laden (HTTP ${res.status}).`);
+    }
+    return begehungAusDatensatz(result);
 }
 
-// Nutzdaten fuer save.php: bei einem geoeffneten Markt-Datensatz derselben
-// Begehung (Markt + Datum) wieder als Markt-Datensatz, sonst die Begehung.
-function serverNutzdaten() {
+// Markt-Datensatz: Gefaehrdungsbeurteilung und Verknuepfungen auf diesem
+// Geraet uebernehmen - nur wenn der Datensatz eine GBO enthaelt (sonst bleibt
+// die GBO auf dem Geraet unveraendert, wie beim Zuruecksetzen der Begehung).
+function uebernehmeGboAusDatensatz(record) {
+    const m = record && record.__markt;
+    if (!m || !m.gbo) return false;
     try {
-        const g = JSON.parse(localStorage.getItem(MARKT_CONTAINER_KEY) || 'null');
-        if (g && g.rest && g.kennung === begehungsKennung()) {
-            const c = state.companyInfo || {};
-            return Object.assign({}, g.rest, {
-                savedAt: new Date().toISOString(),
-                market: Object.assign({}, g.rest.market || {}, { marktnummer: c.marktnummer || '', plzOrt: c.plzOrt || '', strasse: c.strasse || '' }),
-                companyInfo: c,
-                audit: state
-            });
+        localStorage.setItem(GBO_STATE_KEY, JSON.stringify(window.GBOMigrate ? GBOMigrate.state(m.gbo) : m.gbo));
+        if (Array.isArray(m.links)) {
+            localStorage.setItem('asicMarketLinksV2', JSON.stringify(window.GBOMigrate ? GBOMigrate.links(m.links) : m.links));
         }
-    } catch (e) { /* normale Begehung */ }
-    return state;
+    } catch (e) { console.error('GBO-Stand konnte nicht übernommen werden:', e); }
+    return true;
 }
 
 // Uebernimmt einen vom Server geladenen Datensatz als laufende Begehung.
 // Wie "In App anzeigen" im Team-Archiv: auch die Unterbereich-Schalter
 // werden uebernommen und der lokale Fotobestand geleert (Server-Datensaetze
 // enthalten keine Fotos) - sonst blieben Schalter und Fotos der vorherigen
-// Begehung stehen (ab Ausgabestand 1.54-8).
+// Begehung stehen.
 async function applyServerRecord(result, filename) {
     const leer = defaultState();
     state.companyInfo = Object.assign({}, leer.companyInfo, result.companyInfo || {});
@@ -1115,7 +1108,7 @@ async function applyServerRecord(result, filename) {
     state.notApplicable = result.notApplicable || {};
     state.subgroupNotApplicable = result.subgroupNotApplicable || {};
     state.freieTexte = result.freieTexte || {};
-    merkeMarktContainer(result);
+    uebernehmeGboAusDatensatz(result);
 
     if (typeof deleteAllPhotos === 'function') {
         try { await deleteAllPhotos(); } catch (e) { console.error('Fotos konnten nicht geleert werden:', e); }
@@ -1134,15 +1127,17 @@ async function applyServerRecord(result, filename) {
     if (typeof renderCompanyInfoStrip === 'function') renderCompanyInfoStrip();
     if (typeof renderMeasures === 'function') await renderMeasures();
     if (typeof restoreSignatures === 'function') restoreSignatures();
+    // z. B. fuer die GBO-Seite, die danach neu aufbaut
+    document.dispatchEvent(new CustomEvent('asic:server-geladen', { detail: { fileName: filename } }));
 }
 
 async function loadStateFromServer(filename) {
     const result = await fetchServerRecord(filename);
     await applyServerRecord(result, filename);
-    showToast('Begehung vom Server geladen: ' + filename);
+    showToast((result.__markt ? 'Markt vom Server geladen: ' : 'Begehung vom Server geladen: ') + filename);
 }
 
-// ===== Dialog "Vom Server laden" (ab Ausgabestand 1.54-8) =====
+// ===== Dialog "Vom Server laden" =====
 // Liste mit Suche, Rueckfrage vor dem Ersetzen einer offenen Begehung
 // (wahlweise vorher im Verlauf archivieren), Lade- und Fehlerzustaende.
 async function openServerLoadDialog() {
@@ -1294,7 +1289,7 @@ async function openServerLoadDialog() {
             <div class="srv-meldung srv-meldung-warnung">
                 <strong>Offene Begehung wird ersetzt</strong>
                 <p>Auf diesem Gerät ist die Begehung <b>${escapeHtml(aktuell)}</b> geöffnet. ${escapeHtml(sicherung)}</p>
-                <p>Geladen wird <b>${escapeHtml(f.marktnummer ? 'Markt ' + f.marktnummer : 'ohne Marktnummer')}${f.datum ? ' vom ' + escapeHtml(f.datum) : ''}</b>. Daten vom Server enthalten keine Fotos; die Fotos auf diesem Gerät werden entfernt.</p>
+                <p>Geladen wird <b>${escapeHtml(f.marktnummer ? 'Markt ' + f.marktnummer : 'ohne Marktnummer')}${f.datum ? ' vom ' + escapeHtml(f.datum) : ''}</b>. Daten vom Server enthalten keine Fotos; die Fotos auf diesem Gerät werden entfernt. Enthält der Datensatz eine Gefährdungsbeurteilung, ersetzt sie die auf diesem Gerät.</p>
             </div>
             <div class="srv-aktionen srv-aktionen-spalte">
                 <button type="button" class="btn btn-primary" data-srv="archiv">Erst im Verlauf archivieren, dann laden</button>
@@ -1382,7 +1377,7 @@ function frageVorErsetzen(ziel, opt) {
         overlay.className = 'srv-overlay';
         overlay.innerHTML = `
             <div class="srv-box" role="dialog" aria-modal="true" aria-labelledby="srv-r-titel">
-                <div class="srv-kopf"><div><h2 class="srv-titel" id="srv-r-titel">In App anzeigen</h2><p class="srv-sub">${escapeHtml(opt.sub || 'Begehung aus dem Team-Archiv öffnen')}</p></div>
+                <div class="srv-kopf"><div><h2 class="srv-titel" id="srv-r-titel">In App anzeigen</h2><p class="srv-sub">${escapeHtml(opt.sub || 'Markt aus dem Team-Archiv öffnen')}</p></div>
                 <button type="button" class="srv-x" aria-label="Schließen">×</button></div>
                 <div class="srv-inhalt">
                     <div class="wb-karte">
@@ -1406,7 +1401,7 @@ function frageVorErsetzen(ziel, opt) {
     });
 }
 
-// ===== Hinweis "gerade geoeffnet" (ab 1.54-11) =====
+// ===== Hinweis "gerade geoeffnet" =====
 // Reiner Hinweis, keine Sperre: Wer eine Begehung aus dem Team-Archiv
 // oeffnet, meldet das an offen.php. Andere Geraete sehen dann "geoeffnet auf
 // <Geraetename>". Abmeldung beim Speichern auf dem Server, Archivieren,
@@ -1510,7 +1505,7 @@ function offenSatz(e) {
         ' – dort wird sie möglicherweise bearbeitet. Öffnen ist trotzdem möglich; beim Speichern meldet die App, falls inzwischen ein neuerer Stand im Team-Archiv liegt.';
 }
 
-// ===== Einheitliche Hinweisfenster (ab 1.54-9) =====
+// ===== Einheitliche Hinweisfenster =====
 // Gleicher Aufbau wie "In App anzeigen" / Wiederholungsbegehung.
 // opt: { titel, sub, karte: {markt, datum, ort}, punkte: [Text], warnung:
 //        {titel, text}, knoepfe: [{w, text, art: 'primaer'|'warn'|''}] }
@@ -1520,7 +1515,7 @@ function zeigeHinweisFenster(opt) {
         const k = opt.karte;
         const karte = k ? `
             <div class="wb-karte">
-                <div class="ta-kopf"><span class="srv-markt">${escapeHtml(k.markt || 'ohne Marktnummer')}</span><span class="srv-datum">${escapeHtml(k.datum || '–')}</span></div>
+                <div class="ta-kopf"><span class="srv-markt">${escapeHtml(k.markt || 'ohne Marktnummer')}</span>${k.datum === '' ? '' : `<span class="srv-datum">${escapeHtml(k.datum || '–')}</span>`}</div>
                 ${k.ort ? `<div class="srv-ort">${escapeHtml(k.ort)}</div>` : ''}
             </div>` : '';
         const punkte = (opt.punkte || []).length ? `<ul class="wb-liste">${opt.punkte.map(t => `<li>${escapeHtml(t)}</li>`).join('')}</ul>` : '';
@@ -1577,7 +1572,7 @@ function sicherungsSatz() {
             : 'Sie ist nicht auf dem Server gesichert.');
 }
 
-// Eigene Fassungen (ab 1.54-9): Begehung_<Datum>_Markt<Nr>_Fassung-<n>.json
+// Eigene Fassungen: Begehung_<Datum>_Markt<Nr>_Fassung-<n>.json
 function fassungVon(dateiname) {
     const m = /_Fassung-(\d+)\.json$/.exec(String(dateiname || ''));
     return m ? Number(m[1]) : 0;
@@ -2489,7 +2484,7 @@ function pdfFilename() {
     return `Massnahmenplan_${marktnummer}_${datum}.pdf`;
 }
 
-// ===== Quellen je Massnahme (Sprachstil "Einfach", ab Ausgabestand 1.54-13) =====
+// ===== Quellen je Massnahme (Sprachstil "Einfach") =====
 // Die einfachen Massnahmentexte nennen keine Regelwerke. Fuer den PDF-Anhang
 // werden die Fundstellen deshalb aus dem BGHW- und dem Rechtlich-Text
 // derselben Massnahme (js/text.js) ausgelesen.
@@ -3344,7 +3339,7 @@ async function buildPdf(includeChecklist, includeFotos) {
     // Quellen als Anhang - nur wenn ueberhaupt Massnahmen vorhanden sind.
     // "BGHW"/"Rechtlich": Gesamtliste (die Texte zitieren die Fundstellen
     // selbst). "Einfach": nur die Quellen zu den Massnahmen dieser Begehung,
-    // je Massnahme (ab Ausgabestand 1.54-13).
+    // je Massnahme.
     if (state.measures.length > 0) {
         if (MEASURE_STYLE === 'einfach') {
             renderMassnahmenQuellenAnhang(doc, margin, contentWidth, pageHeight, state.measures);
@@ -3916,7 +3911,6 @@ function setRating(itemId, rating) {
     // Freier Pruefpunkt ohne Text: erst Text eintragen
     if (FREIE_PUNKT_IDS.indexOf(itemId) !== -1 && !freierText(itemId) && !state.ratings[itemId]) return;
 
-
     // Schutz: waehrend eine Kategorie per Schalter als "nicht vorhanden" markiert ist,
     // bleiben ihre Fragen gesperrt auf N.V. (Buttons sind zusaetzlich disabled).
     for (
@@ -4195,7 +4189,7 @@ async function shareJson() {
     }
 }
 
-// Rueckfrage vor dem Laden einer JSON-Datei (ab 1.54-9). Fotos bleiben nur,
+// Rueckfrage vor dem Laden einer JSON-Datei. Fotos bleiben nur,
 // wenn die Datei dieselbe Begehung (Markt + Datum) enthaelt.
 async function frageVorJsonLaden(data, dateiname) {
     const ci = data.companyInfo || {};
@@ -4203,6 +4197,9 @@ async function frageVorJsonLaden(data, dateiname) {
     const fotos = await anzahlFotosAufGeraet();
     const punkte = [
         'Die Begehung aus der Datei „' + dateiname + '“ wird auf diesem Gerät geöffnet und kann weiterbearbeitet werden.',
+        data.__markt && data.__markt.gbo
+            ? 'Die Datei enthält auch eine Gefährdungsbeurteilung – sie ersetzt die auf diesem Gerät.'
+            : 'Die Gefährdungsbeurteilung auf diesem Gerät bleibt unverändert.',
         gleich
             ? 'Es ist dieselbe Begehung wie die geöffnete – die Fotos auf diesem Gerät bleiben erhalten.'
             : 'JSON-Dateien enthalten keine Fotos.' + (fotos ? ' Die ' + fotosText(fotos) + ' auf diesem Gerät werden entfernt.' : '')
@@ -4291,7 +4288,7 @@ function importJson(file) {
                     data.freieTexte || {}
             };
 
-            merkeMarktContainer(data);
+            uebernehmeGboAusDatensatz(data);
             initCompanyForm();
             renderChecklist();
             renderCompanyInfoStrip();
@@ -4342,7 +4339,7 @@ function importJson(file) {
 // Zeitpunkt der Archivierung) inklusive der zu diesem Zeitpunkt vorhandenen
 // Fotos. Archivieren loescht NICHT die aktuelle Begehung - beides bleibt
 // parallel bestehen, bis man separat "Zurücksetzen" nutzt.
-// ===== Wiederholungsbegehung (ab Rev. 1.52) =====
+// ===== Wiederholungsbegehung =====
 // Kennzeichnung einer Massnahme, die aus der Vorbegehung uebernommen wurde.
 function vorbegehungHinweis(measure) {
     const v = measure && measure.vorbegehung;
@@ -4416,7 +4413,8 @@ async function archiveCurrentAudit() {
         punkte: [
             'Ein vollständiger Schnappschuss mit Bewertungen, Maßnahmen, Unterschriften' + (fotos ? ' und ' + fotosText(fotos) : '') + ' wird unter „Verlauf → Mein Verlauf“ abgelegt.',
             'Die Begehung bleibt geöffnet und kann weiterbearbeitet werden.',
-            'Das Archiv liegt nur auf diesem Gerät. Fürs Team bitte zusätzlich „Auf Server speichern“.'
+            'Die Gefährdungsbeurteilung gehört nicht zum Archiv – sie wird mit „Markt auf Server speichern“ oder „Gesamtsicherung Markt“ gesichert.',
+            'Das Archiv liegt nur auf diesem Gerät. Fürs Team bitte zusätzlich „Markt auf Server speichern“.'
         ],
         knoepfe: [
             { w: 'ja', text: 'Archivieren', art: 'primaer' },
@@ -4667,12 +4665,18 @@ async function shareArchivedReportPdf(record, mode) {
 
 async function resetAll() {
     const fotos = await anzahlFotosAufGeraet();
-    const leer = !begehungHatInhalt() && fotos === 0;
+    // Nur die Begehung zaehlt - die Gefaehrdungsbeurteilung bleibt erhalten
+    // (sie wird auf der GBO-Seite zurueckgesetzt).
+    const c0 = state.companyInfo || {};
+    const leer = fotos === 0 && !(Object.keys(state.ratings || {}).length > 0
+        || (state.measures || []).length > 0 || String(c0.marktnummer || '').trim());
     const wahl = await zeigeHinweisFenster({
         titel: 'Zurücksetzen',
         sub: 'Neue, leere Begehung beginnen',
         karte: leer ? null : karteAktuelleBegehung(),
-        punkte: leer ? ['Auf diesem Gerät ist keine Begehung mit Eingaben geöffnet.'] : [],
+        punkte: leer
+            ? ['Auf diesem Gerät ist keine Begehung mit Eingaben geöffnet.', 'Die Gefährdungsbeurteilung bleibt unverändert.']
+            : ['Die Gefährdungsbeurteilung bleibt erhalten – sie wird auf der GBO-Seite zurückgesetzt.'],
         warnung: leer ? null : {
             titel: 'Eingaben werden gelöscht',
             text: (fotos ? 'Betriebsdaten, Bewertungen, Maßnahmen, Unterschriften und ' + fotosText(fotos) : 'Betriebsdaten, Bewertungen, Maßnahmen und Unterschriften') + ' werden von diesem Gerät gelöscht. ' + sicherungsSatz() + ' Das lässt sich nicht rückgängig machen.'

@@ -1,3 +1,3 @@
-// ASiC Handel – aktuelles Jahr in Impressum/Datenschutz eintragen.
-// Ab Rev. 1.54-5 als eigene Datei (Content-Security-Policy).
-document.querySelectorAll('.js-current-year').forEach(el => { el.textContent = new Date().getFullYear(); });
+// ASiC Handel – aktuelles Jahr in Fußzeilen eintragen (eigene Datei wegen
+// der Content-Security-Policy: keine eingebetteten Skripte).
+document.querySelectorAll('.js-current-year, #gbo-current-year').forEach(el => { el.textContent = new Date().getFullYear(); });
