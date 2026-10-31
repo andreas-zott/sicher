@@ -3,18 +3,19 @@
 // ==========================================================================
 // Offline-Unterstützung und schneller Seitenaufbau für die ASiC-Handel-App.
 //
-// SERVICE-WORKER-VERSION: 2.2.0
+// SERVICE-WORKER-VERSION: 1.54
 // Bei JEDEM Update gemeinsam hochzaehlen:
 //   - BUILD / CACHE_NAME hier (bei neuer Revision auch APP_VERSION)
 //   - APP_REVISION in js/app.js (nur bei neuer Revision)
 //   - das ?v=… hinter allen js/css-Einbindungen in den HTML-Seiten (= BUILD)
 //
-// Ladestrategie:
-//   - Programmdateien mit Versionszusatz (js/…?v=2.2.0, css/…?v=2.2.0) und
+// Ladestrategie (ab Rev. 1.54):
+//   - Programmdateien mit Versionszusatz (js/…?v=1.54, css/…?v=1.54) und
 //     Schriften: SOFORT aus dem Cache auf dem Geraet, ohne Rueckfrage beim
 //     Server. Das ist sicher, weil sich bei jedem Update der Zusatz ?v=
 //     aendert - dann ist es fuer den Browser eine neue Adresse und wird
-//     frisch geladen. 
+//     frisch geladen. (Rev. 1.53 hat jede Datei bei jedem Aufruf beim Server
+//     nachgefragt - bei entfernten Servern spuerbar langsam.)
 //   - HTML-Seiten, zugang-config.js, manifest, Icons: zuerst vom Server
 //     (cache: 'no-cache', damit nicht der HTTP-Cache des Browsers eine alte
 //     Fassung liefert), bei fehlender Verbindung aus dem Cache.
@@ -29,13 +30,13 @@
 // archivierten Begehungen oder Fotos.
 // ==========================================================================
 
-const APP_VERSION = '2.2.0';
-// Ausgabestand innerhalb derselben Revision: aendert sich
+const APP_VERSION = '1.54';
+// Ausgabestand innerhalb derselben Revision (ab Rev. 1.54): aendert sich
 // nur Code, aber nicht die sichtbare Revision, wird NUR dieser Zaehler
-// erhoeht ('2.2.0-2', '2.2.0-3' …). Er steht im Cache-Namen und im ?v=-Zusatz
+// erhoeht ('1.54-2', '1.54-3' …). Er steht im Cache-Namen und im ?v=-Zusatz
 // der HTML-Seiten und sorgt dafuer, dass die Geraete die neuen Dateien holen.
-const BUILD = '2.2.0-9';
-const CACHE_NAME = 'asic-handel-v2.2.0-9';   // immer = 'asic-handel-v' + BUILD
+const BUILD = '1.54-20';
+const CACHE_NAME = 'asic-handel-v1.54-20';   // immer = 'asic-handel-v' + BUILD
 
 
 // ==========================================================================
@@ -56,10 +57,6 @@ const PRECACHE_URLS = [
     './auswertung-team.html',
     './impressum.html',
     './datenschutz.html',
-    './gbo.html',
-    './gbo-hilfe.html',
-    './gbo-dokumentation.html',
-    './quellen.html',
 
     './manifest.json',
     './zugang-config.js',
@@ -75,7 +72,6 @@ const PRECACHE_URLS = [
 // Mit Versionszusatz - genau so, wie die HTML-Seiten sie einbinden
 const PRECACHE_VERSIONIERT = [
     './css/styles.css',
-    './css/gbo.css',
 
     './js/app.js',
     './js/access-gate.js',
@@ -93,22 +89,7 @@ const PRECACHE_VERSIONIERT = [
     './js/jspdf.umd.min.js',
     './js/hilfe-suche.js',
     './js/seiten-jahr.js',
-    './js/auswertung-team-pruefung.js',
-    './js/quellen-suche.js',
-    './js/market-store.js',
-    './js/market-ui.js',
-    './js/storage-check.js',
-    './js/gbo-data.js',
-    './js/gbo-photos.js',
-    './js/gbo-pdf.js',
-    './js/gbo-quellen.js',
-    './js/gbo-struktur.js',
-    './js/gbo-migrate.js',
-    './js/gbo.js',
-    './js/gbo-risk.js',
-    './js/gbo-fristen.js',
-    './js/gbo-signatur.js',
-    './js/gbo-v2.js'
+    './js/auswertung-team-pruefung.js'
 ].map(url => url + '?v=' + BUILD);
 
 
@@ -146,9 +127,7 @@ self.addEventListener('activate', event => {
         caches.keys()
             .then(keys => Promise.all(
                 keys.map(key => {
-                    // Nur Caches der Version 2 entfernen - Version 1.54 kann unter derselben
-                    // Domain in einem Nachbarordner laufen und hat ihren eigenen Cache.
-                    if (key.startsWith('asic-handel-v2.') && key !== CACHE_NAME) {
+                    if (key.startsWith('asic-handel-v1.') && key !== CACHE_NAME) {
                         console.log('[SW] Lösche alten Cache:', key);
                         return caches.delete(key);
                     }

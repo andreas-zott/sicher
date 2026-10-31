@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 
-<!-- Sicherheitsrichtlinie: nur eigene Skripte, keine eingebetteten
+<!-- Sicherheitsrichtlinie (ab Rev. 1.54-5): nur eigene Skripte, keine eingebetteten
      Skripte oder Inline-Handler. connect-src erlaubt https:, damit ein Team-Archiv
      auf einem anderen Server (Einstellungen) erreichbar bleibt. -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https: ipc: http://ipc.localhost; worker-src 'self'; manifest-src 'self'; object-src 'none'; frame-src 'self' blob:; base-uri 'self'; form-action 'self'">
@@ -11,9 +11,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Hilfe & FAQ – ASiC Handel</title>
 
-<link rel="stylesheet" href="css/styles.css?v=2.2.0-9">
+<link rel="stylesheet" href="css/styles.css?v=1.54-20">
 <script src="zugang-config.js"></script>
-<script src="js/access-gate.js?v=2.2.0-9"></script>
+<script src="js/access-gate.js?v=1.54-20"></script>
 
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -42,7 +42,6 @@
             <a href="massnahmen.html">Aktionsplan</a>
             <a href="fotos.html">Fotos</a>
             <a href="verlauf.html">Verlauf</a>
-            <a href="gbo.html">Gefährdungsbeurteilung</a>
         </nav>
 
     </div>
@@ -161,10 +160,19 @@
 
         <p class="h-section-intro">Oben wechseln Sie die Seite, unten bedienen Sie die Begehung, im Fuß finden Sie Hilfe und Einstellungen.</p>
 
+        <a class="card" href="kurzanleitung.html" style="display: flex; align-items: center; gap: 0.9rem; padding: 0.9rem 1rem; margin-bottom: 0.7rem; text-decoration: none; color: inherit; border-left: 4px solid var(--brand-red);" data-unit data-kw="bebilderte kurzanleitung anleitung bilder screenshots schritt für schritt outlook pdf teilen einstieg neu">
+            <span style="font-size: 1.6rem;" aria-hidden="true">🖼️</span>
+            <span style="flex: 1;">
+                <strong>Bebilderte Kurzanleitung öffnen</strong><br>
+                <span style="font-size: 0.88rem; color: var(--ink-soft);">Alle Schritte mit Bildschirmfotos und Pfeilen – von der Einrichtung über die Begehung bis zum Versand per Outlook. Auch zum Ausdrucken.</span>
+            </span>
+            <span aria-hidden="true" style="color: var(--brand-red); font-weight: 700;">→</span>
+        </a>
+
         <div class="card" style="padding: 0.9rem 1rem; margin-bottom: 0.7rem;" data-unit data-kw="menü menue übersicht leiste navigation oben unten fuß fusszeile bedienung aufbau">
             <dl class="h-ps">
                 <dt>Oben</dt>
-                <dd>Auf jeder Seite: <strong>Prüfkatalog</strong> (Begehung bewerten), <strong>Aktionsplan</strong> (Mängel als Maßnahmen, Unterschriften), <strong>Fotos</strong> (Fotodokumentation), <strong>Verlauf</strong> (eigenes Archiv und Team-Archiv) und <strong>Gefährdungsbeurteilung</strong> (GBO, mit eigener <a href="gbo-hilfe.html">Hilfe zur GBO</a>).</dd>
+                <dd>Auf jeder Seite: <strong>Prüfkatalog</strong> (Begehung bewerten), <strong>Aktionsplan</strong> (Mängel als Maßnahmen, Unterschriften), <strong>Fotos</strong> (Fotodokumentation), <strong>Verlauf</strong> (eigenes Archiv und Team-Archiv).</dd>
                 <dt>Unten</dt>
                 <dd>Auf dem Prüfkatalog: <strong>Datei ▾</strong> (Speichern, Team-Archiv ›, JSON-Datei ›, Archiv, Zurücksetzen), <strong>Sprachstil</strong> (Einfach, BGHW, Rechtlich) und <strong>Exportieren ▾</strong> (Drucken, PDF teilen, Mail vorbereiten). <strong>Exportieren ▾</strong> gibt es auch auf Aktionsplan und Fotos.</dd>
                 <dt>Fuß</dt>
@@ -196,7 +204,7 @@
             <div class="h-body">
                 <p class="h-short">Am Ende in dieser Reihenfolge:</p>
                 <ol>
-                    <li><strong>Datei ▾ → Team-Archiv › → Markt auf Server speichern</strong> – sichert Begehung und Gefährdungsbeurteilung des Markts zentral.</li>
+                    <li><strong>Datei ▾ → Team-Archiv › → Auf Server speichern</strong> – sichert die Begehung zentral.</li>
                     <li>Bericht über <strong>Exportieren ▾</strong> erstellen und versenden.</li>
                     <li><strong>Datei ▾ → Begehung archivieren</strong> – legt einen festen Stand im Verlauf ab.</li>
                     <li><strong>Datei ▾ → Zurücksetzen</strong> – leert die Begehung für den nächsten Markt.</li>
@@ -361,6 +369,8 @@
                         </ul>
                     </div>
                 </details>
+            </div>
+        </details>
 
         <details class="h-item" id="q-mehrere" data-unit data-kw="mehrere märkte gleichzeitig parallel zurücksetzen neuer markt">
             <summary>Kann ich mehrere Märkte gleichzeitig bearbeiten?</summary>
@@ -472,7 +482,7 @@
                 </ul>
                 <p><strong>Wichtig:</strong> Beim <strong>PDF teilen</strong> zwingend <strong>Outlook</strong> verwenden. Andere Apps im Teilen-Menü (z. B. Apple Mail, Nachrichten) übernehmen den Betreff nicht; die Mail müsste dann von Hand ergänzt werden.</p>
                 <p>Unterstützt Ihr Gerät das Teilen nicht, lädt die App das PDF stattdessen herunter.</p>
-                <p><strong>Desktop-App unter Windows:</strong> Dort öffnet <strong>Drucken</strong> direkt den Druckdialog, und <strong>PDF teilen</strong> gibt es nicht. <strong>Mail mit PDF vorbereiten</strong> speichert das PDF im Ordner <strong>Downloads\ASiC Handel</strong>, zeigt es im Explorer markiert an und öffnet die Mail mit Betreff und Text – das PDF einfach in die Mail ziehen. Auch alle anderen Exporte (PDF, JSON, CSV, Gesamtsicherung) landen in der Desktop-App in diesem Ordner. Das gilt auch für die Gefährdungsbeurteilung.</p>
+                <p><strong>Desktop-App unter Windows:</strong> Dort öffnet <strong>Drucken</strong> direkt den Druckdialog, und <strong>PDF teilen</strong> gibt es nicht. <strong>Mail mit PDF vorbereiten</strong> speichert das PDF im Ordner <strong>Downloads\ASiC Handel</strong>, zeigt es im Explorer markiert an und öffnet die Mail mit Betreff und Text – das PDF einfach in die Mail ziehen. Auch alle anderen Exporte (PDF, JSON, CSV) landen in der Desktop-App in diesem Ordner.</p>
             </div>
         </details>
 
@@ -525,12 +535,12 @@
                 <p class="h-short">Die laufende Begehung wird automatisch gespeichert. Unter <strong>Datei ▾</strong> auf dem Prüfkatalog stehen außerdem bereit:</p>
                 <ul>
                     <li><strong>Speichern</strong> – manueller Speichervorgang</li>
-                    <li><strong>Team-Archiv ›</strong> – darin <strong>Markt auf Server speichern</strong> (Begehung und Gefährdungsbeurteilung) und <strong>Vom Server laden</strong></li>
-                    <li><strong>JSON-Datei ›</strong> – darin <strong>Exportieren</strong> (Backup der Begehung als Datei), <strong>Gesamtsicherung Markt</strong> (Begehung und Gefährdungsbeurteilung als eine Datei), <strong>Per Mail teilen</strong> (Datei im Anhang) und <strong>Laden</strong> (exportierten Stand öffnen)</li>
+                    <li><strong>Team-Archiv ›</strong> – darin <strong>Auf Server speichern</strong> und <strong>Vom Server laden</strong></li>
+                    <li><strong>JSON-Datei ›</strong> – darin <strong>Exportieren</strong> (Backup als Datei), <strong>Per Mail teilen</strong> (Datei im Anhang) und <strong>Laden</strong> (exportierten Stand öffnen)</li>
                     <li><strong>Begehung archivieren</strong> – sichert einen vollständigen Schnappschuss</li>
                     <li><strong>Zurücksetzen</strong> – löscht die aktuelle Begehung samt Fotos</li>
                 </ul>
-                <p>Punkte mit <strong>›</strong> öffnen eine Unterebene, <strong>‹ Zurück</strong> führt wieder hinaus. Vor Archivieren, Zurücksetzen und JSON-Laden zeigt die App ein Hinweisfenster mit der betroffenen Begehung; beim Zurücksetzen und Laden kann die offene Begehung vorher im Verlauf archiviert werden. Lädt man eine JSON-Datei derselben Begehung (gleicher Markt, gleiches Datum), bleiben die Fotos auf dem Gerät erhalten, sonst werden sie entfernt. Die Gefährdungsbeurteilung bleibt beim Zurücksetzen und Archivieren der Begehung unverändert; sie wird auf der GBO-Seite zurückgesetzt und mit „Markt auf Server speichern“ oder „Gesamtsicherung Markt“ gesichert.</p>
+                <p>Punkte mit <strong>›</strong> öffnen eine Unterebene, <strong>‹ Zurück</strong> führt wieder hinaus. Vor Archivieren, Zurücksetzen und JSON-Laden zeigt die App ein Hinweisfenster mit der betroffenen Begehung; beim Zurücksetzen und Laden kann die offene Begehung vorher im Verlauf archiviert werden. Lädt man eine JSON-Datei derselben Begehung (gleicher Markt, gleiches Datum), bleiben die Fotos auf dem Gerät erhalten, sonst werden sie entfernt.</p>
                 <details class="h-more">
                     <summary>Mehr Details</summary>
                     <div>
@@ -583,14 +593,13 @@
         <details class="h-item" id="q-nas" data-unit data-kw="nas server speichern laden einstellungen zugriffsschlüssel cors versionen überschreiben">
             <summary>Wie sichere ich auf dem Server?</summary>
             <div class="h-body">
-                <p class="h-short"><strong>Datei ▾ → Team-Archiv › → Markt auf Server speichern</strong>, später <strong>Vom Server laden</strong>. Gespeichert werden Begehung und Gefährdungsbeurteilung des Markts gemeinsam. Datum und Marktnummer der Begehung müssen ausgefüllt sein, und die App muss über die Server-Adresse geöffnet sein.</p>
+                <p class="h-short"><strong>Datei ▾ → Team-Archiv › → Auf Server speichern</strong>, später <strong>Vom Server laden</strong>. Datum und Marktnummer müssen ausgefüllt sein, und die App muss über die Server-Adresse geöffnet sein.</p>
                 <details class="h-more">
                     <summary>Mehr Details</summary>
                     <div>
                         <ul>
-                            <li>Gespeichert werden die Prüfdaten und die Gefährdungsbeurteilung, keine Original-Fotos (Maßnahmen und GBO-Bildbelege enthalten kleine Vorschaubilder).</li>
-                            <li>Auf der Seite <strong>Aktionsplan</strong> erinnert ein Hinweis, solange der aktuelle Stand – auch eine Änderung in der Gefährdungsbeurteilung – noch nicht im Team-Archiv gesichert ist. <strong>Jetzt sichern</strong> speichert den Markt sofort.</li>
-                            <li><strong>Vom Server laden</strong> zeigt alle Märkte im Team-Archiv, neueste zuerst, mit Suche nach Marktnummer, Ort oder Datum. Ist auf dem Gerät eine Begehung geöffnet, fragt die App vorher nach und bietet an, sie zuerst im <strong>Verlauf</strong> zu archivieren. Die Fotos der Begehung auf dem Gerät werden beim Laden entfernt; enthält der Datensatz eine Gefährdungsbeurteilung, ersetzt sie die auf dem Gerät.</li>
+                            <li>Gespeichert werden nur die Prüfdaten, keine Fotos.</li>
+                            <li><strong>Vom Server laden</strong> zeigt alle Begehungen im Team-Archiv, neueste zuerst, mit Suche nach Marktnummer, Ort oder Datum. Ist auf dem Gerät eine Begehung geöffnet, fragt die App vorher nach und bietet an, sie zuerst im <strong>Verlauf</strong> zu archivieren. Die Fotos auf dem Gerät werden beim Laden entfernt.</li>
                             <li>Speichern Sie für denselben Markt am selben Tag erneut, wird die Datei ersetzt. Der vorherige Stand liegt als Kopie im Ordner <code>versionen</code> auf dem Server (für Administratoren).</li>
                             <li>Läuft die App unter einer anderen Adresse (z. B. GitHub Pages), tragen Sie unter <strong>Einstellungen</strong> eine externe Server-Adresse ein. Der Server muss Anfragen von der App-Adresse ausdrücklich erlauben (CORS).</li>
                             <li>Mit dem <strong>Zugriffsschlüssel</strong> unterschreibt die App jede Server-Anfrage. Er wird geschützt auf dem Gerät abgelegt, lässt sich danach nicht mehr anzeigen und geht nicht über das Netz. Er wirkt nur, wenn auf dem Server derselbe Schlüssel eingerichtet ist.</li>
@@ -607,16 +616,17 @@
                 <details class="h-more">
                     <summary>Mehr Details</summary>
                     <div>
-                        <p>So behält das ganze Team den Überblick, welche Märkte schon geprüft wurden. Sie können jede Begehung als PDF exportieren oder in der App anzeigen; <strong>In App anzeigen</strong> übernimmt dabei auch die Gefährdungsbeurteilung des Markts. Original-Fotos sind nicht enthalten. Über das Suchfeld finden Sie Märkte nach Marktnummer, Ort oder Datum. Der Reiter funktioniert nur, wenn die App über die Server-Adresse läuft oder in den Einstellungen eine Server-Adresse hinterlegt ist.</p>
+                        <p>So behält das ganze Team den Überblick, welche Märkte schon geprüft wurden. Sie können jede Begehung als PDF exportieren oder in der App anzeigen. Fotos sind nicht enthalten. Der Reiter funktioniert nur, wenn die App über die Server-Adresse läuft oder in den Einstellungen eine Server-Adresse hinterlegt ist.</p>
+                        <p>Begehungen, die mit der Version 2 (Begehung und Gefährdungsbeurteilung) gespeichert wurden, erscheinen ebenfalls und werden in der Team-Auswertung mitgezählt. Öffnen und speichern Sie eine solche Begehung hier, bleibt ihre Gefährdungsbeurteilung auf dem Server erhalten.</p>
                     </div>
                 </details>
             </div>
         </details>
 
         <details class="h-item" id="q-gleichzeitig" data-unit data-kw="gleichzeitig zwei geräte kollege andere person überschreiben konflikt neuerer stand fassung team-archiv speichern parallel geöffnet gerätename in bearbeitung">
-            <summary>Was passiert, wenn zwei Personen denselben Markt bearbeiten?</summary>
+            <summary>Was passiert, wenn zwei Personen dieselbe Begehung bearbeiten?</summary>
             <div class="h-body">
-                <p class="h-short">Beim <strong>Markt auf Server speichern</strong> prüft die App, ob seit dem Öffnen jemand anderes dieselbe Begehung gespeichert hat. Wenn ja, fragt sie nach, statt den anderen Stand einfach zu überschreiben.</p>
+                <p class="h-short">Beim <strong>Auf Server speichern</strong> prüft die App, ob seit dem Öffnen jemand anderes dieselbe Begehung gespeichert hat. Wenn ja, fragt sie nach, statt den anderen Stand einfach zu überschreiben.</p>
                 <details class="h-more">
                     <summary>Mehr Details</summary>
                     <div>
@@ -645,7 +655,6 @@
                             <li>Alle Maßnahmen, die in der Vorbegehung nicht erledigt waren, werden als <strong>Mangel</strong> vorbelegt und mit „Offen aus Vorbegehung vom …“ gekennzeichnet – im Prüfkatalog, im Aktionsplan und im PDF.</li>
                             <li>Ist ein Mangel inzwischen behoben, setzen Sie den Prüfpunkt einfach auf <strong>OK</strong>; die Maßnahme entfällt dann.</li>
                             <li>Unterschriften und Fotos werden nicht übernommen. Der aktuell laufende, noch nicht archivierte Stand auf dem Gerät wird ersetzt – vorher archivieren, falls er noch gebraucht wird.</li>
-                            <li>Übernommen wird nur die Begehung. Die Gefährdungsbeurteilung auf dem Gerät bleibt unverändert.</li>
                         </ul>
                     </div>
                 </details>
@@ -754,24 +763,6 @@
             </div>
         </details>
 
-        <details class="h-item h-problem" id="p-speicher" data-unit data-kw="speicher voll warnung platz foto nicht genug belegt">
-            <summary>Beim Foto erscheint eine Speicher-Warnung</summary>
-            <div class="h-body">
-                <dl class="h-ps">
-                    <dt>Ursache</dt>
-                    <dd>Die App prüft vor jedem Foto den freien Platz auf dem Gerät. Bei einer Belegung ab etwa 80&nbsp;% warnt sie, bei zu wenig Platz speichert sie das Foto nicht.</dd>
-                    <dt>Lösung</dt>
-                    <dd>
-                        <ol>
-                            <li>Die Begehung sichern (<strong>Datei ▾ → JSON exportieren</strong> oder <strong>Markt auf Server speichern</strong>).</li>
-                            <li>Nicht mehr benötigte Fotos löschen.</li>
-                            <li>Fertige Begehungen archivieren und die laufende Begehung zurücksetzen.</li>
-                        </ol>
-                    </dd>
-                </dl>
-            </div>
-        </details>
-
         <details class="h-item h-problem" id="p-menue" data-unit data-kw="menü reagiert nicht export is not defined fehlermeldung javascript neu laden">
             <summary>Ein Menü oder der Export reagiert nicht, oder „… is not defined“ erscheint</summary>
             <div class="h-body">
@@ -836,7 +827,7 @@
         </details>
 
         <details class="h-item h-problem" id="p-nas" data-unit data-kw="nas speichern laden funktioniert nicht fehler schlüssel zugriff server erreichbar github pages">
-            <summary>„Markt auf Server speichern“ oder „Vom Server laden“ funktioniert nicht</summary>
+            <summary>„Auf Server speichern“ oder „Vom Server laden“ funktioniert nicht</summary>
             <div class="h-body">
                 <dl class="h-ps">
                     <dt>Ursache</dt>
@@ -883,7 +874,7 @@
         <details class="h-item" id="w-version" data-unit data-kw="version revision stand fußzeile">
             <summary>Welche Version der App nutze ich?</summary>
             <div class="h-body">
-                <p class="h-short">Die Revision steht in der Fußzeile jeder Seite und auf jedem PDF. Aktuell ist die Revision <span data-zahl="revision">2.2.0</span> vom <span data-zahl="revision_datum">25.10.2026</span>.</p>
+                <p class="h-short">Die Revision steht in der Fußzeile jeder Seite und auf jedem PDF. Aktuell ist die Revision <span data-zahl="revision">1.54</span> vom <span data-zahl="revision_datum">25.10.2026</span>.</p>
             </div>
         </details>
 
@@ -988,11 +979,11 @@
 </footer>
 
 
-<script src="js/audit-data.js?v=2.2.0-9"></script>
-<script src="js/text.js?v=2.2.0-9"></script>
-<script src="js/app.js?v=2.2.0-9"></script>
+<script src="js/audit-data.js?v=1.54-20"></script>
+<script src="js/text.js?v=1.54-20"></script>
+<script src="js/app.js?v=1.54-20"></script>
 
-<script src="js/hilfe-suche.js?v=2.2.0-9"></script>
+<script src="js/hilfe-suche.js?v=1.54-20"></script>
 
 </body>
 </html>
