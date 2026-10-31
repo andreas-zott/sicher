@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<!-- Sicherheitsrichtlinie: nur eigene Skripte, keine eingebetteten Skripte oder
+     Inline-Handler. connect-src erlaubt https:, damit ein Team-Archiv auf einem
+     anderen Server (Einstellungen) erreichbar bleibt. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https: ipc: http://ipc.localhost; worker-src 'self'; manifest-src 'self'; object-src 'none'; frame-src 'self' blob:; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="same-origin">
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Hilfe &amp; FAQ GBO – ASiC Handel</title>
+<link href="css/styles.css?v=2.2.0-9" rel="stylesheet"/>
+<script src="zugang-config.js"></script>
+<script src="js/access-gate.js?v=2.2.0-9"></script>
+<style>
+/* Kopfbereich */
+.doku-hero{background:linear-gradient(135deg,#294d68 0%,#416b88 100%);border-radius:var(--radius);padding:1.75rem 1.5rem;color:#fff;margin-bottom:1.5rem;box-shadow:var(--shadow)}
+.doku-hero-badge{display:inline-block;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.5);border-radius:999px;padding:.25rem .9rem;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.9rem}
+.doku-hero h1{font-size:1.7rem;color:#fff;margin-bottom:.3rem}
+.doku-hero p{opacity:.92;font-size:.95rem}
+
+/* Inhaltsverzeichnis */
+.doku-toc{display:flex;flex-wrap:wrap;gap:.4rem 1.25rem;font-size:.85rem;margin-bottom:1.75rem;padding:.9rem 1.1rem;background:var(--paper-raised);border-radius:var(--radius-sm);border:1px solid var(--line)}
+.doku-toc a{text-decoration:none;color:var(--ink-soft);border-bottom:1px dotted var(--steel-light)}
+
+/* Abschnitte: immer Überschrift, Einleitung, Inhalt */
+.doku-section{margin-bottom:2rem;scroll-margin-top:1rem}
+.doku-section h2{font-size:1.15rem;color:#294d68;border-bottom:2px solid #7895aa;padding-bottom:.4rem;margin-bottom:1rem}
+.doku-lead{font-size:.92rem;color:var(--ink-soft);margin:0 0 .9rem}
+
+/* Inhaltsbausteine: feste Karte oder aufklappbare Frage */
+.faq-item{margin-bottom:.7rem;overflow:hidden;background:#fff;border:1px solid #d7e1e8;border-radius:12px;box-shadow:0 2px 8px rgba(31,55,74,.04)}
+.faq-item summary{padding:.9rem 1.15rem;cursor:pointer;font-weight:600;font-size:.92rem;color:var(--ink);list-style:none;display:flex;justify-content:space-between;gap:1rem}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary::after{content:"+";font-size:1.2rem;color:var(--brand-red-dark)}
+.faq-item[open] summary::after{content:"–"}
+.faq-item[open] summary{border-bottom:1px solid var(--line)}
+.faq-body{padding:.9rem 1.15rem 1.1rem;font-size:.88rem;color:var(--ink-soft)}
+.faq-body p{margin:0 0 .7rem}
+.faq-body p:last-child{margin-bottom:0}
+.faq-body ul,.faq-body ol{padding-left:1.25rem;margin:.5rem 0 .8rem}
+.faq-body li{margin:.3rem 0}
+.faq-tag{display:inline-block;font-size:.68rem;font-weight:700;text-transform:uppercase;padding:.15rem .55rem;border-radius:999px;margin-right:.4rem;background:var(--brand-red-tint);color:var(--brand-red-dark)}
+
+/* Hinweisbox */
+.doku-box{border-left:3px solid #416b88;background:#eef3f7;border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:.85rem 1.1rem;margin:.4rem 0 .9rem;font-size:.88rem}
+.doku-box-title{font-weight:700;color:#294d68;margin-bottom:.3rem}
+.doku-box p:last-child{margin-bottom:0}
+
+/* Tabellen */
+.doku-table-wrap{overflow-x:auto;margin:.4rem 0 .9rem}
+.doku-table{width:100%;border-collapse:collapse;font-size:.86rem}
+.doku-table th{background:#294d68;color:#fff;text-align:left;padding:.55rem .7rem}
+.doku-table td{padding:.5rem .7rem;border-bottom:1px solid var(--line);vertical-align:top}
+.doku-table tr:nth-child(even) td{background:var(--paper-raised)}
+.doku-table td:first-child{font-weight:600}
+
+.app-footer-meta{text-align:center;margin-top:.8rem;font-size:.78rem;color:var(--ink-soft);line-height:1.55}
+@media(max-width:600px){.doku-toc{gap:.55rem .85rem;padding:.8rem}.doku-hero{padding:1.25rem 1rem}}
+</style>
+</head>
+<body>
+<header class="app-header">
+  <div class="hazard-strip"></div>
+  <div class="app-header-inner">
+    <div class="brand"><span class="brand-title">ASiC Handel</span><span class="brand-tag">GBO</span><span class="brand-subtitle">„Gefährdungen systematisch beurteilen.“</span></div>
+    <nav class="app-nav"><a href="index.html">Prüfkatalog</a><a href="gbo.html">Gefährdungsbeurteilung</a><a href="gbo-dokumentation.html">Technische Dokumentation GBO</a></nav>
+  </div>
+</header>
+
+<main class="page">
+
+<div class="doku-hero">
+  <div class="doku-hero-badge">Hilfe &amp; FAQ · GBO</div>
+  <h1>Bedienungsanleitung Gefährdungsbeurteilung</h1>
+  <p>Schritt für Schritt: vorbereiten, beurteilen, Maßnahmen verfolgen und dokumentieren.</p>
+</div>
+
+<nav class="doku-toc" aria-label="Inhaltsverzeichnis">
+  <a href="#start">1 Erste Schritte</a>
+  <a href="#menues">2 Menüs</a>
+  <a href="#struktur">3 Aufbau &amp; Themen finden</a>
+  <a href="#bewertung">4 Bewerten</a>
+  <a href="#massnahmen">5 Maßnahmen</a>
+  <a href="#psychisch">6 Psychische Belastungen</a>
+  <a href="#bildbelege">7 Fotos &amp; Bildbelege</a>
+  <a href="#statistik">8 Übersicht &amp; Fortschreibung</a>
+  <a href="#begehung">9 Begehungshinweise</a>
+  <a href="#sicherung">10 Sicherung &amp; Druck</a>
+  <a href="#iphone">11 iPhone</a>
+  <a href="#fachfragen">12 Fachfragen</a>
+  <a href="#quellen">13 Quellen</a>
+</nav>
+
+<!-- 1 -->
+<section class="doku-section" id="start">
+  <h2>1. Erste Schritte: So bearbeiten Sie die GBO</h2>
+  <p class="doku-lead">Sechs Schritte von den Betriebsdaten bis zur Sicherung.</p>
+  <div class="card"><div class="faq-body">
+    <ol>
+      <li><b>Betriebsdaten prüfen.</b> Marktnummer, Anschrift, Datum sowie „Marktleitung / Verantwortlich“ eintragen bzw. kontrollieren.</li>
+      <li><b>Inventar festlegen.</b> Die Kernbeurteilung ist immer aktiv. Unter „GBO vorbereiten“ zusätzlich die besonderen Einrichtungen, Arbeitsbereiche und Maschinen auswählen, die es im Markt gibt; gleiche Geräte bei Bedarf mehrfach anlegen.</li>
+      <li><b>Gefährdungen beurteilen.</b> Unter „Gefährdungen beurteilen“ jede angezeigte Frage anhand der tatsächlichen Arbeitsbedingungen bewerten.</li>
+      <li><b>Maßnahmen festlegen.</b> Bei Handlungsbedarf konkrete Maßnahme, Verantwortlichen und Frist dokumentieren; bei Beratungsbedarf die offene fachliche Klärung festhalten.</li>
+      <li><b>Umsetzung und Wirksamkeit prüfen.</b> Nach der Umsetzung kontrollieren, ob die Maßnahme im Alltag wirkt, und Ergebnis sowie Datum dokumentieren.</li>
+      <li><b>Dokumentieren und sichern.</b> Übersicht und Fristen prüfen, Bildbelege bei Bedarf aufrufen und die GBO regelmäßig sichern.</li>
+    </ol>
+  </div></div>
+</section>
+
+<!-- 2 -->
+<section class="doku-section" id="menues">
+  <h2>2. Die Menüs im Überblick</h2>
+  <p class="doku-lead">Die Vorbereitung des Beurteilungsumfangs ist von der eigentlichen Bewertung getrennt.</p>
+  <div class="card"><div class="faq-body">
+    <div class="doku-table-wrap"><table class="doku-table">
+      <tr><th>Menü</th><th>Wofür es dient</th></tr>
+      <tr><td>Übersicht – Stand &amp; Aufgaben</td><td>Fortschritt, offene Maßnahmen nach Frist, Gefährdungsfaktoren mit Restrisiko und die Fortschreibung der GBO.</td></tr>
+      <tr><td>Betriebsdaten</td><td>Stammdaten und „Marktleitung / Verantwortlich“ pflegen.</td></tr>
+      <tr><td>GBO vorbereiten</td><td>Relevante Themen, Arbeitsbereiche und Maschinen auswählen. Die Auswahl ist noch keine Bewertung.</td></tr>
+      <tr><td>Gefährdungen beurteilen</td><td>Fragen fachlich bewerten und bei Bedarf Maßnahmen dokumentieren.</td></tr>
+      <tr><td>Hinweise aus Begehungen</td><td>Befunde einer passenden GBO-Frage zuordnen und zur Prüfung vormerken.</td></tr>
+      <tr><td>Bildbelege</td><td>Gespeicherte Fotos mit Modul, Bereich, Fragen-ID und Fragetext ansehen.</td></tr>
+      <tr><td>Dokumentation</td><td>JSON sichern und importieren sowie Gesamt-GBO und Maßnahmenliste als PDF drucken, teilen oder per Mail vorbereiten.</td></tr>
+    </table></div>
+  </div></div>
+</section>
+
+<!-- 3 -->
+<section class="doku-section" id="struktur">
+  <h2>3. Themen und Fragen finden</h2>
+  <p class="doku-lead">Ab Rev. 2.1.0 gliedert sich die GBO in die Kernbeurteilung nach Gefährdungsfaktoren und die Vertiefung nach Inventar.</p>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Struktur</span>Wie ist die GBO aufgebaut?</span></summary>
+    <div class="faq-body">
+      <p><b>Kernbeurteilung</b> (immer aktiv, 287 Fragen): Faktor 0 „Organisation und Pflichten“ und die Gefährdungsfaktoren 1 bis 11 – mechanisch, elektrisch, Gefahrstoffe, biologisch, Brand und Explosion, thermisch, physikalisch, Arbeitsumgebung, physische Belastung, psychische Belastung, sonstige Gefährdungen. Innerhalb eines Faktors sind die Fragen nach Themen gruppiert, z. B. „Leitern und Tritte“ unter Faktor 1.</p>
+      <p><b>Vertiefung</b>: Module für die besonderen Einrichtungen, Arbeitsbereiche und Maschinen, die unter „GBO vorbereiten“ ausgewählt sind. Bereichsmodule sind nach Gefährdungsfaktoren gegliedert, Maschinen nach der Grundstruktur Aufstellung, Bedienung, Schutzeinrichtungen, Störung und Stillsetzen, Reinigung, Prüfung und Mängel, Organisation und Unterweisung.</p>
+    </div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Auswahl</span>Warum erscheint ein Bereich, den ich nicht ausgewählt habe?</span></summary>
+    <div class="faq-body"><p>Wird eine Kernfrage mit Handlungs- oder Beratungsbedarf bewertet, öffnet sich die passende Vertiefung automatisch, z. B. Fußschutz bei PSA oder Technik- und Heizungsräume bei Brandschutz. Ein Hinweis im Modul nennt die auslösende Frage. Die Vertiefung bleibt sichtbar, solange der Bedarf besteht, oder dauerhaft, wenn der Bereich ausgewählt wird.</p></div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Geräte</span>Wie beurteile ich zwei gleiche Maschinen?</span></summary>
+    <div class="faq-body"><p>Unter „GBO vorbereiten“ → „Mehrere gleiche Geräte“ auf „+ weiteres Gerät“ tippen und eine Bezeichnung eintragen, z. B. „Backshop“ und „Metzgerei“. Jedes Gerät erscheint als eigenes Modul mit eigenen Antworten.</p></div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Umstellung</span>Was ist mit meiner GBO aus einer früheren Fassung?</span></summary>
+    <div class="faq-body"><p>Sie wird beim ersten Öffnen automatisch übernommen. Doppelte Fragen wurden zusammengeführt; war die verbleibende Frage schon bewertet, steht die Angabe der entfallenen Frage unter „Festgestellte Gefährdung“ mit dem Vermerk „[Übernommen aus …]“. Waren Leih- und eigene Presse oder beide Backöfen ausgewählt, gibt es jetzt zwei Geräte. Risikobewertungen von Modulen bleiben erhalten; neu bewertet wird je Gefährdungsfaktor.</p></div>
+  </details>
+</section>
+
+<section class="doku-section" id="bewertung">
+  <h2>4. Gefährdungen beurteilen</h2>
+  <p class="doku-lead">Jede Frage erhält genau eine von vier Bewertungen. Das Risiko wird je Modul eingestuft.</p>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Bewertung</span>Was bedeuten die vier Antworten?</span></summary>
+    <div class="faq-body">
+      <p><b>Ausreichend geschützt:</b> Die vorhandenen Schutzmaßnahmen werden als ausreichend beurteilt.</p>
+      <p><b>Handlungsbedarf:</b> Zusätzliche Maßnahmen sind erforderlich; Quellenhinweis und Erläuterung werden eingeblendet.</p>
+      <p><b>Beratungs-/Vertiefungsbedarf:</b> Weitere fachliche Klärung oder Unterlagen sind erforderlich.</p>
+      <p><b>Nicht zutreffend:</b> Die Gefährdung bzw. Tätigkeit ist im betrachteten Betrieb nicht vorhanden.</p>
+    </div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Fortschritt</span>Wie wird der Fortschritt berechnet?</span></summary>
+    <div class="faq-body"><p>Gezählt werden nur Fragen der aktivierten GBO-Module. Jede gesetzte Bewertung – auch „Nicht zutreffend“ – gilt als beantwortet.</p></div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Quelle</span>Was bedeutet der Quellenhinweis?</span></summary>
+    <div class="faq-body"><p>Er nennt die einschlägigen Rechtsgrundlagen und Regeln zum Thema der Frage, jeweils mit Paragraf, Anhangnummer oder Abschnitt (zum Beispiel „ASR A1.8 Abschn. 5 – Betreiben von Verkehrswegen“). Die Erläuterung und die Hinweise zu technischen, organisatorischen und personenbezogenen Maßnahmen gehören zum selben Thema.</p>
+<p>Die Quellen werden dem Thema der Frage fest zugeordnet, nicht aus dem Fragetext erraten. Ein gelbes Kennzeichen „Abschnitt prüfen“ bedeutet: Das Regelwerk ist richtig benannt, Paragraf oder Abschnitt konnten beim Erstellen nicht gegen den Wortlaut abgeglichen werden. Dort bitte vor der Verwendung in der Fassung nachsehen, die in Ihrem Betrieb gilt.</p></div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Risiko</span>Wie bewerte ich das Risiko eines Moduls?</span></summary>
+    <div class="faq-body">
+      <p>Am Anfang jedes Moduls steht der Block „Risikobewertung“. Sie stufen zwei Werte ein: die <b>Schwere</b> des möglichen Schadens (1 gering bis 4 sehr schwer) und die <b>Wahrscheinlichkeit</b> (1 unwahrscheinlich bis 4 sehr wahrscheinlich). Die App multipliziert beide Werte zur Risikozahl.</p>
+      <p><b>① Ausgangsrisiko:</b> Das Risiko ohne die vorgesehenen Schutzmaßnahmen. <b>② Restrisiko:</b> Das Risiko nach Umsetzung der Maßnahmen. <b>③ Wirksamkeitskontrolle:</b> Datum, Ergebnis (wirksam, teilweise wirksam, nicht wirksam) und Name der prüfenden Person.</p>
+      <p>Der Block „Skala und Risikoklassen“ erklärt jede Stufe. Die Einstufung nehmen Sie selbst vor; die App setzt sie nie automatisch.</p>
+    </div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Risiko</span>Welche Risikoklassen gibt es, und wann ist das Restrisiko vertretbar?</span></summary>
+    <div class="faq-body">
+      <div class="doku-table-wrap"><table class="doku-table">
+        <tr><th>Risikozahl</th><th>Klasse</th><th>Richtwert für das Handeln</th></tr>
+        <tr><td>1 bis 2</td><td>niedrig</td><td>Kein weiterer Handlungsbedarf, Zustand beobachten.</td></tr>
+        <tr><td>3 bis 6</td><td>mittel</td><td>Maßnahmen planen und mit Frist festlegen (innerhalb von 6 Monaten).</td></tr>
+        <tr><td>8 bis 9</td><td>hoch</td><td>Maßnahmen zeitnah umsetzen (innerhalb von 1 Monat).</td></tr>
+        <tr><td>12 bis 16</td><td>sehr hoch</td><td>Sofort handeln, die Tätigkeit bis zur Umsetzung gegebenenfalls aussetzen.</td></tr>
+      </table></div>
+      <p>Ein Restrisiko bis zur Risikozahl 6 gilt in der App als <b>vertretbar</b>, ab 8 als <b>nicht vertretbar</b>. Das ist eine betriebliche Festlegung und keine gesetzliche Vorgabe; das Arbeitsschutzgesetz schreibt kein bestimmtes Bewertungsverfahren vor. Bei nicht vertretbarem Restrisiko legen Sie zusätzliche Maßnahmen fest und bewerten danach neu.</p>
+    </div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Hinweis</span>Setzt die App Bewertungen automatisch?</span></summary>
+    <div class="faq-body"><p>Nein. Weder die Auswahl von Maßnahmen noch die Zuordnung eines Begehungsbefunds setzt eine Bewertung, und auch die Risikostufen tragen Sie selbst ein. Die App berechnet nur Risikozahl, Risikoklasse und die Hinweise daraus. Die Beurteilung bleibt Ihre fachliche Entscheidung.</p></div>
+  </details>
+</section>
+
+<!-- 5 -->
+<section class="doku-section" id="massnahmen">
+  <h2>5. Maßnahmen und Wirksamkeitskontrolle</h2>
+  <p class="doku-lead">Bei Handlungs- oder Beratungsbedarf werden Maßnahmen an der jeweiligen Frage dokumentiert.</p>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Maßnahme</span>Was wird bei Handlungsbedarf dokumentiert?</span></summary>
+    <div class="faq-body">
+      <ul>
+        <li>Feststellung bzw. Gefährdung</li>
+        <li>Vorhandene Schutzmaßnahmen</li>
+        <li>Zusätzliche Maßnahme</li>
+        <li>Verantwortlicher und Frist</li>
+        <li>Umsetzung</li>
+        <li>Wirksamkeitskontrolle mit Datum, Prüfer und Ergebnis</li>
+      </ul>
+    </div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Verantwortlich</span>Wer wird als Verantwortlicher eingetragen?</span></summary>
+    <div class="faq-body"><p>Das Feld „Verantwortlich“ wird mit „Marktleitung / Verantwortlich“ aus den Betriebsdaten vorbelegt, sofern noch keine abweichende Person eingetragen ist. Individuell festgelegte Verantwortliche bleiben erhalten.</p></div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">TOP</span>Wie wähle ich Maßnahmen sinnvoll aus?</span></summary>
+    <div class="faq-body">
+      <p>Das TOP-Prinzip gibt die Reihenfolge vor:</p>
+      <ul>
+        <li><b>T – Technisch:</b> Gefährdungen möglichst an der Quelle beseitigen oder begrenzen.</li>
+        <li><b>O – Organisatorisch:</b> sichere Abläufe, Zuständigkeiten, Wartung und Prüfungen festlegen.</li>
+        <li><b>P – Personenbezogen:</b> erforderliche Unterweisung und ergänzende persönliche Schutzmaßnahmen berücksichtigen.</li>
+      </ul>
+      <p>Technische Maßnahmen haben grundsätzlich Vorrang, soweit sie geeignet und erforderlich sind. Die Hinweise sind auf die jeweilige Gefährdung zu beziehen.</p>
+    </div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Wirksamkeit</span>Wann muss eine Maßnahme als wirksam bewertet werden?</span></summary>
+    <div class="faq-body"><p>Nach der Umsetzung wird die Wirksamkeit unter realen Arbeitsbedingungen anhand der konkreten betrieblichen Situation geprüft und dokumentiert. Eine pauschale jährliche Neubewertung aller Gefährdungsbeurteilungen wird daraus nicht abgeleitet.</p></div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Maßnahmenplan</span>Wo erscheinen meine Maßnahmen gesammelt?</span></summary>
+    <div class="faq-body"><p>Alle Maßnahmen werden zusammen mit Verantwortlichem, Frist, Umsetzung und Wirksamkeitsprüfung in der Maßnahmenliste und der Gesamt-GBO ausgegeben (Menü „Dokumentation“). Das gilt auch für ausgewählte Maßnahmen der psychischen Belastungen.</p></div>
+  </details>
+</section>
+
+<!-- 6 -->
+<section class="doku-section" id="psychisch">
+  <h2>6. Psychische Belastungen</h2>
+  <p class="doku-lead">Das Modul bündelt arbeitsbedingte psychische Belastungsfaktoren des Einzelhandels. Es ersetzt nicht die individuelle fachliche Beurteilung.</p>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Bedienung</span>Wie bearbeite ich eine psychische Belastungsfrage?</span></summary>
+    <div class="faq-body"><p>Die Frage wird zunächst mit einer der vier GBO-Bewertungen beurteilt. Bei Handlungs- oder Vertiefungsbedarf können Feststellung, vorhandene Schutzmaßnahmen, eine konkrete zusätzliche Maßnahme, Verantwortlicher, Frist, Umsetzung und Wirksamkeitskontrolle dokumentiert werden. Ein Foto können Sie über den Foto-/Anhangbezug hinzufügen (siehe Abschnitt 7).</p></div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Aufbau</span>Wie ist das Modul gegliedert?</span></summary>
+    <div class="faq-body"><p>Der Faktor „10 · Psychische Belastung“ beginnt mit der Eingangsfrage nach BGHW: Werden psychische Fehlbelastungen vermieden, und mit welchem Verfahren wurde beurteilt (Expertencheck, PegA-Befragung, PegA-Team, Ideen-Treffen)? Danach folgen die 39 Fragen, gegliedert nach den acht Themenfeldern: Arbeitsinhalt und Arbeitsaufgabe, Arbeitsorganisation, Arbeitszeit, soziale Beziehungen und Kommunikation, Führung, Kundenkontakt und emotionale Anforderungen, Arbeitsumgebung sowie besondere Belastungssituationen. Die Nummern PSY-01 bis PSY-39 bleiben fest; die Reihenfolge innerhalb des Moduls folgt den Themenfeldern.</p></div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Methode</span>Reicht die Begehung für die psychische Gefährdungsbeurteilung aus?</span></summary>
+    <div class="faq-body"><p>Nur zum Teil. Bei der Begehung lassen sich Arbeitsbedingungen beobachten und mit Marktleitung und Beschäftigten besprechen. Für eine belastbare Beurteilung sollen die Beschäftigten beteiligt werden, etwa über eine kurze Befragung, ein moderiertes Teamgespräch bzw. Ideen-Treffen (DGUV Information 206-007) oder ein Beobachtungsinterview. Die Ergebnisse tragen Sie bei der jeweiligen Frage unter „Festgestellte Gefährdung“ oder „Vorhandene Schutzmaßnahmen“ ein. Beurteilt werden immer die Arbeitsbedingungen, nicht einzelne Personen. Den gleichen Hinweis zeigt das Modul oben an.</p></div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Maßnahme</span>Was bedeuten die Maßnahmenvorschläge?</span></summary>
+    <div class="faq-body"><p>Sie sind fachliche Auswahlhilfen und ersetzen nicht die betriebliche Beurteilung. Mehrere passende Maßnahmen können ausgewählt werden. Eine eigene Lösung tragen Sie zusätzlich als „Sonstige Maßnahme“ ein.</p></div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Kennzeichen</span>Was bedeutet das U?</span></summary>
+    <div class="faq-body"><p>Das U kennzeichnet Fragen mit Unterweisungsbezug. Es ist eine Bedienhilfe und bedeutet nicht, dass jede Frage automatisch eine eigenständige gesetzliche Unterweisungspflicht begründet.</p></div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Quelle</span>Warum steht die Quelle direkt an der Frage?</span></summary>
+    <div class="faq-body"><p>Die fachliche Orientierung steht dort, wo die Beurteilung erfolgt. Rechtsgrundlage, Regelwerk oder Handlungshilfe sind eine Orientierung; maßgeblich bleiben die im konkreten Betrieb geltenden Anforderungen.</p></div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Bewertung</span>Gibt es eine Punktzahl oder Ampel?</span></summary>
+    <div class="faq-body"><p>Nein. Das Punktesystem der zugrunde liegenden Vorlage wurde bewusst nicht übernommen. Es gelten wie überall in der GBO die vier Bewertungen „Ausreichend geschützt“, „Handlungsbedarf“, „Beratungs-/Vertiefungsbedarf“ und „Nicht zutreffend“.</p></div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Quellen</span>Welche Quellen stehen hinter dem Modul?</span></summary>
+    <div class="faq-body">
+      <p>Berücksichtigt wurden insbesondere ArbSchG, DGUV Vorschrift 1, DGUV Information 206-007 „So geht’s mit Ideen-Treffen“ (Beteiligung der Beschäftigten), die GDA-Leitlinie „Gefährdungsbeurteilung psychischer Belastung“, die BGHW-Handlungshilfe „Psychische Belastungen im Handel“, ArbStättV, ASR, DIN EN ISO 10075 und – soweit für Beteiligung und Organisation relevant – das BetrVG.</p>
+      <p>Die Anwendung übernimmt daraus keine Punktbewertung und ersetzt keine fachliche Ermittlung der tatsächlichen Arbeitsbedingungen.</p>
+    </div>
+  </details>
+</section>
+
+<!-- 7 -->
+<section class="doku-section" id="bildbelege">
+  <h2>7. Fotos und Bildbelege</h2>
+  <p class="doku-lead">Fotos werden direkt an der GBO-Frage aufgenommen und im Menü „Bildbelege“ gesammelt angezeigt.</p>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Foto</span>Wie füge ich ein Foto oder eine Datei hinzu?</span></summary>
+    <div class="faq-body">
+      <p>Beim Feld „Foto-/Anhangbezug“ stehen die Schaltflächen <b>Kamera</b> und <b>Datei auswählen</b> bereit. Auf dem iPhone kann „Kamera“ direkt die Kamera öffnen; „Datei auswählen“ öffnet die Dateiauswahl. Es können ausschließlich Bilder angehängt werden; über „Entfernen“ löschen Sie ein Bild wieder.</p>
+      <p>Jedes Bild wird wie im Prüfkatalog auf maximal 1024 Pixel Kantenlänge und JPEG-Qualität 62 % verkleinert.</p>
+    </div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Ansicht</span>Wo sehe ich alle Bildbelege?</span></summary>
+    <div class="faq-body"><p>Im Menü „Bildbelege“. Jede Karte zeigt Modul, Themenbereich, Fragen-ID und Fragetext. Mit Auswahl der Vorschau öffnen Sie das Bild größer. Das Ansehen verändert keine Daten.</p></div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Daten</span>Wo werden die Bilder gespeichert?</span></summary>
+    <div class="faq-body">
+      <p>Die Bilder liegen auf dem Gerät, mit dem Sie sie aufgenommen haben, in einem eigenen Speicherbereich der App. Sie bleiben dort auch nach „Begehung zurücksetzen“ erhalten; nur „GBO zurücksetzen“ löscht sie.</p>
+      <p>In der JSON-Sicherung und im Marktcontainer steht pro Bild nur ein kleines Vorschaubild, nicht das Bild selbst. Wer die GBO auf einem anderen Gerät öffnet, sieht deshalb die Vorschau.</p>
+      <div class="doku-box"><div class="doku-box-title">Datenschutz</div><p>Bitte keine unnötigen personenbezogenen oder besonders sensiblen Angaben aufnehmen.</p></div>
+    </div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Ansicht</span>Was bedeutet „Vorschau“ an einem Bild?</span></summary>
+    <div class="faq-body">
+      <p>Das Original liegt nicht auf diesem Gerät, zum Beispiel weil die GBO von einem anderen Gerät oder vom Server geladen wurde. Sie sehen dann nur das kleine Vorschaubild. Zur Dokumentation reicht es meist aus. Wollen Sie das Originalbild, nehmen Sie das Foto auf diesem Gerät neu auf; es ersetzt die Vorschau.</p>
+    </div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Speicher</span>Was passiert, wenn der Speicher knapp wird?</span></summary>
+    <div class="faq-body">
+      <p>Vor jedem neuen Bild prüft die App den freien Platz:</p>
+      <ul>
+        <li><b>Speicher zu mindestens 80 % belegt:</b> Sie bekommen eine Warnung und können wählen, ob Sie das Bild trotzdem speichern.</li>
+        <li><b>Nicht genug Platz:</b> Das Bild wird nicht gespeichert. Die Meldung nennt den Bedarf und den freien Platz.</li>
+      </ul>
+      <p>In den Menüs „Bildbelege“ und „Dokumentation“ sehen Sie jederzeit, wie voll der Speicher ist. Bei einer Warnung hilft es, nicht mehr benötigte Bilder zu entfernen, die GBO zu sichern und die Begehung zu archivieren. Die Prüfung gilt ebenso für die Fotos im Prüfkatalog und im Aktionsplan.</p>
+    </div>
+  </details>
+</section>
+
+<!-- 8 -->
+<section class="doku-section" id="statistik">
+  <h2>8. Übersicht und Fortschreibung</h2>
+  <p class="doku-lead">Die Übersicht unterstützt die laufende Bearbeitung. Sie ersetzt weder die fachliche Beurteilung noch die Kontrolle vor Ort.</p>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Statistik</span>Was zeigt die Übersicht?</span></summary>
+    <div class="faq-body"><p>Oben stehen drei Kennzahlen: Fortschritt der Kernbeurteilung, Fortschritt der Vertiefung und die Zahl offener Punkte. Ein schmaler Balken zeigt die Verteilung aller Bewertungen (ausreichend geschützt, nicht zutreffend, Beratungsbedarf, Handlungsbedarf, noch offen).</p><p>Darunter folgt „Zu erledigen“: alle offenen Maßnahmen, zuerst die überfälligen, dann Handlungs- und Beratungsbedarf, jeweils nach Frist sortiert. Ein Klick auf einen Eintrag öffnet die Frage. Die Tabelle „Gefährdungsfaktoren“ zeigt je Faktor den Stand der Kernfragen, den Bedarf und das Restrisiko; ein Klick öffnet den Faktor in „Beurteilen“.</p></div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Risiko</span>Was zeigt die Risikoübersicht?</span></summary>
+    <div class="faq-body"><p>Die Übersicht zählt die Gefährdungsfaktoren nach ihrer Risikoklasse im Restrisiko (niedrig, mittel, hoch, sehr hoch, noch nicht bewertet) und zeigt eine Matrix aus Schwere und Wahrscheinlichkeit. Darunter stehen die Faktoren mit nicht vertretbarem Restrisiko. Faktoren ohne Restrisiko-Einstufung zählen als „noch nicht bewertet“.</p></div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Fortschreibung</span>Wann muss die GBO überprüft werden, und wie dokumentiere ich das?</span></summary>
+    <div class="faq-body">
+      <p>Das Arbeitsschutzgesetz verlangt keine feste Frist, sondern eine Überprüfung und Anpassung bei jedem Anlass (ArbSchG § 3 Abs. 1, § 5): nach einem Unfall, Beinaheunfall oder einer arbeitsbedingten Erkrankung, nach einem Überfall oder Gewaltereignis, bei neuen Maschinen, Arbeitsmitteln oder Arbeitsstoffen, bei Umbauten oder geänderten Abläufen, bei geänderten Vorschriften und wenn die Wirksamkeitskontrolle oder eine Begehung Mängel zeigt. Zusätzlich legt der Betrieb eine regelmäßige Überprüfung fest; in der App wählen Sie dafür 12, 24 oder 36 Monate (Voreinstellung 12).</p>
+      <p>In der Karte „Fortschreibung“ der Übersicht öffnen Sie „Überprüfung dokumentieren“ und tragen Datum, Anlass, Ergebnis (z. B. „GBO angepasst“ oder „keine Änderung erforderlich“), Name, die betroffenen Gefährdungsfaktoren und eine Bemerkung ein. Die Einträge erscheinen als Verlauf. Die App berechnet die nächste regelmäßige Überprüfung (letzte Überprüfung plus gewählter Zeitraum, ohne Eintrag ab dem Datum der GBO) und zeigt, ob sie bald fällig oder überfällig ist. Der Verlauf steht im Gesamt-PDF im Abschnitt „Fortschreibung“; Stand und nächster Termin erscheinen auch auf dem Deckblatt und im Mail-Text.</p>
+    </div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Frist</span>Wann gilt eine Maßnahme als überfällig?</span></summary>
+    <div class="faq-body"><p>Wenn die Frist vor dem heutigen lokalen Datum liegt und kein Umsetzungsdatum eingetragen ist. Prüfen Sie bei einem überfälligen Eintrag den tatsächlichen Stand und aktualisieren Sie die Dokumentation.</p></div>
+  </details>
+</section>
+
+<!-- 9 -->
+<section class="doku-section" id="begehung">
+  <h2>9. Hinweise aus Begehungen</h2>
+  <p class="doku-lead">Begehung und GBO bleiben getrennte Teilstände und werden nur gezielt verknüpft.</p>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Begehung</span>Wie ordne ich einen Befund zu und wie geht es nach „Vormerken“ weiter?</span></summary>
+    <div class="faq-body">
+      <p>Dem Begehungsbefund wird zuerst ein GBO-Modul und dann eine konkrete GBO-Frage zugeordnet. Nach dem Vormerken stehen drei Funktionen zur Verfügung:</p>
+      <ul>
+        <li><b>GBO öffnen:</b> führt zur verknüpften Frage; dort steht der ursprüngliche Begehungsbefund als Herkunftshinweis.</li>
+        <li><b>Ändern:</b> ändert die Zuordnung.</li>
+        <li><b>Lösen:</b> hebt die Zuordnung auf.</li>
+      </ul>
+      <p>Die Bewertung der GBO-Frage wird nicht automatisch gesetzt. Für den größten Teil der Begehungspunkte (148 von 199) ist bereits eine passende Frage vorbelegt; sie ist ein Vorschlag und sollte vor dem Vormerken kontrolliert werden. Punkte ohne passende GBO-Frage (z. B. Elektrik, Aufzüge) wählen Sie selbst aus.</p>
+    </div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">PDF</span>Kann ich den Umfang der Gesamt-GBO beim Drucken einschränken?</span></summary>
+    <div class="faq-body"><p>Ja. Im Menü „GBO dokumentieren“ gibt es bei „Gesamte GBO“ den Bereich „Druckumfang“: nur Einträge mit Handlungs- oder Beratungsbedarf, ohne Bildbelege und ohne Quellen und Hinweise. Die Auswahl bleibt auf dem Gerät gespeichert und gilt nur für die Gesamt-GBO, nicht für die Maßnahmenliste. Kurzfassung und Inhaltsverzeichnis stehen in jeder Gesamt-GBO.</p></div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">PDF</span>Wofür ist der Maßnahmenplan im Querformat?</span></summary>
+    <div class="faq-body"><p>Er ist zum Aushängen und Abhaken im Markt gedacht: alle Maßnahmen nach Dringlichkeit sortiert (überfällige zuerst), mit Verantwortlichem, Frist, Kästchen „erledigt am“ und Feld für die Paraphe. Bereits als umgesetzt eingetragene Maßnahmen erscheinen mit Haken und Datum. Die Erledigung muss zusätzlich in der App eingetragen werden.</p></div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">PDF</span>Was zeigen Kurzfassung und Inhaltsverzeichnis?</span></summary>
+    <div class="faq-body"><p>Die Kurzfassung zeigt die Risikomatrix mit den Modulen nach Restrisiko, die höchsten Restrisiken, die Module mit dem meisten Handlungsbedarf und überfällige Maßnahmen. Das Inhaltsverzeichnis nennt Seitenzahlen; Einträge lassen sich antippen. Zusätzlich enthält das PDF Lesezeichen für die Navigation am Bildschirm.</p></div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Freigabe</span>Wie unterschreibt die verantwortliche Person in der App?</span></summary>
+    <div class="faq-body"><p>Im Menü „GBO dokumentieren“ steht der Abschnitt „Freigabe und Unterschrift“ mit je einem Feld für die verantwortliche Person (Marktleitung bzw. Unternehmer) und den Ersteller. Name und Datum eintragen, dann mit Finger oder Stift im Feld unterschreiben; die Unterschrift wird sofort gespeichert und auf Seite 2 der PDF-Ausgabe eingesetzt. „Unterschrift löschen“ leert das Feld. Es handelt sich um eine Handunterschrift als Bild, nicht um eine qualifizierte elektronische Signatur. Nach wesentlichen Änderungen der GBO sollte erneut unterschrieben werden.</p></div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Risiko</span>Kann ich einzelne Gefährdungen eines Moduls bewerten?</span></summary>
+    <div class="faq-body"><p>Ja. Im Block „Risikobewertung“ jedes Moduls öffnen Sie „Einzelgefährdungen bewerten“ und fügen je Gefährdung eine Zeile hinzu: Bezeichnung, Schwere und Wahrscheinlichkeit vorher und nachher sowie eine Maßnahme. Sobald Einzelgefährdungen bewertet sind, gilt für das Modul der jeweils höchste Einzelwert; die Modulfelder sind dann gesperrt. Ohne Einzelgefährdungen bewerten Sie wie bisher das ganze Modul.</p></div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Fristen</span>Wie werde ich an überschrittene Fristen erinnert, und wie erfährt der Markt davon?</span></summary>
+    <div class="faq-body"><p>Sind Maßnahmen überfällig oder ist die regelmäßige Überprüfung fällig, erscheint oben auf den GBO-Seiten eine Hinweisleiste. In der Übersicht stehen die Punkte in „Zu erledigen“, überfällige zuerst. Mit „Erinnerung per Mail“ öffnet sich ein Mailentwurf an die E-Mail-Adresse des Marktes (Betriebsdaten); Sie schicken ihn selbst ab. Die App versendet keine Mails von allein.</p></div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">PDF</span>Was steht auf der zweiten Seite der PDF-Ausgabe?</span></summary>
+    <div class="faq-body"><p>Die Dokumentenkontrolle: Zweck und Rechtsgrundlage, Stand und Ersteller, letzte und nächste Überprüfung, Bewertungsmaßstab sowie Unterschriftsfelder für die erstellende Person, die Marktleitung bzw. den Unternehmer und die Kenntnisnahme.</p></div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Betriebsdaten</span>Wie übernehme ich Betriebsdaten aus der Begehung?</span></summary>
+    <div class="faq-body"><p>Mit <b>Betriebsdaten aus Begehung übernehmen</b> werden passende vorhandene Angaben in die GBO übertragen. Leere Felder aus der Begehung überschreiben keine bereits eingetragenen GBO-Daten. Das Datum der Begehung wird dem GBO-Datum zugeordnet.</p></div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Daten</span>Überschreibt die GBO die Begehung?</span></summary>
+    <div class="faq-body"><p>Nein. Begehung und GBO bleiben getrennte Teilstände; eine neue Begehung setzt auch die GBO nicht zurück.</p></div>
+  </details>
+</section>
+
+<!-- 10 -->
+<section class="doku-section" id="sicherung">
+  <h2>10. Sicherung, Server, Druck und Zurücksetzen</h2>
+  <p class="doku-lead">Alles Wichtige zum Sichern, Ausgeben und Löschen Ihrer GBO.</p>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Daten</span>Wie sichere ich die GBO und wie heißt die Datei?</span></summary>
+    <div class="faq-body">
+      <p>Im Menü „Dokumentation“ sichern Sie die GBO als JSON-Datei und lesen sie bei Bedarf wieder ein. Die Datei enthält von den Bildbelegen nur die Vorschaubilder, nicht die Bilder selbst. Der Dateiname lautet:</p>
+      <p><code>GBO_Sicherung_Markt_[Marktnummer]_[Datum].json</code></p>
+      <p>Marktnummer und Betriebsdatum werden automatisch aus den Betriebsdaten übernommen.</p>
+    </div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Server</span>Wie funktioniert die gemeinsame Sicherung mit der Begehung (NAS / Server)?</span></summary>
+    <div class="faq-body">
+      <p>Bei der Gesamtsicherung bzw. Speicherung auf dem Server werden Begehung und GBO gemeinsam in einem Marktcontainer übertragen, bleiben aber getrennte Teilstände. Beide verwenden dieselbe in den Einstellungen hinterlegte Server-Adresse und denselben optionalen Zugriffsschlüssel.</p>
+      <p>„Markt vom NAS / Server laden“ öffnet dieselbe Liste wie in der Begehung, mit Suche nach Marktnummer, Ort oder Datum. Ist ein Markt gerade auf einem anderen Gerät geöffnet, steht dort „geöffnet auf …“ mit dem Gerätenamen aus den Einstellungen. Hat seit dem Laden jemand anderes denselben Markt gespeichert, fragt die App beim Speichern nach: als eigene Fassung speichern, trotzdem überschreiben oder abbrechen.</p>
+      <p>Frühere Einzel-Sicherungen der Begehung und der GBO bleiben einlesbar.</p>
+    </div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">PDF</span>Welche Ausgaben gibt es und wie nutze ich sie?</span></summary>
+    <div class="faq-body">
+      <p>Im Menü „Dokumentation“ gibt es zwei Ausgaben, jeweils als PDF-Datei:</p>
+      <ul>
+        <li><b>Gesamte GBO:</b> Deckblatt mit Betriebsdaten und Status, danach alle ausgewählten Bereiche mit Bewertungen, Maßnahmen und Bildern.</li>
+        <li><b>Maßnahmenliste:</b> nur Fragen mit Handlungs- oder Beratungsbedarf oder hinterlegter Maßnahme, als Tabelle.</li>
+      </ul>
+      <p>Für jede Ausgabe gibt es drei Schaltflächen:</p>
+      <ul>
+        <li><b>Drucken (PDF):</b> öffnet das PDF in einem neuen Tab. Gedruckt wird über das Teilen-Symbol. Blockiert Ihr Gerät das neue Fenster, wird das PDF heruntergeladen.</li>
+        <li><b>PDF teilen:</b> öffnet das Teilen-Menü mit der PDF-Datei und einem fertigen Text. <b>Zum Versenden zwingend Outlook wählen</b> – nur dann stehen Betreff (z. B. „Gefährdungsbeurteilung Markt 1234“) und Mail-Text richtig in der Mail; andere Apps wie Apple Mail übernehmen den Betreff nicht.</li>
+        <li><b>Mail vorbereiten:</b> öffnet einen Mail-Entwurf mit Betreff und Text, aber ohne Anhang.</li>
+        <li><b>In der Desktop-App unter Windows:</b> „Drucken“ öffnet direkt den Druckdialog, „PDF teilen“ gibt es nicht, und „Mail mit PDF vorbereiten“ speichert das PDF unter Downloads\ASiC Handel, zeigt es im Explorer markiert an und öffnet die Mail – das PDF in die Mail ziehen. Auch die übrigen Sicherungen und Exporte landen dort.</li>
+      </ul>
+    </div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Mail</span>Wie verschicke ich die GBO per Mail?</span></summary>
+    <div class="faq-body">
+      <p>Am einfachsten mit <b>PDF teilen</b> und im Teilen-Menü die Mail-App wählen: Die PDF-Datei hängt dann bereits an. Der Mail-Text enthält Marktnummer, Anschrift, Stand, Prüfer, einen Kurzstatus (beantwortete Fragen, Handlungsbedarf, offene und überfällige Maßnahmen) und die Bitte, die Maßnahmen bis zu den Fristen umzusetzen.</p>
+      <p>Mit <b>Mail vorbereiten</b> entsteht nur der Entwurf mit Betreff und Text; die PDF-Datei müssen Sie dann selbst anhängen. Die Mail-App auf dem iPad übernimmt den Betreff beim Teilen nicht immer; der Text steht trotzdem im Entwurf.</p>
+      <p>Prüfer und Marktleitung stammen aus den Betriebsdaten. Tragen Sie dort den Namen des Prüfers ein, steht er als Absender unter der Mail.</p>
+    </div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">PDF</span>Was steht in der Gesamt-GBO ausführlich und was kompakt?</span></summary>
+    <div class="faq-body">
+      <p>Fragen mit „Ausreichend geschützt“, „Nicht zutreffend“ oder ohne Bewertung stehen kompakt in einer Zeile (Kennung, Thema, Frage und Status). Fragen mit Handlungs- oder Beratungsbedarf stehen als ausführlicher Block mit Feststellung, Maßnahmen, Verantwortlichem, Frist, Umsetzung, Wirksamkeit und bei Handlungsbedarf Quelle und Hinweis. Abgelaufene Fristen sind rot markiert. So bleibt auch eine große GBO übersichtlich.</p>
+    </div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">PDF</span>Sind Bilder im PDF enthalten?</span></summary>
+    <div class="faq-body">
+      <p>Ja. Jeder Bildbeleg erscheint bei seiner Frage, in der Maßnahmenliste unter dem Eintrag. Liegt das Originalbild auf diesem Gerät, wird es verwendet. Sonst erscheint das Vorschaubild mit dem Zusatz „(Vorschau)“. Wollen Sie das Original im PDF, erstellen Sie es auf dem Gerät, mit dem das Foto aufgenommen wurde.</p>
+    </div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Reset</span>Was passiert bei „GBO zurücksetzen“?</span></summary>
+    <div class="faq-body"><p>Zuerst erscheint ein Hinweisfenster mit dem Markt und dem, was gelöscht wird. Erst nach „GBO zurücksetzen“ werden GBO-Auswahl, Bewertungen/Antworten, Bildbelege (einschließlich der Bilder auf diesem Gerät), Maßnahmen- und Wirksamkeitsdaten sowie Vormerkungen gelöscht. Die Begehung und die zentralen NAS-/Servereinstellungen bleiben erhalten. Sichern Sie die GBO deshalb vorher.</p></div>
+  </details>
+</section>
+
+<!-- 11 -->
+<section class="doku-section" id="iphone">
+  <h2>11. Bedienung auf dem iPhone</h2>
+  <p class="doku-lead">Die Darstellung ist für schmale Bildschirme bis 520 px optimiert. Die fachliche Datenstruktur bleibt unverändert.</p>
+  <div class="card"><div class="faq-body">
+    <div class="doku-table-wrap"><table class="doku-table">
+      <tr><th>Bereich</th><th>So funktioniert es auf dem iPhone</th></tr>
+      <tr><td>Navigation</td><td>Die obere Navigation lässt sich horizontal wischen, ohne dass die ganze Seite seitlich scrollt.</td></tr>
+      <tr><td>Betriebsdaten</td><td>Felder stehen untereinander und haben ausreichend große Eingabeflächen.</td></tr>
+      <tr><td>Auswahl</td><td>Allgemeine GBO, Arbeitsbereiche und Maschinen stehen untereinander; Module bleiben einzeln auswählbar.</td></tr>
+      <tr><td>Bewertung</td><td>Die Bewertungsoptionen stehen untereinander und haben eine größere Touch-Fläche.</td></tr>
+      <tr><td>Maßnahmen</td><td>Maßnahmenfelder und Aktionsschaltflächen stehen untereinander; nichts wird am rechten Rand abgeschnitten.</td></tr>
+      <tr><td>Begehung ↔ GBO</td><td>Die Zuordnung von Modul und Frage ist vollständig bedienbar; der ursprüngliche Befund bleibt an der Frage sichtbar.</td></tr>
+      <tr><td>Sicherung / PDF</td><td>Sicherung, Import und die beiden PDF-Ausgaben mit je drei Schaltflächen stehen untereinander bereit.</td></tr>
+      <tr><td>Eingaben</td><td>Formularfelder haben eine ausreichende Schriftgröße, damit Safari beim Tippen nicht in die Seite hineinzoomt.</td></tr>
+    </table></div>
+  </div></div>
+</section>
+
+<!-- 12 -->
+<section class="doku-section" id="fachfragen">
+  <h2>12. Häufige Fachfragen</h2>
+  <p class="doku-lead">Besonders ausführlich abgebildete Querschnittsthemen.</p>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Hautschutz</span>Wie werden Feuchtarbeit und Hautschutz beurteilt?</span></summary>
+    <div class="faq-body"><p>Die GBO trennt die Ermittlung der Hautgefährdung von der Auswahl der Schutzmaßnahmen. Berücksichtigt werden insbesondere Feuchtarbeit, häufiges Händewaschen, flüssigkeitsdichtes Handschuhtragen sowie Kontakt zu Reinigungs-, Desinfektions- und anderen hautgefährdenden Stoffen. Grundlage ist insbesondere die TRGS 401.</p></div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Arbeitsmittel</span>Warum gibt es ein eigenes Modul für Putz- und Reinigungsmaschinen?</span></summary>
+    <div class="faq-body"><p>Die allgemeine Reinigung bewertet Verfahren und Reinigungschemie. Eine Reinigungsmaschine ist zusätzlich ein Arbeitsmittel. Deshalb werden Bedienung, bewegte Teile, Netz-/Akkubetrieb, Befüllen, Störung, sicheres Stillsetzen, Werkzeugwechsel, Maschinenreinigung, Wartung, Prüfung und Unterweisung separat beurteilt.</p></div>
+  </details>
+  <details class="card faq-item">
+    <summary><span><span class="faq-tag">Organisation</span>Was wird beim Einsatz von Fremdfirmen geprüft?</span></summary>
+    <div class="faq-body"><p>Geprüft werden unter anderem Gefährdungsaustausch, gegenseitige Gefährdungen, Abstimmung der Schutzmaßnahmen, Zutritt, Ansprechpartner, Qualifikation, Arbeiten an Arbeitsmitteln, besondere Gefahren, Notfallorganisation und Rückmeldung nach Abschluss. Eine besondere Koordination wird nicht pauschal vorausgesetzt, sondern nach der konkreten gegenseitigen Gefährdung beurteilt.</p></div>
+  </details>
+</section>
+
+<!-- 13 -->
+<section class="doku-section" id="quellen">
+  <h2>13. Fachliche Grundlagen und Quellen</h2>
+  <p class="doku-lead">Die GBO ist eine eigenständige Anwendung. Die Quellen dienen als fachliche Orientierung für einzelne Fragen und Themen. Maßgeblich bleiben die jeweils geltenden Vorschriften und Regeln, die Gefährdungsbeurteilung des konkreten Betriebs und – soweit einschlägig – Herstellerangaben.</p>
+  <div class="card"><div class="faq-body">
+    <div class="doku-table-wrap"><table class="doku-table">
+      <tr><th>Quelle</th><th>Thema / Einsatz</th></tr>
+      <tr><td>ArbSchG §§ 5, 6</td><td>Grundlage der Gefährdungsbeurteilung, Ermittlung von Gefährdungen sowie Dokumentation von Ergebnis und Maßnahmen.</td></tr>
+      <tr><td>ArbSchG § 8</td><td>Zusammenarbeit mehrerer Arbeitgeber und erforderlicher Informationsaustausch, insbesondere bei Fremdfirmen.</td></tr>
+      <tr><td>ArbStättV §§ 3, 3a, 6 und Anhang</td><td>Arbeitsstätten, Gefährdungsbeurteilung, Unterweisung sowie Anforderungen an Arbeitsräume, Verkehrswege, Sanitär- und Pausenbereiche.</td></tr>
+      <tr><td>ASR V3</td><td>Systematik der Gefährdungsbeurteilung in Arbeitsstätten.</td></tr>
+      <tr><td>ASR V3a.2</td><td>Barrierefreie Gestaltung von Arbeitsstätten; relevant für Sozialräume und insbesondere barrierefreie Sanitärbereiche.</td></tr>
+      <tr><td>ASR A1.2 / A1.5 / A1.7 / A1.8</td><td>Raumabmessungen und Bewegungsflächen, Fußböden, Türen/Tore sowie Verkehrswege.</td></tr>
+      <tr><td>ASR A2.1 / A2.2 / A2.3</td><td>Absturz/Herabfallen, Brandschutz, Feuerlöscheinrichtungen, Brandschutzhelfer sowie Fluchtwege und Notausgänge.</td></tr>
+      <tr><td>ASR A3.4</td><td>Beleuchtung und Sichtverbindung; tätigkeitsbezogene Beleuchtungsanforderungen.</td></tr>
+      <tr><td>ASR A4.1 / A4.2 / A4.3</td><td>Sanitärräume, Pausen-/Bereitschaftsräume sowie Erste-Hilfe-Räume und -Mittel.</td></tr>
+      <tr><td>DGUV Vorschrift 1 / DGUV Regel 100-001</td><td>Grundsätze der Prävention, Unterweisung und organisatorische Anforderungen des betrieblichen Arbeitsschutzes.</td></tr>
+      <tr><td>DGUV Regel 108-601 „Branche Einzelhandel“</td><td>Branchenspezifische Gefährdungen und Schutzmaßnahmen im Einzelhandel.</td></tr>
+      <tr><td>DGUV Information 208-043 „Sicherheit von Regalen“</td><td>Regalsicherheit, Prüfungen, Dokumentation, Beschädigungen und Maßnahmen im Lager.</td></tr>
+      <tr><td>DGUV Vorschrift 68</td><td>Flurförderzeuge; sichere Verwendung und wiederkehrende Prüfungen.</td></tr>
+      <tr><td>DGUV Vorschrift 3</td><td>Elektrische Anlagen und Betriebsmittel; Prüfungen vor Inbetriebnahme, nach Änderungen/Instandsetzung und wiederkehrend.</td></tr>
+      <tr><td>DGUV Vorschrift 25 / DGUV Regel 108-010</td><td>Überfallprävention, Bargeldhandling, Kassen- und Verkaufsstellenorganisation.</td></tr>
+      <tr><td>BetrSichV §§ 3, 13 und Anhang 2 Abschnitt 2</td><td>Gefährdungsbeurteilung, Zusammenarbeit und Prüfungen von Aufzugsanlagen; Notfallplan, Notbefreiung und Notrufweiterleitung.</td></tr>
+      <tr><td>TRBS 1111</td><td>Gefährdungsbeurteilung bei der Verwendung von Arbeitsmitteln und Betrachtung aller relevanten Betriebsphasen.</td></tr>
+      <tr><td>TRBS 1112</td><td>Instandhaltung, sichere Durchführung und organisatorische Anforderungen bei Wartungs-/Instandhaltungsarbeiten.</td></tr>
+      <tr><td>GefStoffV §§ 6, 14, 15 / TRGS 401 / TRGS 510</td><td>Gefahrstoffbeurteilung, Unterweisung, Hautgefährdungen/Feuchtarbeit und Lagerung von Gefahrstoffen.</td></tr>
+      <tr><td>DGUV Regel 112-191</td><td>Auswahl und Benutzung von Fuß- und Knieschutz; Ausgabe 12/2025.</td></tr>
+      <tr><td>DGUV Regel 110-011</td><td>Fleischwirtschaft – Handwerk, Ausgabe 08/2025; Fleisch-/Lebensmittelbereiche und branchenspezifische Gefahren.</td></tr>
+      <tr><td>DGUV Information 206-007, GDA-Leitlinie „Gefährdungsbeurteilung psychischer Belastung“, BGHW-Handlungshilfe „Psychische Belastungen im Handel“, DIN EN ISO 10075, BetrVG</td><td>Psychische Belastungen (siehe Abschnitt 6); das BetrVG, soweit für Beteiligung und Organisation relevant.</td></tr>
+    </table></div>
+    <div class="doku-box"><div class="doku-box-title">Hinweis zu Normen</div><p>Technische Normen wie DIN EN 15635 oder DIN 14462 werden nur dort als ergänzende technische Referenz genannt, wo sie für den jeweiligen Sachverhalt relevant sind. Normen ersetzen nicht die Gefährdungsbeurteilung.</p></div>
+  </div></div>
+</section>
+
+</main>
+
+<footer class="app-footer">
+  <div class="app-footer-links"><a href="gbo.html">Gefährdungsbeurteilung</a><a href="gbo-hilfe.html">FAQ GBO</a><a href="gbo-dokumentation.html">Technische Dokumentation GBO</a><a href="hilfe.html">FAQ Begehung</a></div>
+  <div class="app-footer-meta"><div>Rev. 2.2.0 · Stand 25.10.2026</div><div>© <span class="js-current-year">2026</span> Andreas Zott – Alle Rechte vorbehalten</div></div>
+</footer>
+<script src="js/seiten-jahr.js?v=2.2.0-9"></script>
+</body>
+</html>

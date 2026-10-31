@@ -10,9 +10,9 @@
 <meta name="referrer" content="same-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Technische Dokumentation – ASiC Handel</title>
-<link rel="stylesheet" href="css/styles.css?v=1.54-20">
+<link rel="stylesheet" href="css/styles.css?v=2.2.0-9">
 <script src="zugang-config.js"></script>
-<script src="js/access-gate.js?v=1.54-20"></script>
+<script src="js/access-gate.js?v=2.2.0-9"></script>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -237,6 +237,8 @@
     .st-betrieb   { background: #e7eef6; color: #2c4f73; }
     .st-rest      { background: #fff3d6; color: #7a5300; }
     table.doku-table.befunde td:first-child { white-space: nowrap; }
+    table.doku-table.tests td:first-child { white-space: normal; min-width: 14rem; }
+    table.doku-table.tests td:last-child { min-width: 12rem; }
     table.doku-table.befunde td:nth-child(3) { min-width: 14rem; }
 
     .doku-box.ok {
@@ -306,6 +308,7 @@
             <a href="massnahmen.html">Aktionsplan</a>
             <a href="fotos.html">Fotos</a>
             <a href="verlauf.html">Verlauf</a>
+            <a href="gbo.html">Gefährdungsbeurteilung</a>
         </nav>
     </div>
 </header>
@@ -342,14 +345,14 @@
                 <div class="doku-meta-label">
                     App-Revision
                 </div>
-                <div class="doku-meta-value"> <span data-zahl="revision">1.54</span> (<span data-zahl="revision_datum">25.10.2026</span>) </div>
+                <div class="doku-meta-value"> <span data-zahl="revision">2.2.0</span> (<span data-zahl="revision_datum">25.10.2026</span>) </div>
             </div>
 
             <div class="doku-meta-item">
                 <div class="doku-meta-label">
                     Service Worker
                 </div>
-                <div class="doku-meta-value"> <span data-zahl="cache_version">v1.54-20</span> </div>
+                <div class="doku-meta-value"> <span data-zahl="cache_version">v2.2.0-9</span> </div>
             </div>
 
             <div class="doku-meta-item">
@@ -405,7 +408,7 @@
         </a>
 
         <a href="#einschraenkungen">
-            8. Datenhaltung, Team-Archiv und Auswertung
+            8. Bekannte Einschränkungen
         </a>
 
         <a href="#sicherheit"> 9. Sicherheit im Code </a>
@@ -413,8 +416,9 @@
         <a href="#cybersicherheit"> 10. App-Sicherheitsanalyse </a>
 
         <a href="#betrieb"> 11. Betrieb und Updates </a>
-        <a href="#pflege"> 12. Pflege von Fragen, Antworten und Quellen </a>
-        <a href="#dateien"> 13. Dateiübersicht </a>
+        <a href="#gbo"> 12. Gefährdungsbeurteilung und Markt-Datensatz </a>
+        <a href="#pflege"> 13. Pflege von Fragen, Antworten und Quellen </a>
+        <a href="#dateien"> 14. Dateiübersicht </a>
 
     </div>
 
@@ -601,7 +605,7 @@
 
             <p>
                 Die aktuelle technische Cache-Version lautet:
-                <strong><code><span data-zahl="cache">asic-handel-v1.54-20</span></code></strong>.
+                <strong><code><span data-zahl="cache">asic-handel-v2.2.0-9</span></code></strong>.
             </p>
 
             <ul>
@@ -890,6 +894,26 @@
                 </tr>
 
                 <tr>
+                    <td>gbo.html</td>
+                    <td>Gefährdungsbeurteilung (GBO): Betriebsdaten, Themen, Bewertung, Statistik, Bildbelege und Markt-Datensatz</td>
+                </tr>
+
+                <tr>
+                    <td>gbo-hilfe.html</td>
+                    <td>Hilfe und FAQ zur Gefährdungsbeurteilung</td>
+                </tr>
+
+                <tr>
+                    <td>gbo-dokumentation.html</td>
+                    <td>Technische Dokumentation der Gefährdungsbeurteilung</td>
+                </tr>
+
+                <tr>
+                    <td>quellen.html</td>
+                    <td>Übersicht der Rechtsgrundlagen und Regelwerke mit Suche</td>
+                </tr>
+
+                <tr>
                     <td>dokumentation.html</td>
                     <td>Technische Dokumentation</td>
                 </tr>
@@ -1133,9 +1157,10 @@
                 <code>renderMassnahmenQuellenAnhang()</code> die Seite „Quellen zu den Maßnahmen“
                 an: je Maßnahme der Begehung (gleiche Nummer wie im Maßnahmenplan) die Fundstellen,
                 die <code>quellenZuMassnahme()</code> aus dem BGHW- und dem Rechtlich-Text desselben
-                Prüfpunkts ausliest (Gesetze mit Paragraphen je Gesetz zusammengefasst, ASR/TRGS/TRBS,
-                DGUV-Regelwerke, DIN/VDE). Änderungen an den Maßnahmentexten wirken sich deshalb
-                automatisch aus; manuell erfasste Maßnahmen ohne Prüfpunkt erscheinen nicht.
+                Prüfpunkts ausliest (Gesetze mit Paragraphen je Gesetz zusammengefasst, auch in der
+                Schreibweise „BetrSichV §§ 6, 10“, ASR/TRGS/TRBS, DGUV-Regelwerke, DIN/VDE).
+                Änderungen an den Maßnahmentexten wirken sich deshalb automatisch aus; manuell
+                erfasste Maßnahmen ohne Prüfpunkt erscheinen nicht.
             </p>
 
             <p><strong>1. DGUV-/BGHW-Regelwerk und Unfallverhütungsvorschriften</strong></p>
@@ -1319,6 +1344,13 @@
                 <li>
                     Fotos werden lokal in
                     <strong>IndexedDB</strong> gespeichert
+                </li>
+
+                <li>
+                    Vor dem Speichern prüft <code>js/storage-check.js</code> den freien
+                    Platz: bei zu wenig Platz wird nicht gespeichert, ab 80&nbsp;%
+                    Belegung erscheint eine Warnung. Das gilt für die Fotoseite
+                    und für Fotos im Aktionsplan.
                 </li>
 
                 <li>
@@ -1684,24 +1716,37 @@
         </div>
 
         <h2>
-            Datenhaltung, Team-Archiv und Auswertung
+            Bekannte Einschränkungen / offene Punkte
         </h2>
 
 
         <div class="doku-box">
 
             <div class="doku-box-title">
-                Lokale Speicherung und Sicherung
+                Kein automatischer Cloud-Sync
             </div>
 
-            Laufende Begehung, Fotos und „Mein Verlauf“ liegen nur auf dem
-            jeweiligen Gerät (localStorage bzw. IndexedDB). Einen automatischen
-            Abgleich zwischen Geräten gibt es nicht. Werden die Website-Daten des
-            Browsers gelöscht, ist der lokale Bestand verloren; gesichert wird über
-            „Datei ▾ → JSON-Datei › → Exportieren“ (verlustfrei: Begehung mit
-            Maßnahmen, Status und Unterschriften, ohne Fotos), über das Archiv
-            (mit Fotos, aber ebenfalls nur auf dem Gerät) und über das Team-Archiv.
-            Die Auswertung bietet zusätzlich einen CSV-Export der Bewertungen.
+            Die aktuell laufenden Begehungsdaten und die lokalen Fotos
+            werden grundsätzlich lokal auf dem jeweiligen Gerät gespeichert.
+            Ein automatischer Mehrgeräte-Sync ist nicht Bestandteil der
+            clientseitigen Kernarchitektur.
+
+        </div>
+
+
+        <div class="doku-box">
+
+            <div class="doku-box-title">
+                Lokales Backup beachten
+            </div>
+
+            Werden Browser-/Website-Daten gelöscht, kann der lokale Bestand
+            verloren gehen. Für die aktuelle Begehung steht deshalb
+            weiterhin der JSON-Export als externes Backup zur Verfügung.
+
+            Archivierte Begehungen und Fotos liegen ebenfalls lokal im
+            Browser bzw. in IndexedDB, sofern keine zusätzliche externe
+            Sicherung eingerichtet wurde.
 
         </div>
 
@@ -1709,33 +1754,90 @@
         <div class="doku-box ok">
 
             <div class="doku-box-title">
-                Team-Archiv auf dem Server (save.php / list.php / load.php)
+                Server-Speicherung (save.php / list.php / load.php)
             </div>
 
-            „Datei ▾ → Team-Archiv › → Auf Server speichern“ legt die Begehung als
-            <code>Begehung_&lt;Datum&gt;_Markt&lt;Nr&gt;.json</code> im Datenordner ab;
-            „Vom Server laden“ (<code>openServerLoadDialog()</code>) zeigt alle Begehungen
-            mit Suche. <code>list.php</code> liefert je Datei Datum, Marktnummer, Firma,
-            PLZ/Ort und Speicherzeit und erkennt auch manuell in den Datenordner gelegte
-            JSON-Exporte.
+            Über „Datei ▾ → Team-Archiv › → Markt auf Server speichern" bzw. „Vom Server laden" lässt
+            sich der aktuelle Markt (Begehung und Gefährdungsbeurteilung, <code>ASiCMarket.container()</code>) zusätzlich auf einem Server sichern, über drei serverseitige PHP-Skripte. „Vom Server laden“ öffnet einen Dialog mit Suche
+            (<code>openServerLoadDialog()</code>). Ist eine Begehung mit Eingaben geöffnet, fragt
+            er vor dem Ersetzen nach und kann sie zuerst im Verlauf archivieren
+            (<code>archiviereAktuelleBegehung()</code>). Übernommen wird wie bei „In App anzeigen“
+            im Team-Archiv (<code>applyServerRecord()</code>): einschließlich der
+            Unterbereich-Schalter und – wenn im Datensatz enthalten – der Gefährdungsbeurteilung mit
+            Verknüpfungen (<code>uebernehmeGboAusDatensatz()</code>); der lokale Fotobestand der
+            Begehung wird geleert. Danach sendet <code>applyServerRecord()</code> das Ereignis
+            <code>asic:server-geladen</code>; die GBO-Seite baut darauf neu auf. Die GBO-Seite lädt
+            dafür <code>js/app.js</code> mit und nutzt für „Markt auf Server speichern“, „Markt vom
+            Server laden“ und „GBO zurücksetzen“ dieselben Dialoge. „In App anzeigen“ im
+            Team-Archiv und in „Mein Verlauf“ zeigt immer einen Hinweis (<code>frageVorErsetzen()</code>)
+            mit Markt, Datum, Ort und Firma der gewählten Begehung; die Archivieren-Möglichkeit
+            erscheint nur, wenn eine Begehung mit Eingaben geöffnet ist. Die Einträge des
+            Team-Archivs sind wie im Dialog aufgebaut (Marktnummer, Begehungsdatum, Ort und Firma,
+            Speicherzeit, Hinweis auf die auf diesem Gerät geöffnete Begehung).
+            Gleichzeitiges Bearbeiten: <code>saveStateToServer()</code> sendet zusätzlich
+            <code>_speichern</code> (<code>speicherSteuerung()</code>) mit der Datei und deren
+            <code>_nas.savedAt</code>, die das Gerät zuletzt vom Server geladen oder dorthin gespeichert
+            hat (gemerkt in <code>asicServerStand.serverZeit</code>). <code>save.php</code> entfernt das
+            Feld, prüft unter einer Dateisperre (<code>.speichern.lock</code> im Datenordner) und
+            antwortet bei abweichendem Stand oder fremder Datei mit HTTP 409 und
+            <code>konflikt: true</code>. Die App fragt dann nach (<code>frageBeiKonflikt()</code>):
+            Modus <code>neueFassung</code> legt <code>Begehung_&lt;Datum&gt;_Markt&lt;Nr&gt;_Fassung-&lt;n&gt;.json</code>
+            an, in die das Gerät danach weiter speichert; <code>ueberschreiben</code> ersetzt die Datei
+            (vorheriger Stand wie immer in <code>versionen/</code>). Anfragen ohne
+            <code>_speichern</code> (ältere Ausgabestände) werden wie bisher ohne Prüfung
+            gespeichert. Team-Archiv und Ladedialog zeigen die Fassung, das Alter der Speicherung
+            (<code>vorWieLange()</code>) und „kürzlich gespeichert“ (unter zwei Stunden); die
+            Team-Auswertung zählt je Markt und Datum nur die zuletzt gespeicherte Fassung
+            (<code>nurNeuesteFassung()</code>).
+            Hinweis „gerade geöffnet“ (keine Sperre): <code>offen.php</code> führt im Datenordner
+            <code>_offen/offen.json</code> (Dateiname, Gerätename aus den Einstellungen, zufällige
+            Gerätekennung <code>asicGeraetId</code>, Zeitpunkt; je Gerät ein Eintrag, Ablauf nach
+            4 Stunden). <code>applyServerRecord()</code> und „In App anzeigen“ im Team-Archiv melden
+            <code>oeffnen</code> (<code>meldeGeoeffnet()</code>); Speichern auf dem Server, Archivieren,
+            Zurücksetzen, JSON laden, Öffnen aus „Mein Verlauf“ und Wiederholungsbegehung melden
+            <code>schliessen</code> (<code>meldeGeschlossen()</code>). Team-Archiv und Ladedialog lesen die
+            Liste mit <code>ladeOffenListe()</code> und zeigen „geöffnet auf …“; fehlt
+            <code>offen.php</code> oder ist das Gerät offline, entfällt der Hinweis ohne Fehlermeldung.
+            Vor „In App anzeigen“ und beim Zurückkehren zur Seite wird die Liste neu geholt. Die
+            Meldung wird ohne <code>keepalive</code> gesendet (Safari verwirft solche Anfragen an eine
+            andere Server-Adresse); das Ergebnis der letzten Meldung und die Erreichbarkeit von
+            <code>offen.php</code> stehen in der Diagnose (Einstellungen).
+            <code>fetchServerRecord()</code> liest aus dem Markt-Datensatz die Begehung
+            (<code>begehungAusDatensatz()</code>), auch beim JSON-Import (z. B. einer
+            „Gesamtsicherung Markt“). Standardmäßig
+            wird eine relative Adresse im selben Verzeichnis wie die App
+            verwendet; unter „Einstellungen" lässt sich stattdessen eine
+            externe Server-Adresse hinterlegen (<code>nasUrl()</code> baut
+            daraus die tatsächliche Adresse, ohne Konfiguration gilt der relative Pfad). Optional zusätzlich ein
+            Zugriffsschlüssel. Die App legt ihn geschützt ab und unterschreibt
+            damit jede Anfrage; der Server prüft die Unterschrift zeitsicher per
+            <code>hash_equals()</code>, sofern dort ebenfalls ein Schlüssel
+            hinterlegt ist (Abschnitt 10).
 
             <ul>
-                <li>Voraussetzung zum Speichern: Datum und Marktnummer in den Betriebsdaten.</li>
-                <li>Vor jedem Überschreiben sichert <code>save.php</code> den bisherigen Stand
-                    in <code>versionen/</code>; je Begehung bleiben die letzten 20 Stände,
-                    ältere werden komprimiert nach <code>versionen/archiv/</code> verschoben
-                    (Grenzen in <code>config.php</code>, siehe Abschnitt 11).</li>
-                <li>Standard ist eine relative Adresse neben der App; unter „Einstellungen“
-                    lässt sich eine andere Server-Adresse (dann CORS auf dem Server nötig) und
-                    ein Zugriffsschlüssel hinterlegen. Die App legt ihn geschützt ab und
-                    unterschreibt damit jede Anfrage; die Skripte prüfen die Unterschrift
-                    (Abschnitt 10).</li>
-                <li>Server-Daten enthalten keine Fotos. Fehler beim Server-Zugriff berühren
-                    die lokalen Daten nicht.</li>
-                <li>Version 1.54 und Version 2 nutzen denselben Datenordner. Datensätze der
-                    Version 2 (Begehung und Gefährdungsbeurteilung gemeinsam) liest die 1.54
-                    als Begehung; speichert sie eine solche Begehung zurück, bleibt die
-                    Gefährdungsbeurteilung im Datensatz erhalten.</li>
+                <li>Voraussetzung zum Speichern: Datum und Marktnummer
+                    müssen in den Betriebsdaten ausgefüllt sein</li>
+                <li>Von der lokalen Speicherung komplett getrennt – ein
+                    fehlgeschlagener Server-Zugriff hat keinen Einfluss auf
+                    lokal gespeicherte Daten</li>
+                <li>Bei externer Adresse (andere Herkunft als die App
+                    selbst) muss der Zielserver CORS für die App-Adresse
+                    erlauben</li>
+                <li><code>list.php</code>/<code>load.php</code> erkennen
+                    sowohl die von <code>save.php</code> selbst erzeugten
+                    Dateien als auch manuell in den Datenordner eingespielte Exporte aus „JSON exportieren"/„JSON per
+                    Mail teilen" — beide erscheinen im Team-Archiv</li>
+                <li><code>list.php</code> liefert je Datei Datum, Marktnummer,
+                    Firma und PLZ/Ort für die Anzeige in „Vom Server laden"
+                    und im Team-Archiv</li>
+                <li>Wird für denselben Markt am selben Tag erneut
+                    gespeichert, ersetzt <code>save.php</code> die Datei.
+                    Der vorherige Stand wird vorher mit Zeitstempel in den
+                    Unterordner <code>versionen</code> des Datenordners
+                    kopiert. Dieser Ordner wird von
+                    <code>list.php</code> und <code>load.php</code> nicht
+                    erfasst und dient nur der Wiederherstellung durch
+                    Administratoren; er wird nicht automatisch geleert.</li>
             </ul>
 
         </div>
@@ -1744,31 +1846,284 @@
         <div class="doku-box ok">
 
             <div class="doku-box-title">
-                Gemeinsames Arbeiten am Team-Archiv
+                Verlauf-Seite: Mein Verlauf, Team-Archiv, Wiederherstellen
             </div>
 
-            Mehrere Geräte können dieselbe Begehung öffnen; jedes arbeitet mit einer
-            eigenen Kopie. Damit nichts unbemerkt überschrieben wird:
+            Zwei Reiter: „Mein Verlauf" (lokal archivierte Begehungen,
+            IndexedDB) und „Team-Archiv (Server)" (alle über <code>list.php</code>
+            gefundenen, von beliebigen Nutzern auf dem Server gespeicherten
+            Begehungen). Beide bieten „PDF exportieren" sowie „In App
+            anzeigen" — lädt die jeweilige Begehung zurück in den
+            laufenden Arbeitsstand (nach Bestätigung, da der aktuell
+            laufende Stand dabei überschrieben wird; das Archiv selbst
+            bleibt unberührt).
 
             <ul>
-                <li><strong>Rückfrage beim Speichern:</strong> <code>saveStateToServer()</code>
-                    schickt mit, welchen Stand das Gerät zuletzt vom Server hatte.
-                    <code>save.php</code> prüft das unter einer Dateisperre
-                    (<code>.speichern.lock</code>) und meldet einen neueren oder fremden Stand
-                    mit HTTP 409. Die App bietet dann „Als eigene Fassung speichern“
-                    (<code>…_Fassung-&lt;n&gt;.json</code>), „Trotzdem überschreiben“ oder
-                    „Abbrechen“ (<code>frageBeiKonflikt()</code>). Die Team-Auswertung zählt
-                    je Markt und Datum nur die zuletzt gespeicherte Fassung.</li>
-                <li><strong>„kürzlich gespeichert“:</strong> Team-Archiv und Ladedialog zeigen
-                    das Alter der Speicherung und kennzeichnen Stände der letzten zwei Stunden.</li>
-                <li><strong>„geöffnet auf …“:</strong> Wer eine Begehung aus dem Team-Archiv
-                    öffnet, meldet das an <code>offen.php</code> (Dateiname, Gerätename aus den
-                    Einstellungen, zufällige Gerätekennung, Zeitpunkt in
-                    <code>_offen/offen.json</code>). Andere Geräte sehen den Hinweis in der Liste
-                    und beim Öffnen. Keine Sperre; der Eintrag endet beim Speichern,
-                    Archivieren, Zurücksetzen oder Öffnen einer anderen Begehung, spätestens
-                    nach 4 Stunden. Ohne Verbindung oder ohne <code>offen.php</code> entfällt
-                    nur der Hinweis.</li>
+                <li>Beim lokalen Archiv werden auch die zugehörigen
+                    Fotos zurückgeschrieben (mit ursprünglicher id/measureId,
+                    damit die Zuordnung zu den Maßnahmen erhalten bleibt)</li>
+                <li>Team-Archiv-Datensätze enthalten keine Fotos (nur
+                    Text-/Bewertungsdaten) — beim Wiederherstellen wird
+                    ein vorhandener lokaler Fotobestand deshalb nur
+                    geleert, nicht ersetzt</li>
+                <li>Beide Reiter nur verfügbar, wenn die App direkt über die Server-Adresse aufgerufen wird oder eine Server-Adresse
+                    in den Einstellungen hinterlegt wurde</li>
+            </ul>
+
+        </div>
+
+
+        <div class="card doku-card">
+            <h3>Wiederholungsbegehung</h3>
+            <p>
+                Jeder Eintrag im eigenen Verlauf und im Team-Archiv hat den Knopf
+                „Wiederholungsbegehung“. <code>buildFollowUpState()</code> in
+                <code>js/app.js</code> erzeugt daraus einen neuen Arbeitsstand:
+            </p>
+            <ul>
+                <li>Betriebsdaten, <code>notApplicable</code> und <code>subgroupNotApplicable</code> werden übernommen, <code>datum</code> wird auf heute gesetzt.</li>
+                <li>Jede Maßnahme mit Status ungleich „erledigt“ wird übernommen; der zugehörige Prüfpunkt wird auf „Mangel“ gesetzt, der Kommentar übernommen.</li>
+                <li>Die übernommene Maßnahme trägt <code>vorbegehung: { datum, status }</code>. Prüfkatalog, Aktionsplan und PDF zeigen daraus „Offen aus Vorbegehung vom …“.</li>
+                <li>Unterschriften und Fotos werden nicht übernommen; der laufende Arbeitsstand und die lokalen Fotos werden nach Rückfrage ersetzt.</li>
+                <li>Übernommen wird nur die Begehung. Die Gefährdungsbeurteilung auf dem Gerät bleibt unverändert; bei einem Markt-Datensatz aus dem Team-Archiv wird der Begehungsteil verwendet.</li>
+            </ul>
+        </div>
+
+
+        <div class="doku-box">
+
+            <div class="doku-box-title">
+                Rohdaten teilen: CSV (auswertung.html) und JSON (index.html)
+            </div>
+
+            Neben dem jeweiligen Download-Button („CSV herunterladen" /
+            „JSON exportieren") gibt es „… per Mail teilen" — für den
+            Fall, dass kein Server-Zugriff möglich ist und die Daten
+            stattdessen manuell weitergegeben werden sollen. Beide nutzen
+            <code>navigator.share()</code> mit vorgefertigtem Betreff/Text
+            und fallen ohne Unterstützung dafür automatisch auf den
+            normalen Download zurück. In der Desktop-App (Tauri unter Windows,
+            WebView2; erkannt über <code>laeuftInTauri()</code>) gibt es weder neue Fenster noch
+            das Teilen-Menü: „Drucken“ lädt das PDF dort in einen unsichtbaren Rahmen und öffnet
+            dessen Druckdialog (<code>druckePdfImRahmen()</code>, dafür
+            <code>frame-src 'self' blob:</code> in der Content-Security-Policy), „PDF teilen“ und
+            „JSON per Mail teilen“ sind ausgeblendet. Die Webansicht speichert keine Downloads; Links
+            mit <code>download</code>-Attribut (auch <code>doc.save()</code> von jsPDF) werden deshalb
+            abgefangen und über den Desktop-Befehl <code>datei_ablegen</code>
+            (<code>src-tauri/src/main.rs</code>, Rohdaten-Aufruf mit Dateiname im Kopf
+            <code>asic-dateiname</code>) unter Downloads\ASiC Handel gespeichert und im Explorer markiert
+            (<code>tauriDateiAblegen()</code>, <code>tauriDownloadAbfangen()</code>; der Inhalt von
+            <code>blob:</code>-Adressen wird beim Anlegen gemerkt, da <code>fetch()</code> darauf per CSP
+            gesperrt ist). „Mail mit PDF vorbereiten“ legt das PDF so ab und öffnet danach die Mail
+            per <code>mailto:</code> (<code>mailMitPdfDesktop()</code>) – das neue Outlook für Windows
+            nimmt von außen keine Anhänge an. Dasselbe gilt für die PDF-Ausgaben und Sicherungen der GBO-Seite (<code>js/gbo-pdf.js</code>, <code>js/market-store.js</code>). Für die Verbindung zur Desktop-Hülle erlaubt die CSP
+            <code>connect-src … ipc: http://ipc.localhost</code>. Der JSON-Export ist verlustfrei
+            (vollständige Begehung inkl. Maßnahmen/Status/Unterschriften),
+            der CSV-Export enthält nur die reinen Bewertungsdaten.
+            Das Datei-Menü auf <code>index.html</code> ist zweistufig: Speichern,
+            „Team-Archiv ›“, „JSON-Datei ›“, Begehung archivieren und Zurücksetzen auf der
+            Hauptebene; die Unterebenen sind <code>.menu-ebene</code>-Blöcke, die
+            <code>initDropdownMenu()</code> über <code>.menu-weiter</code> / <code>.menu-zurueck</code>
+            umschaltet (beim Schließen wieder Hauptebene). Archivieren, Zurücksetzen und
+            JSON-Laden fragen über <code>zeigeHinweisFenster()</code> im Stil der übrigen
+            Dialoge statt über <code>confirm()</code>; Zurücksetzen und JSON-Laden bieten
+            vorher „Erst im Verlauf archivieren“ an. <code>importJson()</code> übernimmt auch
+            die Unterbereich-Schalter und leert die Fotos auf dem Gerät, außer die Datei
+            enthält dieselbe Begehung (Markt und Datum). <code>js/market-ui.js</code> beschriftet
+            „Markt auf Server speichern“ und fügt „Gesamtsicherung Markt“ in die Unterebene
+            „JSON-Datei“ ein. Zurücksetzen und Archivieren betreffen nur die Begehung; die
+            Gefährdungsbeurteilung bleibt unverändert.
+
+            <p>
+                <strong>Wichtig:</strong> Der CSV-Export sowie
+                „Kategorien-Schwachstellen" lesen die Bewertungen direkt
+                aus den in jeder Begehung gespeicherten Schlüsseln
+                (<code>Object.keys(record.ratings)</code>), nicht über
+                den aktuellen Fragenkatalog. So bleiben auch Begehungen
+                auswertbar, deren Frage-IDs sich seither geändert haben —
+                nicht mehr zuordenbare Fragen werden mit „(nicht mehr im
+                aktuellen Katalog)" gekennzeichnet statt zu verschwinden.
+            </p>
+
+        </div>
+
+
+        <div class="doku-box ok">
+
+            <div class="doku-box-title">
+                Auswertungsseiten: Zeitraum-Filter, Auffällige Märkte, Gesamtauswertung als PDF
+            </div>
+
+            <code>auswertung.html</code> bietet zusätzlich einen
+            Zeitraum-Filter („Letzte 3/6 Monate/Alles"), eine Liste
+            „Auffällige Märkte" (Märkte über der durchschnittlichen
+            Mängelquote) sowie eine „Gesamtauswertung als PDF"
+            (Kategorien-Schwachstellen, Auffällige Märkte und
+            Marktverlauf in einem Dokument, herunterladbar oder per
+            Mail teilbar).
+
+            <p>
+                „Gesamtverteilung" (Tortendiagramm Ja/Mangel/N.V.) und
+                „Kategorien-Schwachstellen" (Balkendiagramm nach
+                Mängelquote) werden zusätzlich als Diagramm dargestellt –
+                sowohl am Bildschirm (SVG, ohne externe
+                Chart-Bibliothek) als auch im PDF-Export (direkt mit
+                jsPDF-Bordmitteln gezeichnet), mit identischen Farben
+                und Zahlen an beiden Stellen.
+            </p>
+
+            <p>
+                <code>auswertung-team.html</code> bietet dieselben
+                Diagramme sowie ebenfalls Rohdaten-Export (CSV) und
+                Gesamtauswertung als PDF, nur bezogen auf alle im
+                Team-Archiv (Server) gefundenen Begehungen statt nur die
+                lokal auf diesem Gerät archivierten. Die eigentliche
+                Erzeugungslogik ist dieselbe wie bei
+                <code>auswertung.html</code> (<code>js/auswertung.js</code>
+                wird dafür auch auf dieser Seite mitgeladen) – nur die
+                Datenquelle unterscheidet sich.
+            </p>
+
+            <p>
+                <strong>Ladestatus</strong>: Oberhalb der
+                Filter zeigt <code>auswertung-team.html</code> einen
+                Statusbalken (<code>#team-lade-status</code>,
+                <code>setzeTeamLadeStatus()</code> in
+                <code>js/auswertung-team.js</code>). Während des Ladens:
+                Spinner, „x von y Begehungen geladen" und Fortschrittsbalken;
+                die Dateien werden weiterhin parallel geladen, jede fertige
+                Datei zählt hoch. Danach grün „vollständig geladen" mit
+                Anzahl, Dauer und Uhrzeit, gelb „teilweise geladen", wenn
+                Dateien übersprungen wurden, oder rot mit Fehlergrund. Ein
+                Knopf „Neu laden" bzw. „Erneut versuchen" lädt das
+                Team-Archiv ohne Seitenneuladen erneut. Filter und
+                Export-Knöpfe sind während des Ladens gesperrt.
+            </p>
+
+            <p>
+                <strong>Ladestatus im Team-Archiv</strong>:
+                Dieselbe Anzeige steht auf <code>verlauf.html</code> im Reiter
+                „Team-Archiv“ über der Liste (<code>#team-archive-loading</code>,
+                <code>setzeTeamArchivStatus()</code> in <code>js/verlauf.js</code>).
+                Da <code>list.php</code> die Liste in einem Abruf liefert, zeigt
+                der Balken einen durchlaufenden statt eines prozentualen
+                Fortschritts. Danach grün mit Anzahl, Dauer und Uhrzeit oder rot
+                mit Fehlergrund und „Erneut versuchen“. Auch die Knöpfe an den
+                Einträgen (PDF, In App anzeigen, Wiederholungsbegehung) melden
+                das Laden der einzelnen Begehung dort; während des Ladens sind
+                die Knöpfe gesperrt.
+            </p>
+
+            <p>
+                <strong>Diagnose, Fehlerprotokoll, Sicherungshinweis und Suche</strong>:
+                (1) <em>Diagnose</em> auf <code>einstellungen.html</code>
+                (<code>erstelleDiagnoseText()</code> in
+                <code>js/einstellungen.js</code>): Version/Ausgabestand,
+                Service-Worker-Cache (Abgleich mit dem Ausgabestand der Seite),
+                Aufruf-Adresse, Server-Adresse, ob ein Schlüssel hinterlegt ist
+                (nie der Inhalt), Verbindungstest (<code>pruefeServerVerbindung()</code>,
+                auch vom Knopf „Verbindung testen“ genutzt), Sicherungsstand,
+                lokales Archiv, Fotos, Speicher (<code>navigator.storage</code>),
+                Gerät/Browser und die letzten Fehlermeldungen. Kopieren
+                (Zwischenablage, Ersatzweg über Markieren) oder per
+                <code>mailto:</code>.
+                (2) <em>Fehlerprotokoll</em> in <code>js/app.js</code>
+                (<code>merkeFehler()</code>, localStorage
+                <code>asicFehlerLog</code>, letzte 10): rote Hinweise
+                (<code>showToast(…, 'error')</code>) und unerwartete
+                Programmfehler.
+                (3) <em>Sicherungshinweis</em> (auf
+                <code>massnahmen.html</code> unterhalb der Unterschriften und des
+                Foto-Hinweises, Platzhalter <code>#sicherungs-hinweis-platz</code>): Nach „Auf Server
+                speichern“, „Vom Server laden“ und „In App anzeigen“ aus dem
+                Team-Archiv wird ein Fingerabdruck des Bearbeitungsstands
+                gemerkt (localStorage <code>asicServerStand</code>, mit Markt
+                und Datum). Der Fingerabdruck umfasst Begehung und
+                Gefährdungsbeurteilung, weil beide gemeinsam als
+                Markt-Datensatz gespeichert werden; „Jetzt sichern“ speichert
+                den Markt-Datensatz. Weicht der Stand ab, erscheint ein Hinweis mit
+                „Jetzt sichern“ und „Später“ (<code>aktualisiereSicherungsHinweis()</code>);
+                nur wenn Server-Funktionen verfügbar sind.
+                (4) <em>Suche im Team-Archiv</em> auf <code>verlauf.html</code>:
+                alle Suchwörter müssen in Marktnummer, Ort, Datum oder
+                Dateiname vorkommen; Trefferzahl daneben.
+            </p>
+
+            <p>
+                <strong>Frische Dateien und schneller Seitenaufbau</strong>:
+                Alle Einbindungen von <code>js/…</code> und <code>css/…</code>
+                tragen den Zusatz <code>?v=2.2.0-9</code> (Ausgabestand <code>BUILD</code> aus <code>sw.js</code>), auch auf den Seiten der Gefährdungsbeurteilung. Diese Dateien (und die
+                Schriften) liefert der Service Worker sofort aus
+                dem Cache auf dem Gerät, ohne Rückfrage beim Server; nach einem
+                Update ändert sich der Zusatz, dadurch werden sie automatisch
+                neu geladen. HTML-Seiten, <code>zugang-config.js</code> (ohne
+                Zusatz, damit eine Änderung des Betreibers sofort greift),
+                Manifest und Icons werden zuerst beim Server nachgefragt
+                (<code>cache: 'no-cache'</code>), offline aus dem Cache.
+                <code>js/jspdf.umd.min.js</code> wird mit <code>defer</code>
+                geladen und blockiert den Seitenaufbau nicht mehr.
+                <code>js/auswertung.js</code> liest das lokale Archiv nur noch
+                auf <code>auswertung.html</code>, nicht mehr auf der
+                Team-Auswertung. Bei jedem Update <code>?v=</code>, <code>BUILD</code>/<code>CACHE_NAME</code>,
+                <code>APP_VERSION</code> in <code>sw.js</code> und
+                <code>APP_REVISION</code> gemeinsam hochzählen.
+            </p>
+
+            <p>
+                <strong>Markt-Filter</strong>: Ein zweites Dropdown neben
+                dem Zeitraum-Filter schränkt alle Auswertungsbereiche
+                (außer „Wiederkehrende Mängel") auf einen einzelnen Markt
+                ein. Die Optionen werden automatisch aus den geladenen
+                Daten ermittelt (<code>populateMarktFilter()</code>,
+                numerisch sortiert).
+            </p>
+
+            <p>
+                <strong>Kategorie-Drilldown</strong>: Ein Klick/Tipp auf
+                einen Balken in „Kategorien-Schwachstellen" zeigt die
+                einzelnen Fragen dieser Kategorie mit eigener
+                Mängelquote darunter an (erneuter Klick klappt es wieder
+                zu). Nutzt dieselben, zuletzt gerenderten Daten wie das
+                Diagramm selbst.
+            </p>
+
+            <p>
+                <strong>Gesamt-Trend über Zeit</strong>: Ein
+                Liniendiagramm zeigt die Mängelquote je Kalendermonat,
+                über alle (gefilterten) Märkte hinweg zusammengefasst –
+                sowohl am Bildschirm als auch im PDF-Export. Bei nur
+                einem Monat mit Daten wird stattdessen ein Hinweistext
+                angezeigt, da für einen Trend mindestens zwei Punkte
+                nötig sind.
+            </p>
+
+            <p>
+                <strong>Kriterium bei „Auffällige Märkte"</strong>: Das Kriterium ist über eine Auswahl wählbar (Über Durchschnitt,
+                Top 5, Top 10, ab 50%, ab 75%) – wirkt sich auch auf den
+                PDF-Export aus.
+            </p>
+
+            <ul>
+                <li>Der Zeitraum-Filter gilt bewusst nicht für
+                    „Wiederkehrende Mängel" (soll immer den tatsächlich
+                    letzten Vergleich finden) und „Offene Maßnahmen"
+                    (eine alte offene Maßnahme darf nicht gerade dann
+                    verschwinden, wenn sie am dringendsten ist)</li>
+                <li>Die eigentliche Berechnungslogik
+                    (<code>berechneKategorienSchwachstellen()</code>,
+                    <code>berechneAuffaelligeMaerkte()</code>,
+                    <code>berechneVerlaufProMarkt()</code>,
+                    <code>filterNachZeitraum()</code>) liegt zentral in
+                    <code>js/auswertung-logik.js</code>, genutzt von
+                    <code>auswertung.html</code> und
+                    <code>auswertung-team.html</code> — Bildschirmanzeige
+                    und PDF greifen auf dieselben Funktionen zu, zeigen
+                    also garantiert identische Zahlen</li>
+                <li><code>zeitwertVonBegehung(r)</code> ermittelt einen
+                    Zeitstempel unabhängig von der Datenquelle (lokale
+                    Datensätze: <code>createdAt</code>; Server-Datensätze
+                    ohne dieses Feld: ersatzweise aus
+                    <code>companyInfo.datum</code>)</li>
             </ul>
 
         </div>
@@ -1777,24 +2132,26 @@
         <div class="doku-box ok">
 
             <div class="doku-box-title">
-                Verlauf und Wiederholungsbegehung
+                „Auswertung Verlauf" und „Auswertung Team"
             </div>
 
-            <code>verlauf.html</code> hat die Reiter „Mein Verlauf“ (lokales Archiv) und
-            „Team-Archiv (Server)“, jeweils mit „PDF exportieren“, „In App anzeigen“ und
-            „Wiederholungsbegehung“. Das Team-Archiv zeigt Ladestatus und Suche.
+            Zwei Buttons auf der Verlauf-Seite, neben „Mein Verlauf" und
+            „Team-Archiv (Server)". Beide sind reine Links auf eigenständige
+            Seiten, kein eingebettetes Panel — optisch identisch gestaltet
+            (<code>&lt;a class="btn btn-secondary btn-small verlauf-tab"&gt;</code>).
 
             <ul>
-                <li><strong>In App anzeigen</strong> zeigt vorher ein Hinweisfenster mit Markt,
-                    Datum und Ort (<code>frageVorErsetzen()</code>); ist eine Begehung mit
-                    Eingaben offen, kann sie zuerst archiviert werden. Aus „Mein Verlauf“
-                    kommen die Fotos mit, aus dem Team-Archiv nicht – dort wird der lokale
-                    Fotobestand geleert. Das Archiv selbst bleibt unverändert.</li>
-                <li><strong>Wiederholungsbegehung</strong> (<code>buildFollowUpState()</code>)
-                    übernimmt Betriebsdaten und die Schalter „nicht vorhanden“, setzt das
-                    Datum auf heute und übernimmt jede nicht erledigte Maßnahme samt Mangel und
-                    Kommentar mit dem Vermerk „Offen aus Vorbegehung vom …“. Unterschriften
-                    und Fotos werden nicht übernommen.</li>
+                <li>„Auswertung Verlauf" → <code>auswertung.html</code>
+                    (lokales Archiv)</li>
+                <li>„Auswertung Team" → <code>auswertung-team.html</code>
+                    (Team-Archiv/Server; dieselben drei Bereiche
+                    Kategorien-Schwachstellen/Auffällige Märkte/Verlauf
+                    pro Markt, eigener Zeitraum-Filter; lädt jede
+                    Team-Datei einzeln, defekte Dateien werden
+                    übersprungen statt die Auswertung scheitern zu
+                    lassen)</li>
+                <li><code>js/verlauf.js</code> kennt dadurch nur noch zwei
+                    echte Tabs (<code>lokal</code>, <code>team</code>)</li>
             </ul>
 
         </div>
@@ -1803,16 +2160,13 @@
         <div class="doku-box">
 
             <div class="doku-box-title">
-                Datei-Menü und Hinweisfenster
+                Jahreszahlen in der Fußzeile
             </div>
 
-            Das Datei-Menü auf <code>index.html</code> hat zwei Ebenen: Speichern,
-            „Team-Archiv ›“, „JSON-Datei ›“, Begehung archivieren und Zurücksetzen
-            (Umschalten in <code>initDropdownMenu()</code>). Archivieren, Zurücksetzen und
-            JSON laden fragen über <code>zeigeHinweisFenster()</code> im gleichen Stil wie
-            die übrigen Dialoge; Zurücksetzen und JSON laden bieten vorher „Erst im
-            Verlauf archivieren“ an. Beim JSON-Laden bleiben die Fotos nur bei derselben
-            Begehung (Markt und Datum) erhalten.
+            Werden anhand des aktuellen Systemdatums berechnet, nicht
+            fest hinterlegt: Copyright als Zeitspanne ab Gründungsjahr
+            2026 (z. B. „© 2026–2027" ab dem jeweils nächsten Jahr),
+            „(Sifa) Arbeitssicherheit" mit dem jeweils aktuellen Jahr.
 
         </div>
 
@@ -1820,113 +2174,12 @@
         <div class="doku-box">
 
             <div class="doku-box-title">
-                Desktop-App (Windows)
+                Zugangscode ist kein kryptografischer Schutz
             </div>
 
-            In der Tauri-Hülle (WebView2, erkannt über <code>laeuftInTauri()</code>) gibt es
-            weder neue Fenster noch das Teilen-Menü noch gespeicherte Downloads. Deshalb:
-            „Drucken“ öffnet das PDF in einem unsichtbaren Rahmen direkt im Druckdialog
-            (<code>druckePdfImRahmen()</code>); „PDF teilen“ und „JSON per Mail teilen“ sind
-            ausgeblendet; alle Exporte legt der Desktop-Befehl <code>datei_ablegen</code>
-            (<code>src-tauri/src/main.rs</code>) unter Downloads\ASiC Handel ab und zeigt sie
-            im Explorer (<code>tauriDateiAblegen()</code>); „Mail mit PDF vorbereiten“ öffnet
-            die Mail mit Betreff und Text, das PDF wird hineingezogen. Die Hülle schaltet den
-            Service Worker ab, damit nach einem Neubau sofort die neuen Dateien gelten. Die
-            Content-Security-Policy erlaubt dafür <code>frame-src 'self' blob:</code> und
-            <code>connect-src … ipc: http://ipc.localhost</code>.
-
-        </div>
-
-
-        <div class="doku-box ok">
-
-            <div class="doku-box-title">
-                Auswertungen
-            </div>
-
-            <code>auswertung.html</code> wertet das lokale Archiv aus,
-            <code>auswertung-team.html</code> alle Begehungen im Team-Archiv (jede Datei
-            einzeln geladen, mit Ladestatus und „Neu laden“; defekte Dateien werden
-            übersprungen). Beide bieten:
-
-            <ul>
-                <li>Filter nach Zeitraum und Markt; „Wiederkehrende Mängel“ und „Offene
-                    Maßnahmen“ ignorieren den Zeitraum bewusst.</li>
-                <li>Gesamtverteilung, Kategorien-Schwachstellen mit Aufklappen auf die
-                    einzelnen Fragen, Mängelquote je Monat und „Auffällige Märkte“ mit
-                    wählbarem Kriterium – als SVG am Bildschirm und gleich im PDF.</li>
-                <li>„Gesamtauswertung als PDF“ und CSV-Export.</li>
-            </ul>
-
-            Die Berechnung liegt zentral in <code>js/auswertung-logik.js</code>; Bildschirm
-            und PDF zeigen deshalb dieselben Zahlen. Die Bewertungen werden aus den in jeder
-            Begehung gespeicherten Schlüsseln gelesen, nicht über den aktuellen Katalog –
-            Fragen, die es nicht mehr gibt, erscheinen mit „(nicht mehr im aktuellen
-            Katalog)“.
-
-        </div>
-
-
-        <div class="doku-box">
-
-            <div class="doku-box-title">
-                Diagnose und Sicherungshinweis
-            </div>
-
-            <ul>
-                <li><strong>Diagnose</strong> (<code>einstellungen.html</code>,
-                    <code>erstelleDiagnoseText()</code>): Ausgabestand, Service-Worker-Cache,
-                    Aufruf- und Server-Adresse, ob ein Schlüssel hinterlegt ist (nie der
-                    Inhalt), Verbindungstest, Gerätename und Erreichbarkeit von
-                    <code>offen.php</code>, Sicherungsstand, Archiv, Fotos, Speicher, Gerät und
-                    die letzten Fehlermeldungen (<code>merkeFehler()</code>). Kopieren oder
-                    per Mail senden.</li>
-                <li><strong>Sicherungshinweis</strong> auf <code>massnahmen.html</code>
-                    unterhalb der Unterschriften: Weicht der Bearbeitungsstand vom zuletzt im
-                    Team-Archiv gesicherten ab, erscheinen „Jetzt sichern“ und „Später“
-                    (<code>aktualisiereSicherungsHinweis()</code>).</li>
-            </ul>
-
-        </div>
-
-
-        <div class="doku-box">
-
-            <div class="doku-box-title">
-                Programmdateien und Updates
-            </div>
-
-            Alle Einbindungen von <code>js/…</code> und <code>css/…</code> tragen den
-            Ausgabestand als Zusatz <code>?v=</code> (<code>BUILD</code> in
-            <code>sw.js</code>, derzeit <code><span data-zahl="cache_version">v1.54-20</span></code>).
-            Diese Dateien und die Schriften liefert der Service Worker sofort aus dem Cache;
-            nach einem Update ändert sich der Zusatz, und die Geräte laden sie neu.
-            HTML-Seiten, <code>zugang-config.js</code>, Manifest und Icons werden zuerst beim
-            Server nachgefragt, offline aus dem Cache. Bei jedem Update werden
-            <code>?v=</code> in allen Seiten sowie <code>BUILD</code>/<code>CACHE_NAME</code>
-            in <code>sw.js</code> gemeinsam erhöht (bei neuer Revision zusätzlich
-            <code>APP_VERSION</code> und <code>APP_REVISION</code>).
-
-        </div>
-
-
-        <div class="doku-box">
-
-            <div class="doku-box-title">
-                Grenzen
-            </div>
-
-            <ul>
-                <li>Kein automatischer Abgleich zwischen Geräten; das Team-Archiv ist eine
-                    Ablage, keine Synchronisation.</li>
-                <li>Fotos gibt es nur auf dem Gerät und im lokalen Archiv, nicht im
-                    Team-Archiv.</li>
-                <li>Der Zugangscode ist eine organisatorische Hürde, kein kryptografischer
-                    Schutz; er ersetzt keine Anmeldung am Server.</li>
-                <li>Eine Mail mit fertigem Anhang lässt sich aus der App nicht vorbereiten
-                    (<code>mailto:</code> kennt keine Anhänge; das neue Outlook für Windows nimmt
-                    von außen keine an). Auf dem iPad hängt „PDF teilen“ das PDF an.</li>
-            </ul>
+            Der clientseitige Zugangsschutz dient als organisatorische
+            Zugriffshürde, ersetzt aber keine serverseitige
+            Authentifizierung oder Verschlüsselung.
 
         </div>
 
@@ -2167,7 +2420,7 @@
             <div class="doku-table-wrap">
             <table class="doku-table">
                 <tr><th>Angaben</th><th></th></tr>
-                <tr><td>Prüfgegenstand</td><td>ASiC Handel, Rev. <span data-zahl="revision">1.54</span>, Ausgabestand <code><span data-zahl="cache_version">v1.54-20</span></code></td></tr>
+                <tr><td>Prüfgegenstand</td><td>ASiC Handel, Rev. <span data-zahl="revision">2.2.0</span> (Begehungsliste und Gefährdungsbeurteilung), Service Worker <code><span data-zahl="cache_version">v2.2.0-9</span></code></td></tr>
                 <tr><td>Prüfdatum</td><td>25.10.2026</td></tr>
                 <tr><td>Methode</td><td>Quellcode-Durchsicht, Angriffstests im Browser (Chromium) mit präparierten Begehungsdaten, Tests der Server-Endpunkte (PHP 8.3)</td></tr>
                 <tr><td>Ergebnis</td><td>Alle Schwachstellen im Programmcode sind behoben und durch Tests belegt. Offen sind nur noch Punkte der Einrichtung und des Betriebs sowie bewertete Restrisiken (siehe unten).</td></tr>
@@ -2187,7 +2440,7 @@
             <div class="doku-table-wrap">
             <table class="doku-table">
                 <tr><th>Bereich</th><th>Mögliche Angriffe</th></tr>
-                <tr><td>Daten aus Dateien</td><td>Präparierte JSON-Dateien (Import, Team-Archiv, von Hand in den Datenordner gelegt) mit eingeschleustem HTML/JavaScript</td></tr>
+                <tr><td>Daten aus Dateien</td><td>Präparierte JSON-Dateien (Begehungs-Import, GBO-Sicherung, Markt-Gesamtsicherung, Team-Archiv, von Hand in den Datenordner gelegt) mit eingeschleustem HTML/JavaScript</td></tr>
                 <tr><td>Team-Archiv-Server</td><td>Lesen und Überschreiben von Begehungen über <code>save.php</code>, <code>list.php</code>, <code>load.php</code>; Durchprobieren des Schlüssels; Vollschreiben des Datenträgers</td></tr>
                 <tr><td>Prüfseite</td><td>Ausspähen von Server-Pfaden, Schlüssel in Protokollen, Missbrauch für Abrufe fremder Adressen</td></tr>
                 <tr><td>Gerät und Browser</td><td>Auslesen des Browser-Speichers (Begehungen, Fotos, Unterschriften, Schlüssel), Umgehen der Zugangssperre</td></tr>
@@ -2293,7 +2546,7 @@
                 <tr><td>Browser-Richtlinie</td><td>Content-Security-Policy in jeder Seite: nur eigene Skriptdateien, keine eingebetteten Skripte, kein <code>eval</code>, keine Plugins, keine fremden Bilder oder Schriften; eingebettete Rahmen nur mit eigenen Inhalten (<code>frame-src 'self' blob:</code>, für das Drucken in der Desktop-App); zusätzlich die Verbindung zur Desktop-Hülle (<code>ipc:</code>, <code>http://ipc.localhost</code>). Verbindungen nur zum eigenen Server und zu HTTPS-Adressen (für ein Team-Archiv auf einem anderen Server).</td></tr>
                 <tr><td>HTTP-Header</td><td><code>X-Content-Type-Options: nosniff</code>, Schutz vor Einbetten (<code>X-Frame-Options</code>, <code>frame-ancestors</code>), <code>Referrer-Policy: same-origin</code>; JSON-Antworten zusätzlich <code>Cache-Control: no-store</code>.</td></tr>
                 <tr><td>Zugriff Server</td><td>Unterschriebene Anfragen (HMAC-SHA-256, zeitkonstanter Vergleich, 5 Minuten Zeitfenster, jeder Zufallswert nur einmal); der Schlüssel geht nicht über das Netz. Sperre nach 20 Fehlversuchen für 15 Minuten je Absender (HTTP 429).</td></tr>
-                <tr><td>Schlüssel auf dem Gerät</td><td>Als nicht exportierbarer Krypto-Schlüssel in IndexedDB; in <code>localStorage</code> nur Länge und letzte vier Zeichen zur Anzeige. Ein früher als Text gespeicherter Schlüssel wird beim ersten Start automatisch umgestellt und gelöscht.</td></tr>
+                <tr><td>Schlüssel auf dem Gerät</td><td>Als nicht exportierbarer Krypto-Schlüssel in IndexedDB; in <code>localStorage</code> nur Länge und letzte vier Zeichen zur Anzeige. Ein früher als Text gespeicherter Schlüssel wird beim ersten Start automatisch umgestellt und gelöscht. Gilt auch für die Gefährdungsbeurteilung (gemeinsamer Markt-Datensatz).</td></tr>
                 <tr><td>Missbrauchsschutz</td><td>Höchstens 60 Speichervorgänge in 10 Minuten je Absender, höchstens 20 MB je Begehung, 20 Stände je Begehung in <code>versionen/</code>, ältere komprimiert in <code>versionen/archiv/</code> (Obergrenze 500 MB). Alle Werte in <code>config.php</code> unter <code>grenzen</code> anpassbar.</td></tr>
                 <tr><td>Dateizugriff</td><td><code>load.php</code> nimmt nur Dateinamen der beiden bekannten Muster an (kein Verzeichnis-Ausbruch); Schreiben über temporäre Datei; Datenordner per Sperrdatei bzw. außerhalb des Web-Verzeichnisses.</td></tr>
                 <tr><td>Lieferumfang</td><td>Keine Zwischendateien; Entwickler-Werkzeuge gesperrt. Keine Bibliotheken oder Schriften von Drittanbietern zur Laufzeit.</td></tr>
@@ -2310,13 +2563,13 @@
         <div class="card doku-card">
 
             <p>
-                Ergebnisse für den aktuellen Ausgabestand
-                <code><span data-zahl="cache_version">v1.54-20</span></code> mit präparierten
+                Ergebnisse für den aktuellen Stand
+                <code><span data-zahl="cache_version">v2.2.0-9</span></code> mit präparierten
                 Daten bzw. gezielten Anfragen.
             </p>
 
             <div class="doku-table-wrap">
-            <table class="doku-table">
+            <table class="doku-table tests">
                 <tr><th>Test</th><th>Ergebnis</th></tr>
                 <tr>
                     <td>Kommentar mit Schadcode (Maßnahmen-Seite)</td>
@@ -2340,6 +2593,18 @@
                 </tr>
                 <tr>
                     <td>Marktnummer mit Anführungszeichen (Auswertung)</td>
+                    <td>maskiert</td>
+                </tr>
+                <tr>
+                    <td>GBO: Testcode in allen rund 2.800 Feldern eines vollständigen GBO-Stands (wie beim Import), alle Ansichten aufgerufen</td>
+                    <td>in keinem Feld ausgeführt – auch bei abgeschalteter CSP</td>
+                </tr>
+                <tr>
+                    <td>GBO-Bildbeleg mit präparierter Adresse bzw. <code>javascript:</code>-Link</td>
+                    <td>verworfen</td>
+                </tr>
+                <tr>
+                    <td>GBO-Überprüfungsdatum mit HTML</td>
                     <td>maskiert</td>
                 </tr>
                 <tr>
@@ -2399,7 +2664,7 @@
                     <td>Abruf unterbleibt, Hinweis</td>
                 </tr>
                 <tr>
-                    <td>Bedienung: Prüfkatalog, Schalter, Maßnahmen, Fotos, Verlauf, Team-Archiv, Hilfe-Suche, Speichern</td>
+                    <td>Bedienung: Prüfkatalog, Schalter, Maßnahmen mit Foto, Verlauf, Team-Archiv (Markt speichern und laden, Suche, Ladestatus, Wiederholungsbegehung), Sicherungshinweis, Team-Auswertung, Diagnose, GBO mit Antwort, Bildbeleg, Überprüfung und PDF, Hilfe- und Quellensuche, Offline-Cache</td>
                     <td>funktioniert, keine Konsolenfehler</td>
                 </tr>
             </table>
@@ -2592,11 +2857,11 @@
                 </tr>
                 <tr>
                     <td><code>APP_REVISION</code> / <code>APP_REVISION_DATE</code> in js/app.js</td>
-                    <td><span data-zahl="revision">1.54</span> / <span data-zahl="revision_datum">25.10.2026</span></td>
+                    <td><span data-zahl="revision">2.2.0</span> / <span data-zahl="revision_datum">25.10.2026</span></td>
                 </tr>
                 <tr>
                     <td><code>CACHE_NAME</code> und Kommentar <code>SERVICE-WORKER-VERSION</code> in sw.js</td>
-                    <td>asic-handel-v<span data-zahl="revision">1.54</span></td>
+                    <td>asic-handel-v<span data-zahl="revision">2.2.0</span></td>
                 </tr>
             </table>
             </div>
@@ -2686,13 +2951,93 @@
 
 
     <!-- ================================================================ -->
-    <!-- 12. PFLEGE VON FRAGEN, ANTWORTEN UND QUELLEN                     -->
+    <!-- 12. GEFÄHRDUNGSBEURTEILUNG UND MARKT-DATENSATZ                   -->
+    <!-- ================================================================ -->
+
+    <section class="doku-section" id="gbo">
+
+        <div class="section-title">
+            Abschnitt 12
+        </div>
+
+        <h2>
+            Gefährdungsbeurteilung und Markt-Datensatz
+        </h2>
+
+        <div class="card doku-card">
+
+            <p>
+                Die Gefährdungsbeurteilung (GBO) ist ein eigenständiges Modul
+                neben der Begehung. Sie hat eigene Seiten
+                (<code>gbo.html</code>, <code>gbo-hilfe.html</code>,
+                <code>gbo-dokumentation.html</code>), eigene Daten
+                (<code>js/gbo-data.js</code>) und einen eigenen Speicherstand.
+                Die technischen Einzelheiten stehen in der
+                <a href="gbo-dokumentation.html">Technischen Dokumentation der GBO</a>.
+            </p>
+
+            <table class="doku-table">
+                <tr>
+                    <th>Bereich</th>
+                    <th>Speicherort</th>
+                </tr>
+                <tr>
+                    <td>Begehung (Prüfkatalog, Aktionsplan)</td>
+                    <td>localStorage <code>begehungState</code></td>
+                </tr>
+                <tr>
+                    <td>Gefährdungsbeurteilung</td>
+                    <td>localStorage <code>asicGboStateV1</code> (Bildbelege der GBO sind darin als Bilddaten enthalten)</td>
+                </tr>
+                <tr>
+                    <td>Verknüpfungen Begehung ↔ GBO</td>
+                    <td>localStorage <code>asicMarketLinksV2</code></td>
+                </tr>
+                <tr>
+                    <td>Fotos der Begehung und Archiv</td>
+                    <td>IndexedDB <code>asicHandelPhotos</code> und <code>asicHandelArchiv</code></td>
+                </tr>
+            </table>
+
+            <p>
+                <strong>Markt-Datensatz:</strong> <code>js/market-store.js</code>
+                fasst Begehung, GBO und Verknüpfungen zu einem Container
+                (Format <code>ASiC-Marktcontainer</code>, Formatversion 2) zusammen.
+                Beide Teilstände bleiben darin getrennt. Der Container wird als
+                JSON-Datei gesichert oder über <code>save.php</code> auf den Server
+                geschrieben; beim Laden erkennt die App das Format und stellt beide
+                Teile wieder her. Ältere Dateien nur mit Begehung oder nur mit GBO
+                bleiben ladbar.
+            </p>
+
+            <p>
+                <strong>Team-Archiv:</strong> „Markt auf Server speichern“
+                (<code>saveStateToServer()</code>, auch „Jetzt sichern“ im
+                Sicherungshinweis) speichert immer den Markt-Datensatz.
+                Verlauf, Team-Auswertung und Wiederholungsbegehung lesen
+                daraus den Begehungsteil (<code>begehungAusDatensatz()</code>
+                in <code>js/app.js</code>); „In App anzeigen“ und „Vom Server
+                laden“ übernehmen zusätzlich die Gefährdungsbeurteilung.
+            </p>
+
+            <p>
+                Die Dateinamen auf dem Server richten sich weiter nach
+                Datum und Marktnummer aus den Betriebsdaten der Begehung.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================================================ -->
+    <!-- 13. PFLEGE VON FRAGEN, ANTWORTEN UND QUELLEN                     -->
     <!-- ================================================================ -->
 
     <section class="doku-section" id="pflege">
 
         <div class="section-title">
-            Abschnitt 12
+            Abschnitt 13
         </div>
 
         <h2>
@@ -2701,44 +3046,11 @@
 
         <div class="card doku-card">
             <p>
-                Die Inhalte des Prüfkatalogs liegen in reinen
+                Die Inhalte von Prüfkatalog und Gefährdungsbeurteilung liegen in reinen
                 Datendateien. Die Seiten der App müssen bei Inhaltsänderungen nicht
                 angefasst werden. Danach sind immer drei Schritte nötig: Zahlen
                 aktualisieren, Versionsstand hochzählen, Pakete neu bauen.
             </p>
-            <div class="doku-box">
-                <div class="doku-box-title">Pflege-Tool</div>
-                <p>
-                    Für diese Änderungen gibt es ein eigenes Pflege-Tool
-                    (<code>ASiC-Handel-1.54_Pflege-Tool.html</code>). Es ist eine
-                    einzelne HTML-Datei, läuft ohne Internet im Browser (Edge,
-                    Chrome, Firefox) und gehört nicht auf den Webserver. Das Tool
-                    liest ein vorhandenes Paket der App, ohne dessen Code
-                    auszuführen, und erzeugt daraus ein neues Paket. Das
-                    Original bleibt unverändert.
-                </p>
-                <p><strong>Bearbeiten lassen sich:</strong></p>
-                <ul>
-                    <li>Prüffragen, Unterbereiche und Kategorien, auch der Schalter „nicht vorhanden“</li>
-                    <li>Maßnahmentexte in allen drei Sprachstilen und der Standardtext</li>
-                    <li>das Quellenverzeichnis im PDF</li>
-                    <li>die Quellentabellen dieser Dokumentation</li>
-                    <li>Suchen und Ersetzen über alle Texte, z. B. wenn ein Regelwerk zurückgezogen wird</li>
-                </ul>
-                <p><strong>Was das Tool selbst erledigt:</strong></p>
-                <ul>
-                    <li>Es hält die Regeln für Frage-IDs ein (siehe unten). Bestehende IDs sind fest, entfernte IDs werden als stillgelegt vermerkt.</li>
-                    <li>Es prüft vor dem Export auf fehlende Texte und doppelte oder falsche IDs.</li>
-                    <li>Es übernimmt die Schritte 1 und 2 unter „Danach immer“: Zahlen, Dateiübersicht und Ausgabestand.</li>
-                    <li>Es legt jedem Paket eine Änderungsliste mit altem und neuem Wortlaut bei.</li>
-                </ul>
-                <p>
-                    Von Hand bleiben das Testen und Einspielen (Schritt 3),
-                    Freitexte in <code>hilfe.html</code>, die Kategorien
-                    namentlich nennen (das Tool listet die Fundstellen auf), und
-                    eine neue Revision. Eine Anleitung ist im Tool enthalten.
-                </p>
-            </div>
         </div>
 
         <h3>
@@ -2754,6 +3066,7 @@
                 <tr><td><code>dokumentation.html</code></td><td>Abschnitt 3, Unterpunkte „Maßnahmentexte in drei Sprachstilen“ und „Quellenverzeichnis der Maßnahmentexte“ (Tabellen „Quelle | Bezug im Maßnahmenkatalog“)</td><td>Regelwerk kommt hinzu, fällt weg oder wird umbenannt</td></tr>
                 <tr><td><code>js/app.js</code></td><td><code>OPTIONAL_CATEGORIES</code>: Kategorien mit Schalter „nicht vorhanden“</td><td>Nur wenn eine solche Kategorie dazukommt oder wegfällt</td></tr>
                 <tr><td><code>hilfe.html</code></td><td>Zwei Stellen nennen die Kategorien mit Schalter „nicht vorhanden“ namentlich: Frage „Was bedeutet der Schalter …“ und Problem „Eine Kategorie ist gesperrt …“</td><td>Nur zusammen mit <code>OPTIONAL_CATEGORIES</code></td></tr>
+                <tr><td><code>js/gbo-v2.js</code></td><td><code>QUESTION_MAP</code>: welche Begehungsfrage auf welche GBO-Frage verweist (Vormerkung Begehung → GBO)</td><td>Frage-IDs der Begehung ändern sich, oder eine neue Frage soll eine GBO-Verknüpfung bekommen</td></tr>
             </table>
             </div>
             <div class="doku-box">
@@ -2764,6 +3077,24 @@
                     und im PDF nur ein allgemeiner Standardtext. Zu jeder neuen Frage
                     daher alle drei Sprachstile anlegen.
                 </p>
+            </div>
+        </div>
+
+        <h3>
+            Gefährdungsbeurteilung: betroffene Dateien
+        </h3>
+
+        <div class="card doku-card">
+            <div class="doku-table-wrap">
+            <table class="doku-table pflege">
+                <tr><th>Datei</th><th>Was drinsteht</th><th>Wann ändern</th></tr>
+                <tr><td><code>js/gbo-data.js</code></td><td>Themen, Bereiche, Maschinen, Fragen und Maßnahmenvorschläge der GBO</td><td>Frage oder Antwortvorschlag ändert sich</td></tr>
+                <tr><td><code>js/gbo-quellen.js</code></td><td>Regelwerke je Themenfeld mit Fundstelle (Paragraf, Abschnitt), Erläuterung und Maßnahmenhinweisen; Kennzeichnung „geprüft“ (sonst zeigt die App „Abschnitt prüfen“)</td><td>Quellenangabe ändert sich</td></tr>
+                <tr><td><code>quellen.html</code></td><td>Quellenübersicht mit Suche</td><td>Regelwerk kommt hinzu, fällt weg oder wird umbenannt</td></tr>
+                <tr><td><code>js/gbo-struktur.js</code></td><td>Zuordnung zu den Gefährdungsfaktoren 0–11, automatische Vertiefungen (LINKS), zusammengelegte Fragen (ALIAS)</td><td>Fragen werden verschoben oder zusammengelegt</td></tr>
+                <tr><td><code>js/gbo-migrate.js</code></td><td>Liste „alte ID → neue ID“</td><td>Nur wenn Frage-IDs umbenannt werden</td></tr>
+                <tr><td><code>gbo-hilfe.html</code>, <code>gbo-dokumentation.html</code></td><td>Beschreibung von Aufbau und Themen der GBO</td><td>Nur wenn sich die Struktur ändert</td></tr>
+            </table>
             </div>
         </div>
 
@@ -2779,11 +3110,14 @@
                 <tr><td>Maßnahmentext ändern</td><td><code>js/text.js</code> (<code>MEASURES_TEXT</code>)</td><td>Alle drei Sprachstile prüfen</td></tr>
                 <tr><td>Neue Frage</td><td><code>js/audit-data.js</code> + <code>js/text.js</code></td><td>Neue, noch nie verwendete ID; Text in allen drei Stilen</td></tr>
                 <tr><td>Frage entfernen</td><td><code>js/audit-data.js</code></td><td>ID nie für eine andere Frage verwenden</td></tr>
-                <tr><td>Neues Regelwerk oder neue Fassung</td><td><code>js/text.js</code> (<code>MEASURE_SOURCES</code> und betroffene Texte) + <code>dokumentation.html</code></td><td>Ausgabe mit Monat/Jahr nennen, z. B. „Ausgabe 11/2024“</td></tr>
+                <tr><td>Neues Regelwerk oder neue Fassung</td><td><code>js/text.js</code> (<code>MEASURE_SOURCES</code> und betroffene Texte) + <code>dokumentation.html</code> (bei GBO-Bezug auch <code>js/gbo-quellen.js</code> und <code>quellen.html</code>)</td><td>Ausgabe mit Monat/Jahr nennen, z. B. „Ausgabe 11/2024“</td></tr>
                 <tr><td>Regelwerk zurückgezogen</td><td>wie oben; alle Verweise ersetzen</td><td>Nach dem Kurztitel suchen (z. B. „100-500“); Ersatz und Grund in der Doku nennen</td></tr>
                 <tr><td>Neue Kategorie</td><td><code>js/audit-data.js</code> + <code>js/text.js</code></td><td>Kategorie-<code>id</code> klein und ohne Leerzeichen</td></tr>
                 <tr><td>Kategorie mit Schalter „nicht vorhanden“</td><td>zusätzlich <code>js/app.js</code> + zwei Stellen in <code>hilfe.html</code></td><td>Schlüssel = Kategorie-<code>id</code>, Wert = Text am Schalter</td></tr>
                 <tr><td>Neuer Unterbereich</td><td><code>js/audit-data.js</code> (<code>group</code>)</td><td>Schalter je Unterbereich entsteht automatisch (außer Beleuchtung)</td></tr>
+                <tr><td>GBO-Frage oder -Antwortvorschlag ändern</td><td><code>js/gbo-data.js</code></td><td>ID bleibt</td></tr>
+                <tr><td>GBO-Quelle ändern</td><td><code>js/gbo-quellen.js</code> + <code>quellen.html</code></td><td>Nach Abgleich mit dem Wortlaut „geprüft“ = 1 setzen</td></tr>
+                <tr><td>GBO-Fragen zusammenlegen oder umbenennen</td><td><code>js/gbo-struktur.js</code> bzw. <code>js/gbo-migrate.js</code></td><td>Alte ID immer auf die neue übertragen, sonst gehen Bewertungen und Bildbelege verloren</td></tr>
             </table>
             </div>
         </div>
@@ -2793,16 +3127,16 @@
         </h3>
 
         <div class="card doku-card">
-            <p><strong>1. Zahlen und Dateiübersicht aktualisieren.</strong> Im Ordner <code>ASiC</code> <code>python tools/doku-zahlen.py</code> ausführen (nur prüfen: <code>--pruefen</code>). Das Skript zählt Kategorien und Fragen, liest Revision und Cache-Namen und trägt die Werte in <code>dokumentation.html</code> und <code>hilfe.html</code> ein. Es meldet doppelte Frage-IDs. Diese Zahlen nie von Hand ändern; nur in <code>datenschutz.html</code> und <code>impressum.html</code> den Stand von Hand angleichen.</p>
+            <p><strong>1. Zahlen und Dateiübersicht aktualisieren.</strong> Im Ordner <code>gbo</code> <code>python tools/doku-zahlen.py</code> ausführen (nur prüfen: <code>--pruefen</code>). Das Skript zählt Kategorien und Fragen der Begehung sowie Module und Fragen der GBO, liest Revision und Cache-Namen und trägt die Werte in <code>dokumentation.html</code>, <code>hilfe.html</code>, <code>gbo-dokumentation.html</code>, <code>gbo-hilfe.html</code>, <code>impressum.html</code> und <code>datenschutz.html</code> ein. Es meldet doppelte Frage-IDs. Diese Zahlen nie von Hand ändern.</p>
             <p><strong>2. Versionsstand hochzählen</strong> – sonst laden die Geräte die neuen Texte nicht:</p>
             <div class="doku-table-wrap">
             <table class="doku-table pflege">
                 <tr><th>Art</th><th>Was ändern</th></tr>
-                <tr><td>Ausgabestand (Regelfall, z. B. 1.54-7 → 1.54-8)</td><td><code>BUILD</code> und <code>CACHE_NAME</code> in <code>sw.js</code> sowie den Zusatz <code>?v=…</code> hinter allen js- und css-Einbindungen der HTML-Seiten (gleicher Wert wie <code>BUILD</code>)</td></tr>
-                <tr><td>Neue Revision (z. B. 1.55)</td><td>zusätzlich <code>APP_REVISION</code> und <code>APP_REVISION_DATE</code> in <code>js/app.js</code> sowie <code>APP_VERSION</code> in <code>sw.js</code></td></tr>
+                <tr><td>Ausgabestand (z. B. 2.2.0 → 2.2.0-2)</td><td><code>BUILD</code> und <code>CACHE_NAME</code> in <code>sw.js</code> sowie den Zusatz <code>?v=…</code> hinter allen js- und css-Einbindungen der HTML-Seiten (gleicher Wert wie <code>BUILD</code>)</td></tr>
+                <tr><td>Neue Revision (z. B. 2.3.0)</td><td>zusätzlich <code>APP_REVISION</code> und <code>APP_REVISION_DATE</code> in <code>js/app.js</code>, <code>APP_VERSION</code> in <code>sw.js</code> und die fest eingetragene Revision in den Fußzeilen von <code>gbo.html</code>, <code>gbo-hilfe.html</code> und <code>gbo-dokumentation.html</code></td></tr>
             </table>
             </div>
-            <p><strong>3. Testen und Pakete neu bauen.</strong> Geänderte Frage im Prüfkatalog, Maßnahmentext in allen drei Sprachstilen und PDF mit Quellenverzeichnis prüfen; danach die Pakete für IT, GitHub und Synology neu erstellen (<code>config.php</code> und <code>zugang-config.js</code> der Betreiber nicht überschreiben).</p>
+            <p><strong>3. Testen und Pakete neu bauen.</strong> Geänderte Frage im Prüfkatalog, in der GBO, Maßnahmentext in allen drei Sprachstilen und PDF mit Quellenverzeichnis prüfen; danach die Pakete für IT, GitHub und Synology neu erstellen (<code>config.php</code> und <code>zugang-config.js</code> der Betreiber nicht überschreiben).</p>
         </div>
 
         <h3>
@@ -2812,7 +3146,7 @@
         <div class="card doku-card">
             <p>
                 Archivierte Begehungen, das Team-Archiv, die Auswertungen, die
-                Wiederholungsbegehung und die Zuordnung der Maßnahmen
+                Wiederholungsbegehung und die Zuordnung der Maßnahmen sowie Bewertungen, Bildbelege und Vormerkungen der GBO
                 hängen an der Frage-ID, nicht am Fragetext.
             </p>
             <div class="doku-table-wrap">
@@ -2821,7 +3155,7 @@
                 <tr><td>Text ändern</td><td>Unbedenklich – die ID bleibt.</td></tr>
                 <tr><td>Neue Frage</td><td>Immer eine neue, noch nie verwendete ID vergeben.</td></tr>
                 <tr><td>Frage löschen</td><td>ID nie für eine andere Frage wiederverwenden. Alte Begehungen bleiben auswertbar; die Auswertung zeigt die Frage als „nicht mehr im aktuellen Katalog“.</td></tr>
-                <tr><td>ID ändern</td><td>Vermeiden – Bewertungen und Maßnahmen alter Begehungen würden der Frage nicht mehr zugeordnet.</td></tr>
+                <tr><td>ID ändern</td><td>Bei der Begehung vermeiden. Bei der GBO nur mit Eintrag in <code>js/gbo-migrate.js</code>.</td></tr>
                 <tr><td>Lücken in der Nummerierung</td><td>Erlaubt – nicht nachträglich „aufrücken“.</td></tr>
             </table>
             </div>
@@ -2830,13 +3164,13 @@
     </section>
 
     <!-- ================================================================ -->
-    <!-- 13. DATEIÜBERSICHT                                               -->
+    <!-- 14. DATEIÜBERSICHT                                               -->
     <!-- ================================================================ -->
 
     <section class="doku-section" id="dateien">
 
         <div class="section-title">
-            Abschnitt 13
+            Abschnitt 14
         </div>
 
         <h2>
@@ -2862,62 +3196,77 @@
                 <!-- DATEITABELLE:START -->
                 <tr>
                     <td>index.html</td>
-                    <td class="zahl">755</td>
+                    <td class="zahl">761</td>
                     <td>Prüfkatalog und Eingabe der Begehungsdaten</td>
                 </tr>
                 <tr>
                     <td>massnahmen.html</td>
-                    <td class="zahl">714</td>
+                    <td class="zahl">720</td>
                     <td>Aktionsplan, Maßnahmenbearbeitung, Status und Unterschriften</td>
                 </tr>
                 <tr>
-                    <td>fotos.html</td>
+                    <td>gbo.html</td>
+                    <td class="zahl">25</td>
+                    <td>Gefährdungsbeurteilung (GBO): Betriebsdaten, Themen, Bewertung, Statistik, Bildbelege, Markt-Datensatz</td>
+                </tr>
+                <tr>
+                    <td>gbo-hilfe.html</td>
                     <td class="zahl">549</td>
+                    <td>Hilfe und FAQ zur Gefährdungsbeurteilung</td>
+                </tr>
+                <tr>
+                    <td>gbo-dokumentation.html</td>
+                    <td class="zahl">541</td>
+                    <td>Technische Dokumentation der Gefährdungsbeurteilung</td>
+                </tr>
+                <tr>
+                    <td>quellen.html</td>
+                    <td class="zahl">365</td>
+                    <td>Übersicht der Rechtsgrundlagen und Regelwerke mit Suche</td>
+                </tr>
+                <tr>
+                    <td>fotos.html</td>
+                    <td class="zahl">554</td>
                     <td>Aufnahme, Einfügen, Kommentieren und Verwaltung von Fotos</td>
                 </tr>
                 <tr>
                     <td>verlauf.html</td>
-                    <td class="zahl">391</td>
+                    <td class="zahl">395</td>
                     <td>Archivierte Begehungen (Mein Verlauf) und Team-Archiv (Server)</td>
                 </tr>
                 <tr>
                     <td>auswertung.html</td>
-                    <td class="zahl">943</td>
+                    <td class="zahl">947</td>
                     <td>Auswertung der lokal archivierten Begehungen</td>
                 </tr>
                 <tr>
                     <td>auswertung-team.html</td>
-                    <td class="zahl">894</td>
+                    <td class="zahl">898</td>
                     <td>Auswertung aller Begehungen im Team-Archiv (Server)</td>
                 </tr>
                 <tr>
                     <td>einstellungen.html</td>
-                    <td class="zahl">382</td>
-                    <td>Konfigurierbare Server-Adresse und Zugriffsschlüssel</td>
+                    <td class="zahl">386</td>
+                    <td>Server-Adresse, Zugriffsschlüssel, Verbindungstest und Diagnose</td>
                 </tr>
                 <tr>
                     <td>impressum.html</td>
-                    <td class="zahl">170</td>
+                    <td class="zahl">171</td>
                     <td>Impressum</td>
                 </tr>
                 <tr>
                     <td>datenschutz.html</td>
-                    <td class="zahl">243</td>
+                    <td class="zahl">264</td>
                     <td>Datenschutzerklärung</td>
                 </tr>
                 <tr>
                     <td>hilfe.html</td>
-                    <td class="zahl">989</td>
+                    <td class="zahl">997</td>
                     <td>Bedienungsanleitung und FAQ</td>
                 </tr>
                 <tr>
-                    <td>kurzanleitung.html</td>
-                    <td class="zahl">200</td>
-                    <td>Bebilderte Kurzanleitung (Bildschirmfotos eingebettet, aus „Hilfe &amp; FAQ“ verlinkt)</td>
-                </tr>
-                <tr>
                     <td>dokumentation.html</td>
-                    <td class="zahl">3.198</td>
+                    <td class="zahl">3.639</td>
                     <td>Technische Dokumentation (diese Seite)</td>
                 </tr>
                 <tr>
@@ -2927,8 +3276,8 @@
                 </tr>
                 <tr>
                     <td>js/app.js</td>
-                    <td class="zahl">4.975</td>
-                    <td>Kernlogik, State-Verwaltung, Checkliste, PDF-Erzeugung, Export, Archivierung, Server-Zugriff, Hilfsfunktionen (escapeHtml, todayIsoLocal) und Service-Worker-Registrierung</td>
+                    <td class="zahl">4.979</td>
+                    <td>Kernlogik, State-Verwaltung, Checkliste, PDF-Erzeugung, Export, Archivierung, NAS-Zugriff, Hilfsfunktionen (escapeHtml, todayIsoLocal) und Service-Worker-Registrierung</td>
                 </tr>
                 <tr>
                     <td>js/audit-data.js</td>
@@ -2937,12 +3286,12 @@
                 </tr>
                 <tr>
                     <td>js/text.js</td>
-                    <td class="zahl">1.148</td>
+                    <td class="zahl">1.149</td>
                     <td>Hinterlegte Maßnahmentexte und Sprachstile</td>
                 </tr>
                 <tr>
                     <td>js/massnahmen.js</td>
-                    <td class="zahl">1.074</td>
+                    <td class="zahl">1.096</td>
                     <td>Logik der Aktionsplan-Seite</td>
                 </tr>
                 <tr>
@@ -2952,7 +3301,7 @@
                 </tr>
                 <tr>
                     <td>js/fotos.js</td>
-                    <td class="zahl">111</td>
+                    <td class="zahl">131</td>
                     <td>Bedienlogik der Fotodokumentationsseite</td>
                 </tr>
                 <tr>
@@ -2962,7 +3311,7 @@
                 </tr>
                 <tr>
                     <td>js/verlauf.js</td>
-                    <td class="zahl">464</td>
+                    <td class="zahl">466</td>
                     <td>Bedienlogik der Archiv-/Verlaufseite inkl. Team-Archiv (Server)</td>
                 </tr>
                 <tr>
@@ -2988,22 +3337,7 @@
                 <tr>
                     <td>js/access-gate.js</td>
                     <td class="zahl">149</td>
-                    <td>Clientseitige Zugangshürde für die installierte App-Ansicht (prüft die Prüfsumme aus zugang-config.js)</td>
-                </tr>
-                <tr>
-                    <td>js/hilfe-suche.js</td>
-                    <td class="zahl">200</td>
-                    <td>Suche, Auf-/Zuklappen und „Nach oben“ der Hilfeseite</td>
-                </tr>
-                <tr>
-                    <td>js/seiten-jahr.js</td>
-                    <td class="zahl">3</td>
-                    <td>Aktuelles Jahr in Impressum und Datenschutz</td>
-                </tr>
-                <tr>
-                    <td>js/auswertung-team-pruefung.js</td>
-                    <td class="zahl">14</td>
-                    <td>Selbstprüfung der Team-Auswertung auf veraltete Programmdateien</td>
+                    <td>Clientseitige Zugangshürde für die installierte App-Ansicht</td>
                 </tr>
                 <tr>
                     <td>zugang-config.js</td>
@@ -3011,9 +3345,24 @@
                     <td>Betreiber-Einstellung: Prüfsumme (SHA-256) des Zugangscodes, Abfrage ein/aus</td>
                 </tr>
                 <tr>
+                    <td>js/seiten-jahr.js</td>
+                    <td class="zahl">3</td>
+                    <td>Aktuelles Jahr in den Fußzeilen</td>
+                </tr>
+                <tr>
+                    <td>js/hilfe-suche.js</td>
+                    <td class="zahl">200</td>
+                    <td>Suche, Auf-/Zuklappen und „Nach oben“ der Hilfeseite</td>
+                </tr>
+                <tr>
+                    <td>js/quellen-suche.js</td>
+                    <td class="zahl">20</td>
+                    <td>Suche in der Quellenübersicht</td>
+                </tr>
+                <tr>
                     <td>sw.js</td>
-                    <td class="zahl">202</td>
-                    <td>Service Worker, Offline-Fähigkeit, Cache-Version v1.54-20</td>
+                    <td class="zahl">223</td>
+                    <td>Service Worker, Offline-Fähigkeit, Cache-Version v2.2.0-9</td>
                 </tr>
                 <tr>
                     <td>manifest.json</td>
@@ -3021,29 +3370,114 @@
                     <td>Web-App-Manifest für die Installation als App</td>
                 </tr>
                 <tr>
-                    <td>config.php</td>
-                    <td class="zahl">139</td>
-                    <td>Server: Datenordner und Zugriffsschlüssel, zentral für alle PHP-Skripte</td>
-                </tr>
-                <tr>
-                    <td>pruefen.php</td>
-                    <td class="zahl">408</td>
-                    <td>Server: Prüfseite für die Einrichtung (PHP, Rechte, Schutz des Datenordners, HTTPS, Schlüssel)</td>
-                </tr>
-                <tr>
                     <td>save.php</td>
                     <td class="zahl">761</td>
-                    <td>Server: Begehung speichern (sichert den Vorgängerstand im Unterordner versionen)</td>
+                    <td>NAS: Begehung speichern (sichert den Vorgängerstand im Unterordner versionen)</td>
                 </tr>
                 <tr>
                     <td>list.php</td>
                     <td class="zahl">352</td>
-                    <td>Server: Liste aller gespeicherten Begehungen für das Team-Archiv</td>
+                    <td>NAS: Liste aller gespeicherten Begehungen für das Team-Archiv</td>
+                </tr>
+                <tr>
+                    <td>nas-test.html</td>
+                    <td class="zahl">1</td>
+                    <td>Eigenständige Testseite für die NAS-Anbindung (wird von den App-Seiten nicht verlinkt)</td>
+                </tr>
+                <tr>
+                    <td>auswertung.js</td>
+                    <td class="zahl">716</td>
+                    <td>Auswertungs-Skript im Hauptordner (wird von den App-Seiten nicht eingebunden; wird auf dem NAS verwendet)</td>
+                </tr>
+                <tr>
+                    <td>js/webdav-store.js</td>
+                    <td class="zahl">161</td>
+                    <td>Ältere WebDAV-Anbindung für das Synology-Backup (wird von den App-Seiten nicht eingebunden)</td>
+                </tr>
+                <tr>
+                    <td>css/gbo.css</td>
+                    <td class="zahl">712</td>
+                    <td>Gestaltung der Gefährdungsbeurteilung</td>
+                </tr>
+                <tr>
+                    <td>js/gbo-data.js</td>
+                    <td class="zahl">5.953</td>
+                    <td>Daten der Gefährdungsbeurteilung: Themen, Bereiche, Arbeitsmittel, Fragen und Maßnahmen</td>
+                </tr>
+                <tr>
+                    <td>js/gbo-quellen.js</td>
+                    <td class="zahl">520</td>
+                    <td>Regelwerke je Themenfeld der GBO: Paragraf bzw. Abschnitt, Erläuterung und Maßnahmenhinweise (TOP) je Frage</td>
+                </tr>
+                <tr>
+                    <td>js/gbo-struktur.js</td>
+                    <td class="zahl">462</td>
+                    <td>Aufbau der GBO ab Rev. 2.1.0: Kernbeurteilung nach Gefährdungsfaktoren 0–11, Zusammenführung doppelter Fragen und Module, neue Kernfragen, Maschinen-Grundstruktur, Instanzen, automatische Vertiefung</td>
+                </tr>
+                <tr>
+                    <td>js/gbo.js</td>
+                    <td class="zahl">78</td>
+                    <td>Logik der Gefährdungsbeurteilung: Auswahl, Bewertung, Statistik, Bildbelege, Druckausgabe</td>
+                </tr>
+                <tr>
+                    <td>js/gbo-v2.js</td>
+                    <td class="zahl">62</td>
+                    <td>Verknüpfung von Begehungsfeststellungen mit der Gefährdungsbeurteilung</td>
+                </tr>
+                <tr>
+                    <td>js/gbo-risk.js</td>
+                    <td class="zahl">624</td>
+                    <td>GBO: Risikobewertung je Modul (Schwere x Wahrscheinlichkeit, Ausgangs- und Restrisiko, Wirksamkeitskontrolle), Risikoübersicht und Fortschreibung der GBO</td>
+                </tr>
+                <tr>
+                    <td>js/gbo-pdf.js</td>
+                    <td class="zahl">1.415</td>
+                    <td>PDF-Ausgabe der Gefährdungsbeurteilung: Gesamt-GBO und Maßnahmenliste, Drucken, Teilen, Mail-Text</td>
+                </tr>
+                <tr>
+                    <td>js/gbo-signatur.js</td>
+                    <td class="zahl">114</td>
+                    <td>Unterschriftenfelder (Freigabe) der GBO: Zeichenfeld, Speicherung im GBO-Stand, Übernahme ins PDF</td>
+                </tr>
+                <tr>
+                    <td>js/gbo-fristen.js</td>
+                    <td class="zahl">113</td>
+                    <td>Fristüberwachung der GBO: überfällige Maßnahmen, Hinweisleiste, Mailentwurf an den Markt</td>
+                </tr>
+                <tr>
+                    <td>js/gbo-migrate.js</td>
+                    <td class="zahl">160</td>
+                    <td>Übernahme alter Frage-Kürzel der GBO (Bewertungen, Vormerkungen, Fotos) ab Rev. 2.0.29</td>
+                </tr>
+                <tr>
+                    <td>js/gbo-photos.js</td>
+                    <td class="zahl">115</td>
+                    <td>Bildablage der Gefährdungsbeurteilung in IndexedDB (asicGboPhotos), Vorschaubilder, Übernahme alter Bilder</td>
+                </tr>
+                <tr>
+                    <td>js/storage-check.js</td>
+                    <td class="zahl">101</td>
+                    <td>Speicherprüfung vor dem Speichern von Fotos mit Warnmeldung (Begehung und GBO)</td>
+                </tr>
+                <tr>
+                    <td>js/market-store.js</td>
+                    <td class="zahl">35</td>
+                    <td>Gemeinsamer Markt-Datensatz: Sichern, Laden und NAS-Zugriff für Begehung und GBO</td>
+                </tr>
+                <tr>
+                    <td>js/market-ui.js</td>
+                    <td class="zahl">34</td>
+                    <td>Schaltflächen für die Gesamtsicherung des Marktes im Prüfkatalog</td>
                 </tr>
                 <tr>
                     <td>load.php</td>
                     <td class="zahl">173</td>
-                    <td>Server: einzelne gespeicherte Begehung laden</td>
+                    <td>NAS: einzelne gespeicherte Begehung laden</td>
+                </tr>
+                <tr>
+                    <td>config.php</td>
+                    <td class="zahl">139</td>
+                    <td>Einzige Server-Einstellung: Datenordner, Zugriffsschlüssel, CORS, Grenzwerte, Sicherheits-Header</td>
                 </tr>
                 <tr>
                     <td>offen.php</td>
@@ -3053,16 +3487,41 @@
                 <tr>
                     <td>schutz.php</td>
                     <td class="zahl">466</td>
-                    <td>Missbrauchsschutz für das Team-Archiv: Bremse für Fehlversuche und Speichern, Größengrenze, Begrenzung von versionen/ mit Archiv (versionen/archiv/)</td>
+                    <td>Missbrauchsschutz für das Team-Archiv: Bremse für Fehlversuche und Speichern, Größengrenze, Begrenzung von versionen/ mit Archiv</td>
+                </tr>
+                <tr>
+                    <td>pruefen.php</td>
+                    <td class="zahl">408</td>
+                    <td>Prüfseite für die Server-Einrichtung (nach der Einrichtung löschen)</td>
+                </tr>
+                <tr>
+                    <td>.htaccess</td>
+                    <td class="zahl">23</td>
+                    <td>Sicherheits-Header für Apache (CSP inkl. frame-ancestors, nosniff), Sperre der Hilfsdateien</td>
+                </tr>
+                <tr>
+                    <td>web.config</td>
+                    <td class="zahl">25</td>
+                    <td>Sicherheits-Header für IIS, Sperre des Ordners tools</td>
+                </tr>
+                <tr>
+                    <td>daten/.htaccess</td>
+                    <td class="zahl">3</td>
+                    <td>Sperre des mitgelieferten Datenordners (Apache)</td>
+                </tr>
+                <tr>
+                    <td>daten/web.config</td>
+                    <td class="zahl">12</td>
+                    <td>Sperre des mitgelieferten Datenordners (IIS)</td>
                 </tr>
                 <tr>
                     <td>tools/doku-zahlen.py</td>
-                    <td class="zahl">281</td>
+                    <td class="zahl">293</td>
                     <td>Hilfsskript: aktualisiert Zahlen und Dateitabelle in dokumentation.html und hilfe.html</td>
                 </tr>
                 <tr>
                     <td>tools/doku-dateien.json</td>
-                    <td class="zahl">226</td>
+                    <td class="zahl">312</td>
                     <td>Dateiliste mit Beschreibungen für das Hilfsskript</td>
                 </tr>
                 <tr>
@@ -3091,29 +3550,14 @@
                     <td>Lizenztext der Schrift (SIL Open Font License 1.1)</td>
                 </tr>
                 <tr>
+                    <td>js/auswertung-team-pruefung.js</td>
+                    <td class="zahl">14</td>
+                    <td>Selbstprüfung der Team-Auswertung auf veraltete Programmdateien</td>
+                </tr>
+                <tr>
                     <td>INSTALLATION.txt</td>
                     <td class="zahl">12,4 KB</td>
                     <td>Installationsanleitung für den Betrieb auf einem eigenen Server</td>
-                </tr>
-                <tr>
-                    <td>daten/.htaccess</td>
-                    <td class="zahl">0,1 KB</td>
-                    <td>Sperrdatei für Apache (Datenordner-Variante B)</td>
-                </tr>
-                <tr>
-                    <td>daten/web.config</td>
-                    <td class="zahl">0,3 KB</td>
-                    <td>Sperrdatei für IIS (Datenordner-Variante B)</td>
-                </tr>
-                <tr>
-                    <td>.htaccess</td>
-                    <td class="zahl">23</td>
-                    <td>Sicherheits-Header für Apache (CSP inkl. frame-ancestors, nosniff), Sperre der Hilfsdateien</td>
-                </tr>
-                <tr>
-                    <td>web.config</td>
-                    <td class="zahl">25</td>
-                    <td>Sicherheits-Header für IIS, Sperre des Ordners tools</td>
                 </tr>
                 <!-- DATEITABELLE:ENDE -->
 
@@ -3122,11 +3566,11 @@
 
             <p>
                 <strong>Gesamt (eigener Code, ohne jsPDF und Schrift):</strong>
-                <span data-zahl="zeilen_gesamt">26.690</span> Zeilen
+                <span data-zahl="zeilen_gesamt">40.053</span> Zeilen
             </p>
 
             <p style="font-size:0.82rem; color:var(--ink-soft);">
-                Stand der Zeilenzahlen: <span data-zahl="zeilen_stand">31.10.2026</span>.
+                Stand der Zeilenzahlen: <span data-zahl="zeilen_stand">30.10.2026</span>.
                 Die Werte wurden aus den tatsächlich enthaltenen Dateien gezählt.
             </p>
 
@@ -3188,9 +3632,9 @@
 </footer>
 
 
-<script src="js/audit-data.js?v=1.54-20"></script>
-<script src="js/text.js?v=1.54-20"></script>
-<script src="js/app.js?v=1.54-20"></script>
+<script src="js/audit-data.js?v=2.2.0-9"></script>
+<script src="js/text.js?v=2.2.0-9"></script>
+<script src="js/app.js?v=2.2.0-9"></script>
 
 <!-- Quellenverzeichnis ist für diesen Dokumentstand detailliert und statisch dokumentiert. -->
 
