@@ -4,7 +4,7 @@
 
 let archiveCache = [];
 let teamArchiveCache = [];
-let teamOffenListe = [];   // auf anderen Geraeten geoeffnet
+let teamOffenListe = [];   // auf anderen Geraeten geoeffnet (ab 1.54-11)
 
 async function loadAndRenderArchive() {
     try {
@@ -88,14 +88,14 @@ async function onArchiveRestore(id) {
         { sub: 'Begehung aus „Mein Verlauf“ öffnen', punkte: [
             'Die Begehung wird auf diesem Gerät geöffnet und kann weiterbearbeitet werden.',
             (record.photos && record.photos.length ? record.photos.length + ' Foto' + (record.photos.length === 1 ? '' : 's') + ' dieser Begehung werden wiederhergestellt.' : 'Zu dieser Begehung sind keine Fotos archiviert.'),
-            'Archivierte Begehungen bleiben unverändert.',
-            'Die Gefährdungsbeurteilung auf diesem Gerät bleibt unverändert.'
+            'Archivierte Begehungen bleiben unverändert.'
         ] });
     if (!wahl) return;
 
     try {
         if (wahl === 'archiv' && !(await archiviereAktuelleBegehung())) return;
         await meldeGeschlossen();
+        try { localStorage.removeItem(MARKT_CONTAINER_KEY); } catch (e) { /* egal */ }
         const restoredState = {
             companyInfo: { ...record.companyInfo },
             ratings: { ...(record.ratings || {}) },
@@ -123,7 +123,7 @@ async function onArchiveRestore(id) {
     }
 }
 
-// Wiederholungsbegehung aus einer archivierten Begehung
+// Wiederholungsbegehung aus einer archivierten Begehung (ab Rev. 1.52)
 async function onArchiveFollowUp(id) {
     const record = archiveCache.find(r => r.id === id);
     if (!record) return;
@@ -157,7 +157,7 @@ async function onArchiveDelete(id) {
 // mit den PHP-Skripten aufgerufen wird, nicht auf
 // GitHub Pages (dort gibt es save.php/list.php/load.php nicht).
 
-// ===== Ladestatus Team-Archiv (gleiche Anzeige wie die
+// ===== Ladestatus Team-Archiv (ab Rev. 1.54, gleiche Anzeige wie die
 // Team-Auswertung) =====
 // Zeigt ueber der Liste: wird geladen (Spinner + durchlaufender Balken,
 // da list.php die Liste in EINEM Abruf liefert), fertig (gruen, Anzahl +
@@ -269,7 +269,7 @@ function renderTeamArchiveList() {
     // Sicherheit nochmal explizit nach Speicherzeitpunkt).
     const alle = [...teamArchiveCache].sort((a, b) => (b.savedAt || '').localeCompare(a.savedAt || ''));
 
-    // Suche: alle Suchwoerter muessen vorkommen,
+    // Suche (ab Ausgabestand 1.54-3): alle Suchwoerter muessen vorkommen,
     // in Marktnummer, Ort/Firma, Begehungsdatum oder Dateiname.
     const suchEl = document.getElementById('team-archiv-suchfeld');
     const woerter = (suchEl ? suchEl.value : '').toLowerCase().split(/\s+/).filter(Boolean);
@@ -339,12 +339,11 @@ async function onTeamArchiveExport(fileName) {
 // hatte.
 async function onTeamArchiveRestore(fileName) {
     const eintrag = (teamArchiveCache || []).find(e => e.fileName === fileName) || {};
-    // Kuerzlich gespeichert / gerade geoeffnet: Hinweis, dass gerade jemand
-    // anderes daran arbeiten koennte
+    // Kuerzlich gespeichert: Hinweis, dass gerade jemand anderes daran
+    // arbeiten koennte (ab 1.54-9)
     const punkte = [
-        'Der Markt wird auf diesem Gerät geöffnet und kann weiterbearbeitet werden.',
-        'Enthält der Datensatz eine Gefährdungsbeurteilung, wird sie ebenfalls übernommen.',
-        'Daten aus dem Team-Archiv enthalten keine Original-Fotos.'
+        'Die Begehung wird auf diesem Gerät geöffnet und kann weiterbearbeitet werden.',
+        'Daten aus dem Team-Archiv enthalten keine Fotos.'
     ];
     const standJetzt = (typeof leseServerStand === 'function') ? leseServerStand() : null;
     const hierGeoeffnet = !!(standJetzt && standJetzt.datei === fileName && sicherungsZustand() !== 'leer');
@@ -374,10 +373,9 @@ async function onTeamArchiveRestore(fileName) {
             freieTexte: { ...(record.freieTexte || {}) }
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(restoredState));
-        // Markt-Datensatz: Gefaehrdungsbeurteilung ebenfalls uebernehmen
-        uebernehmeGboAusDatensatz(record);
+        merkeMarktContainer(record);
         // gilt als im Team-Archiv gesichert (wird im Pruefkatalog nach dem
-        // Seitenaufbau als Sicherungsstand uebernommen)
+        // Seitenaufbau als Sicherungsstand uebernommen, ab Ausgabestand 1.54-3)
         try {
             localStorage.setItem('asicServerStandAusstehend', JSON.stringify({
                 datei: fileName,
@@ -398,7 +396,7 @@ async function onTeamArchiveRestore(fileName) {
     }
 }
 
-// Wiederholungsbegehung aus einer Begehung im Team-Archiv
+// Wiederholungsbegehung aus einer Begehung im Team-Archiv (ab Rev. 1.52)
 async function onTeamArchiveFollowUp(fileName) {
     try {
         const record = await ladeTeamBegehungMitStatus(fileName, 'Wiederholungsbegehung');

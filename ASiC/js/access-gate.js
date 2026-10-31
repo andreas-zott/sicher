@@ -6,7 +6,7 @@
 // Echten Schutz liefert der Server (Firmennetz, Zugriffsschluessel in
 // config.php, ggf. Anmeldung am Webserver).
 //
-// Der Code steht nicht im Quelltext, sondern nur als SHA-256-
+// Ab Rev. 1.52 steht der Code nicht mehr hier, sondern als SHA-256-
 // Pruefsumme in ../zugang-config.js (vom Betreiber anpassbar). Fehlt diese
 // Datei, gilt die eingebaute Voreinstellung.
 //
@@ -17,7 +17,7 @@
 
 const ACCESS_STORAGE_KEY = 'asicHandelAccessGranted';
 
-// Pruefsumme des voreingestellten Codes (Rueckfall, wenn zugang-config.js fehlt).
+// Pruefsumme des bisherigen Standardcodes (bis Rev. 1.51 im Quelltext).
 const ACCESS_DEFAULT_HASH = '35dd4578183b7acc2b18153304e59452d7ae1bbe34877d5edccf3ae5964e5232';
 
 function accessConfig() {
@@ -106,8 +106,8 @@ function accessSha256Fallback(bytes) {
 
     let gemerkt = '';
     try { gemerkt = localStorage.getItem(ACCESS_STORAGE_KEY) || ''; } catch (e) { gemerkt = ''; }
-    // Fruehere Fassungen merkten nur 'true' - gilt weiter, solange der
-    // voreingestellte Code unveraendert ist.
+    // Bis Rev. 1.51 wurde nur 'true' gemerkt - gilt weiter, solange der
+    // Standardcode unveraendert ist.
     if (gemerkt === cfg.codeHash || (gemerkt === 'true' && cfg.codeHash === ACCESS_DEFAULT_HASH)) return;
 
     document.documentElement.classList.add('access-locked');

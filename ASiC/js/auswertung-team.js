@@ -19,7 +19,7 @@ let teamZeitraumMonate = null;
 let teamMarktFilter = 'alle';
 let teamAuffaelligModus = 'durchschnitt';
 
-// ===== Ladestatus-Anzeige =====
+// ===== Ladestatus-Anzeige (ab Rev. 1.53) =====
 // Zeigt oberhalb der Filter, ob das Team-Archiv gerade geladen wird
 // (Spinner + "x von y Begehungen" + Balken), fertig ist, nur teilweise
 // geladen werden konnte oder ein Fehler aufgetreten ist. Waehrend des
@@ -107,7 +107,7 @@ async function ladeTeamAuswertungDaten() {
             return;
         }
 
-        // Eigene Fassungen derselben Begehung nur einmal zaehlen:
+        // Eigene Fassungen (ab 1.54-9) derselben Begehung nur einmal zaehlen:
         // je Markt und Datum gilt die zuletzt gespeicherte Fassung.
         fileList = nurNeuesteFassung(fileList);
 

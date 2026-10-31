@@ -19,7 +19,6 @@
 // - DGUV Vorschrift 1, 2, 3, 68 sowie DGUV Informationen 204-020/204-022,
 //   208-016, 208-043, 208-061
 // - BetrSichV und DIN EN 378 (Kälteanlagen). DGUV Regel 100-500 Kapitel 2.35 ist laut DGUV seit 04/2023 zurückgezogen
-//   (kein Nachfolger benannt) und wird nicht mehr zitiert.
 // - ASR A1.2, A1.3, A1.5, A1.7, A1.8, A2.1, A2.2, A2.3, A3.4, A4.1, A4.2, A4.3
 // - ArbSchG, ArbStättV, BetrSichV, GefStoffV, ArbMedVV, ArbZG, JArbSchG,
 //   SGB VII und SGB IX sowie einschlägige TRBS/TRGS

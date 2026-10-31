@@ -76,29 +76,9 @@ async function onPhotosCaptured(fileList) {
     if (files.length === 0) return;
 
     let failed = 0;
-    let stopp = false;
-    let gewarnt = false;
     for (const file of files) {
-        if (stopp) { failed++; continue; }
         try {
             const blob = await resizeImageFile(file);
-
-            // Platz vorher pruefen: bei zu wenig Speicher nicht speichern,
-            // bei knappem Speicher einmal warnen (js/storage-check.js).
-            if (window.ASiCStorage) {
-                const pruefung = await ASiCStorage.check(blob.size);
-                if (!pruefung.ok) {
-                    alert(pruefung.message);
-                    failed++;
-                    stopp = true;
-                    continue;
-                }
-                if (pruefung.warn && !gewarnt) {
-                    gewarnt = true;
-                    showToast(pruefung.message, 'error');
-                }
-            }
-
             await addPhoto(blob, '');
         } catch (err) {
             console.error('Foto konnte nicht verarbeitet werden:', err);

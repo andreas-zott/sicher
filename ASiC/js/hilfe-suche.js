@@ -1,5 +1,5 @@
 // ASiC Handel – Suche, Auf-/Zuklappen und "Nach oben" der Hilfeseite.
-// Eigene Datei wegen der Content-Security-Policy (erlaubt
+// Ab Rev. 1.54-5 aus hilfe.html ausgelagert (Content-Security-Policy erlaubt
 // keine eingebetteten Skripte mehr).
 (function () {
     'use strict';

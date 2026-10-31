@@ -11,7 +11,7 @@
 // Voraussetzung: findItemById() und formatDate() aus js/app.js muessen
 // bereits geladen sein.
 
-// identisch mit escapeHtml() in js/app.js. Die fruehere
+// Ab Rev. 1.54-5 identisch mit escapeHtml() in js/app.js. Die fruehere
 // Fassung (textContent -> innerHTML) maskierte KEINE Anfuehrungszeichen und
 // ersetzte - weil diese Datei nach app.js geladen wird - auf den
 // Auswertungsseiten die sichere Fassung. In Attributwerten

@@ -1,10 +1,10 @@
 // ==========================================================================
 // ASiC Handel — Einstellungen (Server-Adresse + Zugriffsschlüssel)
 // ==========================================================================
-// Im Design der Hilfe-Seite: Statuskacheln, Verbindungstest und Eintragen
-// des Schlüssels (ein gespeicherter Wert wird nicht mehr angezeigt).
-// Server-Adresse im localStorage dieses Geräts ('nasBaseUrl'); der
-// Zugriffsschlüssel geschützt (siehe nasSchluesselSpeichern in app.js).
+// Ab Rev. 1.52 im Design der Hilfe-Seite: Statuskacheln, Verbindungstest
+// und Eintragen des Schlüssels (gespeicherter Wert wird nicht mehr angezeigt). Gespeichert wird weiterhin nur im
+// localStorage dieses Geräts ('nasBaseUrl'); der Zugriffsschlüssel ab 1.54-16
+// geschützt (siehe nasSchluesselSpeichern in app.js).
 // ==========================================================================
 
 function initSettingsPage() {
@@ -55,7 +55,7 @@ function initSettingsPage() {
         setTile('st-server', base ? base + (adresseSicher(base) ? '' : ' – nicht HTTPS, wird nicht verwendet') : 'gleiche Adresse wie die App', adresseSicher(base) ? '' : 'is-alert');
         setTile('st-key', info ? 'hinterlegt (' + info.laenge + ' Zeichen' + (info.art === 'gesperrt' ? ', geschützt)' : ', ungeschützt)') : 'nicht hinterlegt', '');
         setTile('st-version', typeof APP_REVISION !== 'undefined'
-            ? 'Rev. ' + APP_REVISION + (appAusgabestand() !== APP_REVISION ? ' · Ausgabestand ' + appAusgabestand() : '') + (typeof APP_REVISION_DATE !== 'undefined' ? ' · ' + formatDate(APP_REVISION_DATE) : '')
+            ? 'Rev. ' + APP_REVISION + ' · Ausgabestand ' + appAusgabestand() + (typeof APP_REVISION_DATE !== 'undefined' ? ' · ' + formatDate(APP_REVISION_DATE) : '')
             : '–', '');
     }
 
@@ -279,7 +279,7 @@ async function pruefeServerVerbindung(base, schluessel) {
     }
 }
 
-// ===== Diagnose =====
+// ===== Diagnose (ab Ausgabestand 1.54-3) =====
 // Stellt den technischen Zustand dieses Geraets als Text zusammen - fuer
 // die EDV. Bewusst OHNE Begehungsinhalte, Namen und Zugriffsschluessel.
 
@@ -351,7 +351,7 @@ async function erstelleDiagnoseText() {
         z('Verbindungstest', 'nicht möglich – App läuft auf GitHub Pages ohne eingetragene Server-Adresse');
     }
 
-    // Hinweis "gerade geoeffnet"
+    // Hinweis "gerade geoeffnet" (ab 1.54-12)
     z('Gerätename', geraetName() || 'nicht eingetragen');
     if (serverFunktionenVerfuegbar()) {
         const offen = await sicher(async () => {
