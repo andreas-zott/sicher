@@ -506,6 +506,7 @@ function zeigeUeber() {
     kopf.id = 'ueber-kopf';
     karte.append(logo, kopf,
         zeile('Idee und Entwicklung', 'Andreas Zott'),
+        zeile('Technische Umsetzung', 'mit Claude (Anthropic)'),
         zeile('Grundidee', '05.05.2025'),
         zeile('Probelauf', 'August 2025, in Zusammenarbeit mit dem Team Arbeitssicherheit REWE Dortmund'));
     if (UEBER_SATZ) karte.appendChild(el('p', 'ueber-satz', '„' + UEBER_SATZ + '“'));
