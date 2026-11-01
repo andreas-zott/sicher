@@ -472,8 +472,66 @@ function initDiagnose() {
     });
 }
 
+// ===== Über ASiC Handel (ab Ausgabestand 1.54-21 / 2.2.0-10) =====
+// Siebenmal kurz hintereinander auf die Kachel „App-Version“ tippen.
+// Rein lokale Anzeige: keine Daten, keine Netzwerkzugriffe, kein PDF.
+function initUeber() {
+    const kachel = document.getElementById('st-version');
+    if (!kachel) return;
+    let zaehler = 0, zuletzt = 0;
+    kachel.addEventListener('click', () => {
+        const jetzt = Date.now();
+        zaehler = (jetzt - zuletzt < 1500) ? zaehler + 1 : 1;
+        zuletzt = jetzt;
+        if (zaehler >= 7) { zaehler = 0; zeigeUeber(); }
+    });
+}
+
+const UEBER_SATZ = 'Arbeitsschutz ist Teamarbeit – danke an das Team Arbeitssicherheit für den gemeinsamen Weg.';
+const UEBER_MOTTO = 'Sicher geprüft. Sicher gehandelt.';
+
+function zeigeUeber() {
+    if (document.querySelector('.ueber-hinter')) return;
+    const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+    const zeile = (titel, wert) => { const p = el('p', 'ueber-zeile'); p.appendChild(el('span', 'ueber-titel', titel)); p.appendChild(el('span', 'ueber-wert', wert)); return p; };
+    const vorher = document.activeElement;
+    const hinter = el('div', 'ueber-hinter');
+    const karte = el('div', 'ueber-karte');
+    karte.setAttribute('role', 'dialog');
+    karte.setAttribute('aria-modal', 'true');
+    karte.setAttribute('aria-labelledby', 'ueber-kopf');
+    const logo = el('div', 'ueber-logo', 'ASiC');
+    logo.setAttribute('aria-hidden', 'true');
+    const kopf = el('h2', 'ueber-kopf', 'Über ASiC Handel');
+    kopf.id = 'ueber-kopf';
+    karte.append(logo, kopf,
+        zeile('Idee und Entwicklung', 'Andreas Zott'),
+        zeile('Grundidee', '05.05.2025'),
+        zeile('Probelauf', 'August 2025, in Zusammenarbeit mit dem Team Arbeitssicherheit REWE Dortmund'));
+    if (UEBER_SATZ) karte.appendChild(el('p', 'ueber-satz', '„' + UEBER_SATZ + '“'));
+    if (UEBER_MOTTO) karte.appendChild(el('p', 'ueber-motto', '„' + UEBER_MOTTO + '“'));
+    const stand = (typeof APP_REVISION !== 'undefined' ? 'Rev. ' + APP_REVISION + ' · ' : '') + 'Ausgabestand ' + appAusgabestand();
+    karte.appendChild(el('p', 'ueber-stand', stand));
+    const knopf = el('button', 'btn ueber-schliessen', 'Schließen');
+    knopf.type = 'button';
+    karte.appendChild(knopf);
+    hinter.appendChild(karte);
+    document.body.appendChild(hinter);
+    const zu = () => {
+        hinter.remove();
+        document.removeEventListener('keydown', taste);
+        if (vorher && vorher.focus) vorher.focus();
+    };
+    const taste = e => { if (e.key === 'Escape') zu(); if (e.key === 'Tab') { e.preventDefault(); knopf.focus(); } };
+    knopf.addEventListener('click', zu);
+    hinter.addEventListener('click', e => { if (e.target === hinter) zu(); });
+    document.addEventListener('keydown', taste);
+    knopf.focus();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initSettingsPage();
     initDiagnose();
+    initUeber();
     if (typeof renderFooterMeta === 'function') renderFooterMeta();
 });
