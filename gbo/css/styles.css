@@ -1638,24 +1638,56 @@ a.btn {
     bottom: 6.5rem;
     left: 50%;
     transform: translateX(-50%);
-    background: var(--ink);
-    color: #fff;
-    padding: 0.8rem 1.25rem;
-    border-radius: var(--radius-sm);
-    font-size: 0.88rem;
-    font-weight: 600;
+    background: var(--card);
+    color: var(--ink);
+    border-radius: var(--radius);
     box-shadow: var(--shadow-lg);
     z-index: 60;
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    max-width: min(90vw, 420px);
-    white-space: normal;
-    line-height: 1.4;
+    width: max-content;
+    max-width: min(92vw, 440px);
+    min-width: min(92vw, 260px);
+    overflow: hidden;
+    cursor: pointer;
     animation: toast-in 0.25s ease;
 }
 
-.toast.error {
+.toast-kopf {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.75rem 1.1rem 0.65rem;
+    border-bottom: 3px solid var(--brand-red);
+}
+
+.toast-zeichen {
+    flex: none;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #fff;
+    background: var(--ok, #1d6b42);
+}
+
+.toast-titel {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.toast-text {
+    padding: 0.6rem 1.1rem 0.8rem;
+    font-size: 0.88rem;
+    line-height: 1.45;
+    color: var(--ink-soft, var(--ink));
+}
+
+.toast.error .toast-zeichen {
     background: var(--mangel);
 }
 
@@ -3093,3 +3125,148 @@ html.srv-offen, html.srv-offen body { overflow: hidden; }
     font-size: 0.92rem;
 }
 .wb-liste li { margin: 0.25rem 0; }
+
+/* Über ASiC Handel (ab Ausgabestand 1.54-21 / 2.2.0-10) */
+#st-version { cursor: default; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+.ueber-hinter { position: fixed; inset: 0; z-index: 1000; background: rgba(28, 34, 38, 0.55); display: flex; align-items: center; justify-content: center; padding: 16px; }
+.ueber-karte { background: var(--card, #fff); color: var(--ink); border-radius: 16px; border-top: 6px solid var(--brand-red); box-shadow: 0 18px 50px rgba(0, 0, 0, 0.3); width: 100%; max-width: 420px; max-height: calc(100vh - 32px); overflow-y: auto; padding: 22px 24px 20px; text-align: center; }
+.ueber-logo { width: 56px; height: 56px; margin: 0 auto 10px; border-radius: 14px; background: var(--brand-red); color: #fff; display: grid; place-items: center; font-weight: 800; font-size: 16px; }
+.ueber-kopf { margin: 0 0 14px; font-size: 1.3rem; }
+.ueber-zeile { margin: 0 0 10px; display: flex; flex-direction: column; gap: 2px; }
+.ueber-titel { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-soft); }
+.ueber-wert { font-size: 1rem; line-height: 1.4; }
+.ueber-satz { margin: 16px 0 0; font-style: italic; font-size: 1rem; line-height: 1.45; color: var(--ink); }
+.ueber-motto { margin: 10px 0 0; font-weight: 700; font-size: 1rem; color: var(--brand-red-dark); }
+.ueber-stand { margin: 14px 0 16px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 0.85rem; color: var(--ink-soft); }
+.ueber-schliessen { min-width: 140px; }
+@media print { .ueber-hinter { display: none !important; } }
+
+/* ==========================================================================
+   Anmeldung (ab Rev. 1.55)
+   ========================================================================== */
+.an-seite { min-height: 100vh; display: flex; flex-direction: column; }
+.an-main {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: clamp(1.5rem, 6vh, 4rem);
+}
+.an-karte {
+    width: 100%;
+    max-width: 420px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-top: 4px solid var(--brand-red);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    padding: 1.6rem 1.4rem 1.4rem;
+    box-sizing: border-box;
+}
+.an-logo {
+    width: 56px; height: 56px;
+    border-radius: 12px;
+    background: var(--ink);
+    color: #fff;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1rem;
+}
+.an-form[hidden] { display: none; }
+.an-titel {
+    font-family: var(--font-display);
+    font-size: 1.45rem;
+    margin: 0 0 0.35rem;
+    text-align: center;
+}
+.an-text { color: var(--ink-soft); text-align: center; margin: 0 0 1.2rem; }
+.an-knopf { width: 100%; margin-top: 0.3rem; }
+.an-knopf + .an-knopf { margin-top: 0.6rem; }
+.an-knopf[hidden], .s-field[hidden], .btn[hidden] { display: none; }
+.an-meldung {
+    min-height: 1.3em;
+    margin: 0.7rem 0 0;
+    color: var(--brand-red-dark);
+    font-weight: 600;
+    font-size: 0.92rem;
+}
+.an-meldung:empty { margin: 0; min-height: 0; }
+.an-klein { font-size: 0.82rem; color: var(--steel); text-align: center; margin: 1rem 0 0; }
+.an-dialog .s-field input { font-size: 16px; }
+.an-wer { font-weight: 700; font-size: 1.05rem; margin: 0 0 0.25rem; }
+
+/* Benutzerverwaltung */
+.s-field select {
+    width: 100%;
+    box-sizing: border-box;
+    font: inherit;
+    font-size: 16px;
+    padding: 0.7rem 0.85rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--paper);
+    color: var(--ink);
+}
+.bv-felder { display: grid; grid-template-columns: 1fr 1fr 180px; gap: 0 0.9rem; }
+@media (max-width: 700px) { .bv-felder { grid-template-columns: 1fr; } }
+.bv-start {
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 2px dashed var(--brand-red);
+    border-radius: var(--radius-sm);
+    background: var(--brand-red-tint);
+}
+.bv-start[hidden] { display: none; }
+.bv-start-titel { font-weight: 700; margin: 0 0 0.4rem; }
+.bv-start-wert {
+    font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+    font-size: 1.5rem;
+    letter-spacing: 0.08em;
+    background: #fff;
+    border-radius: var(--radius-sm);
+    padding: 0.5rem 0.8rem;
+    margin: 0 0 0.5rem;
+    display: inline-block;
+    user-select: all;
+}
+.bv-liste-karte { padding: 0.3rem 1.2rem; }
+.bv-zeile { padding: 0.9rem 0; border-bottom: 1px solid var(--line); }
+.bv-zeile:last-child { border-bottom: 0; }
+.bv-inaktiv { opacity: 0.65; }
+.bv-kopf { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.3rem 0.6rem; }
+.bv-kennung { color: var(--steel); font-size: 0.9rem; }
+.bv-admin { background: var(--brand-red-tint); color: var(--brand-red-dark); }
+.bv-info { font-size: 0.88rem; color: var(--ink-soft); margin: 0.25rem 0 0.55rem; }
+.bv-aktionen { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.bv-aktionen .btn { padding: 0.4rem 0.75rem; font-size: 0.86rem; min-height: 0; }
+.bv-protokoll { margin-top: 0.8rem; overflow-x: auto; }
+.bv-tabelle { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.bv-tabelle th, .bv-tabelle td { text-align: left; padding: 0.4rem 0.5rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+.bv-tabelle th { background: var(--paper); font-weight: 700; white-space: nowrap; }
+.bv-tabelle td:first-child { white-space: nowrap; }
+#bv-fehler[hidden], #pa-fehler[hidden] { display: none; }
+
+/* Hinweis-Meldung (z. B. "Team-Archiv folgt, sobald Verbindung besteht") */
+.toast.hinweis .toast-zeichen {
+    background: #b26a00;
+}
+.bv-schalter { display: flex; align-items: flex-start; gap: 0.9rem; }
+.bv-schalter .toggle-switch { margin-top: 0.15rem; }
+.bv-schalter-text { cursor: pointer; }
+.bv-schalter-text .s-hint { display: block; margin-top: 0.3rem; font-weight: 400; }
+.s-team-auto { font-size: 0.88rem; color: var(--ink-soft); margin: 0.2rem 0 0.9rem; padding: 0.55rem 0.8rem; background: var(--paper); border-radius: var(--radius-sm); }
+.s-team-auto:empty { display: none; }
+.bv-schalter-zwei { margin-top: 1.1rem; padding-top: 1.1rem; border-top: 1px solid var(--line); }
+
+/* PDF-Archiv (ab 2.3.0-3) */
+.pa-markt { margin-top: 1rem; }
+.pa-markt-titel { font-family: var(--font-display); font-size: 1.1rem; margin: 0 0 0.4rem; }
+.pa-zeile { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.7rem 0; border-top: 1px solid var(--line); }
+.pa-info { font-size: 0.85rem; color: var(--ink-soft); margin-top: 0.15rem; word-break: break-word; }
+#pa-bereich[hidden] { display: none; }
+
+/* PDF-Archiv: Knöpfe je Zeile (ab 2.3.0-3 mit "Löschen") */
+.pa-knoepfe { display: flex; align-items: center; gap: 0.75rem; flex: none; }
