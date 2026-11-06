@@ -3,7 +3,7 @@
 // ==========================================================================
 // Offline-Unterstützung und schneller Seitenaufbau für die ASiC-Handel-App.
 //
-// SERVICE-WORKER-VERSION: 2.2.0
+// SERVICE-WORKER-VERSION: 2.3.0
 // Bei JEDEM Update gemeinsam hochzaehlen:
 //   - BUILD / CACHE_NAME hier (bei neuer Revision auch APP_VERSION)
 //   - APP_REVISION in js/app.js (nur bei neuer Revision)
@@ -29,13 +29,13 @@
 // archivierten Begehungen oder Fotos.
 // ==========================================================================
 
-const APP_VERSION = '2.2.0';
+const APP_VERSION = '2.3.0';
 // Ausgabestand innerhalb derselben Revision: aendert sich
 // nur Code, aber nicht die sichtbare Revision, wird NUR dieser Zaehler
 // erhoeht ('2.2.0-2', '2.2.0-3' …). Er steht im Cache-Namen und im ?v=-Zusatz
 // der HTML-Seiten und sorgt dafuer, dass die Geraete die neuen Dateien holen.
-const BUILD = '2.2.0-9';
-const CACHE_NAME = 'asic-handel-v2.2.0-9';   // immer = 'asic-handel-v' + BUILD
+const BUILD = '2.3.0-3';
+const CACHE_NAME = 'asic-handel-v2.3.0-3';   // immer = 'asic-handel-v' + BUILD
 
 
 // ==========================================================================
@@ -50,6 +50,8 @@ const PRECACHE_URLS = [
     './fotos.html',
     './verlauf.html',
     './einstellungen.html',
+    './benutzer.html',
+    './pdf-archiv.html',
     './dokumentation.html',
     './hilfe.html',
     './auswertung.html',
@@ -79,6 +81,7 @@ const PRECACHE_VERSIONIERT = [
 
     './js/app.js',
     './js/access-gate.js',
+    './js/anmeldung-pruefen.js',
     './js/audit-data.js',
     './js/text.js',
     './js/massnahmen.js',
@@ -87,6 +90,8 @@ const PRECACHE_VERSIONIERT = [
     './js/fotos.js',
     './js/verlauf.js',
     './js/einstellungen.js',
+    './js/benutzer.js',
+    './js/pdf-archiv.js',
     './js/auswertung-logik.js',
     './js/auswertung.js',
     './js/auswertung-team.js',
@@ -125,7 +130,7 @@ self.addEventListener('install', event => {
                 for (const url of PRECACHE_URLS.concat(PRECACHE_VERSIONIERT)) {
                     const request = new Request(url, { cache: 'reload' });
                     const response = await fetch(request);
-                    if (!response.ok) {
+                    if (!response.ok || response.redirected) {   // redirected: nicht angemeldet (ab 1.55)
                         console.error('[SW] Fehler beim Laden:', url, response.status);
                         throw new Error(`HTTP ${response.status} bei ${url}`);
                     }
@@ -171,7 +176,9 @@ function istSofortAusCache(url) {
 }
 
 function inCacheLegen(request, response) {
-    if (response && response.status === 200 && response.type !== 'opaque') {
+    // Ab Rev. 1.55: umgeleitete Antworten (z. B. Torwaechter -> Anmeldeseite)
+    // nie unter der angefragten Adresse ablegen
+    if (response && response.status === 200 && response.type === 'basic' && !response.redirected) {
         const copy = response.clone();
         caches.open(CACHE_NAME)
             .then(cache => cache.put(request, copy))

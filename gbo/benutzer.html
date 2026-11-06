@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+
+<meta charset="UTF-8">
+
+<!-- Benutzerverwaltung (ab Rev. 1.55): nur für Administratoren. Der Server
+     (benutzer.php) prüft Anmeldung, Rolle und Zugriffsschlüssel selbst. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https: ipc: http://ipc.localhost; worker-src 'self'; manifest-src 'self'; object-src 'none'; frame-src 'self' blob:; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="same-origin">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<title>Benutzerverwaltung – ASiC Handel</title>
+
+<link rel="stylesheet" href="css/styles.css?v=2.3.0-3">
+<script src="zugang-config.js"></script>
+<script src="js/access-gate.js?v=2.3.0-3"></script>
+<script src="js/anmeldung-pruefen.js?v=2.3.0-3"></script>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1c2226">
+
+</head>
+
+<body>
+
+<header class="app-header">
+    <div class="hazard-strip"></div>
+    <div class="app-header-inner">
+        <div class="brand">
+            <span class="brand-title">ASiC Handel</span>
+            <span class="brand-tag">Märkte</span>
+            <span class="brand-subtitle">„Sicher geprüft. Sicher gehandelt.“</span>
+        </div>
+        <nav class="app-nav">
+            <a href="index.html">Prüfkatalog</a>
+            <a href="massnahmen.html">Aktionsplan</a>
+            <a href="fotos.html">Fotos</a>
+            <a href="verlauf.html">Verlauf</a>
+            <a href="gbo.html">Gefährdungsbeurteilung</a>
+        </nav>
+    </div>
+</header>
+
+<main class="page" id="oben">
+
+    <div class="h-hero">
+        <div class="h-hero-badge">Administration</div>
+        <h1>Benutzerverwaltung</h1>
+        <p>Konten für die Anmeldung anlegen, sperren und Passwörter zurücksetzen. Passwörter sieht hier niemand – auch kein Administrator. Ein neues Konto bekommt ein Startpasswort, das beim ersten Anmelden geändert werden muss.</p>
+    </div>
+
+    <p class="srv-meldung srv-meldung-warnung" id="bv-fehler" hidden></p>
+
+    <section class="h-section" id="neu">
+        <div class="h-section-label">Neues Konto</div>
+        <h2>Benutzer anlegen</h2>
+        <div class="s-card">
+            <form id="bv-form" novalidate>
+                <div class="bv-felder">
+                    <div class="s-field">
+                        <label for="bv-name">Name</label>
+                        <input type="text" id="bv-name" maxlength="80" autocomplete="off" placeholder="z. B. Maria Muster">
+                    </div>
+                    <div class="s-field">
+                        <label for="bv-kennung">Anmeldename</label>
+                        <input type="text" id="bv-kennung" maxlength="64" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="z. B. m.muster">
+                    </div>
+                    <div class="s-field">
+                        <label for="bv-rolle">Rolle</label>
+                        <select id="bv-rolle">
+                            <option value="pruefer">Prüfer</option>
+                            <option value="admin">Administrator</option>
+                        </select>
+                    </div>
+                </div>
+                <p class="s-hint">Anmeldename: Kleinbuchstaben, Ziffern und . _ - @ (eine E-Mail-Adresse geht auch). Administratoren dürfen zusätzlich Benutzer verwalten.</p>
+                <div class="s-actions">
+                    <button class="btn btn-primary" type="submit" id="bv-anlegen">Benutzer anlegen</button>
+                </div>
+                <p class="s-status" id="bv-status" role="status"></p>
+            </form>
+            <div class="bv-start" id="bv-start" hidden>
+                <p class="bv-start-titel" id="bv-start-titel">Startpasswort</p>
+                <p class="bv-start-wert" id="bv-start-wert"></p>
+                <p class="s-hint">Nur jetzt sichtbar. Bitte persönlich übergeben, nicht per E-Mail. Beim ersten Anmelden muss ein eigenes Passwort festgelegt werden.</p>
+                <div class="s-actions">
+                    <button class="btn btn-secondary" type="button" id="bv-start-kopieren">Kopieren</button>
+                    <button class="btn btn-secondary" type="button" id="bv-start-ok">Erledigt – ausblenden</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="h-section" id="team">
+        <div class="h-section-label">Für alle Geräte</div>
+        <h2>Team-Archiv und PDF-Archiv</h2>
+        <div class="s-card">
+            <div class="bv-schalter">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="bv-auto">
+                    <span class="toggle-slider"></span>
+                </label>
+                <label for="bv-auto" class="bv-schalter-text"><strong>Beim Speichern und Archivieren automatisch ins Team-Archiv</strong>
+                    <span class="s-hint">Tippt jemand auf „Speichern“ oder „Begehung archivieren“, landet die Begehung zusätzlich im Team-Archiv – ohne Verbindung automatisch, sobald wieder eine besteht. Gilt für alle Geräte; Prüfer können es nicht ändern.</span></label>
+            </div>
+            <div class="bv-schalter bv-schalter-zwei">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="bv-pdf">
+                    <span class="toggle-slider"></span>
+                </label>
+                <label for="bv-pdf" class="bv-schalter-text"><strong>Erstellte PDFs automatisch im PDF-Archiv ablegen</strong>
+                    <span class="s-hint">Jedes PDF, das in der App geteilt, heruntergeladen oder gedruckt wird, landet zusätzlich im PDF-Ordner auf dem Server. Einsehen können es nur Konten mit dem Recht „PDF-Archiv“ (Administratoren immer) – in der App unter <a href="pdf-archiv.html">PDF-Archiv</a> oder über den PDF-Ordner.</span></label>
+            </div>
+            <div class="bv-schalter bv-schalter-zwei">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="bv-loeschen">
+                    <span class="toggle-slider"></span>
+                </label>
+                <label for="bv-loeschen" class="bv-schalter-text"><strong>Löschen im Archiv erlauben</strong>
+                    <span class="s-hint">Administratoren sehen dann im Team-Archiv (Verlauf) und im PDF-Archiv einen Knopf „Löschen“. Gelöschte Begehungen und PDFs sind endgültig vom Server entfernt, für alle Geräte. Jedes Löschen steht im Protokoll. Prüfer können nie löschen.</span></label>
+            </div>
+            <p class="s-status" id="bv-auto-status" role="status"></p>
+        </div>
+    </section>
+
+    <section class="h-section" id="liste">
+        <div class="h-section-label">Konten</div>
+        <h2>Benutzer</h2>
+        <div class="s-card bv-liste-karte">
+            <div class="bv-liste" id="bv-liste" aria-live="polite"><p class="s-hint">Wird geladen …</p></div>
+        </div>
+    </section>
+
+    <section class="h-section" id="protokoll">
+        <div class="h-section-label">Nachvollziehbarkeit</div>
+        <h2>Protokoll</h2>
+        <p class="h-section-intro">Anmeldungen, Fehlversuche und Änderungen an Konten – die letzten 200 Einträge, neueste zuerst. Ältere Monate löscht der Server automatisch (Einstellung in config.php).</p>
+        <div class="s-card">
+            <div class="s-actions"><button class="btn btn-secondary" type="button" id="bv-protokoll-laden">Protokoll anzeigen</button></div>
+            <div class="bv-protokoll" id="bv-protokoll"></div>
+        </div>
+    </section>
+
+</main>
+
+<footer class="app-footer">
+    <div class="app-footer-meta">
+        <span id="footer-version"></span>
+        <span class="footer-copyright" id="footer-copyright"></span>
+    </div>
+    <div class="app-footer-links">
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutz</a>
+        <a href="dokumentation.html">Technische Dokumentation</a>
+        <a href="hilfe.html">Hilfe &amp; FAQ</a>
+        <a href="einstellungen.html">Einstellungen</a>
+    </div>
+</footer>
+
+<script src="js/audit-data.js?v=2.3.0-3"></script>
+<script src="js/text.js?v=2.3.0-3"></script>
+<script src="js/photos-store.js?v=2.3.0-3"></script>
+<script src="js/archive-store.js?v=2.3.0-3"></script>
+<script src="js/app.js?v=2.3.0-3"></script>
+<script src="js/benutzer.js?v=2.3.0-3"></script>
+
+</body>
+</html>

@@ -9,9 +9,10 @@
 <meta name="referrer" content="same-origin">
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <title>Technische Dokumentation GBO – ASiC Handel</title>
-<link href="css/styles.css?v=2.2.0-9" rel="stylesheet"/>
+<link href="css/styles.css?v=2.3.0-3" rel="stylesheet"/>
 <script src="zugang-config.js"></script>
-<script src="js/access-gate.js?v=2.2.0-9"></script>
+<script src="js/access-gate.js?v=2.3.0-3"></script>
+<script src="js/anmeldung-pruefen.js?v=2.3.0-3"></script>
 <style>
 /* Kopfbereich */
 .doku-hero{background:linear-gradient(135deg,#294d68 0%,#416b88 100%);border-radius:var(--radius);padding:1.75rem 1.5rem;color:#fff;margin-bottom:1.5rem;box-shadow:var(--shadow)}
@@ -75,9 +76,9 @@
   <p>Aufbau, Datenhaltung, Bewertungslogik, Funktionen und fachliche Quellen der GBO in ASiC Handel.</p>
   <div class="doku-meta-grid">
     <div class="doku-meta-item"><div class="doku-meta-label">App</div><div class="doku-meta-value">ASiC Handel Rev. 2.2.0</div></div>
-    <div class="doku-meta-item"><div class="doku-meta-label">Stand</div><div class="doku-meta-value"><span data-zahl="revision_datum">25.10.2026</span></div></div>
+    <div class="doku-meta-item"><div class="doku-meta-label">Stand</div><div class="doku-meta-value"><span data-zahl="revision_datum">06.11.2026</span></div></div>
     <div class="doku-meta-item"><div class="doku-meta-label">GBO-Daten</div><div class="doku-meta-value"><span data-zahl="gbo_fragen">1054</span> Fragen · <span data-zahl="gbo_module">92</span> Module</div></div>
-    <div class="doku-meta-item"><div class="doku-meta-label">Service Worker</div><div class="doku-meta-value">v2.2.0</div></div>
+    <div class="doku-meta-item"><div class="doku-meta-label">Service Worker</div><div class="doku-meta-value">v2.3.0-3</div></div>
   </div>
 </div>
 
@@ -386,7 +387,7 @@
     <p>Marktnummer und Datum stammen aus den Betriebsdaten; das Datum wird für den Dateinamen in <code>JJJJ-MM-TT</code> normalisiert.</p>
 
     <h3>Marktcontainer und Server</h3>
-    <p>Bei der Gesamtsicherung bzw. Server-Speicherung werden Begehung und GBO gemeinsam im ASiC-Marktcontainer (Formatversion 2) übertragen, bleiben aber getrennte Teilstände. Einzel-Sicherungen der Begehung und der GBO bleiben einlesbar.</p>
+    <p>Bei der Gesamtsicherung bzw. Server-Speicherung werden Begehung und GBO gemeinsam im ASiC-Marktcontainer (Formatversion 2) übertragen, bleiben aber getrennte Teilstände. Einzel-Sicherungen der Begehung und der GBO bleiben einlesbar. Ab 2.3.0-3 ruft „Gesamtsicherung Markt“ nach dem Herunterladen <code>speichernMitTeamArchiv()</code> auf: ist das automatische Speichern eingeschaltet, geht der Marktcontainer zusätzlich ins Team-Archiv (ohne Verbindung nachgeholt, bei fremdem neuerem Stand mit Rückfrage).</p>
 
     <h3>GBO zurücksetzen</h3>
     <p>Vor dem Löschen erscheint eine Sicherheitsabfrage. Nach Bestätigung werden Auswahl, Bewertungen/Antworten, Bildbelege (einschließlich der Bilddateien in der IndexedDB), Maßnahmen- und Wirksamkeitsdaten sowie Begehungs-Vormerkungen zurückgesetzt. Die Begehung und die zentralen NAS-/Servereinstellungen bleiben erhalten.</p>
@@ -522,8 +523,8 @@
     <div class="doku-table-wrap"><table class="doku-table">
       <tr><th>Merkmal</th><th>Wert</th></tr>
       <tr><td>Anwendung</td><td>ASiC Handel · Rev. 2.2.0</td></tr>
-      <tr><td>Stand</td><td><span data-zahl="revision_datum">25.10.2026</span></td></tr>
-      <tr><td>Service Worker</td><td>v2.2.0</td></tr>
+      <tr><td>Stand</td><td><span data-zahl="revision_datum">06.11.2026</span></td></tr>
+      <tr><td>Service Worker</td><td>v2.3.0-3</td></tr>
       <tr><td>Fragenbestand</td><td><span data-zahl="gbo_fragen">1054</span> Fragen, <span data-zahl="gbo_eindeutig">1054</span> eindeutige Fragen-IDs, <span data-zahl="gbo_module">92</span> Module</td></tr>
       <tr><td>Sicherungsformat</td><td>GBO-JSON; ASiC-Marktcontainer Formatversion 2</td></tr>
     </table></div>
@@ -534,8 +535,8 @@
 
 <footer class="app-footer">
   <div class="app-footer-links"><a href="gbo.html">Gefährdungsbeurteilung</a><a href="gbo-hilfe.html">FAQ GBO</a><a href="gbo-dokumentation.html">Technische Dokumentation GBO</a><a href="hilfe.html">FAQ Begehung</a></div>
-  <div class="app-footer-meta"><div>Rev. 2.2.0 · Stand 25.10.2026</div><div>© <span class="js-current-year">2026</span> Andreas Zott – Alle Rechte vorbehalten</div></div>
+  <div class="app-footer-meta"><div>Rev. 2.3.0 · Stand 05.11.2026</div><div>© <span class="js-current-year">2026</span> Andreas Zott – Alle Rechte vorbehalten</div></div>
 </footer>
-<script src="js/seiten-jahr.js?v=2.2.0-9"></script>
+<script src="js/seiten-jahr.js?v=2.3.0-3"></script>
 </body>
 </html>

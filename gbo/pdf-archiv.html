@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+
+<meta charset="UTF-8">
+
+<!-- PDF-Archiv (ab Rev. 2.3.0-3): nur für Konten mit dem Recht "PDF-Archiv".
+     Der Server (pdf.php) prüft Anmeldung, Recht und Zugriffsschlüssel selbst. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https: ipc: http://ipc.localhost; worker-src 'self'; manifest-src 'self'; object-src 'none'; frame-src 'self' blob:; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="same-origin">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<title>PDF-Archiv – ASiC Handel</title>
+
+<link rel="stylesheet" href="css/styles.css?v=2.3.0-3">
+<script src="zugang-config.js"></script>
+<script src="js/access-gate.js?v=2.3.0-3"></script>
+<script src="js/anmeldung-pruefen.js?v=2.3.0-3"></script>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1c2226">
+
+</head>
+
+<body>
+
+<header class="app-header">
+    <div class="hazard-strip"></div>
+    <div class="app-header-inner">
+        <div class="brand">
+            <span class="brand-title">ASiC Handel</span>
+            <span class="brand-tag">Märkte</span>
+            <span class="brand-subtitle">„Sicher geprüft. Sicher gehandelt.“</span>
+        </div>
+        <nav class="app-nav">
+            <a href="index.html">Prüfkatalog</a>
+            <a href="massnahmen.html">Aktionsplan</a>
+            <a href="fotos.html">Fotos</a>
+            <a href="verlauf.html">Verlauf</a>
+            <a href="gbo.html">Gefährdungsbeurteilung</a>
+        </nav>
+    </div>
+</header>
+
+<main class="page" id="oben">
+
+    <div class="h-hero">
+        <div class="h-hero-badge">Archiv</div>
+        <h1>PDF-Archiv</h1>
+        <p>Alle in der App erstellten PDFs – Begehung (Gesamtbericht, Checkliste, Maßnahmenplan, Fotodokumentation) und Gefährdungsbeurteilung – nach Markt sortiert. Die Dateien liegen im PDF-Ordner auf dem Server; jeder Abruf wird protokolliert.</p>
+    </div>
+
+    <p class="srv-meldung srv-meldung-warnung" id="pa-fehler" hidden></p>
+
+    <section class="h-section" id="pa-bereich">
+        <div class="s-card">
+            <div class="s-field">
+                <label for="pa-suche">Suchen</label>
+                <input type="search" id="pa-suche" autocomplete="off" spellcheck="false" placeholder="Marktnummer, Datum (z. B. 06.11.2026) oder Art">
+            </div>
+            <p class="s-hint" id="pa-anzahl"></p>
+        </div>
+        <div class="pa-liste" id="pa-liste" aria-live="polite"><p class="s-hint">Wird geladen …</p></div>
+    </section>
+
+</main>
+
+<footer class="app-footer">
+    <div class="app-footer-meta">
+        <span id="footer-version"></span>
+        <span class="footer-copyright" id="footer-copyright"></span>
+    </div>
+    <div class="app-footer-links">
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutz</a>
+        <a href="dokumentation.html">Technische Dokumentation</a>
+        <a href="hilfe.html">Hilfe &amp; FAQ</a>
+        <a href="einstellungen.html">Einstellungen</a>
+    </div>
+</footer>
+
+<script src="js/audit-data.js?v=2.3.0-3"></script>
+<script src="js/text.js?v=2.3.0-3"></script>
+<script src="js/photos-store.js?v=2.3.0-3"></script>
+<script src="js/archive-store.js?v=2.3.0-3"></script>
+<script src="js/app.js?v=2.3.0-3"></script>
+<script src="js/pdf-archiv.js?v=2.3.0-3"></script>
+
+</body>
+</html>

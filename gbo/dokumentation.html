@@ -10,9 +10,10 @@
 <meta name="referrer" content="same-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Technische Dokumentation – ASiC Handel</title>
-<link rel="stylesheet" href="css/styles.css?v=2.2.0-9">
+<link rel="stylesheet" href="css/styles.css?v=2.3.0-3">
 <script src="zugang-config.js"></script>
-<script src="js/access-gate.js?v=2.2.0-9"></script>
+<script src="js/access-gate.js?v=2.3.0-3"></script>
+<script src="js/anmeldung-pruefen.js?v=2.3.0-3"></script>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -338,21 +339,21 @@
                 <div class="doku-meta-label">
                     Dokumentstand
                 </div>
-                <div class="doku-meta-value"> <span data-zahl="stand">25.10.2026</span> </div>
+                <div class="doku-meta-value"> <span data-zahl="stand">06.11.2026</span> </div>
             </div>
 
             <div class="doku-meta-item">
                 <div class="doku-meta-label">
                     App-Revision
                 </div>
-                <div class="doku-meta-value"> <span data-zahl="revision">2.2.0</span> (<span data-zahl="revision_datum">25.10.2026</span>) </div>
+                <div class="doku-meta-value"> <span data-zahl="revision">2.3.0</span> (<span data-zahl="revision_datum">06.11.2026</span>) </div>
             </div>
 
             <div class="doku-meta-item">
                 <div class="doku-meta-label">
                     Service Worker
                 </div>
-                <div class="doku-meta-value"> <span data-zahl="cache_version">v2.2.0-9</span> </div>
+                <div class="doku-meta-value"> <span data-zahl="cache_version">v2.3.0-3</span> </div>
             </div>
 
             <div class="doku-meta-item">
@@ -605,7 +606,7 @@
 
             <p>
                 Die aktuelle technische Cache-Version lautet:
-                <strong><code><span data-zahl="cache">asic-handel-v2.2.0-9</span></code></strong>.
+                <strong><code><span data-zahl="cache">asic-handel-v2.3.0-3</span></code></strong>.
             </p>
 
             <ul>
@@ -1794,6 +1795,43 @@
             (<code>vorWieLange()</code>) und „kürzlich gespeichert“ (unter zwei Stunden); die
             Team-Auswertung zählt je Markt und Datum nur die zuletzt gespeicherte Fassung
             (<code>nurNeuesteFassung()</code>).
+            Automatisch ins Team-Archiv (ab 2.3.0-2): „Speichern“ (Datei-Menü, Aktionsplan) und
+            „Gesamtsicherung Markt“ (GBO-Seite) rufen <code>speichernMitTeamArchiv()</code>: erst
+            lokal speichern, dann – falls eingeschaltet, Datum und Marktnummer gesetzt und der Stand
+            von Begehung oder GBO seit der letzten Server-Sicherung geändert (Fingerabdruck) – über
+            <code>saveStateToServer('normal', {auto:true})</code> ins Team-Archiv, mit derselben
+            Rückfrage bei Konflikten. Ohne Verbindung merkt sich die App Markt + Datum
+            (<code>asicTeamNachholen</code>) und holt das Speichern beim Ereignis <code>online</code>
+            bzw. beim nächsten Öffnen von Prüfkatalog, Aktionsplan oder GBO-Seite nach
+            (<code>teamArchivNachholen()</code>). Ein- und ausschalten kann nur ein Administrator
+            (Benutzerverwaltung, <code>benutzer.php</code> Aktion <code>einstellung</code>, Datei
+            <code>_benutzer/einstellungen.json</code>, Eintrag im Protokoll); ohne Anmeldung gilt
+            <code>autoTeamArchiv</code> aus <code>config.php</code> (Voreinstellung an). Die Geräte
+            erhalten den Wert mit dem Anmeldestatus und merken ihn sich. Ab 2.3.0-3 gilt derselbe
+            Schalter für „Begehung archivieren“ (<code>teamArchivNachArchivieren()</code>, Meldung
+            „Archiviert – auch im Team-Archiv“); das Archivieren vor dem Laden oder Zurücksetzen
+            bleibt rein lokal.
+            PDF-Archiv (ab 2.3.0-3): Jedes erstellte PDF der Begehung (<code>pdfArchivieren()</code>
+            in <code>js/app.js</code>) und der Gefährdungsbeurteilung (<code>js/gbo-pdf.js</code>, Arten
+            <code>gbu-gesamt</code>, <code>gbu-massnahmen</code>, <code>gbu-plan</code>) geht zusätzlich an
+            <code>pdf.php</code> (POST <code>{aktion:'ablegen', markt, datum, art, pdf}</code>, Base64).
+            Ablage als <code>&lt;pdfOrdner&gt;/Markt_&lt;Nr&gt;/&lt;Datum&gt;_&lt;Art&gt;_&lt;HHMMSS&gt;.pdf</code>,
+            Verzeichnis <code>_pdf/index.json</code> im Datenordner (Prüfsumme, Größe, Zeitpunkt,
+            Person; gleiche Prüfsumme wird nicht doppelt abgelegt). Ohne Verbindung wartet das PDF in
+            der IndexedDB-Warteschlange <code>asic-pdf-ablage</code>. Nur mit Anmeldung; Schalter
+            <code>autoPdfArchiv</code> (Administrator). Einsehen über <code>pdf-archiv.html</code> nur mit
+            dem Recht <code>pdfLesen</code> oder als Administrator; jedes Öffnen steht als
+            <code>pdf-abruf</code> im Protokoll.
+            Löschen im Archiv (ab 2.3.0-3): Schalter <code>archivLoeschen</code> (Voreinstellung aus),
+            nur Administratoren. <code>loeschen.php</code> (POST <code>{datei}</code>, Namensmuster wie
+            <code>load.php</code>) löscht den Markt-Datensatz samt Ständen in <code>versionen/</code> und
+            <code>versionen/archiv/</code>; <code>pdf.php</code> POST <code>{aktion:'loeschen', id}</code>
+            löscht ein PDF. Beide verlangen Schlüssel, Sitzung und <code>X-ASiC</code>, prüfen Rolle und
+            Schalter selbst und protokollieren <code>archiv-geloescht</code>.
+            Rückfragen und Meldungen (ab 2.3.0-3): alle Rückfragen im App-Fenster
+            (<code>zeigeHinweisFenster()</code>, für die GBO-Seite <code>asicFrage()</code>), Meldungen
+            als Karte im Fenster-Stil (<code>showToast()</code>, <code>asicMeldung()</code> statt
+            <code>alert()</code>).
             Hinweis „gerade geöffnet“ (keine Sperre): <code>offen.php</code> führt im Datenordner
             <code>_offen/offen.json</code> (Dateiname, Gerätename aus den Einstellungen, zufällige
             Gerätekennung <code>asicGeraetId</code>, Zeitpunkt; je Gerät ein Eintrag, Ablauf nach
@@ -2057,7 +2095,7 @@
             <p>
                 <strong>Frische Dateien und schneller Seitenaufbau</strong>:
                 Alle Einbindungen von <code>js/…</code> und <code>css/…</code>
-                tragen den Zusatz <code>?v=2.2.0-9</code> (Ausgabestand <code>BUILD</code> aus <code>sw.js</code>), auch auf den Seiten der Gefährdungsbeurteilung. Diese Dateien (und die
+                tragen den Zusatz <code>?v=2.3.0-3</code> (Ausgabestand <code>BUILD</code> aus <code>sw.js</code>), auch auf den Seiten der Gefährdungsbeurteilung. Diese Dateien (und die
                 Schriften) liefert der Service Worker sofort aus
                 dem Cache auf dem Gerät, ohne Rückfrage beim Server; nach einem
                 Update ändert sich der Zusatz, dadurch werden sie automatisch
@@ -2374,6 +2412,92 @@
                     </td>
                 </tr>
 
+            <tr>
+                    <td>Anmeldung (ab Rev. 2.3.0)</td>
+                    <td>
+                        Mit <code>'anmeldung' =&gt; true</code> in <code>config.php</code>
+                        ist die App nur nach Anmeldung mit Anmeldename und Passwort
+                        nutzbar. <code>konto.php</code> verwaltet die Konten in
+                        <code>&lt;Datenordner&gt;/_benutzer/benutzer.json</code>;
+                        Passwörter liegen nur als Hash vor (<code>password_hash</code>
+                        mit Argon2id, sonst bcrypt; bei Bedarf beim Anmelden neu
+                        berechnet). <code>anmeldung.php</code> meldet an und ab und
+                        ändert Passwörter (altes Passwort nötig, Startpasswort muss
+                        geändert werden). Unbekannte Namen kosten dieselbe Rechenzeit
+                        wie bekannte, die Meldung ist in beiden Fällen gleich.
+                        5 Fehlversuche in 15 Minuten sperren das Konto für 15 Minuten,
+                        zusätzlich greift die Sperre je Absender aus
+                        <code>schutz.php</code>.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Sitzung</td>
+                    <td>
+                        Cookie <code>asic_sitzung</code> mit 32 Byte Zufall,
+                        <code>HttpOnly</code>, <code>Secure</code> (bei HTTPS),
+                        <code>SameSite=Strict</code>, Pfad = App-Ordner. Auf dem
+                        Server liegt nur der SHA-256-Prüfwert mit Ablaufzeit
+                        (<code>_benutzer/sitzungen.json</code>, Voreinstellung
+                        10&nbsp;Stunden). Sperren, Löschen oder Zurücksetzen eines
+                        Kontos und eine Passwortänderung beenden dessen übrige
+                        Sitzungen. Schreibende Anfragen verlangen die Kopfzeile
+                        <code>X-ASiC: 1</code>, die fremde Seiten ohne CORS-Freigabe
+                        nicht setzen können (Schutz vor untergeschobenen Anfragen).
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Datenzugriff</td>
+                    <td>
+                        <code>save.php</code>, <code>list.php</code>,
+                        <code>load.php</code> und <code>offen.php</code> prüfen erst
+                        den unterschriebenen Zugriffsschlüssel, dann die Sitzung
+                        (<code>401 {grund:'anmeldung'}</code>; mit Startpasswort
+                        <code>403 {grund:'passwort'}</code>). Die App fängt das in
+                        <code>nasFetch()</code> ab, zeigt ein Anmeldefenster und
+                        wiederholt die Anfrage – Eingaben bleiben erhalten.
+                        <code>save.php</code> vermerkt Anmeldename und Name im
+                        Feld <code>_nas</code>; das Team-Archiv zeigt „gespeichert von“.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Torwächter</td>
+                    <td>
+                        Eine Umleitungsregel (<code>.htaccess</code>, bei IIS/nginx
+                        laut Installationsanleitung) schickt alle Aufrufe außer
+                        Anmeldeseite, Impressum, Datenschutz, Manifest, Icons,
+                        <code>css/</code>, <code>fonts/</code> und PHP-Dateien über
+                        <code>tor.php</code>. Es liefert nur bekannte Dateiarten aus
+                        dem App-Ordner, keine Pfade mit <code>.</code>/<code>_</code>
+                        am Anfang, nicht <code>daten/</code> und <code>tools/</code>;
+                        ohne gültige Sitzung leitet es Seiten zur Anmeldeseite um
+                        (sonst 401). Der Service Worker legt umgeleitete Antworten
+                        nie im Cache ab. <code>js/anmeldung-pruefen.js</code> leitet
+                        beim Öffnen einer Seite zur Anmeldung, wenn die Sitzung
+                        fehlt – ohne Verbindung wird nicht geprüft.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Benutzerverwaltung</td>
+                    <td>
+                        <code>benutzer.php</code> (Zugriffsschlüssel + Sitzung mit
+                        Rolle Administrator): Einstellung „automatisch ins Team-Archiv“
+                        für alle Geräte (ab 2.3.0-2), anlegen mit Startpasswort
+                        (12 Zeichen ohne verwechselbare Zeichen, nur einmal
+                        angezeigt), zurücksetzen, sperren, Rolle ändern, löschen,
+                        Protokoll lesen. Mindestens ein aktiver Administrator
+                        bleibt; das eigene Konto ist vor Sperren, Herabstufen und
+                        Löschen geschützt. Den ersten Administrator legt
+                        <code>pruefen.php</code> an (nur solange es kein Konto gibt,
+                        Zugriffsschlüssel nötig). Anmeldeprotokoll mit Zeit, Ereignis,
+                        Konto und IP in <code>_benutzer/protokoll-JJJJ-MM.log</code>,
+                        ältere Monate als <code>protokollMonate</code> werden gelöscht.
+                    </td>
+                </tr>
+
             </table>
             </div>
 
@@ -2425,8 +2549,8 @@
             <div class="doku-table-wrap">
             <table class="doku-table">
                 <tr><th>Angaben</th><th></th></tr>
-                <tr><td>Prüfgegenstand</td><td>ASiC Handel, Rev. <span data-zahl="revision">2.2.0</span> (Begehungsliste und Gefährdungsbeurteilung), Service Worker <code><span data-zahl="cache_version">v2.2.0-9</span></code></td></tr>
-                <tr><td>Prüfdatum</td><td>25.10.2026</td></tr>
+                <tr><td>Prüfgegenstand</td><td>ASiC Handel, Rev. <span data-zahl="revision">2.3.0</span> (Begehungsliste und Gefährdungsbeurteilung), Service Worker <code><span data-zahl="cache_version">v2.3.0-3</span></code></td></tr>
+                <tr><td>Prüfdatum</td><td>05.11.2026 (Anmeldung); übrige Prüfungen 25.10.2026</td></tr>
                 <tr><td>Methode</td><td>Quellcode-Durchsicht, Angriffstests im Browser (Chromium) mit präparierten Begehungsdaten, Tests der Server-Endpunkte (PHP 8.3)</td></tr>
                 <tr><td>Ergebnis</td><td>Alle Schwachstellen im Programmcode sind behoben und durch Tests belegt. Offen sind nur noch Punkte der Einrichtung und des Betriebs sowie bewertete Restrisiken (siehe unten).</td></tr>
                 <tr><td>Einordnung</td><td>Interne Prüfung durch den Entwickler. Ersetzt keinen Penetrationstest durch einen externen Dienstleister.</td></tr>
@@ -2448,6 +2572,7 @@
                 <tr><td>Daten aus Dateien</td><td>Präparierte JSON-Dateien (Begehungs-Import, GBO-Sicherung, Markt-Gesamtsicherung, Team-Archiv, von Hand in den Datenordner gelegt) mit eingeschleustem HTML/JavaScript</td></tr>
                 <tr><td>Team-Archiv-Server</td><td>Lesen und Überschreiben von Begehungen über <code>save.php</code>, <code>list.php</code>, <code>load.php</code>; Durchprobieren des Schlüssels; Vollschreiben des Datenträgers</td></tr>
                 <tr><td>Prüfseite</td><td>Ausspähen von Server-Pfaden, Schlüssel in Protokollen, Missbrauch für Abrufe fremder Adressen</td></tr>
+                <tr><td>Anmeldung (ab 2.3.0)</td><td>Erraten von Passwörtern, Ausprobieren von Anmeldenamen, Stehlen oder Fälschen der Sitzung, untergeschobene Anfragen von fremden Seiten, Abruf von App-Seiten ohne Anmeldung, Rechteausweitung zum Administrator</td></tr>
                 <tr><td>Gerät und Browser</td><td>Auslesen des Browser-Speichers (Begehungen, Fotos, Unterschriften, Schlüssel), Umgehen der Zugangssperre</td></tr>
                 <tr><td>Lieferpaket</td><td>Mitgelieferte Hilfsdateien, die über den Webserver abrufbar wären</td></tr>
             </table>
@@ -2488,13 +2613,13 @@
                     <td>S2</td>
                     <td><span class="sev sev-mittel">Mittel</span></td>
                     <td><strong>Zugriff über ein entsperrtes Gerät</strong><br>Der Schlüssel liegt nicht mehr als Text auf dem Gerät, sondern als nicht auslesbarer Krypto-Schlüssel; die App unterschreibt damit jede Anfrage, der Schlüssel selbst geht nicht über das Netz. Er lässt sich weder in den Einstellungen (dort nur „hinterlegt · endet auf …“) noch über die Entwicklerwerkzeuge herauskopieren. Wer das entsperrte Gerät in der Hand hat, kann über die App aber weiterhin auf das Team-Archiv zugreifen. Ohne HTTPS (kein Web Crypto) speichert und verschickt die App keinen Schlüssel.</td>
-                    <td><span class="sev st-rest">Restrisiko</span><br>Gerätesperre und Geräteverwaltung (S6). Bei Geräteverlust Schlüssel tauschen. Nach Umstellung aller Geräte <code>'klartextSchluessel' =&gt; false</code> setzen.</td>
+                    <td><span class="sev st-rest">Restrisiko</span><br>Gerätesperre und Geräteverwaltung (S6). Mit Anmeldung (ab 2.3.0) zusätzlich: Konto der Person sperren oder Passwort zurücksetzen – das beendet ihre Sitzungen sofort; ohne Sitzung ist nach spätestens 10 Stunden ein Passwort nötig. Bei Geräteverlust Schlüssel tauschen. Nach Umstellung aller Geräte <code>'klartextSchluessel' =&gt; false</code> setzen.</td>
                 </tr>
                 <tr>
                     <td>S3</td>
                     <td><span class="sev sev-mittel">Mittel</span></td>
                     <td><strong>Zugangssperre wirkt nur im Browser</strong><br>Die Code-Abfrage greift nur in der installierten App und lässt sich über einen normalen Browser-Tab oder den Browser-Speicher umgehen.</td>
-                    <td><span class="sev st-rest">Bewusst</span><br>Ist eine Hürde gegen zufälliges Herumstöbern, kein Zugriffsschutz. Eigenen Code festlegen; echten Schutz liefern Firmennetz, <code>apiKey</code> und ggf. eine Anmeldung am Webserver.</td>
+                    <td><span class="sev st-ok">Abgelöst</span><br>Ist eine Hürde gegen zufälliges Herumstöbern, kein Zugriffsschutz. Den echten Schutz liefert ab 2.3.0 die Anmeldung mit Benutzername und Passwort, die der Server selbst prüft; mit ihr entfällt der Zugangscode automatisch.</td>
                 </tr>
                 <tr>
                     <td>S4</td>
@@ -2519,6 +2644,24 @@
                     <td><span class="sev sev-gering">Gering</span></td>
                     <td><strong>Lage des Datenordners</strong><br>Liegt der Datenordner im Web-Verzeichnis (Variante B), hängt sein Schutz an Sperrdateien bzw. einer nginx-Regel.</td>
                     <td><span class="sev st-betrieb">Betreiber</span><br>Variante A (außerhalb des Web-Verzeichnisses) verwenden; <code>pruefen.php</code> prüft die Sperre automatisch.</td>
+                </tr>
+                <tr>
+                    <td>S8</td>
+                    <td><span class="sev sev-gering">Gering</span></td>
+                    <td><strong>Kontosperre als Störung</strong><br>Wer einen Anmeldenamen kennt, kann das Konto mit 5 falschen Passwörtern für 15 Minuten sperren. Ein Durchprobieren von Passwörtern wird damit aussichtslos.</td>
+                    <td><span class="sev st-rest">Bewusst</span><br>Sperrdauer und Zahl der Versuche in <code>config.php</code> anpassbar; das Protokoll zeigt Fehlversuche mit IP-Adresse. Anmeldenamen nicht öffentlich machen.</td>
+                </tr>
+                <tr>
+                    <td>S9</td>
+                    <td><span class="sev sev-mittel">Mittel</span></td>
+                    <td><strong>Torwächter hängt an der Server-Regel</strong><br>Ohne Umleitungsregel (fehlendes <code>mod_rewrite</code>, IIS ohne URL Rewrite, nginx ohne Regel) sind die App-Seiten selbst frei abrufbar. Die Daten bleiben geschützt, weil die PHP-Dateien die Anmeldung selbst prüfen.</td>
+                    <td><span class="sev st-betrieb">Betreiber</span><br>Regel laut Installationsanleitung einrichten; <code>pruefen.php</code> zeigt „Torwächter in Betrieb“.</td>
+                </tr>
+                <tr>
+                    <td>S10</td>
+                    <td><span class="sev sev-mittel">Mittel</span></td>
+                    <td><strong>PDF-Archiv enthält vollständige Berichte</strong><br>Die abgelegten PDFs (Begehung und Gefährdungsbeurteilung) enthalten Fotos in Originalqualität, Namen und Unterschriften. Abruf über <code>pdf.php</code> nur mit Schlüssel, Anmeldung und dem Recht „PDF-Archiv“ (Administratoren immer); jeder Abruf wird protokolliert. Wer direkten Zugriff auf den Ablageordner oder das Netzlaufwerk hat, sieht die Dateien ohne diese Prüfung. Löschen (Schalter „Löschen im Archiv“) ist endgültig, ohne Papierkorb.</td>
+                    <td><span class="sev st-betrieb">Betreiber</span><br>Ablageordner außerhalb des Webverzeichnisses; Freigabe des Netzlaufwerks auf den festgelegten Personenkreis beschränken; Löschfrist festlegen; „Löschen im Archiv“ nur bei Bedarf einschalten.</td>
                 </tr>
 
             </table>
@@ -2551,6 +2694,7 @@
                 <tr><td>Browser-Richtlinie</td><td>Content-Security-Policy in jeder Seite: nur eigene Skriptdateien, keine eingebetteten Skripte, kein <code>eval</code>, keine Plugins, keine fremden Bilder oder Schriften; eingebettete Rahmen nur mit eigenen Inhalten (<code>frame-src 'self' blob:</code>, für das Drucken in der Desktop-App); zusätzlich die Verbindung zur Desktop-Hülle (<code>ipc:</code>, <code>http://ipc.localhost</code>). Verbindungen nur zum eigenen Server und zu HTTPS-Adressen (für ein Team-Archiv auf einem anderen Server).</td></tr>
                 <tr><td>HTTP-Header</td><td><code>X-Content-Type-Options: nosniff</code>, Schutz vor Einbetten (<code>X-Frame-Options</code>, <code>frame-ancestors</code>), <code>Referrer-Policy: same-origin</code>; JSON-Antworten zusätzlich <code>Cache-Control: no-store</code>.</td></tr>
                 <tr><td>Zugriff Server</td><td>Unterschriebene Anfragen (HMAC-SHA-256, zeitkonstanter Vergleich, 5 Minuten Zeitfenster, jeder Zufallswert nur einmal); der Schlüssel geht nicht über das Netz. Sperre nach 20 Fehlversuchen für 15 Minuten je Absender (HTTP 429).</td></tr>
+                <tr><td>Anmeldung</td><td>Eigene Konten mit Rolle; Passwörter nur als Argon2id-/bcrypt-Hash; gleiche Meldung und Rechenzeit für unbekannte Namen; Kontosperre nach 5 Fehlversuchen in 15 Minuten. Sitzungs-Cookie mit 32 Byte Zufall, <code>HttpOnly</code>, <code>Secure</code>, <code>SameSite=Strict</code>, 10 Stunden; auf dem Server nur der SHA-256-Prüfwert. Schreibende Anfragen nur mit Kopfzeile <code>X-ASiC</code>. Torwächter <code>tor.php</code> liefert App-Seiten und Programmdateien nur nach Anmeldung. Protokoll aller Anmeldungen und Kontoänderungen.</td></tr>
                 <tr><td>Schlüssel auf dem Gerät</td><td>Als nicht exportierbarer Krypto-Schlüssel in IndexedDB; in <code>localStorage</code> nur Länge und letzte vier Zeichen zur Anzeige. Ein früher als Text gespeicherter Schlüssel wird beim ersten Start automatisch umgestellt und gelöscht. Gilt auch für die Gefährdungsbeurteilung (gemeinsamer Markt-Datensatz).</td></tr>
                 <tr><td>Missbrauchsschutz</td><td>Höchstens 60 Speichervorgänge in 10 Minuten je Absender, höchstens 20 MB je Begehung, 20 Stände je Begehung in <code>versionen/</code>, ältere komprimiert in <code>versionen/archiv/</code> (Obergrenze 500 MB). Alle Werte in <code>config.php</code> unter <code>grenzen</code> anpassbar.</td></tr>
                 <tr><td>Dateizugriff</td><td><code>load.php</code> nimmt nur Dateinamen der beiden bekannten Muster an (kein Verzeichnis-Ausbruch); Schreiben über temporäre Datei; Datenordner per Sperrdatei bzw. außerhalb des Web-Verzeichnisses.</td></tr>
@@ -2569,7 +2713,7 @@
 
             <p>
                 Ergebnisse für den aktuellen Stand
-                <code><span data-zahl="cache_version">v2.2.0-9</span></code> mit präparierten
+                <code><span data-zahl="cache_version">v2.3.0-3</span></code> mit präparierten
                 Daten bzw. gezielten Anfragen.
             </p>
 
@@ -2669,6 +2813,78 @@
                     <td>Abruf unterbleibt, Hinweis</td>
                 </tr>
                 <tr>
+                    <td>App-Seite und Programmdatei ohne Anmeldung abrufen</td>
+                    <td>Seite: Umleitung zur Anmeldeseite; Datei: 401. <code>tools/</code>, <code>daten/</code>, versteckte Dateien, <code>../</code>: 404</td>
+                </tr>
+                <tr>
+                    <td>Daten-Endpunkte mit gültigem Schlüssel, ohne Sitzung</td>
+                    <td>401 „Bitte anmelden“; App zeigt Anmeldefenster und wiederholt die Anfrage danach erfolgreich</td>
+                </tr>
+                <tr>
+                    <td>Anmelden mit falschem Passwort bzw. unbekanntem Namen</td>
+                    <td>dieselbe Meldung „Anmeldename oder Passwort ist falsch“</td>
+                </tr>
+                <tr>
+                    <td>6 falsche Passwörter hintereinander</td>
+                    <td>ab dem 6. Versuch Sperre 15 Minuten, auch das richtige Passwort wird abgewiesen</td>
+                </tr>
+                <tr>
+                    <td>Anmeldung ohne Kopfzeile <code>X-ASiC</code> (fremde Seite)</td>
+                    <td>abgewiesen</td>
+                </tr>
+                <tr>
+                    <td>Abgelaufene Sitzung (Ablaufzeit zurückgesetzt)</td>
+                    <td>nicht mehr angemeldet, Seiten leiten zur Anmeldung</td>
+                </tr>
+                <tr>
+                    <td>Anmelden mit Startpasswort</td>
+                    <td>Passwortänderung erzwungen; Seiten und Daten erst danach; Passwort mit Anmeldenamen oder unter 10 Zeichen abgelehnt</td>
+                </tr>
+                <tr>
+                    <td>Prüfer ruft Benutzerverwaltung auf</td>
+                    <td>403 „Administratoren vorbehalten“, Link in den Einstellungen ausgeblendet</td>
+                </tr>
+                <tr>
+                    <td>Administrator sperrt, stuft herab oder löscht sich selbst</td>
+                    <td>abgelehnt, mindestens ein aktiver Administrator bleibt</td>
+                </tr>
+                <tr>
+                    <td>Konto sperren bzw. Passwort zurücksetzen</td>
+                    <td>Sitzungen der Person sofort beendet; altes Startpasswort ungültig</td>
+                </tr>
+                <tr>
+                    <td>Name mit HTML/Skript in der Benutzerverwaltung</td>
+                    <td>als Text angezeigt, nicht ausgeführt</td>
+                </tr>
+                <tr>
+                    <td>Erster Administrator über <code>pruefen.php</code>, danach erneuter Versuch</td>
+                    <td>angelegt (Argon2id); zweiter Versuch: Formular nicht mehr vorhanden, kein Konto angelegt</td>
+                </tr>
+                <tr>
+                    <td>Automatisch ins Team-Archiv: Prüfer ändert die Einstellung direkt am Server</td>
+                    <td>403 „Administratoren vorbehalten“; Änderung durch Administrator im Protokoll</td>
+                </tr>
+                <tr>
+                    <td>Speichern ohne Verbindung, danach wieder online</td>
+                    <td>lokal gespeichert, Team-Archiv automatisch nachgeholt; bei fremdem neuerem Stand Rückfrage statt Überschreiben</td>
+                </tr>
+                <tr>
+                    <td>PDF-Archiv: Begehungs- und GBO-PDF teilen, offline und wieder online</td>
+                    <td>beide unter <code>Markt_&lt;Nr&gt;/</code> abgelegt; offline in die Warteschlange, danach nachgeholt</td>
+                </tr>
+                <tr>
+                    <td>PDF-Archiv: Prüfer ohne Recht ruft Liste/Datei direkt ab</td>
+                    <td>403, kein Knopf; mit Recht Liste sichtbar, Abruf im Protokoll</td>
+                </tr>
+                <tr>
+                    <td>Löschen im Archiv: Schalter aus, Prüfer, <code>../config.php</code>, ohne <code>X-ASiC</code></td>
+                    <td>403 bzw. 400, kein Knopf; mit Schalter als Administrator: Datensatz mit Ständen bzw. PDF entfernt, Protokoll</td>
+                </tr>
+                <tr>
+                    <td>Service Worker bei eingeschalteter Anmeldung</td>
+                    <td>installiert (62 Dateien), keine Anmeldeseite unter fremder Adresse im Cache</td>
+                </tr>
+                <tr>
                     <td>Bedienung: Prüfkatalog, Schalter, Maßnahmen mit Foto, Verlauf, Team-Archiv (Markt speichern und laden, Suche, Ladestatus, Wiederholungsbegehung), Sicherungshinweis, Team-Auswertung, Diagnose, GBO mit Antwort, Bildbeleg, Überprüfung und PDF, Hilfe- und Quellensuche, Offline-Cache</td>
                     <td>funktioniert, keine Konsolenfehler</td>
                 </tr>
@@ -2687,15 +2903,16 @@
             <div class="doku-box">
                 <div class="doku-box-title">Vor dem Produktivbetrieb</div>
                 <p>
-                    1. In <code>config.php</code> einen langen Zufallswert als <code>apiKey</code> setzen
+                    1. Ist die App aus dem Internet erreichbar: Anmeldung einschalten (<code>'anmeldung' =&gt; true</code>), ersten Administrator über <code>pruefen.php</code> anlegen und die Torwächter-Regel prüfen.<br>
+                    2. In <code>config.php</code> einen langen Zufallswert als <code>apiKey</code> setzen
                     (z. B. <code>openssl rand -hex 24</code>) und auf den Geräten eintragen.<br>
-                    2. Eigenen Zugangscode festlegen (<code>zugang-config.js</code>, nur die Prüfsumme) und den Nutzern direkt mitteilen.<br>
-                    3. Datenordner außerhalb des Web-Verzeichnisses anlegen (Variante A).<br>
-                    4. Nur über HTTPS mit gültigem Zertifikat betreiben; in den Einstellungen nur <code>https://</code>-Adressen eintragen.<br>
-                    5. <code>pruefen.php</code> aufrufen, alle roten Punkte beheben, danach löschen.<br>
-                    6. Ordner <code>tools/</code> nicht auf den Webserver kopieren.<br>
-                    7. Datenordner einschließlich <code>versionen/archiv/</code> in die Server-Sicherung aufnehmen.<br>
-                    8. Geräte mit Code sperren, möglichst über eine Geräteverwaltung (MDM).
+                    3. Eigenen Zugangscode festlegen (<code>zugang-config.js</code>, nur die Prüfsumme) und den Nutzern direkt mitteilen.<br>
+                    4. Datenordner außerhalb des Web-Verzeichnisses anlegen (Variante A).<br>
+                    5. Nur über HTTPS mit gültigem Zertifikat betreiben; in den Einstellungen nur <code>https://</code>-Adressen eintragen.<br>
+                    6. <code>pruefen.php</code> aufrufen, alle roten Punkte beheben, danach löschen.<br>
+                    7. Ordner <code>tools/</code> nicht auf den Webserver kopieren.<br>
+                    8. Datenordner einschließlich <code>versionen/archiv/</code> in die Server-Sicherung aufnehmen.<br>
+                    9. Geräte mit Code sperren, möglichst über eine Geräteverwaltung (MDM).
                 </p>
             </div>
 
@@ -2779,6 +2996,21 @@
                     <td><code>false</code> = nur unterschriebene Anfragen (empfohlen, Vorlage). <code>true</code> oder Eintrag fehlt = auch ältere App-Stände annehmen, die den Schlüssel im Klartext schicken. pruefen.php zeigt, wann zuletzt so eine Anfrage kam.</td>
                 </tr>
                 <tr>
+                    <td><code>anmeldung</code> (ab 2.3.0)</td>
+                    <td>config.php</td>
+                    <td><code>true</code> = App nur nach Anmeldung nutzbar (Abschnitt 9). Fehlt der Eintrag, bleibt sie aus. Feineinstellungen: <code>sitzungStunden</code> (10), <code>anmeldeVersuche</code> (5), <code>anmeldeSperreMinuten</code> (15), <code>passwortMinLaenge</code> (10, mind. 8), <code>protokollMonate</code> (6).</td>
+                </tr>
+                <tr>
+                    <td><code>autoTeamArchiv</code> (ab 2.3.0-2)</td>
+                    <td>config.php</td>
+                    <td>Beim Speichern automatisch ins Team-Archiv. Mit Anmeldung legt das ein Administrator in der App fest (Benutzerverwaltung); dieser Eintrag gilt dann nur, solange dort nichts festgelegt ist. Fehlt er, gilt <code>true</code>.</td>
+                </tr>
+                <tr>
+                    <td><code>pdfOrdner</code>, <code>pdfMaxMB</code>, <code>autoPdfArchiv</code>, <code>archivLoeschen</code> (ab 2.3.0-3)</td>
+                    <td>config.php</td>
+                    <td>PDF-Archiv (nur mit Anmeldung). <code>pdfOrdner</code>: Ablageort, leer = <code>&lt;datenOrdner&gt;/pdf</code>; kann auf ein eingebundenes Netzlaufwerk zeigen, außerhalb des Webverzeichnisses. <code>pdfMaxMB</code>: größtes PDF (14). <code>autoPdfArchiv</code>: Vorgabe (<code>true</code>). <code>archivLoeschen</code>: Vorgabe für „Löschen im Archiv“ (<code>false</code>). Mit Anmeldung legt ein Administrator beides in der App fest.</td>
+                </tr>
+                <tr>
                     <td>Zugangscode</td>
                     <td>zugang-config.js (<code>aktiv</code>, <code>codeHash</code>)</td>
                     <td>Einmalige Abfrage beim ersten Start der installierten App. Gespeichert ist nur die SHA-256-Prüfsumme.</td>
@@ -2797,6 +3029,15 @@
                 <li>In config.php bei <code>apiKey</code> eintragen.</li>
                 <li>Auf jedem Gerät unter Einstellungen „Schlüssel ändern“ wählen, neuen Wert eintragen, speichern und „Verbindung testen“.</li>
                 <li>Mit <code>pruefen.php</code> kontrollieren (Schlüssel im Formular eingeben).</li>
+            </ol>
+
+            <p><strong>Anmeldung einschalten</strong></p>
+            <ol>
+                <li>In config.php <code>'anmeldung' =&gt; true</code> setzen.</li>
+                <li><code>pruefen.php</code> öffnen, Zugriffsschlüssel eingeben und den ersten Administrator anlegen.</li>
+                <li>In der App anmelden; weitere Konten unter Einstellungen → Anmeldung → Benutzerverwaltung anlegen.</li>
+                <li>Torwächter-Regel prüfen (pruefen.php: „Torwächter in Betrieb“; IIS/nginx: Regel aus der Installationsanleitung).</li>
+                <li>Der Zugangscode entfällt dann automatisch: Der Torwächter liefert <code>zugang-config.js</code> abgeschaltet aus, und die Anmeldeseite merkt sich auf dem Gerät, dass angemeldet wird. <code>zugang-config.js</code> muss nicht geändert werden.</li>
             </ol>
 
             <p><strong>Zugangscode ändern</strong></p>
@@ -2862,11 +3103,11 @@
                 </tr>
                 <tr>
                     <td><code>APP_REVISION</code> / <code>APP_REVISION_DATE</code> in js/app.js</td>
-                    <td><span data-zahl="revision">2.2.0</span> / <span data-zahl="revision_datum">25.10.2026</span></td>
+                    <td><span data-zahl="revision">2.3.0</span> / <span data-zahl="revision_datum">06.11.2026</span></td>
                 </tr>
                 <tr>
                     <td><code>CACHE_NAME</code> und Kommentar <code>SERVICE-WORKER-VERSION</code> in sw.js</td>
-                    <td>asic-handel-v<span data-zahl="revision">2.2.0</span></td>
+                    <td>asic-handel-v<span data-zahl="revision">2.3.0</span></td>
                 </tr>
             </table>
             </div>
@@ -3223,58 +3464,73 @@
                 <!-- DATEITABELLE:START -->
                 <tr>
                     <td>index.html</td>
-                    <td class="zahl">761</td>
+                    <td class="zahl">762</td>
                     <td>Prüfkatalog und Eingabe der Begehungsdaten</td>
                 </tr>
                 <tr>
                     <td>massnahmen.html</td>
-                    <td class="zahl">720</td>
+                    <td class="zahl">721</td>
                     <td>Aktionsplan, Maßnahmenbearbeitung, Status und Unterschriften</td>
                 </tr>
                 <tr>
                     <td>gbo.html</td>
-                    <td class="zahl">25</td>
+                    <td class="zahl">26</td>
                     <td>Gefährdungsbeurteilung (GBO): Betriebsdaten, Themen, Bewertung, Statistik, Bildbelege, Markt-Datensatz</td>
                 </tr>
                 <tr>
                     <td>gbo-hilfe.html</td>
-                    <td class="zahl">551</td>
+                    <td class="zahl">559</td>
                     <td>Hilfe und FAQ zur Gefährdungsbeurteilung</td>
                 </tr>
                 <tr>
                     <td>gbo-dokumentation.html</td>
-                    <td class="zahl">541</td>
+                    <td class="zahl">542</td>
                     <td>Technische Dokumentation der Gefährdungsbeurteilung</td>
                 </tr>
                 <tr>
                     <td>quellen.html</td>
-                    <td class="zahl">365</td>
+                    <td class="zahl">364</td>
                     <td>Übersicht der Rechtsgrundlagen und Regelwerke mit Suche</td>
                 </tr>
                 <tr>
                     <td>fotos.html</td>
-                    <td class="zahl">554</td>
+                    <td class="zahl">555</td>
                     <td>Aufnahme, Einfügen, Kommentieren und Verwaltung von Fotos</td>
                 </tr>
                 <tr>
                     <td>verlauf.html</td>
-                    <td class="zahl">395</td>
+                    <td class="zahl">396</td>
                     <td>Archivierte Begehungen (Mein Verlauf) und Team-Archiv (Server)</td>
                 </tr>
                 <tr>
                     <td>auswertung.html</td>
-                    <td class="zahl">947</td>
+                    <td class="zahl">948</td>
                     <td>Auswertung der lokal archivierten Begehungen</td>
                 </tr>
                 <tr>
                     <td>auswertung-team.html</td>
-                    <td class="zahl">898</td>
+                    <td class="zahl">899</td>
                     <td>Auswertung aller Begehungen im Team-Archiv (Server)</td>
                 </tr>
                 <tr>
                     <td>einstellungen.html</td>
-                    <td class="zahl">386</td>
-                    <td>Server-Adresse, Zugriffsschlüssel, Verbindungstest und Diagnose</td>
+                    <td class="zahl">409</td>
+                    <td>Server-Adresse, Zugriffsschlüssel, Verbindungstest und Diagnose; Anmeldung (Passwort ändern, Abmelden)</td>
+                </tr>
+                <tr>
+                    <td>anmeldung.html</td>
+                    <td class="zahl">120</td>
+                    <td>Anmeldeseite: Benutzername und Passwort, Passwort ändern</td>
+                </tr>
+                <tr>
+                    <td>benutzer.html</td>
+                    <td class="zahl">171</td>
+                    <td>Benutzerverwaltung für Administratoren (Konten, Startpasswörter, Protokoll)</td>
+                </tr>
+                <tr>
+                    <td>pdf-archiv.html</td>
+                    <td class="zahl">92</td>
+                    <td>PDF-Archiv: abgelegte PDFs nach Markt ansehen (Recht "PDF-Archiv")</td>
                 </tr>
                 <tr>
                     <td>impressum.html</td>
@@ -3283,32 +3539,32 @@
                 </tr>
                 <tr>
                     <td>datenschutz.html</td>
-                    <td class="zahl">264</td>
+                    <td class="zahl">271</td>
                     <td>Datenschutzerklärung</td>
                 </tr>
                 <tr>
                     <td>hilfe.html</td>
-                    <td class="zahl">1.007</td>
+                    <td class="zahl">1.106</td>
                     <td>Bedienungsanleitung und FAQ</td>
                 </tr>
                 <tr>
                     <td>kurzanleitung.html</td>
-                    <td class="zahl">280</td>
+                    <td class="zahl">291</td>
                     <td>Bebilderte Kurzanleitung für Begehung und GBO (Bildschirmfotos eingebettet, aus „Hilfe &amp; FAQ“ und „FAQ GBO“ verlinkt)</td>
                 </tr>
                 <tr>
                     <td>dokumentation.html</td>
-                    <td class="zahl">3.674</td>
+                    <td class="zahl">3.980</td>
                     <td>Technische Dokumentation (diese Seite)</td>
                 </tr>
                 <tr>
                     <td>css/styles.css</td>
-                    <td class="zahl">3.095</td>
+                    <td class="zahl">3.272</td>
                     <td>Gesamtes gemeinsames Styling</td>
                 </tr>
                 <tr>
                     <td>js/app.js</td>
-                    <td class="zahl">4.979</td>
+                    <td class="zahl">5.391</td>
                     <td>Kernlogik, State-Verwaltung, Checkliste, PDF-Erzeugung, Export, Archivierung, NAS-Zugriff, Hilfsfunktionen (escapeHtml, todayIsoLocal) und Service-Worker-Registrierung</td>
                 </tr>
                 <tr>
@@ -3323,7 +3579,7 @@
                 </tr>
                 <tr>
                     <td>js/massnahmen.js</td>
-                    <td class="zahl">1.096</td>
+                    <td class="zahl">1.086</td>
                     <td>Logik der Aktionsplan-Seite</td>
                 </tr>
                 <tr>
@@ -3343,12 +3599,12 @@
                 </tr>
                 <tr>
                     <td>js/verlauf.js</td>
-                    <td class="zahl">466</td>
+                    <td class="zahl">534</td>
                     <td>Bedienlogik der Archiv-/Verlaufseite inkl. Team-Archiv (Server)</td>
                 </tr>
                 <tr>
                     <td>js/einstellungen.js</td>
-                    <td class="zahl">479</td>
+                    <td class="zahl">614</td>
                     <td>Bedienlogik der Einstellungsseite</td>
                 </tr>
                 <tr>
@@ -3368,8 +3624,28 @@
                 </tr>
                 <tr>
                     <td>js/access-gate.js</td>
-                    <td class="zahl">149</td>
+                    <td class="zahl">154</td>
                     <td>Clientseitige Zugangshürde für die installierte App-Ansicht</td>
+                </tr>
+                <tr>
+                    <td>js/anmeldung.js</td>
+                    <td class="zahl">204</td>
+                    <td>Anmelden und Passwort ändern (Anmeldeseite)</td>
+                </tr>
+                <tr>
+                    <td>js/anmeldung-pruefen.js</td>
+                    <td class="zahl">56</td>
+                    <td>Prüft beim Öffnen jeder Seite die Anmeldung und leitet ggf. zur Anmeldeseite</td>
+                </tr>
+                <tr>
+                    <td>js/benutzer.js</td>
+                    <td class="zahl">310</td>
+                    <td>Logik der Benutzerverwaltung</td>
+                </tr>
+                <tr>
+                    <td>js/pdf-archiv.js</td>
+                    <td class="zahl">206</td>
+                    <td>PDF-Archiv: Liste, Suche, Öffnen und Löschen (Administratoren)</td>
                 </tr>
                 <tr>
                     <td>zugang-config.js</td>
@@ -3393,8 +3669,8 @@
                 </tr>
                 <tr>
                     <td>sw.js</td>
-                    <td class="zahl">223</td>
-                    <td>Service Worker, Offline-Fähigkeit, Cache-Version v2.2.0-9</td>
+                    <td class="zahl">230</td>
+                    <td>Service Worker, Offline-Fähigkeit, Cache-Version v2.3.0-3</td>
                 </tr>
                 <tr>
                     <td>manifest.json</td>
@@ -3403,17 +3679,17 @@
                 </tr>
                 <tr>
                     <td>save.php</td>
-                    <td class="zahl">761</td>
+                    <td class="zahl">770</td>
                     <td>NAS: Begehung speichern (sichert den Vorgängerstand im Unterordner versionen)</td>
                 </tr>
                 <tr>
                     <td>list.php</td>
-                    <td class="zahl">352</td>
+                    <td class="zahl">358</td>
                     <td>NAS: Liste aller gespeicherten Begehungen für das Team-Archiv</td>
                 </tr>
                 <tr>
                     <td>nas-test.html</td>
-                    <td class="zahl">1</td>
+                    <td class="zahl">0</td>
                     <td>Eigenständige Testseite für die NAS-Anbindung (wird von den App-Seiten nicht verlinkt)</td>
                 </tr>
                 <tr>
@@ -3463,7 +3739,7 @@
                 </tr>
                 <tr>
                     <td>js/gbo-pdf.js</td>
-                    <td class="zahl">1.415</td>
+                    <td class="zahl">1.435</td>
                     <td>PDF-Ausgabe der Gefährdungsbeurteilung: Gesamt-GBO und Maßnahmenliste, Drucken, Teilen, Mail-Text</td>
                 </tr>
                 <tr>
@@ -3503,17 +3779,17 @@
                 </tr>
                 <tr>
                     <td>load.php</td>
-                    <td class="zahl">173</td>
+                    <td class="zahl">175</td>
                     <td>NAS: einzelne gespeicherte Begehung laden</td>
                 </tr>
                 <tr>
                     <td>config.php</td>
-                    <td class="zahl">139</td>
+                    <td class="zahl">214</td>
                     <td>Einzige Server-Einstellung: Datenordner, Zugriffsschlüssel, CORS, Grenzwerte, Sicherheits-Header</td>
                 </tr>
                 <tr>
                     <td>offen.php</td>
-                    <td class="zahl">176</td>
+                    <td class="zahl">180</td>
                     <td>Server: Hinweis „gerade geöffnet“ für das Team-Archiv (nur Dateiname, Gerätename, Zeitpunkt; läuft nach 4 Stunden ab)</td>
                 </tr>
                 <tr>
@@ -3522,13 +3798,43 @@
                     <td>Missbrauchsschutz für das Team-Archiv: Bremse für Fehlversuche und Speichern, Größengrenze, Begrenzung von versionen/ mit Archiv</td>
                 </tr>
                 <tr>
+                    <td>konto.php</td>
+                    <td class="zahl">504</td>
+                    <td>Benutzerkonten, Passwort-Hashes, Sitzungen, Sperre, Protokoll (wird eingebunden)</td>
+                </tr>
+                <tr>
+                    <td>anmeldung.php</td>
+                    <td class="zahl">181</td>
+                    <td>Anmelden, Abmelden, Passwort ändern, Anmeldestatus</td>
+                </tr>
+                <tr>
+                    <td>benutzer.php</td>
+                    <td class="zahl">244</td>
+                    <td>Benutzer anlegen, sperren, zurücksetzen, löschen; Protokoll (nur Administratoren)</td>
+                </tr>
+                <tr>
+                    <td>pdf.php</td>
+                    <td class="zahl">288</td>
+                    <td>PDF-Archiv: PDFs ablegen, auflisten, ausliefern und (Administratoren) löschen</td>
+                </tr>
+                <tr>
+                    <td>loeschen.php</td>
+                    <td class="zahl">78</td>
+                    <td>Team-Archiv: Markt-Datensatz samt älterer Stände löschen (nur Administratoren, Schalter in der Benutzerverwaltung)</td>
+                </tr>
+                <tr>
+                    <td>tor.php</td>
+                    <td class="zahl">141</td>
+                    <td>Torwächter: liefert App-Seiten und -Dateien nur nach Anmeldung aus</td>
+                </tr>
+                <tr>
                     <td>pruefen.php</td>
-                    <td class="zahl">408</td>
+                    <td class="zahl">536</td>
                     <td>Prüfseite für die Server-Einrichtung (nach der Einrichtung löschen)</td>
                 </tr>
                 <tr>
                     <td>.htaccess</td>
-                    <td class="zahl">23</td>
+                    <td class="zahl">41</td>
                     <td>Sicherheits-Header für Apache (CSP inkl. frame-ancestors, nosniff), Sperre der Hilfsdateien</td>
                 </tr>
                 <tr>
@@ -3553,7 +3859,7 @@
                 </tr>
                 <tr>
                     <td>tools/doku-dateien.json</td>
-                    <td class="zahl">316</td>
+                    <td class="zahl">368</td>
                     <td>Dateiliste mit Beschreibungen für das Hilfsskript</td>
                 </tr>
                 <tr>
@@ -3588,7 +3894,7 @@
                 </tr>
                 <tr>
                     <td>INSTALLATION.txt</td>
-                    <td class="zahl">12,4 KB</td>
+                    <td class="zahl">25,2 KB</td>
                     <td>Installationsanleitung für den Betrieb auf einem eigenen Server</td>
                 </tr>
                 <!-- DATEITABELLE:ENDE -->
@@ -3598,11 +3904,11 @@
 
             <p>
                 <strong>Gesamt (eigener Code, ohne jsPDF und Schrift):</strong>
-                <span data-zahl="zeilen_gesamt">40.384</span> Zeilen
+                <span data-zahl="zeilen_gesamt">44.547</span> Zeilen
             </p>
 
             <p style="font-size:0.82rem; color:var(--ink-soft);">
-                Stand der Zeilenzahlen: <span data-zahl="zeilen_stand">31.10.2026</span>.
+                Stand der Zeilenzahlen: <span data-zahl="zeilen_stand">06.11.2026</span>.
                 Die Werte wurden aus den tatsächlich enthaltenen Dateien gezählt.
             </p>
 
@@ -3664,9 +3970,9 @@
 </footer>
 
 
-<script src="js/audit-data.js?v=2.2.0-9"></script>
-<script src="js/text.js?v=2.2.0-9"></script>
-<script src="js/app.js?v=2.2.0-9"></script>
+<script src="js/audit-data.js?v=2.3.0-3"></script>
+<script src="js/text.js?v=2.3.0-3"></script>
+<script src="js/app.js?v=2.3.0-3"></script>
 
 <!-- Quellenverzeichnis ist für diesen Dokumentstand detailliert und statisch dokumentiert. -->
 
