@@ -407,11 +407,11 @@
             const inputs = host.querySelectorAll('[data-item-f="n"]'); if (inputs.length) inputs[inputs.length - 1].focus();
         };
         host.querySelectorAll('[data-item-del]').forEach(btn => {
-            btn.onclick = () => {
+            btn.onclick = async () => {
                 const i = Number(btn.dataset.itemDel);
                 const e = items();
                 const it = e.items[i];
-                if (it && (it.n || it.s0 || it.s1) && !confirm('Diese Einzelgefährdung entfernen?')) return;
+                if (it && (it.n || it.s0 || it.s1) && !(await (window.asicFrage||(o=>Promise.resolve(window.confirm(o.text))))({ titel: 'Einzelgefährdung entfernen', text: 'Diese Einzelgefährdung entfernen?', ja: 'Entfernen', warn: true }))) return;
                 e.items.splice(i, 1);
                 cleanup();
                 api().save();
@@ -572,7 +572,7 @@ ${rows ? `<ol class="gbo-review-list">${rows}</ol>` : ''}</section>`;
         const add = document.getElementById('reviewAdd');
         if (add) add.onclick = () => {
             const date = document.getElementById('reviewDate').value;
-            if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) { alert('Bitte ein Datum angeben.'); return; }
+            if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) { (window.asicMeldung||window.alert)('Bitte ein Datum angeben.'); return; }
             const st = stateObj();
             st.reviews.push({
                 date,
@@ -586,8 +586,8 @@ ${rows ? `<ol class="gbo-review-list">${rows}</ol>` : ''}</section>`;
             ['reviewBy', 'reviewNote'].forEach(k => { const el = document.getElementById(k); if (el) el.value = ''; });
             renderOverview();
         };
-        rv.querySelectorAll('[data-review-del]').forEach(b => b.onclick = () => {
-            if (!confirm('Diesen Eintrag zur Überprüfung entfernen?')) return;
+        rv.querySelectorAll('[data-review-del]').forEach(b => b.onclick = async () => {
+            if (!(await (window.asicFrage||(o=>Promise.resolve(window.confirm(o.text))))({ titel: 'Überprüfung entfernen', text: 'Diesen Eintrag zur Überprüfung entfernen?', ja: 'Entfernen', warn: true }))) return;
             const st = stateObj();
             const sorted = st.reviews.slice().sort((a, c) => String(c.date).localeCompare(String(a.date)));
             const target = sorted[Number(b.dataset.reviewDel)];

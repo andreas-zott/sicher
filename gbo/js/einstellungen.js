@@ -135,7 +135,19 @@ function initSettingsPage() {
     });
 
     btnKeyEntfernen.addEventListener('click', async () => {
-        if (!confirm('Zugriffsschlüssel auf diesem Gerät entfernen? Das Team-Archiv ist danach erst wieder nach Eintragen des Schlüssels erreichbar.')) return;
+        const wahl = await zeigeHinweisFenster({
+            titel: 'Zugriffsschlüssel entfernen',
+            sub: 'Nur auf diesem Gerät',
+            punkte: [
+                'Der Zugriffsschlüssel wird auf diesem Gerät gelöscht.',
+                'Das Team-Archiv ist danach erst wieder erreichbar, wenn der Schlüssel neu eingetragen ist.'
+            ],
+            knoepfe: [
+                { w: 'ja', text: 'Entfernen', art: 'warn' },
+                { w: '', text: 'Abbrechen' }
+            ]
+        });
+        if (wahl !== 'ja') return;
         await nasSchluesselLoeschen();
         keyBearbeiten = false;
         zeigeKeyZustand();
@@ -180,7 +192,19 @@ function initSettingsPage() {
     });
 
     btnReset.addEventListener('click', async () => {
-        if (!confirm('Server-Adresse und Zugriffsschlüssel auf diesem Gerät zurücksetzen? Begehungen, Fotos und Archiv bleiben unverändert.')) return;
+        const wahl = await zeigeHinweisFenster({
+            titel: 'Server-Verbindung zurücksetzen',
+            sub: 'Nur auf diesem Gerät',
+            punkte: [
+                'Server-Adresse und Zugriffsschlüssel werden auf diesem Gerät gelöscht.',
+                'Begehungen, Fotos und Archiv bleiben unverändert.'
+            ],
+            knoepfe: [
+                { w: 'ja', text: 'Zurücksetzen', art: 'warn' },
+                { w: '', text: 'Abbrechen' }
+            ]
+        });
+        if (wahl !== 'ja') return;
         input.value = '';
         try {
             localStorage.removeItem('nasBaseUrl');
@@ -472,8 +496,119 @@ function initDiagnose() {
     });
 }
 
+// ===== Über ASiC Handel (ab Ausgabestand 1.54-21 / 2.2.0-10) =====
+// Siebenmal kurz hintereinander auf die Kachel „App-Version“ tippen.
+// Rein lokale Anzeige: keine Daten, keine Netzwerkzugriffe, kein PDF.
+function initUeber() {
+    const kachel = document.getElementById('st-version');
+    if (!kachel) return;
+    let zaehler = 0, zuletzt = 0;
+    kachel.addEventListener('click', () => {
+        const jetzt = Date.now();
+        zaehler = (jetzt - zuletzt < 1500) ? zaehler + 1 : 1;
+        zuletzt = jetzt;
+        if (zaehler >= 7) { zaehler = 0; zeigeUeber(); }
+    });
+}
+
+const UEBER_SATZ = 'Arbeitsschutz ist Teamarbeit – danke an das Team Arbeitssicherheit für den gemeinsamen Weg.';
+const UEBER_MOTTO = 'Sicher geprüft. Sicher gehandelt.';
+
+function zeigeUeber() {
+    if (document.querySelector('.ueber-hinter')) return;
+    const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+    const zeile = (titel, wert) => { const p = el('p', 'ueber-zeile'); p.appendChild(el('span', 'ueber-titel', titel)); p.appendChild(el('span', 'ueber-wert', wert)); return p; };
+    const vorher = document.activeElement;
+    const hinter = el('div', 'ueber-hinter');
+    const karte = el('div', 'ueber-karte');
+    karte.setAttribute('role', 'dialog');
+    karte.setAttribute('aria-modal', 'true');
+    karte.setAttribute('aria-labelledby', 'ueber-kopf');
+    const logo = el('div', 'ueber-logo', 'ASiC');
+    logo.setAttribute('aria-hidden', 'true');
+    const kopf = el('h2', 'ueber-kopf', 'Über ASiC Handel');
+    kopf.id = 'ueber-kopf';
+    karte.append(logo, kopf,
+        zeile('Idee und Entwicklung', 'Andreas Zott'),
+        zeile('Technische Umsetzung', 'mit Claude (Anthropic)'),
+        zeile('Grundidee', '05.05.2025'),
+        zeile('Probelauf', 'August 2025, in Zusammenarbeit mit dem Team Arbeitssicherheit REWE Dortmund'));
+    if (UEBER_SATZ) karte.appendChild(el('p', 'ueber-satz', '„' + UEBER_SATZ + '“'));
+    if (UEBER_MOTTO) karte.appendChild(el('p', 'ueber-motto', '„' + UEBER_MOTTO + '“'));
+    const stand = (typeof APP_REVISION !== 'undefined' ? 'Rev. ' + APP_REVISION + ' · ' : '') + 'Ausgabestand ' + appAusgabestand();
+    karte.appendChild(el('p', 'ueber-stand', stand));
+    const knopf = el('button', 'btn ueber-schliessen', 'Schließen');
+    knopf.type = 'button';
+    karte.appendChild(knopf);
+    hinter.appendChild(karte);
+    document.body.appendChild(hinter);
+    const zu = () => {
+        hinter.remove();
+        document.removeEventListener('keydown', taste);
+        if (vorher && vorher.focus) vorher.focus();
+    };
+    const taste = e => { if (e.key === 'Escape') zu(); if (e.key === 'Tab') { e.preventDefault(); knopf.focus(); } };
+    knopf.addEventListener('click', zu);
+    hinter.addEventListener('click', e => { if (e.target === hinter) zu(); });
+    document.addEventListener('keydown', taste);
+    knopf.focus();
+}
+
+// ===== Anmeldung (ab Rev. 1.55) =====
+// Anzeige "Beim Speichern automatisch ins Team-Archiv" (ab 2.3.0-2) – legt ein
+// Administrator fest (Benutzerverwaltung) bzw. ohne Anmeldung config.php
+async function initTeamAutoInfo() {
+    const ziel = document.getElementById('team-auto-info');
+    if (!ziel) return;
+    const s = window.asicAnmeldung ? await window.asicAnmeldung : null;
+    const an = typeof autoTeamArchivAn === 'function' ? autoTeamArchivAn() : true;
+    let wer = '';
+    if (s && s.aktiv) wer = s.benutzer && s.benutzer.rolle === 'admin' ? ' – änderbar unter Benutzerverwaltung' : ' (vom Administrator festgelegt)';
+    else if (s) wer = ' (vom Server festgelegt)';
+    const pdf = typeof autoPdfArchivAn === 'function' ? autoPdfArchivAn() : true;
+    ziel.textContent = 'Beim Speichern und Archivieren automatisch ins Team-Archiv: ' + (an ? 'an' : 'aus')
+        + ' · Erstellte PDFs im PDF-Archiv ablegen: ' + (pdf ? 'an' : 'aus')
+        + (s && s.aktiv && s.benutzer && s.benutzer.rolle === 'admin' ? ' · Löschen im Archiv: ' + (s.archivLoeschen ? 'an' : 'aus') : '') + wer;
+}
+
+async function initAnmeldung() {
+    const bereich = document.getElementById('anmeldung');
+    if (!bereich || !window.asicAnmeldung) return;
+    const s = await window.asicAnmeldung;
+    if (!s || !s.aktiv || !s.angemeldet || !s.benutzer) return;
+    const b = s.benutzer;
+    bereich.hidden = false;
+    document.getElementById('an-wer').textContent = 'Angemeldet als ' + b.name + ' (' + b.kennung + ') · '
+        + (b.rolle === 'admin' ? 'Administrator' : 'Prüfer');
+    const ende = s.ende ? new Date(s.ende) : null;
+    if (ende && !isNaN(ende)) {
+        document.getElementById('an-bis').textContent = 'Die Anmeldung gilt bis '
+            + ende.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' }) + ', '
+            + ende.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) + ' Uhr. Danach fragt die App beim nächsten Speichern oder Öffnen erneut nach dem Passwort.';
+    }
+    document.getElementById('btn-an-benutzer').hidden = b.rolle !== 'admin';
+    document.getElementById('btn-an-pdf').hidden = !b.pdfLesen;
+    document.getElementById('btn-an-abmelden').addEventListener('click', async () => {
+        const st = document.getElementById('an-status');
+        try {
+            await fetch('anmeldung.php', {
+                method: 'POST', credentials: 'same-origin', cache: 'no-store',
+                headers: { 'Content-Type': 'application/json', 'X-ASiC': '1' },
+                body: JSON.stringify({ aktion: 'abmelden' })
+            });
+            location.replace('anmeldung.html?ziel=index.html');
+        } catch (e) {
+            st.textContent = 'Abmelden ist nur mit Verbindung zum Server möglich.';
+            st.className = 's-status is-error';
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    initAnmeldung();
+    initTeamAutoInfo();
     initSettingsPage();
     initDiagnose();
+    initUeber();
     if (typeof renderFooterMeta === 'function') renderFooterMeta();
 });

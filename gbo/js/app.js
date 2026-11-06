@@ -8,8 +8,8 @@ const STORAGE_KEY = 'begehungState';
 
 // Revisionsstand der App/Checkliste (in Fusszeile und PDF sichtbar,
 // bei inhaltlichen Aenderungen an Fragenkatalog/Massnahmen hochzaehlen)
-const APP_REVISION = '2.2.0';
-const APP_REVISION_DATE = '2026-10-25';
+const APP_REVISION = '2.3.0';
+const APP_REVISION_DATE = '2026-11-06';
 
 // Heutiges Datum als JJJJ-MM-TT in LOKALER Zeit. toISOString() liefert UTC,
 // dadurch stand zwischen 0 und 2 Uhr (deutsche Zeit) das Vortagsdatum drin.
@@ -60,7 +60,7 @@ const AKTION_ERLAUBT = new Set([
     'onMeasurePhotoDelete', 'openMeasureCamera', 'onMeasurePhotosCaptured',
     'updateMeasureField', 'onMeasureStatusChange',
     'onArchiveExport', 'onArchiveRestore', 'onArchiveFollowUp', 'onArchiveDelete',
-    'onTeamArchiveExport', 'onTeamArchiveRestore', 'onTeamArchiveFollowUp'
+    'onTeamArchiveExport', 'onTeamArchiveRestore', 'onTeamArchiveFollowUp', 'onTeamArchiveDelete'
 ]);
 
 function aktionAttr(ereignis, funktion, ...args) {
@@ -477,14 +477,68 @@ function totalItemCount() {
     return AUDIT_CATEGORIES.reduce((sum, c) => sum + c.items.filter(i => punktZaehlt(i)).length, 0);
 }
 
+// Kurz-Meldung im Stil der Fenster (ab 2.3.0-3): Titel, roter Strich, Text.
+// Aufteilung aus dem Meldungstext: "Titel – Text" bzw. "Titel: Text";
+// kurze Meldungen bestehen nur aus dem Titel. Verschwindet von selbst,
+// Antippen schliesst sofort.
+function toastTeile(message, type) {
+    const m = String(message == null ? '' : message).trim();
+    const gross = t => t ? t.charAt(0).toUpperCase() + t.slice(1) : t;
+    let i = m.indexOf(' – ');
+    if (i > 0 && i <= 60) return { titel: m.slice(0, i), text: gross(m.slice(i + 3)) };
+    i = m.indexOf(': ');
+    if (i > 0 && i <= 40) return { titel: m.slice(0, i), text: gross(m.slice(i + 2)) };
+    if (m.length <= 48) return { titel: m, text: '' };
+    return { titel: type === 'error' ? 'Fehler' : type === 'hinweis' ? 'Hinweis' : 'Erledigt', text: m };
+}
+
+// Ersatz fuer alert()/confirm() (ab 2.3.0-3): Meldung im Stil der App bzw.
+// Rueckfrage im App-Fenster. Ohne app.js-Fenster bleibt der Browser-Dialog.
+function asicMeldung(text, typ) {
+    const t = String(text == null ? '' : text);
+    const art = typ || (/fehlgeschlagen|voll|größer|keine gültige|nicht möglich/i.test(t) ? 'error'
+        : /gespeichert:/i.test(t) ? 'success' : 'hinweis');
+    if (typeof showToast === 'function' && document.body) showToast(t, art); else window.alert(t);
+}
+
+async function asicFrage(o) {
+    const opt = typeof o === 'string' ? { text: o } : (o || {});
+    if (typeof zeigeHinweisFenster !== 'function' || !document.body) return window.confirm(opt.text || '');
+    return (await zeigeHinweisFenster({
+        titel: opt.titel || 'Bitte bestätigen',
+        sub: opt.sub || '',
+        punkte: String(opt.text || '').split(/\n\s*\n/).filter(Boolean),
+        knoepfe: [{ w: 'ja', text: opt.ja || 'OK', art: opt.warn ? 'warn' : 'primaer' }, { w: '', text: 'Abbrechen' }]
+    })) === 'ja';
+}
+
 function showToast(message, type = 'success') {
     if (type === 'error') merkeFehler(message);
     document.querySelectorAll('.toast').forEach(t => t.remove());
+    const teile = toastTeile(message, type);
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
-    toast.textContent = message;
+    toast.setAttribute('role', type === 'error' ? 'alert' : 'status');
+    const kopf = document.createElement('div');
+    kopf.className = 'toast-kopf';
+    const zeichen = document.createElement('span');
+    zeichen.className = 'toast-zeichen';
+    zeichen.setAttribute('aria-hidden', 'true');
+    zeichen.textContent = type === 'error' ? '✕' : type === 'hinweis' ? '!' : '✓';
+    const titel = document.createElement('strong');
+    titel.className = 'toast-titel';
+    titel.textContent = teile.titel;
+    kopf.append(zeichen, titel);
+    toast.append(kopf);
+    if (teile.text) {
+        const text = document.createElement('div');
+        text.className = 'toast-text';
+        text.textContent = teile.text;
+        toast.append(text);
+    }
+    toast.addEventListener('click', () => toast.remove());
     document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), type === 'error' ? 6000 : 2600);
+    setTimeout(() => toast.remove(), type === 'error' ? 6000 : type === 'hinweis' ? 4500 : 3000);
 }
 
 // ===== Vorgefertigter Mail-Text beim PDF-Versand =====
@@ -695,7 +749,9 @@ async function mailEntwurfMitPdf(mode) {
     try {
         showToast('PDF wird erstellt …');
         const doc = await buildReportPdf(mode);
-        await mailMitPdfDesktop(buildShareEmailSubject(mode), buildShareEmailText(mode), doc.output('blob'), reportFilename(mode));
+        const blob = doc.output('blob');
+        pdfArchivieren(blob, mode);
+        await mailMitPdfDesktop(buildShareEmailSubject(mode), buildShareEmailText(mode), blob, reportFilename(mode));
     } catch (err) {
         console.error('Mail mit PDF fehlgeschlagen:', err);
         showToast('PDF-Fehler: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
@@ -969,7 +1025,18 @@ async function nasFetch(endpunkt, abfrage, options, schluessel, base, wiederholt
     const methode = String(opts.method || 'GET').toUpperCase();
     const kopf = await nasAuthKopf(methode, endpunkt, abfrage, typeof opts.body === 'string' ? opts.body : '', schluessel);
     if (kopf) opts.headers = Object.assign({}, opts.headers, { 'X-Api-Key': kopf });
+    if (!opts.credentials) opts.credentials = 'same-origin';
     const res = await fetch(url, opts);
+    // Ab Rev. 1.55: Anmeldung abgelaufen oder Startpasswort noch nicht geändert
+    if ((res.status === 401 || res.status === 403) && wiederholt !== 'anmeldung') {
+        let j = null;
+        try { j = await res.clone().json(); } catch (e) {}
+        if (j && j.grund === 'anmeldung') {
+            if (await anmeldeDialog()) return nasFetch(endpunkt, abfrage, options, schluessel, base, 'anmeldung');
+        } else if (j && j.grund === 'passwort') {
+            await passwortHinweisDialog();
+        }
+    }
     if (res.status === 401 && kopf && kopf.indexOf('asic1:') === 0 && !wiederholt) {
         let j = null;
         try { j = await res.clone().json(); } catch (e) {}
@@ -979,6 +1046,101 @@ async function nasFetch(endpunkt, abfrage, options, schluessel, base, wiederholt
         }
     }
     return res;
+}
+
+// ===== Anmeldung (ab Rev. 1.55) =====
+// Ist die Sitzung abgelaufen, fragt die App hier – ohne die Seite zu
+// verlassen – erneut nach dem Passwort. Die Eingaben der Begehung bleiben
+// dabei unberuehrt. Liefert true nach erfolgreicher Anmeldung.
+let anmeldeDialogOffen = null;
+function anmeldeDialog() {
+    if (anmeldeDialogOffen) return anmeldeDialogOffen;
+    anmeldeDialogOffen = new Promise(resolve => {
+        let letzte = '';
+        try { letzte = localStorage.getItem('asicAnmeldename') || ''; } catch (e) {}
+        const overlay = document.createElement('div');
+        overlay.className = 'srv-overlay';
+        overlay.innerHTML = `
+            <div class="srv-box" role="dialog" aria-modal="true" aria-labelledby="an-d-titel">
+                <div class="srv-kopf"><div><h2 class="srv-titel" id="an-d-titel">Bitte erneut anmelden</h2>
+                <p class="srv-sub">Die Anmeldung ist abgelaufen. Ihre Eingaben bleiben erhalten.</p></div>
+                <button type="button" class="srv-x" aria-label="Schließen">×</button></div>
+                <form class="srv-inhalt an-dialog" novalidate>
+                    <div class="s-field"><label for="an-d-kennung">Anmeldename</label>
+                        <input type="text" id="an-d-kennung" autocomplete="username" autocapitalize="off" spellcheck="false"></div>
+                    <div class="s-field"><label for="an-d-passwort">Passwort</label>
+                        <input type="password" id="an-d-passwort" autocomplete="current-password" autocapitalize="off" spellcheck="false"></div>
+                    <p class="an-meldung" role="alert"></p>
+                    <div class="srv-aktionen srv-aktionen-spalte">
+                        <button type="submit" class="btn btn-primary">Anmelden und fortfahren</button>
+                        <button type="button" class="btn btn-secondary" data-abbruch>Abbrechen</button>
+                    </div>
+                </form>
+            </div>`;
+        document.body.appendChild(overlay);
+        document.documentElement.classList.add('srv-offen');
+        const feldK = overlay.querySelector('#an-d-kennung');
+        const feldP = overlay.querySelector('#an-d-passwort');
+        const meldung = overlay.querySelector('.an-meldung');
+        feldK.value = letzte;
+        (letzte ? feldP : feldK).focus();
+        const ende = ok => {
+            overlay.remove();
+            document.documentElement.classList.remove('srv-offen');
+            document.removeEventListener('keydown', taste);
+            anmeldeDialogOffen = null;
+            resolve(ok);
+        };
+        function taste(e) { if (e.key === 'Escape') ende(false); }
+        document.addEventListener('keydown', taste);
+        overlay.querySelector('.srv-x').addEventListener('click', () => ende(false));
+        overlay.querySelector('[data-abbruch]').addEventListener('click', () => ende(false));
+        overlay.querySelector('form').addEventListener('submit', async e => {
+            e.preventDefault();
+            meldung.textContent = '';
+            const kennung = feldK.value.trim();
+            if (!kennung || !feldP.value) { meldung.textContent = 'Bitte Anmeldename und Passwort eingeben.'; return; }
+            try {
+                const res = await fetch(nasUrl('anmeldung.php'), {
+                    method: 'POST', credentials: 'same-origin', cache: 'no-store',
+                    headers: { 'Content-Type': 'application/json', 'X-ASiC': '1' },
+                    body: JSON.stringify({ aktion: 'anmelden', kennung, passwort: feldP.value })
+                });
+                let j = {};
+                try { j = await res.json(); } catch (err) {}
+                feldP.value = '';
+                if (res.ok && j.ok) {
+                    try { localStorage.setItem('asicAnmeldename', kennung); } catch (err) {}
+                    if (j.benutzer && j.benutzer.mussAendern) {
+                        ende(false);
+                        passwortHinweisDialog();
+                        return;
+                    }
+                    ende(true);
+                    return;
+                }
+                meldung.textContent = j.message || 'Die Anmeldung hat nicht geklappt.';
+                feldP.focus();
+            } catch (err) {
+                meldung.textContent = 'Der Server ist gerade nicht erreichbar. Ihre Eingaben bleiben auf diesem Gerät gespeichert.';
+            }
+        });
+    });
+    return anmeldeDialogOffen;
+}
+
+async function passwortHinweisDialog() {
+    const w = await zeigeHinweisFenster({
+        titel: 'Eigenes Passwort festlegen',
+        sub: 'Sie sind noch mit dem Startpasswort angemeldet.',
+        punkte: ['Bevor Daten mit dem Team-Archiv ausgetauscht werden, bitte ein eigenes Passwort festlegen.',
+                 'Ihre Eingaben bleiben auf diesem Gerät gespeichert.'],
+        knoepfe: [{ w: 'jetzt', text: 'Passwort jetzt festlegen', art: 'primaer' }, { w: '', text: 'Später' }]
+    });
+    if (w === 'jetzt') {
+        const seite = (location.pathname.split('/').pop() || 'index.html');
+        location.href = 'anmeldung.html?aktion=passwort&ziel=' + encodeURIComponent(/^[a-z0-9-]+\.html$/i.test(seite) ? seite : 'index.html');
+    }
 }
 
 // Noch als Text gespeicherten Schluessel gleich beim Start umstellen
@@ -1002,11 +1164,115 @@ function speicherSteuerung(modus) {
     };
 }
 
+// ===== Beim Speichern automatisch ins Team-Archiv (ab 2.3.0-2) =====
+// Ob das gilt, legt ein Administrator fest (Benutzerverwaltung) bzw. ohne
+// Anmeldung config.php. Der Stand kommt mit dem Anmeldestatus
+// (anmeldung-pruefen.js) und wird auf dem Geraet gemerkt; unbekannt = an.
+// Ohne Verbindung merkt sich die App die Begehung (Markt + Datum) und
+// holt das Speichern nach, sobald wieder eine Verbindung besteht.
+const AUTO_TEAM_KEY = 'asicAutoTeamArchiv';
+const TEAM_NACHHOLEN_KEY = 'asicTeamNachholen';
+
+function autoTeamArchivAn() {
+    try { return localStorage.getItem(AUTO_TEAM_KEY) !== '0'; } catch (e) { return true; }
+}
+
+function merkeTeamNachholen() {
+    try { localStorage.setItem(TEAM_NACHHOLEN_KEY, begehungsKennung()); } catch (e) { /* ohne Speicher */ }
+}
+
+function vergissTeamNachholen() {
+    try { localStorage.removeItem(TEAM_NACHHOLEN_KEY); } catch (e) { /* ohne Speicher */ }
+}
+
+function teamArchivMoeglich() {
+    const c = state.companyInfo || {};
+    return !!(String(c.marktnummer || '').trim() && c.datum);
+}
+
+let teamSpeichernLaeuft = false;
+
+// Fuer die Knoepfe "Speichern" (Datei-Menue im Pruefkatalog, Maßnahmenseite)
+// und "Gesamtsicherung Markt" (Seite der Gefaehrdungsbeurteilung; dort mit
+// vorsatz 'Gesamtsicherung erstellt').
+async function speichernMitTeamArchiv(vorsatz) {
+    if (typeof vorsatz !== 'string') vorsatz = 'Gespeichert';
+    if (!saveState()) {
+        showToast('Speichern auf diesem Gerät fehlgeschlagen.', 'error');
+        return;
+    }
+    const gboInhalt = (() => { try { const g = leseGboStand(); return !!(g && Object.keys(g).length); } catch (e) { return false; } })();
+    if (!autoTeamArchivAn() || !serverFunktionenVerfuegbar() || !(begehungHatInhalt() || gboInhalt)) {
+        showToast(vorsatz);
+        return;
+    }
+    if (!teamArchivMoeglich()) {
+        showToast(vorsatz + ' – für das Team-Archiv fehlen noch Datum oder Marktnummer der Begehung.', 'hinweis');
+        return;
+    }
+    if (sicherungsZustand() === 'gesichert') {
+        vergissTeamNachholen();
+        showToast(vorsatz + ' – das Team-Archiv ist bereits aktuell.');
+        return;
+    }
+    if (navigator.onLine === false) {
+        merkeTeamNachholen();
+        showToast(vorsatz + ' – ins Team-Archiv, sobald wieder eine Verbindung besteht.', 'hinweis');
+        return;
+    }
+    if (teamSpeichernLaeuft) return;
+    teamSpeichernLaeuft = true;
+    try { await saveStateToServer('normal', { auto: true, vorsatz }); } finally { teamSpeichernLaeuft = false; }
+}
+
+// Nach "Begehung archivieren" (ab 2.3.0-3): denselben Stand auch ins
+// Team-Archiv, wenn der Administrator-Schalter an ist. Gleiche Regeln wie
+// beim Speichern; ohne Verbindung wird nachgeholt.
+async function teamArchivNachArchivieren() {
+    if (!autoTeamArchivAn() || !serverFunktionenVerfuegbar() || !begehungHatInhalt()) return;
+    if (!teamArchivMoeglich()) {
+        showToast('Archiviert – für das Team-Archiv fehlen noch Datum oder Marktnummer.', 'hinweis');
+        return;
+    }
+    if (sicherungsZustand() === 'gesichert') {
+        vergissTeamNachholen();
+        showToast('Archiviert – das Team-Archiv ist bereits aktuell.');
+        return;
+    }
+    if (navigator.onLine === false) {
+        merkeTeamNachholen();
+        showToast('Archiviert – ins Team-Archiv, sobald wieder eine Verbindung besteht.', 'hinweis');
+        return;
+    }
+    if (teamSpeichernLaeuft) return;
+    teamSpeichernLaeuft = true;
+    try { await saveStateToServer('normal', { auto: true, archiv: true, vorsatz: 'Archiviert' }); } finally { teamSpeichernLaeuft = false; }
+}
+
+// Ausstehendes Speichern nachholen (Verbindung wieder da / Seite geoeffnet)
+async function teamArchivNachholen() {
+    let offen = null;
+    try { offen = localStorage.getItem(TEAM_NACHHOLEN_KEY); } catch (e) { return; }
+    if (!offen || teamSpeichernLaeuft || navigator.onLine === false) return;
+    if (!document.getElementById('btn-save') && !document.getElementById('btn-save-measures') && !document.getElementById('marketSaveBtn')) return;
+    if (!autoTeamArchivAn() || !serverFunktionenVerfuegbar()) return;
+    if (offen !== begehungsKennung() || !teamArchivMoeglich()) return;
+    if (sicherungsZustand() === 'gesichert') { vergissTeamNachholen(); return; }
+    teamSpeichernLaeuft = true;
+    try { await saveStateToServer('normal', { auto: true, nachholen: true }); } finally { teamSpeichernLaeuft = false; }
+}
+window.addEventListener('online', () => setTimeout(teamArchivNachholen, 1500));
+window.addEventListener('load', () => setTimeout(teamArchivNachholen, 2500));
+
 // Speichert den Markt-Datensatz (Begehung + Gefaehrdungsbeurteilung, aus
 // js/market-store.js). Ist das Modul auf einer Seite nicht geladen, wird nur
 // die Begehung gespeichert (bisheriges Format, von save.php ebenso angenommen).
-async function saveStateToServer(modus) {
+async function saveStateToServer(modus, opts) {
+    const geraet = (opts && opts.archiv) ? 'Im Verlauf archiviert' : 'Auf diesem Gerät gespeichert';
     if (typeof modus !== 'string') modus = 'normal';
+    const auto = !!(opts && opts.auto);
+    const nachholen = !!(opts && opts.nachholen);
+    const vorsatz = (opts && opts.vorsatz) || 'Gespeichert';
     try {
         saveState();
         const nutzdaten = window.ASiCMarket ? ASiCMarket.container() : state;
@@ -1019,20 +1285,49 @@ async function saveStateToServer(modus) {
         const result = await parseJsonResponse(res);
         if (res.status === 409 && result && result.konflikt) {
             const wahl = await frageBeiKonflikt(result);
-            if (wahl) return saveStateToServer(wahl);
-            showToast('Nicht gespeichert – der Stand im Team-Archiv bleibt unverändert.');
+            if (wahl) return saveStateToServer(wahl, opts);
+            if (auto) vergissTeamNachholen();
+            showToast(auto
+                ? geraet + ' – der Stand im Team-Archiv bleibt unverändert.'
+                : 'Nicht gespeichert – der Stand im Team-Archiv bleibt unverändert.', auto ? 'hinweis' : 'success');
             return;
         }
         if (!res.ok || !result.ok) {
-            throw new Error(result.message || `Fehler beim Speichern (HTTP ${res.status}).`);
+            const e = new Error(result.message || `Fehler beim Speichern (HTTP ${res.status}).`);
+            e.status = res.status;
+            throw e;
         }
         markiereServerGesichert(result.fileName, result.savedAt);
+        vergissTeamNachholen();
         meldeGeschlossen();
-        showToast(result.fassung
-            ? 'Als eigene Fassung gespeichert (Fassung ' + result.fassung + ')'
-            : (window.ASiCMarket ? 'Markt auf Server gespeichert: ' : 'Auf Server gespeichert: ') + result.fileName);
+        if (auto) {
+            if (nachholen) {
+                showToast(result.fassung
+                    ? 'Nachgeholt: im Team-Archiv als eigene Fassung ' + result.fassung + ' gespeichert'
+                    : 'Nachgeholt: Markt jetzt auch im Team-Archiv');
+            } else {
+                showToast(result.fassung
+                    ? vorsatz + ' – im Team-Archiv als eigene Fassung ' + result.fassung
+                    : vorsatz + ' – auch im Team-Archiv');
+            }
+        } else {
+            showToast(result.fassung
+                ? 'Als eigene Fassung gespeichert (Fassung ' + result.fassung + ')'
+                : (window.ASiCMarket ? 'Markt auf Server gespeichert: ' : 'Auf Server gespeichert: ') + result.fileName);
+        }
     } catch (err) {
         console.error('Server-Speichern fehlgeschlagen:', err);
+        if (auto) {
+            // Keine Verbindung (Netzwerkfehler): spaeter nachholen
+            if (err instanceof TypeError || navigator.onLine === false) {
+                merkeTeamNachholen();
+                if (!nachholen) showToast(vorsatz + ' – ins Team-Archiv, sobald wieder eine Verbindung besteht.', 'hinweis');
+                return;
+            }
+            vergissTeamNachholen();
+            showToast(geraet + '. Team-Archiv: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
+            return;
+        }
         showToast('Speichern auf dem Server fehlgeschlagen: ' + (err && err.message ? err.message : 'unbekannter Fehler'), 'error');
     }
 }
@@ -1249,7 +1544,7 @@ async function openServerLoadDialog() {
                 <span class="srv-markt">${f.marktnummer ? 'Markt ' + escapeHtml(f.marktnummer) : 'ohne Marktnummer'}${fassungVon(f.fileName) ? ' <span class="srv-fassung">Fassung ' + fassungVon(f.fileName) + '</span>' : ''}</span>
                 <span class="srv-datum">${escapeHtml(f.datum || '–')}</span>
                 <span class="srv-ort">${escapeHtml(ort)}${zusatz ? ' · ' + escapeHtml(zusatz) : ''}</span>
-                <span class="srv-meta">${escapeHtml(formatGespeichert(f.savedAt))}${vorWieLange(f.savedAt) ? ' · ' + escapeHtml(vorWieLange(f.savedAt)) : ''}${offenAnderswo(offenListe, f.fileName) ? '<span class="srv-badge srv-badge-offen">' + escapeHtml(offenKurztext(offenAnderswo(offenListe, f.fileName))) + '</span>' : (kuerzlichGespeichert(f.savedAt) && f.fileName !== offen ? '<span class="srv-badge srv-badge-frisch">kürzlich gespeichert</span>' : '')}${f.fileName === offen ? '<span class="srv-badge">auf diesem Gerät geöffnet</span>' : ''}</span>
+                <span class="srv-meta">${escapeHtml(formatGespeichert(f.savedAt))}${f.von ? ' von ' + escapeHtml(f.von) : ''}${vorWieLange(f.savedAt) ? ' · ' + escapeHtml(vorWieLange(f.savedAt)) : ''}${offenAnderswo(offenListe, f.fileName) ? '<span class="srv-badge srv-badge-offen">' + escapeHtml(offenKurztext(offenAnderswo(offenListe, f.fileName))) + '</span>' : (kuerzlichGespeichert(f.savedAt) && f.fileName !== offen ? '<span class="srv-badge srv-badge-frisch">kürzlich gespeichert</span>' : '')}${f.fileName === offen ? '<span class="srv-badge">auf diesem Gerät geöffnet</span>' : ''}</span>
             </button>`;
         }).join('');
         liste.querySelectorAll('.srv-eintrag').forEach(b => b.addEventListener('click', () => {
@@ -1495,13 +1790,13 @@ function offenAnderswo(liste, fileName) {
 
 function offenKurztext(e) {
     const wie = vorWieLange(e.seit);
-    return 'geöffnet auf ' + (e.geraet || 'einem anderen Gerät') + (wie ? ' · ' + wie : '');
+    return 'geöffnet' + (e.person ? ' von ' + e.person : '') + ' auf ' + (e.geraet || 'einem anderen Gerät') + (wie ? ' · ' + wie : '');
 }
 
 function offenSatz(e) {
     const d = new Date(e.seit);
     const uhr = isNaN(d) ? '' : d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
-    return 'Gerade geöffnet auf ' + (e.geraet || 'einem anderen Gerät') + (uhr ? ' (seit ' + uhr + ' Uhr)' : '') +
+    return 'Gerade geöffnet' + (e.person ? ' von ' + e.person : '') + ' auf ' + (e.geraet || 'einem anderen Gerät') + (uhr ? ' (seit ' + uhr + ' Uhr)' : '') +
         ' – dort wird sie möglicherweise bearbeitet. Öffnen ist trotzdem möglich; beim Speichern meldet die App, falls inzwischen ein neuerer Stand im Team-Archiv liegt.';
 }
 
@@ -1776,6 +2071,124 @@ function initExportMenu() {
     }
 }
 
+// ===== PDF-Archiv (ab 2.3.0-3) =====
+// Jedes erstellte PDF (Teilen, Herunterladen, Drucken, Mail) legt die App
+// zusaetzlich auf dem Server ab (pdf.php), sofern ein Administrator das nicht
+// abgeschaltet hat. Ohne Verbindung wartet das PDF in einer Warteschlange auf
+// dem Geraet (IndexedDB) und wird nachgereicht. Ansehen koennen die PDFs nur
+// berechtigte Konten (Seite pdf-archiv.html) bzw. ueber den PDF-Ordner.
+const AUTO_PDF_KEY = 'asicAutoPdfArchiv';
+
+function autoPdfArchivAn() {
+    try { return localStorage.getItem(AUTO_PDF_KEY) !== '0'; } catch (e) { return true; }
+}
+
+function pdfArtAusModus(mode) {
+    if (mode === 'checkliste') return 'checkliste';
+    if (mode === 'massnahmen') return 'massnahmenplan';
+    if (mode === 'fotos') return 'fotos';
+    return 'gesamtbericht';
+}
+
+function pdfWarteschlangeDb() {
+    return new Promise((resolve, reject) => {
+        const req = indexedDB.open('asic-pdf-ablage', 1);
+        req.onupgradeneeded = () => req.result.createObjectStore('warteschlange', { keyPath: 'id', autoIncrement: true });
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+    });
+}
+
+async function pdfWarteschlange(aktion, wert) {
+    const db = await pdfWarteschlangeDb();
+    return new Promise((resolve, reject) => {
+        const tx = db.transaction('warteschlange', aktion === 'alle' ? 'readonly' : 'readwrite');
+        const st = tx.objectStore('warteschlange');
+        const req = aktion === 'alle' ? st.getAll() : aktion === 'dazu' ? st.add(wert) : st.delete(wert);
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+    });
+}
+
+function blobAlsBase64(blob) {
+    return new Promise((resolve, reject) => {
+        const r = new FileReader();
+        r.onload = () => resolve(String(r.result).split(',')[1] || '');
+        r.onerror = () => reject(r.error);
+        r.readAsDataURL(blob);
+    });
+}
+
+// Ergebnis: 'ok' | 'doppelt' | 'warten' (spaeter erneut) | 'fehler'
+async function pdfSenden(eintrag) {
+    try {
+        const res = await nasFetch('pdf.php', '', {
+            method: 'POST', cache: 'no-store',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ aktion: 'ablegen', markt: eintrag.markt, datum: eintrag.datum, art: eintrag.art, pdf: eintrag.pdf })
+        });
+        let j = {};
+        try { j = await res.json(); } catch (e) {}
+        if (res.ok && j.ok) return { ergebnis: j.doppelt ? 'doppelt' : 'ok' };
+        if (res.status === 401 || res.status === 403 && j.grund === 'passwort' || res.status === 429 || res.status >= 500) {
+            return { ergebnis: 'warten', meldung: j.message || '' };
+        }
+        return { ergebnis: 'fehler', meldung: j.message || ('Fehler ' + res.status) };
+    } catch (e) {
+        return { ergebnis: 'warten', meldung: '' };
+    }
+}
+
+// angaben (optional, Gefaehrdungsbeurteilung): { markt, datum, art }
+async function pdfArchivieren(blob, mode, angaben) {
+    if (!autoPdfArchivAn() || !serverFunktionenVerfuegbar() || typeof indexedDB === 'undefined') return;
+    // Angaben sofort festhalten (bei archivierten Begehungen ist "state"
+    // nur waehrend des Erstellens umgeleitet)
+    const c = angaben ? { marktnummer: angaben.markt, datum: angaben.datum } : Object.assign({}, state.companyInfo || {});
+    const markt = String(c.marktnummer || '').trim().replace(/[^A-Za-z0-9-]+/g, '-').slice(0, 20);
+    const datum = /^\d{4}-\d{2}-\d{2}$/.test(String(c.datum || '')) ? c.datum : '';
+    if (!markt || !datum) {
+        setTimeout(() => showToast('PDF nicht im PDF-Archiv abgelegt – Marktnummer oder Datum fehlt.', 'hinweis'), 2800);
+        return;
+    }
+    let eintrag;
+    try {
+        eintrag = { markt, datum, art: angaben && angaben.art ? angaben.art : pdfArtAusModus(mode), pdf: await blobAlsBase64(blob), zeit: new Date().toISOString() };
+    } catch (e) { return; }
+    const r = navigator.onLine === false ? { ergebnis: 'warten' } : await pdfSenden(eintrag);
+    if (r.ergebnis === 'warten') {
+        try {
+            await pdfWarteschlange('dazu', eintrag);
+            setTimeout(() => showToast('PDF wird im PDF-Archiv abgelegt, sobald wieder eine Verbindung besteht.', 'hinweis'), 2800);
+        } catch (e) { /* ohne Speicher keine Warteschlange */ }
+    } else if (r.ergebnis === 'ok') {
+        setTimeout(() => showToast('PDF zusätzlich im PDF-Archiv abgelegt'), 2800);
+    } else if (r.ergebnis === 'fehler') {
+        setTimeout(() => showToast('PDF-Archiv: ' + r.meldung, 'error'), 2800);
+    }
+}
+
+let pdfWarteschlangeLaeuft = false;
+async function pdfWarteschlangeAbarbeiten() {
+    if (pdfWarteschlangeLaeuft || navigator.onLine === false || typeof indexedDB === 'undefined') return;
+    if (!serverFunktionenVerfuegbar()) return;
+    pdfWarteschlangeLaeuft = true;
+    let geschafft = 0;
+    try {
+        const offen = await pdfWarteschlange('alle');
+        for (const e of offen || []) {
+            const r = await pdfSenden(e);
+            if (r.ergebnis === 'warten') break;
+            await pdfWarteschlange('weg', e.id);
+            if (r.ergebnis !== 'fehler') geschafft++;
+        }
+    } catch (e) { /* naechster Versuch spaeter */ }
+    pdfWarteschlangeLaeuft = false;
+    if (geschafft) showToast(geschafft === 1 ? 'Nachgeholt: 1 PDF im PDF-Archiv abgelegt' : 'Nachgeholt: ' + geschafft + ' PDFs im PDF-Archiv abgelegt');
+}
+window.addEventListener('online', () => setTimeout(pdfWarteschlangeAbarbeiten, 4000));
+window.addEventListener('load', () => setTimeout(pdfWarteschlangeAbarbeiten, 5000));
+
 // ===== PDF teilen (iPad-Teilen-Menü, inkl. AirPrint) mit Download-Fallback =====
 // Gemeinsam genutzt von der Checkliste (app.js) und den Maßnahmen (massnahmen.js).
 // Bewaehrter Trick (aus dem Schwesterprojekt): navigator.share() mit der PDF-Datei
@@ -1786,6 +2199,7 @@ function initExportMenu() {
 async function sharePdfDoc(doc, filename, shareTitle, mode) {
     try {
         const blob = doc.output('blob');
+        pdfArchivieren(blob, mode);
 
         if (navigator.canShare && typeof File !== 'undefined') {
             const file = new File([blob], filename, { type: 'application/pdf' });
@@ -3446,6 +3860,7 @@ async function printReport(mode) {
 
         const blob =
             doc.output('blob');
+        pdfArchivieren(blob, mode);
 
         // Desktop-App (Tauri): kein neues Fenster moeglich - im Rahmen drucken
         if (laeuftInTauri()) {
@@ -4406,6 +4821,7 @@ async function startFollowUpAudit(record, quelle) {
 
 async function archiveCurrentAudit() {
     const fotos = await anzahlFotosAufGeraet();
+    const mitTeam = autoTeamArchivAn() && serverFunktionenVerfuegbar();
     const wahl = await zeigeHinweisFenster({
         titel: 'Begehung archivieren',
         sub: 'Schnappschuss in „Mein Verlauf“ ablegen',
@@ -4414,7 +4830,9 @@ async function archiveCurrentAudit() {
             'Ein vollständiger Schnappschuss mit Bewertungen, Maßnahmen, Unterschriften' + (fotos ? ' und ' + fotosText(fotos) : '') + ' wird unter „Verlauf → Mein Verlauf“ abgelegt.',
             'Die Begehung bleibt geöffnet und kann weiterbearbeitet werden.',
             'Die Gefährdungsbeurteilung gehört nicht zum Archiv – sie wird mit „Markt auf Server speichern“ oder „Gesamtsicherung Markt“ gesichert.',
-            'Das Archiv liegt nur auf diesem Gerät. Fürs Team bitte zusätzlich „Markt auf Server speichern“.'
+            mitTeam
+                ? 'Zusätzlich wird der Stand im Team-Archiv gespeichert (ohne Verbindung, sobald wieder eine besteht).'
+                : 'Das Archiv liegt nur auf diesem Gerät. Fürs Team bitte zusätzlich „Markt auf Server speichern“.'
         ],
         knoepfe: [
             { w: 'ja', text: 'Archivieren', art: 'primaer' },
@@ -4422,7 +4840,9 @@ async function archiveCurrentAudit() {
         ]
     });
     if (wahl !== 'ja') return;
-    if (await archiviereAktuelleBegehung()) meldeGeschlossen();
+    if (!(await archiviereAktuelleBegehung())) return;
+    if (mitTeam) await teamArchivNachArchivieren();
+    meldeGeschlossen();
 }
 
 // Archiviert die laufende Begehung ohne Rueckfrage (auch fuer den Dialog
@@ -4810,15 +5230,7 @@ document.addEventListener(
             );
 
         if (btnSave) {
-            btnSave.addEventListener(
-                'click',
-                () => {
-                    saveState();
-                    showToast(
-                        'Gespeichert'
-                    );
-                }
-            );
+            btnSave.addEventListener('click', speichernMitTeamArchiv);
         }
 
         const btnSaveNas = document.getElementById('btn-save-nas');

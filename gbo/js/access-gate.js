@@ -104,6 +104,11 @@ function accessSha256Fallback(bytes) {
     const cfg = accessConfig();
     if (!cfg.aktiv) return;
 
+    // Ab Rev. 1.55: Ist auf dem Server die Anmeldung mit Benutzername und
+    // Passwort eingeschaltet, entfaellt der Zugangscode (die Anmeldeseite
+    // merkt sich das auf dem Geraet).
+    try { if (localStorage.getItem('asicAnmeldungAktiv') === '1') return; } catch (e) { /* weiter */ }
+
     let gemerkt = '';
     try { gemerkt = localStorage.getItem(ACCESS_STORAGE_KEY) || ''; } catch (e) { gemerkt = ''; }
     // Fruehere Fassungen merkten nur 'true' - gilt weiter, solange der
