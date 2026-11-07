@@ -11,9 +11,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Hilfe & FAQ – ASiC Handel</title>
 
-<link rel="stylesheet" href="css/styles.css?v=1.54-21">
-<script src="zugang-config.js"></script>
-<script src="js/access-gate.js?v=1.54-21"></script>
+<link rel="stylesheet" href="css/styles.css?v=1.55-10">
+<script src="js/anmeldung-pruefen.js?v=1.55-10"></script>
 
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -180,14 +179,14 @@
             </dl>
         </div>
 
-        <details class="h-item" id="q-einrichten" data-unit data-kw="einrichten einrichtung erster start neues gerät ipad installieren home-bildschirm zugangscode einstellungen server schlüssel">
+        <details class="h-item" id="q-einrichten" data-unit data-kw="einrichten einrichtung erster start neues gerät ipad installieren home-bildschirm einstellungen server schlüssel anmelden anmeldung startpasswort">
             <summary>Wie richte ich die App auf einem neuen Gerät ein?</summary>
             <div class="h-body">
                 <p class="h-short">Einmal pro Gerät, danach öffnet sich die App direkt:</p>
                 <ol>
                     <li>App-Adresse in Safari (iPad) bzw. Edge oder Chrome (PC) öffnen.</li>
                     <li>Installieren: iPad über <strong>Teilen → Zum Home-Bildschirm</strong>, PC über <strong>App installieren</strong> in der Adresszeile.</li>
-                    <li>Beim ersten Start der installierten App den <strong>Zugangscode</strong> eingeben. Den Code erhalten Sie von der Arbeitssicherheit.</li>
+                    <li>Mit Ihrem <strong>Anmeldenamen</strong> und dem <strong>Startpasswort</strong> anmelden und gleich ein eigenes Passwort festlegen. Beides erhalten Sie von einem Administrator.</li>
                     <li>Im Fuß <strong>Einstellungen</strong> öffnen, Server-Adresse und Zugriffsschlüssel eintragen, <strong>Speichern</strong>, dann <strong>Verbindung testen</strong>.</li>
                 </ol>
                 <details class="h-more">
@@ -204,7 +203,7 @@
             <div class="h-body">
                 <p class="h-short">Am Ende in dieser Reihenfolge:</p>
                 <ol>
-                    <li><strong>Datei ▾ → Team-Archiv › → Auf Server speichern</strong> – sichert die Begehung zentral.</li>
+                    <li><strong>Datei ▾ → Speichern</strong> (bzw. <strong>Team-Archiv › → Auf Server speichern</strong>) – sichert die Begehung zentral. Die Meldung zeigt, ob sie im Team-Archiv angekommen ist.</li>
                     <li>Bericht über <strong>Exportieren ▾</strong> erstellen und versenden.</li>
                     <li><strong>Datei ▾ → Begehung archivieren</strong> – legt einen festen Stand im Verlauf ab.</li>
                     <li><strong>Datei ▾ → Zurücksetzen</strong> – leert die Begehung für den nächsten Markt.</li>
@@ -503,6 +502,26 @@
             </div>
         </details>
 
+        <details class="h-item" id="q-pdf-archiv" data-unit data-kw="pdf archiv ablage abgelegt gesichert server ordner netzlaufwerk berechtigung einsehen ansehen nachgeholt offline">
+            <summary>Werden erstellte PDFs auch gesichert (PDF-Archiv)?</summary>
+            <div class="h-body">
+                <p class="h-short">Ja, wenn Sie angemeldet sind und ein Administrator das PDF-Archiv eingeschaltet hat: Jedes PDF, das Sie teilen, herunterladen, drucken oder per Mail vorbereiten, legt die App zusätzlich auf dem Server ab. Die Meldung „PDF zusätzlich im PDF-Archiv abgelegt“ bestätigt das.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <ul>
+                            <li>Abgelegt wird nach Markt, Datum und Berichtsart. Dafür muss im Bericht die <strong>Marktnummer</strong> eingetragen sein; fehlt sie, weist die App darauf hin.</li>
+                            <li>Ohne Verbindung merkt sich das Gerät die PDFs und legt sie automatisch ab, sobald wieder eine Verbindung besteht („Nachgeholt: … PDF im PDF-Archiv abgelegt“).</li>
+                            <li><strong>Einsehen</strong> können die PDFs nur Konten, denen ein Administrator in der <strong>Benutzerverwaltung</strong> das PDF-Archiv erlaubt hat (Administratoren immer). Sie finden es unter <strong>Einstellungen → PDF-Archiv</strong>. Jedes Öffnen wird protokolliert.</li>
+                            <li>Wird dasselbe PDF mehrmals erzeugt, kann es mehrfach im Archiv liegen – jeweils mit Uhrzeit im Dateinamen.</li>
+                            <li>Ein- und ausschalten kann das PDF-Archiv nur ein Administrator (Benutzerverwaltung → Team-Archiv und PDF-Archiv).</li>
+                            <li><strong>Löschen:</strong> Hat ein Administrator „Löschen im Archiv erlauben“ eingeschaltet, sehen Administratoren im PDF-Archiv und im Team-Archiv (Verlauf) einen Knopf <strong>Löschen</strong>. Gelöscht wird nach einer Rückfrage endgültig vom Server, für alle Geräte; der Vorgang steht im Protokoll. Prüfer können nicht löschen.</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+        </details>
+
     </section>
 
 
@@ -534,10 +553,10 @@
             <div class="h-body">
                 <p class="h-short">Die laufende Begehung wird automatisch gespeichert. Unter <strong>Datei ▾</strong> auf dem Prüfkatalog stehen außerdem bereit:</p>
                 <ul>
-                    <li><strong>Speichern</strong> – manueller Speichervorgang</li>
+                    <li><strong>Speichern</strong> – speichert auf diesem Gerät und, wenn vom Administrator eingeschaltet, automatisch auch ins Team-Archiv</li>
                     <li><strong>Team-Archiv ›</strong> – darin <strong>Auf Server speichern</strong> und <strong>Vom Server laden</strong></li>
                     <li><strong>JSON-Datei ›</strong> – darin <strong>Exportieren</strong> (Backup als Datei), <strong>Per Mail teilen</strong> (Datei im Anhang) und <strong>Laden</strong> (exportierten Stand öffnen)</li>
-                    <li><strong>Begehung archivieren</strong> – sichert einen vollständigen Schnappschuss</li>
+                    <li><strong>Begehung archivieren</strong> – sichert einen vollständigen Schnappschuss im Verlauf und, wenn vom Administrator eingeschaltet, automatisch auch im Team-Archiv</li>
                     <li><strong>Zurücksetzen</strong> – löscht die aktuelle Begehung samt Fotos</li>
                 </ul>
                 <p>Punkte mit <strong>›</strong> öffnen eine Unterebene, <strong>‹ Zurück</strong> führt wieder hinaus. Vor Archivieren, Zurücksetzen und JSON-Laden zeigt die App ein Hinweisfenster mit der betroffenen Begehung; beim Zurücksetzen und Laden kann die offene Begehung vorher im Verlauf archiviert werden. Lädt man eine JSON-Datei derselben Begehung (gleicher Markt, gleiches Datum), bleiben die Fotos auf dem Gerät erhalten, sonst werden sie entfernt.</p>
@@ -553,7 +572,7 @@
         <details class="h-item" id="q-archiv" data-unit data-kw="archiv archivieren verlauf mein verlauf abgeschlossen begehung">
             <summary>Wie archiviere ich eine Begehung?</summary>
             <div class="h-body">
-                <p class="h-short"><strong>Datei ▾ → Begehung archivieren</strong>. Die laufende Begehung bleibt bestehen; mit <strong>Zurücksetzen</strong> beginnen Sie danach eine neue.</p>
+                <p class="h-short"><strong>Datei ▾ → Begehung archivieren</strong>. Die laufende Begehung bleibt bestehen; mit <strong>Zurücksetzen</strong> beginnen Sie danach eine neue. Ist das automatische Team-Archiv eingeschaltet, landet der Stand dabei auch im Team-Archiv („Archiviert – auch im Team-Archiv“); ohne Verbindung wird das nachgeholt.</p>
                 <details class="h-more">
                     <summary>Mehr Details</summary>
                     <div>
@@ -593,7 +612,7 @@
         <details class="h-item" id="q-nas" data-unit data-kw="nas server speichern laden einstellungen zugriffsschlüssel cors versionen überschreiben">
             <summary>Wie sichere ich auf dem Server?</summary>
             <div class="h-body">
-                <p class="h-short"><strong>Datei ▾ → Team-Archiv › → Auf Server speichern</strong>, später <strong>Vom Server laden</strong>. Datum und Marktnummer müssen ausgefüllt sein, und die App muss über die Server-Adresse geöffnet sein.</p>
+                <p class="h-short">In der Regel automatisch: <strong>Speichern</strong> (Datei-Menü oder Aktionsplan) legt die Begehung auch im Team-Archiv ab. Gezielt geht es über <strong>Datei ▾ → Team-Archiv › → Auf Server speichern</strong>, später <strong>Vom Server laden</strong>. Datum und Marktnummer müssen ausgefüllt sein, und die App muss über die Server-Adresse geöffnet sein.</p>
                 <details class="h-more">
                     <summary>Mehr Details</summary>
                     <div>
@@ -609,6 +628,65 @@
             </div>
         </details>
 
+        <details class="h-item" id="q-anmelden" data-unit data-kw="anmelden anmeldung login benutzername anmeldename passwort startpasswort abmelden sitzung abgelaufen erneut anmelden">
+            <summary>Wie melde ich mich an – und warum fragt die App erneut?</summary>
+            <div class="h-body">
+                <p class="h-short">Ist auf Ihrem Server die Anmeldung eingeschaltet, öffnet sich die App erst nach dem Anmelden mit <strong>Anmeldename</strong> und <strong>Passwort</strong>. Die Anmeldung gilt einen Arbeitstag (10 Stunden).</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <ul>
+                            <li>Beim ersten Anmelden mit dem Startpasswort legen Sie sofort ein eigenes Passwort fest (mindestens 10 Zeichen, nicht der Anmeldename). Ein kurzer Satz ist leicht zu merken und schwer zu erraten.</li>
+                            <li>Ist die Anmeldung abgelaufen, fragt die App beim nächsten Speichern oder Laden im Fenster <strong>Bitte erneut anmelden</strong> nach dem Passwort. Ihre Eingaben bleiben erhalten; danach geht es direkt weiter.</li>
+                            <li>Ohne Verbindung (z. B. im Markt) arbeitet eine geöffnete App normal weiter. Gespeichert wird auf dem Server, sobald wieder eine Verbindung besteht und Sie angemeldet sind.</li>
+                            <li>Nach 5 falschen Passwörtern ist das Konto 15 Minuten gesperrt.</li>
+                            <li><strong>Einstellungen → Anmeldung</strong> zeigt, als wer Sie angemeldet sind und bis wann. Dort können Sie Ihr <strong>Passwort ändern</strong> und sich <strong>abmelden</strong> – das empfiehlt sich an gemeinsam genutzten Geräten.</li>
+                            <li>Passwort vergessen? Ein Administrator vergibt Ihnen ein neues Startpasswort.</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-benutzer" data-unit data-kw="benutzer benutzerverwaltung administrator admin konto anlegen sperren löschen passwort zurücksetzen rolle prüfer protokoll">
+            <summary>Wie verwalte ich Benutzer? (Administratoren)</summary>
+            <div class="h-body">
+                <p class="h-short"><strong>Einstellungen → Anmeldung → Benutzerverwaltung</strong>. Dort legen Administratoren Konten an, setzen Passwörter zurück, sperren, ändern die Rolle oder löschen ein Konto.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <ul>
+                            <li>Ein neues Konto bekommt ein <strong>Startpasswort</strong>. Es wird nur einmal angezeigt – bitte persönlich übergeben, nicht per E-Mail.</li>
+                            <li><strong>Prüfer</strong> arbeiten mit der App und dem Team-Archiv, <strong>Administratoren</strong> zusätzlich mit der Benutzerverwaltung.</li>
+                            <li>Sperren oder Zurücksetzen meldet die Person auf allen Geräten sofort ab. Begehungen im Team-Archiv bleiben beim Löschen eines Kontos erhalten.</li>
+                            <li>Das eigene Konto kann man nicht sperren, herabstufen oder löschen; mindestens ein Administrator bleibt immer erhalten.</li>
+                            <li>Das <strong>Protokoll</strong> zeigt Anmeldungen, Fehlversuche und Änderungen an Konten.</li>
+                            <li>Passwörter sieht niemand – auch kein Administrator. Auf dem Server liegt nur ein nicht umkehrbarer Prüfwert.</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-auto-team" data-unit data-kw="automatisch team-archiv speichern ohne verbindung nachholen offline schalter administrator">
+            <summary>Speichert die App automatisch ins Team-Archiv?</summary>
+            <div class="h-body">
+                <p class="h-short">Ja, wenn der Administrator das eingeschaltet hat (Voreinstellung): Ein Tipp auf <strong>Speichern</strong> sichert die Begehung auf diesem Gerät <em>und</em> im Team-Archiv.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <ul>
+                            <li>Die Meldung danach zeigt das Ergebnis: „Gespeichert – auch im Team-Archiv“, „das Team-Archiv ist bereits aktuell“ oder „ins Team-Archiv, sobald wieder eine Verbindung besteht“.</li>
+                            <li><strong>Ohne Verbindung</strong> merkt sich die App die Begehung und holt das Speichern von selbst nach, sobald das Gerät wieder online ist und der Prüfkatalog oder Aktionsplan offen ist.</li>
+                            <li>Fehlen <strong>Datum oder Marktnummer</strong>, wird nur auf dem Gerät gespeichert.</li>
+                            <li>Hat inzwischen jemand anderes dieselbe Begehung gespeichert, fragt die App wie gewohnt nach (eigene Fassung, überschreiben oder abbrechen).</li>
+                            <li>Ob automatisch gespeichert wird, steht unter <strong>Einstellungen → Server-Verbindung</strong>. Ein- und ausschalten können nur Administratoren in der <strong>Benutzerverwaltung</strong>; es gilt dann für alle Geräte.</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+        </details>
+
         <details class="h-item" id="q-team" data-unit data-kw="team archiv nas kollegen alle märkte überblick">
             <summary>Was ist das Team-Archiv?</summary>
             <div class="h-body">
@@ -616,7 +694,7 @@
                 <details class="h-more">
                     <summary>Mehr Details</summary>
                     <div>
-                        <p>So behält das ganze Team den Überblick, welche Märkte schon geprüft wurden. Sie können jede Begehung als PDF exportieren oder in der App anzeigen. Fotos sind nicht enthalten. Der Reiter funktioniert nur, wenn die App über die Server-Adresse läuft oder in den Einstellungen eine Server-Adresse hinterlegt ist.</p>
+                        <p>So behält das ganze Team den Überblick, welche Märkte schon geprüft wurden. Mit Anmeldung steht bei jeder Begehung, wer sie gespeichert hat. Sie können jede Begehung als PDF exportieren oder in der App anzeigen. Fotos sind nicht enthalten. Der Reiter funktioniert nur, wenn die App über die Server-Adresse läuft oder in den Einstellungen eine Server-Adresse hinterlegt ist.</p>
                         <p>Begehungen, die mit der Version 2 (Begehung und Gefährdungsbeurteilung) gespeichert wurden, erscheinen ebenfalls und werden in der Team-Auswertung mitgezählt. Öffnen und speichern Sie eine solche Begehung hier, bleibt ihre Gefährdungsbeurteilung auf dem Server erhalten.</p>
                     </div>
                 </details>
@@ -743,6 +821,25 @@
         <h2>Wenn etwas nicht klappt</h2>
 
         <p class="h-section-intro">Zu jedem Problem: was meist dahintersteckt und was Sie tun können.</p>
+
+        <details class="h-item h-problem" id="p-anmeldung" data-unit data-kw="anmeldung klappt nicht passwort falsch gesperrt anmeldeseite immer wieder login fehler">
+            <summary>Die Anmeldung klappt nicht</summary>
+            <div class="h-body">
+                <dl class="h-ps">
+                    <dt>Ursache</dt>
+                    <dd>Passwort vertippt, Konto nach zu vielen Fehlversuchen kurz gesperrt, keine Verbindung zum Server, oder die App wurde nicht über die Server-Adresse geöffnet.</dd>
+                    <dt>Lösung</dt>
+                    <dd>
+                        <ol>
+                            <li>Groß-/Kleinschreibung beim Passwort prüfen (der Anmeldename wird immer kleingeschrieben).</li>
+                            <li>Bei „Zu viele falsche Passwörter“ 15 Minuten warten – oder einen Administrator um ein neues Startpasswort bitten.</li>
+                            <li>Erscheint die Anmeldeseite immer wieder: die App über die Server-Adresse öffnen und prüfen, ob Website-Daten/Cookies für diese Adresse erlaubt sind.</li>
+                            <li>Bei „Keine Verbindung“: Zum Anmelden wird der Server gebraucht. Eine bereits geöffnete App arbeitet ohne Verbindung weiter.</li>
+                        </ol>
+                    </dd>
+                </dl>
+            </div>
+        </details>
 
         <details class="h-item h-problem" id="p-foto" data-unit data-kw="foto speichern hängt seite safari privat indexeddb speicher fehler">
             <summary>Fotos lassen sich nicht speichern, oder die Seite hängt</summary>
@@ -874,18 +971,19 @@
         <details class="h-item" id="w-version" data-unit data-kw="version revision stand fußzeile">
             <summary>Welche Version der App nutze ich?</summary>
             <div class="h-body">
-                <p class="h-short">Die Revision steht in der Fußzeile jeder Seite und auf jedem PDF. Aktuell ist die Revision <span data-zahl="revision">1.54</span> vom <span data-zahl="revision_datum">25.10.2026</span>.</p>
+                <p class="h-short">Die Revision steht in der Fußzeile jeder Seite und auf jedem PDF. Aktuell ist die Revision <span data-zahl="revision">1.55</span> vom <span data-zahl="revision_datum">06.11.2026</span>.</p>
             </div>
         </details>
 
-        <details class="h-item" id="w-zugang" data-unit data-kw="zugangscode passwort code abfrage installierte app">
-            <summary>Warum sehe ich die Zugangscode-Abfrage nicht immer?</summary>
+        <details class="h-item" id="w-zugang" data-unit data-kw="zugang schutz anmeldung passwort wer kann die app öffnen zugriff fremde">
+            <summary>Wer kann die App öffnen?</summary>
             <div class="h-body">
-                <p class="h-short">Sie erscheint nur in der installierten App-Ansicht, nicht im normalen Browser-Tab. Sie ist eine organisatorische Hürde und kein echter Zugriffsschutz.</p>
+                <p class="h-short">Ist auf Ihrem Server die Anmeldung eingeschaltet, öffnen sich App und Team-Archiv nur nach der Anmeldung mit Anmeldename und Passwort. Eine zusätzliche Code-Abfrage gibt es nicht mehr.</p>
                 <details class="h-more">
                     <summary>Mehr Details</summary>
                     <div>
-                        <p>Der Code wird nur einmal pro Gerät abgefragt. Ändert der Betreiber den Code (Datei <code>zugang-config.js</code>), fragt jedes Gerät beim nächsten Start einmal neu.</p>
+                        <p>Die Anmeldung prüft der Server selbst: Ohne gültige Sitzung liefert er weder die Seiten der App noch gespeicherte Begehungen oder PDFs aus. Eine Anmeldung gilt höchstens einen Arbeitstag; nach fünf Fehlversuchen wird das Konto kurz gesperrt.</p>
+                        <p>Ist die Anmeldung auf dem Server ausgeschaltet, ist die App für jeden erreichbar, der die Adresse kennt. Die Begehungen auf dem Gerät bleiben trotzdem nur auf diesem Gerät.</p>
                     </div>
                 </details>
             </div>
@@ -979,11 +1077,11 @@
 </footer>
 
 
-<script src="js/audit-data.js?v=1.54-21"></script>
-<script src="js/text.js?v=1.54-21"></script>
-<script src="js/app.js?v=1.54-21"></script>
+<script src="js/audit-data.js?v=1.55-10"></script>
+<script src="js/text.js?v=1.55-10"></script>
+<script src="js/app.js?v=1.55-10"></script>
 
-<script src="js/hilfe-suche.js?v=1.54-21"></script>
+<script src="js/hilfe-suche.js?v=1.55-10"></script>
 
 </body>
 </html>
