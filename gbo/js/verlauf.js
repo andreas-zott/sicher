@@ -139,26 +139,7 @@ async function onArchiveFollowUp(id) {
 }
 
 async function onArchiveDelete(id) {
-    const r = archiveCache.find(x => x.id === id);
-    const c = (r && r.companyInfo) || {};
-    const wahl = await zeigeHinweisFenster({
-        titel: 'Aus dem Verlauf löschen',
-        sub: 'Archivierte Begehung auf diesem Gerät entfernen',
-        karte: {
-            markt: c.marktnummer ? 'Markt ' + c.marktnummer : 'ohne Marktnummer',
-            datum: c.datum ? formatDatumDe(c.datum) : '–',
-            ort: [c.plzOrt, c.firma].filter(Boolean).join(' · ')
-        },
-        punkte: [
-            'Der Schnappschuss wird mit seinen Fotos unwiderruflich aus „Mein Verlauf“ gelöscht.',
-            'Die laufende Begehung und Stände im Team-Archiv bleiben unverändert.'
-        ],
-        knoepfe: [
-            { w: 'ja', text: 'Löschen', art: 'warn' },
-            { w: '', text: 'Abbrechen' }
-        ]
-    });
-    if (wahl !== 'ja') return;
+    if (!confirm('Diese archivierte Begehung wirklich unwiderruflich löschen?')) return;
     try {
         await deleteArchivedAudit(id);
         archiveCache = archiveCache.filter(r => r.id !== id);
@@ -280,54 +261,6 @@ async function ladeTeamBegehungMitStatus(fileName, aktion) {
     }
 }
 
-// Löschen im Team-Archiv (ab 2.3.0-3): nur Administratoren und nur, wenn
-// der Schalter "Löschen im Archiv" in der Benutzerverwaltung an ist. Der
-// Server prüft das bei jedem Löschen selbst noch einmal.
-let teamLoeschenErlaubt = false;
-if (window.asicAnmeldung && typeof window.asicAnmeldung.then === 'function') {
-    window.asicAnmeldung.then(s => {
-        teamLoeschenErlaubt = !!(s && s.aktiv && s.benutzer && s.benutzer.rolle === 'admin' && s.archivLoeschen);
-        if (teamLoeschenErlaubt && teamArchiveCache.length) renderTeamArchiveList();
-    }).catch(() => {});
-}
-
-async function onTeamArchiveDelete(fileName) {
-    const e = teamArchiveCache.find(x => x.fileName === fileName) || {};
-    const wahl = await zeigeHinweisFenster({
-        titel: 'Aus dem Team-Archiv löschen',
-        sub: 'Für alle Geräte, endgültig',
-        karte: {
-            markt: e.marktnummer ? 'Markt ' + e.marktnummer : 'ohne Marktnummer',
-            datum: e.datum || '–',
-            ort: [e.plzOrt, e.firma].filter(Boolean).join(' · ')
-        },
-        punkte: [
-            'Der Markt-Datensatz (Begehung und Gefährdungsbeurteilung) wird mit allen älteren Ständen endgültig vom Server gelöscht und ist danach für niemanden mehr abrufbar.',
-            'Archive auf den Geräten („Mein Verlauf“) und PDFs im PDF-Archiv bleiben erhalten.',
-            'Der Vorgang wird im Protokoll vermerkt.'
-        ],
-        knoepfe: [
-            { w: 'ja', text: 'Endgültig löschen', art: 'warn' },
-            { w: '', text: 'Abbrechen' }
-        ]
-    });
-    if (wahl !== 'ja') return;
-    try {
-        const res = await nasFetch('loeschen.php', '', {
-            method: 'POST', cache: 'no-store',
-            headers: { 'Content-Type': 'application/json', 'X-ASiC': '1' },
-            body: JSON.stringify({ datei: fileName })
-        });
-        const j = await res.json().catch(() => ({}));
-        if (!res.ok || !j.ok) throw new Error(j.message || ('Fehler ' + res.status));
-        teamArchiveCache = teamArchiveCache.filter(x => x.fileName !== fileName);
-        renderTeamArchiveList();
-        showToast('Gelöscht – ' + (e.marktnummer ? 'Markt ' + e.marktnummer + ' vom ' + (e.datum || '–') : fileName) + ' ist nicht mehr im Team-Archiv.');
-    } catch (err) {
-        showToast('Löschen fehlgeschlagen: ' + (err.message === 'Failed to fetch' ? 'Der Server ist nicht erreichbar.' : err.message), 'error');
-    }
-}
-
 function renderTeamArchiveList() {
     const container = document.getElementById('team-archive-list');
     if (!container) return;
@@ -377,7 +310,6 @@ function renderTeamArchiveList() {
                     <button class="btn btn-secondary btn-small" ${aktionAttr('click', 'onTeamArchiveRestore', '$closest-filename')}>📂 In App anzeigen</button>
                     <button class="btn btn-secondary btn-small" ${aktionAttr('click', 'onTeamArchiveFollowUp', '$closest-filename')} title="Neue Begehung für diesen Markt mit den offenen Maßnahmen dieser Begehung">🔁 Wiederholungsbegehung</button>
                 </div>
-                ${teamLoeschenErlaubt ? `<button class="btn-link photo-delete" ${aktionAttr('click', 'onTeamArchiveDelete', '$closest-filename')}>🗑️ Löschen</button>` : ''}
             </div>
         </div>`;
     }).join('');

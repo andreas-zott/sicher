@@ -482,7 +482,7 @@ async function onMeasurePhotosCaptured(
             if (window.ASiCStorage) {
                 const pruefung = await ASiCStorage.check(blob.size);
                 if (!pruefung.ok) {
-                    (window.asicMeldung||window.alert)(pruefung.message);
+                    alert(pruefung.message);
                     failed++;
                     stopp = true;
                     continue;
@@ -1079,7 +1079,17 @@ document.addEventListener(
 
         if (btnSave) {
 
-            btnSave.addEventListener('click', speichernMitTeamArchiv);
+            btnSave.addEventListener(
+                'click',
+                () => {
+
+                    saveState();
+
+                    showToast(
+                        'Gespeichert'
+                    );
+                }
+            );
         }
 
     }

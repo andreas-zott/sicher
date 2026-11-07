@@ -23,10 +23,7 @@
         'benutzer-angelegt': 'Benutzer angelegt',
         'benutzer-geaendert': 'Benutzer geändert',
         'benutzer-geloescht': 'Benutzer gelöscht',
-        'einrichtung': 'Erster Administrator angelegt',
-        'einstellung-geaendert': 'Einstellung geändert',
-        'pdf-abruf': 'PDF angesehen',
-        'archiv-geloescht': 'Im Archiv gelöscht'
+        'einrichtung': 'Erster Administrator angelegt'
     };
 
     function zeit(iso) {
@@ -120,8 +117,7 @@
 
         const info = document.createElement('div');
         info.className = 'bv-info';
-        info.textContent = status(b) + ' · letzte Anmeldung: ' + (b.letzteAnmeldung ? zeit(b.letzteAnmeldung) : 'noch nie')
-            + (b.rolle === 'admin' ? ' · PDF-Archiv: ja (Administrator)' : ' · PDF-Archiv: ' + (b.pdfLesen ? 'ja' : 'nein'));
+        info.textContent = status(b) + ' · letzte Anmeldung: ' + (b.letzteAnmeldung ? zeit(b.letzteAnmeldung) : 'noch nie');
 
         const aktionen = document.createElement('div');
         aktionen.className = 'bv-aktionen';
@@ -129,12 +125,6 @@
             if (!await frage('Passwort zurücksetzen?', b.name + ' bekommt ein neues Startpasswort und wird auf allen Geräten abgemeldet.', 'Zurücksetzen')) return;
             ausfuehren({ aktion: 'zuruecksetzen', kennung: b.kennung }, j => startpasswortZeigen('Neues Startpasswort für ' + b.name, j.startpasswort));
         }));
-        if (b.rolle !== 'admin') {
-            aktionen.append(knopf(b.pdfLesen ? 'PDF-Archiv entziehen' : 'PDF-Archiv erlauben', async () => {
-                if (!b.pdfLesen && !await frage('PDF-Archiv erlauben?', b.name + ' kann danach alle abgelegten PDFs ansehen – mit Fotos, Namen und Unterschriften. Jeder Abruf wird protokolliert.', 'Erlauben')) return;
-                ausfuehren({ aktion: 'aendern', kennung: b.kennung, pdfLesen: !b.pdfLesen });
-            }));
-        }
         if (b.kennung !== ich) {
             aktionen.append(knopf(b.aktiv ? 'Sperren' : 'Entsperren', async () => {
                 if (b.aktiv && !await frage('Konto sperren?', b.name + ' kann sich danach nicht mehr anmelden und wird auf allen Geräten abgemeldet.', 'Sperren', true)) return;
@@ -154,48 +144,11 @@
         return z;
     }
 
-    function zeigeEinstellungen(e) {
-        if (!e) return;
-        el('bv-auto').checked = !!e.autoTeamArchiv;
-        el('bv-pdf').checked = e.autoPdfArchiv !== false;
-        el('bv-loeschen').checked = !!e.archivLoeschen;
-        try { localStorage.setItem('asicAutoPdfArchiv', e.autoPdfArchiv !== false ? '1' : '0'); } catch (err) { /* ohne Speicher */ }
-        el('bv-auto-status').textContent = e.geaendert
-            ? 'Zuletzt geändert am ' + zeit(e.geaendert) + ' Uhr von ' + (e.von || '–') + '.'
-            : 'Voreinstellung (noch nicht geändert).';
-        try { localStorage.setItem('asicAutoTeamArchiv', e.autoTeamArchiv ? '1' : '0'); } catch (err) { /* ohne Speicher */ }
-    }
-
-    function schalterVerbinden(id, feld, text) {
-        el(id).addEventListener('change', async () => {
-            const schalter = el(id);
-            const wert = schalter.checked;
-            schalter.disabled = true;
-            fehler('');
-            try {
-                const daten = { aktion: 'einstellung' };
-                daten[feld] = wert;
-                const j = await senden(daten);
-                zeigeEinstellungen(j.einstellungen);
-                if (typeof showToast === 'function') showToast(text + ': ' + (wert ? 'an' : 'aus'));
-            } catch (err) {
-                schalter.checked = !wert;
-                fehler(err.message);
-            } finally {
-                schalter.disabled = false;
-            }
-        });
-    }
-    schalterVerbinden('bv-auto', 'autoTeamArchiv', 'Automatisch ins Team-Archiv');
-    schalterVerbinden('bv-pdf', 'autoPdfArchiv', 'PDFs automatisch im PDF-Archiv');
-    schalterVerbinden('bv-loeschen', 'archivLoeschen', 'Löschen im Archiv');
-
     async function laden() {
         const liste = el('bv-liste');
         try {
             const j = await holen('aktion=liste');
             ich = j.ich || '';
-            zeigeEinstellungen(j.einstellungen);
             liste.textContent = '';
             if (!j.benutzer.length) {
                 liste.innerHTML = '<p class="s-hint">Noch keine Benutzer.</p>';
@@ -297,12 +250,12 @@
         const s = window.asicAnmeldung ? await window.asicAnmeldung : null;
         if (s && s.aktiv && s.benutzer && s.benutzer.rolle !== 'admin') {
             fehler('Die Benutzerverwaltung ist Administratoren vorbehalten.');
-            document.querySelectorAll('#neu, #liste, #protokoll, #team').forEach(x => { x.hidden = true; });
+            document.querySelectorAll('#neu, #liste, #protokoll').forEach(x => { x.hidden = true; });
             return;
         }
         if (s && !s.aktiv) {
             fehler('Auf diesem Server ist die Anmeldung nicht eingeschaltet (config.php).');
-            document.querySelectorAll('#neu, #liste, #protokoll, #team').forEach(x => { x.hidden = true; });
+            document.querySelectorAll('#neu, #liste, #protokoll').forEach(x => { x.hidden = true; });
             return;
         }
         laden();

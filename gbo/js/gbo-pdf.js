@@ -67,8 +67,6 @@
     }
 
     function toast(message, type) {
-        // Meldung im Stil der App (showToast aus js/app.js), sonst einfach
-        if (typeof showToast === 'function') { showToast(message, type || 'success'); return; }
         document.querySelectorAll('.toast').forEach(t => t.remove());
         const el = document.createElement('div');
         el.className = 'toast ' + (type || 'success');
@@ -1303,21 +1301,6 @@
         return typeof laeuftInTauri === 'function' && laeuftInTauri();
     }
 
-    // PDF-Archiv (ab 2.3.0-3): erstelltes PDF zusaetzlich auf dem Server
-    // ablegen (pdfArchivieren aus js/app.js). Datum "TT.MM.JJJJ" -> ISO.
-    function archivieren(blob, data, mode) {
-        if (typeof pdfArchivieren !== 'function') return;
-        const meta = (data && data.meta) || {};
-        let datum = String(meta.date || data.fileDate || '').trim();
-        const m = datum.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
-        if (m) datum = m[3] + '-' + m[2].padStart(2, '0') + '-' + m[1].padStart(2, '0');
-        pdfArchivieren(blob, mode, {
-            markt: meta.marktnummer || '',
-            datum,
-            art: mode === 'plan' ? 'gbu-plan' : mode === 'massnahmen' ? 'gbu-massnahmen' : 'gbu-gesamt'
-        });
-    }
-
     async function run(action, measuresOnly, ctx, variant) {
         const mode = variant === 'plan' ? 'plan' : measuresOnly ? 'massnahmen' : 'gesamt';
         const opts = printOpts();
@@ -1330,9 +1313,7 @@
                 toast('PDF wird erstellt …');
                 const data = await ctx.collect(measuresOnly, { images: mode === 'plan' ? false : !(mode === 'gesamt' && opts.noImages) });
                 const doc = await build(data, mode, ctx.guidance, opts);
-                const blob = doc.output('blob');
-                archivieren(blob, data, mode);
-                await mailMitPdfDesktop(mailSubject(data.meta, mode), mailText(data, mode), blob, filename(data, mode));
+                await mailMitPdfDesktop(mailSubject(data.meta, mode), mailText(data, mode), doc.output('blob'), filename(data, mode));
             } catch (err) {
                 console.error(err);
                 toast('PDF-Fehler: ' + (err && err.message ? err.message : 'Fehler'), 'error');
@@ -1366,7 +1347,6 @@
             const doc = await build(data, mode, ctx.guidance, opts);
             const name = filename(data, mode);
             const blob = doc.output('blob');
-            archivieren(blob, data, mode);
 
             if (action === 'print' && tauri) {
                 if (await druckePdfImRahmen(blob)) {

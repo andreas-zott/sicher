@@ -175,13 +175,11 @@
             return;
         }
         if (s && Number.isFinite(s.passwortMinLaenge)) minLaenge = s.passwortMinLaenge;
-        // Mit Anmeldung braucht die installierte App keinen Zugangscode mehr
         try {
-            if (s && typeof s.autoTeamArchiv === 'boolean') localStorage.setItem('asicAutoTeamArchiv', s.autoTeamArchiv ? '1' : '0');
-            if (s && typeof s.autoPdfArchiv === 'boolean') localStorage.setItem('asicAutoPdfArchiv', s.autoPdfArchiv ? '1' : '0');
-            if (s && s.aktiv) localStorage.setItem('asicAnmeldungAktiv', '1');
-            else localStorage.removeItem('asicAnmeldungAktiv');
-        } catch (e) { /* ohne Speicher: Zugangscode bleibt */ }
+            // Merker des früheren Zugangscodes (bis 2.3.0-1) aufräumen
+            localStorage.removeItem('asicAnmeldungAktiv');
+            localStorage.removeItem('asicHandelAccessGranted');
+        } catch (e) { /* ohne Speicher: weiter */ }
         if (!s || !s.aktiv) {
             hinweis('Keine Anmeldung nötig', 'Auf diesem Server ist die Anmeldung nicht eingeschaltet.', true);
             setTimeout(weiter, 1500);

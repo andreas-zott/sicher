@@ -36,10 +36,9 @@
             if (!res.ok) return null;
             const s = await res.json();
             try {
-                if (s && typeof s.autoTeamArchiv === 'boolean') localStorage.setItem('asicAutoTeamArchiv', s.autoTeamArchiv ? '1' : '0');
-                if (s && typeof s.autoPdfArchiv === 'boolean') localStorage.setItem('asicAutoPdfArchiv', s.autoPdfArchiv ? '1' : '0');
-                if (s && s.aktiv) localStorage.setItem('asicAnmeldungAktiv', '1');
-                else localStorage.removeItem('asicAnmeldungAktiv');
+                // Merker des früheren Zugangscodes (bis 2.3.0-1) aufräumen
+                localStorage.removeItem('asicAnmeldungAktiv');
+                localStorage.removeItem('asicHandelAccessGranted');
             } catch (e) { /* weiter */ }
             if (!s || !s.aktiv) return s || null;
             if (!s.angemeldet || (s.benutzer && s.benutzer.mussAendern)) {

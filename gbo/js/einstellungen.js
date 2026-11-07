@@ -135,19 +135,7 @@ function initSettingsPage() {
     });
 
     btnKeyEntfernen.addEventListener('click', async () => {
-        const wahl = await zeigeHinweisFenster({
-            titel: 'Zugriffsschlüssel entfernen',
-            sub: 'Nur auf diesem Gerät',
-            punkte: [
-                'Der Zugriffsschlüssel wird auf diesem Gerät gelöscht.',
-                'Das Team-Archiv ist danach erst wieder erreichbar, wenn der Schlüssel neu eingetragen ist.'
-            ],
-            knoepfe: [
-                { w: 'ja', text: 'Entfernen', art: 'warn' },
-                { w: '', text: 'Abbrechen' }
-            ]
-        });
-        if (wahl !== 'ja') return;
+        if (!confirm('Zugriffsschlüssel auf diesem Gerät entfernen? Das Team-Archiv ist danach erst wieder nach Eintragen des Schlüssels erreichbar.')) return;
         await nasSchluesselLoeschen();
         keyBearbeiten = false;
         zeigeKeyZustand();
@@ -192,19 +180,7 @@ function initSettingsPage() {
     });
 
     btnReset.addEventListener('click', async () => {
-        const wahl = await zeigeHinweisFenster({
-            titel: 'Server-Verbindung zurücksetzen',
-            sub: 'Nur auf diesem Gerät',
-            punkte: [
-                'Server-Adresse und Zugriffsschlüssel werden auf diesem Gerät gelöscht.',
-                'Begehungen, Fotos und Archiv bleiben unverändert.'
-            ],
-            knoepfe: [
-                { w: 'ja', text: 'Zurücksetzen', art: 'warn' },
-                { w: '', text: 'Abbrechen' }
-            ]
-        });
-        if (wahl !== 'ja') return;
+        if (!confirm('Server-Adresse und Zugriffsschlüssel auf diesem Gerät zurücksetzen? Begehungen, Fotos und Archiv bleiben unverändert.')) return;
         input.value = '';
         try {
             localStorage.removeItem('nasBaseUrl');
@@ -555,22 +531,6 @@ function zeigeUeber() {
 }
 
 // ===== Anmeldung (ab Rev. 1.55) =====
-// Anzeige "Beim Speichern automatisch ins Team-Archiv" (ab 2.3.0-2) – legt ein
-// Administrator fest (Benutzerverwaltung) bzw. ohne Anmeldung config.php
-async function initTeamAutoInfo() {
-    const ziel = document.getElementById('team-auto-info');
-    if (!ziel) return;
-    const s = window.asicAnmeldung ? await window.asicAnmeldung : null;
-    const an = typeof autoTeamArchivAn === 'function' ? autoTeamArchivAn() : true;
-    let wer = '';
-    if (s && s.aktiv) wer = s.benutzer && s.benutzer.rolle === 'admin' ? ' – änderbar unter Benutzerverwaltung' : ' (vom Administrator festgelegt)';
-    else if (s) wer = ' (vom Server festgelegt)';
-    const pdf = typeof autoPdfArchivAn === 'function' ? autoPdfArchivAn() : true;
-    ziel.textContent = 'Beim Speichern und Archivieren automatisch ins Team-Archiv: ' + (an ? 'an' : 'aus')
-        + ' · Erstellte PDFs im PDF-Archiv ablegen: ' + (pdf ? 'an' : 'aus')
-        + (s && s.aktiv && s.benutzer && s.benutzer.rolle === 'admin' ? ' · Löschen im Archiv: ' + (s.archivLoeschen ? 'an' : 'aus') : '') + wer;
-}
-
 async function initAnmeldung() {
     const bereich = document.getElementById('anmeldung');
     if (!bereich || !window.asicAnmeldung) return;
@@ -587,7 +547,6 @@ async function initAnmeldung() {
             + ende.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) + ' Uhr. Danach fragt die App beim nächsten Speichern oder Öffnen erneut nach dem Passwort.';
     }
     document.getElementById('btn-an-benutzer').hidden = b.rolle !== 'admin';
-    document.getElementById('btn-an-pdf').hidden = !b.pdfLesen;
     document.getElementById('btn-an-abmelden').addEventListener('click', async () => {
         const st = document.getElementById('an-status');
         try {
@@ -606,7 +565,6 @@ async function initAnmeldung() {
 
 document.addEventListener('DOMContentLoaded', () => {
     initAnmeldung();
-    initTeamAutoInfo();
     initSettingsPage();
     initDiagnose();
     initUeber();

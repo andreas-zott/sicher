@@ -88,7 +88,7 @@ async function onPhotosCaptured(fileList) {
             if (window.ASiCStorage) {
                 const pruefung = await ASiCStorage.check(blob.size);
                 if (!pruefung.ok) {
-                    (window.asicMeldung||window.alert)(pruefung.message);
+                    alert(pruefung.message);
                     failed++;
                     stopp = true;
                     continue;
