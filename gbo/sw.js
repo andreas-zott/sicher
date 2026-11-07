@@ -15,7 +15,7 @@
 //     Server. Das ist sicher, weil sich bei jedem Update der Zusatz ?v=
 //     aendert - dann ist es fuer den Browser eine neue Adresse und wird
 //     frisch geladen. 
-//   - HTML-Seiten, zugang-config.js, manifest, Icons: zuerst vom Server
+//   - HTML-Seiten, manifest, Icons: zuerst vom Server
 //     (cache: 'no-cache', damit nicht der HTTP-Cache des Browsers eine alte
 //     Fassung liefert), bei fehlender Verbindung aus dem Cache.
 //   - .php und fremde Adressen (anderer Server): nie angefasst.
@@ -34,8 +34,8 @@ const APP_VERSION = '2.3.0';
 // nur Code, aber nicht die sichtbare Revision, wird NUR dieser Zaehler
 // erhoeht ('2.2.0-2', '2.2.0-3' …). Er steht im Cache-Namen und im ?v=-Zusatz
 // der HTML-Seiten und sorgt dafuer, dass die Geraete die neuen Dateien holen.
-const BUILD = '2.3.0-3';
-const CACHE_NAME = 'asic-handel-v2.3.0-3';   // immer = 'asic-handel-v' + BUILD
+const BUILD = '2.3.0-2';
+const CACHE_NAME = 'asic-handel-v2.3.0-2';   // immer = 'asic-handel-v' + BUILD
 
 
 // ==========================================================================
@@ -51,7 +51,6 @@ const PRECACHE_URLS = [
     './verlauf.html',
     './einstellungen.html',
     './benutzer.html',
-    './pdf-archiv.html',
     './dokumentation.html',
     './hilfe.html',
     './auswertung.html',
@@ -64,7 +63,6 @@ const PRECACHE_URLS = [
     './quellen.html',
 
     './manifest.json',
-    './zugang-config.js',
 
     './icon-192.png',
     './icon-512.png',
@@ -80,7 +78,6 @@ const PRECACHE_VERSIONIERT = [
     './css/gbo.css',
 
     './js/app.js',
-    './js/access-gate.js',
     './js/anmeldung-pruefen.js',
     './js/audit-data.js',
     './js/text.js',
@@ -91,7 +88,6 @@ const PRECACHE_VERSIONIERT = [
     './js/verlauf.js',
     './js/einstellungen.js',
     './js/benutzer.js',
-    './js/pdf-archiv.js',
     './js/auswertung-logik.js',
     './js/auswertung.js',
     './js/auswertung-team.js',

@@ -9,7 +9,7 @@
 <meta name="referrer" content="same-origin">
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <title>Datenschutzerklärung – ASiC Handel</title>
-<link href="css/styles.css?v=2.3.0-3" rel="stylesheet"/>
+<link href="css/styles.css?v=2.3.0-2" rel="stylesheet"/>
 <link href="manifest.json" rel="manifest"/>
 <meta name="theme-color" content="#1c2226"/>
 <style>
@@ -63,7 +63,7 @@
   <p>Welche Daten ASiC Handel verarbeitet, wo sie liegen und wann sie das Gerät verlassen.</p>
   <div class="doku-meta-grid">
     <div class="doku-meta-item"><div class="doku-meta-label">App</div><div class="doku-meta-value">ASiC Handel Rev. <span data-zahl="revision">2.3.0</span></div></div>
-    <div class="doku-meta-item"><div class="doku-meta-label">Stand</div><div class="doku-meta-value"><span data-zahl="revision_datum">06.11.2026</span></div></div>
+    <div class="doku-meta-item"><div class="doku-meta-label">Stand</div><div class="doku-meta-value"><span data-zahl="revision_datum">05.11.2026</span></div></div>
     <div class="doku-meta-item"><div class="doku-meta-label">Anbieter</div><div class="doku-meta-value">Andreas Zott</div></div>
   </div>
 </div>
@@ -146,7 +146,6 @@
       <tr><td>GBO-Bildbelege</td><td>IndexedDB auf dem Gerät; im GBO-Stand nur ein kleines Vorschaubild</td><td>Bild entfernen oder „GBO zurücksetzen“</td></tr>
       <tr><td>Verbindung zum eigenen Server</td><td>Browser-Speicher (localStorage): Adresse, gegebenenfalls Zugangsdaten, Gerätename und zufällige Gerätekennung</td><td>Einstellung leeren</td></tr>
       <tr><td>Anmeldung (falls eingeschaltet)</td><td>Gerät: technisch notwendiges Sitzungs-Cookie mit einer Zufallszahl, zuletzt verwendeter Anmeldename (localStorage). Server: Konten mit Passwort nur als nicht umkehrbarer Prüfwert, Sitzungen nur als Prüfwert, Anmeldeprotokoll</td><td>Cookie: Abmelden oder nach 10 Stunden; Konto: durch einen Administrator; Protokoll: automatisch nach 6 Monaten</td></tr>
-      <tr><td>Zugangsmerker</td><td>localStorage; nur bei installierter App (Home-Bildschirm)</td><td>Browserdaten löschen</td></tr>
       <tr><td>Programmdateien</td><td>Cache des Service Workers (nur App-Dateien, keine Eingaben)</td><td>Browserdaten löschen</td></tr>
     </table></div>
     <p>Die Speicherprüfung der App liest nur die vom Browser gemeldete Belegung, um vor Speicherengpässen zu warnen. Sie wird nicht übertragen.</p>
@@ -179,13 +178,10 @@
     <h3>Export, Teilen, Mail</h3>
     <p>JSON-Sicherungen und PDF-Dateien lassen sich speichern, teilen oder per Mail versenden. Mit „PDF teilen“ öffnet sich das Teilen-Menü des Geräts mit Datei und Text. Mit „Mail vorbereiten“ entsteht ein Entwurf in Ihrer Mail-App; der Text enthält Marktnummer, Anschrift, Stand und einen Kurzstatus. Erst mit dem Absenden oder Speichern verlässt etwas das Gerät. Ab dann gelten die Bedingungen des gewählten Dienstes.</p>
     <h3>Speicherung auf dem eigenen Server</h3>
-    <p>Optional kann der Marktdatensatz auf einen Server des Betreibers gespeichert und von dort geladen werden, zum Beispiel auf einen internen Webserver, auf dem auch die Team-Auswertung läuft. Ebenso ist eine WebDAV-Sicherung von Archiven möglich. Das geschieht nur, wenn die Verbindung in den Einstellungen eingerichtet ist und Sie speichern; hat der Betreiber das automatische Speichern ins Team-Archiv eingeschaltet, geht der Stand beim Speichern und Archivieren zusätzlich dorthin. Empfänger ist dann der Betreiber dieses Servers; Schutz und Zugriffsrechte dort sind seine Aufgabe. Adresse und gegebenenfalls Zugangsdaten werden lokal im Browser gespeichert. Verwenden Sie dafür ein eingeschränktes Konto.</p>
+    <p>Optional kann der Marktdatensatz auf einen Server des Betreibers gespeichert und von dort geladen werden, zum Beispiel auf einen internen Webserver, auf dem auch die Team-Auswertung läuft. Ebenso ist eine WebDAV-Sicherung von Archiven möglich. Das geschieht nur, wenn die Verbindung in den Einstellungen eingerichtet ist und Sie die Funktion auslösen. Empfänger ist dann der Betreiber dieses Servers; Schutz und Zugriffsrechte dort sind seine Aufgabe. Adresse und gegebenenfalls Zugangsdaten werden lokal im Browser gespeichert. Verwenden Sie dafür ein eingeschränktes Konto.</p>
     <p>Wird ein Markt aus dem Team-Archiv geöffnet, meldet die App das dem Server als Hinweis für andere Geräte: Dateiname des Datensatzes, der in den Einstellungen eingetragene Gerätename, eine zufällige Gerätekennung und der Zeitpunkt. Der Eintrag wird beim Speichern, Archivieren, Zurücksetzen oder Öffnen eines anderen Markts entfernt, spätestens nach 4 Stunden. Wählen Sie als Gerätenamen eine Bezeichnung des Geräts, keinen Personennamen.</p>
     <p>Ist die Anmeldung eingeschaltet, vermerkt der Server beim Speichern den Namen der angemeldeten Person in der Begehung; das Team-Archiv zeigt „gespeichert von“.</p>
-    <h3>PDF-Archiv auf dem eigenen Server</h3>
-    <p>Bei eingeschalteter Anmeldung kann der Betreiber festlegen, dass jedes in der App erstellte PDF (Begehung und Gefährdungsbeurteilung; Teilen, Drucken, Herunterladen, Mail vorbereiten) zusätzlich auf seinem Server abgelegt wird. Ein solches PDF enthält den vollständigen Bericht: Marktdaten, Feststellungen, Fotos in Originalqualität, Namen und gegebenenfalls Unterschriften. Abgelegt werden außerdem Zeitpunkt sowie Anmeldename und Name der Person, die das PDF erstellt hat. Ohne Verbindung merkt sich das Gerät die PDFs und überträgt sie später.</p>
-    <p>Einsehen können die PDFs nur angemeldete Konten, denen ein Administrator das ausdrücklich erlaubt hat, sowie Administratoren. Jedes Öffnen wird mit Konto und Zeitpunkt protokolliert. Ablageort, Zugriffsrechte und Löschfristen legt der Betreiber fest. Schaltet ein Administrator „Löschen im Archiv“ ein, können Administratoren einzelne Markt-Datensätze im Team-Archiv und einzelne PDFs in der App endgültig löschen; jeder Löschvorgang wird protokolliert.</p>
-    <p>Es gibt keine Weitergabe an Werbe- oder Analysedienste und keine Synchronisation über die beschriebenen Funktionen hinaus.</p>
+    <p>Es gibt keine Weitergabe an Werbe- oder Analysedienste und keine automatische Synchronisation.</p>
   </div>
 </section>
 
@@ -194,7 +190,7 @@
   <p class="doku-lead">Beim Aufruf der App.</p>
   <div class="card doku-card">
     <p>Die Dateien der App werden von einem Webserver ausgeliefert. Dabei verarbeitet der Server technisch notwendige Zugriffsdaten (IP-Adresse, Datum und Uhrzeit, abgerufene Datei, Browserkennung), etwa in Protokolldateien. Sie dienen dem sicheren Betrieb. Sie werden nicht mit den Inhalten der App verknüpft. Verantwortlich ist der Betreiber des Servers.</p>
-    <p>Ohne Anmeldung setzt die App keine Cookies. Ist auf dem Server die Anmeldung mit Benutzername und Passwort eingeschaltet, setzt der Server nach dem Anmelden ein technisch notwendiges Sitzungs-Cookie (Zufallszahl, nur für diesen Server, nicht für Skripte lesbar, gültig bis zum Abmelden, höchstens einen Arbeitstag). Anmeldungen, Fehlversuche und Änderungen an Konten werden mit Zeitpunkt und IP-Adresse protokolliert; das Protokoll sehen nur Administratoren der App, es wird nach 6 Monaten automatisch gelöscht und dient allein der Sicherheit, nicht der Leistungskontrolle. Der Service Worker speichert nur App-Dateien für die Offline-Nutzung. Bei installierter App kann eine Zugangsabfrage erscheinen; sie ist eine Hürde gegen zufälliges Öffnen und keine Verschlüsselung.</p>
+    <p>Ohne Anmeldung setzt die App keine Cookies. Ist auf dem Server die Anmeldung mit Benutzername und Passwort eingeschaltet, setzt der Server nach dem Anmelden ein technisch notwendiges Sitzungs-Cookie (Zufallszahl, nur für diesen Server, nicht für Skripte lesbar, gültig bis zum Abmelden, höchstens einen Arbeitstag). Anmeldungen, Fehlversuche und Änderungen an Konten werden mit Zeitpunkt und IP-Adresse protokolliert; das Protokoll sehen nur Administratoren der App, es wird nach 6 Monaten automatisch gelöscht und dient allein der Sicherheit, nicht der Leistungskontrolle. Der Service Worker speichert nur App-Dateien für die Offline-Nutzung.</p>
   </div>
 </section>
 
@@ -215,7 +211,7 @@
   <h2>10. Speicherdauer</h2>
   <p class="doku-lead">Wie lange Daten bleiben.</p>
   <div class="card doku-card">
-    <p>Lokale Daten bleiben, bis Sie sie löschen, die App zurücksetzen oder der Browser seinen Speicher entfernt (zum Beispiel beim Löschen von Websitedaten). Für Archive, Exportdateien und Serverablagen (Team-Archiv, PDF-Archiv) gelten die vom Verantwortlichen festgelegten Aufbewahrungs- und Löschfristen. Weitergegebene Dateien (E-Mail, Cloud, Dateiablage) sind dort gesondert zu löschen.</p>
+    <p>Lokale Daten bleiben, bis Sie sie löschen, die App zurücksetzen oder der Browser seinen Speicher entfernt (zum Beispiel beim Löschen von Websitedaten). Für Archive, Exportdateien und Serverablagen gelten die vom Verantwortlichen festgelegten Aufbewahrungs- und Löschfristen. Weitergegebene Dateien (E-Mail, Cloud, Dateiablage) sind dort gesondert zu löschen.</p>
   </div>
 </section>
 
@@ -256,7 +252,7 @@
   <p class="doku-lead">Aktualität.</p>
   <div class="card doku-card">
     <p>Die Erklärung wird angepasst, wenn sich Funktionen, Verarbeitung oder Rechtslage ändern. Maßgeblich ist die in der App veröffentlichte Fassung.</p>
-    <div class="doku-box"><div class="doku-box-title">Technischer Stand</div><p>Diese Fassung berücksichtigt Begehung und Gefährdungsbeurteilung mit lokaler Speicherung, IndexedDB-Bildern, Archivierung, JSON- und PDF-Ausgabe, optionaler Serverspeicherung mit Anmeldung, App-Revision <span data-zahl="revision">2.3.0</span> und Service Worker <code><span data-zahl="cache_version">v2.3.0-3</span></code>.</p></div>
+    <div class="doku-box"><div class="doku-box-title">Technischer Stand</div><p>Diese Fassung berücksichtigt Begehung und Gefährdungsbeurteilung mit lokaler Speicherung, IndexedDB-Bildern, Archivierung, JSON- und PDF-Ausgabe, optionaler Serverspeicherung mit Anmeldung, App-Revision <span data-zahl="revision">2.3.0</span> und Service Worker <code><span data-zahl="cache_version">v2.3.0-2</span></code>.</p></div>
   </div>
 </section>
 
@@ -264,8 +260,8 @@
 
 <footer class="app-footer">
   <div class="app-footer-links"><a href="impressum.html">Impressum</a><a href="dokumentation.html">Technische Dokumentation</a><a href="gbo-dokumentation.html">Technische Dokumentation GBO</a><a href="hilfe.html">Hilfe &amp; FAQ</a><a href="gbo-hilfe.html">FAQ GBO</a><a href="auswertung.html">Auswertung</a><a href="einstellungen.html">Einstellungen</a></div>
-  <div class="app-footer-meta"><div>Rev. <span data-zahl="revision">2.3.0</span> · Stand <span data-zahl="revision_datum">06.11.2026</span></div><div>© <span class="js-current-year">2026</span> Andreas Zott – Alle Rechte vorbehalten</div></div>
+  <div class="app-footer-meta"><div>Rev. <span data-zahl="revision">2.3.0</span> · Stand <span data-zahl="revision_datum">05.11.2026</span></div><div>© <span class="js-current-year">2026</span> Andreas Zott – Alle Rechte vorbehalten</div></div>
 </footer>
-<script src="js/seiten-jahr.js?v=2.3.0-3"></script>
+<script src="js/seiten-jahr.js?v=2.3.0-2"></script>
 </body>
 </html>
