@@ -1057,17 +1057,7 @@ document.addEventListener(
 
         if (btnSave) {
 
-            btnSave.addEventListener(
-                'click',
-                () => {
-
-                    saveState();
-
-                    showToast(
-                        'Gespeichert'
-                    );
-                }
-            );
+            btnSave.addEventListener('click', speichernMitTeamArchiv);
         }
 
     }
