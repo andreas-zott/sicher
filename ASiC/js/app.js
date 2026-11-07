@@ -821,9 +821,9 @@ function getNasBaseUrl() {
 // fuer alle, die nichts konfiguriert haben.
 // Ab 1.55-11: Liegt der Server unter einer anderen Adresse als die App
 // (z. B. App auf GitHub Pages, Server auf der Synology), kann sich die App
-// dort nicht anmelden. Das Team-Archiv geht dann nur, wenn der Server diese
-// Adresse in config.php unter 'ohneAnmeldung' zulässt; das PDF-Archiv
-// (nur mit Anmeldung) bleibt aus.
+// dort nicht anmelden. Team-Archiv und PDF-Ablage gehen dann nur, wenn der
+// Server diese Adresse in config.php unter 'ohneAnmeldung' zulässt; das
+// PDF-Archiv ansehen geht nur in der App auf dem Server selbst.
 function serverAnFremderAdresse() {
     const base = getNasBaseUrl();
     if (!base) return false;
@@ -1011,7 +1011,9 @@ async function nasFetch(endpunkt, abfrage, options, schluessel, base, wiederholt
         let j = null;
         try { j = await res.clone().json(); } catch (e) {}
         if (j && j.grund === 'anmeldung' && serverAnFremderAdresse()) {
-            throw new Error('Der Server verlangt eine Anmeldung. Unter dieser Adresse kann sich die App nicht anmelden – auf dem Server muss sie in config.php unter „ohneAnmeldung“ eingetragen sein.');
+            const fehler = new Error('Der Server verlangt eine Anmeldung. Unter dieser Adresse kann sich die App nicht anmelden – auf dem Server muss sie in config.php unter „ohneAnmeldung“ eingetragen sein.');
+            fehler.anmeldungNoetig = true;
+            throw fehler;
         }
         if (j && j.grund === 'anmeldung') {
             if (await anmeldeDialog()) return nasFetch(endpunkt, abfrage, options, schluessel, base, 'anmeldung');
@@ -2075,7 +2077,6 @@ function initExportMenu() {
 const AUTO_PDF_KEY = 'asicAutoPdfArchiv';
 
 function autoPdfArchivAn() {
-    if (serverAnFremderAdresse()) return false;   // PDF-Archiv nur mit Anmeldung (ab 1.55-11)
     try { return localStorage.getItem(AUTO_PDF_KEY) !== '0'; } catch (e) { return true; }
 }
 
@@ -2125,12 +2126,13 @@ async function pdfSenden(eintrag) {
         });
         let j = {};
         try { j = await res.json(); } catch (e) {}
-        if (res.ok && j.ok) return { ergebnis: j.doppelt ? 'doppelt' : 'ok' };
+        if (res.ok && j.ok) return { ergebnis: j.ausgeschaltet ? 'aus' : (j.doppelt ? 'doppelt' : 'ok') };
         if (res.status === 401 || res.status === 403 && j.grund === 'passwort' || res.status === 429 || res.status >= 500) {
             return { ergebnis: 'warten', meldung: j.message || '' };
         }
         return { ergebnis: 'fehler', meldung: j.message || ('Fehler ' + res.status) };
     } catch (e) {
+        if (e && e.anmeldungNoetig) return { ergebnis: 'fehler', meldung: e.message };
         return { ergebnis: 'warten', meldung: '' };
     }
 }
@@ -2165,7 +2167,7 @@ async function pdfArchivieren(blob, mode) {
 
 let pdfWarteschlangeLaeuft = false;
 async function pdfWarteschlangeAbarbeiten() {
-    if (pdfWarteschlangeLaeuft || navigator.onLine === false || typeof indexedDB === 'undefined' || serverAnFremderAdresse()) return;
+    if (pdfWarteschlangeLaeuft || navigator.onLine === false || typeof indexedDB === 'undefined') return;
     if (!serverFunktionenVerfuegbar()) return;
     pdfWarteschlangeLaeuft = true;
     let geschafft = 0;
@@ -2175,7 +2177,7 @@ async function pdfWarteschlangeAbarbeiten() {
             const r = await pdfSenden(e);
             if (r.ergebnis === 'warten') break;
             await pdfWarteschlange('weg', e.id);
-            if (r.ergebnis !== 'fehler') geschafft++;
+            if (r.ergebnis === 'ok' || r.ergebnis === 'doppelt') geschafft++;
         }
     } catch (e) { /* naechster Versuch spaeter */ }
     pdfWarteschlangeLaeuft = false;
