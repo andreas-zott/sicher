@@ -34,8 +34,8 @@ const APP_VERSION = '2.3.0';
 // nur Code, aber nicht die sichtbare Revision, wird NUR dieser Zaehler
 // erhoeht ('2.2.0-2', '2.2.0-3' …). Er steht im Cache-Namen und im ?v=-Zusatz
 // der HTML-Seiten und sorgt dafuer, dass die Geraete die neuen Dateien holen.
-const BUILD = '2.3.0-2';
-const CACHE_NAME = 'asic-handel-v2.3.0-2';   // immer = 'asic-handel-v' + BUILD
+const BUILD = '2.3.0-4';
+const CACHE_NAME = 'asic-handel-v2.3.0-4';   // immer = 'asic-handel-v' + BUILD
 
 
 // ==========================================================================
@@ -66,10 +66,6 @@ const PRECACHE_URLS = [
 
     './icon-192.png',
     './icon-512.png',
-
-    './fonts/space-grotesk-latin-500-normal.woff2',
-    './fonts/space-grotesk-latin-600-normal.woff2',
-    './fonts/space-grotesk-latin-700-normal.woff2'
 ];
 
 // Mit Versionszusatz - genau so, wie die HTML-Seiten sie einbinden
