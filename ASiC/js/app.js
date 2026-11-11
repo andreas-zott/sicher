@@ -2417,6 +2417,17 @@ function drawCoverPage(doc, pageWidth, pageHeight, margin, documentTitle, docume
     const boxWidth = 120;
     const boxX = (pageWidth - boxWidth) / 2;
 
+    // Abstände so wählen, dass Liste, Status-Legende und Fußzeile auf die
+    // Seite passen, ohne sich zu überlappen (Fußzeile bei pageHeight - 15)
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(12.5);
+    const zeilenJeWert = rows.map(([, value]) => doc.splitTextToSize(String(value), boxWidth).length);
+    const statsHoehe = computeStats().total ? 32 : 0;
+    const platz = (pageHeight - 24) - y - statsHoehe;
+    let abstand = 9;
+    const hoehe = a => zeilenJeWert.reduce((s, n) => s + 5.5 + n * 5.5 + 2 + a, 0);
+    while (abstand > 3 && hoehe(abstand) > platz) abstand -= 0.5;
+
     rows.forEach(([label, value]) => {
         doc.setFont(undefined, 'bold');
         doc.setFontSize(8.5);
@@ -2432,7 +2443,7 @@ function drawCoverPage(doc, pageWidth, pageHeight, margin, documentTitle, docume
         doc.setDrawColor(225);
         doc.setLineWidth(0.25);
         doc.line(boxX, y, boxX + boxWidth, y);
-        y += 9;
+        y += abstand;
     });
 
     // Statistik: Status der Begehung als horizontaler Segmentbalken + Legende
