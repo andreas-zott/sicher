@@ -35,8 +35,8 @@ const APP_VERSION = '1.55';
 // nur Code, aber nicht die sichtbare Revision, wird NUR dieser Zaehler
 // erhoeht ('1.54-2', '1.54-3' …). Er steht im Cache-Namen und im ?v=-Zusatz
 // der HTML-Seiten und sorgt dafuer, dass die Geraete die neuen Dateien holen.
-const BUILD = '1.55-12';
-const CACHE_NAME = 'asic-handel-v1.55-12';   // immer = 'asic-handel-v' + BUILD
+const BUILD = '1.55-19';
+const CACHE_NAME = 'asic-handel-v1.55-19';   // immer = 'asic-handel-v' + BUILD
 
 
 // ==========================================================================
@@ -64,10 +64,6 @@ const PRECACHE_URLS = [
 
     './icon-192.png',
     './icon-512.png',
-
-    './fonts/space-grotesk-latin-500-normal.woff2',
-    './fonts/space-grotesk-latin-600-normal.woff2',
-    './fonts/space-grotesk-latin-700-normal.woff2'
 ];
 
 // Mit Versionszusatz - genau so, wie die HTML-Seiten sie einbinden
@@ -85,6 +81,7 @@ const PRECACHE_VERSIONIERT = [
     './js/verlauf.js',
     './js/einstellungen.js',
     './js/benutzer.js',
+    './js/jahresbericht.js',
     './js/pdf-archiv.js',
     './js/auswertung-logik.js',
     './js/auswertung.js',
