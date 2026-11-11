@@ -126,16 +126,25 @@
     <section class="h-section" id="jahresbericht">
         <div class="h-section-label">Auswertung</div>
         <h2>Jahresbericht</h2>
-        <p class="h-section-intro">Alle Begehungen eines Jahres aus dem Team-Archiv: Marktnummer, Ort, Datum, Prüfer und Anzahl der festgestellten Mängel – als PDF mit Briefkopf oder als CSV für Excel. Begehungen, die nur auf einem Gerät liegen, fehlen darin.</p>
+        <p class="h-section-intro">Alle Begehungen eines Jahres aus dem Team-Archiv: Marktnummer, Ort, Datum, Prüfer und Anzahl der festgestellten Mängel – als PDF mit Briefkopf oder als CSV für Excel. Auf Wunsch kommt die Team-Gesamtauswertung des Jahres dazu (Diagramme, Kategorien, auffällige Märkte) – im selben PDF oder als eigenes PDF. Begehungen, die nur auf einem Gerät liegen, fehlen darin.</p>
         <div class="s-card">
             <div class="jb-zeile">
                 <div class="s-field jb-jahr">
                     <label for="jb-jahr">Jahr</label>
                     <select id="jb-jahr"><option value="">wird geladen …</option></select>
                 </div>
+                <div class="s-field jb-inhalt">
+                    <label for="jb-inhalt">Inhalt</label>
+                    <select id="jb-inhalt">
+                        <option value="liste">Jahresbericht (Liste)</option>
+                        <option value="team">Team-Gesamtauswertung</option>
+                        <option value="beides">Beides in einem PDF</option>
+                        <option value="getrennt">Beides als zwei PDFs</option>
+                    </select>
+                </div>
                 <div class="s-actions jb-knoepfe">
-                    <button class="btn btn-primary" type="button" id="jb-pdf">Jahresbericht als PDF</button>
-                    <button class="btn btn-secondary" type="button" id="jb-csv">Als CSV (Excel)</button>
+                    <button class="btn btn-primary" type="button" id="jb-pdf">PDF erstellen</button>
+                    <button class="btn btn-secondary" type="button" id="jb-csv" title="CSV enthält immer die Liste">Liste als CSV (Excel)</button>
                 </div>
             </div>
             <p class="s-status" id="jb-status" role="status"></p>
@@ -202,6 +211,8 @@
 <script src="js/app.js?v=1.55-19"></script>
 <script src="js/benutzer.js?v=1.55-19"></script>
 <script src="js/jspdf.umd.min.js?v=1.55-19"></script>
+<script src="js/auswertung-logik.js?v=1.55-19"></script>
+<script src="js/auswertung.js?v=1.55-19"></script>
 <script src="js/jahresbericht.js?v=1.55-19"></script>
 
 </body>

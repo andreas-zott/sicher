@@ -891,6 +891,11 @@
                 </tr>
 
                 <tr>
+                    <td>admin-anleitung.html</td>
+                    <td>Bebilderte Anleitung für Administratoren, aus Einstellungen und Benutzerverwaltung verlinkt; nur für Administratoren abrufbar</td>
+                </tr>
+
+                <tr>
                     <td>dokumentation.html</td>
                     <td>Technische Dokumentation</td>
                 </tr>
@@ -1764,11 +1769,15 @@
                     <code>autoTeamArchiv</code> aus <code>config.php</code>.</li>
                 <li><strong>Jahresbericht:</strong> <code>js/jahresbericht.js</code> erstellt für
                     Administratoren aus dem Team-Archiv eine Jahresliste (Marktnummer, Ort,
-                    Datum, Prüfer, Anzahl Mängel) als PDF mit Briefkopf oder als CSV. Den
+                    Datum, Prüfer, Anzahl Mängel) als PDF mit Briefkopf oder als CSV. Unter
+                    „Inhalt“ kommt auf Wunsch die Team-Gesamtauswertung des Jahres dazu
+                    (<code>buildAuswertungPdf()</code> aus <code>js/auswertung.js</code>) – im
+                    selben PDF oder als zweites PDF (PDF-Art <code>teamauswertung</code>). Den
                     Briefkopf liefert <code>config.php</code> (<code>'briefkopf'</code>); ein
                     Administrator kann ihn in der App ändern. Liegt
                     <code>briefkopf-logo.png</code> im App-Ordner, erscheint das Logo im
-                    Briefkopf, auf der Anmeldeseite und auf dem PDF-Deckblatt. Das PDF wird im
+                    Briefkopf, in der Team-Gesamtauswertung, auf der Anmeldeseite und auf dem
+                    PDF-Deckblatt. Die PDFs werden im
                     PDF-Archiv unter <code>Jahresberichte</code> abgelegt.</li>
                 <li><strong>PDF-Archiv:</strong> Jedes erstellte PDF geht über
                     <code>pdfArchivieren()</code> zusätzlich an <code>pdf.php</code> und wird als
@@ -3065,6 +3074,26 @@
             </ul>
         </div>
 
+        <h3>
+            Bebilderte Admin-Anleitung
+        </h3>
+
+        <div class="card doku-card">
+            <p>
+                <code>admin-anleitung.html</code> ist genauso aufgebaut wie die
+                Kurzanleitung (eine Datei ohne Skripte, Bilder eingebettet) und
+                beschreibt in neun Abschnitten alles, was nur Administratoren können:
+                Benutzer anlegen und verwalten, die Schalter für alle Geräte,
+                Jahresbericht und Briefkopf, PDF-Archiv, Löschen im Team-Archiv,
+                Protokoll und typische Aufgaben.
+            </p>
+            <ul>
+                <li><strong>Aufruf:</strong> Knopf „Admin-Anleitung“ unter Einstellungen → Anmeldung und Link oben in der Benutzerverwaltung – beide nur für Administratoren sichtbar.</li>
+                <li><strong>Zugriff:</strong> <code>tor.php</code> liefert die Seite bei eingeschalteter Anmeldung nur an Konten mit der Rolle Administrator aus; andere werden zu den Einstellungen umgeleitet. Ohne Torwächter-Regel ist die Seite frei abrufbar, enthält aber keine Daten.</li>
+                <li><strong>Bilder:</strong> fiktive Personen und Märkte (Beispiel Handel GmbH). Bei geänderten Admin-Seiten die betroffenen Bildschirmfotos neu aufnehmen.</li>
+            </ul>
+        </div>
+
     </section>
 
     <!-- ================================================================ -->
@@ -3130,7 +3159,7 @@
                 </tr>
                 <tr>
                     <td>einstellungen.html</td>
-                    <td class="zahl">403</td>
+                    <td class="zahl">404</td>
                     <td>Server-Adresse, Zugriffsschlüssel und Anmeldung (Passwort ändern, Abmelden)</td>
                 </tr>
                 <tr>
@@ -3140,7 +3169,7 @@
                 </tr>
                 <tr>
                     <td>benutzer.html</td>
-                    <td class="zahl">208</td>
+                    <td class="zahl">220</td>
                     <td>Benutzerverwaltung für Administratoren (Konten, Startpasswörter, Protokoll)</td>
                 </tr>
                 <tr>
@@ -3169,13 +3198,18 @@
                     <td>Bebilderte Kurzanleitung (Bildschirmfotos eingebettet, aus „Hilfe &amp; FAQ“ verlinkt)</td>
                 </tr>
                 <tr>
+                    <td>admin-anleitung.html</td>
+                    <td class="zahl">164</td>
+                    <td>Bebilderte Anleitung für Administratoren (nur für Administratoren abrufbar)</td>
+                </tr>
+                <tr>
                     <td>dokumentation.html</td>
-                    <td class="zahl">3.476</td>
+                    <td class="zahl">3.510</td>
                     <td>Technische Dokumentation (diese Seite)</td>
                 </tr>
                 <tr>
                     <td>css/styles.css</td>
-                    <td class="zahl">3.207</td>
+                    <td class="zahl">3.209</td>
                     <td>Gesamtes gemeinsames Styling</td>
                 </tr>
                 <tr>
@@ -3220,7 +3254,7 @@
                 </tr>
                 <tr>
                     <td>js/einstellungen.js</td>
-                    <td class="zahl">616</td>
+                    <td class="zahl">619</td>
                     <td>Bedienlogik der Einstellungsseite</td>
                 </tr>
                 <tr>
@@ -3230,7 +3264,7 @@
                 </tr>
                 <tr>
                     <td>js/auswertung.js</td>
-                    <td class="zahl">797</td>
+                    <td class="zahl">820</td>
                     <td>Logik der Auswertungsseite</td>
                 </tr>
                 <tr>
@@ -3250,7 +3284,7 @@
                 </tr>
                 <tr>
                     <td>js/jahresbericht.js</td>
-                    <td class="zahl">455</td>
+                    <td class="zahl">501</td>
                     <td>Jahresbericht aus dem Team-Archiv mit Briefkopf</td>
                 </tr>
                 <tr>
@@ -3340,12 +3374,12 @@
                 </tr>
                 <tr>
                     <td>tor.php</td>
-                    <td class="zahl">131</td>
+                    <td class="zahl">137</td>
                     <td>Torwächter: liefert App-Seiten und -Dateien nur nach Anmeldung aus</td>
                 </tr>
                 <tr>
                     <td>pdf.php</td>
-                    <td class="zahl">296</td>
+                    <td class="zahl">297</td>
                     <td>PDF-Archiv: PDFs ablegen, auflisten, ausliefern und (Administratoren) löschen</td>
                 </tr>
                 <tr>
@@ -3370,7 +3404,7 @@
                 </tr>
                 <tr>
                     <td>INSTALLATION.txt</td>
-                    <td class="zahl">29,1 KB</td>
+                    <td class="zahl">29,5 KB</td>
                     <td>Installationsanleitung für den Betrieb auf einem eigenen Server</td>
                 </tr>
                 <tr>
@@ -3400,7 +3434,7 @@
 
             <p>
                 <strong>Gesamt (eigener Code, ohne jsPDF und Schrift):</strong>
-                <span data-zahl="zeilen_gesamt">31.144</span> Zeilen
+                <span data-zahl="zeilen_gesamt">31.435</span> Zeilen
             </p>
 
             <p style="font-size:0.82rem; color:var(--ink-soft);">
