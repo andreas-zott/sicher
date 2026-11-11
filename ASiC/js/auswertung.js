@@ -448,7 +448,7 @@ function zeichneLiniendiagrammPdf(doc, punkte, x, y, breite, hoehe) {
     });
 }
 
-// optionen (ab 1.55-19, für den Jahresbericht in der Benutzerverwaltung):
+// optionen (ab 1.55-20, für den Jahresbericht in der Benutzerverwaltung):
 //   doc          vorhandenes jsPDF-Dokument - die Auswertung wird angehängt
 //   zeitraumText eigener Text unter dem Titel (z. B. "Jahr 2025")
 //   logo         { daten, w, h } - sonst das Firmenlogo aus app.js
