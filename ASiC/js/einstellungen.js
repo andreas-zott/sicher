@@ -588,6 +588,8 @@ async function initAnmeldung() {
     }
     document.getElementById('btn-an-benutzer').hidden = b.rolle !== 'admin';
     document.getElementById('btn-an-pdf').hidden = !b.pdfLesen;
+    // ab 1.55-16: direkt zum Jahresbericht (Benutzerverwaltung, nur Administratoren)
+    document.getElementById('btn-an-jahresbericht').hidden = b.rolle !== 'admin';
     document.getElementById('btn-an-abmelden').addEventListener('click', async () => {
         const st = document.getElementById('an-status');
         try {

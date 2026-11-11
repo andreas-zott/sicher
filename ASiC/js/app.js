@@ -2330,6 +2330,42 @@ function checklistPdfHeaderLines() {
 }
 
 // ===== Deckblatt (Titelseite mit Betriebsdaten), wird jedem PDF vorangestellt =====
+// ===== Firmenlogo auf dem PDF-Deckblatt (ab 1.55-18) =====
+// Meldet der Server (anmeldung.php?aktion=status, Feld "logo"), dass im
+// App-Ordner briefkopf-logo.png liegt (IT-Paket), lädt die App das Logo
+// einmal und merkt es sich auf dem Gerät – so steht es auch ohne
+// Verbindung auf dem Deckblatt. Ohne Logodatei bleibt alles wie bisher.
+const FIRMENLOGO_KEY = 'asicFirmenlogo';
+let firmenlogo = null;
+try {
+    const gemerkt = JSON.parse(localStorage.getItem(FIRMENLOGO_KEY) || 'null');
+    if (gemerkt && gemerkt.daten && gemerkt.w && gemerkt.h) firmenlogo = gemerkt;
+} catch (e) { /* ohne Speicher */ }
+
+(async function firmenlogoAktualisieren() {
+    try {
+        const s = window.asicAnmeldung ? await window.asicAnmeldung : null;
+        if (!s || typeof s.logo !== 'boolean') return;
+        if (!s.logo) {
+            firmenlogo = null;
+            try { localStorage.removeItem(FIRMENLOGO_KEY); } catch (e) { /* weiter */ }
+            return;
+        }
+        const res = await fetch('briefkopf-logo.png', { cache: 'no-cache', credentials: 'same-origin' });
+        if (!res.ok) return;
+        const daten = await blobAlsBase64(await res.blob()).then(b => 'data:image/png;base64,' + b);
+        const masse = await new Promise(ok => {
+            const bild = new Image();
+            bild.onload = () => ok({ w: bild.naturalWidth, h: bild.naturalHeight });
+            bild.onerror = () => ok(null);
+            bild.src = daten;
+        });
+        if (!masse || !masse.w || !masse.h) return;
+        firmenlogo = { daten, w: masse.w, h: masse.h };
+        try { localStorage.setItem(FIRMENLOGO_KEY, JSON.stringify(firmenlogo)); } catch (e) { /* weiter */ }
+    } catch (e) { /* ohne Logo weiter */ }
+})();
+
 function drawCoverPage(doc, pageWidth, pageHeight, margin, documentTitle, documentSubtitle) {
     // Roter Kopfbalken mit Markenname
     doc.setFillColor(204, 7, 30);
@@ -2341,6 +2377,14 @@ function drawCoverPage(doc, pageWidth, pageHeight, margin, documentTitle, docume
     doc.setFont(undefined, 'normal');
     doc.setFontSize(11);
     doc.text('(Arbeitsschutz & Prävention)', pageWidth / 2, 30, { align: 'center' });
+
+    // Firmenlogo mittig über dem Titel (nur wenn vorhanden, ab 1.55-18)
+    if (firmenlogo) {
+        try {
+            const lh = 20, lw = lh * firmenlogo.w / firmenlogo.h;
+            doc.addImage(firmenlogo.daten, 'PNG', (pageWidth - lw) / 2, 50, lw, lh);
+        } catch (e) { /* ohne Logo weiter */ }
+    }
 
     let y = 80;
     doc.setFont(undefined, 'bold');

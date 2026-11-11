@@ -22,6 +22,15 @@
 
     const el = id => document.getElementById(id);
 
+    // Ab 1.55-17: Firmenlogo über der Anmeldung, wenn die Seite es enthält
+    // (IT-Paket: briefkopf-logo.png). Erst nach erfolgreichem Laden zeigen.
+    (function () {
+        const logo = el('an-firmenlogo');
+        if (!logo) return;
+        const zeigen = () => { if (logo.naturalWidth > 0) logo.hidden = false; };
+        if (logo.complete) zeigen(); else logo.addEventListener('load', zeigen);
+    })();
+
     function zeige(id) {
         ['form-anmelden', 'form-passwort', 'an-hinweis'].forEach(f => { el(f).hidden = f !== id; });
         const erstesFeld = el(id).querySelector('input:not([hidden])');

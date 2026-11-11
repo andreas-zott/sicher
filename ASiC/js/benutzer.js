@@ -156,6 +156,9 @@
 
     function zeigeEinstellungen(e) {
         if (!e) return;
+        // Ab 1.55-14: Briefkopf an den Jahresbericht weitergeben
+        window.asicTeamEinstellungenLetzte = e;
+        try { document.dispatchEvent(new CustomEvent('asic-einstellungen', { detail: e })); } catch (err) { /* weiter */ }
         el('bv-auto').checked = !!e.autoTeamArchiv;
         el('bv-pdf').checked = e.autoPdfArchiv !== false;
         el('bv-loeschen').checked = !!e.archivLoeschen;
