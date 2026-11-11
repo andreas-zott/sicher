@@ -441,7 +441,7 @@
         sperren(true);
         try {
             const { zeilen, datensaetze, fehlgeschlagen } = await begehungenDesJahres(jahr);
-            const inhalt = (el('jb-inhalt') && el('jb-inhalt').value) || 'liste';
+            const inhalt = (el('jb-inhalt') && el('jb-inhalt').value) || 'beides';
             const werte = zusammenfassung(zeilen);
             const hinweis = fehlgeschlagen ? ' ' + fehlgeschlagen + ' Datei(en) ließen sich nicht laden und fehlen.' : '';
             if (art === 'pdf') {
@@ -470,6 +470,7 @@
                 const wie = await teilenOderLaden(teile, titel, 'application/pdf');
                 const was = { liste: 'Jahresbericht', team: 'Team-Gesamtauswertung', beides: 'Jahresbericht mit Team-Gesamtauswertung', getrennt: 'Jahresbericht und Team-Gesamtauswertung' }[inhalt] || 'Jahresbericht';
                 status(was + ' ' + jahr + ': ' + werte.begehungen + ' Begehungen, ' + werte.maengel + ' Mängel.'
+                    + (inhalt === 'liste' ? ' Ohne Team-Gesamtauswertung – dafür unter „Inhalt“ „Beides …“ wählen.' : '')
                     + (wie === 'heruntergeladen' ? (teile.length > 1 ? ' Zwei PDFs heruntergeladen.' : ' PDF heruntergeladen.') : '')
                     + ablage + hinweis, fehlgeschlagen ? 'warnung' : 'ok');
             } else {
@@ -495,6 +496,17 @@
         }
     }
 
+    // Inhalt: Voreinstellung "Beides in einem PDF", die letzte Wahl merkt sich das Gerät
+    const inhaltWahl = el('jb-inhalt');
+    if (inhaltWahl) {
+        try {
+            const gemerkt = localStorage.getItem('asicJbInhalt');
+            if (gemerkt && [...inhaltWahl.options].some(o => o.value === gemerkt)) inhaltWahl.value = gemerkt;
+        } catch (e) { /* ohne Speicher weiter */ }
+        inhaltWahl.addEventListener('change', () => {
+            try { localStorage.setItem('asicJbInhalt', inhaltWahl.value); } catch (e) { /* egal */ }
+        });
+    }
     el('jb-pdf').addEventListener('click', () => erstellen('pdf'));
     el('jb-csv').addEventListener('click', () => erstellen('csv'));
     jahreLaden();
