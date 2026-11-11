@@ -448,7 +448,13 @@ function zeichneLiniendiagrammPdf(doc, punkte, x, y, breite, hoehe) {
     });
 }
 
-async function buildAuswertungPdf(datenOverride, titel, zeitraumMonateOverride, auffaelligModusOverride) {
+// optionen (ab 1.55-19, für den Jahresbericht in der Benutzerverwaltung):
+//   doc          vorhandenes jsPDF-Dokument - die Auswertung wird angehängt
+//   zeitraumText eigener Text unter dem Titel (z. B. "Jahr 2025")
+//   logo         { daten, w, h } - sonst das Firmenlogo aus app.js
+//   seitenzahlen false = keine eigenen Seitenzahlen (macht dann der Aufrufer)
+async function buildAuswertungPdf(datenOverride, titel, zeitraumMonateOverride, auffaelligModusOverride, optionen) {
+    optionen = optionen || {};
     let daten;
     let effektiverZeitraum = zeitraumMonate;
     if (datenOverride) {
@@ -472,7 +478,13 @@ async function buildAuswertungPdf(datenOverride, titel, zeitraumMonateOverride, 
     }
 
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    let doc;
+    if (optionen.doc) {
+        doc = optionen.doc;
+        doc.addPage();
+    } else {
+        doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    }
     const pageWidth = 210;
     const pageHeight = 297;
     const margin = 14;
@@ -488,10 +500,20 @@ async function buildAuswertungPdf(datenOverride, titel, zeitraumMonateOverride, 
     doc.text(titel || 'Gesamtauswertung', pageWidth / 2, 22, { align: 'center' });
     doc.setFont(undefined, 'normal');
     doc.setFontSize(11);
-    const zeitraumText = effektiverZeitraum === null ? 'Gesamter bisheriger Zeitraum' : `Letzte ${effektiverZeitraum} Monate`;
+    const zeitraumText = optionen.zeitraumText
+        || (effektiverZeitraum === null ? 'Gesamter bisheriger Zeitraum' : `Letzte ${effektiverZeitraum} Monate`);
     doc.text(zeitraumText, pageWidth / 2, 30, { align: 'center' });
 
     let y = 55;
+    // Firmenlogo unter dem roten Kopf, wenn im App-Ordner briefkopf-logo.png liegt
+    const logo = optionen.logo || (typeof firmenlogo !== 'undefined' ? firmenlogo : null);
+    if (logo && logo.daten && logo.w && logo.h) {
+        try {
+            const lh = 14, lw = lh * logo.w / logo.h;
+            doc.addImage(logo.daten, 'PNG', (pageWidth - lw) / 2, 48, lw, lh);
+            y = 72;
+        } catch (e) { /* ohne Logo weiter */ }
+    }
     doc.setFont(undefined, 'normal');
     doc.setFontSize(9);
     doc.setTextColor(100, 116, 139);
@@ -553,7 +575,8 @@ async function buildAuswertungPdf(datenOverride, titel, zeitraumMonateOverride, 
         y += 58;
     }
 
-    // Kategorien-Schwachstellen
+    // Kategorien-Schwachstellen (Überschrift und Diagramm auf derselben Seite)
+    if (y + 75 > pageHeight - 20) { doc.addPage(); y = 18; }
     ueberschrift('Kategorien-Schwachstellen');
     const kategorienRows = berechneKategorienSchwachstellen(daten);
     if (kategorienRows.length === 0) {
@@ -604,7 +627,7 @@ async function buildAuswertungPdf(datenOverride, titel, zeitraumMonateOverride, 
     });
 
     // Seitenzahlen
-    const totalPages = doc.getNumberOfPages();
+    const totalPages = optionen.seitenzahlen === false ? 0 : doc.getNumberOfPages();
     for (let i = 1; i <= totalPages; i++) {
         doc.setPage(i);
         doc.setFontSize(8);

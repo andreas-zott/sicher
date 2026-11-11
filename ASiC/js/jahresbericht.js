@@ -143,6 +143,7 @@
         if (!dateien) dateien = await getServerFiles();
         const kandidaten = dateien.filter(f => dateiName(f) && (!dateiJahr(f) || dateiJahr(f) === jahr));
         const zeilen = [];
+        const datensaetze = [];   // vollständige Begehungen für die Team-Gesamtauswertung
         let fertig = 0, fehlgeschlagen = 0;
         status('Lade Begehungen aus dem Team-Archiv … 0 von ' + kandidaten.length);
         // höchstens 4 gleichzeitig, damit der Server nicht überlastet wird
@@ -155,6 +156,7 @@
                     const c = (r && r.companyInfo) || {};
                     const datum = datumIso(c.datum || f.datumISO || f.datum);
                     if (jahrAus(datum) === jahr) {
+                        if (r) datensaetze.push(r);
                         let maengel = 0;
                         Object.values((r && r.ratings) || {}).forEach(v => { if (v === 'mangel') maengel++; });
                         zeilen.push({
@@ -174,7 +176,7 @@
         }
         await Promise.all([arbeiter(), arbeiter(), arbeiter(), arbeiter()]);
         zeilen.sort((a, b) => a.markt.localeCompare(b.markt, 'de', { numeric: true }) || a.datum.localeCompare(b.datum));
-        return { zeilen, fehlgeschlagen };
+        return { zeilen, datensaetze, fehlgeschlagen };
     }
 
     function zusammenfassung(zeilen) {
@@ -238,6 +240,19 @@
         } catch (e) {
             return null;
         }
+    }
+
+    // Team-Gesamtauswertung (dieselbe wie unter Verlauf → Auswertung Team),
+    // eingeschränkt auf das gewählte Jahr. Mit zielDoc wird sie angehängt.
+    async function teamAuswertungPdf(jahr, datensaetze, logo, zielDoc) {
+        if (typeof buildAuswertungPdf !== 'function') throw new Error('Auswertung nicht geladen – Seite neu laden.');
+        if (!datensaetze.length) throw new Error('Für ' + jahr + ' liegen keine Begehungen im Team-Archiv.');
+        return buildAuswertungPdf(datensaetze, 'Team-Gesamtauswertung ' + jahr, null, 'durchschnitt', {
+            doc: zielDoc || null,
+            zeitraumText: 'Jahr ' + jahr + ' (01.01. - 31.12.' + jahr + ')',
+            logo: logo || undefined,
+            seitenzahlen: !zielDoc
+        });
     }
 
     function baueJahresberichtPdf(jahr, zeilen, werte, von, logo) {
@@ -364,7 +379,13 @@
             doc.text(String(werte.maengel), R + B - 2, y, { align: 'right' });
         }
 
-        // Fußzeile auf jeder Seite
+        return doc;
+    }
+
+    // Fußzeile auf jeder Seite (auch auf einer angehängten Team-Gesamtauswertung)
+    function fusszeilen(doc, jahr) {
+        const R = 20, B = 210 - 2 * R, GRAU = [100, 112, 122], LINIE = [221, 225, 222];
+        const bk = briefkopf || {};
         const n = doc.getNumberOfPages();
         for (let s = 1; s <= n; s++) {
             doc.setPage(s);
@@ -376,37 +397,41 @@
         return doc;
     }
 
-    async function pdfAblegen(blob) {
+    async function pdfAblegen(blob, art) {
         if (typeof autoPdfArchivAn === 'function' && !autoPdfArchivAn()) return '';
         try {
-            const r = await pdfSenden({ markt: 'alle', datum: heuteIso(), art: 'jahresbericht', pdf: await blobAlsBase64(blob) });
-            if (r.ergebnis === 'ok') return ' Zusätzlich im PDF-Archiv abgelegt (Ordner „Jahresberichte“).';
+            const r = await pdfSenden({ markt: 'alle', datum: heuteIso(), art: art || 'jahresbericht', pdf: await blobAlsBase64(blob) });
+            if (r.ergebnis === 'ok') return ' Im PDF-Archiv abgelegt (Ordner „Jahresberichte“).';
             if (r.ergebnis === 'doppelt') return ' Liegt bereits im PDF-Archiv.';
             if (r.ergebnis === 'fehler') return ' PDF-Archiv: ' + (r.meldung || 'nicht abgelegt') + '.';
         } catch (e) { /* Ablage ist ein Zusatz */ }
         return '';
     }
 
-    async function teilenOderLaden(blob, dateiname, titel, typ) {
+    // teile: [{ blob, name }] - mehrere Dateien gehen in EINEM Teilen-Dialog
+    // (ein zweiter Dialog direkt danach wird vom iPad abgelehnt).
+    async function teilenOderLaden(teile, titel, typ) {
         if (navigator.canShare && typeof File !== 'undefined') {
-            const datei = new File([blob], dateiname, { type: typ });
-            if (navigator.canShare({ files: [datei] })) {
+            const dateien = teile.map(t => new File([t.blob], t.name, { type: typ }));
+            if (navigator.canShare({ files: dateien })) {
                 try {
-                    await navigator.share({ files: [datei], title: titel });
+                    await navigator.share({ files: dateien, title: titel });
                     return 'geteilt';
                 } catch (err) {
                     if (err && err.name === 'AbortError') return 'abgebrochen';
                 }
             }
         }
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = dateiname;
-        document.body.append(a);
-        a.click();
-        a.remove();
-        setTimeout(() => URL.revokeObjectURL(url), 60000);
+        teile.forEach((t, i) => setTimeout(() => {
+            const url = URL.createObjectURL(t.blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = t.name;
+            document.body.append(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 60000);
+        }, i * 400));
         return 'heruntergeladen';
     }
 
@@ -415,17 +440,38 @@
         const jahr = el('jb-jahr').value || String(new Date().getFullYear());
         sperren(true);
         try {
-            const { zeilen, fehlgeschlagen } = await begehungenDesJahres(jahr);
+            const { zeilen, datensaetze, fehlgeschlagen } = await begehungenDesJahres(jahr);
+            const inhalt = (el('jb-inhalt') && el('jb-inhalt').value) || 'liste';
             const werte = zusammenfassung(zeilen);
             const hinweis = fehlgeschlagen ? ' ' + fehlgeschlagen + ' Datei(en) ließen sich nicht laden und fehlen.' : '';
             if (art === 'pdf') {
                 if (typeof window.jspdf === 'undefined') throw new Error('PDF-Bibliothek nicht geladen – Seite neu laden.');
-                const doc = baueJahresberichtPdf(jahr, zeilen, werte, await ersteller(), await ladeLogo());
-                const blob = doc.output('blob');
-                const ablage = await pdfAblegen(blob);
-                const wie = await teilenOderLaden(blob, 'ASiC-Jahresbericht-' + jahr + '.pdf', 'Jahresbericht ' + jahr, 'application/pdf');
-                status('Jahresbericht ' + jahr + ': ' + werte.begehungen + ' Begehungen, ' + werte.maengel + ' Mängel.'
-                    + (wie === 'heruntergeladen' ? ' PDF heruntergeladen.' : '') + ablage + hinweis, fehlgeschlagen ? 'warnung' : 'ok');
+                const logo = await ladeLogo();
+                const teile = [];      // { blob, name, art }
+                if (inhalt === 'liste' || inhalt === 'beides') {
+                    // Jahresliste, bei "beides" mit angehängter Team-Gesamtauswertung
+                    const doc = baueJahresberichtPdf(jahr, zeilen, werte, await ersteller(), logo);
+                    if (inhalt === 'beides') await teamAuswertungPdf(jahr, datensaetze, logo, doc);
+                    fusszeilen(doc, jahr);
+                    teile.push({ blob: doc.output('blob'), name: 'ASiC-Jahresbericht-' + jahr + '.pdf', art: 'jahresbericht' });
+                }
+                if (inhalt === 'getrennt') {
+                    const doc = baueJahresberichtPdf(jahr, zeilen, werte, await ersteller(), logo);
+                    fusszeilen(doc, jahr);
+                    teile.push({ blob: doc.output('blob'), name: 'ASiC-Jahresbericht-' + jahr + '.pdf', art: 'jahresbericht' });
+                }
+                if (inhalt === 'team' || inhalt === 'getrennt') {
+                    const doc = await teamAuswertungPdf(jahr, datensaetze, logo);
+                    teile.push({ blob: doc.output('blob'), name: 'ASiC-Team-Gesamtauswertung-' + jahr + '.pdf', art: 'teamauswertung' });
+                }
+                let ablage = '';
+                for (const t of teile) ablage = (await pdfAblegen(t.blob, t.art)) || ablage;
+                const titel = inhalt === 'team' ? 'Team-Gesamtauswertung ' + jahr : 'Jahresbericht ' + jahr;
+                const wie = await teilenOderLaden(teile, titel, 'application/pdf');
+                const was = { liste: 'Jahresbericht', team: 'Team-Gesamtauswertung', beides: 'Jahresbericht mit Team-Gesamtauswertung', getrennt: 'Jahresbericht und Team-Gesamtauswertung' }[inhalt] || 'Jahresbericht';
+                status(was + ' ' + jahr + ': ' + werte.begehungen + ' Begehungen, ' + werte.maengel + ' Mängel.'
+                    + (wie === 'heruntergeladen' ? (teile.length > 1 ? ' Zwei PDFs heruntergeladen.' : ' PDF heruntergeladen.') : '')
+                    + ablage + hinweis, fehlgeschlagen ? 'warnung' : 'ok');
             } else {
                 const z = ['Nr.;Marktnummer;Ort;Datum;Prüfer/in;Mängel'];
                 const feld = v => {
@@ -438,7 +484,7 @@
                 z.push(['', 'Summe', werte.begehungen + ' Begehungen', werte.maerkte + ' Märkte', 'Mängel gesamt', werte.maengel].map(feld).join(';'));
                 z.push(['', '', '', '', 'Mängel je Begehung', zahlDe(werte.schnitt, 1)].map(feld).join(';'));
                 const blob = new Blob(['﻿' + z.join('\r\n') + '\r\n'], { type: 'text/csv;charset=utf-8' });
-                const wie = await teilenOderLaden(blob, 'ASiC-Jahresbericht-' + jahr + '.csv', 'Jahresbericht ' + jahr, 'text/csv');
+                const wie = await teilenOderLaden([{ blob, name: 'ASiC-Jahresbericht-' + jahr + '.csv' }], 'Jahresbericht ' + jahr, 'text/csv');
                 status('Jahresbericht ' + jahr + ' als CSV: ' + werte.begehungen + ' Begehungen.'
                     + (wie === 'heruntergeladen' ? ' Datei heruntergeladen.' : '') + hinweis, fehlgeschlagen ? 'warnung' : 'ok');
             }

@@ -136,7 +136,7 @@
             karte.className = 's-card pa-markt';
             const h = document.createElement('h2');
             h.className = 'pa-markt-titel';
-            h.textContent = 'Markt ' + markt;
+            h.textContent = markt === 'alle' ? 'Jahresberichte und Auswertungen' : 'Markt ' + markt;
             karte.append(h);
             gruppen.get(markt).sort((a, b) => b.datum.localeCompare(a.datum) || b.zeit.localeCompare(a.zeit)).forEach(p => {
                 const z = document.createElement('div');
