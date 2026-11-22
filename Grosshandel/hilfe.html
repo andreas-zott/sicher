@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+
+<!-- Sicherheitsrichtlinie (ab Rev. 1.54-5): nur eigene Skripte, keine eingebetteten
+     Skripte oder Inline-Handler. connect-src erlaubt https:, damit ein Team-Archiv
+     auf einem anderen Server (Einstellungen) erreichbar bleibt. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https: ipc: http://ipc.localhost; worker-src 'self'; manifest-src 'self'; object-src 'none'; frame-src 'self' blob:; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="same-origin">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Hilfe & FAQ – Großhandel Begehung</title>
+
+<link rel="stylesheet" href="css/styles.css?v=1.1-9">
+<script src="js/anmeldung-pruefen.js?v=1.1-9"></script>
+
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1c2226">
+
+</head>
+
+<body>
+
+<header class="app-header">
+
+    <div class="hazard-strip"></div>
+
+    <div class="app-header-inner">
+
+        <div class="brand">
+            <span class="brand-title">Großhandel Begehung</span>
+            <span class="brand-tag">SIFA</span>
+            <span class="brand-subtitle">„Sicher geprüft. Sicher gehandelt.“</span>
+        </div>
+
+        <nav class="app-nav">
+            <a href="index.html">Prüfkatalog</a>
+            <a href="massnahmen.html">Aktionsplan</a>
+            <a href="fotos.html">Fotos</a>
+            <a href="verlauf.html">Verlauf</a><a href="gbo.html">Gefährdungsbeurteilung</a>
+        </nav>
+
+    </div>
+
+</header>
+
+
+<main class="page" id="oben">
+
+    <!-- ================================================================ -->
+    <!-- KOPF MIT SUCHE                                                   -->
+    <!-- ================================================================ -->
+
+    <div class="h-hero">
+
+        <div class="h-hero-badge">Hilfe &amp; FAQ</div>
+
+        <h1>Wie können wir helfen?</h1>
+
+        <p>Suchen Sie nach einem Stichwort oder wählen Sie ein Thema.</p>
+
+        <div class="h-search" role="search">
+            <span class="h-search-icon" aria-hidden="true">🔍</span>
+            <input
+                type="search"
+                id="faq-search"
+                placeholder="z. B. Foto, Server, PDF, Archiv"
+                autocomplete="off"
+                autocapitalize="off"
+                spellcheck="false"
+                aria-label="Hilfe durchsuchen">
+            <button type="button" class="h-search-clear" id="faq-clear" aria-label="Suche löschen" hidden>×</button>
+        </div>
+
+    </div>
+
+
+    <!-- ================================================================ -->
+    <!-- THEMEN                                                           -->
+    <!-- ================================================================ -->
+
+    <nav class="h-tiles" aria-label="Themen">
+
+        <a class="h-tile" href="#anleitung">
+            <span class="h-tile-icon" aria-hidden="true">🚀</span>
+            <span class="h-tile-title">Kurzanleitung</span>
+            <span class="h-tile-sub">Menüs, Einrichtung, Start</span>
+        </a>
+
+        <a class="h-tile" href="#pruefen">
+            <span class="h-tile-icon" aria-hidden="true">📋</span>
+            <span class="h-tile-title">Prüfkatalog</span>
+            <span class="h-tile-sub">Bewerten und Mängel</span>
+        </a>
+
+        <a class="h-tile" href="#fotos">
+            <span class="h-tile-icon" aria-hidden="true">📷</span>
+            <span class="h-tile-title">Fotos</span>
+            <span class="h-tile-sub">Aufnehmen und zuordnen</span>
+        </a>
+
+        <a class="h-tile" href="#export">
+            <span class="h-tile-icon" aria-hidden="true">📄</span>
+            <span class="h-tile-title">PDF &amp; Export</span>
+            <span class="h-tile-sub">Drucken, teilen, mailen</span>
+        </a>
+
+        <a class="h-tile" href="#sichern">
+            <span class="h-tile-icon" aria-hidden="true">💾</span>
+            <span class="h-tile-title">Sichern &amp; Server</span>
+            <span class="h-tile-sub">Archiv, Backup, Team</span>
+        </a>
+
+        <a class="h-tile" href="#auswertung">
+            <span class="h-tile-icon" aria-hidden="true">📊</span>
+            <span class="h-tile-title">Auswertung</span>
+            <span class="h-tile-sub">Standorte vergleichen</span>
+        </a>
+
+        <a class="h-tile is-alert" href="#probleme">
+            <span class="h-tile-icon" aria-hidden="true">🛠️</span>
+            <span class="h-tile-title">Probleme lösen</span>
+            <span class="h-tile-sub">Wenn etwas nicht klappt</span>
+        </a>
+
+        <a class="h-tile" href="#wissen">
+            <span class="h-tile-icon" aria-hidden="true">💡</span>
+            <span class="h-tile-title">Gut zu wissen</span>
+            <span class="h-tile-sub">Offline, Updates, Recht</span>
+        </a>
+
+    </nav>
+
+
+    <div class="h-tools">
+        <button type="button" id="faq-toggle" aria-pressed="false">Alle Antworten aufklappen</button>
+        <span class="h-status" id="faq-status" role="status" aria-live="polite"></span>
+    </div>
+
+    <div class="h-empty" id="faq-empty">
+        <p><strong>Keine Treffer.</strong></p>
+        <p>Versuchen Sie ein kürzeres oder anderes Stichwort, z. B. „Foto“, „PDF“ oder „Server“.</p>
+        <button type="button" id="faq-empty-reset">Suche zurücksetzen</button>
+    </div>
+
+
+    <!-- ================================================================ -->
+    <!-- 0. KURZANLEITUNG                                                 -->
+    <!-- ================================================================ -->
+
+    <section class="h-section" id="anleitung">
+
+        <div class="h-section-label">Kurzanleitung</div>
+
+        <h2>Die App auf einen Blick</h2>
+
+        <p class="h-section-intro">Oben wechseln Sie die Seite, unten bedienen Sie die Begehung, im Fuß finden Sie Hilfe und Einstellungen.</p>
+
+        <a class="card" href="kurzanleitung.html" style="display: flex; align-items: center; gap: 0.9rem; padding: 0.9rem 1rem; margin-bottom: 0.7rem; text-decoration: none; color: inherit; border-left: 4px solid var(--brand-red);" data-unit data-kw="bebilderte kurzanleitung anleitung bilder screenshots schritt für schritt outlook pdf teilen einstieg neu">
+            <span style="font-size: 1.6rem;" aria-hidden="true">🖼️</span>
+            <span style="flex: 1;">
+                <strong>Bebilderte Kurzanleitung öffnen</strong><br>
+                <span style="font-size: 0.88rem; color: var(--ink-soft);">Alle Schritte mit Bildschirmfotos und Pfeilen – von der Einrichtung über die Begehung bis zum Versand per Outlook. Auch zum Ausdrucken.</span>
+            </span>
+            <span aria-hidden="true" style="color: var(--brand-red); font-weight: 700;">→</span>
+        </a>
+
+        <a class="card" href="gbo-hilfe.html" style="display: flex; align-items: center; gap: 0.9rem; padding: 0.9rem 1rem; margin-bottom: 0.7rem; text-decoration: none; color: inherit; border-left: 4px solid var(--brand-red);" data-unit data-kw="gefährdungsbeurteilung gbo hilfe faq risiko inventar maßnahmen kurzanleitung">
+            <span style="font-size: 1.6rem;" aria-hidden="true">🛡️</span>
+            <span style="flex: 1;">
+                <strong>Gefährdungsbeurteilung: Hilfe &amp; FAQ</strong><br>
+                <span style="font-size: 0.88rem; color: var(--ink-soft);">Alles zum Reiter „Gefährdungsbeurteilung“ – mit eigener bebilderter Kurzanleitung.</span>
+            </span>
+            <span aria-hidden="true" style="color: var(--brand-red); font-weight: 700;">→</span>
+        </a>
+
+        <div class="card" style="padding: 0.9rem 1rem; margin-bottom: 0.7rem;" data-unit data-kw="menü menue übersicht leiste navigation oben unten fuß fusszeile bedienung aufbau">
+            <dl class="h-ps">
+                <dt>Oben</dt>
+                <dd>Auf jeder Seite: <strong>Prüfkatalog</strong> (Begehung bewerten), <strong>Aktionsplan</strong> (Mängel als Maßnahmen, Unterschriften), <strong>Fotos</strong> (Fotodokumentation), <strong>Verlauf</strong> (eigenes Archiv und Team-Archiv), <strong>Gefährdungsbeurteilung</strong> (GBO des Standorts, eigene <a href="gbo-hilfe.html">Hilfe</a>).</dd>
+                <dt>Unten</dt>
+                <dd>Auf dem Prüfkatalog: <strong>Datei ▾</strong> (Speichern, Team-Archiv ›, JSON-Datei ›, Archiv, Zurücksetzen), <strong>Sprachstil</strong> (Einfach, BGHW, Rechtlich) und <strong>Exportieren ▾</strong> (Drucken, PDF teilen, Mail vorbereiten). <strong>Exportieren ▾</strong> gibt es auch auf Aktionsplan und Fotos.</dd>
+                <dt>Fuß</dt>
+                <dd><strong>Hilfe &amp; FAQ</strong>, <strong>Einstellungen</strong>, <strong>Auswertung</strong>, <strong>Auswertung Team</strong>, Impressum, Datenschutz, Technische Dokumentation und die aktuelle Revision.</dd>
+            </dl>
+        </div>
+
+        <details class="h-item" id="q-einrichten" data-unit data-kw="einrichten einrichtung erster start neues gerät ipad installieren home-bildschirm einstellungen server schlüssel anmelden anmeldung startpasswort">
+            <summary>Wie richte ich die App auf einem neuen Gerät ein?</summary>
+            <div class="h-body">
+                <p class="h-short">Schritt für Schritt mit Bildern: <a href="erster-start.html">Anleitung „Erster Start“</a>. Kurz: einmal pro Gerät, danach öffnet sich die App direkt:</p>
+                <ol>
+                    <li>App-Adresse in Safari (iPad) bzw. Edge oder Chrome (PC) öffnen.</li>
+                    <li>Installieren: iPad über <strong>Teilen → Zum Home-Bildschirm</strong>, PC über <strong>App installieren</strong> in der Adresszeile.</li>
+                    <li>Mit Ihrem <strong>Anmeldenamen</strong> und dem <strong>Startpasswort</strong> anmelden und gleich ein eigenes Passwort festlegen. Beides erhalten Sie von einem Administrator.</li>
+                    <li>Im Fuß <strong>Einstellungen</strong> öffnen, Server-Adresse und Zugriffsschlüssel eintragen, <strong>Speichern</strong>, dann <strong>Verbindung testen</strong>.</li>
+                </ol>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Bleibt die Server-Adresse leer, nutzt die App den Server, von dem sie geladen wurde. Die Einstellungen gelten nur für dieses Gerät und diesen Browser.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-abschluss" data-unit data-kw="abschluss abschließen fertig ende begehung reihenfolge server speichern archivieren zurücksetzen nächster markt">
+            <summary>Wie schließe ich eine Begehung richtig ab?</summary>
+            <div class="h-body">
+                <p class="h-short">Am Ende in dieser Reihenfolge:</p>
+                <ol>
+                    <li><strong>Datei ▾ → Speichern</strong> (bzw. <strong>Team-Archiv › → Auf Server speichern</strong>) – sichert die Begehung zentral. Die Meldung zeigt, ob sie im Team-Archiv angekommen ist.</li>
+                    <li>Bericht über <strong>Exportieren ▾</strong> erstellen und versenden.</li>
+                    <li><strong>Datei ▾ → Begehung archivieren</strong> – legt einen festen Stand im Verlauf ab.</li>
+                    <li><strong>Datei ▾ → Zurücksetzen</strong> – leert die Begehung für den nächsten Standort.</li>
+                </ol>
+                <p class="h-warn">Zurücksetzen löscht die laufende Begehung samt Fotos auf diesem Gerät. Vorher speichern oder archivieren.</p>
+            </div>
+        </details>
+
+    </section>
+
+
+    <!-- ================================================================ -->
+    <!-- 1. SCHNELLSTART                                                  -->
+    <!-- ================================================================ -->
+
+    <section class="h-section" id="start" data-unit>
+
+        <div class="h-section-label">Schnellstart</div>
+
+        <h2>Eine Begehung in 6 Schritten</h2>
+
+        <ol class="h-steps">
+
+            <li class="h-step">
+                <span class="h-step-title">Betriebsdaten eintragen</span>
+                <p>Oben auf der Seite <strong>Prüfkatalog</strong>: Standortnummer, PLZ/Ort, Straße, Datum, Prüfer, Betriebsleitung und Teilnehmer. Diese Angaben erscheinen in allen PDFs. Für das Speichern auf dem Server werden Datum und Standortnummer zwingend gebraucht.</p>
+                <span class="h-where">Prüfkatalog</span>
+            </li>
+
+            <li class="h-step">
+                <span class="h-step-title">Fragen bewerten</span>
+                <p>Alle <span data-zahl="fragen">454</span> Fragen in <span data-zahl="kategorien">45</span> Kategorien mit <strong>OK</strong>, <strong>!</strong> (Mangel) oder <strong>N.V.</strong> (nicht vorhanden) bewerten. Bei einem Mangel können Sie die Situation kurz beschreiben.</p>
+                <span class="h-where">Prüfkatalog</span>
+            </li>
+
+            <li class="h-step">
+                <span class="h-step-title">Fotos aufnehmen</span>
+                <p>Allgemeine Fotos auf der Seite <strong>Fotos</strong>. Gehört ein Foto zu einem Mangel, nehmen Sie es direkt im <strong>Aktionsplan</strong> bei der Maßnahme auf – eine nachträgliche Zuordnung ist nicht möglich.</p>
+                <span class="h-where">Fotos oder Aktionsplan</span>
+            </li>
+
+            <li class="h-step">
+                <span class="h-step-title">Maßnahmen bearbeiten</span>
+                <p>Status setzen (<strong>Offen</strong>, <strong>In Bearbeitung</strong>, <strong>Erledigt</strong>) und die Unterschriften von Prüfer und Betriebsleitung erfassen.</p>
+                <span class="h-where">Aktionsplan</span>
+            </li>
+
+            <li class="h-step">
+                <span class="h-step-title">Bericht erstellen</span>
+                <p><strong>Exportieren ▾</strong> öffnen, den Umfang wählen (Checkliste, Maßnahmen, Fotos oder Alles) und dann <strong>Drucken</strong>, <strong>PDF teilen</strong> oder <strong>Mail vorbereiten</strong> antippen. Beim <strong>PDF teilen</strong> im Teilen-Menü <strong>Outlook</strong> wählen.</p>
+                <span class="h-where">auf jeder Seite</span>
+            </li>
+
+            <li class="h-step">
+                <span class="h-step-title">Archivieren</span>
+                <p><strong>Datei ▾ → Begehung archivieren</strong>. Danach mit <strong>Zurücksetzen</strong> für den nächsten Standort neu beginnen. Archivierte Begehungen bleiben unter <strong>Verlauf</strong> erhalten.</p>
+                <span class="h-where">Prüfkatalog, Verlauf</span>
+            </li>
+
+        </ol>
+
+    </section>
+
+
+    <!-- ================================================================ -->
+    <!-- 2. PRÜFKATALOG                                                   -->
+    <!-- ================================================================ -->
+
+    <section class="h-section" id="pruefen">
+
+        <div class="h-section-label">Prüfkatalog</div>
+
+        <h2>Fragen bewerten und Mängel festhalten</h2>
+
+        <details class="h-item" id="q-bewerten" data-unit data-kw="ok mangel nv n.v. nicht vorhanden bewertung antwort">
+            <summary>Wie bewerte ich eine Frage?</summary>
+            <div class="h-body">
+                <p class="h-short">Tippen Sie auf <strong>OK</strong>, <strong>!</strong> (Mangel) oder <strong>N.V.</strong> (nicht vorhanden). Bei einem Mangel erscheint darunter ein Feld für die Beschreibung, und die passende Maßnahme landet im Aktionsplan.</p>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-mangeltext" data-unit data-kw="beschreibung mangel kommentar freitext textfeld">
+            <summary>Was trage ich bei „Beschreibung des Mangels“ ein?</summary>
+            <div class="h-body">
+                <p class="h-short">Alles, was die konkrete Situation beschreibt, z. B. „Regal 3 im Lager, rechte Ecke beschädigt“. Das Feld ist optional.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Der Text erscheint zusätzlich zum Standard-Maßnahmentext im Aktionsplan – am Bildschirm und im PDF, direkt unter der jeweiligen Maßnahme. So müssen Sie den allgemeinen Maßnahmentext nicht selbst anpassen.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-inhalte" data-unit data-kw="frage ändern prüffrage falsch maßnahmentext ändern quelle regelwerk veraltet pflege pflege-tool katalog">
+            <summary>Eine Prüffrage oder ein Maßnahmentext passt nicht – wer ändert das?</summary>
+            <div class="h-body">
+                <p class="h-short">Prüfkatalog, Maßnahmentexte, Quellen und Ausstattung werden zentral mit dem Pflege-Tool gepflegt und mit einem neuen Ausgabestand eingespielt. Änderungswünsche bitte an den Verantwortlichen der App geben.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Das Pflege-Tool (<code>Grosshandel-Begehung_Pflege-Tool.html</code>) liegt im Paket der App und läuft auf dem PC. Bewertungen, Archiv und Auswertungen hängen an der ID einer Frage – umformulierte Fragen behalten deshalb ihre Antworten. Entfernte Fragen erscheinen in alten Begehungen als „nicht mehr im aktuellen Katalog“. Nach einem neuen Ausgabestand laden die Geräte die neuen Texte beim nächsten Öffnen mit Verbindung automatisch.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-sprachstil" data-unit data-kw="sprachstil einfach bghw rechtlich maßnahmentext formulierung quellen quellenverzeichnis fundstellen anhang">
+            <summary>Wie wechsle ich den Sprachstil der Maßnahmentexte?</summary>
+            <div class="h-body">
+                <p class="h-short">Unten auf der Seite Prüfkatalog, zwischen den Bereichen <strong>Datei</strong> und <strong>Exportieren</strong>, wählen Sie <strong>Einfach</strong>, <strong>BGHW</strong> oder <strong>Rechtlich</strong>.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <ul>
+                            <li><strong>Einfach:</strong> verständliche Formulierungen für die schnelle Abstimmung am Standort</li>
+                            <li><strong>BGHW:</strong> fachlich orientierte Formulierungen</li>
+                            <li><strong>Rechtlich:</strong> ausführlichere Formulierungen mit Verweisen auf Vorschriften</li>
+                        </ul>
+                        <p>Der gewählte Stil gilt für die angezeigten Maßnahmentexte und für das PDF. Am Ende des PDF stehen die Quellen: bei <strong>BGHW</strong> und <strong>Rechtlich</strong> das vollständige Quellenverzeichnis, bei <strong>Einfach</strong> nur die Quellen zu den Maßnahmen dieser Begehung, jeweils unter der Nummer der Maßnahme.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-nv" data-unit data-kw="nicht vorhanden schalter kategorie aufzug wc praktikanten kühl sperren gesperrt">
+            <summary>Was bedeutet der Schalter „nicht zutreffend“?</summary>
+            <div class="h-body">
+                <p class="h-short">Damit markieren Sie eine ganze Kategorie als N.V., wenn es sie am Standort nicht gibt. Alle Fragen werden automatisch auf N.V. gesetzt und gesperrt.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>In der Großhandel Begehung hat <strong>jede Kategorie</strong> diesen Schalter, z. B. „Keine Regalbediengeräte am Standort“ oder „Keine begehbaren Kühl- bzw. Tiefkühlbereiche am Standort“. Schalten Sie ihn wieder aus, lassen sich die Fragen wieder bearbeiten.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-betriebsprofil" data-unit data-kw="betriebsprofil ausstattung kennzahlen ersthelfer brandschutzhelfer bereiche prüffrist prüfdatum überfällig fällig">
+            <summary>Betriebsprofil, Bereiche und Prüffristen – wie funktioniert das?</summary>
+            <div class="h-body">
+                <p class="h-short">Im Betriebsprofil tragen Sie Kennzahlen und die Ausstattung des Standorts ein. Bei prüfpflichtigen Punkten tragen Sie das Datum der letzten Prüfung ein; die App zeigt, ob die Prüfung noch gültig, bald fällig oder überfällig ist.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p><strong>Kennzahlen:</strong> Aus „Höchstens gleichzeitig anwesend“ berechnet die App die Mindestzahl der Ersthelfer (DGUV Vorschrift 1 § 26) und Brandschutzhelfer (ASR A2.2). Weitere Hinweise erscheinen bei mehr als 20 Beschäftigten (Arbeitsschutzausschuss) und bei Nachtarbeit.</p>
+                        <p><strong>Ausstattung am Standort:</strong> Entfernen Sie einen Haken (z. B. „Betriebstankstelle Diesel“), wird die zugehörige Kategorie auf „nicht zutreffend“ gesetzt. Setzen Sie den Haken wieder, werden die automatisch gesetzten N.V.-Bewertungen wieder auf „offen“ gestellt.</p>
+                        <p><strong>Bereiche:</strong> Die Kategorien sind in elf Bereiche gegliedert (z. B. „Lager und Kommissionierung“). Die Überschrift zeigt den Fortschritt im Bereich. Im PDF erscheinen dieselben Bereiche.</p>
+                        <p><strong>Prüffristen:</strong> Bei prüfpflichtigen Punkten (z. B. Regalinspektion, Stapler, Tore, Feuerlöscher) steht unter der Frage das Feld „Letzte Prüfung“. Bezug ist das Datum der Begehung. Grün = gültig, gelb = innerhalb von 30 Tagen fällig, rot = überfällig (dann den Punkt als Mangel bewerten). Bei „Frist laut Prüfbericht“ wird nur das Datum festgehalten. Das PDF enthält eine Prüffristen-Übersicht. Bei einer Wiederholungsbegehung werden die Prüfdaten übernommen.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-unterbereiche" data-unit data-kw="unterbereich unterbereiche aufzug personenaufzug lastenaufzug absturz leitern psa">
+            <summary>Wie funktionieren die Unterbereiche (Parkhäuser, Pforten, Aufzüge, Werkstatt)?</summary>
+            <div class="h-body">
+                <p class="h-short">Einige Kategorien sind in Unterbereiche gegliedert, jeder mit eigenem N.V.-Schalter. Parkhäuser (1–4) und Pforten (1–2) sind je Parkhaus bzw. Pforte einzeln bewertbar.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p><strong>Parkhäuser und Pforten:</strong> Jedes Parkhaus (bis 4) und jede Pforte (bis 2) hat einen eigenen Unterbereich mit allen Fragen – einschließlich Treppenhäusern und Aufzügen der Parkhäuser bzw. der Schrankenanlage. Tragen Sie im Betriebsprofil die Anzahl ein; nicht benötigte Unterbereiche werden automatisch auf N.V. gesetzt. In Aktionsplan und PDF steht vor jeder Frage, welches Parkhaus bzw. welche Pforte gemeint ist.</p>
+                        <p><strong>Aufzüge:</strong> Personenaufzug (3 Fragen) und Lastenaufzug (3 Fragen). Gibt es nur einen Lastenaufzug, schalten Sie den Unterbereich Personenaufzug auf N.V.</p>
+                        <p><strong>Absturzsicherung:</strong> Bühnen und Absturzkanten (3), Leitern und Tritte (2), PSA gegen Absturz (2).</p>
+                        <p><strong>Werkstatt Flurförderzeuge:</strong> Werkstatt und Instandsetzung (13) sowie Sozialraum, Pausenraum und Büro der Werkstatt (4).</p>
+                        <p>Der Schalter <strong>Unterbereich nicht vorhanden / nicht anwendbar</strong> setzt nur die Fragen dieses Unterbereichs auf N.V. Der Schalter der Kategorie gilt für alle Fragen der Kategorie.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-sonstiges" data-unit data-kw="sonstiges frei freie prüfpunkte eigener prüfpunkt feld text eigene frage">
+            <summary>Wie funktioniert die Kategorie „Sonstiges“?</summary>
+            <div class="h-body">
+                <p class="h-short">Ganz unten im Prüfkatalog gibt es zwei freie Prüfpunkte (38.1 und 38.2) für Feststellungen, die in keiner anderen Kategorie vorkommen. Den Text tragen Sie selbst ein.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <ul>
+                            <li>Text in das Feld schreiben, z. B. „Außenlager Leergut: Bauzaun umgekippt“. Erst dann lassen sich <strong>OK</strong>, <strong>!</strong> und <strong>N.V.</strong> wählen.</li>
+                            <li>Ein leeres Feld zählt nicht als offen und erscheint nicht im PDF.</li>
+                            <li>Bei <strong>!</strong> landet der Punkt wie jeder andere im Aktionsplan, mit Ihrem Text als Prüfpunkt. Das Feld „Maßnahme“ bleibt leer zum freien Ausfüllen; es gibt keinen Textvorschlag und keine Quellenangabe.</li>
+                            <li>Der Schalter <strong>Keine sonstigen Feststellungen</strong> setzt beide Punkte auf N.V.</li>
+                            <li>Bei einer Wiederholungsbegehung werden die eingetragenen Texte übernommen.</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-mehrere" data-unit data-kw="mehrere märkte gleichzeitig parallel zurücksetzen neuer markt">
+            <summary>Kann ich mehrere Standorte gleichzeitig bearbeiten?</summary>
+            <div class="h-body">
+                <p class="h-short">Nein, pro Gerät gibt es eine laufende Begehung. Archivieren Sie den fertigen Standort, setzen Sie zurück und beginnen Sie den nächsten.</p>
+            </div>
+        </details>
+
+    </section>
+
+
+    <!-- ================================================================ -->
+    <!-- 3. FOTOS                                                         -->
+    <!-- ================================================================ -->
+
+    <section class="h-section" id="fotos">
+
+        <div class="h-section-label">Fotos</div>
+
+        <h2>Fotos aufnehmen, zuordnen und verwalten</h2>
+
+        <details class="h-item" id="q-foto-add" data-unit data-kw="foto bild kamera galerie auswählen einfügen kommentar löschen">
+            <summary>Wie füge ich ein Foto hinzu?</summary>
+            <div class="h-body">
+                <p class="h-short">Auf der Seite <strong>Fotos</strong> nehmen Sie ein Foto mit der Kamera auf oder wählen ein vorhandenes Bild aus. Jedes Foto können Sie kommentieren oder einzeln löschen.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Fotografieren Sie einen Mangel möglichst direkt und ergänzen Sie bei Bedarf einen kurzen Kommentar. Die Bilder werden automatisch verkleinert, um Speicherplatz zu sparen. Ob die Auswahl vorhandener Bilder möglich ist, hängt von Browser und Gerät ab.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-foto-massnahme" data-unit data-kw="foto maßnahme zuordnen aktionsplan verknüpfen nachträglich">
+            <summary>Wie ordne ich ein Foto einer Maßnahme zu?</summary>
+            <div class="h-body">
+                <p class="h-short">Nehmen Sie das Foto direkt im <strong>Aktionsplan</strong> bei der jeweiligen Maßnahme auf. Ein bereits auf der Seite Fotos gespeichertes Bild lässt sich nachträglich nicht zuordnen.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Das Foto ist dann automatisch mit der Maßnahme verknüpft und erscheint im Maßnahmen-PDF zusammen mit Feststellung und Maßnahmentext.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-foto-ort" data-unit data-kw="foto speicher indexeddb zurücksetzen archivieren löschen gerät">
+            <summary>Wo liegen meine Fotos, und was passiert beim Zurücksetzen?</summary>
+            <div class="h-body">
+                <p class="h-short">Nur auf diesem Gerät, in einer eigenen Datenbank. Beim <strong>Zurücksetzen</strong> werden sie gelöscht, beim <strong>Archivieren</strong> ins Archiv übernommen.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Fotos liegen in IndexedDB und nicht in der normalen Begehungsdatei, weil Bilder viel größer sind als Textdaten. Archivierte Begehungen behalten ihre Fotos auch nach einem Zurücksetzen. Löschen Sie die Website-Daten des Browsers, gehen auch die Fotos verloren.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-foto-vorschau" data-unit data-kw="vorschau vorschaubild gestrichelt team archiv anderes gerät foto löschen nicht möglich">
+            <summary>Warum sehe ich „Vorschau“ statt des echten Fotos?</summary>
+            <div class="h-body">
+                <p class="h-short">Die Begehung wurde auf einem anderen Gerät geöffnet, z. B. über das Team-Archiv. Dort gibt es nur ein kleines Vorschaubild, das sich nicht löschen lässt.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Zu jedem Foto einer Maßnahme speichert die App ein kleines, stark komprimiertes Vorschaubild in der Begehungsdatei. Das Original bleibt auf dem Gerät, auf dem es aufgenommen wurde. Auf anderen Geräten erkennen Sie die Vorschau am gestrichelten Rahmen und der Kennzeichnung „Vorschau“.</p>
+                        <p>Bei älteren Fotos ohne Vorschaubild wird es beim nächsten Öffnen des Aktionsplans automatisch nachgeholt.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+    </section>
+
+
+    <!-- ================================================================ -->
+    <!-- 4. PDF UND EXPORT                                                -->
+    <!-- ================================================================ -->
+
+    <section class="h-section" id="export">
+
+        <div class="h-section-label">PDF &amp; Export</div>
+
+        <h2>Berichte erstellen, drucken und versenden</h2>
+
+        <details class="h-item" id="q-pdf-arten" data-unit data-kw="pdf checkliste maßnahmen fotos alles gesamtbericht exportieren bericht deckblatt">
+            <summary>Welche Berichte kann ich erstellen?</summary>
+            <div class="h-body">
+                <p class="h-short">Über <strong>Exportieren ▾</strong> wählen Sie zuerst den Umfang:</p>
+                <ul>
+                    <li><strong>Checkliste</strong> – Fragen und Bewertungen</li>
+                    <li><strong>Maßnahmen</strong> – Aktionsplan mit Status, Unterschriften und Maßnahmenfotos</li>
+                    <li><strong>Fotos</strong> – eigenständige Fotodokumentation</li>
+                    <li><strong>Alles</strong> – kombinierter Gesamtbericht (Voreinstellung)</li>
+                </ul>
+                <p>Jedes PDF beginnt mit einem Deckblatt aus Betriebsdaten und Begehungsstatus.</p>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-pdf-aktion" data-unit data-kw="drucken pdf teilen mail vorbereiten e-mail versenden download desktop windows tauri outlook eml anhang">
+            <summary>Was machen Drucken, PDF teilen und Mail vorbereiten?</summary>
+            <div class="h-body">
+                <ul>
+                    <li><strong>Drucken</strong> – erzeugt das PDF und öffnet es in einem neuen Tab</li>
+                    <li><strong>PDF teilen</strong> – öffnet das Teilen-Menü Ihres Geräts. <strong>Zum Versenden dort immer Outlook wählen.</strong> Nur dann stehen der Betreff (z. B. „Begehung Standort 1234“) in der Betreffzeile und der Mail-Text darunter.</li>
+                    <li><strong>Mail vorbereiten</strong> – öffnet eine Mail mit vorausgefülltem Text (Standort, Prüfer, Betreff)</li>
+                </ul>
+                <p><strong>Wichtig:</strong> Beim <strong>PDF teilen</strong> zwingend <strong>Outlook</strong> verwenden. Andere Apps im Teilen-Menü (z. B. Apple Mail, Nachrichten) übernehmen den Betreff nicht; die Mail müsste dann von Hand ergänzt werden.</p>
+                <p>Unterstützt Ihr Gerät das Teilen nicht, lädt die App das PDF stattdessen herunter.</p>
+                <p><strong>Desktop-App unter Windows:</strong> Dort öffnet <strong>Drucken</strong> direkt den Druckdialog, und <strong>PDF teilen</strong> gibt es nicht. <strong>Mail mit PDF vorbereiten</strong> speichert das PDF im Ordner <strong>Downloads\Großhandel Begehung</strong>, zeigt es im Explorer markiert an und öffnet die Mail mit Betreff und Text – das PDF einfach in die Mail ziehen. Auch alle anderen Exporte (PDF, JSON, CSV) landen in der Desktop-App in diesem Ordner.</p>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-pdf-fotos" data-unit data-kw="pdf fotos bilder fotoanhang kommentar seite">
+            <summary>Wie erscheinen Fotos im PDF?</summary>
+            <div class="h-body">
+                <p class="h-short">Allgemeine Fotos stehen in der Fotodokumentation, Fotos einer Maßnahme als Vorschaubilder direkt bei der Maßnahme.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <ul>
+                            <li>Gibt es keine allgemeinen Fotos, entfällt dieser Abschnitt komplett – es erscheint keine leere Seite.</li>
+                            <li>Für Maßnahmen mit Fotos kann zusätzlich ein Fotoanhang erzeugt werden.</li>
+                            <li>Die Fotodokumentation zeigt bis zu vier Fotos pro Seite, Kommentare werden mit ausgegeben.</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-pdf-archiv" data-unit data-kw="pdf archiv ablage abgelegt gesichert server ordner netzlaufwerk berechtigung einsehen ansehen nachgeholt offline">
+            <summary>Werden erstellte PDFs auch gesichert (PDF-Archiv)?</summary>
+            <div class="h-body">
+                <p class="h-short">Ja, wenn Sie angemeldet sind und ein Administrator das PDF-Archiv eingeschaltet hat: Jedes PDF, das Sie teilen, herunterladen, drucken oder per Mail vorbereiten, legt die App zusätzlich auf dem Server ab. Die Meldung „PDF zusätzlich im PDF-Archiv abgelegt“ bestätigt das.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <ul>
+                            <li>Abgelegt wird nach Standort, Datum und Berichtsart. Dafür muss im Bericht die <strong>Standortnummer</strong> eingetragen sein; fehlt sie, weist die App darauf hin.</li>
+                            <li>Ohne Verbindung merkt sich das Gerät die PDFs und legt sie automatisch ab, sobald wieder eine Verbindung besteht („Nachgeholt: … PDF im PDF-Archiv abgelegt“).</li>
+                            <li><strong>Einsehen</strong> können die PDFs nur Konten, denen ein Administrator in der <strong>Benutzerverwaltung</strong> das PDF-Archiv erlaubt hat (Administratoren immer). Sie finden es unter <strong>Einstellungen → PDF-Archiv</strong>. Jedes Öffnen wird protokolliert.</li>
+                            <li>Wird dasselbe PDF mehrmals erzeugt, kann es mehrfach im Archiv liegen – jeweils mit Uhrzeit im Dateinamen.</li>
+                            <li>Ein- und ausschalten kann das PDF-Archiv nur ein Administrator (Benutzerverwaltung → Team-Archiv und PDF-Archiv).</li>
+                            <li><strong>Löschen:</strong> Hat ein Administrator „Löschen im Archiv erlauben“ eingeschaltet, sehen Administratoren im PDF-Archiv und im Team-Archiv (Verlauf) einen Knopf <strong>Löschen</strong>. Gelöscht wird nach einer Rückfrage endgültig vom Server, für alle Geräte; der Vorgang steht im Protokoll. Prüfer können nicht löschen.</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+    </section>
+
+
+    <!-- ================================================================ -->
+    <!-- 5. SICHERN, ARCHIV, SERVER                                        -->
+    <!-- ================================================================ -->
+
+    <section class="h-section" id="sichern">
+
+        <div class="h-section-label">Sichern &amp; Server</div>
+
+        <h2>Daten sichern, archivieren und im Team teilen</h2>
+
+        <details class="h-item" id="q-ort" data-unit data-kw="daten speicher gespeichert lokal browser localstorage website-daten löschen zweites ipad gerät">
+            <summary>Wo werden meine Daten gespeichert?</summary>
+            <div class="h-body">
+                <p class="h-short">Lokal auf diesem Gerät im Browser. Auf einem zweiten iPad entsteht ein eigener, getrennter Datenbestand.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Die laufende Begehung liegt im Browserspeicher, Fotos und Archiv in einer eigenen Datenbank (IndexedDB). Löschen Sie die Website-Daten des Browsers, kann alles verloren gehen. Sichern Sie wichtige Begehungen deshalb zusätzlich als PDF, als JSON-Datei oder auf dem Server.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-datei" data-unit data-kw="datei menü speichern json exportieren laden mail teilen archivieren zurücksetzen backup sicherung">
+            <summary>Was kann ich im Datei-Menü tun?</summary>
+            <div class="h-body">
+                <p class="h-short">Die laufende Begehung wird automatisch gespeichert. Unter <strong>Datei ▾</strong> auf dem Prüfkatalog stehen außerdem bereit:</p>
+                <ul>
+                    <li><strong>Speichern</strong> – speichert auf diesem Gerät und, wenn vom Administrator eingeschaltet, automatisch auch ins Team-Archiv</li>
+                    <li><strong>Team-Archiv ›</strong> – darin <strong>Auf Server speichern</strong> und <strong>Vom Server laden</strong></li>
+                    <li><strong>JSON-Datei ›</strong> – darin <strong>Exportieren</strong> (Backup als Datei), <strong>Per Mail teilen</strong> (Datei im Anhang) und <strong>Laden</strong> (exportierten Stand öffnen)</li>
+                    <li><strong>Begehung archivieren</strong> – sichert einen vollständigen Schnappschuss im Verlauf und, wenn vom Administrator eingeschaltet, automatisch auch im Team-Archiv</li>
+                    <li><strong>Zurücksetzen</strong> – löscht die aktuelle Begehung samt Fotos</li>
+                </ul>
+                <p>Punkte mit <strong>›</strong> öffnen eine Unterebene, <strong>‹ Zurück</strong> führt wieder hinaus. Vor Archivieren, Zurücksetzen und JSON-Laden zeigt die App ein Hinweisfenster mit der betroffenen Begehung; beim Zurücksetzen und Laden kann die offene Begehung vorher im Verlauf archiviert werden. Lädt man eine JSON-Datei derselben Begehung (gleicher Standort, gleiches Datum), bleiben die Fotos auf dem Gerät erhalten, sonst werden sie entfernt.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Die JSON-Datei ist verlustfrei: Sie enthält die vollständige Begehung mit Maßnahmen, Status und Unterschriften, aber keine Fotos. Legt der Administrator die Datei im Datenordner des Servers ab, erscheint sie automatisch im Team-Archiv.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-archiv" data-unit data-kw="archiv archivieren verlauf mein verlauf abgeschlossen begehung">
+            <summary>Wie archiviere ich eine Begehung?</summary>
+            <div class="h-body">
+                <p class="h-short"><strong>Datei ▾ → Begehung archivieren</strong>. Die laufende Begehung bleibt bestehen; mit <strong>Zurücksetzen</strong> beginnen Sie danach eine neue. Ist das automatische Team-Archiv eingeschaltet, landet der Stand dabei auch im Team-Archiv („Archiviert – auch im Team-Archiv“); ohne Verbindung wird das nachgeholt.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Beim Archivieren werden die zu diesem Zeitpunkt vorhandenen Fotos mit übernommen. Archivierte Begehungen finden Sie auf der Seite <strong>Verlauf</strong> unter <strong>Mein Verlauf</strong>. Dort können Sie sie erneut anzeigen, als PDF exportieren oder löschen.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-archiv-bearbeiten" data-unit data-kw="archiv bearbeiten anzeigen in app anzeigen wiederherstellen überschreiben verlauf">
+            <summary>Kann ich eine archivierte Begehung wieder bearbeiten?</summary>
+            <div class="h-body">
+                <p class="h-short">Ja: <strong>Verlauf → Mein Verlauf → In App anzeigen</strong>. Vor dem Öffnen zeigt die App einen Hinweis mit Standort, Datum und Ort der gewählten Begehung. Ist auf dem Gerät noch eine Begehung mit Eingaben geöffnet, bietet sie an, diese zuerst im Verlauf zu archivieren.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Das Archiv selbst bleibt unberührt, die Begehung lässt sich jederzeit erneut öffnen. Die zugehörigen Fotos werden mit zurückgeladen.</p>
+                        <p>Im Team-Archiv gibt es dieselbe Funktion. Dort sind aber keine Fotos gespeichert: Ein auf diesem Gerät vorhandener Fotobestand wird beim Öffnen geleert und nicht ersetzt. Auch hier erscheint vor dem Öffnen ein Hinweis mit Standort, Datum und Ort. Ist auf dem Gerät eine Begehung geöffnet, bietet die App vorher an, sie zuerst im Verlauf zu archivieren.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-geraet" data-unit data-kw="übertragen anderes gerät wechseln umziehen json fotos">
+            <summary>Wie übertrage ich eine Begehung auf ein anderes Gerät?</summary>
+            <div class="h-body">
+                <p class="h-short">Mit <strong>Datei ▾ → JSON-Datei › → Exportieren</strong> (oder <strong>Per Mail teilen</strong>) und auf dem anderen Gerät mit <strong>Datei ▾ → JSON-Datei › → Laden</strong>. Fotos sind in der JSON-Datei nicht enthalten.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Für die Fotos nutzen Sie das PDF oder die Archivfunktion, weil die Bilder nur auf dem Gerät gespeichert sind. Auch das Speichern auf dem Server überträgt nur die Prüfdaten.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-nas" data-unit data-kw="nas server speichern laden einstellungen zugriffsschlüssel cors versionen überschreiben">
+            <summary>Wie sichere ich auf dem Server?</summary>
+            <div class="h-body">
+                <p class="h-short">In der Regel automatisch: <strong>Speichern</strong> (Datei-Menü oder Aktionsplan) legt die Begehung auch im Team-Archiv ab. Gezielt geht es über <strong>Datei ▾ → Team-Archiv › → Auf Server speichern</strong>, später <strong>Vom Server laden</strong>. Datum und Standortnummer müssen ausgefüllt sein, und die App muss über die Server-Adresse geöffnet sein.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <ul>
+                            <li>Gespeichert werden nur die Prüfdaten, keine Fotos. Gibt es auf dem Gerät eine Gefährdungsbeurteilung für denselben Standort, wird sie mit der Begehung zusammen gespeichert und beim Öffnen auf einem anderen Gerät mitgeladen.</li>
+                            <li><strong>Vom Server laden</strong> zeigt alle Begehungen im Team-Archiv, neueste zuerst, mit Suche nach Standortnummer, Ort oder Datum. Ist auf dem Gerät eine Begehung geöffnet, fragt die App vorher nach und bietet an, sie zuerst im <strong>Verlauf</strong> zu archivieren. Die Fotos auf dem Gerät werden beim Laden entfernt.</li>
+                            <li>Speichern Sie für denselben Standort am selben Tag erneut, wird die Datei ersetzt. Der vorherige Stand liegt als Kopie im Ordner <code>versionen</code> auf dem Server (für Administratoren).</li>
+                            <li>Läuft die App unter einer anderen Adresse, tragen Sie unter <strong>Einstellungen</strong> eine externe Server-Adresse ein. Der Server muss Anfragen von der App-Adresse ausdrücklich erlauben (CORS).</li>
+                            <li>Mit dem <strong>Zugriffsschlüssel</strong> unterschreibt die App jede Server-Anfrage. Er wird geschützt auf dem Gerät abgelegt, lässt sich danach nicht mehr anzeigen und geht nicht über das Netz. Er wirkt nur, wenn auf dem Server derselbe Schlüssel eingerichtet ist.</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-anmelden" data-unit data-kw="anmelden anmeldung login benutzername anmeldename passwort startpasswort abmelden sitzung abgelaufen erneut anmelden">
+            <summary>Wie melde ich mich an – und warum fragt die App erneut?</summary>
+            <div class="h-body">
+                <p class="h-short">Ist auf Ihrem Server die Anmeldung eingeschaltet, öffnet sich die App erst nach dem Anmelden mit <strong>Anmeldename</strong> und <strong>Passwort</strong>. Die Anmeldung gilt einen Arbeitstag (10 Stunden).</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <ul>
+                            <li>Beim ersten Anmelden mit dem Startpasswort legen Sie sofort ein eigenes Passwort fest (mindestens 10 Zeichen, nicht der Anmeldename). Ein kurzer Satz ist leicht zu merken und schwer zu erraten.</li>
+                            <li>Ist die Anmeldung abgelaufen, fragt die App beim nächsten Speichern oder Laden im Fenster <strong>Bitte erneut anmelden</strong> nach dem Passwort. Ihre Eingaben bleiben erhalten; danach geht es direkt weiter.</li>
+                            <li>Ohne Verbindung (z. B. am Standort) arbeitet eine geöffnete App normal weiter. Gespeichert wird auf dem Server, sobald wieder eine Verbindung besteht und Sie angemeldet sind.</li>
+                            <li>Nach 5 falschen Passwörtern ist das Konto 15 Minuten gesperrt.</li>
+                            <li><strong>Einstellungen → Anmeldung</strong> zeigt, als wer Sie angemeldet sind und bis wann. Dort können Sie Ihr <strong>Passwort ändern</strong> und sich <strong>abmelden</strong> – das empfiehlt sich an gemeinsam genutzten Geräten.</li>
+                            <li>Passwort vergessen? Ein Administrator vergibt Ihnen ein neues Startpasswort.</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-benutzer" data-unit data-kw="benutzer benutzerverwaltung administrator admin konto anlegen sperren löschen passwort zurücksetzen rolle prüfer protokoll">
+            <summary>Wie verwalte ich Benutzer? (Administratoren)</summary>
+            <div class="h-body">
+                <p class="h-short"><strong>Einstellungen → Anmeldung → Benutzerverwaltung</strong>. Dort legen Administratoren Konten an, setzen Passwörter zurück, sperren, ändern die Rolle oder löschen ein Konto.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <ul>
+                            <li>Ein neues Konto bekommt ein <strong>Startpasswort</strong>. Es wird nur einmal angezeigt – bitte persönlich übergeben, nicht per E-Mail.</li>
+                            <li><strong>Prüfer</strong> arbeiten mit der App und dem Team-Archiv, <strong>Administratoren</strong> zusätzlich mit der Benutzerverwaltung.</li>
+                            <li>Sperren oder Zurücksetzen meldet die Person auf allen Geräten sofort ab. Begehungen im Team-Archiv bleiben beim Löschen eines Kontos erhalten.</li>
+                            <li>Das eigene Konto kann man nicht sperren, herabstufen oder löschen; mindestens ein Administrator bleibt immer erhalten.</li>
+                            <li>Das <strong>Protokoll</strong> zeigt Anmeldungen, Fehlversuche und Änderungen an Konten.</li>
+                            <li>Passwörter sieht niemand – auch kein Administrator. Auf dem Server liegt nur ein nicht umkehrbarer Prüfwert.</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-auto-team" data-unit data-kw="automatisch team-archiv speichern ohne verbindung nachholen offline schalter administrator">
+            <summary>Speichert die App automatisch ins Team-Archiv?</summary>
+            <div class="h-body">
+                <p class="h-short">Ja, wenn der Administrator das eingeschaltet hat (Voreinstellung): Ein Tipp auf <strong>Speichern</strong> sichert die Begehung auf diesem Gerät <em>und</em> im Team-Archiv.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <ul>
+                            <li>Die Meldung danach zeigt das Ergebnis: „Gespeichert – auch im Team-Archiv“, „das Team-Archiv ist bereits aktuell“ oder „ins Team-Archiv, sobald wieder eine Verbindung besteht“.</li>
+                            <li><strong>Ohne Verbindung</strong> merkt sich die App die Begehung und holt das Speichern von selbst nach, sobald das Gerät wieder online ist und der Prüfkatalog oder Aktionsplan offen ist.</li>
+                            <li>Fehlen <strong>Datum oder Standortnummer</strong>, wird nur auf dem Gerät gespeichert.</li>
+                            <li>Hat inzwischen jemand anderes dieselbe Begehung gespeichert, fragt die App wie gewohnt nach (eigene Fassung, überschreiben oder abbrechen).</li>
+                            <li>Ob automatisch gespeichert wird, steht unter <strong>Einstellungen → Server-Verbindung</strong>. Ein- und ausschalten können nur Administratoren in der <strong>Benutzerverwaltung</strong>; es gilt dann für alle Geräte.</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-team" data-unit data-kw="team archiv nas kollegen alle märkte überblick">
+            <summary>Was ist das Team-Archiv?</summary>
+            <div class="h-body">
+                <p class="h-short">Auf der Seite <strong>Verlauf</strong> zeigt der Reiter <strong>Team-Archiv (Server)</strong> alle Begehungen, die irgendjemand im Team auf dem Server gespeichert hat – nicht nur Ihre eigenen.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>So behält das ganze Team den Überblick, welche Standorte schon geprüft wurden. Mit Anmeldung steht bei jeder Begehung, wer sie gespeichert hat. Sie können jede Begehung als PDF exportieren oder in der App anzeigen. Fotos sind nicht enthalten. Der Reiter funktioniert nur, wenn die App über die Server-Adresse läuft oder in den Einstellungen eine Server-Adresse hinterlegt ist.</p>
+                        <p>Begehungen mit Gefährdungsbeurteilung erscheinen wie alle anderen und werden in der Team-Auswertung mitgezählt; beim Öffnen kommt die Gefährdungsbeurteilung mit. Das Team-Archiv der Großhandel Begehung ist von ASiC Handel getrennt: Begehungen aus ASiC Handel erscheinen hier nicht und lassen sich nicht öffnen.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-gleichzeitig" data-unit data-kw="gleichzeitig zwei geräte kollege andere person überschreiben konflikt neuerer stand fassung team-archiv speichern parallel geöffnet gerätename in bearbeitung">
+            <summary>Was passiert, wenn zwei Personen dieselbe Begehung bearbeiten?</summary>
+            <div class="h-body">
+                <p class="h-short">Beim <strong>Auf Server speichern</strong> prüft die App, ob seit dem Öffnen jemand anderes dieselbe Begehung gespeichert hat. Wenn ja, fragt sie nach, statt den anderen Stand einfach zu überschreiben.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Eine Begehung aus dem Team-Archiv können mehrere Personen gleichzeitig öffnen – jedes Gerät hat seine eigene Kopie. Liegt beim Speichern ein neuerer Stand im Team-Archiv, zeigt die App Zeitpunkt und Begehung und bietet an:</p>
+                        <ul>
+                            <li><strong>Als eigene Fassung speichern:</strong> Ihr Stand kommt zusätzlich ins Team-Archiv und ist dort mit „Fassung 2“ (3, 4 …) gekennzeichnet. Der andere Stand bleibt unverändert. Weitere Speicherungen von diesem Gerät gehen in diese Fassung.</li>
+                            <li><strong>Trotzdem überschreiben:</strong> Ihr Stand ersetzt den anderen. Der bisherige Stand bleibt als Sicherung auf dem Server; für die Wiederherstellung ist der Administrator zuständig.</li>
+                            <li><strong>Abbrechen:</strong> Es wird nichts gespeichert.</li>
+                        </ul>
+                        <p>Dasselbe gilt, wenn Sie eine neue Begehung für einen Standort und ein Datum speichern, für die im Team-Archiv schon eine Begehung liegt.</p>
+                        <p>Im Team-Archiv und unter „Vom Server laden“ steht hinter der Speicherzeit, wie lange sie her ist („vor 20 Minuten“). Begehungen, die in den letzten zwei Stunden gespeichert wurden, tragen den Hinweis <strong>kürzlich gespeichert</strong> – vielleicht arbeitet gerade jemand daran. Hat jemand eine Begehung aus dem Team-Archiv geöffnet, sehen alle anderen <strong>geöffnet auf …</strong> mit dem Gerätenamen aus den Einstellungen; beim Öffnen weist die App darauf hin. Das ist nur ein Hinweis, keine Sperre. Er verschwindet, sobald auf dem Gerät auf dem Server gespeichert, archiviert, zurückgesetzt oder eine andere Begehung geöffnet wird, spätestens nach 4 Stunden. Die Team-Auswertung zählt von mehreren Fassungen nur die zuletzt gespeicherte.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-wiederholung" data-unit data-kw="wiederholungsbegehung nachbegehung wiederholung vorbegehung letzte begehung offene maßnahmen übernehmen nachkontrolle">
+            <summary>Wie lege ich eine Wiederholungsbegehung an?</summary>
+            <div class="h-body">
+                <p class="h-short">Auf der Seite <strong>Verlauf</strong> bei der letzten Begehung des Standorts <strong>🔁 Wiederholungsbegehung</strong> tippen – im eigenen Verlauf oder im Team-Archiv.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <ul>
+                            <li>Betriebsdaten, die als „nicht vorhanden“ geschalteten Bereiche und die Texte unter „Sonstiges“ werden übernommen, das Datum wird auf heute gesetzt.</li>
+                            <li>Alle Maßnahmen, die in der Vorbegehung nicht erledigt waren, werden als <strong>Mangel</strong> vorbelegt und mit „Offen aus Vorbegehung vom …“ gekennzeichnet – im Prüfkatalog, im Aktionsplan und im PDF.</li>
+                            <li>Ist ein Mangel inzwischen behoben, setzen Sie den Prüfpunkt einfach auf <strong>OK</strong>; die Maßnahme entfällt dann.</li>
+                            <li>Unterschriften und Fotos werden nicht übernommen. Der aktuell laufende, noch nicht archivierte Stand auf dem Gerät wird ersetzt – vorher archivieren, falls er noch gebraucht wird.</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+    </section>
+
+
+    <!-- ================================================================ -->
+    <!-- 6. AUSWERTUNG                                                    -->
+    <!-- ================================================================ -->
+
+    <section class="h-section" id="auswertung">
+
+        <div class="h-section-label">Auswertung</div>
+
+        <h2>Standorte und Zeiträume vergleichen</h2>
+
+        <p class="h-section-intro">Für den Alltag nicht nötig, aber hilfreich, wenn Sie mehrere Begehungen oder Standorte überblicken wollen.</p>
+
+        <details class="h-item" id="q-aw-filter" data-unit data-kw="zeitraum filter markt monate auswertung wiederkehrende mängel offene maßnahmen">
+            <summary>Wie funktionieren Zeitraum- und Standort-Filter?</summary>
+            <div class="h-body">
+                <p class="h-short">Oben auf der Auswertungsseite wählen Sie den Zeitraum (<strong>Letzte 3 Monate</strong>, <strong>Letzte 6 Monate</strong>, <strong>Alles</strong>) und optional einen einzelnen Standort.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Der Zeitraum gilt für Kategorien-Schwachstellen, Auffällige Standorte, Verlauf pro Standort sowie CSV- und PDF-Export. <strong>Wiederkehrende Mängel</strong> und <strong>Offene Maßnahmen</strong> berücksichtigen ihn bewusst nicht, damit dort immer der aktuellste Stand sichtbar bleibt. Der Standort-Filter wirkt auf alles außer Wiederkehrende Mängel.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-aw-auffaellig" data-unit data-kw="auffällige märkte gesamtauswertung pdf csv diagramm mängelquote kriterium trend">
+            <summary>Was zeigen „Auffällige Standorte“ und die Gesamtauswertung?</summary>
+            <div class="h-body">
+                <p class="h-short">Auffällige Standorte sind Standorte mit hoher Mängelquote. Das Kriterium wählen Sie selbst (über Durchschnitt, Top 5, Top 10, ab 50 %, ab 75 %). Die Gesamtauswertung fasst alles in einem PDF zusammen.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Das PDF enthält Gesamtverteilung, Kategorien-Schwachstellen, Auffällige Standorte, Standortverlauf und den Gesamt-Trend, z. B. für eine monatliche Übersicht an die Regionalleitung. Sie können es herunterladen oder per Mail teilen. Dasselbe gibt es als CSV mit den Rohdaten.</p>
+                        <p>Die Diagramme sehen am Bildschirm und im PDF gleich aus. Ein Tipp auf einen Balken in den Kategorien-Schwachstellen zeigt die Einzelfragen dieser Kategorie.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-aw-team" data-unit data-kw="auswertung verlauf team unterschied lokal nas">
+            <summary>Was ist der Unterschied zwischen „Auswertung Verlauf“ und „Auswertung Team“?</summary>
+            <div class="h-body">
+                <p class="h-short"><strong>Auswertung Verlauf</strong> wertet die auf diesem Gerät archivierten Begehungen aus, <strong>Auswertung Team</strong> alle im Team-Archiv auf dem Server.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Beide Buttons stehen auf der Seite Verlauf. Die Team-Auswertung lädt im Hintergrund jede Datei einzeln vom Server, das kann bei vielen Begehungen etwas dauern. Ein Statusbalken oben auf der Seite zeigt, wie viele Begehungen schon geladen sind, und meldet grün, wenn alles da ist; bis dahin sind Filter und Export gesperrt. Mit „Neu laden“ holt man den aktuellen Stand erneut. Dieselbe Anzeige gibt es auf der Seite Verlauf im Reiter „Team-Archiv“. Dort hilft ein Suchfeld, eine Begehung nach Standortnummer, Ort oder Datum zu finden. Liegt die laufende Begehung noch nicht im Team-Archiv, weist der Aktionsplan unterhalb der Unterschriften darauf hin („Jetzt sichern“). Wenn etwas nicht funktioniert: unter „Einstellungen“ → „Diagnose erstellen“ den Text kopieren und an die EDV schicken. Dateien, die sich nicht laden lassen, werden übersprungen. Sie hat einen eigenen Zeitraum-Filter, CSV-Export und PDF und funktioniert nur unter denselben Voraussetzungen wie das Team-Archiv.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-jahresbericht" data-unit data-kw="jahresbericht team-gesamtauswertung teamauswertung bericht jahr mängel anzahl märkte übersicht briefkopf csv excel administrator">
+            <summary>Wie erstelle ich einen Jahresbericht?</summary>
+            <div class="h-body">
+                <p class="h-short">Als Administrator unter „Einstellungen“ → „Anmeldung“ auf „Jahresbericht“ tippen (oder in der Benutzerverwaltung zum Abschnitt „Jahresbericht“), Jahr und Inhalt wählen und „PDF erstellen“ oder „Liste als CSV (Excel)“ tippen. Voreingestellt ist der Jahresbericht mit der Team-Gesamtauswertung des Jahres in einem PDF; unter „Inhalt“ geht auch beides als zwei PDFs oder nur eines davon.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Der Bericht listet alle Begehungen des Jahres aus dem Team-Archiv mit Standortnummer, Ort, Datum, Prüfer und der Anzahl der mit „Mangel“ bewerteten Prüfpunkte – sortiert nach Standortnummer, darunter die Summen (Begehungen, Standorte, Mängel gesamt, Mängel je Begehung). Begehungen, die nur auf einem Gerät liegen, fehlen darin. Das PDF hat oben einen Briefkopf; Firma, Anschrift und Ansprechpartner trägt ein Administrator einmal unter „Briefkopf“ ein. Ist das PDF-Archiv eingeschaltet, liegt das PDF danach zusätzlich im Ordner „Jahresberichte“.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="q-aw-katalog" data-unit data-kw="nicht mehr im aktuellen katalog frage entfernt nummer alt">
+            <summary>Warum steht bei einer Frage „nicht mehr im aktuellen Katalog“?</summary>
+            <div class="h-body">
+                <p class="h-short">Die Frage gibt es im heutigen Katalog nicht mehr unter derselben Nummer. Das ist kein Datenverlust.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Der Prüfkatalog entwickelt sich weiter. Die ursprüngliche Antwort bleibt erhalten und wird in den Kategorien-Schwachstellen und im CSV-Export mitgezählt – nur eben ohne aktuellen Kategorienamen und Fragetext.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+    </section>
+
+
+    <!-- ================================================================ -->
+    <!-- 7. PROBLEME LÖSEN                                                -->
+    <!-- ================================================================ -->
+
+    <section class="h-section" id="probleme">
+
+        <div class="h-section-label">Probleme lösen</div>
+
+        <h2>Wenn etwas nicht klappt</h2>
+
+        <p class="h-section-intro">Zu jedem Problem: was meist dahintersteckt und was Sie tun können.</p>
+
+        <details class="h-item h-problem" id="p-anmeldung" data-unit data-kw="anmeldung klappt nicht passwort falsch gesperrt anmeldeseite immer wieder login fehler">
+            <summary>Die Anmeldung klappt nicht</summary>
+            <div class="h-body">
+                <dl class="h-ps">
+                    <dt>Ursache</dt>
+                    <dd>Passwort vertippt, Konto nach zu vielen Fehlversuchen kurz gesperrt, keine Verbindung zum Server, oder die App wurde nicht über die Server-Adresse geöffnet.</dd>
+                    <dt>Lösung</dt>
+                    <dd>
+                        <ol>
+                            <li>Groß-/Kleinschreibung beim Passwort prüfen (der Anmeldename wird immer kleingeschrieben).</li>
+                            <li>Bei „Zu viele falsche Passwörter“ 15 Minuten warten – oder einen Administrator um ein neues Startpasswort bitten.</li>
+                            <li>Erscheint die Anmeldeseite immer wieder: die App über die Server-Adresse öffnen und prüfen, ob Website-Daten/Cookies für diese Adresse erlaubt sind.</li>
+                            <li>Bei „Keine Verbindung“: Zum Anmelden wird der Server gebraucht. Eine bereits geöffnete App arbeitet ohne Verbindung weiter.</li>
+                        </ol>
+                    </dd>
+                </dl>
+            </div>
+        </details>
+
+        <details class="h-item h-problem" id="p-foto" data-unit data-kw="foto speichern hängt seite safari privat indexeddb speicher fehler">
+            <summary>Fotos lassen sich nicht speichern, oder die Seite hängt</summary>
+            <div class="h-body">
+                <dl class="h-ps">
+                    <dt>Ursache</dt>
+                    <dd>Safari blockiert den Speicher für Fotos und Archiv (IndexedDB), z. B. im privaten Surfmodus oder in einem hängenden Zustand.</dd>
+                    <dt>Lösung</dt>
+                    <dd>
+                        <ol>
+                            <li>Prüfen, ob Safari im privaten Modus läuft, und ihn beenden.</li>
+                            <li>Die App vollständig schließen und neu öffnen.</li>
+                            <li>Prüfen, ob genug Gerätespeicher frei ist.</li>
+                            <li>Erscheint die Meldung erneut, den genauen Fehlertext notieren.</li>
+                        </ol>
+                    </dd>
+                </dl>
+            </div>
+        </details>
+
+        <details class="h-item h-problem" id="p-menue" data-unit data-kw="menü reagiert nicht export is not defined fehlermeldung javascript neu laden">
+            <summary>Ein Menü oder der Export reagiert nicht, oder „… is not defined“ erscheint</summary>
+            <div class="h-body">
+                <dl class="h-ps">
+                    <dt>Ursache</dt>
+                    <dd>Eine alte oder unvollständige JavaScript-Datei. Die Seiten teilen sich <code>js/app.js</code> und weitere Dateien im Ordner <code>js/</code>.</dd>
+                    <dt>Lösung</dt>
+                    <dd>
+                        <ol>
+                            <li>Die Seite komplett neu laden.</li>
+                            <li>Die App vollständig schließen und neu öffnen.</li>
+                            <li>Prüfen, ob alle aktuellen Dateien auf dem Server liegen.</li>
+                            <li>Bei erneutem Fehler den genauen Fehlertext notieren.</li>
+                        </ol>
+                    </dd>
+                </dl>
+            </div>
+        </details>
+
+        <details class="h-item h-problem" id="p-druck" data-unit data-kw="drucken pdf öffnet sich nicht popup blocker tab safari">
+            <summary>Beim Drucken öffnet sich kein PDF</summary>
+            <div class="h-body">
+                <dl class="h-ps">
+                    <dt>Ursache</dt>
+                    <dd>Das PDF wird bewusst in einem neuen Tab geöffnet. Safari blockiert das möglicherweise (Popup-Blocker).</dd>
+                    <dt>Lösung</dt>
+                    <dd>Popups für die App-Adresse erlauben und <strong>Drucken</strong> erneut antippen.</dd>
+                </dl>
+            </div>
+        </details>
+
+        <details class="h-item h-problem" id="p-gesperrt" data-unit data-kw="kategorie gesperrt nicht bearbeiten schalter nicht vorhanden grau">
+            <summary>Eine Kategorie ist gesperrt und lässt sich nicht bearbeiten</summary>
+            <div class="h-body">
+                <dl class="h-ps">
+                    <dt>Ursache</dt>
+                    <dd>Der Schalter „nicht zutreffend“ der Kategorie ist eingeschaltet (jede Kategorie hat diesen Schalter). Bei Unterbereichen (z. B. Parkhaus 3, Pforte 2, Personenaufzug) kann auch der Schalter des Unterbereichs aktiv sein – bei Parkhäusern und Pforten auch über die Anzahl im Betriebsprofil.</dd>
+                    <dt>Lösung</dt>
+                    <dd>Den Schalter ausschalten. Danach lassen sich die Fragen wieder bewerten.</dd>
+                </dl>
+            </div>
+        </details>
+
+        <details class="h-item h-problem" id="p-update" data-unit data-kw="update aktualisierung neue version erscheint nicht alt cache service worker home bildschirm">
+            <summary>Neue Änderungen erscheinen nicht</summary>
+            <div class="h-body">
+                <dl class="h-ps">
+                    <dt>Ursache</dt>
+                    <dd>Der Service Worker (Offline-Speicher der App) liefert noch alte Dateien aus. Bei einer neuen App-Version wechselt er den Zwischenspeicher, iOS-Safari bemerkt das manchmal verzögert. Ihre Begehungsdaten bleiben dabei erhalten.</dd>
+                    <dt>Lösung</dt>
+                    <dd>
+                        <ol>
+                            <li>Die Seite wirklich neu laden (nicht nur zwischen Tabs wechseln).</li>
+                            <li>iPad mit Symbol auf dem Home-Bildschirm: Symbol löschen und die App über Safari neu hinzufügen.</li>
+                            <li>Firefox: <code>about:serviceworkers</code> öffnen, den Eintrag der App suchen, <strong>Unregister</strong> anklicken und neu laden.</li>
+                            <li>Letzte Möglichkeit: Einstellungen → Safari → Verlauf und Websitedaten löschen.</li>
+                        </ol>
+                    </dd>
+                </dl>
+                <div class="h-warn"><strong>Achtung bei Schritt 4:</strong> Das löscht auch Ihre lokale Begehung, Fotos und Archive sowie die Daten anderer Websites. Exportieren Sie vorher die JSON-Datei und sichern Sie wichtige Begehungen als PDF.</div>
+            </div>
+        </details>
+
+        <details class="h-item h-problem" id="p-nas" data-unit data-kw="nas speichern laden funktioniert nicht fehler schlüssel zugriff server erreichbar">
+            <summary>„Auf Server speichern“ oder „Vom Server laden“ funktioniert nicht</summary>
+            <div class="h-body">
+                <dl class="h-ps">
+                    <dt>Ursache</dt>
+                    <dd>
+                        <ul>
+                            <li>Datum oder Standortnummer fehlen in den Betriebsdaten.</li>
+                            <li>Die App wurde nicht über die Server-Adresse geöffnet und in den Einstellungen ist keine Server-Adresse hinterlegt.</li>
+                            <li>Der Server ist nicht erreichbar (Netzwerk, VPN oder Server ausgeschaltet).</li>
+                            <li>Die Meldung „Ungültiger oder fehlender Zugriffsschlüssel“: Der Schlüssel in den Einstellungen stimmt nicht mit dem Server überein.</li>
+                            <li>Die Meldung „kein Team-Archiv der Großhandel Begehung“ bzw. „Dieses Team-Archiv gehört zur Großhandel Begehung“: Die Server-Adresse zeigt auf ASiC Handel (oder umgekehrt). Jede App braucht ihre eigene Server-Adresse bzw. ihren eigenen Datenordner.</li>
+                        </ul>
+                    </dd>
+                    <dt>Lösung</dt>
+                    <dd>Die passende Ursache beheben: Betriebsdaten ausfüllen, die App über die Server-Adresse öffnen oder die Server-Adresse unter <strong>Einstellungen</strong> eintragen, Verbindung prüfen, Schlüssel abgleichen. Ein Server-Fehler hat keinen Einfluss auf Ihre lokal gespeicherten Daten.</dd>
+                </dl>
+            </div>
+        </details>
+
+    </section>
+
+
+    <!-- ================================================================ -->
+    <!-- 8. GUT ZU WISSEN                                                 -->
+    <!-- ================================================================ -->
+
+    <section class="h-section" id="wissen">
+
+        <div class="h-section-label">Gut zu wissen</div>
+
+        <h2>Offline, Zugang und Rechtliches</h2>
+
+        <details class="h-item" id="w-offline" data-unit data-kw="offline internet ohne netz service worker schrift datenschutz">
+            <summary>Funktioniert die App ohne Internet?</summary>
+            <div class="h-body">
+                <p class="h-short">Ja. Nach dem ersten erfolgreichen Laden stehen die App-Dateien auch ohne Netz zur Verfügung. Nur die Server-Funktionen brauchen eine Verbindung.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Online bevorzugt die App das Netzwerk, ohne Netz nutzt sie den Zwischenspeicher. Schriften und Programmbibliotheken werden nicht von fremden Servern geladen. Es werden keine Daten an Dritte übertragen.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="w-version" data-unit data-kw="version revision stand fußzeile">
+            <summary>Welche Version der App nutze ich?</summary>
+            <div class="h-body">
+                <p class="h-short">Die Revision steht in der Fußzeile jeder Seite und auf jedem PDF. Aktuell ist die Revision <span data-zahl="revision">1.1</span> vom <span data-zahl="revision_datum">20.11.2026</span>.</p>
+            </div>
+        </details>
+
+        <details class="h-item" id="w-zugang" data-unit data-kw="zugang schutz anmeldung passwort wer kann die app öffnen zugriff fremde">
+            <summary>Wer kann die App öffnen?</summary>
+            <div class="h-body">
+                <p class="h-short">Ist auf Ihrem Server die Anmeldung eingeschaltet, öffnen sich App und Team-Archiv nur nach der Anmeldung mit Anmeldename und Passwort. Eine zusätzliche Code-Abfrage gibt es nicht mehr.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Die Anmeldung prüft der Server selbst: Ohne gültige Sitzung liefert er weder die Seiten der App noch gespeicherte Begehungen oder PDFs aus. Eine Anmeldung gilt höchstens einen Arbeitstag; nach fünf Fehlversuchen wird das Konto kurz gesperrt.</p>
+                        <p>Ist die Anmeldung auf dem Server ausgeschaltet, ist die App für jeden erreichbar, der die Adresse kennt. Die Begehungen auf dem Gerät bleiben trotzdem nur auf diesem Gerät.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item" id="w-recht" data-unit data-kw="rechtsberatung maßnahmentexte verbindlich recht gesetz vorschrift aktualität">
+            <summary>Sind die Maßnahmentexte eine verbindliche Rechtsberatung?</summary>
+            <div class="h-body">
+                <p class="h-short">Nein. Die Texte unterstützen die Dokumentation. Bei rechtlichen oder technischen Detailfragen muss die zuständige Fachkraft oder eine geeignete Fachstelle die konkrete Situation prüfen.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Gesetzliche und technische Regelwerke können sich ändern. Prüfen Sie sie bei kritischen Fragen auf Aktualität.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+    </section>
+
+
+    <!-- ================================================================ -->
+    <!-- WEITERE HILFE                                                    -->
+    <!-- ================================================================ -->
+
+    <section class="h-section" id="weiter" data-unit>
+
+        <div class="h-section-label">Weitere Hilfe</div>
+
+        <h2>Ist Ihre Frage nicht dabei?</h2>
+
+        <div class="h-help">
+            <p>Technische Details zu Aufbau, Speicherung, Fotodokumentation und Service Worker finden Sie in der <a href="dokumentation.html">Technischen Dokumentation</a>.</p>
+            <p>Bei einem konkreten Problem hilft es, den genauen Wortlaut der Fehlermeldung und die betroffene Seite zu notieren. So lässt sich die Ursache deutlich schneller eingrenzen.</p>
+        </div>
+
+    </section>
+
+</main>
+
+<button type="button" class="h-top" id="faq-top" aria-label="Nach oben">↑</button>
+
+
+<footer class="app-footer">
+
+    <div class="app-footer-meta">
+
+        <span id="footer-version"></span>
+
+        <span
+            class="footer-copyright"
+            id="footer-copyright">
+        </span>
+
+    </div>
+
+    <div class="app-footer-links">
+
+        <a href="impressum.html">
+            Impressum
+        </a>
+
+        <a href="datenschutz.html">
+            Datenschutz
+        </a>
+
+        <a href="dokumentation.html">
+            Technische Dokumentation
+        </a>
+
+        <a href="hilfe.html">
+            Hilfe &amp; FAQ
+        </a>
+
+        <a href="auswertung.html">
+            Auswertung
+        </a>
+
+
+        <a href="auswertung-team.html">
+            Auswertung Team
+        </a>
+
+
+        <a href="einstellungen.html">
+            Einstellungen
+        </a>
+
+    </div>
+
+</footer>
+
+
+<script src="js/audit-data.js?v=1.1-9"></script>
+<script src="js/text.js?v=1.1-9"></script>
+<script src="js/app.js?v=1.1-9&amp;r=2"></script>
+
+<script src="js/hilfe-suche.js?v=1.1-9"></script>
+
+</body>
+</html>

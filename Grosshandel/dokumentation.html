@@ -1,0 +1,3631 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+
+<!-- Sicherheitsrichtlinie: nur eigene Skripte, keine eingebetteten
+     Skripte oder Inline-Handler. connect-src erlaubt https:, damit ein Team-Archiv
+     auf einem anderen Server (Einstellungen) erreichbar bleibt. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https: ipc: http://ipc.localhost; worker-src 'self'; manifest-src 'self'; object-src 'none'; frame-src 'self' blob:; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="same-origin">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Technische Dokumentation – Großhandel Begehung</title>
+<link rel="stylesheet" href="css/styles.css?v=1.1-9">
+<script src="js/anmeldung-pruefen.js?v=1.1-9"></script>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1c2226">
+
+<style>
+    /* Ergaenzende Stile nur fuer diese Doku-Seite, nutzen dieselben CSS-Variablen wie die App */
+    .doku-hero {
+        background: linear-gradient(135deg, var(--brand-red) 0%, var(--brand-red-dark) 100%);
+        border-radius: var(--radius);
+        padding: 1.75rem 1.5rem;
+        color: #fff;
+        margin-bottom: 1.5rem;
+        box-shadow: var(--shadow);
+    }
+
+    .doku-hero-badge {
+        display: inline-block;
+        background: rgba(255,255,255,0.18);
+        border: 1px solid rgba(255,255,255,0.5);
+        border-radius: 999px;
+        padding: 0.25rem 0.9rem;
+        font-size: 0.72rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 0.9rem;
+    }
+
+    .doku-hero h1 {
+        font-size: 1.7rem;
+        color: #fff;
+        margin-bottom: 0.3rem;
+    }
+
+    .doku-hero p {
+        opacity: 0.92;
+        font-size: 0.95rem;
+    }
+
+    .doku-meta-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 0.75rem;
+        margin-top: 1.25rem;
+    }
+
+    .doku-meta-item {
+        background: rgba(255,255,255,0.12);
+        border-radius: var(--radius-sm);
+        padding: 0.6rem 0.85rem;
+    }
+
+    .doku-meta-label {
+        font-size: 0.68rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        opacity: 0.8;
+    }
+
+    .doku-meta-value {
+        font-weight: 700;
+        font-size: 0.92rem;
+        margin-top: 0.15rem;
+    }
+
+    .doku-section {
+        margin-bottom: 2rem;
+    }
+
+    .doku-section h2 {
+        font-size: 1.15rem;
+        color: var(--ink);
+        border-bottom: 2px solid var(--brand-red);
+        padding-bottom: 0.4rem;
+        margin-bottom: 1rem;
+    }
+
+    .doku-section h3 {
+        font-size: 0.98rem;
+        color: var(--ink);
+        margin: 1.1rem 0 0.5rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .doku-section h3::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        background: var(--brand-red);
+        border-radius: 2px;
+        flex-shrink: 0;
+    }
+
+    .doku-card {
+        padding: 1.1rem 1.25rem;
+        margin-bottom: 0.9rem;
+    }
+
+    .doku-card p:last-child,
+    .doku-card ul:last-child,
+    .doku-card ol:last-child {
+        margin-bottom: 0;
+    }
+
+    .doku-card p {
+        margin-bottom: 0.6rem;
+    }
+
+    .doku-card ul,
+    .doku-card ol {
+        margin: 0 0 0.6rem 1.2rem;
+    }
+
+    .doku-card li {
+        margin-bottom: 0.35rem;
+    }
+
+    .doku-card code {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        padding: 0.1rem 0.4rem;
+        border-radius: 4px;
+        font-size: 0.85em;
+        color: var(--brand-red-dark);
+    }
+
+    table.doku-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.86rem;
+        margin-bottom: 0.5rem;
+    }
+
+    table.doku-table th {
+        background: var(--brand-red-dark);
+        color: #fff;
+        text-align: left;
+        padding: 0.55rem 0.7rem;
+        font-weight: 600;
+    }
+
+    table.doku-table th:first-child {
+        border-top-left-radius: 8px;
+    }
+
+    table.doku-table th:last-child {
+        border-top-right-radius: 8px;
+    }
+
+    table.doku-table td {
+        padding: 0.5rem 0.7rem;
+        border-bottom: 1px solid var(--line);
+        vertical-align: top;
+    }
+
+    table.doku-table tr:nth-child(even) td {
+        background: var(--paper-raised);
+    }
+
+    table.doku-table td:first-child {
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    table.doku-table.dateien td:first-child {
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+
+    table.doku-table td.zahl {
+        text-align: right;
+        white-space: nowrap;
+    }
+
+    table.doku-table.quellen td:first-child {
+        white-space: normal;
+        width: 42%;
+        min-width: 12rem;
+    }
+
+    table.doku-table.pflege td:first-child {
+        white-space: normal;
+        min-width: 9rem;
+    }
+
+    .doku-table-wrap {
+        overflow-x: auto;
+    }
+
+    .doku-box {
+        border-left: 3px solid var(--brand-red);
+        background: var(--brand-red-tint);
+        border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        padding: 0.85rem 1.1rem;
+        margin-bottom: 0.9rem;
+        font-size: 0.88rem;
+    }
+
+    .doku-box-title {
+        font-weight: 700;
+        color: var(--brand-red-dark);
+        margin-bottom: 0.3rem;
+        font-size: 0.9rem;
+    }
+
+    .sev {
+        display: inline-block;
+        border-radius: 999px;
+        padding: 0.1rem 0.6rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+        white-space: nowrap;
+        letter-spacing: 0.02em;
+    }
+    .sev-kritisch { background: #cc071e; color: #fff; }
+    .sev-hoch     { background: #e8590c; color: #fff; }
+    .sev-mittel   { background: #f2c94c; color: #3d2f00; }
+    .sev-gering   { background: #dfe5e8; color: #2b3a42; }
+    .st-ok        { background: var(--ok-tint); color: #1d6b42; }
+    .st-betrieb   { background: #e7eef6; color: #2c4f73; }
+    .st-rest      { background: #fff3d6; color: #7a5300; }
+    table.doku-table.befunde td:first-child { white-space: nowrap; }
+    table.doku-table.befunde td:nth-child(3) { min-width: 14rem; }
+
+    .doku-box.ok {
+        border-left-color: var(--ok);
+        background: var(--ok-tint);
+    }
+
+    .doku-box.ok .doku-box-title {
+        color: var(--ok);
+    }
+
+    .doku-pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .doku-pill {
+        background: var(--paper-raised);
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 0.3rem 0.8rem;
+        font-size: 0.78rem;
+        color: var(--ink-soft);
+    }
+
+    .doku-toc {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem 1.25rem;
+        font-size: 0.85rem;
+        margin-bottom: 1.75rem;
+        padding: 0.9rem 1.1rem;
+        background: var(--paper-raised);
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--line);
+    }
+
+    .doku-toc a {
+        text-decoration: none;
+        color: var(--ink-soft);
+        border-bottom: 1px dotted var(--steel-light);
+        white-space: nowrap;
+    }
+
+    .doku-toc a:hover {
+        color: var(--brand-red-dark);
+    }
+</style>
+</head>
+
+<body>
+
+<header class="app-header">
+    <div class="hazard-strip"></div>
+
+    <div class="app-header-inner">
+        <div class="brand">
+            <span class="brand-title">Großhandel Begehung</span>
+            <span class="brand-tag">SIFA</span>
+            <span class="brand-subtitle">„Sicher geprüft. Sicher gehandelt.“</span>
+        </div>
+
+        <nav class="app-nav">
+            <a href="index.html">Prüfkatalog</a>
+            <a href="massnahmen.html">Aktionsplan</a>
+            <a href="fotos.html">Fotos</a>
+            <a href="verlauf.html">Verlauf</a><a href="gbo.html">Gefährdungsbeurteilung</a>
+        </nav>
+    </div>
+</header>
+
+
+<main class="page">
+
+    <!-- ================================================================ -->
+    <!-- HERO                                                             -->
+    <!-- ================================================================ -->
+
+    <div class="doku-hero">
+        <div class="doku-hero-badge">
+            Technische Dokumentation
+        </div>
+        <h1>Großhandel Begehung</h1>
+        <p>
+            Architektur, Funktionsumfang und Codeübersicht der App – Begehung und Gefährdungsbeurteilung
+        </p>
+        <div class="doku-meta-grid">
+            <div class="doku-meta-item">
+                <div class="doku-meta-label">Dokumentstand</div>
+                <div class="doku-meta-value"> <span data-zahl="stand">21.11.2026</span> </div>
+            </div>
+            <div class="doku-meta-item">
+                <div class="doku-meta-label">App-Revision</div>
+                <div class="doku-meta-value"> <span data-zahl="revision">1.1</span> (<span data-zahl="revision_datum">20.11.2026</span>) </div>
+            </div>
+            <div class="doku-meta-item">
+                <div class="doku-meta-label">Ausgabestand</div>
+                <div class="doku-meta-value"> <span data-zahl="cache_version">v1.1-9</span> </div>
+            </div>
+            <div class="doku-meta-item">
+                <div class="doku-meta-label">Zielgerät</div>
+                <div class="doku-meta-value">Firmen-iPad, Safari</div>
+            </div>
+            <div class="doku-meta-item">
+                <div class="doku-meta-label">Prüfkatalog</div>
+                <div class="doku-meta-value"> <span data-zahl="kategorien">45</span> Kategorien in <span data-zahl="bereiche">11</span> Bereichen · <span data-zahl="fragen">454</span> Prüfpunkte </div>
+            </div>
+            <div class="doku-meta-item">
+                <div class="doku-meta-label">Gefährdungsbeurteilung</div>
+                <div class="doku-meta-value"> <span data-zahl="gbo_faktoren">12</span> Faktoren · <span data-zahl="gbo_module">62</span> Module · <span data-zahl="gbo_fragen">966</span> Fragen </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="doku-toc">
+        <a href="#architektur">1. Technische Architektur</a>
+        <a href="#seiten">2. Seitenstruktur</a>
+        <a href="#funktionsumfang">3. Prüfkatalog und Aktionsplan</a>
+        <a href="#gbo">4. Gefährdungsbeurteilung</a>
+        <a href="#fotos">5. Fotodokumentation</a>
+        <a href="#pdf">6. PDF und Export</a>
+        <a href="#design">7. Design und Schrift</a>
+        <a href="#recht">8. Rechtliche Bestandteile</a>
+        <a href="#einschraenkungen">9. Datenhaltung, Team-Archiv und Auswertung</a>
+        <a href="#sicherheit">10. Sicherheit im Code</a>
+        <a href="#cybersicherheit">11. App-Sicherheitsanalyse</a>
+        <a href="#betrieb">12. Betrieb und Updates</a>
+        <a href="#pflege">13. Pflege von Fragen, Antworten und Quellen</a>
+        <a href="#dateien">14. Dateiübersicht</a>
+    </div>
+
+    <!-- 1. ARCHITEKTUR -->
+    <section class="doku-section" id="architektur">
+
+        <div class="section-title">
+            Abschnitt 1
+        </div>
+
+        <h2>
+            Technische Architektur
+        </h2>
+
+
+        <h3>
+            Grundprinzip
+        </h3>
+
+        <div class="card doku-card">
+
+            <p>
+                Reine <strong>clientseitige Web-App</strong> (HTML/CSS/JavaScript,
+                „Vanilla JS“, keine Frameworks wie React oder Vue). Die App benötigt
+                keine eigene Backend-Anwendung und keine klassische serverseitige
+                Datenbank.
+            </p>
+
+            <p>
+                Die wesentlichen Funktionen laufen vollständig im Browser.
+                Zur Laufzeit ist für die Grundfunktionen keine Internetverbindung
+                erforderlich, da die benötigten HTML-, CSS- und JavaScript-Dateien
+                lokal über den Service Worker verfügbar gemacht werden.
+            </p>
+
+        </div>
+
+
+        <h3>
+            Speicherarchitektur
+        </h3>
+
+        <div class="card doku-card">
+            <p>
+                Die App verwendet getrennte Speicherorte im Browser. Die Daten bleiben geräte- und
+                browsergebunden. Alle Namen beginnen mit <code>ghb</code> – sie überschneiden sich
+                nicht mit ASiC Handel, auch wenn beide Apps auf demselben Gerät laufen.
+            </p>
+            <table class="doku-table">
+                <tr><th>Speicher</th><th>Inhalt</th><th>Warum dort</th></tr>
+                <tr><td>localStorage<br><code>ghbBegehungState</code></td>
+                    <td>Laufende Begehung: Betriebsdaten mit Betriebsprofil (<code>companyInfo.betrieb</code>) und
+                        Prüfdaten (<code>companyInfo.pruefDaten</code>), Bewertungen, Kommentare, Maßnahmen,
+                        Unterschriften, Schalter „nicht zutreffend“ und Unterbereiche</td>
+                    <td>Kleine strukturierte Textdaten der laufenden Begehung</td></tr>
+                <tr><td>localStorage<br><code>ghbGboStateV1</code>, <code>ghbMarketLinksV2</code></td>
+                    <td>Gefährdungsbeurteilung des Standorts (Auswahl, Bewertungen, Risiko, Maßnahmen,
+                        Überprüfungen, Unterschriften) und Vormerkungen aus den Begehungshinweisen</td>
+                    <td>Eigenständiger Fachstand, unabhängig von der Begehung fortschreibbar</td></tr>
+                <tr><td>localStorage<br><code>ghbMarktContainerV2</code></td>
+                    <td>Merker beim Öffnen eines Standort-Datensatzes (übrige Teile ohne Begehung), damit beim
+                        Zurückspeichern nichts verloren geht</td>
+                    <td>Nur Verwaltungsangabe</td></tr>
+                <tr><td>IndexedDB<br><code>ghbPhotos</code></td>
+                    <td>Fotos der Begehung als Blobs mit Kommentaren und Zuordnung zur Maßnahme</td>
+                    <td>Geeignet für größere Binärdaten</td></tr>
+                <tr><td>IndexedDB<br><code>ghbGboPhotos</code></td>
+                    <td>Bildbelege der Gefährdungsbeurteilung je Frage</td>
+                    <td>Getrennt von den Begehungsfotos</td></tr>
+                <tr><td>IndexedDB<br><code>ghbArchiv</code></td>
+                    <td>Archivierte Begehungen („Mein Verlauf“) mit den zum Archivzeitpunkt vorhandenen Fotos</td>
+                    <td>Vollständige Schnappschüsse abgeschlossener Begehungen</td></tr>
+                <tr><td>IndexedDB<br><code>ghb-sicherheit</code>, <code>ghb-pdf-ablage</code></td>
+                    <td>Zugriffsschlüssel als nicht auslesbarer Krypto-Schlüssel; Warteschlange für das PDF-Archiv</td>
+                    <td>Schlüssel nie als Text; PDFs werden nachgeholt, wenn wieder Verbindung besteht</td></tr>
+                <tr><td>localStorage<br><code>ghbNasBaseUrl</code>, <code>ghbFirmenlogo</code> u. a.</td>
+                    <td>Server-Adresse, Gerätename, Schalter, gemerktes Firmenlogo, Fehlerprotokoll</td>
+                    <td>Einstellungen je Gerät</td></tr>
+            </table>
+        </div>
+
+
+        <div class="doku-box">
+
+            <div class="doku-box-title">
+                Hinweis zur Robustheit
+            </div>
+
+            IndexedDB-Zugriffe sind gegen bekannte Safari/WebKit-Probleme
+            abgesichert. Insbesondere bei <code>indexedDB.open()</code> können
+            in seltenen Fällen Anfragen hängen bleiben; hierfür bestehen
+            Zeitüberschreitungen bzw. Fehlerbehandlungen, damit die App nicht
+            dauerhaft blockiert.
+
+        </div>
+
+
+        <h3>
+            Verwendete Bibliotheken
+        </h3>
+
+        <div class="card doku-card">
+
+            <ul>
+
+                <li>
+                    <strong>jsPDF</strong>
+                    (<code>js/jspdf.umd.min.js</code>) –
+                    lokale Bibliothek zur PDF-Erzeugung
+                </li>
+
+                <li>
+                    Keine Framework-Abhängigkeit wie React, Vue oder Angular
+                </li>
+
+                <li> Keine CDN- oder Fremdserver-Abhängigkeit: Bibliotheken und Schrift liegen lokal im Projekt, es werden keine Daten an Dritte übertragen </li>
+
+                <li>
+                    Kein Build-Prozess und kein npm/Bundler erforderlich;
+                    die App läuft direkt aus den bereitgestellten Dateien
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <h3>
+            Offline-Fähigkeit / Service Worker
+        </h3>
+
+        <div class="card doku-card">
+
+            <p>
+                Der Service Worker <code>sw.js</code> stellt die Offline-Fähigkeit
+                der App bereit. Er wird über <code>js/app.js</code> registriert.
+            </p>
+
+            <p>
+                Der aktuelle Cache heißt:
+                <strong><code><span data-zahl="cache">grosshandel-begehung-v1.1-9</span></span></code></strong>.
+            </p>
+
+            <ul>
+
+                <li>
+                    Beim Installieren einer neuen Version werden die
+                    hinterlegten App-Dateien ausdrücklich mit einer
+                    <code>cache: 'reload'</code>-Anforderung neu geladen.
+                </li>
+
+                <li>
+                    HTML-, CSS-, JavaScript-, Icon-, Manifest-, Schrift- und jsPDF-Dateien werden anschließend für den Offline-Betrieb
+                    im neuen Cache gespeichert.
+                </li>
+
+                <li>
+                    Der Service Worker verwendet online grundsätzlich
+                    <strong>„Netzwerk zuerst“</strong>.
+                    Eine erfolgreiche Netzwerkantwort wird anschließend
+                    im aktuellen Cache aktualisiert.
+                </li>
+
+                <li>
+                    Nicht zwischengespeichert werden die
+                    Server-Endpunkte (<code>*.php</code>) sowie Anfragen
+                    an fremde Adressen. Dadurch erscheinen offline keine
+                    veralteten Dateilisten oder Begehungsdaten aus dem Cache.
+                </li>
+
+                <li>
+                    Ist kein Netzwerk verfügbar, wird auf die bereits
+                    vorhandene Cache-Version zurückgegriffen.
+                </li>
+
+                <li>
+                    Beim <code>activate</code>-Ereignis werden ältere
+                    Caches der Großhandel Begehung automatisch gelöscht.
+                </li>
+
+                <li>
+                    <code>self.skipWaiting()</code> sorgt dafür, dass eine
+                    neue Version nicht erst beim nächsten Browserstart
+                    installiert werden muss.
+                </li>
+
+                <li>
+                    <code>self.clients.claim()</code> übernimmt vorhandene
+                    offene Tabs möglichst unmittelbar durch den neuen
+                    Service Worker.
+                </li>
+
+                <li>
+                    Registrierung erfolgt mit
+                    <code>{ updateViaCache: 'none' }</code> — verhindert,
+                    dass der Browser <code>sw.js</code> selbst aus seinem
+                    eigenen HTTP-Cache liest und dadurch eine neue Version
+                    (neuer <code>CACHE_NAME</code>) gar nicht erst erkennt.
+                    Zusätzlich wird nach der Registrierung sofort
+                    <code>registration.update()</code> aufgerufen, statt nur
+                    auf den nächsten browserinternen periodischen Check zu
+                    warten.
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <div class="doku-box ok">
+
+            <div class="doku-box-title">
+                Verhalten bei einem App-Update
+            </div>
+
+            Ein neuer technischer Versionsstand des Service Workers erzeugt
+            einen neuen Cache. Bei einer Umstellung des <code>CACHE_NAME</code>
+            werden die vorgesehenen App-Dateien erneut geladen und der
+            bisherige Cache der Großhandel Begehung entfernt.
+
+            <strong>
+                Lokale Benutzerdaten in localStorage und IndexedDB werden
+                dabei nicht gelöscht.
+            </strong>
+
+        </div>
+
+
+        <div class="doku-box">
+
+            <div class="doku-box-title">
+                Falls ein Update nicht ankommt
+            </div>
+
+            Trotz <code>updateViaCache: 'none'</code> und sofortigem
+            <code>registration.update()</code>-Aufruf kann es einzelne
+            Geräte/Browser geben, die eine neue Version nicht sofort
+            erkennen (insbesondere iOS Safari kann hier hartnäckig sein).
+            In diesem Fall der Reihe nach:
+
+            <ul>
+                <li>Seite mit einer echten Aktualisierung neu laden (nicht
+                    nur zwischen Tabs wechseln)</li>
+                <li>Falls als Home-Bildschirm-Symbol installiert: Symbol
+                    löschen und über Safari neu hinzufügen</li>
+                <li>Als letzte Möglichkeit: Einstellungen → Safari →
+                    Verlauf und Websitedaten löschen (betrifft dann
+                    allerdings auch andere Websites)</li>
+            </ul>
+
+        </div>
+
+
+        <div class="doku-box">
+
+            <div class="doku-box-title">
+                Wichtig bei zukünftigen Änderungen
+            </div>
+
+            Wenn sich ausgelieferte App-Dateien technisch ändern, sollte
+            <code>CACHE_NAME</code> in <code>sw.js</code> auf eine neue Version
+            gesetzt werden, beispielsweise von
+            <code>grosshandel-begehung-v1.1-3</code> auf <code>grosshandel-begehung-v1.1-4</code> (gemeinsam mit <code>BUILD</code> und den <code>?v=</code>-Zusätzen).
+            Dadurch wird ein neuer App-Cache aufgebaut.
+
+        </div>
+
+
+        <h3>
+            PWA-Grundgerüst &amp; Installation als Desktop-App
+        </h3>
+
+        <div class="card doku-card">
+
+            <ul>
+
+                <li>
+                    <code>manifest.json</code> und Icons
+                    (<code>icon-192.png</code>,
+                    <code>icon-512.png</code>) sind vorhanden.
+                </li>
+
+                <li>
+                    Die App kann auf unterstützten Geräten zum
+                    Home-Bildschirm hinzugefügt bzw. als installierbare
+                    Web-App verwendet werden.
+                </li>
+
+                <li>
+                    Auf Firmenrechnern lässt sich die HTTPS-Adresse der App
+                    beispielsweise in Edge oder Chrome als App installieren.
+                </li>
+
+                <li>
+                    Die HTTPS-Bereitstellung ist Voraussetzung für
+                    Service Worker und PWA-Funktionen.
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <h3>
+            Zugriffsschutz
+        </h3>
+
+        <div class="card doku-card">
+
+            <p>
+                Die App wird ausschließlich über die <strong>Anmeldung mit
+                Anmeldename und Passwort</strong> geschützt (Einzelheiten
+                im Abschnitt Anmeldung). Der Server prüft sie
+                selbst: <code>tor.php</code> liefert die Seiten und
+                Programmdateien nur mit gültiger Sitzung aus, und
+                <code>save.php</code>, <code>list.php</code>, <code>load.php</code>,
+                <code>offen.php</code> sowie <code>pdf.php</code> verlangen sie
+                ebenfalls. <code>js/anmeldung-pruefen.js</code> leitet beim
+                Öffnen einer Seite nur sichtbar zur Anmeldeseite weiter.
+            </p>
+
+        </div>
+
+
+        <div class="doku-box">
+
+            <div class="doku-box-title">
+                Ohne eingeschaltete Anmeldung
+            </div>
+
+            Ist in <code>config.php</code> <code>'anmeldung'</code> nicht
+            eingeschaltet (oder läuft die App ohne PHP),
+            sind die Seiten der App für jeden erreichbar, der die Adresse kennt.
+            Das Team-Archiv bleibt dann nur durch den Zugriffsschlüssel geschützt,
+            die Begehungen auf den Geräten bleiben auf dem jeweiligen Gerät.
+            Für den Betrieb im Internet deshalb immer die Anmeldung einschalten.
+
+        </div>
+
+
+        <div class="doku-box">
+
+            <div class="doku-box-title">
+                App unter anderer Adresse
+            </div>
+
+            Eine App unter einer anderen Adresse als der Server (z. B. die
+            Desktop-App) kann sich nicht anmelden. Steht ihre Adresse in
+            <code>config.php</code> unter <code>'ohneAnmeldung'</code> (und in der
+            CORS-Liste), darf sie mit gültig unterschriebenem Zugriffsschlüssel
+            ins Team-Archiv speichern, laden und PDFs ablegen. PDFs ansehen,
+            Löschen und Benutzerverwaltung bleiben bei der Anmeldung. Da sich die
+            Herkunftsangabe außerhalb eines Browsers vortäuschen lässt, schützt
+            hier praktisch allein der Zugriffsschlüssel. Voreinstellung: keine
+            Ausnahme.
+
+        </div>
+
+    </section>
+
+    <section class="doku-section" id="seiten">
+
+        <div class="section-title">
+            Abschnitt 2
+        </div>
+
+        <h2>
+            Seitenstruktur
+        </h2>
+
+        <div class="card doku-card">
+            <p>Die App besteht aus eigenständigen HTML-Seiten, die gemeinsame CSS-, Daten- und Logikdateien verwenden.</p>
+            <table class="doku-table">
+                <tr><th>Seite</th><th>Zweck</th></tr>
+                <tr><td>index.html</td><td>Prüfkatalog: Betriebsdaten, Betriebsprofil mit Ausstattung, Bereiche und Kategorien mit Schalter „nicht zutreffend“, Prüffristen</td></tr>
+                <tr><td>massnahmen.html</td><td>Aktionsplan: Maßnahmen, Status, Fotos und Unterschriften</td></tr>
+                <tr><td>fotos.html</td><td>Allgemeine Fotodokumentation</td></tr>
+                <tr><td>verlauf.html</td><td>Mein Verlauf (lokales Archiv) und Team-Archiv (Server)</td></tr>
+                <tr><td>gbo.html</td><td>Gefährdungsbeurteilung des Standorts (Reiter „Gefährdungsbeurteilung“)</td></tr>
+                <tr><td>auswertung.html</td><td>Auswertung der lokal archivierten Begehungen</td></tr>
+                <tr><td>auswertung-team.html</td><td>Auswertung aller Begehungen im Team-Archiv</td></tr>
+                <tr><td>einstellungen.html</td><td>Server-Adresse, Zugriffsschlüssel, Anmeldung, Diagnose</td></tr>
+                <tr><td>anmeldung.html</td><td>Anmeldeseite</td></tr>
+                <tr><td>benutzer.html</td><td>Benutzerverwaltung, Team-Einstellungen, Briefkopf (nur Administratoren)</td></tr>
+                <tr><td>pdf-archiv.html</td><td>PDF-Archiv (nur mit Berechtigung)</td></tr>
+                <tr><td>hilfe.html</td><td>Bedienungsanleitung und FAQ der Begehung</td></tr>
+                <tr><td>gbo-hilfe.html</td><td>Hilfe und FAQ der Gefährdungsbeurteilung</td></tr>
+                <tr><td>kurzanleitung.html</td><td>Bebilderte Kurzanleitung der Begehung, aus „Hilfe &amp; FAQ“ verlinkt</td></tr>
+                <tr><td>gbo-kurzanleitung.html</td><td>Bebilderte Kurzanleitung der Gefährdungsbeurteilung, aus der GBO-Hilfe und der GBO-Seite verlinkt</td></tr>
+                <tr><td>admin-anleitung.html</td><td>Bebilderte Anleitung für Administratoren; nur für Administratoren abrufbar</td></tr>
+                <tr><td>dokumentation.html</td><td>Technische Dokumentation (diese Seite)</td></tr>
+                <tr><td>gbo-dokumentation.html</td><td>Technische Dokumentation der Gefährdungsbeurteilung</td></tr>
+                <tr><td>impressum.html, datenschutz.html</td><td>Impressum und Datenschutzerklärung</td></tr>
+            </table>
+            <p>Die Hauptseiten teilen sich Kopfzeile mit Badge „SIFA“, Navigation (Prüfkatalog, Aktionsplan,
+               Fotos, Verlauf, Gefährdungsbeurteilung) und Fußzeile mit Revision und rechtlichen Links.</p>
+        </div>
+
+    </section>
+
+    <section class="doku-section" id="funktionsumfang">
+
+        <div class="section-title">
+            Abschnitt 3
+        </div>
+
+        <h2>
+            Prüfkatalog und Aktionsplan
+        </h2>
+
+        <h3>
+            Prüfkatalog – <span data-zahl="kategorien">45</span> Kategorien in <span data-zahl="bereiche">11</span> Bereichen, <span data-zahl="fragen">454</span> Prüfpunkte
+        </h3>
+
+        <div class="card doku-card">
+            <p>
+                Der Katalog ist auf einen Großhandelsstandort zugeschnitten (Lager, Kommissionierung,
+                Flurförderzeuge, Rampen, Kühlung, Fleischwerk, Frischezentrum, Verwaltungen,
+                Besucherbereiche, Parkhäuser, Energieanlagen). Die Kategorien sind in Bereiche gegliedert;
+                jede Kategorie trägt eine feste Nummer (<code>nr</code>), die sich bei neuen Kategorien
+                nicht verschiebt. Die Tabelle wird von <code>tools/doku-zahlen.py</code> aus
+                <code>js/audit-data.js</code> erzeugt.
+            </p>
+            <div class="doku-table-wrap">
+            <table class="doku-table">
+                <tr><th>Nr.</th><th>Kategorie</th><th>Prüfpunkte</th><th>mit Prüffrist</th></tr>
+                <!-- KATALOG:START -->
+                <tr class="doku-bereich"><td colspan="4"><strong>Eingänge, Empfang und Besucherbereiche</strong></td></tr>
+                <tr>
+                    <td class="zahl">1</td>
+                    <td>Haupteingang und Empfang</td>
+                    <td class="zahl">14</td>
+                    <td class="zahl">1</td>
+                </tr>
+                <tr>
+                    <td class="zahl">2</td>
+                    <td>Pforten und Schrankenanlagen <small>· je Pforte (bis 2), 2 Unterbereiche</small></td>
+                    <td class="zahl">18</td>
+                    <td class="zahl">2</td>
+                </tr>
+                <tr>
+                    <td class="zahl">3</td>
+                    <td>Börsensaal und Veranstaltungen</td>
+                    <td class="zahl">11</td>
+                    <td class="zahl">–</td>
+                </tr>
+                <tr>
+                    <td class="zahl">4</td>
+                    <td>Ausstellungsraum</td>
+                    <td class="zahl">8</td>
+                    <td class="zahl">–</td>
+                </tr>
+                <tr class="doku-bereich"><td colspan="4"><strong>Verwaltung, Schulung und Sozialbereiche</strong></td></tr>
+                <tr>
+                    <td class="zahl">5</td>
+                    <td>Büroarbeitsplätze</td>
+                    <td class="zahl">10</td>
+                    <td class="zahl">1</td>
+                </tr>
+                <tr>
+                    <td class="zahl">42</td>
+                    <td>Verwaltung Dienstleistungszentrum</td>
+                    <td class="zahl">15</td>
+                    <td class="zahl">2</td>
+                </tr>
+                <tr>
+                    <td class="zahl">43</td>
+                    <td>Schulungszentrum <small>· 3 Unterbereiche</small></td>
+                    <td class="zahl">13</td>
+                    <td class="zahl">1</td>
+                </tr>
+                <tr>
+                    <td class="zahl">6</td>
+                    <td>Sozialräume und PSA</td>
+                    <td class="zahl">6</td>
+                    <td class="zahl">–</td>
+                </tr>
+                <tr class="doku-bereich"><td colspan="4"><strong>Verkehr, Parkflächen und Parkhäuser</strong></td></tr>
+                <tr>
+                    <td class="zahl">7</td>
+                    <td>Verkehrswege</td>
+                    <td class="zahl">10</td>
+                    <td class="zahl">–</td>
+                </tr>
+                <tr>
+                    <td class="zahl">8</td>
+                    <td>Außenbereich und Hof</td>
+                    <td class="zahl">7</td>
+                    <td class="zahl">–</td>
+                </tr>
+                <tr>
+                    <td class="zahl">9</td>
+                    <td>Parkhäuser <small>· je Parkhaus (bis 4), 4 Unterbereiche</small></td>
+                    <td class="zahl">48</td>
+                    <td class="zahl">8</td>
+                </tr>
+                <tr>
+                    <td class="zahl">44</td>
+                    <td>Ladesäulen für Elektrofahrzeuge</td>
+                    <td class="zahl">7</td>
+                    <td class="zahl">1</td>
+                </tr>
+                <tr>
+                    <td class="zahl">10</td>
+                    <td>Tore und Türen</td>
+                    <td class="zahl">6</td>
+                    <td class="zahl">1</td>
+                </tr>
+                <tr class="doku-bereich"><td colspan="4"><strong>Anlieferung, Versand und Verpackung</strong></td></tr>
+                <tr>
+                    <td class="zahl">11</td>
+                    <td>Anlieferung und Rampe</td>
+                    <td class="zahl">10</td>
+                    <td class="zahl">1</td>
+                </tr>
+                <tr>
+                    <td class="zahl">12</td>
+                    <td>Wareneingang und Ladungssicherung</td>
+                    <td class="zahl">6</td>
+                    <td class="zahl">–</td>
+                </tr>
+                <tr>
+                    <td class="zahl">13</td>
+                    <td>Rollcontainer</td>
+                    <td class="zahl">9</td>
+                    <td class="zahl">–</td>
+                </tr>
+                <tr>
+                    <td class="zahl">14</td>
+                    <td>Verpackungsmaschinen</td>
+                    <td class="zahl">10</td>
+                    <td class="zahl">1</td>
+                </tr>
+                <tr class="doku-bereich"><td colspan="4"><strong>Lager, Kommissionierung und Leergut</strong></td></tr>
+                <tr>
+                    <td class="zahl">15</td>
+                    <td>Lager</td>
+                    <td class="zahl">9</td>
+                    <td class="zahl">–</td>
+                </tr>
+                <tr>
+                    <td class="zahl">16</td>
+                    <td>Regale</td>
+                    <td class="zahl">12</td>
+                    <td class="zahl">1</td>
+                </tr>
+                <tr>
+                    <td class="zahl">17</td>
+                    <td>Regalbediengeräte</td>
+                    <td class="zahl">6</td>
+                    <td class="zahl">1</td>
+                </tr>
+                <tr>
+                    <td class="zahl">18</td>
+                    <td>Kommissionierung</td>
+                    <td class="zahl">9</td>
+                    <td class="zahl">–</td>
+                </tr>
+                <tr>
+                    <td class="zahl">19</td>
+                    <td>Kühlung und Tiefkühlung</td>
+                    <td class="zahl">10</td>
+                    <td class="zahl">1</td>
+                </tr>
+                <tr>
+                    <td class="zahl">20</td>
+                    <td>Absturzsicherung <small>· 3 Unterbereiche</small></td>
+                    <td class="zahl">7</td>
+                    <td class="zahl">2</td>
+                </tr>
+                <tr>
+                    <td class="zahl">21</td>
+                    <td>Leergutzentrum</td>
+                    <td class="zahl">10</td>
+                    <td class="zahl">1</td>
+                </tr>
+                <tr class="doku-bereich"><td colspan="4"><strong>Fleischwerk</strong></td></tr>
+                <tr>
+                    <td class="zahl">22</td>
+                    <td>Fleischwerk – Zerlegung und Messerarbeit</td>
+                    <td class="zahl">8</td>
+                    <td class="zahl">–</td>
+                </tr>
+                <tr>
+                    <td class="zahl">23</td>
+                    <td>Fleischwerk – Maschinen</td>
+                    <td class="zahl">8</td>
+                    <td class="zahl">1</td>
+                </tr>
+                <tr>
+                    <td class="zahl">24</td>
+                    <td>Fleischwerk – Kälte, Nässe, Reinigung und Hygiene</td>
+                    <td class="zahl">9</td>
+                    <td class="zahl">2</td>
+                </tr>
+                <tr>
+                    <td class="zahl">25</td>
+                    <td>Fleischwerk – Fördertechnik, Transport und Organisation</td>
+                    <td class="zahl">7</td>
+                    <td class="zahl">1</td>
+                </tr>
+                <tr class="doku-bereich"><td colspan="4"><strong>Frischezentrum Obst und Gemüse</strong></td></tr>
+                <tr>
+                    <td class="zahl">39</td>
+                    <td>Frischezentrum – Wareneingang, Umschlag und Kommissionierung</td>
+                    <td class="zahl">9</td>
+                    <td class="zahl">1</td>
+                </tr>
+                <tr>
+                    <td class="zahl">40</td>
+                    <td>Frischezentrum – Kühllager und Reiferäume</td>
+                    <td class="zahl">8</td>
+                    <td class="zahl">1</td>
+                </tr>
+                <tr>
+                    <td class="zahl">41</td>
+                    <td>Frischezentrum – Verwaltung</td>
+                    <td class="zahl">15</td>
+                    <td class="zahl">2</td>
+                </tr>
+                <tr class="doku-bereich"><td colspan="4"><strong>Flurförderzeuge, Werkstatt und Tankstelle</strong></td></tr>
+                <tr>
+                    <td class="zahl">26</td>
+                    <td>Gabelstapler</td>
+                    <td class="zahl">12</td>
+                    <td class="zahl">1</td>
+                </tr>
+                <tr>
+                    <td class="zahl">27</td>
+                    <td>E-Ameisen (Mitgänger-Flurförderzeuge)</td>
+                    <td class="zahl">7</td>
+                    <td class="zahl">1</td>
+                </tr>
+                <tr>
+                    <td class="zahl">28</td>
+                    <td>Hubwagen</td>
+                    <td class="zahl">5</td>
+                    <td class="zahl">1</td>
+                </tr>
+                <tr>
+                    <td class="zahl">29</td>
+                    <td>Batterieladestation</td>
+                    <td class="zahl">7</td>
+                    <td class="zahl">1</td>
+                </tr>
+                <tr>
+                    <td class="zahl">30</td>
+                    <td>Werkstatt Flurförderzeuge <small>· 2 Unterbereiche</small></td>
+                    <td class="zahl">17</td>
+                    <td class="zahl">4</td>
+                </tr>
+                <tr>
+                    <td class="zahl">31</td>
+                    <td>Betriebstankstelle (Diesel)</td>
+                    <td class="zahl">10</td>
+                    <td class="zahl">3</td>
+                </tr>
+                <tr class="doku-bereich"><td colspan="4"><strong>Gebäude, Technik, Photovoltaik und Gefahrstoffe</strong></td></tr>
+                <tr>
+                    <td class="zahl">32</td>
+                    <td>Aufzüge (Personen- und Lastenaufzug) <small>· 2 Unterbereiche</small></td>
+                    <td class="zahl">6</td>
+                    <td class="zahl">2</td>
+                </tr>
+                <tr>
+                    <td class="zahl">45</td>
+                    <td>Photovoltaikanlage auf den Dächern</td>
+                    <td class="zahl">7</td>
+                    <td class="zahl">1</td>
+                </tr>
+                <tr>
+                    <td class="zahl">33</td>
+                    <td>Ballenpresse und Müllpresse</td>
+                    <td class="zahl">6</td>
+                    <td class="zahl">1</td>
+                </tr>
+                <tr>
+                    <td class="zahl">34</td>
+                    <td>Gefahrstoffe</td>
+                    <td class="zahl">8</td>
+                    <td class="zahl">–</td>
+                </tr>
+                <tr class="doku-bereich"><td colspan="4"><strong>Brandschutz</strong></td></tr>
+                <tr>
+                    <td class="zahl">35</td>
+                    <td>Brandschutz und Flucht</td>
+                    <td class="zahl">13</td>
+                    <td class="zahl">6</td>
+                </tr>
+                <tr class="doku-bereich"><td colspan="4"><strong>Organisation und Notfall</strong></td></tr>
+                <tr>
+                    <td class="zahl">36</td>
+                    <td>Erste Hilfe</td>
+                    <td class="zahl">8</td>
+                    <td class="zahl">–</td>
+                </tr>
+                <tr>
+                    <td class="zahl">37</td>
+                    <td>Organisation</td>
+                    <td class="zahl">11</td>
+                    <td class="zahl">–</td>
+                </tr>
+                <tr>
+                    <td class="zahl">38</td>
+                    <td>Sonstiges <small>· freie Prüfpunkte</small></td>
+                    <td class="zahl">2</td>
+                    <td class="zahl">–</td>
+                </tr>
+                <!-- KATALOG:ENDE -->
+            </table>
+            </div>
+        </div>
+
+        <h3>Schalter „nicht zutreffend“</h3>
+        <div class="card doku-card">
+            <p>Jede Kategorie hat einen eigenen Schalter mit passendem Text (z. B. „Kein Fleischwerk am
+               Standort“, <code>naLabel</code> in <code>js/audit-data.js</code>). Er setzt alle Prüfpunkte der
+               Kategorie auf N.V. und sperrt die Bewertung. Unterbereiche (z. B. Pforte 1 und Pforte 2,
+               Parkhaus 1 bis 4) haben zusätzlich eigene Schalter.</p>
+        </div>
+
+        <h3>Betriebsprofil und Ausstattung</h3>
+        <div class="card doku-card">
+            <p>Unter den Betriebsdaten steht das Betriebsprofil (<code>renderBetriebsprofil()</code>):</p>
+            <ul>
+                <li>Kennzahlen: Lager-/Betriebsfläche, Beschäftigte, höchstens gleichzeitig anwesend,
+                    Anzahl Flurförderzeuge, Arbeitszeitmodell. Daraus entsteht der Hinweis zur Zahl der
+                    Ersthelfenden (<code>ersthelferHinweisText()</code>).</li>
+                <li>Anzahl Parkhäuser (bis 4) und Pforten (bis 2): nicht vorhandene Instanzen werden
+                    automatisch N.V. (<code>setzeInstanzAnzahl()</code>).</li>
+                <li>Ausstattung mit <span data-zahl="ausstattung">34</span> Haken (<code>AUSSTATTUNG</code>). Ein entfernter Haken
+                    setzt die zugehörigen Kategorien auf „nicht zutreffend“.</li>
+            </ul>
+            <p>Die Angaben stehen in <code>companyInfo.betrieb</code> und reisen deshalb mit Archiv, JSON-Export,
+               Team-Archiv und Wiederholungsbegehung. Im PDF erscheint das Betriebsprofil auf dem Deckblatt
+               (<code>renderBetriebsprofilPdf()</code>). Die Gefährdungsbeurteilung nutzt die Ausstattung für den
+               Inventar-Vorschlag.</p>
+        </div>
+
+        <h3>Prüffristen</h3>
+        <div class="card doku-card">
+            <p><span data-zahl="pruefpunkte_frist">54</span> Prüfpunkte betreffen prüfpflichtige Arbeitsmittel und Anlagen
+               (Feld <code>pruef</code> = Frist in Monaten, 0 = Frist laut Prüfbericht). Dort wird das Datum der
+               letzten Prüfung eingetragen (<code>companyInfo.pruefDaten</code>). <code>pruefStatus()</code>
+               berechnet bezogen auf das Begehungsdatum: gültig, fällig in 30 Tagen oder überfällig – bei
+               überfälliger Prüfung schlägt die App vor, den Punkt als Mangel zu bewerten. Bei N.V. oder
+               gesperrter Kategorie wird keine Frist angezeigt. Das PDF enthält die Prüfdaten je Prüfpunkt.</p>
+        </div>
+
+        <h3>Bewertung und freie Prüfpunkte</h3>
+        <div class="card doku-card">
+            <p>Jeder Prüfpunkt wird mit <strong>OK</strong>, <strong>Mangel</strong> oder <strong>N.V.</strong>
+               bewertet. Bei einem Mangel kann eine Beschreibung erfasst werden; die zugehörige Maßnahme wird
+               im Aktionsplan angelegt. Die Kategorie <strong>Sonstiges</strong> enthält freie Prüfpunkte,
+               deren Text der Prüfer selbst einträgt (<code>state.freieTexte</code>); bewertbar ist ein Punkt erst
+               mit Text, die Maßnahme wird frei formuliert.</p>
+        </div>
+
+        <h3>
+            Maßnahmentexte in drei Sprachstilen
+        </h3>
+
+        <div class="card doku-card">
+
+            <p>
+                Zu den Prüffragen sind vorformulierte Maßnahmentexte
+                hinterlegt. Der gewählte Sprachstil kann jederzeit
+                umgeschaltet werden.
+            </p>
+
+            <ul>
+
+                <li>
+                    <strong>Einfach</strong> –
+                    verständliche Alltagssprache
+                </li>
+
+                <li>
+                    <strong>BGHW</strong> –
+                    Formulierungen mit Bezug auf relevante
+                    Arbeitsschutzregeln und Regelwerke
+                </li>
+
+                <li>
+                    <strong>Rechtlich</strong> –
+                    Formulierungen mit einschlägigen
+                    Gesetzes-, Verordnungs- und Normverweisen
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <h3>
+            Quellenverzeichnis der Maßnahmentexte
+        </h3>
+
+        <div class="card doku-card">
+            <p>Die Maßnahmentexte im Sprachstil „BGHW“ und „Rechtlich“ beziehen sich auf die folgenden Regelwerke.
+               Das Verzeichnis wird aus <code>MEASURE_SOURCES</code> in <code>js/text.js</code> erzeugt und erscheint
+               so auch im PDF-Anhang (<code>renderSourcesAppendix()</code>). Bei „Einfach“ hängt
+               <code>renderMassnahmenQuellenAnhang()</code> je Maßnahme die Fundstellen aus dem BGHW- und dem
+               Rechtlich-Text desselben Prüfpunkts an.</p>
+            <div class="doku-table-wrap">
+            <table class="doku-table">
+                <tr><th>Quelle</th><th>Bezug</th></tr>
+                <!-- QUELLEN:START -->
+                <tr class="doku-bereich"><td colspan="2"><strong>Regelwerk der Unfallversicherung, Normen und technische Grundlagen</strong></td></tr>
+                <tr><td>DGUV Vorschrift 1</td><td>Grundsätze der Prävention</td></tr>
+                <tr><td>DGUV Vorschrift 2</td><td>Betriebsärzte und Fachkräfte für Arbeitssicherheit</td></tr>
+                <tr><td>DGUV Vorschrift 3</td><td>Elektrische Anlagen und Betriebsmittel</td></tr>
+                <tr><td>DGUV Vorschrift 68</td><td>Flurförderzeuge</td></tr>
+                <tr><td>DGUV Vorschrift 70</td><td>Fahrzeuge</td></tr>
+                <tr><td>DGUV Grundsatz 308-001</td><td>Ausbildung und Beauftragung der Fahrer von Flurförderzeugen mit Fahrersitz und Fahrerstand</td></tr>
+                <tr><td>DGUV Grundsatz 312-906</td><td>Auswahl, Ausbildung und Befähigungsnachweis von Sachkundigen für persönliche Schutzausrüstung gegen Absturz</td></tr>
+                <tr><td>DGUV Regel 110-010</td><td>Verwendung von Flüssiggas</td></tr>
+                <tr><td>DGUV Regel 112-139</td><td>Einsatz von Personen-Notsignal-Anlagen</td></tr>
+                <tr><td>DGUV Regel 112-189</td><td>Benutzung von Schutzkleidung</td></tr>
+                <tr><td>DGUV Regel 112-191</td><td>Benutzung von Fuß- und Knieschutz</td></tr>
+                <tr><td>DGUV Regel 112-195</td><td>Benutzung von Schutzhandschuhen</td></tr>
+                <tr><td>DGUV Regel 112-198</td><td>Benutzung von persönlichen Schutzausrüstungen gegen Absturz</td></tr>
+                <tr><td>DGUV Information 204-020</td><td>Dokumentation der Erste-Hilfe-Leistungen</td></tr>
+                <tr><td>DGUV Information 204-022</td><td>Erste Hilfe im Betrieb</td></tr>
+                <tr><td>DGUV Information 205-023</td><td>Brandschutzhelfer</td></tr>
+                <tr><td>DGUV Information 208-016</td><td>Handlungsanleitung für den Umgang mit Leitern und Tritten</td></tr>
+                <tr><td>DGUV Information 208-061</td><td>Lagereinrichtungen und Ladungsträger</td></tr>
+                <tr><td>DIN EN 15635</td><td>Ortsfeste Regalsysteme aus Stahl, Nutzung und Instandhaltung</td></tr>
+                <tr><td>DIN EN 528</td><td>Regalbediengeräte, Sicherheitsanforderungen</td></tr>
+                <tr><td>DIN EN 1398</td><td>Ladebrücken, Sicherheitsanforderungen</td></tr>
+                <tr><td>DIN EN 13241</td><td>Tore, Produktnorm</td></tr>
+                <tr><td>DIN EN 16500</td><td>Vertikale Ballenpressen, Sicherheitsanforderungen</td></tr>
+                <tr><td>DIN EN 378</td><td>Kälteanlagen und Wärmepumpen, sicherheitstechnische Anforderungen</td></tr>
+                <tr><td>DIN EN IEC 62485-3</td><td>Sicherheitsanforderungen an Batterien und Batterieanlagen, Traktionsbatterien</td></tr>
+                <tr><td>DIN 33403-5</td><td>Klima am Arbeitsplatz, ergonomische Gestaltung von Kältearbeitsplätzen</td></tr>
+                <tr><td>DIN 14406-4</td><td>Tragbare Feuerlöscher, Instandhaltung</td></tr>
+                <tr><td>DIN 14096</td><td>Brandschutzordnung</td></tr>
+                <tr><td>DIN 14677</td><td>Instandhaltung von elektrisch gesteuerten Feststellanlagen</td></tr>
+                <tr><td>DIN EN 50172 / DIN V VDE V 0108-100</td><td>Sicherheitsbeleuchtungsanlagen</td></tr>
+                <tr><td>DIN ISO 23601</td><td>Flucht- und Rettungspläne</td></tr>
+                <tr><td>VDI 2700</td><td>Ladungssicherung auf Straßenfahrzeugen</td></tr>
+                <tr><td>VdS 2259</td><td>Batterieladeanlagen für Elektrofahrzeuge</td></tr>
+                <tr><td>VdS 3103</td><td>Lithium-Batterien</td></tr>
+                <tr><td>VdS CEA 4001</td><td>Sprinkleranlagen, Planung und Einbau</td></tr>
+                <tr><td>BAuA</td><td>Leitmerkmalmethoden zur Beurteilung von Lastenhandhabungen</td></tr>
+                <tr class="doku-bereich"><td colspan="2"><strong>Gesetze und Verordnungen</strong></td></tr>
+                <tr><td>ArbSchG</td><td>insbesondere §§ 3, 4, 5, 6, 8, 10, 12, 15</td></tr>
+                <tr><td>ArbStättV</td><td>insbesondere §§ 3, 3a, 4 sowie Anhang Nr. 1.2, 1.5, 1.7, 1.8, 1.10, 2.1, 2.2, 2.3, 3.4, 3.5, 4.1, 4.2, 4.3, 6</td></tr>
+                <tr><td>BetrSichV</td><td>insbesondere §§ 3, 4, 5, 6, 9, 10, 12, 14, 16 sowie Anhang 1 und Anhang 2 Abschnitt 2</td></tr>
+                <tr><td>GefStoffV</td><td>insbesondere §§ 6, 7, 8, 14</td></tr>
+                <tr><td>ArbMedVV</td><td>insbesondere §§ 4, 5 und Anhang Teil 3 und 4</td></tr>
+                <tr><td>ArbZG</td><td>insbesondere §§ 4, 6</td></tr>
+                <tr><td>JArbSchG</td><td>insbesondere §§ 22, 29</td></tr>
+                <tr><td>ASiG</td><td>insbesondere §§ 2, 5, 11</td></tr>
+                <tr><td>SGB VII</td><td>insbesondere § 193</td></tr>
+                <tr><td>PSA-Benutzungsverordnung</td><td>§§ 2, 3</td></tr>
+                <tr><td>Lastenhandhabungsverordnung (LasthandhabV)</td><td>§§ 2, 3</td></tr>
+                <tr><td>StVO</td><td>§ 22 (Ladung)</td></tr>
+                <tr><td>HGB</td><td>§ 412 (Verladen)</td></tr>
+                <tr><td>REACH-Verordnung (EG) Nr. 1907/2006</td><td>Art. 31 (Sicherheitsdatenblätter)</td></tr>
+                <tr><td>ASR A1.2, A1.3, A1.5, A1.7, A1.8, A2.1, A2.2, A2.3, A3.4, A3.5, A4.1, A4.2, A4.3, A6</td><td></td></tr>
+                <tr><td>TRGS 201, TRGS 510, TRGS 555</td><td></td></tr>
+                <tr><td>TRBS 2121-2, TRBS 3121</td><td></td></tr>
+                <!-- QUELLEN:ENDE -->
+            </table>
+            </div>
+            <p style="font-size:0.85rem;color:var(--ink-soft)">DGUV-Vorschriften sind Unfallverhütungsvorschriften;
+               DGUV-Regeln und -Informationen konkretisieren die Umsetzung. ASR, TRGS und TRBS konkretisieren die
+               staatlichen Verordnungen. Normen werden nur herangezogen, soweit sie für die konkrete Anlage
+               einschlägig sind. Für das Fleischwerk ist die BGN zuständig, für den übrigen Standort die BGHW.
+               Feste Fristen und Werte vor dem Produktiveinsatz fachlich gegenprüfen.</p>
+        </div>
+
+        <h3>
+            Aktionsplan
+        </h3>
+
+        <div class="card doku-card">
+
+            <p>
+                Für festgestellte Mängel wird ein eigener Maßnahmenbereich
+                geführt. Neben dem Maßnahmentext können insbesondere
+                zugehörige Fotos und der Bearbeitungsstatus gepflegt
+                werden. Wird im Prüfkatalog bei einer mit „Mangel"
+                bewerteten Frage das optionale Feld „Beschreibung des
+                Mangels" ausgefüllt, erscheint dieser Text zusätzlich zum
+                Maßnahmentext im Aktionsplan (Bildschirm und PDF), direkt
+                unter der jeweiligen Maßnahme – gelesen wird dafür
+                unmittelbar aus <code>state.comments</code>, sodass
+                Bildschirmanzeige und PDF-Export stets denselben,
+                aktuellen Stand zeigen. Die Gesamtverantwortung für
+                Durchführung und Mängelbeseitigung liegt bei der
+                Betriebsleitung; ein entsprechender Hinweis wird auch in den
+                erzeugten PDFs ausgegeben.
+            </p>
+
+            <p>
+                Für Prüfer und Betriebsleitung stehen Unterschriftenfelder
+                zur Verfügung. Die Signaturen werden lokal gespeichert und
+                können in die erzeugten PDFs übernommen werden.
+            </p>
+
+        </div>
+
+    </section>
+
+    <section class="doku-section" id="gbo">
+
+        <div class="section-title">
+            Abschnitt 4
+        </div>
+
+        <h2>
+            Gefährdungsbeurteilung
+        </h2>
+
+        <div class="card doku-card">
+            <p>Der Reiter <strong>Gefährdungsbeurteilung</strong> (<code>gbo.html</code>) enthält die
+               Gefährdungsbeurteilung (GBO) des Standorts. Sie beruht auf der GBO aus ASiC Handel 2.3 und ist
+               für den Großhandel zugeschnitten: keine Kunden (nur Besucher, Lieferanten, Fahrpersonal),
+               keine Kassen und kein Bargeld. Ausführlich beschreibt sie die
+               <a href="gbo-dokumentation.html">Technische Dokumentation GBO</a>.</p>
+            <ul>
+                <li><strong>Kernbeurteilung</strong>: <span data-zahl="gbo_faktoren">12</span> Gefährdungsfaktoren (0 Organisation bis
+                    11 Sonstige) mit <span data-zahl="gbo_kernfragen">270</span> Fragen, Pflicht für jeden Standort, mit Risikobewertung
+                    je Faktor (Schwere × Wahrscheinlichkeit, vorher und nachher).</li>
+                <li><strong>Vertiefung</strong> nach Inventar: <span data-zahl="gbo_module">62</span> Module (<span data-zahl="gbo_themen">5</span>
+                    Einrichtungen, <span data-zahl="gbo_bereiche">28</span> Bereiche, <span data-zahl="gbo_maschinen">29</span> Maschinen) mit
+                    <span data-zahl="gbo_vertiefungsfragen">696</span> Fragen; davon <span data-zahl="gbo_gh_module">31</span> Module mit
+                    <span data-zahl="gbo_gh_fragen">186</span> Fragen eigens für den Großhandel.</li>
+                <li>Zu jeder Frage: Rechtsbezug, Quellenhinweis, technische/organisatorische/personenbezogene
+                    Maßnahmen, Verantwortliche, Frist, Wirksamkeit, Bildbeleg.</li>
+                <li><strong>Inventar vorschlagen</strong> übernimmt die Ausstattung aus dem Betriebsprofil der
+                    geöffneten Begehung; <strong>Begehungshinweise</strong> ordnen Mängel des Prüfkatalogs
+                    einer GBO-Frage zu (nur Vormerkung, keine automatische Bewertung).</li>
+                <li>Ausgaben: Gesamt-GBO, Maßnahmenliste und Maßnahmenplan als PDF mit Firmenlogo.</li>
+            </ul>
+            <p><strong>Speicherung:</strong> Die GBO liegt auf dem Gerät (<code>ghbGboStateV1</code>). „Auf
+               Server speichern“ legt Begehung und GBO gemeinsam als <em>Standort-Datensatz</em> ab
+               (Format <code>ASiC-Marktcontainer</code>, Version 2, Begehung unter <code>audit</code>, GBO unter
+               <code>gbo</code>, Kennung <code>app: "grosshandel-begehung"</code>). Die GBO wird nur
+               mitgespeichert, wenn ihre Standortnummer zur Begehung passt (<code>gboFuerServer()</code>). Beim
+               Öffnen eines Standort-Datensatzes übernimmt <code>merkeMarktContainer()</code> die GBO auf das
+               Gerät.</p>
+        </div>
+
+        <h3>Module der Gefährdungsbeurteilung</h3>
+        <div class="card doku-card">
+            <p>Erzeugt von <code>tools/doku-zahlen.py</code> (über <code>tools/gbo-zaehlen.js</code>, also genau so,
+               wie <code>gbo.html</code> die GBO aufbaut).</p>
+            <div class="doku-table-wrap">
+            <table class="doku-table">
+                <tr><th>Modul</th><th>Fragen</th><th>Herkunft</th></tr>
+                <!-- GBOMODULE:START -->
+                <tr class="doku-bereich"><td colspan="3"><strong>Kernbeurteilung (für jeden Standort)</strong></td></tr>
+                <tr><td>0 · Organisation und Pflichten</td><td class="zahl">60</td><td></td></tr>
+                <tr><td>1 · Mechanische Gefährdungen</td><td class="zahl">60</td><td></td></tr>
+                <tr><td>2 · Elektrische Gefährdungen</td><td class="zahl">5</td><td></td></tr>
+                <tr><td>3 · Gefahrstoffe</td><td class="zahl">29</td><td></td></tr>
+                <tr><td>4 · Biologische Arbeitsstoffe</td><td class="zahl">2</td><td></td></tr>
+                <tr><td>5 · Brand- und Explosionsgefährdungen</td><td class="zahl">11</td><td></td></tr>
+                <tr><td>6 · Thermische Gefährdungen</td><td class="zahl">6</td><td></td></tr>
+                <tr><td>7 · Physikalische Einwirkungen</td><td class="zahl">4</td><td></td></tr>
+                <tr><td>8 · Arbeitsumgebung</td><td class="zahl">42</td><td></td></tr>
+                <tr><td>9 · Physische Belastung</td><td class="zahl">7</td><td></td></tr>
+                <tr><td>10 · Psychische Belastung</td><td class="zahl">39</td><td></td></tr>
+                <tr><td>11 · Sonstige Gefährdungen</td><td class="zahl">5</td><td></td></tr>
+                <tr class="doku-bereich"><td colspan="3"><strong>Besondere Einrichtungen und Tätigkeiten</strong></td></tr>
+                <tr><td>Flurförderzeuge</td><td class="zahl">6</td><td></td></tr>
+                <tr><td>Gabelstapler</td><td class="zahl">4</td><td></td></tr>
+                <tr><td>Presscontainer</td><td class="zahl">5</td><td></td></tr>
+                <tr><td>Leergut und Leergutzentrum</td><td class="zahl">7</td><td></td></tr>
+                <tr><td>Rollcontainer, Paletten und Ladungsträger</td><td class="zahl">6</td><td>neu für den Großhandel</td></tr>
+                <tr class="doku-bereich"><td colspan="3"><strong>Arbeitsbereiche</strong></td></tr>
+                <tr><td>Obst und Gemüse (Frischezentrum)</td><td class="zahl">12</td><td></td></tr>
+                <tr><td>Kühl- und Tiefkühlware</td><td class="zahl">14</td><td></td></tr>
+                <tr><td>Fleischwerk – Herstellung</td><td class="zahl">18</td><td></td></tr>
+                <tr><td>Fleischwerk – Zerlegung</td><td class="zahl">16</td><td></td></tr>
+                <tr><td>Kühlhäuser</td><td class="zahl">17</td><td></td></tr>
+                <tr><td>Lager und Kommissionierung</td><td class="zahl">18</td><td></td></tr>
+                <tr><td>Wareneingang, Warenausgang und Laderampe</td><td class="zahl">25</td><td></td></tr>
+                <tr><td>CO₂-Kälteanlage und CO₂-Kühlräume</td><td class="zahl">23</td><td></td></tr>
+                <tr><td>Fußschutz / Arbeitsschuhe</td><td class="zahl">15</td><td></td></tr>
+                <tr><td>Treppen</td><td class="zahl">15</td><td></td></tr>
+                <tr><td>Technik- und Heizungsräume</td><td class="zahl">19</td><td></td></tr>
+                <tr><td>Büros, Verwaltung und Besprechungsräume</td><td class="zahl">15</td><td></td></tr>
+                <tr><td>Bildschirmarbeit</td><td class="zahl">15</td><td></td></tr>
+                <tr><td>Fleischwerk – Gewürze</td><td class="zahl">15</td><td></td></tr>
+                <tr><td>Fleischwerk – Schneidetisch / Hackklotz</td><td class="zahl">16</td><td></td></tr>
+                <tr><td>Pforte, Empfang und Besucherregelung</td><td class="zahl">8</td><td>neu für den Großhandel</td></tr>
+                <tr><td>Börsensaal, Ausstellung und Veranstaltungen</td><td class="zahl">9</td><td>neu für den Großhandel</td></tr>
+                <tr><td>Schulungszentrum und Besprechungsräume</td><td class="zahl">7</td><td>neu für den Großhandel</td></tr>
+                <tr><td>Parkhäuser, Parkflächen und Betriebshof</td><td class="zahl">9</td><td>neu für den Großhandel</td></tr>
+                <tr><td>Kommissionierung</td><td class="zahl">10</td><td>neu für den Großhandel</td></tr>
+                <tr><td>Hochregal- und Schmalganglager</td><td class="zahl">7</td><td>neu für den Großhandel</td></tr>
+                <tr><td>Reifereien und Frischelager Obst und Gemüse</td><td class="zahl">8</td><td>neu für den Großhandel</td></tr>
+                <tr><td>Leergutzentrum</td><td class="zahl">7</td><td>neu für den Großhandel</td></tr>
+                <tr><td>Werkstatt Flurförderzeuge</td><td class="zahl">9</td><td>neu für den Großhandel</td></tr>
+                <tr><td>Betriebstankstelle Diesel</td><td class="zahl">8</td><td>neu für den Großhandel</td></tr>
+                <tr><td>Batterieladestationen Flurförderzeuge</td><td class="zahl">6</td><td>neu für den Großhandel</td></tr>
+                <tr><td>Photovoltaikanlage</td><td class="zahl">6</td><td>neu für den Großhandel</td></tr>
+                <tr><td>Ladesäulen für Elektrofahrzeuge</td><td class="zahl">5</td><td>neu für den Großhandel</td></tr>
+                <tr class="doku-bereich"><td colspan="3"><strong>Maschinen und Anlagen</strong></td></tr>
+                <tr><td>Handmesser (Fleischwerk)</td><td class="zahl">12</td><td></td></tr>
+                <tr><td>Fleischwolf (Fleischwerk)</td><td class="zahl">24</td><td></td></tr>
+                <tr><td>Kutter (Fleischwerk)</td><td class="zahl">20</td><td></td></tr>
+                <tr><td>Bandsäge (Fleischwerk)</td><td class="zahl">23</td><td></td></tr>
+                <tr><td>Aufschnittmaschine / Slicer (Fleischwerk)</td><td class="zahl">20</td><td></td></tr>
+                <tr><td>Wurstfüller (Fleischwerk)</td><td class="zahl">21</td><td></td></tr>
+                <tr><td>Vakuum-/Verpackungstechnik</td><td class="zahl">20</td><td></td></tr>
+                <tr><td>Ballenpresse</td><td class="zahl">25</td><td></td></tr>
+                <tr><td>Umgang mit und Schleifen von Messern (Fleischwerk)</td><td class="zahl">15</td><td></td></tr>
+                <tr><td>Rolltore</td><td class="zahl">18</td><td></td></tr>
+                <tr><td>Automatiktüren</td><td class="zahl">17</td><td></td></tr>
+                <tr><td>Putz- / Reinigungsmaschinen</td><td class="zahl">20</td><td></td></tr>
+                <tr><td>Schubmaststapler und Kommissionierer (hochhebend)</td><td class="zahl">6</td><td>neu für den Großhandel</td></tr>
+                <tr><td>Elektro-Hubwagen (E-Ameise) und Mitfahrgeräte</td><td class="zahl">6</td><td>neu für den Großhandel</td></tr>
+                <tr><td>Regalbediengerät (automatisches Lager)</td><td class="zahl">6</td><td>neu für den Großhandel</td></tr>
+                <tr><td>Förder- und Sortieranlagen (Stetigförderer)</td><td class="zahl">6</td><td>neu für den Großhandel</td></tr>
+                <tr><td>Überladebrücken, Torabdichtungen und Hubtische</td><td class="zahl">5</td><td>neu für den Großhandel</td></tr>
+                <tr><td>Schrankenanlagen und Zufahrtstore</td><td class="zahl">4</td><td>neu für den Großhandel</td></tr>
+                <tr><td>Palettenwickler (Stretchwickelmaschine)</td><td class="zahl">4</td><td>neu für den Großhandel</td></tr>
+                <tr><td>Umreifungsmaschinen und -geräte</td><td class="zahl">4</td><td>neu für den Großhandel</td></tr>
+                <tr><td>Leergutsortieranlage</td><td class="zahl">4</td><td>neu für den Großhandel</td></tr>
+                <tr><td>Kisten- und Behälterwaschanlage</td><td class="zahl">5</td><td>neu für den Großhandel</td></tr>
+                <tr><td>Entschwartungs- und Entvliesmaschine (Fleischwerk, BGN)</td><td class="zahl">4</td><td>neu für den Großhandel</td></tr>
+                <tr><td>Rohrbahn / Hängebahn und Hebezeuge (Fleischwerk, BGN)</td><td class="zahl">4</td><td>neu für den Großhandel</td></tr>
+                <tr><td>Fahrzeughebebühne (Werkstatt)</td><td class="zahl">4</td><td>neu für den Großhandel</td></tr>
+                <tr><td>Hubarbeitsbühne / Scherenbühne</td><td class="zahl">5</td><td>neu für den Großhandel</td></tr>
+                <tr><td>Krane, Hebezeuge und Lastaufnahmemittel</td><td class="zahl">4</td><td>neu für den Großhandel</td></tr>
+                <tr><td>Hochdruckreiniger</td><td class="zahl">5</td><td>neu für den Großhandel</td></tr>
+                <tr><td>Personen- und Lastenaufzüge</td><td class="zahl">5</td><td>neu für den Großhandel</td></tr>
+                <!-- GBOMODULE:ENDE -->
+            </table>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="doku-section" id="fotos">
+
+        <div class="section-title">
+            Abschnitt 5
+        </div>
+
+        <h2>
+            Fotodokumentation
+        </h2>
+
+
+        <div class="card doku-card">
+
+            <p>
+                Die App bietet eine vollständige lokale Fotodokumentation. Fotos können direkt mit dem iPad
+                aufgenommen bzw. über die Gerätefunktionen eingefügt
+                werden.
+            </p>
+
+            <ul>
+
+                <li>
+                    Fotoaufnahme bzw. Fotoauswahl direkt über die
+                    Fotoseite der App
+                </li>
+
+                <li>
+                    Fotos werden lokal in
+                    <strong>IndexedDB</strong> gespeichert
+                </li>
+
+                <li>
+                    Bilddaten werden für die Speicherung automatisch
+                    verkleinert und als JPEG verarbeitet, um den
+                    benötigten Speicherplatz zu reduzieren
+                </li>
+
+                <li>
+                    Zu jedem Foto kann ein Kommentar erfasst werden
+                </li>
+
+                <li>
+                    Einzelne Fotos können wieder gelöscht werden
+                </li>
+
+                <li>
+                    Fotos können als allgemeine Fotodokumentation
+                    gespeichert werden
+                </li>
+
+                <li>
+                    Fotos können zusätzlich direkt einer
+                    <strong>konkreten Maßnahme</strong> zugeordnet werden
+                </li>
+
+                <li>
+                    Von jedem einer Maßnahme zugeordneten Foto wird
+                    zusätzlich ein kleines Vorschaubild (220px, stark
+                    komprimiert, wenige KB) direkt im JSON der Begehung
+                    gespeichert. Das eigentliche Foto bleibt geräte-
+                    gebunden in IndexedDB — wird eine Begehung z. B. über
+                    das Team-Archiv auf einem anderen Gerät geladen, sind
+                    dort keine echten Fotos vorhanden. Das Vorschaubild
+                    dient dann als reine Anzeige-Referenz in der
+                    Maßnahmenliste (erkennbar an gestricheltem Rahmen und
+                    „Vorschau"-Kennzeichnung), kann dort aber nicht
+                    gelöscht werden.
+                </li>
+
+                <li>
+                    Fotos, die zu einem Zeitpunkt aufgenommen wurden, als
+                    diese Vorschaubild-Funktion noch nicht existierte
+                    (z. B. eine bereits laufende Begehung während eines
+                    App-Updates), bekommen das Vorschaubild automatisch
+                    beim nächsten Öffnen der Maßnahmenseite nachträglich
+                    erzeugt — kein manuelles Neu-Fotografieren nötig.
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <div class="doku-box ok">
+
+            <div class="doku-box-title">
+                Fotos und Maßnahmen sind miteinander verknüpft
+            </div>
+
+            Wird ein Foto einer Maßnahme zugeordnet, bleibt der Bezug
+            zur entsprechenden Maßnahme erhalten. Dadurch kann im PDF
+            direkt neben der Feststellung bzw. Maßnahme eine
+            Foto-Vorschau ausgegeben werden.
+
+        </div>
+
+
+        <h3>
+            Speicherung und Löschung
+        </h3>
+
+        <div class="card doku-card">
+
+            <p>
+                Fotos gehören funktional zur jeweiligen Begehung.
+                Sie werden getrennt von den Textdaten im
+                IndexedDB-Speicher verwaltet.
+            </p>
+
+            <p>
+                Beim vollständigen Zurücksetzen der aktuellen Begehung
+                werden deshalb neben den normalen Begehungsdaten auch
+                die zugehörigen Fotos gelöscht.
+            </p>
+
+            <p>
+                Beim Archivieren einer Begehung werden die zu diesem
+                Zeitpunkt vorhandenen Fotos zusammen mit dem
+                Archivdatensatz gespeichert.
+            </p>
+
+        </div>
+
+    </section>
+
+    <section class="doku-section" id="pdf">
+
+        <div class="section-title">
+            Abschnitt 6
+        </div>
+
+        <h2>
+            PDF-Erzeugung und Export
+        </h2>
+
+
+        <div class="card doku-card">
+
+            <p>
+                Die PDF-Dokumente werden direkt im Browser mit
+                <strong>jsPDF</strong> erzeugt. Es ist keine externe
+                PDF-Serververarbeitung erforderlich.
+            </p>
+
+            <p>
+                Die Dokumente werden im DIN-A4-Format aufgebaut und
+                enthalten ein Deckblatt mit Firmenlogo (sofern
+                <code>briefkopf-logo.png</code> vorhanden), Betriebsdaten, Betriebsprofil und einer
+                Übersicht des Begehungsstatus. Die Checkliste ist nach Bereichen gegliedert und nennt bei
+                prüfpflichtigen Punkten das Datum der letzten Prüfung.
+            </p>
+
+            <p>
+                Die App verwendet automatische Seitenumbrüche,
+                Seitenzahlen und für längere Texte automatische
+                Zeilenumbrüche.
+            </p>
+
+        </div>
+
+
+        <h3>
+            Export-Modi
+        </h3>
+
+        <div class="card doku-card">
+
+            <ul>
+
+                <li>
+                    <strong>Checkliste</strong> –
+                    Prüffragen inklusive Bewertungen und ggf.
+                    Mangelkommentaren
+                </li>
+
+                <li>
+                    <strong>Maßnahmen</strong> –
+                    Aktionsplan mit Maßnahmen, Fotos,
+                    Status und Unterschriften
+                </li>
+
+                <li>
+                    <strong>Fotos</strong> –
+                    eigenständiges Fotoprotokoll mit mehreren Fotos
+                    pro Seite und Kommentaren
+                </li>
+
+                <li>
+                    <strong>Alles / Gesamtbericht</strong> –
+                    kombinierter Bericht aus Checkliste,
+                    Maßnahmen und Fotodokumentation
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <h3>
+            Fotos im PDF
+        </h3>
+
+        <div class="card doku-card">
+
+            <p>
+                Fotos können an mehreren Stellen in die PDF-Ausgabe
+                einfließen:
+            </p>
+
+            <ul>
+
+                <li>
+                    Allgemeine Fotos werden als
+                    Fotodokumentation ausgegeben.
+                </li>
+
+                <li>
+                    Fotos einer Maßnahme werden direkt im
+                    Maßnahmenbereich als Vorschaubilder dargestellt.
+                </li>
+
+                <li>
+                    Zusätzlich kann für Maßnahmen mit zugehörigen Fotos
+                    ein eigener Fotoanhang erzeugt werden.
+                </li>
+
+                <li>
+                    Die eigenständige Fotodokumentation verwendet ein
+                    kompaktes Raster mit bis zu vier Fotos pro DIN-A4-Seite.
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <h3>
+            Teilen und Drucken
+        </h3>
+
+        <div class="card doku-card">
+
+            <ul>
+
+                <li>
+                    <strong>Drucken</strong> –
+                    erzeugt das PDF und öffnet es zum Drucken über den
+                    PDF-Betrachter des Geräts
+                </li>
+
+                <li>
+                    <strong>PDF teilen</strong> –
+                    verwendet, sofern verfügbar, die native
+                    Teilen-Funktion des Geräts. Das Teilen-Menü kennt kein
+                    Betreff-Feld; die erste Zeile des geteilten Textes ist
+                    deshalb der Betreff (z. B. „Begehung Standort 1234“), den
+                    Outlook als Betreff übernimmt, danach folgt der Mail-Text.
+                    Für den Versand ist deshalb im Teilen-Menü zwingend
+                    Outlook zu wählen; andere Apps (z. B. Apple Mail)
+                    übernehmen den Betreff nicht
+                </li>
+
+                <li>
+                    <strong>Mail vorbereiten</strong> –
+                    erzeugt einen vorausgefüllten Mailtext mit Standort,
+                    Prüfer und Betreff
+                </li>
+
+                <li>
+                    Bei nicht unterstützten Teilen-Funktionen erfolgt
+                    ein Fallback auf den normalen PDF-Download.
+                </li>
+
+            </ul>
+
+        </div>
+
+    </section>
+
+    <section class="doku-section" id="design">
+
+        <div class="section-title">
+            Abschnitt 7
+        </div>
+
+        <h2>
+            Design und Schrift
+        </h2>
+
+        <div class="card doku-card">
+
+            <ul>
+
+                <li>
+                    <strong>Farbschema:</strong>
+                    Markenfarbe Petrol (<code>#0f7280</code>, dunkler <code>#0b5563</code>, hell <code>#e2f1f3</code>; Variablen <code>--brand-red…</code> aus der Grundlage beibehalten)
+                </li>
+
+                <li>
+                    Verwendung eines neutralen Brandings
+                    „Großhandel Begehung“ mit Badge „SIFA“
+                </li>
+
+                <li>
+                    Durchgängige Karten-, Rundungs- und
+                    Pillen-Optik
+                </li>
+
+                <li>
+                    Responsive Darstellung,
+                    insbesondere für die Bedienung auf dem iPad
+                </li>
+
+                <li>
+                    Touch-orientierte Bedienelemente für
+                    die praktische Verwendung während einer Begehung
+                </li>
+
+                <li>
+                    <strong>Schrift:</strong> Die App verwendet durchgehend die Systemschrift
+                    des Geräts (San Francisco auf iPad und iPhone, Segoe UI unter
+                    Windows). Es werden keine Schriftdateien geladen – auch nicht
+                    von Google oder einem anderen Fremdserver.
+                </li>
+
+            </ul>
+
+        </div>
+
+    </section>
+
+    <section class="doku-section" id="recht">
+
+        <div class="section-title">
+            Abschnitt 8
+        </div>
+
+        <h2>
+            Rechtliche Bestandteile
+        </h2>
+
+        <div class="card doku-card">
+
+            <p>
+                Impressum und Datenschutzerklärung sind als eigene
+                HTML-Seiten vorhanden und über die Fußzeile der App
+                erreichbar.
+            </p>
+
+            <p>
+                Die Anwendung dokumentiert ihren aktuellen technischen
+                Revisionsstand in der Fußzeile und auf den erzeugten
+                PDF-Dokumenten.
+            </p>
+
+        </div>
+
+    </section>
+
+    <section class="doku-section" id="einschraenkungen">
+
+        <div class="section-title">
+            Abschnitt 9
+        </div>
+
+        <h2>
+            Datenhaltung, Team-Archiv und Auswertung
+        </h2>
+
+
+        <div class="doku-box">
+
+            <div class="doku-box-title">
+                Lokale Speicherung und Sicherung
+            </div>
+
+            Laufende Begehung, Fotos und „Mein Verlauf“ liegen nur auf dem
+            jeweiligen Gerät (localStorage bzw. IndexedDB). Einen automatischen
+            Abgleich zwischen Geräten gibt es nicht. Werden die Website-Daten des
+            Browsers gelöscht, ist der lokale Bestand verloren; gesichert wird über
+            „Datei ▾ → JSON-Datei › → Exportieren“ (verlustfrei: Begehung mit
+            Maßnahmen, Status und Unterschriften, ohne Fotos), über das Archiv
+            (mit Fotos, aber ebenfalls nur auf dem Gerät) und über das Team-Archiv.
+            Die Auswertung bietet zusätzlich einen CSV-Export der Bewertungen.
+
+        </div>
+
+
+        <div class="doku-box ok">
+
+            <div class="doku-box-title">
+                Team-Archiv auf dem Server (save.php / list.php / load.php)
+            </div>
+
+            „Datei ▾ → Team-Archiv › → Auf Server speichern“ legt die Begehung (mit Gefährdungsbeurteilung als Standort-Datensatz) als
+            <code>Begehung_&lt;Datum&gt;_Markt&lt;Nr&gt;.json</code> im Datenordner ab;
+            „Vom Server laden“ (<code>openServerLoadDialog()</code>) zeigt alle Begehungen
+            mit Suche. <code>list.php</code> liefert je Datei Datum, Standortnummer, Firma,
+            PLZ/Ort und Speicherzeit und erkennt auch manuell in den Datenordner gelegte
+            JSON-Exporte.
+
+            <ul>
+                <li>Voraussetzung zum Speichern: Datum und Standortnummer in den Betriebsdaten.</li>
+                <li>Vor jedem Überschreiben sichert <code>save.php</code> den bisherigen Stand
+                    in <code>versionen/</code>; je Begehung bleiben die letzten 20 Stände,
+                    ältere werden komprimiert nach <code>versionen/archiv/</code> verschoben
+                    (Grenzen in <code>config.php</code>, siehe Abschnitt 11).</li>
+                <li>Standard ist eine relative Adresse neben der App; unter „Einstellungen“
+                    lässt sich eine andere Server-Adresse (dann CORS auf dem Server nötig) und
+                    ein Zugriffsschlüssel hinterlegen. Die App legt ihn geschützt ab und
+                    unterschreibt damit jede Anfrage; die Skripte prüfen die Unterschrift
+                    (Abschnitt 10).</li>
+                <li>Server-Daten enthalten keine Fotos. Fehler beim Server-Zugriff berühren
+                    die lokalen Daten nicht.</li>
+                <li><strong>Getrennt von ASiC Handel:</strong> Jeder Datensatz trägt die Kennung
+                <code>app: "grosshandel-begehung"</code> (bei Standort-Datensätzen zusätzlich in
+                <code>audit</code>). Die App schickt bei jeder Anfrage <code>app=grosshandel-begehung</code> mit;
+                <code>list.php</code> zeigt nur solche Datensätze, <code>load.php</code>, <code>save.php</code> und
+                <code>loeschen.php</code> weisen fremde Dateien mit HTTP 409 ab (<code>asicNurGrosshandelApp()</code>
+                in <code>konto.php</code>), und eine Datei einer anderen App wird nie überschrieben. Zeigt die
+                Server-Adresse auf ASiC Handel, meldet die App „kein Team-Archiv der Großhandel Begehung“.
+                Empfohlen bleiben ein eigener Datenordner und ein eigener Zugriffsschlüssel.</li>
+            </ul>
+
+        </div>
+
+
+        <div class="doku-box ok">
+
+            <div class="doku-box-title">
+                Gemeinsames Arbeiten am Team-Archiv
+            </div>
+
+            Mehrere Geräte können dieselbe Begehung öffnen; jedes arbeitet mit einer
+            eigenen Kopie. Damit nichts unbemerkt überschrieben wird:
+
+            <ul>
+                <li><strong>Rückfrage beim Speichern:</strong> <code>saveStateToServer()</code>
+                    schickt mit, welchen Stand das Gerät zuletzt vom Server hatte.
+                    <code>save.php</code> prüft das unter einer Dateisperre
+                    (<code>.speichern.lock</code>) und meldet einen neueren oder fremden Stand
+                    mit HTTP 409. Die App bietet dann „Als eigene Fassung speichern“
+                    (<code>…_Fassung-&lt;n&gt;.json</code>), „Trotzdem überschreiben“ oder
+                    „Abbrechen“ (<code>frageBeiKonflikt()</code>). Die Team-Auswertung zählt
+                    je Standort und Datum nur die zuletzt gespeicherte Fassung.</li>
+                <li><strong>Automatisch ins Team-Archiv:</strong> „Speichern“ und
+                    „Begehung archivieren“ legen die Begehung zusätzlich im Team-Archiv ab
+                    (<code>speichernMitTeamArchiv()</code>), sofern Datum und Standortnummer
+                    gesetzt sind und sich der Stand geändert hat. Ohne Verbindung holt die
+                    App das nach (<code>teamArchivNachholen()</code>). Den Schalter setzt ein
+                    Administrator in der Benutzerverwaltung
+                    (<code>_benutzer/einstellungen.json</code>); ohne Anmeldung gilt
+                    <code>autoTeamArchiv</code> aus <code>config.php</code>.</li>
+                <li><strong>Jahresbericht:</strong> <code>js/jahresbericht.js</code> erstellt für
+                    Administratoren aus dem Team-Archiv eine Jahresliste (Standortnummer, Ort,
+                    Datum, Prüfer, Anzahl Mängel) als PDF mit Briefkopf oder als CSV. Unter
+                    „Inhalt“ (Voreinstellung: beides in einem PDF, letzte Wahl je Gerät
+                    gemerkt) kommt die Team-Gesamtauswertung des Jahres dazu
+                    (<code>buildAuswertungPdf()</code> aus <code>js/auswertung.js</code>) – im
+                    selben PDF oder als zweites PDF (PDF-Art <code>teamauswertung</code>). Den
+                    Briefkopf liefert <code>config.php</code> (<code>'briefkopf'</code>); ein
+                    Administrator kann ihn in der App ändern. Liegt
+                    <code>briefkopf-logo.png</code> im App-Ordner, erscheint das Logo im
+                    Briefkopf, in der Team-Gesamtauswertung, auf der Anmeldeseite und auf dem
+                    PDF-Deckblatt. Die PDFs werden im
+                    PDF-Archiv unter <code>Jahresberichte</code> abgelegt.</li>
+                <li><strong>PDF-Archiv:</strong> Jedes erstellte PDF geht über
+                    <code>pdfArchivieren()</code> zusätzlich an <code>pdf.php</code> und wird als
+                    <code>&lt;pdfOrdner&gt;/Markt_&lt;Nr&gt;/&lt;Datum&gt;_&lt;Art&gt;_&lt;HHMMSS&gt;.pdf</code>
+                    abgelegt (gleiche Prüfsumme nicht doppelt). Ohne Verbindung wartet es in
+                    der IndexedDB-Warteschlange <code>ghb-pdf-ablage</code>. Nur mit
+                    Anmeldung; Schalter <code>autoPdfArchiv</code> setzt ein Administrator.
+                    Einsehen über <code>pdf-archiv.html</code> nur mit dem Recht
+                    <code>pdfLesen</code> oder als Administrator; jeder Abruf wird
+                    protokolliert.</li>
+                <li><strong>Löschen im Archiv:</strong> Mit dem Schalter
+                    <code>archivLoeschen</code> (Voreinstellung aus) dürfen Administratoren
+                    Begehungen im Team-Archiv (<code>loeschen.php</code>, samt gespeicherter
+                    Stände) und PDFs im PDF-Archiv (<code>pdf.php</code>) löschen. Der Server
+                    prüft Rolle und Schalter selbst; jedes Löschen steht im Protokoll.</li>
+                <li><strong>„kürzlich gespeichert“:</strong> Team-Archiv und Ladedialog zeigen
+                    das Alter der Speicherung und kennzeichnen Stände der letzten zwei Stunden.</li>
+                <li><strong>„geöffnet auf …“:</strong> Wer eine Begehung aus dem Team-Archiv
+                    öffnet, meldet das an <code>offen.php</code> (Dateiname, Gerätename aus den
+                    Einstellungen, zufällige Gerätekennung, Zeitpunkt in
+                    <code>_offen/offen.json</code>). Andere Geräte sehen den Hinweis in der Liste
+                    und beim Öffnen. Keine Sperre; der Eintrag endet beim Speichern,
+                    Archivieren, Zurücksetzen oder Öffnen einer anderen Begehung, spätestens
+                    nach 4 Stunden. Ohne Verbindung oder ohne <code>offen.php</code> entfällt
+                    nur der Hinweis.</li>
+            </ul>
+
+        </div>
+
+
+        <div class="doku-box ok">
+
+            <div class="doku-box-title">
+                Verlauf und Wiederholungsbegehung
+            </div>
+
+            <code>verlauf.html</code> hat die Reiter „Mein Verlauf“ (lokales Archiv) und
+            „Team-Archiv (Server)“, jeweils mit „PDF exportieren“, „In App anzeigen“ und
+            „Wiederholungsbegehung“. Das Team-Archiv zeigt Ladestatus und Suche.
+
+            <ul>
+                <li><strong>In App anzeigen</strong> zeigt vorher ein Hinweisfenster mit Standort,
+                    Datum und Ort (<code>frageVorErsetzen()</code>); ist eine Begehung mit
+                    Eingaben offen, kann sie zuerst archiviert werden. Aus „Mein Verlauf“
+                    kommen die Fotos mit, aus dem Team-Archiv nicht – dort wird der lokale
+                    Fotobestand geleert. Das Archiv selbst bleibt unverändert.</li>
+                <li><strong>Wiederholungsbegehung</strong> (<code>buildFollowUpState()</code>)
+                    übernimmt Betriebsdaten und die Schalter „nicht vorhanden“, setzt das
+                    Datum auf heute und übernimmt jede nicht erledigte Maßnahme samt Mangel und
+                    Kommentar mit dem Vermerk „Offen aus Vorbegehung vom …“. Unterschriften
+                    und Fotos werden nicht übernommen.</li>
+            </ul>
+
+        </div>
+
+
+        <div class="doku-box">
+
+            <div class="doku-box-title">
+                Datei-Menü und Hinweisfenster
+            </div>
+
+            Das Datei-Menü auf <code>index.html</code> hat zwei Ebenen: Speichern,
+            „Team-Archiv ›“, „JSON-Datei ›“, Begehung archivieren und Zurücksetzen
+            (Umschalten in <code>initDropdownMenu()</code>). Archivieren, Zurücksetzen und
+            JSON laden fragen über <code>zeigeHinweisFenster()</code> im gleichen Stil wie
+            die übrigen Dialoge; Zurücksetzen und JSON laden bieten vorher „Erst im
+            Verlauf archivieren“ an. Beim JSON-Laden bleiben die Fotos nur bei derselben
+            Begehung (Standort und Datum) erhalten.
+
+        </div>
+
+
+        <div class="doku-box">
+
+            <div class="doku-box-title">
+                Desktop-App (Windows, optional)
+            </div>
+
+            Die Desktop-Hülle gehört nicht zum Paket der Großhandel Begehung; der Code unterstützt sie weiterhin. In der Tauri-Hülle (WebView2, erkannt über <code>laeuftInTauri()</code>) gibt es
+            weder neue Fenster noch das Teilen-Menü noch gespeicherte Downloads. Deshalb:
+            „Drucken“ öffnet das PDF in einem unsichtbaren Rahmen direkt im Druckdialog
+            (<code>druckePdfImRahmen()</code>); „PDF teilen“ und „JSON per Mail teilen“ sind
+            ausgeblendet; alle Exporte legt der Desktop-Befehl <code>datei_ablegen</code>
+            (<code>src-tauri/src/main.rs</code>) unter Downloads\Großhandel Begehung ab und zeigt sie
+            im Explorer (<code>tauriDateiAblegen()</code>); „Mail mit PDF vorbereiten“ öffnet
+            die Mail mit Betreff und Text, das PDF wird hineingezogen. Die Hülle schaltet den
+            Service Worker ab, damit nach einem Neubau sofort die neuen Dateien gelten. Die
+            Content-Security-Policy erlaubt dafür <code>frame-src 'self' blob:</code> und
+            <code>connect-src … ipc: http://ipc.localhost</code>.
+
+        </div>
+
+
+        <div class="doku-box ok">
+
+            <div class="doku-box-title">
+                Auswertungen
+            </div>
+
+            <code>auswertung.html</code> wertet das lokale Archiv aus,
+            <code>auswertung-team.html</code> alle Begehungen im Team-Archiv (jede Datei
+            einzeln geladen, mit Ladestatus und „Neu laden“; defekte Dateien werden
+            übersprungen). Beide bieten:
+
+            <ul>
+                <li>Filter nach Zeitraum und Standort; „Wiederkehrende Mängel“ und „Offene
+                    Maßnahmen“ ignorieren den Zeitraum bewusst.</li>
+                <li>Gesamtverteilung, Kategorien-Schwachstellen mit Aufklappen auf die
+                    einzelnen Fragen, Mängelquote je Monat und „Auffällige Standorte“ mit
+                    wählbarem Kriterium – als SVG am Bildschirm und gleich im PDF.</li>
+                <li>„Gesamtauswertung als PDF“ und CSV-Export.</li>
+            </ul>
+
+            Die Berechnung liegt zentral in <code>js/auswertung-logik.js</code>; Bildschirm
+            und PDF zeigen deshalb dieselben Zahlen. Die Bewertungen werden aus den in jeder
+            Begehung gespeicherten Schlüsseln gelesen, nicht über den aktuellen Katalog –
+            Fragen, die es nicht mehr gibt, erscheinen mit „(nicht mehr im aktuellen
+            Katalog)“.
+
+        </div>
+
+
+        <div class="doku-box">
+
+            <div class="doku-box-title">
+                Diagnose und Sicherungshinweis
+            </div>
+
+            <ul>
+                <li><strong>Diagnose</strong> (<code>einstellungen.html</code>,
+                    <code>erstelleDiagnoseText()</code>): Ausgabestand, Service-Worker-Cache,
+                    Aufruf- und Server-Adresse, ob ein Schlüssel hinterlegt ist (nie der
+                    Inhalt), Verbindungstest, Gerätename und Erreichbarkeit von
+                    <code>offen.php</code>, Sicherungsstand, Archiv, Fotos, Speicher, Gerät und
+                    die letzten Fehlermeldungen (<code>merkeFehler()</code>). Kopieren oder
+                    per Mail senden.</li>
+                <li><strong>Sicherungshinweis</strong> auf <code>massnahmen.html</code>
+                    unterhalb der Unterschriften: Weicht der Bearbeitungsstand vom zuletzt im
+                    Team-Archiv gesicherten ab, erscheinen „Jetzt sichern“ und „Später“
+                    (<code>aktualisiereSicherungsHinweis()</code>).</li>
+            </ul>
+
+        </div>
+
+
+        <div class="doku-box">
+
+            <div class="doku-box-title">
+                Programmdateien und Updates
+            </div>
+
+            Alle Einbindungen von <code>js/…</code> und <code>css/…</code> tragen den
+            Ausgabestand als Zusatz <code>?v=</code> (<code>BUILD</code> in
+            <code>sw.js</code>, derzeit <code><span data-zahl="cache_version">v1.1-9</span></span></code>).
+            Diese Dateien und die Schriften liefert der Service Worker sofort aus dem Cache;
+            nach einem Update ändert sich der Zusatz, und die Geräte laden sie neu.
+            HTML-Seiten, Manifest und Icons werden zuerst beim
+            Server nachgefragt, offline aus dem Cache. Bei jedem Update werden
+            <code>?v=</code> in allen Seiten sowie <code>BUILD</code>/<code>CACHE_NAME</code>
+            in <code>sw.js</code> gemeinsam erhöht (bei neuer Revision zusätzlich
+            <code>APP_VERSION</code> und <code>APP_REVISION</code>).
+
+        </div>
+
+
+        <div class="doku-box">
+
+            <div class="doku-box-title">
+                Grenzen
+            </div>
+
+            <ul>
+                <li>Kein automatischer Abgleich zwischen Geräten; das Team-Archiv ist eine
+                    Ablage, keine Synchronisation.</li>
+                <li>Fotos gibt es nur auf dem Gerät und im lokalen Archiv, nicht im
+                    Team-Archiv.</li>
+                <li>Ohne eingeschaltete Anmeldung sind die App-Seiten frei abrufbar; Zugriffsschutz
+                    gibt es nur über die Anmeldung am Server.</li>
+                <li>Eine Mail mit fertigem Anhang lässt sich aus der App nicht vorbereiten
+                    (<code>mailto:</code> kennt keine Anhänge; das neue Outlook für Windows nimmt
+                    von außen keine an). Auf dem iPad hängt „PDF teilen“ das PDF an.</li>
+            </ul>
+
+        </div>
+
+    </section>
+
+    <section class="doku-section" id="sicherheit">
+
+        <div class="section-title">
+            Abschnitt 10
+        </div>
+
+        <h2>
+            Sicherheit und Robustheit im Code
+        </h2>
+
+        <div class="card doku-card">
+
+            <div class="doku-table-wrap">
+            <table class="doku-table">
+
+                <tr>
+                    <th>Thema</th>
+                    <th>Umsetzung</th>
+                </tr>
+
+                <tr>
+                    <td>Ausgabe von Texten</td>
+                    <td>
+                        Alle Nutzereingaben und von außen geladenen Werte
+                        (Foto-Kommentare, Mängelbeschreibung, Maßnahmentexte,
+                        Standortnummer, Server-Dateiliste, Fehlermeldungen) werden
+                        mit <code>escapeHtml()</code> aus <code>js/app.js</code>
+                        maskiert, bevor sie in <code>innerHTML</code> gelangen.
+                        Importierte JSON-Dateien und Server-Daten gelten als nicht
+                        vertrauenswürdig.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Ereignisse</td>
+                    <td>
+                        Erzeugte HTML-Bausteine enthalten keine Inline-Handler
+                        (<code>onclick="…"</code>) mehr. <code>aktionAttr()</code>
+                        in <code>js/app.js</code> schreibt
+                        <code>data-click</code>/<code>data-change</code>/<code>data-input</code>
+                        mit den Argumenten als JSON; eine zentrale Verteilung ruft
+                        nur Funktionen aus der Liste <code>AKTION_ERLAUBT</code>
+                        auf. Werte aus Dateien können so nie als Programmcode
+                        ausgeführt werden.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Content-Security-Policy</td>
+                    <td>
+                        Jede Seite setzt per <code>&lt;meta&gt;</code>
+                        <code>script-src 'self'</code>: nur Skriptdateien vom
+                        eigenen Server, keine eingebetteten Skripte, kein
+                        <code>eval</code>. Eingebettete Skripte wurden nach
+                        <code>js/hilfe-suche.js</code>, <code>js/seiten-jahr.js</code>
+                        und <code>js/auswertung-team-pruefung.js</code> ausgelagert.
+                        Zusätzliche Header (inkl. <code>frame-ancestors</code>) über
+                        <code>.htaccess</code> (Apache), <code>web.config</code> (IIS)
+                        bzw. für PHP-Antworten in <code>config.php</code>.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Werte aus Dateien</td>
+                    <td>
+                        Vorschaubilder werden nur als
+                        <code>data:image/…;base64</code> übernommen
+                        (<code>sicheresVorschaubild()</code>), der Maßnahmen-Status
+                        nur aus den drei bekannten Werten (<code>sichererStatus()</code>).
+                        <code>escapeHtml()</code> in <code>js/auswertung-logik.js</code>
+                        ist identisch mit der Fassung in <code>js/app.js</code>
+                        (maskiert auch Anführungszeichen).
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Missbrauchsschutz Server</td>
+                    <td>
+                        <code>schutz.php</code> (eingebunden von <code>save.php</code>,
+                        <code>list.php</code>, <code>load.php</code>, <code>pruefen.php</code>):
+                        nach zu vielen falschen Zugriffsschlüsseln je Absender
+                        HTTP 429 (Voreinstellung 20 in 15 Min.), Speicher-Bremse
+                        (60 Speichervorgänge in 10 Min.), Größengrenze je
+                        Begehung (20 MB) und höchstens 20 ältere Stände je
+                        Begehung in <code>versionen/</code>; noch ältere Stände wandern komprimiert (<code>.json.gz</code>) nach
+                        <code>versionen/archiv/</code> (Obergrenze
+                        <code>maxArchivMB</code>, Voreinstellung 500 MB – darüber
+                        fallen die ältesten Archivstände weg). Werte optional in
+                        <code>config.php</code> unter <code>grenzen</code>; Zähler im
+                        Unterordner <code>_schutz/</code> des Datenordners.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Prüfseite</td>
+                    <td>
+                        Schlüssel per Formular (POST) statt in der Adresse, mit
+                        derselben Fehlversuch-Bremse. Der Selbsttest des
+                        Datenordners ruft nur Adressen auf, die auf den eigenen
+                        Server zeigen (kein Missbrauch über einen gefälschten
+                        Host-Header).
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Team-Archiv</td>
+                    <td>
+                        Dateinamen stehen im <code>data-filename</code>-Attribut;
+                        die Schaltflächen lesen sie von dort
+                        (<code>'$closest-filename'</code>) und setzen sie nicht
+                        in Programmcode ein.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Datum</td>
+                    <td>
+                        <code>todayIsoLocal()</code> liefert das Tagesdatum in
+                        lokaler Zeit. <code>toISOString()</code> rechnet nach UTC
+                        und lieferte zwischen 0 und 2 Uhr deutscher Zeit das
+                        Datum des Vortags.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Downloads</td>
+                    <td>
+                        <code>URL.revokeObjectURL()</code> wird erst nach
+                        einer Sekunde aufgerufen, weil iOS-Safari den Download
+                        sonst abbrechen kann.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Offline-Cache</td>
+                    <td>
+                        Der Service Worker speichert keine <code>*.php</code>-Antworten
+                        und keine Anfragen an fremde Adressen.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Server-Dateien</td>
+                    <td>
+                        <code>load.php</code> akzeptiert nur Dateinamen, die einem der
+                        beiden bekannten Muster entsprechen, und entfernt
+                        Pfadanteile mit <code>basename()</code>. <code>save.php</code>
+                        schreibt über eine temporäre Datei und sichert den
+                        Vorgängerstand (siehe Abschnitt 8).
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Zugriffsschlüssel</td>
+                    <td>
+                        Optional. Die App speichert den Schlüssel als nicht
+                        auslesbaren Krypto-Schlüssel (Web Crypto, IndexedDB) und
+                        unterschreibt jede Anfrage (HMAC-SHA-256 über Methode,
+                        Endpunkt, Adresszusatz, Zeit, Zufallswert und Inhalt);
+                        der Schlüssel selbst geht nicht über das Netz. Der
+                        Server prüft die Unterschrift mit <code>hash_equals()</code>,
+                        lässt 5 Minuten Zeitabweichung zu und nimmt jeden
+                        Zufallswert nur einmal an.
+                        Der Schlüssel steht zentral in <code>config.php</code>
+                        (standardmäßig leer) und muss in den App-Einstellungen
+                        jedes Geräts identisch hinterlegt werden (siehe
+                        Abschnitt 11).
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Fremdserver</td>
+                    <td>
+                        Es werden weder Schriften noch Bibliotheken von Dritten
+                        geladen. Die einzigen Netzwerkzugriffe sind die
+                        konfigurierten Server-Endpunkte.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Anmeldung</td>
+                    <td>
+                        Mit <code>'anmeldung' =&gt; true</code> in <code>config.php</code>
+                        ist die App nur nach Anmeldung mit Anmeldename und Passwort
+                        nutzbar. <code>konto.php</code> verwaltet die Konten in
+                        <code>&lt;Datenordner&gt;/_benutzer/benutzer.json</code>;
+                        Passwörter liegen nur als Hash vor (<code>password_hash</code>
+                        mit Argon2id, sonst bcrypt; bei Bedarf beim Anmelden neu
+                        berechnet). <code>anmeldung.php</code> meldet an und ab und
+                        ändert Passwörter (altes Passwort nötig, Startpasswort muss
+                        geändert werden). Unbekannte Namen kosten dieselbe Rechenzeit
+                        wie bekannte, die Meldung ist in beiden Fällen gleich.
+                        5 Fehlversuche in 15 Minuten sperren das Konto für 15 Minuten,
+                        zusätzlich greift die Sperre je Absender aus
+                        <code>schutz.php</code>.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Sitzung</td>
+                    <td>
+                        Cookie <code>asic_sitzung</code> mit 32 Byte Zufall,
+                        <code>HttpOnly</code>, <code>Secure</code> (bei HTTPS),
+                        <code>SameSite=Strict</code>, Pfad = App-Ordner. Auf dem
+                        Server liegt nur der SHA-256-Prüfwert mit Ablaufzeit
+                        (<code>_benutzer/sitzungen.json</code>, Voreinstellung
+                        10&nbsp;Stunden). Sperren, Löschen oder Zurücksetzen eines
+                        Kontos und eine Passwortänderung beenden dessen übrige
+                        Sitzungen. Schreibende Anfragen verlangen die Kopfzeile
+                        <code>X-ASiC: 1</code>, die fremde Seiten ohne CORS-Freigabe
+                        nicht setzen können (Schutz vor untergeschobenen Anfragen).
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Datenzugriff</td>
+                    <td>
+                        <code>save.php</code>, <code>list.php</code>,
+                        <code>load.php</code> und <code>offen.php</code> prüfen erst
+                        den unterschriebenen Zugriffsschlüssel, dann die Sitzung
+                        (<code>401 {grund:'anmeldung'}</code>; mit Startpasswort
+                        <code>403 {grund:'passwort'}</code>). Die App fängt das in
+                        <code>nasFetch()</code> ab, zeigt ein Anmeldefenster und
+                        wiederholt die Anfrage – Eingaben bleiben erhalten.
+                        <code>save.php</code> vermerkt Anmeldename und Name im
+                        Feld <code>_nas</code>; das Team-Archiv zeigt „gespeichert von“.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Torwächter</td>
+                    <td>
+                        Eine Umleitungsregel (<code>.htaccess</code>, bei IIS/nginx
+                        laut Installationsanleitung) schickt alle Aufrufe außer
+                        Anmeldeseite, Impressum, Datenschutz, Manifest, Icons,
+                        <code>css/</code>, <code>fonts/</code> und PHP-Dateien über
+                        <code>tor.php</code>. Es liefert nur bekannte Dateiarten aus
+                        dem App-Ordner, keine Pfade mit <code>.</code>/<code>_</code>
+                        am Anfang, nicht <code>daten/</code> und <code>tools/</code>;
+                        ohne gültige Sitzung leitet es Seiten zur Anmeldeseite um
+                        (sonst 401). Der Service Worker legt umgeleitete Antworten
+                        nie im Cache ab. <code>js/anmeldung-pruefen.js</code> leitet
+                        beim Öffnen einer Seite zur Anmeldung, wenn die Sitzung
+                        fehlt – ohne Verbindung wird nicht geprüft.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Benutzerverwaltung</td>
+                    <td>
+                        <code>benutzer.php</code> (Zugriffsschlüssel + Sitzung mit
+                        Rolle Administrator): Einstellung „automatisch ins Team-Archiv“
+                        für alle Geräte, anlegen mit Startpasswort
+                        (12 Zeichen ohne verwechselbare Zeichen, nur einmal
+                        angezeigt), zurücksetzen, sperren, Rolle ändern, löschen,
+                        Protokoll lesen. Mindestens ein aktiver Administrator
+                        bleibt; das eigene Konto ist vor Sperren, Herabstufen und
+                        Löschen geschützt. Den ersten Administrator legt
+                        <code>pruefen.php</code> an (nur solange es kein Konto gibt,
+                        Zugriffsschlüssel nötig). Anmeldeprotokoll mit Zeit, Ereignis,
+                        Konto und IP in <code>_benutzer/protokoll-JJJJ-MM.log</code>,
+                        ältere Monate als <code>protokollMonate</code> werden gelöscht.
+                    </td>
+                </tr>
+
+            </table>
+            </div>
+
+            <div class="doku-box">
+                <div class="doku-box-title">Bei zukünftigen Änderungen</div>
+                <p>
+                    Jeden neuen Text aus Eingabefeldern, Dateien oder vom Server
+                    mit <code>escapeHtml()</code> ausgeben – auch Datumswerte und
+                    IDs. Keine <code>onclick="…"</code> und keine
+                    <code>&lt;script&gt;…&lt;/script&gt;</code> in Seiten schreiben,
+                    sondern <code>aktionAttr()</code> bzw. eigene .js-Dateien
+                    (sonst blockiert die CSP); neue Handler-Funktionen in
+                    <code>AKTION_ERLAUBT</code> eintragen. Das Tagesdatum immer
+                    über <code>todayIsoLocal()</code> bilden. Neue Dateien in
+                    <code>tools/doku-dateien.json</code> eintragen.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="doku-section" id="cybersicherheit">
+
+        <div class="section-title">
+            Abschnitt 11
+        </div>
+
+        <h2>
+            App-Sicherheitsanalyse (Cyber-Sicherheit)
+        </h2>
+
+        <div class="card doku-card">
+
+            <p>
+                Die App wurde auf Schwachstellen und Angriffspunkte untersucht.
+                Geprüft wurden alle Dateien des Pakets (HTML, JavaScript, PHP,
+                Konfiguration, Lieferumfang). Jeder Befund wurde anschließend
+                praktisch nachgestellt: im Browser mit präparierten
+                Begehungsdateien und am Server mit gezielten Anfragen an die
+                PHP-Endpunkte.
+            </p>
+
+            <div class="doku-table-wrap">
+            <table class="doku-table">
+                <tr><th>Angaben</th><th></th></tr>
+                <tr><td>Prüfgegenstand</td><td>Großhandel Begehung, Rev. <span data-zahl="revision">1.1</span>, Ausgabestand <code><span data-zahl="cache_version">v1.1-9</span></code></td></tr>
+                <tr><td>Prüfdatum</td><td>Grundanalyse an der gemeinsamen Code-Basis (ASiC Handel 1.55): 25.10. und 05.11.2026; Ergänzungen der Großhandel Begehung (App-Kennung, Gefährdungsbeurteilung, Firmenlogo): 20.11.2026</td></tr>
+                <tr><td>Methode</td><td>Quellcode-Durchsicht, Angriffstests im Browser (Chromium) mit präparierten Begehungsdaten, Tests der Server-Endpunkte (PHP 8.3)</td></tr>
+                <tr><td>Ergebnis</td><td>Alle Schwachstellen im Programmcode sind behoben und durch Tests belegt. Offen sind nur noch Punkte der Einrichtung und des Betriebs sowie bewertete Restrisiken (siehe unten).</td></tr>
+                <tr><td>Einordnung</td><td>Interne Prüfung durch den Entwickler. Ersetzt keinen Penetrationstest durch einen externen Dienstleister.</td></tr>
+            </table>
+            </div>
+
+        </div>
+
+
+        <h3>
+            Angriffsfläche
+        </h3>
+
+        <div class="card doku-card">
+
+            <div class="doku-table-wrap">
+            <table class="doku-table">
+                <tr><th>Bereich</th><th>Mögliche Angriffe</th></tr>
+                <tr><td>Daten aus Dateien</td><td>Präparierte JSON-Dateien (Import, Team-Archiv, von Hand in den Datenordner gelegt) mit eingeschleustem HTML/JavaScript</td></tr>
+                <tr><td>Team-Archiv-Server</td><td>Lesen und Überschreiben von Begehungen über <code>save.php</code>, <code>list.php</code>, <code>load.php</code>; Durchprobieren des Schlüssels; Vollschreiben des Datenträgers</td></tr>
+                <tr><td>Prüfseite</td><td>Ausspähen von Server-Pfaden, Schlüssel in Protokollen, Missbrauch für Abrufe fremder Adressen</td></tr>
+                <tr><td>Anmeldung</td><td>Erraten von Passwörtern, Ausprobieren von Anmeldenamen, Stehlen oder Fälschen der Sitzung, untergeschobene Anfragen von fremden Seiten, Abruf von App-Seiten ohne Anmeldung, Rechteausweitung zum Administrator</td></tr>
+                <tr><td>Gerät und Browser</td><td>Auslesen des Browser-Speichers (Begehungen, Fotos, Unterschriften, Schlüssel)</td></tr>
+                <tr><td>Lieferpaket</td><td>Mitgelieferte Hilfsdateien, die über den Webserver abrufbar wären</td></tr>
+            </table>
+            </div>
+
+        </div>
+
+
+        <h3>
+            Offene Punkte und Aufgaben des Betreibers
+        </h3>
+
+        <div class="card doku-card">
+
+            <p>
+                Alle übrigen Befunde der Analyse sind im Code behoben und deshalb
+                hier nicht mehr aufgeführt; die Schutzmaßnahmen stehen im folgenden
+                Unterabschnitt. Die Nummern
+                entsprechen dem Sicherheitsbericht für die IT.
+            </p>
+
+            <div class="doku-table-wrap">
+            <table class="doku-table befunde">
+
+                <tr>
+                    <th>Nr.</th>
+                    <th>Schwere</th>
+                    <th>Ist-Zustand</th>
+                    <th>Status und Aufgabe</th>
+                </tr>
+
+                <tr>
+                    <td>S1</td>
+                    <td><span class="sev sev-kritisch">Kritisch</span></td>
+                    <td><strong>Zugriffsschlüssel für das Team-Archiv</strong><br>Im Betrieb ist in <code>config.php</code> ein <code>apiKey</code> gesetzt; <code>save.php</code>, <code>list.php</code>, <code>load.php</code> und <code>offen.php</code> beantworten Anfragen nur mit diesem Schlüssel. Die Vorlage-<code>config.php</code> im Installationspaket enthält bewusst keinen Schlüssel – ohne Schlüssel könnte jeder, der den Server erreicht, Begehungen lesen und überschreiben.</td>
+                    <td><span class="sev st-ok">Umgesetzt</span><br>Schlüssel auf allen Geräten unter „Einstellungen“ eintragen; bei Geräteverlust tauschen. Bei einer neuen Installation einen langen Zufallswert setzen (z. B. <code>openssl rand -hex 24</code>); <code>pruefen.php</code> meldet einen fehlenden oder kurzen Schlüssel.</td>
+                </tr>
+                <tr>
+                    <td>S2</td>
+                    <td><span class="sev sev-mittel">Mittel</span></td>
+                    <td><strong>Zugriff über ein entsperrtes Gerät</strong><br>Der Schlüssel liegt nicht mehr als Text auf dem Gerät, sondern als nicht auslesbarer Krypto-Schlüssel; die App unterschreibt damit jede Anfrage, der Schlüssel selbst geht nicht über das Netz. Er lässt sich weder in den Einstellungen (dort nur „hinterlegt · endet auf …“) noch über die Entwicklerwerkzeuge herauskopieren. Wer das entsperrte Gerät in der Hand hat, kann über die App aber weiterhin auf das Team-Archiv zugreifen. Ohne HTTPS (kein Web Crypto) speichert und verschickt die App keinen Schlüssel.</td>
+                    <td><span class="sev st-rest">Restrisiko</span><br>Gerätesperre und Geräteverwaltung (S6). Mit Anmeldung zusätzlich: Konto der Person sperren oder Passwort zurücksetzen – das beendet ihre Sitzungen sofort; ohne Sitzung ist nach spätestens 10 Stunden ein Passwort nötig. Bei Geräteverlust Schlüssel tauschen. Nach Umstellung aller Geräte <code>'klartextSchluessel' =&gt; false</code> setzen.</td>
+                </tr>
+                <tr>
+                    <td>S4</td>
+                    <td><span class="sev sev-mittel">Mittel</span></td>
+                    <td><strong>Prüfseite zeigt Server-Angaben</strong><br><code>pruefen.php</code> zeigt Server-Pfade, Benutzer und Einstellungen (Schlüssel per Formular, mit Fehlversuch-Sperre).</td>
+                    <td><span class="sev st-betrieb">Betreiber</span><br>Nach der Einrichtung löschen; für eine spätere Kontrolle wieder hochladen.</td>
+                </tr>
+                <tr>
+                    <td>S6</td>
+                    <td><span class="sev sev-gering">Gering</span></td>
+                    <td><strong>Daten unverschlüsselt auf dem Gerät</strong><br>Begehungen, Fotos und Unterschriften liegen im Browser-Speicher (localStorage/IndexedDB).</td>
+                    <td><span class="sev st-betrieb">Betrieb</span><br>Gerätesperre mit Code, Geräteverwaltung (MDM), keine gemeinsam genutzten Geräte ohne Sperre.</td>
+                </tr>
+                <tr>
+                    <td>S7</td>
+                    <td><span class="sev sev-gering">Gering</span></td>
+                    <td><strong>Lage des Datenordners</strong><br>Liegt der Datenordner im Web-Verzeichnis (Variante B), hängt sein Schutz an Sperrdateien bzw. einer nginx-Regel.</td>
+                    <td><span class="sev st-betrieb">Betreiber</span><br>Variante A (außerhalb des Web-Verzeichnisses) verwenden; <code>pruefen.php</code> prüft die Sperre automatisch.</td>
+                </tr>
+                <tr>
+                    <td>S8</td>
+                    <td><span class="sev sev-gering">Gering</span></td>
+                    <td><strong>Kontosperre als Störung</strong><br>Wer einen Anmeldenamen kennt, kann das Konto mit 5 falschen Passwörtern für 15 Minuten sperren. Ein Durchprobieren von Passwörtern wird damit aussichtslos.</td>
+                    <td><span class="sev st-rest">Bewusst</span><br>Sperrdauer und Zahl der Versuche in <code>config.php</code> anpassbar; das Protokoll zeigt Fehlversuche mit IP-Adresse. Anmeldenamen nicht öffentlich machen.</td>
+                </tr>
+                <tr>
+                    <td>S9</td>
+                    <td><span class="sev sev-mittel">Mittel</span></td>
+                    <td><strong>Torwächter hängt an der Server-Regel</strong><br>Ohne Umleitungsregel (fehlendes <code>mod_rewrite</code>, IIS ohne URL Rewrite, nginx ohne Regel) sind die App-Seiten selbst frei abrufbar. Die Daten bleiben geschützt, weil die PHP-Dateien die Anmeldung selbst prüfen.</td>
+                    <td><span class="sev st-betrieb">Betreiber</span><br>Regel laut Installationsanleitung einrichten; <code>pruefen.php</code> zeigt „Torwächter in Betrieb“.</td>
+                </tr>
+                <tr>
+                    <td>S10</td>
+                    <td><span class="sev sev-mittel">Mittel</span></td>
+                    <td><strong>PDF-Archiv enthält vollständige Berichte</strong><br>Die abgelegten PDFs enthalten Fotos in Originalqualität, Namen und Unterschriften. Abruf über <code>pdf.php</code> nur mit Schlüssel, Anmeldung und dem Recht „PDF-Archiv“ (Administratoren immer); Dateikennungen sind zufällig, Pfade werden gegen den Ablageordner geprüft, jeder Abruf wird protokolliert. Wer direkten Zugriff auf den Ablageordner oder das Netzlaufwerk hat, sieht die Dateien ohne diese Prüfung.</td>
+                    <td><span class="sev st-betrieb">Betreiber</span><br>Ablageordner außerhalb des Webverzeichnisses (<code>pruefen.php</code> warnt sonst); Freigabe des Netzlaufwerks auf den festgelegten Personenkreis beschränken; Löschfrist festlegen und den Ordner in das Löschkonzept aufnehmen.</td>
+                </tr>
+
+            </table>
+            </div>
+
+            <div class="doku-box ok">
+                <div class="doku-box-title">Legende</div>
+                <p>
+                    <span class="sev st-ok">Umgesetzt</span> im Betrieb erledigt, bei neuen Installationen zu beachten ·
+                    <span class="sev st-betrieb">Betreiber</span> / <span class="sev st-betrieb">Betrieb</span> durch Einrichtung oder organisatorisch zu erfüllen ·
+                    <span class="sev st-rest">Restrisiko</span> / <span class="sev st-rest">Bewusst</span> bekannt und bewertet, im Code nicht weiter zu schließen.
+                </p>
+            </div>
+
+        </div>
+
+
+        <h3>
+            Wirksame Schutzmaßnahmen
+        </h3>
+
+        <div class="card doku-card">
+
+            <div class="doku-table-wrap">
+            <table class="doku-table">
+                <tr><th>Ebene</th><th>Schutz</th></tr>
+                <tr><td>Ausgabe</td><td>Alle Werte aus Eingaben, Dateien und vom Server werden mit <code>escapeHtml()</code> maskiert. Vorschaubilder und Status werden zusätzlich auf erlaubte Werte geprüft.</td></tr>
+                <tr><td>Ereignisse</td><td>Keine Inline-Handler. <code>aktionAttr()</code> legt Argumente als JSON-Daten ab; eine zentrale Verteilung ruft nur Funktionen aus <code>AKTION_ERLAUBT</code> auf.</td></tr>
+                <tr><td>Browser-Richtlinie</td><td>Content-Security-Policy in jeder Seite: nur eigene Skriptdateien, keine eingebetteten Skripte, kein <code>eval</code>, keine Plugins, keine fremden Bilder oder Schriften; eingebettete Rahmen nur mit eigenen Inhalten (<code>frame-src 'self' blob:</code>, für das Drucken in der Desktop-App); zusätzlich die Verbindung zur Desktop-Hülle (<code>ipc:</code>, <code>http://ipc.localhost</code>). Verbindungen nur zum eigenen Server und zu HTTPS-Adressen (für ein Team-Archiv auf einem anderen Server).</td></tr>
+                <tr><td>HTTP-Header</td><td><code>X-Content-Type-Options: nosniff</code>, Schutz vor Einbetten (<code>X-Frame-Options</code>, <code>frame-ancestors</code>), <code>Referrer-Policy: same-origin</code>; JSON-Antworten zusätzlich <code>Cache-Control: no-store</code>.</td></tr>
+                <tr><td>Zugriff Server</td><td>Unterschriebene Anfragen (HMAC-SHA-256, zeitkonstanter Vergleich, 5 Minuten Zeitfenster, jeder Zufallswert nur einmal); der Schlüssel geht nicht über das Netz. Sperre nach 20 Fehlversuchen für 15 Minuten je Absender (HTTP 429).</td></tr>
+                <tr><td>Anmeldung</td><td>Eigene Konten mit Rolle; Passwörter nur als Argon2id-/bcrypt-Hash; gleiche Meldung und Rechenzeit für unbekannte Namen; Kontosperre nach 5 Fehlversuchen in 15 Minuten. Sitzungs-Cookie mit 32 Byte Zufall, <code>HttpOnly</code>, <code>Secure</code>, <code>SameSite=Strict</code>, 10 Stunden; auf dem Server nur der SHA-256-Prüfwert. Schreibende Anfragen nur mit Kopfzeile <code>X-ASiC</code>. Torwächter <code>tor.php</code> liefert App-Seiten und Programmdateien nur nach Anmeldung. Protokoll aller Anmeldungen und Kontoänderungen.</td></tr>
+                <tr><td>Schlüssel auf dem Gerät</td><td>Als nicht exportierbarer Krypto-Schlüssel in IndexedDB; in <code>localStorage</code> nur Länge und letzte vier Zeichen zur Anzeige. Ein früher als Text gespeicherter Schlüssel wird beim ersten Start automatisch umgestellt und gelöscht.</td></tr>
+                <tr><td>Missbrauchsschutz</td><td>Höchstens 60 Speichervorgänge in 10 Minuten je Absender, höchstens 20 MB je Begehung, 20 Stände je Begehung in <code>versionen/</code>, ältere komprimiert in <code>versionen/archiv/</code> (Obergrenze 500 MB). Alle Werte in <code>config.php</code> unter <code>grenzen</code> anpassbar.</td></tr>
+                <tr><td>Dateizugriff</td><td><code>load.php</code> nimmt nur Dateinamen der beiden bekannten Muster an (kein Verzeichnis-Ausbruch); Schreiben über temporäre Datei; Datenordner per Sperrdatei bzw. außerhalb des Web-Verzeichnisses.</td></tr>
+                <tr><td>Lieferumfang</td><td>Keine Zwischendateien; Entwickler-Werkzeuge gesperrt. Keine Bibliotheken oder Schriften von Drittanbietern zur Laufzeit.</td></tr>
+            </table>
+            </div>
+
+        </div>
+
+
+        <h3>
+            Testergebnisse
+        </h3>
+
+        <div class="card doku-card">
+
+            <p>
+                Ergebnisse für den Ausgabestand
+                <code><span data-zahl="cache_version">v1.1-9</span></code> mit präparierten
+                Daten bzw. gezielten Anfragen.
+            </p>
+
+            <div class="doku-table-wrap">
+            <table class="doku-table">
+                <tr><th>Test</th><th>Ergebnis</th></tr>
+                <tr>
+                    <td>Kommentar mit Schadcode (Maßnahmen-Seite)</td>
+                    <td>nicht ausgeführt, Text sichtbar</td>
+                </tr>
+                <tr>
+                    <td>Vorschaubild mit präparierter Adresse</td>
+                    <td>verworfen</td>
+                </tr>
+                <tr>
+                    <td>Maßnahmen-Status mit Attribut-Ausbruch</td>
+                    <td>verworfen</td>
+                </tr>
+                <tr>
+                    <td>Maßnahmen-ID mit Code (Klick auf „Kamera öffnen“)</td>
+                    <td>nicht ausgeführt, Bedienung normal</td>
+                </tr>
+                <tr>
+                    <td>Ungültiges Datum mit HTML (Team-Auswertung)</td>
+                    <td>maskiert</td>
+                </tr>
+                <tr>
+                    <td>Standortnummer mit Anführungszeichen (Auswertung)</td>
+                    <td>maskiert</td>
+                </tr>
+                <tr>
+                    <td>Gegenprobe CSP: Inline-Skript nachträglich einfügen</td>
+                    <td>vom Browser blockiert</td>
+                </tr>
+                <tr>
+                    <td>Zugriffsschlüssel durchprobieren (Testgrenze 3)</td>
+                    <td>401, 401, 401, danach 429</td>
+                </tr>
+                <tr>
+                    <td>Mitgeschnittene Anfrage erneut senden</td>
+                    <td>401 „bereits verarbeitet“</td>
+                </tr>
+                <tr>
+                    <td>Unterschriebene Anfrage mit verändertem Inhalt oder anderer Datei</td>
+                    <td>401</td>
+                </tr>
+                <tr>
+                    <td>Geräteuhr 10 Minuten falsch</td>
+                    <td>App gleicht mit der Serverzeit ab, Anfrage gelingt</td>
+                </tr>
+                <tr>
+                    <td>Klartext-Schlüssel bei <code>klartextSchluessel</code> = false</td>
+                    <td>401, kein Fehlversuch gezählt</td>
+                </tr>
+                <tr>
+                    <td>Schlüssel über Entwicklerwerkzeuge auslesen</td>
+                    <td>nicht möglich (nicht exportierbar), kein Text im Browser-Speicher</td>
+                </tr>
+                <tr>
+                    <td>Server-Adresse mit <code>http://</code> eintragen</td>
+                    <td>nicht gespeichert, Hinweis „muss mit https:// beginnen“</td>
+                </tr>
+                <tr>
+                    <td>Zugriffsschlüssel ohne HTTPS eintragen</td>
+                    <td>nicht gespeichert, kein Klartext auf dem Gerät oder im Netz</td>
+                </tr>
+                <tr>
+                    <td><code>pruefen.php?schluessel=…</code> in der Adresse</td>
+                    <td>nicht angenommen, Formular mit Hinweis, kein Fehlversuch gezählt</td>
+                </tr>
+                <tr>
+                    <td>Massenhaftes Speichern (Testgrenze 5)</td>
+                    <td>6. Vorgang 429</td>
+                </tr>
+                <tr>
+                    <td>Begehung über Größengrenze</td>
+                    <td>413 mit Meldung</td>
+                </tr>
+                <tr>
+                    <td>Überlauf <code>versionen/</code></td>
+                    <td>neueste Stände bleiben, ältere als .json.gz im Archiv, Obergrenze greift</td>
+                </tr>
+                <tr>
+                    <td>Prüfseite mit gefälschtem Host-Header</td>
+                    <td>Abruf unterbleibt, Hinweis</td>
+                </tr>
+                <tr>
+                    <td>App-Seite und Programmdatei ohne Anmeldung abrufen</td>
+                    <td>Seite: Umleitung zur Anmeldeseite; Datei: 401. <code>tools/</code>, <code>daten/</code>, versteckte Dateien, <code>../</code>: 404</td>
+                </tr>
+                <tr>
+                    <td>Daten-Endpunkte mit gültigem Schlüssel, ohne Sitzung</td>
+                    <td>401 „Bitte anmelden“; App zeigt Anmeldefenster und wiederholt die Anfrage danach erfolgreich</td>
+                </tr>
+                <tr>
+                    <td>Anmelden mit falschem Passwort bzw. unbekanntem Namen</td>
+                    <td>dieselbe Meldung „Anmeldename oder Passwort ist falsch“</td>
+                </tr>
+                <tr>
+                    <td>6 falsche Passwörter hintereinander</td>
+                    <td>ab dem 6. Versuch Sperre 15 Minuten, auch das richtige Passwort wird abgewiesen</td>
+                </tr>
+                <tr>
+                    <td>Anmeldung ohne Kopfzeile <code>X-ASiC</code> (fremde Seite)</td>
+                    <td>abgewiesen</td>
+                </tr>
+                <tr>
+                    <td>Abgelaufene Sitzung (Ablaufzeit zurückgesetzt)</td>
+                    <td>nicht mehr angemeldet, Seiten leiten zur Anmeldung</td>
+                </tr>
+                <tr>
+                    <td>Anmelden mit Startpasswort</td>
+                    <td>Passwortänderung erzwungen; Seiten und Daten erst danach; Passwort mit Anmeldenamen oder unter 10 Zeichen abgelehnt</td>
+                </tr>
+                <tr>
+                    <td>Prüfer ruft Benutzerverwaltung auf</td>
+                    <td>403 „Administratoren vorbehalten“, Link in den Einstellungen ausgeblendet</td>
+                </tr>
+                <tr>
+                    <td>Administrator sperrt, stuft herab oder löscht sich selbst</td>
+                    <td>abgelehnt, mindestens ein aktiver Administrator bleibt</td>
+                </tr>
+                <tr>
+                    <td>Konto sperren bzw. Passwort zurücksetzen</td>
+                    <td>Sitzungen der Person sofort beendet; altes Startpasswort ungültig</td>
+                </tr>
+                <tr>
+                    <td>Name mit HTML/Skript in der Benutzerverwaltung</td>
+                    <td>als Text angezeigt, nicht ausgeführt</td>
+                </tr>
+                <tr>
+                    <td>Erster Administrator über <code>pruefen.php</code>, danach erneuter Versuch</td>
+                    <td>angelegt (Argon2id); zweiter Versuch: Formular nicht mehr vorhanden, kein Konto angelegt</td>
+                </tr>
+                <tr>
+                    <td>Automatisch ins Team-Archiv: Prüfer ändert die Einstellung direkt am Server</td>
+                    <td>403 „Administratoren vorbehalten“; Änderung durch Administrator im Protokoll</td>
+                </tr>
+                <tr>
+                    <td>Speichern ohne Verbindung, danach wieder online</td>
+                    <td>lokal gespeichert, Team-Archiv automatisch nachgeholt; bei fremdem neuerem Stand Rückfrage statt Überschreiben</td>
+                </tr>
+                <tr>
+                    <td>PDF-Archiv: PDF teilen online, danach offline und wieder online</td>
+                    <td>abgelegt unter <code>Markt_&lt;Nr&gt;/</code>; offline in die Warteschlange, danach „Nachgeholt: 1 PDF“</td>
+                </tr>
+                <tr>
+                    <td>PDF-Archiv: Prüfer ohne Recht ruft Liste/Datei direkt ab; Admin erteilt das Recht</td>
+                    <td>403, kein Knopf in den Einstellungen; danach Liste sichtbar, Abruf im Protokoll (<code>pdf-abruf</code>)</td>
+                </tr>
+                <tr>
+                    <td>Löschen im Archiv: Schalter aus, Prüfer, <code>../config.php</code>, ohne <code>X-ASiC</code></td>
+                    <td>403 bzw. 400, kein Knopf; mit Schalter als Administrator: Datei, ältere Stände bzw. PDF entfernt, Eintrag im Protokoll</td>
+                </tr>
+                <tr>
+                    <td>PDF-Archiv: Nicht-PDF, Standortnummer <code>../</code>, ungültige Kennung</td>
+                    <td>jeweils 400, nichts gespeichert; im PDF-Ordner liegen nur PDF-Dateien</td>
+                </tr>
+                                <tr>
+                    <td>Team-Archiv von ASiC Handel in den Einstellungen eingetragen</td>
+                    <td>Verbindungstest meldet „kein Team-Archiv der Großhandel Begehung“, keine fremden Begehungen sichtbar</td>
+                </tr>
+                <tr>
+                    <td>Datei von ASiC Handel im Datenordner laden, überschreiben oder löschen</td>
+                    <td>nicht gelistet; Laden, Speichern und Löschen mit 409 abgewiesen, Datei unverändert</td>
+                </tr>
+                <tr>
+                    <td>JSON-Datei bzw. Gesamtsicherung aus ASiC Handel öffnen</td>
+                    <td>abgewiesen mit Hinweis, laufende Begehung unverändert</td>
+                </tr>
+                <tr>
+                    <td>GBO eines anderen Standorts beim Speichern</td>
+                    <td>wird nicht in den Datensatz übernommen</td>
+                </tr>
+                <tr>
+                    <td>Service Worker bei eingeschalteter Anmeldung</td>
+                    <td>installiert (<span data-zahl="sw_dateien">59</span> Dateien), keine Anmeldeseite unter fremder Adresse im Cache</td>
+                </tr>
+                <tr>
+                    <td>Bedienung: Prüfkatalog, Schalter, Betriebsprofil, Maßnahmen, Fotos, Verlauf, Team-Archiv, Gefährdungsbeurteilung, Hilfe-Suche, Speichern</td>
+                    <td>funktioniert, keine Konsolenfehler</td>
+                </tr>
+            </table>
+            </div>
+
+        </div>
+
+
+        <h3>
+            Pflichten des Betreibers
+        </h3>
+
+        <div class="card doku-card">
+
+            <div class="doku-box">
+                <div class="doku-box-title">Vor dem Produktivbetrieb</div>
+                <p>
+                    1. Ist die App aus dem Internet erreichbar: Anmeldung einschalten (<code>'anmeldung' =&gt; true</code>), ersten Administrator über <code>pruefen.php</code> anlegen und die Torwächter-Regel prüfen.<br>
+                    2. In <code>config.php</code> einen langen Zufallswert als <code>apiKey</code> setzen
+                    (z. B. <code>openssl rand -hex 24</code>) und auf den Geräten eintragen.<br>
+                    3. Datenordner außerhalb des Web-Verzeichnisses anlegen (Variante A).<br>
+                    4. Nur über HTTPS mit gültigem Zertifikat betreiben; in den Einstellungen nur <code>https://</code>-Adressen eintragen.<br>
+                    5. <code>pruefen.php</code> aufrufen, alle roten Punkte beheben, danach löschen.<br>
+                    6. Ordner <code>tools/</code> nicht auf den Webserver kopieren.<br>
+                    7. Datenordner einschließlich <code>versionen/archiv/</code> in die Server-Sicherung aufnehmen.<br>
+                    8. Geräte mit Code sperren, möglichst über eine Geräteverwaltung (MDM).
+                </p>
+            </div>
+
+            <div class="doku-box ok">
+                <div class="doku-box-title">Gemeinsame IP-Adresse</div>
+                <p>
+                    Die Bremsen zählen je IP-Adresse. Laufen alle Geräte über
+                    einen Proxy oder eine gemeinsame Adresse, teilen sie sich
+                    die Zähler. Dann <code>speichernMax</code> erhöhen. Bei einem
+                    aus dem Internet erreichbaren Server kann ein Angreifer mit
+                    falschen Schlüsseln alle Geräte hinter derselben Adresse für
+                    15 Minuten sperren; bei einem langen Schlüssel ist
+                    Durchprobieren aussichtslos, <code>fehlversuchMax</code> darf
+                    dann höher stehen (z. B. 100).
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="doku-section" id="betrieb">
+
+        <div class="section-title">
+            Abschnitt 12
+        </div>
+
+        <h2>
+            Betrieb, Einrichtung und Updates
+        </h2>
+
+        <div class="card doku-card">
+
+            <p>
+                Die App-Dateien laufen vollständig im Browser. Nur „Auf Server
+                speichern“, „Vom Server laden“, das Team-Archiv und die
+                Team-Auswertung sprechen die PHP-Endpunkte an. App und Endpunkte
+                können im selben Ordner liegen (Regelfall) oder auf
+                verschiedenen Servern.
+            </p>
+
+        </div>
+
+        <h3>
+            Konfiguration
+        </h3>
+
+        <div class="card doku-card">
+
+            <p>
+                Schlüssel und Codes stehen nicht in dieser Dokumentation und
+                gehören nicht in ein öffentliches Repository.
+            </p>
+
+            <div class="doku-table-wrap">
+            <table class="doku-table">
+                <tr>
+                    <th>Einstellung</th>
+                    <th>Ort</th>
+                    <th>Wirkung</th>
+                </tr>
+                <tr>
+                    <td><code>datenOrdner</code></td>
+                    <td>config.php</td>
+                    <td>Ablage der JSON-Dateien. Empfohlen außerhalb des Web-Verzeichnisses (z. B. <code>/volume1/asic-handel-backup/Grosshandel</code>); alternativ Unterordner <code>daten</code> mit Sperrdateien für Apache (.htaccess) und IIS (web.config).</td>
+                </tr>
+                <tr>
+                    <td><code>apiKey</code> (Zugriffsschlüssel)</td>
+                    <td>config.php</td>
+                    <td>Leer = kein Schlüssel. Gesetzt: save/list/load/offen antworten ohne gültige Unterschrift in der Kopfzeile <code>X-Api-Key</code> mit HTTP 401; pruefen.php fragt den Schlüssel in einem Formular ab.</td>
+                </tr>
+                <tr>
+                    <td><code>klartextSchluessel</code></td>
+                    <td>config.php</td>
+                    <td><code>false</code> = nur unterschriebene Anfragen (empfohlen, Vorlage). <code>true</code> oder Eintrag fehlt = auch ältere App-Stände annehmen, die den Schlüssel im Klartext schicken. pruefen.php zeigt, wann zuletzt so eine Anfrage kam.</td>
+                </tr>
+                <tr>
+                    <td><code>anmeldung</code></td>
+                    <td>config.php</td>
+                    <td><code>true</code> = App nur nach Anmeldung nutzbar (Abschnitt 9). Fehlt der Eintrag, bleibt sie aus. Feineinstellungen: <code>sitzungStunden</code> (10), <code>anmeldeVersuche</code> (5), <code>anmeldeSperreMinuten</code> (15), <code>passwortMinLaenge</code> (10, mind. 8), <code>protokollMonate</code> (6).</td>
+                </tr>
+                <tr>
+                    <td><code>ohneAnmeldung</code></td>
+                    <td>config.php</td>
+                    <td>Liste von App-Adressen (z. B. <code>['https://app.example.de']</code>), die das Team-Archiv trotz Anmeldung ohne Anmeldung nutzen dürfen – nur Speichern/Liste/Laden/„gerade geöffnet“ und PDFs ablegen, nur mit unterschriebenem Schlüssel. Muss zusätzlich in der CORS-Liste stehen. Fehlt der Eintrag, gibt es keine Ausnahme.</td>
+                </tr>
+                <tr>
+                    <td><code>briefkopf</code></td>
+                    <td>config.php</td>
+                    <td>Voreinstellung für den Briefkopf des Jahresberichts: <code>['firma' =&gt; '…', 'abteilung' =&gt; '…', 'strasse' =&gt; '…', 'ort' =&gt; '…', 'land' =&gt; '…', 'ansprechpartner' =&gt; '…', 'telefon' =&gt; '…', 'email' =&gt; '…']</code>. Ein Administrator kann ihn in der Benutzerverwaltung ändern; das hat dann Vorrang.</td>
+                </tr>
+                <tr>
+                    <td><code>autoTeamArchiv</code></td>
+                    <td>config.php</td>
+                    <td>Beim Speichern automatisch ins Team-Archiv. Mit Anmeldung legt das ein Administrator in der App fest (Benutzerverwaltung); dieser Eintrag gilt dann nur, solange dort nichts festgelegt ist. Fehlt er, gilt <code>true</code>.</td>
+                </tr>
+                <tr>
+                    <td><code>pdfOrdner</code>, <code>pdfMaxMB</code>, <code>autoPdfArchiv</code>, <code>archivLoeschen</code></td>
+                    <td>config.php</td>
+                    <td>PDF-Archiv (nur mit Anmeldung). <code>pdfOrdner</code>: Ablageort, leer = <code>&lt;datenOrdner&gt;/pdf</code>; kann auf ein eingebundenes Netzlaufwerk zeigen, außerhalb des Webverzeichnisses. <code>pdfMaxMB</code>: größtes PDF (14). <code>autoPdfArchiv</code>: Vorgabe, solange der Administrator nichts festgelegt hat (<code>true</code>). <code>archivLoeschen</code>: Vorgabe für „Löschen im Archiv“ (<code>false</code>).</td>
+                </tr>
+                <tr>
+                    <td>Server-Adresse, Zugriffsschlüssel</td>
+                    <td>Einstellungen-Seite (localStorage <code>ghbNasBaseUrl</code>; Schlüssel geschützt in IndexedDB <code>ghb-sicherheit</code>, Anzeige-Angaben in <code>ghbNasApiKeyInfo</code>)</td>
+                    <td>Je Gerät und Browser. Leer = Endpunkte im selben Ordner wie die App.</td>
+                </tr>
+            </table>
+            </div>
+
+            <p><strong>Zugriffsschlüssel erneuern</strong></p>
+            <ol>
+                <li>Neuen Wert erzeugen, z. B. <code>openssl rand -hex 24</code> (mindestens 32 Zeichen).</li>
+                <li>In config.php bei <code>apiKey</code> eintragen.</li>
+                <li>Auf jedem Gerät unter Einstellungen „Schlüssel ändern“ wählen, neuen Wert eintragen, speichern und „Verbindung testen“.</li>
+                <li>Mit <code>pruefen.php</code> kontrollieren (Schlüssel im Formular eingeben).</li>
+            </ol>
+
+            <p><strong>Anmeldung einschalten</strong></p>
+            <ol>
+                <li>In config.php <code>'anmeldung' =&gt; true</code> setzen.</li>
+                <li><code>pruefen.php</code> öffnen, Zugriffsschlüssel eingeben und den ersten Administrator anlegen.</li>
+                <li>In der App anmelden; weitere Konten unter Einstellungen → Anmeldung → Benutzerverwaltung anlegen.</li>
+                <li>Torwächter-Regel prüfen (pruefen.php: „Torwächter in Betrieb“; IIS/nginx: Regel aus der Installationsanleitung).</li>
+            </ol>
+
+        </div>
+
+        <h3>
+            Installation auf einem Server
+        </h3>
+
+        <div class="card doku-card">
+
+            <p>
+                Voraussetzungen: Webserver mit PHP 7.0 oder neuer (empfohlen
+                8.x), HTTPS mit gültigem Zertifikat, <code>post_max_size</code>
+                mindestens 20M. Apache, nginx und IIS sind möglich.
+            </p>
+
+            <ol>
+                <li>App-Ordner vollständig in das Web-Verzeichnis kopieren.</li>
+                <li>Datenordner anlegen; der Webserver-/PHP-Benutzer braucht Lese- und Schreibrecht.</li>
+                <li>In config.php <code>datenOrdner</code> und <code>apiKey</code> eintragen.</li>
+                <li>Liegt der Datenordner im Web-Verzeichnis: Apache braucht <code>AllowOverride</code> für die .htaccess, IIS die web.config, nginx eine eigene Sperrregel.</li>
+                <li><code>pruefen.php</code> aufrufen; alle Punkte müssen grün sein. Danach löschen oder umbenennen, da die Seite Server-Pfade anzeigt.</li>
+                <li>App auf dem iPad über „Zum Home-Bildschirm“, am PC über „App installieren“ einrichten.</li>
+            </ol>
+
+        </div>
+
+        <div class="doku-box">
+            <div class="doku-box-title">
+                App und Endpunkte auf verschiedenen Servern
+            </div>
+            Der Speicherserver muss CORS für die Adresse der App erlauben,
+            einschließlich der Kopfzeilen <code>Content-Type</code> und
+            <code>X-Api-Key</code> sowie der OPTIONS-Vorabanfrage. Die
+            PHP-Dateien setzen diese Kopfzeilen nicht selbst; die Freigabe
+            gehört in die Webserver-Konfiguration. Liegen App und Endpunkte im
+            selben Ordner, entfällt das.
+        </div>
+
+        <h3>
+            Updates
+        </h3>
+
+        <div class="card doku-card">
+
+            <p>
+                Jedes Update braucht eine neue Versionsnummer, sonst liefert der
+                Service Worker weiter die zwischengespeicherten Dateien aus.
+            </p>
+
+            <div class="doku-table-wrap">
+            <table class="doku-table">
+                <tr>
+                    <th>Stelle</th>
+                    <th>Aktuell</th>
+                </tr>
+                <tr>
+                    <td><code>APP_REVISION</code> / <code>APP_REVISION_DATE</code> in <code>js/app.js</code>, <code>APP_VERSION</code> in <code>sw.js</code></td>
+                    <td><span data-zahl="revision">1.1</span> / <span data-zahl="revision_datum">20.11.2026</span></td>
+                </tr>
+                <tr>
+                    <td><code>BUILD</code> und <code>CACHE_NAME</code> in <code>sw.js</code>, Zusatz <code>?v=</code> in allen Seiten</td>
+                    <td><span data-zahl="cache">grosshandel-begehung-v1.1-9</span></td>
+                </tr>
+            </table>
+            </div>
+
+            <ol>
+                <li>Geänderte Dateien auf den Server bzw. in das Repository übertragen. config.php des Servers dabei nicht überschreiben.</li>
+                <li>Versionsnummer an allen Stellen erhöhen.</li>
+                <li>Neue Skriptdateien auf allen Seiten einbinden, die js/app.js nutzen.</li>
+                <li>Nach Änderungen am Prüfkatalog oder an Dateien <code>python3 tools/doku-zahlen.py</code> ausführen.</li>
+                <li>Gerät einmal online öffnen; die Fußzeile zeigt die aktive Revision.</li>
+            </ol>
+
+        </div>
+
+        <h3>
+            Datensicherung und Fehlerbehebung
+        </h3>
+
+        <div class="card doku-card">
+
+            <p>
+                Auf dem Server den Datenordner einschließlich
+                <code>versionen/</code> in die reguläre Sicherung aufnehmen. Auf
+                den Geräten liegen laufende Begehung, Fotos und Archiv im
+                Browser-Speicher; Fotos werden nicht auf den Server übertragen,
+                Vorschaubilder und Unterschriften schon.
+            </p>
+
+            <div class="doku-table-wrap">
+            <table class="doku-table">
+                <tr>
+                    <th>Meldung / Symptom</th>
+                    <th>Ursache</th>
+                    <th>Abhilfe</th>
+                </tr>
+                <tr>
+                    <td>„Ungültiger oder fehlender Zugriffsschlüssel“ (HTTP 401)</td>
+                    <td>Schlüssel im Gerät passt nicht zu config.php</td>
+                    <td>Unter Einstellungen „Schlüssel ändern“ und neu eintragen</td>
+                </tr>
+                <tr>
+                    <td>„Dieses Gerät schickt den Zugriffsschlüssel noch im Klartext“ (HTTP 401)</td>
+                    <td>Gerät hat noch einen älteren App-Stand; der Server nimmt nur unterschriebene Anfragen an</td>
+                    <td>App neu laden bzw. neu öffnen; der Schlüssel wird dabei automatisch umgestellt</td>
+                </tr>
+                <tr>
+                    <td>„Die Uhrzeit des Geräts weicht zu stark ab“ (HTTP 401)</td>
+                    <td>Geräte- oder Serveruhr falsch; die App gleicht einmal automatisch ab</td>
+                    <td>Automatische Uhrzeit am Gerät und Zeitabgleich (NTP) am Server prüfen</td>
+                </tr>
+                <tr>
+                    <td>Verbindungstest ohne Antwort</td>
+                    <td>Server nicht erreichbar oder CORS fehlt</td>
+                    <td>Adresse im Browser öffnen; bei getrennten Servern CORS freigeben</td>
+                </tr>
+                <tr>
+                    <td>„Datenordner ist in config.php nicht eingetragen“</td>
+                    <td><code>datenOrdner</code> leer</td>
+                    <td>config.php ergänzen</td>
+                </tr>
+                <tr>
+                    <td>„Der Datenordner konnte nicht erstellt werden“</td>
+                    <td>Rechte fehlen</td>
+                    <td>Ordner anlegen, Schreibrecht für den PHP-Benutzer</td>
+                </tr>
+                <tr>
+                    <td>„Keine Daten empfangen“</td>
+                    <td><code>post_max_size</code> zu klein</td>
+                    <td>auf mindestens 20M setzen</td>
+                </tr>
+                                <tr>
+                    <td>„Dieses Team-Archiv gehört zur Großhandel Begehung …“ bzw. „kein Team-Archiv der Großhandel Begehung“ (HTTP 409)</td>
+                    <td>Server-Adresse bzw. Datenordner gehört zu ASiC Handel oder umgekehrt</td>
+                    <td>Adresse und <code>datenOrdner</code> prüfen: jede App mit eigenem Ordner und eigenem Schlüssel</td>
+                </tr>
+                <tr>
+                    <td>Geräte zeigen alten Stand</td>
+                    <td>Versionsnummer nicht erhöht</td>
+                    <td><code>CACHE_NAME</code> und <code>APP_REVISION</code> anheben</td>
+                </tr>
+                <tr>
+                    <td>App nicht installierbar, kein Offline-Betrieb</td>
+                    <td>kein HTTPS</td>
+                    <td>gültiges Zertifikat einrichten</td>
+                </tr>
+            </table>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="doku-section" id="pflege">
+
+        <div class="section-title">
+            Abschnitt 13
+        </div>
+
+        <h2>
+            Pflege von Fragen, Antworten und Quellen
+        </h2>
+
+        <div class="card doku-card">
+            <p>Prüfkatalog, Maßnahmentexte, Quellen, Ausstattung und Gefährdungsbeurteilung werden mit dem
+               <strong>Pflege-Tool</strong> <code>Grosshandel-Begehung_Pflege-Tool.html</code> gepflegt. Es liegt im
+               Paket neben dem App-Ordner (nicht auf den Webserver kopieren), ist eine einzelne HTML-Datei und läuft
+               ohne Internet und ohne Python in Edge, Chrome oder Firefox auf dem PC. Eine bebilderte Schritt-für-Schritt-Anleitung liegt daneben
+               (<code>Grosshandel-Begehung_Pflege-Tool_Anleitung.html</code>, auch als PDF).</p>
+            <ol>
+                <li><strong>Paket laden:</strong> die ZIP-Datei des eingesetzten Ausgabestands oder den App-Ordner.
+                    Das Tool erkennt die App an <code>APP_KENNUNG</code> in <code>js/app.js</code> und lehnt Pakete der
+                    ASiC Handel ab.</li>
+                <li><strong>Bearbeiten:</strong> Begehung (Kategorien, Bereiche, Schalter „nicht zutreffend“, Fragen mit
+                    Unterbereich und Prüffrist, Maßnahmentexte in drei Sprachstilen), Quellen PDF, Ausstattung
+                    (Betriebsprofil mit Kategorien und GBO-Modulen für „Inventar vorschlagen“), GBO-Fragen, GBO-Hinweise
+                    (Themenfelder), GBO-Regelwerke, Suchen &amp; Ersetzen.</li>
+                <li><strong>Prüfen &amp; Paket erzeugen:</strong> das Tool prüft IDs, Pflichttexte, Zuordnungen und
+                    Verweise und erzeugt ein neues ZIP mit erhöhtem Ausgabestand und einer Änderungsliste
+                    (<code>PFLEGE-AENDERUNGEN_&lt;Ausgabestand&gt;.txt</code>) als Nachweis.</li>
+            </ol>
+            <p>Eine Bearbeitung merkt sich der Browser für genau das geladene Paket. Das Original bleibt unverändert.
+               Eine <code>config.php</code> und Inhalte des Ordners <code>daten/</code> übernimmt das Tool nie in das
+               neue Paket.</p>
+        </div>
+
+        <h3>Was das Tool schreibt</h3>
+        <div class="card doku-card">
+            <table class="doku-table">
+                <tr><th>Bereich</th><th>Datei</th></tr>
+                <tr><td>Prüfkatalog und Ausstattung</td><td><code>js/audit-data.js</code> (<code>AUDIT_CATEGORIES</code>, <code>AUSSTATTUNG</code>; stillgelegte IDs im Kopf)</td></tr>
+                <tr><td>Maßnahmentexte, Quellenverzeichnis des PDF</td><td><code>js/text.js</code> (<code>MEASURES_TEXT</code>, <code>MEASURE_SOURCES</code>)</td></tr>
+                <tr><td>GBO-Zusatzmodule des Großhandels, ihre Fragen, Themenfelder, Regelwerke, Zuordnung Ausstattung → Inventar</td><td><code>js/gbo-gh-daten.js</code></td></tr>
+                <tr><td>Für den Großhandel umformulierte GBO-Fragen</td><td><code>js/gbo-gh-vor.js</code> bzw. <code>js/gbo-gh-nach.js</code> (<code>TEXT</code>)</td></tr>
+                <tr><td>Faktor 11 – Großhandel</td><td><code>js/gbo-gh-nach.js</code> (<code>F11</code>)</td></tr>
+                <tr><td>Übrige GBO-Fragen, Kernfragen, Maßnahmenlisten, Themenfelder und Regelwerke aus ASiC Handel 2.x</td><td><code>js/gbo-data.js</code>, <code>js/gbo-struktur.js</code>, <code>js/gbo.js</code>, <code>js/gbo-quellen.js</code> – gezielt an den geänderten Stellen, Kommentare bleiben</td></tr>
+                <tr><td>Ausgabestand</td><td><code>sw.js</code> (<code>BUILD</code>, <code>CACHE_NAME</code>, Merker <code>// PFLEGE-TOOL:</code>), alle <code>?v=</code>-Zusätze, <code>INSTALLATION.txt</code>, <code>LIESMICH-Grosshandel.txt</code></td></tr>
+                <tr><td>Zahlen und Tabellen</td><td>alle <code>data-zahl</code>-Stellen sowie Katalog-, Quellen-, GBO-Modul- und Dateitabelle in Dokumentation, Hilfe, FAQ GBO, Technischer Dokumentation GBO, Datenschutz und Impressum – mit derselben Rechnung wie <code>tools/doku-zahlen.py</code></td></tr>
+            </table>
+            <p>Die GBO-Zahlen ermittelt das Tool, indem es die GBO-Dateien in einem abgeschotteten Rahmen genauso
+               aufbaut wie <code>gbo.html</code>. Freitexte, die Kategorien oder Quellen namentlich nennen, listet es
+               in der Änderungsliste unter „Bitte von Hand prüfen“.</p>
+            <p><strong>Von Hand bleiben:</strong> eine neue Revision (<code>APP_REVISION</code>/<code>APP_REVISION_DATE</code>
+               in <code>js/app.js</code>, <code>APP_VERSION</code> in <code>sw.js</code>), neue Kategorien mit Instanzen
+               (wie Pforten, Parkhäuser), Zusammenlegen oder Umbenennen von Markt-Modulen der GBO
+               (<code>js/gbo-struktur.js</code>, <code>js/gbo-gh-vor.js</code>), die Bildschirmfotos der Anleitungen.</p>
+        </div>
+
+        <h3>Python-Werkzeuge im Ordner <code>tools/</code></h3>
+        <div class="card doku-card">
+            <p>Die Erstfassung (Rev. 1.0/1.1) wurde mit Python-Skripten erzeugt; sie liegen weiter im Paket:</p>
+            <table class="doku-table">
+                <tr><th>Datei</th><th>Inhalt</th><th>Erzeugt</th></tr>
+                <tr><td><code>tools/katalog1.py</code> … <code>katalog9.py</code>, <code>tools/erzeuge.py</code></td><td>Prüfkatalog der Erstfassung mit Maßnahmentexten, Ausstattung, Quellenverzeichnis</td><td><code>js/audit-data.js</code>, <code>js/text.js</code></td></tr>
+                <tr><td><code>tools/gbo_gh_katalog.py</code></td><td>GBO-Zusatzmodule der Erstfassung</td><td><code>js/gbo-gh-daten.js</code></td></tr>
+                <tr><td><code>tools/gbo_uebernahme.py</code></td><td>Übernahme der GBO aus ASiC Handel 2.x</td><td><code>gbo.html</code>, <code>js/gbo*.js</code>, <code>css/gbo.css</code></td></tr>
+                <tr><td><code>Grosshandel/tools/doku-zahlen.py</code></td><td>Zahlen und Tabellen in Dokumentation und Hilfe prüfen bzw. eintragen (nur prüfen: <code>--pruefen</code>)</td><td>–</td></tr>
+            </table>
+            <p>Sobald das Pflege-Tool ein Paket gepflegt hat (Merker <code>// PFLEGE-TOOL:</code> in <code>sw.js</code>),
+               brechen <code>erzeuge.py</code>, <code>gbo_gh_katalog.py</code> und <code>gbo_uebernahme.py</code> ab, weil
+               sie die Änderungen überschreiben würden. <code>--erzwingen</code> nur verwenden, wenn die Änderungen zuvor
+               in den Python-Quellen nachgetragen wurden. <code>doku-zahlen.py --pruefen</code> eignet sich weiterhin als
+               Gegenprobe nach dem Export.</p>
+        </div>
+
+        <h3>Regeln für Frage-IDs</h3>
+        <div class="card doku-card">
+            <p>Archiv, Team-Archiv, Auswertungen, Wiederholungsbegehung, Maßnahmen, Prüfdaten und die
+               Bewertungen der GBO hängen an der ID, nicht am Text.</p>
+            <table class="doku-table">
+                <tr><th>Fall</th><th>Regel</th></tr>
+                <tr><td>Text ändern</td><td>Unbedenklich – die ID bleibt.</td></tr>
+                <tr><td>Neue Frage</td><td>Immer eine neue, noch nie verwendete ID vergeben (Begehung: Kategorienummer.laufende Nummer; GBO-Zusatz: Kürzel wie <code>GKO-11</code>).</td></tr>
+                <tr><td>Frage löschen</td><td>ID nie wiederverwenden; alte Begehungen zeigen sie als „nicht mehr im aktuellen Katalog“.</td></tr>
+                <tr><td>Neue Kategorie</td><td>Neue, noch nicht vergebene Nummer <code>nr</code>; vorhandene Nummern bleiben.</td></tr>
+                <tr><td>Lücken</td><td>Erlaubt – nicht nachträglich aufrücken.</td></tr>
+            </table>
+        </div>
+
+        <h3>Bebilderte Anleitungen</h3>
+        <div class="card doku-card">
+            <p><code>kurzanleitung.html</code> (Begehung), <code>gbo-kurzanleitung.html</code>
+               (Gefährdungsbeurteilung) und <code>admin-anleitung.html</code> (Administratoren) sind jeweils eine
+               Datei ohne Skripte mit eingebetteten Bildschirmfotos (fiktiver Standort 2040, Lagerstraße 1,
+               Musterstadt). Die Bilder entstehen automatisch mit den Skripten in <code>tools/anleitung/</code>
+               (Playwright); ändern sich Menüs oder Seitenaufbau, die Skripte erneut ausführen. Die Admin-Anleitung
+               liefert <code>tor.php</code> nur an Administratoren aus. Zu jeder Anleitung gibt es eine PDF-Fassung
+               im Paket.</p>
+        </div>
+
+    </section>
+
+    <section class="doku-section" id="dateien">
+
+        <div class="section-title">
+            Abschnitt 14
+        </div>
+
+        <h2>
+            Dateiübersicht
+        </h2>
+
+        <div class="card doku-card">
+
+            <p>
+                Die Zahlen dieser Tabelle werden mit
+                <code>python3 tools/doku-zahlen.py</code> aus dem Code erzeugt
+                und nicht von Hand gepflegt.
+            </p>
+
+            <div class="doku-table-wrap">
+            <table class="doku-table dateien">
+
+                <tr>
+                    <th>Datei</th>
+                    <th>Zeilen</th>
+                    <th>Funktion</th>
+                </tr>
+                <!-- DATEITABELLE:START -->
+                <tr>
+                    <td>index.html</td>
+                    <td class="zahl">770</td>
+                    <td>Prüfkatalog mit Betriebsdaten, Betriebsprofil (Ausstattung, Anzahl Parkhäuser/Pforten), Bereichen, Prüffristen und Bewertung</td>
+                </tr>
+                <tr>
+                    <td>massnahmen.html</td>
+                    <td class="zahl">716</td>
+                    <td>Aktionsplan, Maßnahmenbearbeitung, Status und Unterschriften</td>
+                </tr>
+                <tr>
+                    <td>fotos.html</td>
+                    <td class="zahl">551</td>
+                    <td>Aufnahme, Einfügen, Kommentieren und Verwaltung von Fotos</td>
+                </tr>
+                <tr>
+                    <td>verlauf.html</td>
+                    <td class="zahl">393</td>
+                    <td>Archivierte Begehungen (Mein Verlauf) und Team-Archiv (Server)</td>
+                </tr>
+                <tr>
+                    <td>gbo.html</td>
+                    <td class="zahl">76</td>
+                    <td>Gefährdungsbeurteilung: Übersicht, Betriebsdaten, Inventar, Beurteilen, Begehungshinweise, Bildbelege, Dokumentation</td>
+                </tr>
+                <tr>
+                    <td>gbo-hilfe.html</td>
+                    <td class="zahl">573</td>
+                    <td>Hilfe und FAQ zur Gefährdungsbeurteilung</td>
+                </tr>
+                <tr>
+                    <td>gbo-dokumentation.html</td>
+                    <td class="zahl">627</td>
+                    <td>Technische Dokumentation der Gefährdungsbeurteilung</td>
+                </tr>
+                <tr>
+                    <td>gbo-kurzanleitung.html</td>
+                    <td class="zahl">87</td>
+                    <td>Bebilderte Kurzanleitung zur Gefährdungsbeurteilung (Bildschirmfotos eingebettet)</td>
+                </tr>
+                <tr>
+                    <td>auswertung.html</td>
+                    <td class="zahl">945</td>
+                    <td>Auswertung der lokal archivierten Begehungen</td>
+                </tr>
+                <tr>
+                    <td>auswertung-team.html</td>
+                    <td class="zahl">896</td>
+                    <td>Auswertung aller Begehungen im Team-Archiv (Server)</td>
+                </tr>
+                <tr>
+                    <td>einstellungen.html</td>
+                    <td class="zahl">408</td>
+                    <td>Server-Adresse, Zugriffsschlüssel, Anmeldung (Passwort ändern, Abmelden), Diagnose</td>
+                </tr>
+                <tr>
+                    <td>anmeldung.html</td>
+                    <td class="zahl">124</td>
+                    <td>Anmeldeseite: Anmeldename und Passwort, Passwort ändern</td>
+                </tr>
+                <tr>
+                    <td>benutzer.html</td>
+                    <td class="zahl">220</td>
+                    <td>Benutzerverwaltung für Administratoren (Konten, Startpasswörter, Schalter, Briefkopf, Protokoll)</td>
+                </tr>
+                <tr>
+                    <td>pdf-archiv.html</td>
+                    <td class="zahl">89</td>
+                    <td>PDF-Archiv: abgelegte PDFs ansehen (nur mit Berechtigung)</td>
+                </tr>
+                <tr>
+                    <td>impressum.html</td>
+                    <td class="zahl">169</td>
+                    <td>Impressum</td>
+                </tr>
+                <tr>
+                    <td>datenschutz.html</td>
+                    <td class="zahl">251</td>
+                    <td>Datenschutzerklärung</td>
+                </tr>
+                <tr>
+                    <td>hilfe.html</td>
+                    <td class="zahl">1.133</td>
+                    <td>Bedienungsanleitung und FAQ der Begehung</td>
+                </tr>
+                <tr>
+                    <td>kurzanleitung.html</td>
+                    <td class="zahl">104</td>
+                    <td>Bebilderte Kurzanleitung der Begehung (Bildschirmfotos eingebettet)</td>
+                </tr>
+                <tr>
+                    <td>erster-start.html</td>
+                    <td class="zahl">89</td>
+                    <td>Bebilderte Anleitung für Mitarbeiter: erster Aufruf, Home-Bildschirm, Anmeldung mit vorläufigem Passwort, eigenes Passwort, Zugriffsschlüssel (ohne Anmeldung erreichbar, verlinkt auf der Anmeldeseite)</td>
+                </tr>
+                <tr>
+                    <td>admin-anleitung.html</td>
+                    <td class="zahl">90</td>
+                    <td>Bebilderte Anleitung für Administratoren (nur für Administratoren abrufbar)</td>
+                </tr>
+                <tr>
+                    <td>dokumentation.html</td>
+                    <td class="zahl">3.630</td>
+                    <td>Technische Dokumentation (diese Seite)</td>
+                </tr>
+                <tr>
+                    <td>css/styles.css</td>
+                    <td class="zahl">3.277</td>
+                    <td>Gemeinsames Styling, Farbe Petrol</td>
+                </tr>
+                <tr>
+                    <td>css/gbo.css</td>
+                    <td class="zahl">741</td>
+                    <td>Gestaltung der Gefährdungsbeurteilung</td>
+                </tr>
+                <tr>
+                    <td>js/app.js</td>
+                    <td class="zahl">5.859</td>
+                    <td>Kernlogik: Zustand, Prüfkatalog mit Bereichen, Betriebsprofil und Prüffristen, PDF, Export, Archiv, Team-Archiv mit App-Kennung, Firmenlogo, Standort-Datensatz mit GBO, Service-Worker-Registrierung</td>
+                </tr>
+                <tr>
+                    <td>js/audit-data.js</td>
+                    <td class="zahl">913</td>
+                    <td>Prüfkatalog: 45 Kategorien in 11 Bereichen, 454 Prüfpunkte, Ausstattung (erzeugt aus tools/katalog*.py)</td>
+                </tr>
+                <tr>
+                    <td>js/text.js</td>
+                    <td class="zahl">2.466</td>
+                    <td>Maßnahmentexte in drei Sprachstilen und Quellenverzeichnis (erzeugt aus tools/katalog*.py)</td>
+                </tr>
+                <tr>
+                    <td>js/massnahmen.js</td>
+                    <td class="zahl">1.064</td>
+                    <td>Logik der Aktionsplan-Seite</td>
+                </tr>
+                <tr>
+                    <td>js/photos-store.js</td>
+                    <td class="zahl">187</td>
+                    <td>IndexedDB-Speicherung der Fotos (ghbPhotos)</td>
+                </tr>
+                <tr>
+                    <td>js/fotos.js</td>
+                    <td class="zahl">111</td>
+                    <td>Bedienlogik der Fotodokumentationsseite</td>
+                </tr>
+                <tr>
+                    <td>js/archive-store.js</td>
+                    <td class="zahl">91</td>
+                    <td>IndexedDB-Speicherung der archivierten Begehungen (ghbArchiv)</td>
+                </tr>
+                <tr>
+                    <td>js/verlauf.js</td>
+                    <td class="zahl">532</td>
+                    <td>Bedienlogik der Verlaufseite inkl. Team-Archiv</td>
+                </tr>
+                <tr>
+                    <td>js/einstellungen.js</td>
+                    <td class="zahl">625</td>
+                    <td>Bedienlogik der Einstellungsseite inkl. Verbindungstest und Diagnose</td>
+                </tr>
+                <tr>
+                    <td>js/auswertung-logik.js</td>
+                    <td class="zahl">495</td>
+                    <td>Gemeinsame Auswertungs-Berechnung (auswertung.html, auswertung-team.html, verlauf.html)</td>
+                </tr>
+                <tr>
+                    <td>js/auswertung.js</td>
+                    <td class="zahl">820</td>
+                    <td>Logik der Auswertungsseite und Team-Gesamtauswertung als PDF</td>
+                </tr>
+                <tr>
+                    <td>js/auswertung-team.js</td>
+                    <td class="zahl">338</td>
+                    <td>Logik der Team-Auswertungsseite</td>
+                </tr>
+                <tr>
+                    <td>js/auswertung-team-pruefung.js</td>
+                    <td class="zahl">14</td>
+                    <td>Selbstprüfung der Team-Auswertung auf veraltete Programmdateien</td>
+                </tr>
+                <tr>
+                    <td>js/anmeldung.js</td>
+                    <td class="zahl">213</td>
+                    <td>Anmelden und Passwort ändern (Anmeldeseite)</td>
+                </tr>
+                <tr>
+                    <td>js/anmeldung-pruefen.js</td>
+                    <td class="zahl">57</td>
+                    <td>Prüft beim Öffnen jeder Seite die Anmeldung und leitet ggf. zur Anmeldeseite</td>
+                </tr>
+                <tr>
+                    <td>js/jahresbericht.js</td>
+                    <td class="zahl">513</td>
+                    <td>Jahresbericht aus dem Team-Archiv mit Briefkopf und Logo</td>
+                </tr>
+                <tr>
+                    <td>js/benutzer.js</td>
+                    <td class="zahl">313</td>
+                    <td>Logik der Benutzerverwaltung</td>
+                </tr>
+                <tr>
+                    <td>js/pdf-archiv.js</td>
+                    <td class="zahl">206</td>
+                    <td>Logik des PDF-Archivs</td>
+                </tr>
+                <tr>
+                    <td>js/hilfe-suche.js</td>
+                    <td class="zahl">200</td>
+                    <td>Suche, Auf-/Zuklappen und „Nach oben“ der Hilfeseiten</td>
+                </tr>
+                <tr>
+                    <td>js/seiten-jahr.js</td>
+                    <td class="zahl">3</td>
+                    <td>Aktuelles Jahr in den Fußzeilen</td>
+                </tr>
+                <tr>
+                    <td>js/gbo-data.js</td>
+                    <td class="zahl">5.953</td>
+                    <td>GBO-Grunddaten aus ASiC Handel 2.3: Themen, Bereiche, Maschinen, Fragen (unverändert übernommen)</td>
+                </tr>
+                <tr>
+                    <td>js/gbo-gh-daten.js</td>
+                    <td class="zahl">3.269</td>
+                    <td>GBO-Zusatzkatalog Großhandel: 31 Module, 186 Fragen mit Rechtsbezug und Maßnahmen (erzeugt aus tools/gbo_gh_katalog.py)</td>
+                </tr>
+                <tr>
+                    <td>js/gbo-gh-vor.js</td>
+                    <td class="zahl">107</td>
+                    <td>GBO-Zuschnitt Großhandel vor dem Umbau: Markt-Module entfernen, Texte anpassen, Zusatzkatalog einfügen</td>
+                </tr>
+                <tr>
+                    <td>js/gbo-gh-nach.js</td>
+                    <td class="zahl">158</td>
+                    <td>GBO-Zuschnitt Großhandel nach dem Umbau: Faktoren, Faktor 11, Rechtsbezug und Faktor der Zusatzfragen</td>
+                </tr>
+                <tr>
+                    <td>js/gbo-gh-inventar.js</td>
+                    <td class="zahl">98</td>
+                    <td>GBO: Inventar aus dem Betriebsprofil der Begehung vorschlagen</td>
+                </tr>
+                <tr>
+                    <td>js/gbo-quellen.js</td>
+                    <td class="zahl">520</td>
+                    <td>Regelwerke je Themenfeld der GBO, Erläuterung und Maßnahmenhinweise (TOP)</td>
+                </tr>
+                <tr>
+                    <td>js/gbo-struktur.js</td>
+                    <td class="zahl">462</td>
+                    <td>Aufbau der GBO: Kernbeurteilung nach Gefährdungsfaktoren 0–11, Zusammenführungen, Maschinen-Grundstruktur, Instanzen, automatische Vertiefung</td>
+                </tr>
+                <tr>
+                    <td>js/gbo.js</td>
+                    <td class="zahl">78</td>
+                    <td>Logik der GBO: Auswahl, Bewertung, Übersicht, Bildbelege, Sicherung</td>
+                </tr>
+                <tr>
+                    <td>js/gbo-v2.js</td>
+                    <td class="zahl">47</td>
+                    <td>GBO: Reiter, Begehungshinweise (Zuordnung der Mängel), Betriebsdaten übernehmen, Server, Zurücksetzen</td>
+                </tr>
+                <tr>
+                    <td>js/gbo-risk.js</td>
+                    <td class="zahl">624</td>
+                    <td>GBO: Risikobewertung (Schwere × Wahrscheinlichkeit), Restrisiko, Wirksamkeit, Fortschreibung</td>
+                </tr>
+                <tr>
+                    <td>js/gbo-pdf.js</td>
+                    <td class="zahl">1.426</td>
+                    <td>PDF-Ausgabe der GBO: Gesamt-GBO, Maßnahmenliste, Maßnahmenplan, mit Firmenlogo</td>
+                </tr>
+                <tr>
+                    <td>js/gbo-signatur.js</td>
+                    <td class="zahl">114</td>
+                    <td>Unterschriften (Freigabe) der GBO</td>
+                </tr>
+                <tr>
+                    <td>js/gbo-fristen.js</td>
+                    <td class="zahl">113</td>
+                    <td>Fristüberwachung der GBO: überfällige Maßnahmen, Hinweisleiste, Mailentwurf</td>
+                </tr>
+                <tr>
+                    <td>js/gbo-migrate.js</td>
+                    <td class="zahl">160</td>
+                    <td>Übernahme alter Frage-Kürzel (Bewertungen, Vormerkungen, Fotos)</td>
+                </tr>
+                <tr>
+                    <td>js/gbo-photos.js</td>
+                    <td class="zahl">115</td>
+                    <td>Bildablage der GBO in IndexedDB (ghbGboPhotos)</td>
+                </tr>
+                <tr>
+                    <td>js/storage-check.js</td>
+                    <td class="zahl">101</td>
+                    <td>Speicherprüfung vor dem Speichern von Fotos (Begehung und GBO)</td>
+                </tr>
+                <tr>
+                    <td>js/market-store.js</td>
+                    <td class="zahl">35</td>
+                    <td>Standort-Datensatz (Begehung + GBO) als Datei sichern</td>
+                </tr>
+                <tr>
+                    <td>sw.js</td>
+                    <td class="zahl">225</td>
+                    <td>Service Worker, Offline-Fähigkeit, Ausgabestand v1.1-9</td>
+                </tr>
+                <tr>
+                    <td>manifest.json</td>
+                    <td class="zahl">24</td>
+                    <td>Web-App-Manifest für die Installation als App</td>
+                </tr>
+                <tr>
+                    <td>pruefen.php</td>
+                    <td class="zahl">542</td>
+                    <td>Server: Prüfseite für die Einrichtung (PHP, Rechte, Datenordner, HTTPS, Schlüssel, erster Administrator)</td>
+                </tr>
+                <tr>
+                    <td>save.php</td>
+                    <td class="zahl">792</td>
+                    <td>Server: Begehung bzw. Standort-Datensatz speichern (nur Großhandel Begehung, sichert den Vorgängerstand in versionen/)</td>
+                </tr>
+                <tr>
+                    <td>list.php</td>
+                    <td class="zahl">363</td>
+                    <td>Server: Liste der Begehungen im Team-Archiv (nur Datensätze der Großhandel Begehung)</td>
+                </tr>
+                <tr>
+                    <td>load.php</td>
+                    <td class="zahl">185</td>
+                    <td>Server: einzelne Begehung laden (fremde Datensätze werden abgewiesen)</td>
+                </tr>
+                <tr>
+                    <td>offen.php</td>
+                    <td class="zahl">181</td>
+                    <td>Server: Hinweis „gerade geöffnet“ im Team-Archiv</td>
+                </tr>
+                <tr>
+                    <td>loeschen.php</td>
+                    <td class="zahl">82</td>
+                    <td>Server: Begehung samt älterer Stände löschen (nur Administratoren, Schalter)</td>
+                </tr>
+                <tr>
+                    <td>schutz.php</td>
+                    <td class="zahl">466</td>
+                    <td>Server: Missbrauchsschutz (Fehlversuche, Speicher-Bremse, Größengrenze, versionen/archiv)</td>
+                </tr>
+                <tr>
+                    <td>konto.php</td>
+                    <td class="zahl">577</td>
+                    <td>Server: Konten, Passwort-Hashes, Sitzungen, Protokoll, App-Kennung (wird eingebunden)</td>
+                </tr>
+                <tr>
+                    <td>anmeldung.php</td>
+                    <td class="zahl">183</td>
+                    <td>Server: Anmelden, Abmelden, Passwort ändern, Anmeldestatus</td>
+                </tr>
+                <tr>
+                    <td>benutzer.php</td>
+                    <td class="zahl">260</td>
+                    <td>Server: Benutzerverwaltung und Team-Einstellungen (nur Administratoren)</td>
+                </tr>
+                <tr>
+                    <td>tor.php</td>
+                    <td class="zahl">137</td>
+                    <td>Server: Torwächter – liefert App-Seiten und -Dateien nur nach Anmeldung</td>
+                </tr>
+                <tr>
+                    <td>pdf.php</td>
+                    <td class="zahl">297</td>
+                    <td>Server: PDF-Archiv – ablegen, auflisten, ausliefern, löschen</td>
+                </tr>
+                <tr>
+                    <td>.htaccess</td>
+                    <td class="zahl">41</td>
+                    <td>Sicherheits-Header und Torwächter-Regel für Apache, Sperre von tools/ und daten/</td>
+                </tr>
+                <tr>
+                    <td>web.config</td>
+                    <td class="zahl">25</td>
+                    <td>Sicherheits-Header für IIS, Sperre des Ordners tools</td>
+                </tr>
+                <tr>
+                    <td>daten/.htaccess</td>
+                    <td class="zahl">3</td>
+                    <td>Sperrdatei für Apache (Datenordner-Variante B)</td>
+                </tr>
+                <tr>
+                    <td>daten/web.config</td>
+                    <td class="zahl">12</td>
+                    <td>Sperrdatei für IIS (Datenordner-Variante B)</td>
+                </tr>
+                <tr>
+                    <td>tools/doku-zahlen.py</td>
+                    <td class="zahl">316</td>
+                    <td>Hilfsskript: aktualisiert Zahlen, Katalog-, Quellen-, GBO- und Dateitabellen in Dokumentation und Hilfe</td>
+                </tr>
+                <tr>
+                    <td>tools/gbo-zaehlen.js</td>
+                    <td class="zahl">32</td>
+                    <td>Hilfsskript: baut die GBO wie gbo.html auf und zählt Faktoren, Module und Fragen</td>
+                </tr>
+                <tr>
+                    <td>tools/doku-dateien.json</td>
+                    <td class="zahl">343</td>
+                    <td>Dateiliste mit Beschreibungen für das Hilfsskript</td>
+                </tr>
+                <tr>
+                    <td>js/jspdf.umd.min.js</td>
+                    <td class="zahl">398 (minifiziert)</td>
+                    <td>Lokal eingebundene Bibliothek zur PDF-Erzeugung</td>
+                </tr>
+                <tr>
+                    <td>briefkopf-logo.png</td>
+                    <td class="zahl">17,8 KB</td>
+                    <td>Firmenlogo für PDF-Deckblätter, Briefkopf und Anmeldeseite (optional, löschen = ohne Logo)</td>
+                </tr>
+                <!-- DATEITABELLE:ENDE -->
+
+            </table>
+            </div>
+
+            <p>
+                <strong>Gesamt (eigener Code, ohne jsPDF und Schrift):</strong>
+                <span data-zahl="zeilen_gesamt">49.445</span> Zeilen
+            </p>
+
+            <p style="font-size:0.82rem; color:var(--ink-soft);">
+                Stand der Zeilenzahlen: <span data-zahl="zeilen_stand">21.11.2026</span>.
+                Die Werte wurden aus den tatsächlich enthaltenen Dateien gezählt.
+            </p>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<footer class="app-footer">
+
+    <div class="app-footer-meta">
+
+        <span id="footer-version"></span>
+
+        <span
+            class="footer-copyright"
+            id="footer-copyright">
+        </span>
+
+    </div>
+
+    <div class="app-footer-links">
+
+        <a href="impressum.html">
+            Impressum
+        </a>
+
+        <a href="datenschutz.html">
+            Datenschutz
+        </a>
+
+        <a href="dokumentation.html">
+            Technische Dokumentation
+        </a>
+
+        <a href="hilfe.html">
+            Hilfe &amp; FAQ
+        </a>
+
+        <a href="auswertung.html">
+            Auswertung
+        </a>
+
+
+        <a href="auswertung-team.html">
+            Auswertung Team
+        </a>
+
+
+        <a href="einstellungen.html">
+            Einstellungen
+        </a>
+
+    </div>
+
+</footer>
+
+
+<script src="js/audit-data.js?v=1.1-9"></script>
+<script src="js/text.js?v=1.1-9"></script>
+<script src="js/app.js?v=1.1-9&amp;r=2"></script>
+
+<!-- Quellenverzeichnis ist für diesen Dokumentstand detailliert und statisch dokumentiert. -->
+
+</body>
+</html>

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+
+<!-- Sicherheitsrichtlinie (ab Rev. 1.54-5): nur eigene Skripte, keine eingebetteten
+     Skripte oder Inline-Handler. connect-src erlaubt https:, damit ein Team-Archiv
+     auf einem anderen Server (Einstellungen) erreichbar bleibt. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https: ipc: http://ipc.localhost; worker-src 'self'; manifest-src 'self'; object-src 'none'; frame-src 'self' blob:; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="same-origin">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+<title>
+    Verlauf – Großhandel Begehung
+</title>
+
+<link
+    rel="stylesheet"
+    href="css/styles.css?v=1.1-9"
+>
+
+<script src="js/anmeldung-pruefen.js?v=1.1-9"></script>
+
+<link
+    rel="manifest"
+    href="manifest.json"
+>
+
+<link
+    rel="apple-touch-icon"
+    href="icon-192.png"
+>
+
+<meta
+    name="apple-mobile-web-app-capable"
+    content="yes"
+>
+
+<meta
+    name="theme-color"
+    content="#1c2226"
+>
+
+<script src="js/jspdf.umd.min.js?v=1.1-9" defer></script>
+
+</head>
+
+
+<body>
+
+
+<!-- ====================================================================== -->
+<!-- HEADER                                                                 -->
+<!-- ====================================================================== -->
+
+<header class="app-header">
+
+    <div class="hazard-strip"></div>
+
+    <div class="app-header-inner">
+
+
+        <div class="brand">
+
+            <span class="brand-title">
+                Großhandel Begehung
+            </span>
+
+            <span class="brand-tag">
+                SIFA
+            </span>
+
+            <span class="brand-subtitle">
+                „Sicher geprüft. Sicher gehandelt.“
+            </span>
+
+        </div>
+
+
+        <nav class="app-nav">
+
+            <a href="index.html">
+                Prüfkatalog
+            </a>
+
+            <a href="massnahmen.html">
+                Aktionsplan
+            </a>
+
+            <a href="fotos.html">
+                Fotos
+            </a>
+
+            <a
+                href="verlauf.html"
+                class="active"
+            >
+                Verlauf
+            </a>
+
+            <a href="gbo.html">
+                Gefährdungsbeurteilung
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+
+<!-- ====================================================================== -->
+<!-- HAUPTBEREICH                                                           -->
+<!-- ====================================================================== -->
+
+<main class="page">
+
+
+    <div class="section-title">
+        Archivierte Begehungen
+    </div>
+
+
+    <!-- ================================================================== -->
+    <!-- HINWEIS                                                            -->
+    <!-- ================================================================== -->
+
+    <div
+        class="card"
+        style="
+            margin-bottom: 1rem;
+            padding: 0.85rem 1rem;
+        "
+    >
+
+        <p
+            style="
+                margin: 0;
+                font-size: 0.88rem;
+                color: var(--ink-soft);
+            "
+        >
+
+            <strong>Archiv:</strong>
+            Beim Archivieren wird ein vollständiger Schnappschuss
+            der Begehung gespeichert. Dazu gehören Betriebsdaten,
+            Bewertungen, Kommentare, Maßnahmen, Unterschriften,
+            Statistikdaten und die zum Zeitpunkt der Archivierung
+            vorhandenen Fotos.
+
+        </p>
+
+    </div>
+
+
+
+    <!-- ================================================================== -->
+    <!-- UMSCHALTER: MEIN VERLAUF / TEAM-ARCHIV                              -->
+    <!-- ================================================================== -->
+
+    <div class="verlauf-tabs" style="display:flex; gap:0.5rem; margin-bottom:1rem;">
+
+        <button
+            id="tab-lokal"
+            class="btn btn-secondary btn-small verlauf-tab active"
+            type="button"
+        >
+            📱 Mein Verlauf
+        </button>
+
+        <button
+            id="tab-team"
+            class="btn btn-secondary btn-small verlauf-tab"
+            type="button"
+        >
+            👥 Team-Archiv (Server)
+        </button>
+
+        <a
+            href="auswertung.html"
+            id="tab-auswertung-verlauf"
+            class="btn btn-secondary btn-small verlauf-tab"
+        >
+            📊 Auswertung Verlauf
+        </a>
+
+        <a
+            href="auswertung-team.html"
+            id="tab-auswertung-team"
+            class="btn btn-secondary btn-small verlauf-tab"
+        >
+            📊 Auswertung Team
+        </a>
+
+    </div>
+
+
+    <!-- ================================================================== -->
+    <!-- ARCHIVLISTE                                                         -->
+    <!-- ================================================================== -->
+
+    <div
+        id="archive-list"
+        class="archive-list"
+    ></div>
+
+
+    <!-- ================================================================== -->
+    <!-- TEAM-ARCHIVLISTE (Server)                                              -->
+    <!-- ================================================================== -->
+
+    <!-- Ladestatus Team-Archiv (gleiche Anzeige wie Team-Auswertung) -->
+    <div
+        id="team-archive-loading"
+        class="lade-status is-laden is-unbestimmt"
+        role="status"
+        aria-live="polite"
+        style="display:none;"
+    >
+        <span class="lade-status-icon" aria-hidden="true"></span>
+        <div class="lade-status-text">
+            <div class="lade-status-titel" id="team-archiv-lade-titel">Team-Archiv wird geladen …</div>
+            <div class="lade-status-detail" id="team-archiv-lade-detail">Dateiliste wird vom Server abgerufen</div>
+            <div class="lade-status-balken" aria-hidden="true"><span></span></div>
+        </div>
+        <button type="button" class="btn btn-secondary btn-small lade-status-btn" id="team-archiv-neu-laden" hidden>↻ Neu laden</button>
+    </div>
+
+    <!-- Suche im Team-Archiv (ab Ausgabestand 1.54-3) -->
+    <div id="team-archiv-suche" class="team-archiv-suche" style="display:none;">
+        <input
+            type="search"
+            id="team-archiv-suchfeld"
+            placeholder="Suchen: Standortnummer, Ort oder Datum"
+            autocomplete="off"
+            aria-label="Team-Archiv durchsuchen"
+        >
+        <span id="team-archiv-treffer" class="team-archiv-treffer" aria-live="polite"></span>
+    </div>
+
+    <div
+        id="team-archive-list"
+        class="archive-list"
+        style="display:none;"
+    ></div>
+
+    <div id="team-archiv-keine-treffer" class="no-measures card" style="display:none;">
+        <p style="margin:0;">Keine Begehung passt zur Suche.</p>
+    </div>
+
+
+    <div
+        id="no-team-archive"
+        class="no-measures card"
+        style="display:none;"
+    >
+        <h3>Noch keine Begehung im Team-Archiv</h3>
+        <p>
+            Begehungen, die Kolleginnen und Kollegen über
+            „Datei ▾ → Auf Server speichern“ gesichert haben,
+            erscheinen hier.
+        </p>
+    </div>
+
+    <div
+        id="team-archive-unavailable"
+        class="no-measures card"
+        style="display:none;"
+    >
+        <h3>Team-Archiv hier nicht verfügbar</h3>
+        <p>
+            Das Team-Archiv funktioniert nur, wenn die App über die
+            Server-Adresse aufgerufen wird oder in den Einstellungen
+            eine Server-Adresse hinterlegt ist — nicht über diese Adresse.
+        </p>
+    </div>
+
+
+    <!-- ================================================================== -->
+    <!-- KEIN ARCHIV                                                         -->
+    <!-- ================================================================== -->
+
+    <div
+        id="no-archive"
+        class="no-measures card"
+        style="display:none;"
+    >
+
+        <h3>
+            Noch keine Begehung archiviert
+        </h3>
+
+        <p>
+            Über „Datei ▾ → Begehung archivieren“
+            auf der Prüfkatalog-Seite können Sie den aktuellen
+            Stand hier sichern.
+        </p>
+
+        <p>
+            Die archivierte Begehung kann später erneut geöffnet
+            bzw. als PDF exportiert werden.
+        </p>
+
+    </div>
+
+</main>
+
+
+
+<!-- ====================================================================== -->
+<!-- FOOTER                                                                 -->
+<!-- ====================================================================== -->
+
+<footer class="app-footer">
+
+    <div class="app-footer-meta">
+
+        <span id="footer-version"></span>
+
+        <span
+            class="footer-copyright"
+            id="footer-copyright"
+        ></span>
+
+    </div>
+
+
+    <div class="app-footer-links">
+
+        <a href="impressum.html">
+            Impressum
+        </a>
+
+        <a href="datenschutz.html">
+            Datenschutz
+        </a>
+
+        <a href="dokumentation.html">
+            Technische Dokumentation
+        </a>
+
+        <a href="hilfe.html">
+            Hilfe &amp; FAQ
+        </a>
+
+        <a href="auswertung.html">
+            Auswertung
+        </a>
+
+
+        <a href="auswertung-team.html">
+            Auswertung Team
+        </a>
+
+
+        <a href="einstellungen.html">
+            Einstellungen
+        </a>
+
+    </div>
+
+</footer>
+
+
+
+<!-- ====================================================================== -->
+<!-- JAVASCRIPT                                                             -->
+<!-- ====================================================================== -->
+
+<script src="js/audit-data.js?v=1.1-9"></script>
+
+<script src="js/text.js?v=1.1-9"></script>
+
+<script src="js/photos-store.js?v=1.1-9"></script>
+
+<script src="js/archive-store.js?v=1.1-9"></script>
+
+
+<script src="js/app.js?v=1.1-9&amp;r=2"></script>
+
+<script src="js/verlauf.js?v=1.1-9"></script>
+
+
+</body>
+
+</html>
