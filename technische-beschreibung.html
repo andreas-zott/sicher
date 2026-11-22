@@ -72,9 +72,12 @@
             Backend und ohne Datenbank. Jede Seite ist eine HTML-Datei; alle
             Berechnungen, PDFs und Speichervorgänge laufen im Browser des
             Geräts. Diese <strong>Sicherungsfassung</strong> wird über <strong>GitHub Pages</strong>
-            ausgeliefert und ist ohne Anmeldung erreichbar. Server-Funktionen
-            (Anmeldung, Team-Archiv, PHP-Skripte) gibt es hier nicht; die Apps
-            speichern nur auf dem Gerät. Das Portal lässt sich auf iPad und
+            ausgeliefert und ist ohne Anmeldung erreichbar. PHP-Skripte laufen hier
+            nicht. ASiC Handel und Großhandel Begehung erreichen ihr Team-Archiv
+            auf dem eigenen Server, wenn in der App Server-Adresse und
+            Zugriffsschlüssel eingetragen sind; der Server lässt diese Adresse
+            in <code>config.php</code> unter <code>ohneAnmeldung</code> und in der
+            CORS-Liste zu. Das Portal lässt sich auf iPad und
             iPhone zum Home-Bildschirm hinzufügen und funktioniert nach dem
             ersten Aufruf auch offline.
         </p>
@@ -88,8 +91,8 @@
         <div class="tabelle-scroll"><table class="tech-table">
 <thead><tr><th>Ordner</th><th>Anwendung</th><th>Eigener Service Worker</th></tr></thead>
 <tbody>
-<tr><td><code>ASiC/</code></td><td>ASiC Handel – digitale Marktbegehung mit Team-Archiv (Version 1.55); hier ohne Anmeldung und Team-Archiv</td><td>ja (<code>asic-handel-v1…</code>)</td></tr>
-<tr><td><code>Grosshandel/</code></td><td>Großhandel Begehung – Begehung für den Großhandel mit eigenem Team-Archiv (Rev. 1.1); hier ohne Anmeldung und Team-Archiv</td><td>ja (<code>grosshandel-begehung-v1…</code>)</td></tr>
+<tr><td><code>ASiC/</code></td><td>ASiC Handel – digitale Marktbegehung mit Team-Archiv (Version 1.55); hier ohne Anmeldung, Team-Archiv über Server-Adresse und Zugriffsschlüssel</td><td>ja (<code>asic-handel-v1…</code>)</td></tr>
+<tr><td><code>Grosshandel/</code></td><td>Großhandel Begehung – Begehung für den Großhandel mit eigenem Team-Archiv (Rev. 1.1); hier ohne Anmeldung, Team-Archiv über Server-Adresse und Zugriffsschlüssel</td><td>ja (<code>grosshandel-begehung-v1…</code>)</td></tr>
 <tr><td><code>gbo/</code></td><td>ASiC GBO – Gefährdungsbeurteilung (Version 2.x, im Aufbau)</td><td>ja (<code>asic-handel-v2…</code>)</td></tr>
 <tr><td><code>gbu/</code></td><td>GBU Zentrale – Gefährdungsbeurteilungen und Prüflisten</td><td>nein</td></tr>
 <tr><td><code>audit-2026/</code></td><td>Arbeitssicherheits-Audit 2026 – nicht mehr gepflegt, nur über das Archiv verlinkt</td><td>ja (<code>audit-2026-…</code>)</td></tr>
@@ -140,7 +143,7 @@
         <ul>
             <li><strong>liste.html → Maßnahmen-Auswertung:</strong> Die Maßnahmen werden vor dem Öffnen in <code>localStorage</code> geschrieben (<code>massnahmen_uebergabe</code>); zusätzlich wird <code>postMessage</code> versucht.</li>
             <li><strong>Audit → Maßnahmenplan:</strong> über <code>localStorage</code> (<code>massnahmenplanData</code>). Im Plan bearbeitete Angaben derselben Begehung (gleicher Markt und gleiches Datum) werden beim erneuten Öffnen übernommen.</li>
-            <li><strong>Audit → NAS:</strong> In der Sicherungsfassung ohne Funktion (kein <code>save.php</code>); nur „JSON lokal speichern“.</li>
+            <li><strong>Audit → NAS:</strong> „Direkt auf NAS speichern“ nutzt Server-Adresse und Zugriffsschlüssel aus ASiC Handel; ohne diese Angaben nur „JSON lokal speichern“.</li>
             <li><strong>Übersicht:</strong> prüft nur, ob der Service Worker bereit ist (Statusfeld „Offline-Betrieb“); sie liest keine gespeicherten Eingaben.</li>
         </ul>
         <h3>Gespeicherte Daten im Browser</h3>
@@ -154,7 +157,7 @@
 <tr><td><code>massnahmen_uebergabe</code></td><td>liste → massnahmen-sifa</td><td>Übergabe der Maßnahmen an die Auswertung</td></tr>
 <tr><td><code>theke_stand_v1</code></td><td>theke</td><td>Antworten, Kopfdaten, Unterschrift</td></tr>
 <tr><td><code>aufzug_stand_v1</code></td><td>aufzug</td><td>Objektdaten, Bewertungen, Prioritäten, Bemerkungen</td></tr>
-<tr><td><code>nasBaseUrl</code>, <code>nasApiKey</code></td><td>audit (gesetzt in ASiC Handel)</td><td>Server-Adresse und Zugriffsschlüssel (in der Sicherungsfassung ohne Bedeutung)</td></tr>
+<tr><td><code>nasBaseUrl</code>, <code>nasApiKey</code></td><td>audit (gesetzt in ASiC Handel)</td><td>Server-Adresse und Zugriffsschlüssel aus den Einstellungen von ASiC Handel (gleiche Adresse, daher gemeinsam genutzt)</td></tr>
 <tr><td><code>theme</code></td><td>alle</td><td><code>light</code> oder <code>dark</code> (ohne Eintrag: dunkel)</td></tr>
 </tbody>
 </table></div>
@@ -203,7 +206,7 @@
         <h2 id="grenzen">8. Bekannte Grenzen</h2>
         <ul>
             <li><strong>Zielplattform:</strong> iPadOS/iOS Safari (Teilen mit Dateianhang, Kamera, Touch). In anderen Browsern fällt „PDF teilen“ auf einen normalen Download zurück.</li>
-            <li><strong>Kein Server:</strong> NAS-Speichern im Audit, Team-Archiv und Anmeldung der Apps funktionieren in der Sicherungsfassung nicht; Daten bleiben auf dem Gerät.</li>
+            <li><strong>Sicherungsfassung:</strong> Team-Archiv nur mit eingetragener Server-Adresse und Zugriffsschlüssel; PDF-Archiv ansehen, Löschen und Benutzerverwaltung nur im Portal mit Anmeldung. Der Schutz des Team-Archivs liegt hier allein beim Zugriffsschlüssel.</li>
             <li><strong>Audit-Fragen:</strong> Antworten werden nach Position gespeichert. Fragen in <code>audit.html</code> daher nicht löschen oder umsortieren, sonst verrutschen gespeicherte Audits.</li>
             <li><strong>Theke/Metzgerei:</strong> erzeugt bei „Nein“ keine Maßnahmen und hat keinen PDF-Export (nur Druck).</li>
             <li><strong>Gerätespeicher:</strong> Daten im Browser gehen verloren, wenn die Websitedaten gelöscht werden; sie werden nicht zwischen Geräten abgeglichen.</li>
