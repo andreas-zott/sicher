@@ -6,7 +6,7 @@
 // Service-Workern (sw.js / service-worker.js), die sich gegenseitig
 // ueberschrieben haben. Jetzt: eine Quelle, ein Service Worker.
 
-const APP_VERSION = '1.3.1';
+const APP_VERSION = '1.4.6';   // gleich wie in service-worker.js und manifest.json
 
 // Dunklen Modus sofort setzen (common.js steht am Ende von <body>), damit die
 // Seite nicht kurz hell aufblitzt. Standard: dunkel ("Leitstand").
@@ -61,10 +61,43 @@ function initServiceWorker() {
     });
 
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sicher/service-worker.js', { updateViaCache: 'none' })
+        // Relativer Pfad: funktioniert im Unterordner von GitHub Pages (/sicher/).
+        navigator.serviceWorker.register('service-worker.js', { updateViaCache: 'none' })
             .then(reg => reg.update())
             .catch(err => console.warn('Service Worker konnte nicht registriert werden:', err));
     });
+}
+
+// Ab 1.4.2: Anmeldung im Portal - in der Fusszeile anzeigen, wer angemeldet
+// ist, mit Link zum Abmelden. Ohne Server (offline) bleibt die Zeile weg.
+function initAnmeldestatus() {
+    const fuss = document.querySelector('.app-footer');
+    if (!fuss || !window.fetch) return;
+    fetch('portal-anmeldung.php?aktion=status', { cache: 'no-store', credentials: 'same-origin' })
+        .then(r => r.ok ? r.json() : null)
+        .then(d => {
+            if (!d || !d.angemeldet) return;
+            // Einmal je Sitzung alle Portalseiten offline bereitlegen lassen
+            try {
+                if (sessionStorage.getItem('portal_nachgeladen') !== d.ende && 'serviceWorker' in navigator) {
+                    navigator.serviceWorker.ready.then(reg => {
+                        if (reg.active) reg.active.postMessage({ typ: 'nachladen' });
+                        sessionStorage.setItem('portal_nachgeladen', d.ende);
+                    });
+                }
+            } catch (e) { /* ohne sessionStorage: nicht schlimm */ }
+            const p = document.createElement('p');
+            p.className = 'app-footer-anmeldung';
+            p.style.marginTop = '8px';
+            p.append('Angemeldet: ' + d.name + ' (' + d.app + ') · ');
+            const a = document.createElement('a');
+            a.href = 'portal-anmeldung.php?aktion=abmelden';
+            a.textContent = 'Abmelden';
+            a.style.color = 'inherit';
+            p.appendChild(a);
+            fuss.appendChild(p);
+        })
+        .catch(() => {});
 }
 
 document.addEventListener('DOMContentLoaded', () => {
