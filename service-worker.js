@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────
-// Arbeitssicherheit – Service Worker (Portal /sicher/)
+// Arbeitssicherheit – Service Worker (Sicherungsfassung auf GitHub Pages /sicher/)
 //
 // Alle Portal-Seiten registrieren ausschliesslich DIESE Datei (ueber
 // js/common.js bzw. direkt). Die alte sw.js ist nur noch ein Verweis
@@ -16,72 +16,87 @@
 // Frueher wurden ALLE Caches der Domain geloescht - also auch die
 // Offline-Daten von ASiC Handel, GBO und Audit-2026.
 // ─────────────────────────────────────────────────────────────
-const APP_VERSION = '1.3.1';
+const APP_VERSION = '1.4.6';
 const CACHE_PREFIX = 'sicherheit-cache-';
 const CACHE_NAME = `${CACHE_PREFIX}v${APP_VERSION}`;
 const ALTE_EIGENE_CACHES = ['checkliste-cache-v1'];
 
 const FILES_TO_CACHE = [
-  '/sicher/',
-  '/sicher/index.html',
-  '/sicher/welcome.html',
-  '/sicher/l1.html',
-  '/sicher/help.html',
-  '/sicher/foto.html',
-  '/sicher/liste-neu.html',
-  '/sicher/mobile-neu.html',
-  '/sicher/liste.html',
-  '/sicher/mobile.html',
-  '/sicher/audit.html',
-  '/sicher/Massnahmenplan.html',
-  '/sicher/massnahmen-sifa.html',
-  '/sicher/theke.html',
-  '/sicher/aushang.html',
-  '/sicher/aufzug.html',
-  '/sicher/faq.html',
-  '/sicher/technische-beschreibung.html',
-  '/sicher/quellen.html',
-  '/sicher/impressum.html',
-  '/sicher/datenschutz.html',
-  '/sicher/manifest.json',
-  '/sicher/icon-192.png',
-  '/sicher/icon-512.png',
-  '/sicher/apple-touch-icon.png',
-  '/sicher/favicon.ico',
-  '/sicher/css/styles.css',
-  '/sicher/css/checkliste.css',
-  '/sicher/js/common.js',
-  '/sicher/js/checkliste-daten.js',
-  '/sicher/js/checkliste-engine.js',
-  '/sicher/js/theke-daten.js',
-  '/sicher/js/aushang-daten.js',
-  '/sicher/lib/css/fontawesome.min.css',
-  '/sicher/lib/webfonts/fa-solid-900.woff2',
-  '/sicher/lib/webfonts/fa-regular-400.woff2',
-  '/sicher/lib/webfonts/fa-brands-400.woff2',
-  '/sicher/lib/jspdf.umd.min.js',
-  '/sicher/lib/fonts/space-grotesk-latin-500-normal.woff2',
-  '/sicher/lib/fonts/space-grotesk-latin-600-normal.woff2',
-  '/sicher/lib/fonts/space-grotesk-latin-700-normal.woff2'
+  './',
+  './index.html',
+  './help.html',
+  './archiv.html',
+  './entstehung.html',
+  './liste.html',
+  './audit.html',
+  './Massnahmenplan.html',
+  './massnahmen-sifa.html',
+  './theke.html',
+  './aushang.html',
+  './aufzug.html',
+  './faq.html',
+  './technische-beschreibung.html',
+  './quellen.html',
+  './impressum.html',
+  './datenschutz.html',
+  './manifest.json',
+  './icon-192.png',
+  './icon-512.png',
+  './apple-touch-icon.png',
+  './favicon.ico',
+  './css/styles.css',
+  './css/checkliste.css',
+  './js/common.js',
+  './js/checkliste-daten.js',
+  './js/checkliste-engine.js',
+  './js/theke-daten.js',
+  './js/aushang-daten.js',
+  './lib/css/fontawesome.min.css',
+  './lib/webfonts/fa-solid-900.woff2',
+  './lib/webfonts/fa-regular-400.woff2',
+  './lib/webfonts/fa-brands-400.woff2',
+  './lib/jspdf.umd.min.js',
+  './lib/fonts/space-grotesk-latin-500-normal.woff2',
+  './lib/fonts/space-grotesk-latin-600-normal.woff2',
+  './lib/fonts/space-grotesk-latin-700-normal.woff2'
 ];
 
 // Installations-Ereignis: Dateien einzeln cachen (eine fehlende Datei
 // bricht so nicht die ganze Installation ab). "cache: reload" umgeht den
-// HTTP-Cache des Browsers - sonst landete u. U. eine bis zu 10 Minuten alte
-// Fassung von GitHub Pages im neuen Cache.
-self.addEventListener('install', event => {
-  event.waitUntil(
+// HTTP-Cache des Browsers - sonst landete u. U. eine veraltete Fassung
+// aus dem Zwischenspeicher im neuen Cache.
+function allesSpeichern() {
+  return (
     caches.open(CACHE_NAME).then(cache =>
       Promise.all(
         FILES_TO_CACHE.map(url =>
-          cache.add(new Request(url, { cache: 'reload' })).catch(err => {
+          // Ab 1.4.2: Ohne Anmeldung leitet der Server Seiten zur Anmeldung um -
+          // diese Antworten nicht unter dem Namen der Seite speichern.
+          fetch(new Request(url, { cache: 'reload', credentials: 'same-origin' })).then(antwort => {
+            if (antwort.ok && !antwort.redirected) return cache.put(url, antwort);
+            // Verworfene Antwort zu Ende lesen, sonst bleibt die Verbindung
+            // belegt (Apache: Keep-Alive) und die Installation haengt.
+            return antwort.arrayBuffer().then(() => {}, () => {});
+          }).catch(err => {
             console.warn('[Service Worker] Konnte nicht gecacht werden:', url, err);
           })
         )
       )
     )
   );
+}
+
+self.addEventListener('install', event => {
+  event.waitUntil(allesSpeichern());
   self.skipWaiting();
+});
+
+// Ab 1.4.2: Nach der Anmeldung meldet js/common.js "nachladen" - dann alle
+// Portalseiten offline bereitlegen (vorher waren sie ohne Anmeldung gesperrt).
+self.addEventListener('message', event => {
+  if (event.data && event.data.typ === 'nachladen') {
+    event.waitUntil(allesSpeichern());
+  }
 });
 
 // Aktivierungs-Ereignis: nur eigene, veraltete Caches loeschen
@@ -122,6 +137,11 @@ function netzZuerst(event) {
     : new Request(req, { cache: 'no-cache' });
 
   const netz = fetch(frisch).then(antwort => {
+    // Umleitung (z. B. zur Anmeldung): nicht speichern; Seitenaufrufe als
+    // echte Umleitung weitergeben, sonst verweigert der Browser die Antwort
+    if (antwort && antwort.redirected) {
+      return req.mode === 'navigate' ? Response.redirect(antwort.url, 303) : antwort;
+    }
     if (antwort && antwort.ok && antwort.type === 'basic') {
       const kopie = antwort.clone();
       event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.put(req, kopie)));
@@ -136,7 +156,7 @@ function netzZuerst(event) {
   return Promise.race([netz, zeitlimit]).catch(() =>
     ausCache(req).then(treffer => {
       if (treffer) return treffer;
-      if (req.mode === 'navigate') return ausCache(new Request('/sicher/welcome.html'));
+      if (req.mode === 'navigate') return ausCache(new Request('./index.html'));
       return Response.error();
     })
   );
@@ -146,18 +166,26 @@ function cacheZuerst(req) {
   return ausCache(req).then(treffer => treffer || fetch(req));
 }
 
-// Nur GET-Anfragen der eigenen Domain; Unterprojekte (ASiC, GBO, Audit-2026,
-// GBU, Unfallanzeige) haben eigene Service Worker bzw. laufen direkt ueber das Netz.
+// Nur GET-Anfragen der eigenen Domain. Der Service Worker liegt im
+// Hauptordner und ist damit fuer die ganze Domain zustaendig - die
+// Unterprojekte (ASiC, Grosshandel, GBO, Audit-2026, GBU, Unfallanzeige)
+// haben eigene Service Worker bzw. laufen direkt ueber das Netz und werden
+// hier NICHT angefasst. Ebenso PHP-Skripte (z. B. save.php): die laufen
+// immer direkt zum Server und werden nie gecacht.
 self.addEventListener('fetch', event => {
   const req = event.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
-  if (/^\/sicher\/(ASiC|gbo|audit-2026|gbu|unfallanzeige)\//.test(url.pathname)) return;
+  if (/^\/(ASiC|Grosshandel|gbo|audit-2026|gbu|unfall|unfallanzeige)(\/|$)/i.test(url.pathname)) return;
+  if (/\.php$/i.test(url.pathname)) return;
 
   const istSeiteOderCode = req.mode === 'navigate'
     || url.pathname.endsWith('/')
     || /\.(html|css|js|json)$/i.test(url.pathname);
+  const istStatisch = /\.(woff2?|png|ico|jpe?g|svg|webp)$/i.test(url.pathname);
 
-  event.respondWith(istSeiteOderCode ? netzZuerst(event) : cacheZuerst(req));
+  if (istSeiteOderCode) event.respondWith(netzZuerst(event));
+  else if (istStatisch) event.respondWith(cacheZuerst(req));
+  // alles andere: unveraendert ueber das Netz
 });

@@ -2,8 +2,11 @@
 <html lang="de">
 <head>
 <meta charset="utf-8" />
+<meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Kundenaufzug – Notbefreiung &amp; Notrufkette</title>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <style>
   :root {
     color-scheme: light;
@@ -232,6 +235,7 @@
     </div>
 
     <div class="toolbar no-print">
+      <a class="btn btn-ghost" href="index.html" style="text-decoration:none;">← Übersicht</a>
       <button class="btn btn-primary" id="btn-export">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Stand speichern (JSON)
@@ -255,6 +259,8 @@
       <input type="file" id="file-input" accept="application/json,.json" hidden />
     </div>
   </header>
+
+  <p class="small muted no-print" style="margin-top:-1rem;">Eingaben werden automatisch auf diesem Gerät gespeichert. „Stand speichern (JSON)“ sichert sie zusätzlich als Datei, z. B. zum Weitergeben.</p>
 
   <section class="card">
     <h2 style="margin-bottom:1rem;">Objektdaten</h2>
@@ -305,7 +311,7 @@
   </section>
 
   <footer>
-    Die genannten Zeitangaben und Pflichten stammen aus BetrSichV (Anhang 1 Nr. 2) und TRBS 3121. Für eine rechtssichere, gerichtsfeste Bewertung sollten die Originaltexte herangezogen und die zuständige Arbeitsschutzbehörde / Berufsgenossenschaft sowie eine ZÜS eingebunden werden. Dieses Dokument dient der strukturierten Aufarbeitung und ersetzt keine Rechtsberatung.
+    Die genannten Zeitangaben und Pflichten stammen aus BetrSichV (Anhang 1 Nr. 4, Anhang 2 Abschnitt 2), TRBS 3121 und TRBS 2181. Für eine rechtssichere, gerichtsfeste Bewertung sollten die Originaltexte herangezogen und die zuständige Arbeitsschutzbehörde / Berufsgenossenschaft sowie eine ZÜS eingebunden werden. Dieses Dokument dient der strukturierten Aufarbeitung und ersetzt keine Rechtsberatung.
   </footer>
 
 </div>
@@ -335,7 +341,9 @@ const kurzbewertung = "Der geschilderte Sachverhalt (keine Meldung an das Marktp
 const regelwerke = [
   { name: "Betriebssicherheitsverordnung (BetrSichV)", relevanz: "Grundpflichten (§ 4), Gefährdungsbeurteilung (§ 5), Betriebsstörungen und Unfälle (§ 11), besondere Vorschriften für Aufzugsanlagen (Anhang 1 Nr. 4)." },
   { name: "BetrSichV Anhang 1 Nr. 4.1", relevanz: "Eingeschlossene Personen müssen jederzeit und in möglichst kurzer Zeit befreit werden können; Zweiwege-Kommunikationssystem zu einer ständig besetzten Stelle ist erforderlich." },
-  { name: "TRBS 3121 „Betrieb von Aufzugsanlagen“", relevanz: "Zentrales Konkretisierungsdokument: Notbefreiung, Notdienst, ständig besetzte Stelle, 30-Minuten-Regel, beauftragte Person, Notfallplan / Notbefreiungsanleitung." },
+  { name: "TRBS 3121 „Betrieb von Aufzugsanlagen“", relevanz: "Zentrales Konkretisierungsdokument: Notfallplan / Notbefreiungsanleitung (Nr. 3.2.2), Personenbefreiung mit Notdienst und Notrufeinrichtungen (Nr. 3.4), ständig besetzte Stelle, 30-Minuten-Regel, beauftragte Person." },
+  { name: "TRBS 2181 „Schutz vor Gefährdungen beim Eingeschlossensein in Personenaufnahmemitteln“", relevanz: "Befreiung eingeschlossener Personen; Eintreffen der befreienden Person spätestens 30 Minuten nach dem Notruf." },
+  { name: "BetrSichV § 16, Anhang 2 Abschnitt 2", relevanz: "Prüfung durch eine zugelassene Überwachungsstelle (ZÜS): Hauptprüfung spätestens alle 2 Jahre, dazwischen Zwischenprüfung; die Prüffristen legt der Betreiber fest." },
   { name: "DGUV Vorschrift 1 / DGUV Regelwerk", relevanz: "Organisationspflichten, Unterweisung und Beauftragung von Personen." },
   { name: "DIN EN 81-28 (Fernnotruf)", relevanz: "Technische Anforderungen an das Notrufsystem: Zweiwege-Sprechverbindung, Funktion bei Stromausfall, Bestätigung/Filterung des Notrufs." },
   { name: "DIN EN 81-20 / EN 81-50", relevanz: "Bau- und Sicherheitsanforderungen an (neue) Aufzugsanlagen." },
@@ -353,7 +361,7 @@ const kernfragen = [
 const sektionen = [
   { id: "A", titel: "A. Dokumenten- und Organisationsprüfung", fragen: [
     { id: "1", text: "Gefährdungsbeurteilung nach § 5 BetrSichV vorhanden, aktuell und unterschrieben?" },
-    { id: "2", text: "Prüffristen durch ZÜS (Zugelassene Überwachungsstelle) festgelegt und eingehalten?" },
+    { id: "2", text: "Prüffristen vom Betreiber festgelegt und ZÜS-Prüfungen (Hauptprüfung spätestens alle 2 Jahre, Zwischenprüfung) eingehalten?" },
     { id: "3", text: "Aktueller Notfallplan / Notbefreiungsanleitung vorhanden und beim Notdienst hinterlegt?" },
     { id: "4", text: "Vertrag mit der beauftragten Firma: ständige Besetzung und 30-Minuten-Reaktionszeit vertraglich zugesichert?" },
     { id: "5", text: "Prüfbücher, Wartungsnachweise und Instandhaltungshistorie vollständig?" },
@@ -413,7 +421,7 @@ const sektionen = [
 
 const massnahmen = [
   { nr: 1, feststellung: "Notruf wurde nicht an das Marktpersonal gemeldet", massnahme: "Alarmierungskette neu definieren; Notruf zusätzlich auf eine ständig besetzte Stelle (Markt- / Info-Leitstelle) aufschalten und im Notfallplan verankern.", prio: "Hoch" },
-  { nr: 2, feststellung: "Befreiung erst nach 55 Minuten – 30-Minuten-Vorgabe überschritten", massnahme: "Vertrag mit Notdienst mit garantierter Reaktions- / Befreiungszeit ≤ 30 Min inkl. Nachweis- und Pönaleregelung; interne beauftragte Personen als Redundanz benennen und unterweisen.", prio: "Hoch" },
+  { nr: 2, feststellung: "Befreiung erst nach 55 Minuten – 30-Minuten-Vorgabe überschritten", massnahme: "Vertrag mit Notdienst mit garantierter Reaktions- / Befreiungszeit von höchstens 30 Min. inkl. Nachweis- und Pönaleregelung; interne beauftragte Personen als Redundanz benennen und unterweisen.", prio: "Hoch" },
   { nr: 3, feststellung: "Beauftragte Firma zu spät – ständige Besetzung fraglich", massnahme: "Nachweis der ständig besetzten Notrufannahme einfordern; regelmäßige Testanrufe mit Protokoll; ggf. Neuausschreibung des Notdienstes.", prio: "Hoch" },
   { nr: 4, feststellung: "Eingeschlossene mussten selbst die Feuerwehr rufen", massnahme: "Eskalationsstufe im Notfallplan: automatische Feuerwehr-Alarmierung bei Nichtbefreiung nach definierter Zeit; Aushang mit Verhaltenshinweisen im Fahrkorb.", prio: "Hoch" },
   { nr: 5, feststellung: "Keine lückenlose Ereignisdokumentation", massnahme: "Störungs- und Ereignisprotokoll mit Zeitstempeln (Notruf, Reaktion, Eintreffen, Befreiung) einführen.", prio: "Mittel" },
@@ -426,42 +434,42 @@ const massnahmen = [
 /* Automatisch abgeleitete Maßnahmen mit Regelwerksbezug je Frage */
 const empfehlungen = {
   "1":  { prio: "Hoch",    regel: "BetrSichV § 5; TRBS 1111",                          massnahme: "Gefährdungsbeurteilung nach § 5 BetrSichV erstellen bzw. aktualisieren, datieren und durch den Betreiber freigeben lassen." },
-  "2":  { prio: "Hoch",    regel: "BetrSichV § 16 u. Anhang 2 Abschn. 2; TRBS 1201",   massnahme: "Prüffristen durch eine ZÜS festlegen lassen und wiederkehrende Prüfungen fristgerecht beauftragen und dokumentieren." },
-  "3":  { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.3; BetrSichV Anhang 1 Nr. 4.1",     massnahme: "Aktuelle Notbefreiungsanleitung / Notfallplan erstellen und nachweislich beim Notdienst hinterlegen." },
-  "4":  { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.2/4.3",                             massnahme: "Notdienstvertrag mit ständig besetzter Notrufannahme und garantierter Befreiung ≤ 30 Min inkl. Nachweis- und Pönaleregelung schließen bzw. nachverhandeln." },
+  "2":  { prio: "Hoch",    regel: "BetrSichV § 3 Abs. 6, § 16 u. Anhang 2 Abschn. 2 Nr. 4; TRBS 1201 Teil 4", massnahme: "Prüffristen als Betreiber festlegen (Hauptprüfung höchstens alle 2 Jahre, Zwischenprüfung in der Mitte), wiederkehrende ZÜS-Prüfungen fristgerecht beauftragen und dokumentieren." },
+  "3":  { prio: "Hoch",    regel: "TRBS 3121 Nr. 3.2.2; BetrSichV Anhang 1 Nr. 4.1",   massnahme: "Aktuelle Notbefreiungsanleitung / Notfallplan erstellen und nachweislich beim Notdienst hinterlegen." },
+  "4":  { prio: "Hoch",    regel: "TRBS 3121 Nr. 3.4.2/3.4.3",                             massnahme: "Notdienstvertrag mit ständig besetzter Notrufannahme und garantierter Befreiung innerhalb von höchstens 30 Min. inkl. Nachweis- und Pönaleregelung schließen bzw. nachverhandeln." },
   "5":  { prio: "Mittel",  regel: "BetrSichV § 14 Abs. 7; TRBS 1201",                  massnahme: "Prüfbuch, Wartungsnachweise und Instandhaltungshistorie vollständig führen und aufbewahren." },
   "6":  { prio: "Hoch",    regel: "DIN EN 81-28; BetrSichV Anhang 1 Nr. 4.1",         massnahme: "Zweiwege-Sprechverbindung instand setzen und Funktion nach DIN EN 81-28 testen und protokollieren." },
   "7":  { prio: "Hoch",    regel: "DIN EN 81-28 Abschn. 4",                            massnahme: "Notrufsystem mit Notstromversorgung (Akku) ausrüsten und die Funktion bei Stromausfall regelmäßig prüfen." },
-  "8":  { prio: "Hoch",    regel: "BetrSichV Anhang 1 Nr. 4.1; TRBS 3121 Nr. 4.3; DIN EN 81-28", massnahme: "Aufschaltung des Notrufs auf eine rund um die Uhr besetzte Stelle sicherstellen (keine Mailbox / Bandansage)." },
+  "8":  { prio: "Hoch",    regel: "BetrSichV Anhang 1 Nr. 4.1; TRBS 3121 Nr. 3.4; DIN EN 81-28", massnahme: "Aufschaltung des Notrufs auf eine rund um die Uhr besetzte Stelle sicherstellen (keine Mailbox / Bandansage)." },
   "9":  { prio: "Mittel",  regel: "DIN EN 81-20 Abschn. 5.4.10; BetrSichV § 4",        massnahme: "Notbeleuchtung im Fahrkorb instand setzen und in die wiederkehrende Prüfung aufnehmen." },
-  "10": { prio: "Mittel",  regel: "TRBS 3121 Nr. 4.3; DGUV Vorschrift 1",             massnahme: "Zugang zu Maschinenraum / Notbefreiungseinrichtung regeln: Schlüsselverwaltung und berechtigte, unterwiesene Personen festlegen." },
-  "11": { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.3",                                 massnahme: "Alarmierungskette (Notdienst → Objektpersonal → Feuerwehr) schriftlich festlegen und im Notfallplan verankern." },
+  "10": { prio: "Mittel",  regel: "TRBS 3121 Nr. 3.4; DGUV Vorschrift 1",             massnahme: "Zugang zu Maschinenraum / Notbefreiungseinrichtung regeln: Schlüsselverwaltung und berechtigte, unterwiesene Personen festlegen." },
+  "11": { prio: "Hoch",    regel: "TRBS 3121 Nr. 3.4",                                 massnahme: "Alarmierungskette (Notdienst → Objektpersonal → Feuerwehr) schriftlich festlegen und im Notfallplan verankern." },
   "12": { prio: "Mittel",  regel: "BetrSichV § 4 Abs. 3; TRBS 3121",                   massnahme: "Notruf- und Befreiungsereignisse mit Zeitstempeln lückenlos protokollieren." },
-  "13": { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.2; DGUV Vorschrift 1 § 13",         massnahme: "Interne, unterwiesene Personen als Redundanz zur Notbefreiung benennen und schriftlich beauftragen." },
+  "13": { prio: "Hoch",    regel: "TRBS 3121 Nr. 3.4.2; DGUV Vorschrift 1 § 13",         massnahme: "Interne, unterwiesene Personen als Redundanz zur Notbefreiung benennen und schriftlich beauftragen." },
   "14": { prio: "Mittel",  regel: "DGUV Vorschrift 1 §§ 4, 12",                        massnahme: "Rolle und Aufgaben des Marktpersonals im Notfall definieren und das Personal darin schulen." },
-  "15": { prio: "Mittel",  regel: "TRBS 3121 Nr. 4.3; DGUV Vorschrift 1 § 4",          massnahme: "Regelmäßige Notfall- und Befreiungsübungen durchführen und dokumentieren." },
+  "15": { prio: "Mittel",  regel: "TRBS 3121 Nr. 3.4; DGUV Vorschrift 1 § 4",          massnahme: "Regelmäßige Notfall- und Befreiungsübungen durchführen und dokumentieren." },
   "16": { prio: "Mittel",  regel: "BetrSichV § 4; TRBS 3121",                          massnahme: "Vollständige Ereignisdokumentation mit Zeitschiene (Notruf, Reaktion, Eintreffen, Befreiung) nacherstellen." },
   "17": { prio: "Hoch",    regel: "BetrSichV § 5; TRBS 3121",                          massnahme: "Ursachenanalyse durchführen, warum keine Meldung an das Marktpersonal erfolgte, und Abstellmaßnahmen festlegen." },
   "18": { prio: "Hoch",    regel: "BetrSichV § 4 Abs. 2",                              massnahme: "Root-Cause-Analyse zur Überschreitung der 30-Minuten-Frist durchführen und Korrekturmaßnahmen ableiten." },
   "19": { prio: "Hoch",    regel: "BetrSichV § 19; DGUV Vorschrift 1",                 massnahme: "Vorfall dem Betreiber und ggf. der Aufsichtsbehörde / Berufsgenossenschaft melden und die Meldung dokumentieren." },
   "20": { prio: "Hoch",    regel: "BetrSichV § 4 Abs. 2 Nr. 3",                        massnahme: "Korrektur- und Vorbeugemaßnahmen (CAPA) mit Verantwortlichen und Fristen festlegen und Wirksamkeit prüfen." },
   "21": { prio: "Hoch",    regel: "BetrSichV § 2 Abs. 3; TRBS 3121",                   massnahme: "Rechtlichen Betreiber der Aufzugsanlage eindeutig benennen und dokumentieren." },
-  "22": { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.2; DGUV Vorschrift 1 § 13",         massnahme: "Beauftragte Person zur Notbefreiung benennen und deren Qualifikation / Unterweisung nachweisen." },
-  "23": { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.2",                                 massnahme: "Zuständigkeit für die Notbefreiung (intern / extern / kombiniert) eindeutig regeln und dokumentieren." },
+  "22": { prio: "Hoch",    regel: "TRBS 3121 Nr. 3.4.2; DGUV Vorschrift 1 § 13",         massnahme: "Beauftragte Person zur Notbefreiung benennen und deren Qualifikation / Unterweisung nachweisen." },
+  "23": { prio: "Hoch",    regel: "TRBS 3121 Nr. 3.4.2",                                 massnahme: "Zuständigkeit für die Notbefreiung (intern / extern / kombiniert) eindeutig regeln und dokumentieren." },
   "24": { prio: "Hoch",    regel: "DIN EN 81-28",                                      massnahme: "Notrufsystem an DIN EN 81-28 anpassen (Zweiwege-Verbindung, Stromausfallsicherheit, Notrufbestätigung)." },
-  "25": { prio: "Hoch",    regel: "BetrSichV Anhang 1 Nr. 4.1; TRBS 3121 Nr. 4.3",     massnahme: "Sicherstellen, dass die Notruf-Empfangsstelle rund um die Uhr besetzt ist, und Nachweis einfordern." },
+  "25": { prio: "Hoch",    regel: "BetrSichV Anhang 1 Nr. 4.1; TRBS 3121 Nr. 3.4",     massnahme: "Sicherstellen, dass die Notruf-Empfangsstelle rund um die Uhr besetzt ist, und Nachweis einfordern." },
   "26": { prio: "Mittel",  regel: "DIN EN 81-28; TRBS 3121",                           massnahme: "Aktuellen Notruf-Funktionstest durchführen und in regelmäßigen Intervallen protokollieren." },
-  "27": { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.3",                                 massnahme: "30-Minuten-Frist vertraglich und praktisch sicherstellen, inkl. Nachweis- und Pönaleregelung." },
+  "27": { prio: "Hoch",    regel: "TRBS 3121 Nr. 3.4",                                 massnahme: "30-Minuten-Frist vertraglich und praktisch sicherstellen, inkl. Nachweis- und Pönaleregelung." },
   "28": { prio: "Mittel",  regel: "TRBS 3121; BetrSichV § 4",                          massnahme: "Durchschnittliche und maximale Reaktionszeiten erfassen und regelmäßig auswerten." },
-  "29": { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.3",                                 massnahme: "Notbefreiungsanleitung sowohl vor Ort als auch beim Notdienst bereitstellen." },
-  "30": { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.3; DGUV Vorschrift 1",             massnahme: "Informationsweg zum Personal im Notfall festlegen (wie / durch wen) und im Notfallplan verankern." },
+  "29": { prio: "Hoch",    regel: "TRBS 3121 Nr. 3.2.2",                               massnahme: "Notbefreiungsanleitung sowohl vor Ort als auch beim Notdienst bereitstellen." },
+  "30": { prio: "Hoch",    regel: "TRBS 3121 Nr. 3.4; DGUV Vorschrift 1",             massnahme: "Informationsweg zum Personal im Notfall festlegen (wie / durch wen) und im Notfallplan verankern." },
   "31": { prio: "Mittel",  regel: "DGUV Vorschrift 1 § 4",                             massnahme: "Personal für Erstmaßnahmen (Beruhigung, Zugang, Einweisung der Feuerwehr) schulen." },
-  "32": { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.2",                                 massnahme: "Redundanz für den Ausfall des externen Dienstes einrichten (interne beauftragte Personen)." },
+  "32": { prio: "Hoch",    regel: "TRBS 3121 Nr. 3.4.2",                                 massnahme: "Redundanz für den Ausfall des externen Dienstes einrichten (interne beauftragte Personen)." },
   "33": { prio: "Hoch",    regel: "BetrSichV § 5; TRBS 1111",                          massnahme: "Aktuelle Gefährdungsbeurteilung erstellen bzw. vorlegen." },
   "34": { prio: "Hoch",    regel: "BetrSichV § 16 u. Anhang 2 Abschn. 2",             massnahme: "ZÜS-Prüfungen fristgerecht durchführen und Prüfbescheinigungen aufbewahren." },
-  "35": { prio: "Mittel",  regel: "TRBS 3121 Nr. 4.3; DGUV Vorschrift 1 § 4",          massnahme: "Notfall- / Alarmplan erstellen und regelmäßig üben und dokumentieren." },
-  "36": { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.3",                                 massnahme: "Klären und dokumentieren, warum die beauftragte Firma verspätet eintraf; Vertrag und Prozess entsprechend anpassen." },
-  "37": { prio: "Hoch",    regel: "TRBS 3121 Nr. 4.3; BetrSichV Anhang 1 Nr. 4.1",     massnahme: "Klären, warum die Eingeschlossenen selbst die Feuerwehr rufen mussten, und eine automatische Eskalationsstufe einführen." },
+  "35": { prio: "Mittel",  regel: "TRBS 3121 Nr. 3.4; DGUV Vorschrift 1 § 4",          massnahme: "Notfall- / Alarmplan erstellen und regelmäßig üben und dokumentieren." },
+  "36": { prio: "Hoch",    regel: "TRBS 3121 Nr. 3.4",                                 massnahme: "Klären und dokumentieren, warum die beauftragte Firma verspätet eintraf; Vertrag und Prozess entsprechend anpassen." },
+  "37": { prio: "Hoch",    regel: "TRBS 3121 Nr. 3.4; BetrSichV Anhang 1 Nr. 4.1",     massnahme: "Klären, warum die Eingeschlossenen selbst die Feuerwehr rufen mussten, und eine automatische Eskalationsstufe einführen." },
   "38": { prio: "Hoch",    regel: "BetrSichV § 4 Abs. 2",                              massnahme: "Sofort- und Dauermaßnahmen nach dem Vorfall einleiten und dokumentieren (CAPA)." },
 };
 
@@ -473,6 +481,25 @@ const ANSWER_LABELS = { ja: "Ja", teilweise: "Teilw.", nein: "Nein", nz: "n. z."
 /* ---------- Zustand ---------- */
 let metaValues = {};
 let answers = {}; // { [id]: { value, prio, note } }
+
+/* Automatisch auf dem Geraet speichern - vorher ging beim Neuladen alles verloren */
+const STORAGE_KEY = "aufzug_stand_v1";
+function speichereStand() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ objektdaten: metaValues, antworten: answers })); } catch (e) {}
+}
+(function ladeStand() {
+  try {
+    const roh = localStorage.getItem(STORAGE_KEY);
+    if (!roh) return;
+    const d = JSON.parse(roh);
+    if (d && d.objektdaten) metaValues = d.objektdaten;
+    if (d && d.antworten) answers = d.antworten;
+  } catch (e) { /* kein Zugriff oder beschaedigter Stand - leer starten */ }
+})();
+function lokalesDatum() {
+  const h = new Date();
+  return h.getFullYear() + "-" + String(h.getMonth() + 1).padStart(2, "0") + "-" + String(h.getDate()).padStart(2, "0");
+}
 
 /* ---------- Helfer ---------- */
 function el(tag, attrs = {}, ...children) {
@@ -499,7 +526,7 @@ document.getElementById("kurzbewertung").textContent = kurzbewertung;
 const objektEl = document.getElementById("objektdaten");
 meta.felder.forEach(f => {
   const input = el("input", { value: metaValues[f.key] ?? "", "data-key": f.key });
-  input.addEventListener("input", e => { metaValues[f.key] = e.target.value; });
+  input.addEventListener("input", e => { metaValues[f.key] = e.target.value; speichereStand(); });
   objektEl.appendChild(el("label", { class: "field" }, el("span", {}, f.label), input));
 });
 
@@ -600,6 +627,7 @@ function renderQuestion(frage) {
       const cur = answers[frage.id] ?? {};
       answers[frage.id] = { ...cur, note: e.target.value };
       updateOffenePunkte();
+      speichereStand();
     });
 
     const measureBox = el("div", { class: "measure" });
@@ -613,6 +641,7 @@ function renderQuestion(frage) {
         const cur = answers[frage.id] ?? {};
         answers[frage.id] = { ...cur, note: emp.massnahme };
         updateOffenePunkte();
+        speichereStand();
       });
       measureBox.appendChild(el("div", { class: "suggest" },
         el("div", { class: "suggest-head" },
@@ -632,6 +661,7 @@ function renderQuestion(frage) {
     inp.addEventListener("input", e => {
       const cur = answers[frage.id] ?? {};
       answers[frage.id] = { ...cur, note: e.target.value };
+      speichereStand();
     });
     container.appendChild(el("div", { class: "note-inline" }, inp));
   }
@@ -686,6 +716,7 @@ function updateEvaluation() {
     el("div", { class: "lbl" }, c.label))));
 
   updateOffenePunkte();
+  speichereStand();
 }
 
 const offenEl = document.getElementById("offene-punkte");
@@ -731,7 +762,7 @@ document.getElementById("btn-export").addEventListener("click", () => {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "kundenaufzug-" + new Date().toISOString().slice(0, 10) + ".json";
+  a.download = "kundenaufzug-" + lokalesDatum() + ".json";
   a.click();
   URL.revokeObjectURL(url);
 });
@@ -795,6 +826,8 @@ function buildAuditPDF() {
   }
   function para(txt, size = 9, indent = 0, color = 40) {
     pdf.setFontSize(size); pdf.setTextColor(color);
+    // Die PDF-Standardschrift kennt "→" nicht; Umlaute und „…“ dagegen schon
+    txt = String(txt).replace(/\s*→\s*/g, " > ");
     const lines = pdf.splitTextToSize(txt, contentWidth - indent);
     for (const ln of lines) { ensure(size * 0.5); pdf.text(ln, margin + indent, y); y += size * 0.5; }
   }
@@ -819,12 +852,12 @@ function buildAuditPDF() {
   const bewertet = s.answered - s.nz;
   const konform = bewertet > 0 ? Math.round((s.ja / bewertet) * 100) : 0;
   heading("Auswertung");
-  para("Beantwortet: " + s.answered + " / " + s.total + "    Konformitaet: " + konform + "%", 10, 0, 0);
+  para("Beantwortet: " + s.answered + " / " + s.total + "    Konformität: " + konform + "%", 10, 0, 0);
   para("Ja: " + s.ja + "   Teilweise: " + s.teilweise + "   Nein: " + s.nein + "   n. z.: " + s.nz + "   Offene Punkte: " + s.offen, 10, 0, 0);
   y += 3;
 
   // Checkliste
-  heading("Pruef-Checkliste");
+  heading("Prüf-Checkliste");
   sektionen.forEach(sec => {
     ensure(8); pdf.setFontSize(10); pdf.setFont(undefined, "bold"); pdf.setTextColor(30, 60, 90);
     const secLines = pdf.splitTextToSize(sec.titel, contentWidth);
@@ -835,7 +868,7 @@ function buildAuditPDF() {
       const label = a.value ? (ANSWER_LABELS[a.value] || a.value) : "offen";
       para(f.id + ". " + f.text, 9, 0, 40);
       let meta2 = "   Bewertung: " + label;
-      if (a.prio) meta2 += "   |   Prioritaet: " + a.prio;
+      if (a.prio) meta2 += "   |   Priorität: " + a.prio;
       para(meta2, 9, 2, a.value === "nein" ? 183 : a.value === "teilweise" ? 150 : 90);
       if (a.note) para("   Bemerkung: " + a.note, 9, 2, 90);
       y += 1.5;
@@ -850,7 +883,7 @@ function buildAuditPDF() {
     .sort((a, b) => (PRIO_ORDER[a.prio ?? "Niedrig"] ?? 3) - (PRIO_ORDER[b.prio ?? "Niedrig"] ?? 3));
 
   pdf.addPage(); miniHeader(); y = 18;
-  heading("Automatisch abgeleitete Massnahmen");
+  heading("Automatisch abgeleitete Maßnahmen");
   if (punkte.length === 0) {
     para("Keine offenen Punkte. Es wurden keine Fragen mit \u201eNein\u201c oder \u201eTeilweise\u201c bewertet.", 10, 0, 90);
   } else {
@@ -863,7 +896,7 @@ function buildAuditPDF() {
       pdf.setFont(undefined, "normal");
       para("Frage " + p.id + ": " + p.text, 9, 2, 40);
       if (emp) {
-        para("Empfohlene Massnahme: " + emp.massnahme, 9, 2, 0);
+        para("Empfohlene Maßnahme: " + emp.massnahme, 9, 2, 0);
         para("Regelwerk: " + emp.regel, 9, 2, 90);
       }
       if (p.note) para("Bemerkung: " + p.note, 9, 2, 90);
@@ -882,14 +915,14 @@ function buildAuditPDF() {
 
 async function generateAndSharePDF() {
   if (!window.jspdf || !window.jspdf.jsPDF) {
-    alert("Die PDF-Bibliothek konnte nicht geladen werden. Bitte pruefen Sie Ihre Internetverbindung und versuchen Sie es erneut.");
+    alert("Die PDF-Bibliothek konnte nicht geladen werden. Bitte prüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.");
     return;
   }
   showOverlay("PDF wird erstellt…");
   try {
     const pdf = buildAuditPDF();
     const objekt = (metaValues.objekt || "Aufzug").replace(/[^\w\-]+/g, "_");
-    const filename = "Kundenaufzug-" + objekt + "-" + new Date().toISOString().slice(0, 10) + ".pdf";
+    const filename = "Kundenaufzug-" + objekt + "-" + lokalesDatum() + ".pdf";
     const blob = pdf.output("blob");
     const file = new File([blob], filename, { type: "application/pdf" });
 
@@ -897,7 +930,7 @@ async function generateAndSharePDF() {
       hideOverlay();
       await navigator.share({
         title: "Kundenaufzug – Notbefreiung & Notrufkette",
-        text: "Anbei das Protokoll zur Aufzugsanlage (" + (metaValues.objekt || "-") + ") mit den automatisch abgeleiteten Massnahmen und Regelwerksbezuegen.",
+        text: "Anbei das Protokoll zur Aufzugsanlage (" + (metaValues.objekt || "-") + ") mit den automatisch abgeleiteten Maßnahmen und Regelwerksbezügen.",
         files: [file],
       });
     } else {
@@ -906,10 +939,10 @@ async function generateAndSharePDF() {
       a.href = url; a.download = filename; a.click();
       URL.revokeObjectURL(url);
       hideOverlay();
-      alert("Das Teilen wird von diesem Browser nicht unterstuetzt. Das PDF wurde stattdessen heruntergeladen.");
+      alert("Das Teilen wird von diesem Browser nicht unterstützt. Das PDF wurde stattdessen heruntergeladen.");
     }
   } catch (err) {
-    console.error("[v0] PDF-Fehler:", err);
+    console.error("PDF-Fehler:", err);
     if (err && err.name === "AbortError") { hideOverlay(); return; } // Nutzer hat das Teilen abgebrochen
     hideOverlay();
     alert("Fehler bei der PDF-Erstellung: " + (err?.message || err));
@@ -924,6 +957,7 @@ document.getElementById("btn-reset").addEventListener("click", () => {
   if (confirm("Alle Eingaben zurücksetzen? Diese Aktion kann nicht rückgängig gemacht werden.")) {
     answers = {};
     metaValues = {};
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
     rerenderAll();
   }
 });

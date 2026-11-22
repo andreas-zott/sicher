@@ -2,6 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8"/>
+<meta name="robots" content="noindex, nofollow">
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Arbeitssicherheits-Audit</title>
 <link href="lib/css/fontawesome.min.css" rel="stylesheet"/>
@@ -801,9 +802,14 @@ input[type="text"], input[type="date"] {
     color: #9ca3af;
 }
 </style>
+<style>@media screen{#titel-kopf{display:none}}</style>
+<style>@media print{.archiv-hinweis{display:none!important}}</style>
 </head>
 <body>
 <div class="container">
+<div style="background:#fff7e6;border:1px solid #f0c36d;border-left:5px solid #d39b2a;border-radius:10px;padding:10px 14px;margin:0 0 16px;font-family:system-ui,-apple-system,sans-serif;font-size:14px;color:#3d2f0f;" class="archiv-hinweis no-print">
+<strong>Archiv – nicht mehr gepflegt.</strong> Fragen, Maßnahmentexte und Rechtsgrundlagen werden nicht mehr aktualisiert. Für neue Begehungen ASiC Handel verwenden. <a href="archiv.html" style="color:#b45309;font-weight:600;">← zurück zum Archiv</a>
+</div>
 <h1 id="titel">Arbeitssicherheits-Audit mit automatischer Maßnahmen-Ableitung bei Abweichungen</h1>
 <p id="untertitel">Systematische Filialprüfung mit automatischer Maßnahmen-Ableitung und Wirksamkeitskontrolle (Prüfpunkte werden gezählt …)</p>
 <div class="print-wrapper">
@@ -833,7 +839,7 @@ input[type="text"], input[type="date"] {
 </div>
 </div>
 <p style="text-align:center; font-size:13px; color:#6b7280; margin: 4px 0 30px;">
-  ℹ️ Alle Aktionen (Fotos, Speichern, PDF teilen, Zurücksetzen …) finden Sie jederzeit im
+  ℹ️ Alle Aktionen (Speichern, PDF teilen, Zurücksetzen …) finden Sie jederzeit im
   <strong>Menü&nbsp;☰</strong> unten rechts.
 </p>
 </div>
@@ -1825,9 +1831,6 @@ in angemessenen Zeitabständen geprüft?
     <button class="btn-medium btn-gray" onclick="exportiereMassnahmen(); schliesseMenu();">
       📝 Defizite exportieren
     </button>
-    <button class="btn-medium btn-blue" onclick="weiterZuFotos(); schliesseMenu();">
-      📸 Zur Foto-Seite
-    </button>
     <button class="btn-medium btn-gray" onclick="if(confirm('Möchtest du die Unterschrift wirklich löschen?')) { clearSignature(); } schliesseMenu();">
       🗑️ Unterschrift löschen
     </button>
@@ -1871,7 +1874,8 @@ function weiterZuFotos() {
     <a href="quellen.html">Quellen</a>
     <a href="faq.html">FAQ</a>
     <a href="technische-beschreibung.html">Technik</a>
-    <a href="welcome.html">Startseite</a>
+    <a href="archiv.html">Archiv</a>
+    <a href="index.html">Startseite</a>
   </nav>
   <p>© <span class="app-footer-jahr"></span> Andreas Zott – Alle Rechte vorbehalten</p>
   <p class="app-footer-sub">(SiFa) Arbeitssicherheit</p>
@@ -1880,12 +1884,6 @@ function weiterZuFotos() {
 
 <script>
   document.querySelectorAll('.app-footer-jahr').forEach(el => el.textContent = new Date().getFullYear());
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sicher/service-worker.js', { updateViaCache: 'none' })
-        .catch(err => console.warn('Service Worker konnte nicht registriert werden:', err));
-    });
-  }
 </script>
 <script src="lib/jspdf.umd.min.js"></script>
 <script>
