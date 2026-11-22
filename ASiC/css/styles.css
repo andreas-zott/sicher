@@ -1652,8 +1652,9 @@ a.btn {
 
 .app-footer-links {
     display: flex;
-    gap: 1.25rem;
-    flex-shrink: 0;
+    flex-wrap: wrap;            /* ab 1.55-23: auf schmalen iPads ragt kein Link aus dem Bild */
+    gap: 0.5rem 1.25rem;
+    flex-shrink: 1;
 }
 
 .app-footer a {
@@ -3208,3 +3209,13 @@ html.srv-offen, html.srv-offen body { overflow: hidden; }
 .an-logos .an-logo { margin: 0; }
 .an-firmenlogo { height: 56px; width: auto; display: block; }
 .an-firmenlogo[hidden] { display: none; }
+
+
+/* ab 1.55-23: Seiten mit Aktionsleiste (Prüfkatalog, Aktionsplan, Fotos) – der Fuß
+   mit Einstellungen, Hilfe & FAQ … endet auch auf iPad und PC oberhalb der festen
+   Leiste und bleibt antippbar (vorher nur auf Smartphones bis 520 px). */
+@media (min-width: 521px) {
+    body:has(.action-bar) {
+        padding-bottom: calc(4.6rem + env(safe-area-inset-bottom));
+    }
+}
