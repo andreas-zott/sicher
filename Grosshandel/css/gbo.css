@@ -1,1 +1,741 @@
 
+.gbo-page{max-width:1180px}.gbo-hero{display:flex;justify-content:space-between;gap:24px;align-items:flex-start;margin:24px 0}.gbo-hero h1{margin:.2rem 0}.gbo-kicker{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;opacity:.65}.gbo-progress{min-width:180px;padding:16px;border:1px solid #d7dde5;border-radius:14px;background:#fff}.gbo-progress strong,.gbo-progress span{display:block}.gbo-progress span{font-size:.85rem;opacity:.7;margin-top:4px}.gbo-card{background:#fff;border:1px solid #d7dde5;border-radius:16px;padding:20px;margin:16px 0;box-shadow:0 2px 10px rgba(0,0,0,.035)}.gbo-card h2{margin-top:0}.gbo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.gbo-grid label{font-weight:700;font-size:.9rem}.gbo-grid input,.gbo-fields input,.gbo-fields textarea{width:100%;box-sizing:border-box;margin-top:6px;padding:10px;border:1px solid #cbd3dc;border-radius:9px;font:inherit}.gbo-head{display:flex;justify-content:space-between;gap:16px;align-items:center}.gbo-head p{margin:.2rem 0;color:#5d6875}.gbo-select-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}.gbo-choice{display:flex;gap:10px;padding:12px;border:1px solid #d7dde5;border-radius:12px;cursor:pointer}.gbo-choice:has(input:checked){border-color:#4d718e;background:#f4f8fb}.gbo-choice strong,.gbo-choice span{display:block}.gbo-choice span{font-size:.84rem;color:#66717c;margin-top:3px}.gbo-module{border:1px solid #d7dde5;border-radius:14px;margin:14px 0;overflow:hidden}.gbo-module>summary{padding:15px 16px;font-weight:800;cursor:pointer;background:#f7f9fb}.gbo-question{padding:16px;border-top:1px solid #e3e7ec}.gbo-qmeta{font-size:.78rem;font-weight:800;opacity:.65}.gbo-qtext{font-weight:700;margin:5px 0 12px}.gbo-statuses{display:flex;flex-wrap:wrap;gap:7px}.gbo-statuses label{border:1px solid #ccd4dd;border-radius:999px;padding:7px 10px;font-size:.82rem;cursor:pointer}.gbo-statuses label:has(input:checked){background:#e9f1f7;border-color:#547793}.gbo-fields{display:none;margin-top:13px;padding:13px;background:#f7f9fb;border-radius:10px}.gbo-fields.open{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.gbo-fields .wide{grid-column:1/-1}.gbo-btn{border:0;border-radius:9px;padding:10px 14px;font-weight:800;cursor:pointer;background:#315c7b;color:white}.gbo-btn.secondary{background:#e9eef2;color:#263746}.gbo-empty,.gbo-note{padding:18px;border-radius:12px;background:#f7f9fb;color:#596673}.gbo-placeholder{padding:16px;border-top:1px solid #e3e7ec;color:#66717c}.gbo-badge{font-size:.72rem;padding:3px 7px;border-radius:999px;background:#e9eef2;margin-left:6px}@media(max-width:700px){.gbo-hero,.gbo-head{display:block}.gbo-progress{margin-top:12px}.gbo-fields.open{grid-template-columns:1fr}}
+
+.gbo-doc-actions{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+
+.gbo-card-intro{margin-top:-6px;color:#5d6875}.gbo-wide{grid-column:1/-1}.gbo-guidance{margin-top:12px;padding:10px 12px;border-left:4px solid #c8102e;background:#fff7f8;border-radius:8px}.gbo-source{font-size:.79rem;font-weight:800;color:#7a1426}.gbo-explain{font-size:.76rem;line-height:1.42;color:#5e6570;margin-top:4px}.gbo-source a{color:inherit}.gbo-print-meta{font-size:.86rem;color:#4f5964}
+
+.gbo-progress-track{height:8px;background:#e6e9ed;border-radius:999px;overflow:hidden;margin:10px 0 7px}.gbo-progress-bar{height:100%;width:0;background:var(--brand-red,#c8102e);border-radius:999px;transition:width .2s ease}.gbo-doc-primary{align-items:stretch}.gbo-doc-primary .gbo-btn{flex:1 1 220px}.gbo-doc-secondary{margin-top:4px}.gbo-doc-secondary .gbo-btn{background:#f0f2f4;color:#263746;border:1px solid #d7dde5}
+
+/* v1.56 – fachliche Untergruppen innerhalb der GBO-Module */
+.gbo-module>summary{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.gbo-subgroups{padding:8px 12px 12px;background:#fff}
+.gbo-subgroup{border:1px solid #e0e5ea;border-radius:11px;margin:8px 0;overflow:hidden;background:#fff}
+.gbo-subgroup>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 13px;cursor:pointer;font-size:.9rem;font-weight:800;background:#fbfcfd;color:#263746}
+.gbo-subgroup[open]>summary{border-bottom:1px solid #e3e7ec;background:#f6f8fa}
+.gbo-subprogress{flex-shrink:0;font-size:.72rem;font-weight:800;color:#5f6b76;background:#e9eef2;border-radius:999px;padding:4px 8px}
+.gbo-subbody .gbo-question:first-child{border-top:0}
+.gbo-subbody .gbo-question{padding-left:14px;padding-right:14px}
+@media(max-width:700px){.gbo-module>summary,.gbo-subgroup>summary{align-items:flex-start}.gbo-badge,.gbo-subprogress{white-space:nowrap}}
+
+/* v1.57 – fachlich gegliederte Gesamtansicht */
+.gbo-overview-group{border:1px solid #c8d0d9;border-radius:16px;margin:18px 0;overflow:hidden;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.035)}
+.gbo-overview-group>summary{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:17px 18px;cursor:pointer;background:#eef2f5;list-style:none}
+.gbo-overview-group>summary::-webkit-details-marker{display:none}
+.gbo-overview-group>summary strong{display:block;font-size:1rem;color:#263746}
+.gbo-overview-group>summary small{display:block;margin-top:3px;font-size:.75rem;font-weight:600;color:#687581}
+.gbo-overview-progress{min-width:150px;text-align:right;font-size:.75rem;color:#53616d}
+.gbo-overview-progress b{display:block;margin-bottom:5px}
+.gbo-overview-progress i{display:block;width:150px;height:6px;border-radius:999px;background:#d9dfe5;overflow:hidden}
+.gbo-overview-progress em{display:block;height:100%;background:var(--brand-red,#c8102e);border-radius:999px}
+.gbo-overview-body{padding:4px 14px 12px}
+.gbo-overview-body>.gbo-module{margin:10px 0}
+@media(max-width:700px){.gbo-overview-group>summary{align-items:flex-start}.gbo-overview-progress{min-width:96px}.gbo-overview-progress i{width:96px}.gbo-overview-body{padding:2px 8px 9px}}
+
+/* Version 2.0: Begehung/GBO-Verknüpfung */
+.gbo-v2-finding{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;padding:1rem 0;border-bottom:1px solid var(--line)}.gbo-v2-finding p{margin:.35rem 0}.gbo-v2-finding small{display:block;color:var(--ink-soft);margin-top:.25rem}.gbo-doc-actions a.gbo-btn{text-decoration:none;display:inline-flex;align-items:center}
+@media(max-width:700px){.gbo-v2-finding{flex-direction:column}.gbo-v2-finding .gbo-btn{width:100%}}
+
+/* v2.0.3 – kompakte Vormerkung bei Begehungsbefunden */
+.gbo-v2-finding .gbo-link-btn{flex:0 0 auto;padding:5px 9px;border-radius:7px;font-size:.74rem;line-height:1.2;white-space:nowrap}
+@media(max-width:700px){.gbo-v2-finding .gbo-link-btn{width:auto;align-self:flex-start}}
+
+/* v2.0.4 – kompakte GBO-Bedienung und vollständige Begehung↔GBO-Verknüpfung */
+.gbo-btn{padding:6px 10px;border-radius:7px;font-size:.78rem;line-height:1.2;min-height:30px}
+.gbo-doc-primary .gbo-btn{flex:0 1 auto}
+.gbo-inline-actions{margin-top:10px;display:flex;gap:7px;flex-wrap:wrap}
+.gbo-btn.danger{background:#8d1f2d;color:#fff}
+.gbo-v2-actions{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+.gbo-v2-map{display:grid;grid-template-columns:minmax(160px,230px) minmax(220px,1fr);gap:6px;margin-top:7px}
+.gbo-v2-map select{max-width:100%;padding:5px 7px;border:1px solid #cbd3dc;border-radius:7px;background:#fff;font-size:.78rem}
+.gbo-linked-note{margin-top:7px;padding:7px 9px;border-left:3px solid var(--brand-red,#c8102e);background:#fff6f7;font-size:.78rem}
+.gbo-linked-note b{display:block;margin-bottom:2px}
+@media(max-width:700px){.gbo-v2-actions{justify-content:flex-start}.gbo-v2-map{grid-template-columns:1fr}.gbo-doc-primary .gbo-btn{width:auto}.gbo-v2-finding .gbo-btn{width:auto}}
+
+/* SW v2.0.6 – thematische Auswahlgruppen */
+.gbo-select-groups{display:grid;gap:16px;margin-top:12px}.gbo-selector-group{border:1px solid #dfe3e7;border-radius:10px;background:#fafbfc;padding:12px}.gbo-selector-group-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 2px 9px;border-bottom:1px solid #e6e9ec;margin-bottom:10px}.gbo-selector-group-head>div:first-child{display:flex;flex-direction:column;gap:2px}.gbo-selector-group-head strong{font-size:15px}.gbo-selector-group-head small{font-size:11px;color:#68727c}.gbo-selector-actions{display:flex;gap:5px;flex:0 0 auto}.gbo-mini-btn{border:1px solid #cbd1d6;background:#fff;border-radius:6px;padding:4px 8px;font:600 11px/1.2 Arial,sans-serif;cursor:pointer}.gbo-mini-btn:hover{background:#f0f2f4}.gbo-selector-group .gbo-select-grid{margin:0}@media(max-width:650px){.gbo-selector-group-head{align-items:flex-start;flex-direction:column}.gbo-selector-actions{align-self:flex-end}}
+
+
+/* v2.0.8 – Typografie an den Prüfkatalog angeglichen */
+.gbo-page {
+    font-family: var(--font-body);
+    color: var(--ink);
+    line-height: 1.5;
+}
+.gbo-page h1,
+.gbo-page h2,
+.gbo-page h3,
+.gbo-page h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+}
+.gbo-page p,
+.gbo-page label,
+.gbo-page input,
+.gbo-page select,
+.gbo-page textarea,
+.gbo-page button {
+    font-family: inherit;
+}
+.gbo-card-intro,
+.gbo-head p,
+.gbo-explain,
+.gbo-empty,
+.gbo-note,
+.gbo-placeholder {
+    line-height: 1.5;
+}
+.gbo-qtext {
+    font-size: 0.92rem;
+    font-weight: 600;
+    line-height: 1.5;
+}
+.gbo-qmeta,
+.gbo-source,
+.gbo-kicker {
+    font-family: var(--font-display);
+}
+.gbo-selector-group-head strong,
+.gbo-overview-group > summary strong,
+.gbo-module > summary,
+.gbo-subgroup > summary {
+    font-family: var(--font-display);
+}
+.gbo-mini-btn {
+    font-family: inherit;
+}
+
+
+/* v2.0.10 – iPhone-Bedienung wie im Prüfkatalog
+   Nur schmale Displays <=520px. Desktop/iPad bleiben unverändert. */
+@media (max-width: 520px) {
+    .gbo-page {
+        padding-left: .65rem;
+        padding-right: .65rem;
+        overflow-x: hidden;
+    }
+    .gbo-hero,
+    .gbo-card {
+        border-radius: 10px;
+    }
+    .gbo-hero {
+        padding: 1rem .9rem;
+    }
+    .gbo-hero h1 {
+        font-size: 1.35rem;
+        line-height: 1.2;
+    }
+    .gbo-hero p,
+    .gbo-card-intro,
+    .gbo-head p,
+    .gbo-note,
+    .gbo-explain {
+        font-size: .82rem;
+    }
+    .gbo-card {
+        padding: .9rem;
+        margin-bottom: .8rem;
+    }
+    .gbo-card h2 {
+        font-size: 1rem;
+        line-height: 1.25;
+    }
+    .gbo-grid {
+        grid-template-columns: 1fr !important;
+        gap: .65rem;
+    }
+    .gbo-wide {
+        grid-column: auto !important;
+    }
+    .gbo-head {
+        gap: .65rem;
+    }
+    .gbo-head > .gbo-btn,
+    .gbo-inline-actions .gbo-btn,
+    .gbo-doc-primary .gbo-btn,
+    .gbo-doc-secondary .gbo-btn {
+        min-height: 42px;
+    }
+    .gbo-inline-actions,
+    .gbo-doc-actions,
+    .gbo-v2-actions {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .gbo-inline-actions .gbo-btn,
+    .gbo-doc-actions .gbo-btn,
+    .gbo-doc-actions a.gbo-btn,
+    .gbo-v2-actions .gbo-btn {
+        width: 100%;
+        justify-content: center;
+        box-sizing: border-box;
+    }
+    .gbo-v2-map {
+        grid-template-columns: 1fr !important;
+        gap: 8px;
+    }
+    .gbo-v2-map select,
+    .gbo-page input,
+    .gbo-page select,
+    .gbo-page textarea {
+        min-height: 42px;
+        box-sizing: border-box;
+        width: 100%;
+        font-size: 16px; /* iOS: verhindert automatisches Zoom bei Formularfeldern */
+    }
+    .gbo-page textarea {
+        min-height: 90px;
+    }
+    .gbo-overview-group > summary,
+    .gbo-module > summary,
+    .gbo-subgroup > summary {
+        padding: 12px 11px;
+        gap: 10px;
+    }
+    .gbo-overview-progress {
+        min-width: 82px;
+        font-size: .68rem;
+    }
+    .gbo-overview-progress i {
+        width: 82px;
+    }
+    .gbo-overview-body {
+        padding: 2px 5px 8px;
+    }
+    .gbo-subbody .gbo-question,
+    .gbo-subbody .gbo-question:first-child {
+        padding-left: 9px;
+        padding-right: 9px;
+    }
+    .gbo-question,
+    .gbo-qtext {
+        font-size: .88rem;
+        line-height: 1.45;
+    }
+    .gbo-question .gbo-answer-grid,
+    .gbo-answer-grid {
+        grid-template-columns: 1fr !important;
+    }
+    .gbo-answer-grid button,
+    .gbo-answer-grid label {
+        min-height: 42px;
+    }
+    .gbo-selector-group {
+        padding: 9px;
+    }
+    .gbo-selector-group-head {
+        gap: 7px;
+    }
+    .gbo-selector-group-head strong {
+        font-size: .9rem;
+    }
+    .gbo-select-grid {
+        grid-template-columns: 1fr !important;
+    }
+    .gbo-mini-btn {
+        min-height: 38px;
+        font-size: .75rem;
+        padding: 7px 9px;
+    }
+    .gbo-v2-finding {
+        gap: .65rem;
+        padding: .8rem 0;
+    }
+    .gbo-v2-finding .gbo-btn,
+    .gbo-v2-finding .gbo-link-btn {
+        min-height: 42px;
+    }
+    .gbo-linked-note {
+        font-size: .8rem;
+        line-height: 1.45;
+    }
+    .gbo-progress {
+        margin-top: .7rem;
+    }
+    .app-header-inner {
+        flex-wrap: wrap;
+    }
+    .app-nav {
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .app-nav::-webkit-scrollbar {
+        display: none;
+    }
+    .app-nav a {
+        min-height: 40px;
+        display: inline-flex;
+        align-items: center;
+        white-space: nowrap;
+    }
+    .app-footer-links {
+        flex-wrap: wrap;
+        gap: .5rem .9rem;
+        justify-content: center;
+    }
+    .doku-table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+.gbo-u-badge{display:inline-block;font-size:.68rem;font-weight:800;border:1px solid currentColor;border-radius:.3rem;padding:.05rem .28rem;margin-left:.25rem}
+.gbo-measure-picks{border:1px solid #d9dde2;border-radius:.65rem;padding:.65rem;background:#fafbfc;display:grid;gap:.4rem}
+.gbo-measure-picks strong{display:block;margin-bottom:.15rem}
+.gbo-measure-picks label{font-weight:500;display:flex;gap:.45rem;align-items:flex-start}
+.gbo-measure-picks input{margin-top:.18rem}
+@media(max-width:700px){.gbo-measure-picks{padding:.7rem}.gbo-measure-picks label{min-height:2.25rem;align-items:center}.gbo-measure-picks input{width:1.15rem;height:1.15rem}.gbo-u-badge{font-size:.72rem}}
+
+/* Eigenständiger Bildbeleg-Bereich der GBO – bewusst keine Begehungslisten-Optik */
+.gbo-attachment{box-sizing:border-box;display:block;margin:1rem 0 .35rem;padding:1rem 1.05rem;border:1px solid #c9d7e5;border-left:5px solid #526f91;border-radius:12px;background:linear-gradient(135deg,#f3f7fb 0%,#f8fafc 100%);box-shadow:0 2px 8px rgba(34,58,82,.045)}
+.gbo-attachment-head{display:flex;align-items:flex-start;gap:.75rem;margin-bottom:.9rem}
+.gbo-attachment-icon{display:grid;place-items:center;flex:0 0 2.35rem;height:2.35rem;border-radius:9px;background:#dce7f2;color:#355675;font-size:1.35rem;font-weight:800}
+.gbo-attachment-eyebrow{font-size:.68rem;letter-spacing:.11em;font-weight:800;color:#526f91;margin:0 0 .18rem}
+.gbo-attachment-title{font-size:1.02rem;font-weight:800;color:#24384c;line-height:1.3}
+.gbo-attachment-intro{font-size:.84rem;line-height:1.45;color:#526273;margin:.28rem 0 0;max-width:68ch}
+.gbo-attachment .gbo-photo-ref-field{display:block;font-size:.84rem;font-weight:700;color:#34475a;margin:.5rem 0 .65rem}
+.gbo-attachment .gbo-photo-ref-field input{display:block;box-sizing:border-box;width:100%;margin-top:.35rem;background:#fff;border:1px solid #c7d2df;border-radius:7px;padding:.65rem .7rem;font:inherit;font-weight:400;color:#1f2937}
+.gbo-attachment-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.gbo-attachment-actions .gbo-btn{min-height:42px;border-color:#aebfd0;background:#fff;color:#2d4c6a}
+.gbo-attachment-actions .gbo-btn:hover{background:#e7eef6}
+.gbo-attachment-status{font-size:.85rem;color:#53616e;margin-top:10px;overflow-wrap:anywhere}
+.gbo-attachment-empty{display:flex;flex-direction:column;gap:.18rem;padding:.7rem .8rem;border:1px dashed #c2cfdd;border-radius:8px;background:rgba(255,255,255,.7)}
+.gbo-attachment-empty strong{font-size:.82rem;color:#455a70}
+.gbo-attachment-empty span{font-size:.78rem;line-height:1.4;color:#68798a}
+.gbo-photo-saved-label{display:inline-flex;align-items:center;gap:.35rem;font-size:.76rem;font-weight:800;color:#25634b;background:#e5f4eb;border:1px solid #b9dfc8;border-radius:999px;padding:.25rem .55rem;margin-bottom:.35rem}
+.gbo-photo-preview-wrap{margin:8px 0 6px;display:flex;flex-direction:column;align-items:flex-start;gap:5px;padding:.6rem;background:#fff;border:1px solid #d7e0e9;border-radius:9px;max-width:max-content}
+.gbo-photo-preview{display:block;width:auto;height:auto;max-width:min(100%,320px);max-height:240px;object-fit:contain;border:1px solid #d8dde3;border-radius:6px;background:#f4f6f8}
+.gbo-photo-caption{font-size:.78rem;color:#647181;overflow-wrap:anywhere}
+.gbo-attachment-fileline{margin-top:5px;overflow-wrap:anywhere;font-size:.8rem;color:#405469}
+.gbo-attachment-remove{border:0;background:transparent;color:#a20d20;text-decoration:underline;cursor:pointer;margin-left:8px;padding:4px;min-height:36px}
+@media(max-width:700px){.gbo-attachment{padding:.85rem;border-radius:10px}.gbo-attachment-head{gap:.6rem}.gbo-attachment-icon{flex-basis:2.1rem;height:2.1rem}.gbo-attachment-actions{display:grid;grid-template-columns:1fr}.gbo-attachment-actions .gbo-btn{width:100%;min-height:46px}.gbo-photo-preview{max-width:100%;max-height:220px}.gbo-photo-preview-wrap{box-sizing:border-box;max-width:100%}}
+
+/* Eigenständige GBO-Methodik: bewusst keine Begehungs-/Mängellisten-Optik */
+.gbo-page{--gbo-ink:#20384b;--gbo-accent:#426783;--gbo-wash:#eef4f8}
+.gbo-hero{padding:1.35rem 1.5rem;border-radius:18px;background:linear-gradient(120deg,#eaf1f6,#f7f9fb);border:1px solid #cbd8e3}
+.gbo-kicker{color:#426783;opacity:1}
+.gbo-method{display:grid;grid-template-columns:56px minmax(0,1fr);gap:1rem;align-items:start;margin:1rem 0 1.25rem;padding:1.25rem 1.4rem;border:1px solid #c5d4e0;border-radius:16px;background:#f3f7fa;color:#263b4c}
+.gbo-method-mark{display:grid;place-items:center;width:52px;height:52px;border-radius:13px;background:#355a76;color:white;font-weight:900;letter-spacing:.04em}
+.gbo-method h2{margin:0 0 .35rem;font-size:1.1rem;color:#20384b}
+.gbo-method p{margin:.25rem 0 .85rem;line-height:1.55}
+.gbo-method-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem}
+.gbo-method-steps>div{padding:.8rem;border:1px solid #d5e0e8;border-radius:10px;background:rgba(255,255,255,.8)}
+.gbo-method-steps b,.gbo-method-steps span{display:block}
+.gbo-method-steps b{font-size:.84rem;color:#294c66;margin-bottom:.25rem}
+.gbo-method-steps span{font-size:.8rem;line-height:1.45;color:#5b6b78}
+.gbo-page>.gbo-card h2{color:#294c66}
+.gbo-page>.gbo-card:nth-of-type(n+5){border-left:3px solid #cbd8e3}
+.gbo-question{background:#fff}
+.gbo-qmeta{color:#55718a;opacity:1;letter-spacing:.025em}
+.gbo-statuses label{border-radius:9px;min-height:36px;display:inline-flex;align-items:center;gap:.35rem;background:#fbfcfd}
+.gbo-statuses label:has(input:checked){background:#e8f0f6;border-color:#557b98;color:#203e55;box-shadow:inset 0 0 0 1px #557b98}
+.gbo-fields.open{border:1px solid #d8e2e9;background:#f6f9fb}
+@media(max-width:700px){.gbo-method{grid-template-columns:1fr;padding:1rem}.gbo-method-mark{width:44px;height:44px}.gbo-method-steps{grid-template-columns:1fr}.gbo-hero{padding:1rem}}
+
+/* GBO v2.0.19 – eigenständige Arbeitsbereiche, Statistik und TOP-Hinweise */
+.gbo-work-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.65rem;margin:1rem 0 1.25rem;padding:.75rem;background:#edf2f6;border:1px solid #d5e0e8;border-radius:16px}
+.gbo-work-nav button{display:flex;flex-direction:column;align-items:flex-start;gap:.28rem;min-height:66px;padding:.8rem .9rem;border:1px solid #d5dfe7;border-radius:11px;background:#fff;color:#29445a;text-align:left;cursor:pointer;font:inherit}
+.gbo-work-nav button span{font-weight:750}
+.gbo-work-nav button small{font-size:.78rem;color:#627587;line-height:1.3}
+.gbo-work-nav button.active{background:#294d68;border-color:#294d68;color:#fff;box-shadow:0 2px 8px #1c3b501a}
+.gbo-work-nav button.active small{color:#e1eaf0}
+.gbo-page [data-gbo-panel][hidden]{display:none!important}
+.gbo-stats-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem;margin:1rem 0}
+.gbo-stat-card{display:flex;flex-direction:column;gap:.35rem;min-height:112px;padding:1rem;border:1px solid #dce4ea;border-radius:13px;background:#f7f9fb}
+.gbo-stat-card>span{font-size:.86rem;font-weight:700;color:#465c6d}
+.gbo-stat-card strong{font-size:2rem;line-height:1.05;color:#263f52}
+.gbo-stat-card small{font-size:.78rem;color:#667987;line-height:1.35}
+.gbo-stat-card.is-action{border-left:4px solid #b64242}.gbo-stat-card.is-consult{border-left:4px solid #b78535}.gbo-stat-card.is-overdue{border-left:4px solid #a42e36;background:#fff6f5}.gbo-stat-card.is-overdue strong{color:#a42e36}.gbo-stat-card.is-ok{border-left:4px solid #4d8469}
+.gbo-stats-details{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.85rem;margin-top:1rem}
+.gbo-stat-list{min-width:0;padding:.9rem;border:1px solid #e0e6eb;border-radius:12px;background:#fff}
+.gbo-stat-list h3{display:flex;justify-content:space-between;align-items:center;gap:.6rem;margin:0 0 .7rem;font-size:1rem}
+.gbo-stat-list h3 span{display:inline-flex;align-items:center;justify-content:center;min-width:1.7rem;height:1.7rem;padding:0 .35rem;border-radius:99px;background:#edf2f6;color:#314c60;font-size:.8rem}
+.gbo-stat-row{display:flex;justify-content:space-between;gap:.8rem;padding:.75rem 0;border-top:1px solid #edf0f3}
+.gbo-stat-row>div:first-child{min-width:0}.gbo-stat-row b{display:block;font-size:.88rem}.gbo-stat-row small{display:block;margin-top:.22rem;color:#687b89;font-size:.76rem}.gbo-stat-row p{margin:.35rem 0 0;font-size:.83rem;overflow-wrap:anywhere}
+.gbo-stat-due{flex:0 0 auto;max-width:130px;color:#586e7e;font-size:.78rem;text-align:right}.gbo-stat-due.late{color:#a42e36;font-weight:750}.gbo-stat-due small{font-weight:400}
+.gbo-top-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.55rem;margin-top:.75rem}
+.gbo-top-grid>div{display:flex;flex-direction:column;gap:.35rem;padding:.7rem;border-radius:9px;background:#f2f5f7;border:1px solid #e0e7ec}
+.gbo-top-grid>div b{font-size:.82rem;color:#294c65}.gbo-top-grid>div span{font-size:.81rem;line-height:1.45;color:#435663}
+.gbo-effectiveness{margin-top:.65rem;padding:.7rem .8rem;border-left:3px solid #6d8a9f;background:#f7f9fa;font-size:.82rem;line-height:1.45;color:#435663}
+@media(max-width:760px){.gbo-work-nav{grid-template-columns:repeat(2,minmax(0,1fr));gap:.5rem;padding:.55rem}.gbo-work-nav button{min-height:60px;padding:.7rem}.gbo-stats-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:.5rem}.gbo-stat-card{min-height:100px;padding:.75rem}.gbo-stat-card strong{font-size:1.7rem}.gbo-stats-details{grid-template-columns:1fr}.gbo-top-grid{grid-template-columns:1fr}.gbo-stat-row{flex-direction:column}.gbo-stat-due{text-align:left;max-width:none}}
+
+/* GBO v2.0.20 – zentrale Fotoübersicht */
+.gbo-photo-gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin-top:1rem}
+.gbo-photo-gallery-card{min-width:0;overflow:hidden;border:1px solid #d5e0e8;border-radius:14px;background:#fff;box-shadow:0 2px 8px rgba(31,55,74,.05)}
+.gbo-photo-gallery-image{display:block;background:#eef3f6;aspect-ratio:4/3;overflow:hidden}
+.gbo-photo-gallery-image img{width:100%;height:100%;display:block;object-fit:contain}
+.gbo-photo-gallery-body{padding:.9rem;display:flex;flex-direction:column;gap:.45rem}
+.gbo-photo-gallery-tag{font-size:.72rem;font-weight:800;letter-spacing:.02em;color:#355a76}
+.gbo-photo-gallery-body h3{margin:0;font-size:1rem;color:#20384b}
+.gbo-photo-gallery-body p{font-size:.84rem;line-height:1.45;margin:0;color:#526575}
+.gbo-photo-gallery-ref{padding:.55rem;background:#f3f7fa;border-radius:8px}
+.gbo-photo-gallery-foot{display:flex;align-items:center;justify-content:space-between;gap:.5rem;flex-wrap:wrap;margin-top:.35rem;font-size:.75rem;color:#617486}
+.gbo-photo-gallery-empty{grid-column:1/-1;display:flex;flex-direction:column;gap:.4rem;padding:1.25rem;border:1px dashed #bacbd8;border-radius:12px;background:#f5f8fa;color:#526575}
+.gbo-photo-gallery-empty b{color:#294c66}
+@media(max-width:900px){.gbo-photo-gallery{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.gbo-photo-gallery{grid-template-columns:1fr}.gbo-photo-gallery-body{padding:.8rem}.gbo-photo-gallery-foot{align-items:flex-start}}
+
+/* Speicheranzeige (Fotos und Eingaben) */
+.gbo-storage-info {
+    margin: 0 0 0.9rem;
+    padding: 0.6rem 0.9rem;
+    border-radius: var(--radius-sm, 8px);
+    background: var(--paper, #eef0ee);
+    border-left: 4px solid var(--steel-light, #b9c0c4);
+    font-size: 0.85rem;
+    color: var(--ink-soft, #3d484f);
+}
+
+.gbo-storage-info:empty { display: none; }
+
+.gbo-storage-info.warn {
+    background: var(--brand-red-tint, #fbeaec);
+    border-left-color: var(--brand-red, #c8102e);
+    color: var(--ink, #1c2226);
+}
+
+/* PDF-Ausgabe: Drucken, Teilen, Mail */
+.gbo-output-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.8rem;
+    margin: 0.9rem 0;
+}
+
+.gbo-output-card {
+    padding: 0.9rem 1rem;
+    border: 1px solid var(--line, #d7dcdf);
+    border-radius: var(--radius-sm, 8px);
+    background: var(--card, #fff);
+}
+
+.gbo-output-card h3 { margin: 0 0 0.25rem; font-size: 1rem; }
+
+.gbo-output-card p {
+    margin: 0 0 0.7rem;
+    font-size: 0.85rem;
+    color: var(--ink-soft, #3d484f);
+}
+
+@media (max-width: 720px) {
+    .gbo-output-grid { grid-template-columns: 1fr; }
+}
+
+/* Risikobewertung und Fortschreibung */
+.gbo-risk{margin:0 0 .9rem;padding:.9rem 1rem;border:1px solid var(--line,#d7dcdf);border-radius:var(--radius-sm,8px);background:#fafbfc}
+.gbo-risk-head{display:flex;flex-wrap:wrap;gap:.3rem .8rem;align-items:baseline;margin-bottom:.6rem}
+.gbo-risk-head span{font-size:.8rem;color:var(--ink-soft,#3d484f)}
+.gbo-risk-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem}
+.gbo-risk-col{padding:.7rem .8rem;border:1px solid var(--line,#d7dcdf);border-radius:var(--radius-sm,8px);background:#fff}
+.gbo-risk-col h4{margin:0 0 .5rem;font-size:.95rem}
+.gbo-risk-col h4 small{display:block;font-weight:400;color:var(--ink-soft,#3d484f);font-size:.78rem}
+.gbo-risk label,.gbo-review-form label{display:flex;flex-direction:column;gap:.2rem;font-size:.8rem;font-weight:600;margin-bottom:.45rem}
+.gbo-risk select,.gbo-risk input{font:inherit;font-weight:400;padding:.4rem .5rem;border:1px solid var(--line,#c4cbd0);border-radius:6px;background:#fff;min-height:40px}
+.gbo-risk-result{display:flex;align-items:center;gap:.5rem;margin-top:.3rem}
+.gbo-risk-score{font-size:1.5rem;font-weight:700}
+.gbo-risk-chip{display:inline-block;padding:.15rem .55rem;border-radius:999px;font-size:.78rem;font-weight:700;background:#e6e9ed;color:#263746}
+.gbo-risk-chip.is-low{background:#dff2e3;color:#1c5a2e}.gbo-risk-chip.is-mid{background:#fdf1c9;color:#6b5200}.gbo-risk-chip.is-high{background:#fde0cc;color:#8a3a00}.gbo-risk-chip.is-top{background:#f8d3d8;color:#8e0a1c}
+.gbo-risk-hints{margin:.6rem 0 0}.gbo-risk-hint{margin:.25rem 0;font-size:.82rem;color:var(--ink-soft,#3d484f)}.gbo-risk-hint.warn{color:#8e0a1c;font-weight:600}.gbo-risk-hint.ok{color:#1c5a2e;font-weight:600}
+.gbo-risk-eff{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.6rem;align-items:end;margin-top:.7rem}.gbo-risk-eff>b{grid-column:1/-1}
+.gbo-risk-help{margin-top:.6rem;font-size:.82rem}.gbo-risk-help summary{cursor:pointer;font-weight:600}
+.gbo-risk-scale{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem;margin-top:.5rem}.gbo-risk-scale ul{margin:.3rem 0 0;padding-left:1.1rem}
+.gbo-risk-mini{margin-left:auto;font-size:.75rem;font-weight:600;white-space:nowrap}
+.gbo-risk-mini i{font-style:normal;display:inline-block;min-width:1.5em;text-align:center;padding:.05rem .3rem;border-radius:5px;background:#e6e9ed}
+.gbo-risk-mini i.is-low{background:#dff2e3}.gbo-risk-mini i.is-mid{background:#fdf1c9}.gbo-risk-mini i.is-high{background:#fde0cc}.gbo-risk-mini i.is-top{background:#f8d3d8}
+.gbo-module>summary{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+.gbo-risk-overview{margin-top:1.4rem}
+.gbo-risk-matrix{border-collapse:collapse;width:100%;max-width:640px;margin:.8rem 0;font-size:.8rem}
+.gbo-risk-matrix caption{caption-side:top;text-align:left;font-weight:600;margin-bottom:.3rem}
+.gbo-risk-matrix th,.gbo-risk-matrix td{border:1px solid #fff;padding:.4rem .5rem;text-align:center}
+.gbo-risk-matrix thead th,.gbo-risk-matrix tbody th{background:#eef1f3;font-weight:600}
+.gbo-risk-matrix td b{display:block;font-size:1.1rem}.gbo-risk-matrix td small{color:rgba(0,0,0,.45);font-size:.7rem}
+.gbo-risk-matrix td.is-low{background:#dff2e3}.gbo-risk-matrix td.is-mid{background:#fdf1c9}.gbo-risk-matrix td.is-high{background:#fde0cc}.gbo-risk-matrix td.is-top{background:#f8d3d8}
+.gbo-stat-card.is-mid{border-left-color:#d9a400}
+.gbo-review-status{display:flex;flex-direction:column;gap:.15rem;padding:.7rem .9rem;border-left:4px solid #9aa5ad;background:#f3f5f7;margin:.6rem 0}
+.gbo-review-status.ok{border-left-color:#2e8b4e;background:#eaf6ee}.gbo-review-status.warn{border-left-color:#d9a400;background:#fdf6dc}.gbo-review-status.late{border-left-color:#cc071e;background:#fbeaec}
+.gbo-review-form{margin:.6rem 0}.gbo-review-form .wide{grid-column:1/-1}
+@media (max-width:720px){.gbo-risk-grid,.gbo-risk-scale{grid-template-columns:1fr}.gbo-risk-eff{grid-template-columns:1fr}}
+
+/* Quellenhinweise je Frage (Rev. 2.0.29) */
+.gbo-src-list{margin:4px 0 6px 18px;padding:0;font-size:.76rem;line-height:1.42;color:#5e6570}
+.gbo-src-list li{margin:2px 0}
+.gbo-src-list b{color:#7a1426}
+.gbo-src-check{font-style:normal;font-weight:700;font-size:.68rem;color:#8a5a00;background:#fff3cd;border-radius:4px;padding:1px 5px;margin-left:3px;white-space:nowrap}
+@media print{.gbo-src-check{background:none;border:1px solid #999;color:#333}}
+
+/* Einzelgefährdungen je Modul (Rev. 2.0.30) */
+.gbo-risk-items{margin:12px 0;border:1px solid var(--gbo-line,#d5dae0);border-radius:8px;padding:8px 12px;background:#fff}
+.gbo-risk-items>summary{cursor:pointer;font-weight:600;padding:6px 0;min-height:44px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.gbo-risk-items>summary small{font-weight:400;color:#5b6570}
+.gbo-risk-item{border-top:1px solid #e3e7ec;padding:10px 0;display:grid;gap:8px}
+.gbo-risk-item-top{display:flex;gap:8px;align-items:center}
+.gbo-risk-item-top input{flex:1 1 auto;min-width:0}
+.gbo-risk-item-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.gbo-risk-item label{display:grid;gap:3px;font-size:.85rem}
+.gbo-risk-item select,.gbo-risk-item input{width:100%;min-height:40px;box-sizing:border-box}
+.gbo-risk-item-res{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:.85rem}
+.gbo-risk-derived{font-size:.85rem;color:#5b6570;margin:6px 0}
+.gbo-risk-derived:empty{display:none}
+@media (min-width:700px){.gbo-risk-item-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+/* Fristüberwachung (Rev. 2.0.30) */
+.gbo-frist-banner{margin:10px 16px;padding:10px 14px;border-radius:8px;background:#fdecea;border:1px solid #e8a39b;color:#8a1c12;font-weight:600}
+
+/* Unterschriftenfelder (Rev. 2.0.31) */
+.gbo-sig-section{margin:16px 0;padding:12px 14px;border:1px solid var(--gbo-line,#d5dae0);border-radius:10px;background:#fff}
+.gbo-sig-grid{display:grid;gap:16px}
+.gbo-sig h4{margin:0 0 8px}
+.gbo-sig-row{display:grid;grid-template-columns:2fr 1fr;gap:10px;margin-bottom:8px}
+.gbo-sig-row label{display:grid;gap:3px;font-size:.85rem}
+.gbo-sig-row input{min-height:40px;box-sizing:border-box;width:100%}
+.gbo-sig-pad{position:relative;border:2px dashed #9aa5b1;border-radius:8px;background:#fafbfc;aspect-ratio:3/1;max-width:600px}
+.gbo-sig-pad canvas{width:100%;height:100%;display:block;touch-action:none;cursor:crosshair}
+.gbo-sig-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#9aa5b1;pointer-events:none;font-size:.95rem}
+.gbo-sig-state{font-size:.85rem;color:#5b6570;align-self:center}
+@media (min-width:900px){.gbo-sig-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.gbo-sig-row{grid-template-columns:1fr}}
+.gbo-sig-hint[hidden]{display:none}
+
+/* Druckumfang (Rev. 2.0.32) */
+.gbo-print-opts{border:1px solid var(--gbo-line,#d5dae0);border-radius:8px;margin:8px 0;padding:6px 12px;display:grid;gap:4px}
+.gbo-print-opts legend{font-weight:600;padding:0 6px;font-size:.9rem}
+.gbo-print-opts label{display:flex;gap:8px;align-items:center;min-height:36px;font-size:.9rem}
+
+/* Methodenhinweis im Modul Psychische Belastungen */
+.gbo-note.gbo-psy-method{margin:12px 14px;padding:12px 14px;font-size:.88rem;line-height:1.45}
+
+/* Rev. 2.1.0: Aufbau nach Gefährdungsfaktoren */
+.gbo-qlaw{font-size:.82rem;margin:0 0 8px;color:#3d4a56}
+.gbo-linked-open{margin:12px 14px;padding:12px 14px;font-size:.88rem;line-height:1.45;border-left:4px solid #c27a00}
+.gbo-overview-group[data-overview="kern"]>summary{border-left:5px solid #cc071e}
+.gbo-instances .gbo-inst-row{border-top:1px solid #e3e7ec;padding:10px 0}
+.gbo-instances .gbo-inst-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}
+.gbo-instances .gbo-inst-name{display:block;font-size:.85rem;margin:6px 0}
+.gbo-instances .gbo-inst-name input{width:100%;box-sizing:border-box;margin-top:4px;padding:8px;border:1px solid #cbd3dc;border-radius:8px;font:inherit}
+.gbo-instances .gbo-inst-line{display:flex;gap:8px;align-items:center}
+.gbo-factor-table table{width:100%;border-collapse:collapse;font-size:.86rem}
+.gbo-factor-table th,.gbo-factor-table td{text-align:left;padding:7px 8px;border-bottom:1px solid #e3e7ec;vertical-align:top}
+.gbo-factor-table th{font-size:.76rem;text-transform:uppercase;letter-spacing:.04em;opacity:.7}
+@media(max-width:700px){.gbo-factor-table{overflow-x:auto}.gbo-factor-table table{min-width:560px}}
+
+/* ===== Rev. 2.1.1 – Übersicht, Navigation, Fortschreibung ===== */
+.gbo-page{--ov-ink:#1c2226;--ov-muted:#5f6b73;--ov-line:#e2e6e9;--ov-soft:#f6f7f8;--ov-red:#cc071e;--ov-red-t:#fbeaec;--ov-blue:#3d6683;--ov-blue-t:#eaf1f6;--ov-green:#2e7d4f;--ov-green-t:#e8f3ec;--ov-grey:#b9c1c7;--ov-amber:#b7791f;--ov-amber-t:#fbf3e4}
+.gbo-hero{padding:.4rem 0 0;margin:14px 0 6px;background:none;border:0;border-radius:0}
+.gbo-hero h1{font-size:clamp(1.5rem,3.4vw,2rem);letter-spacing:-.01em}
+.gbo-hero p{max-width:62ch;color:var(--ov-muted);margin:.3rem 0 0}
+.gbo-kicker{color:var(--ov-red);letter-spacing:.06em}
+details.gbo-method{display:block;margin:.6rem 0 1rem;padding:0;border:1px solid var(--ov-line);border-radius:12px;background:#fff;color:var(--ov-ink)}
+details.gbo-method>summary{display:flex;align-items:center;gap:.7rem;padding:.6rem .85rem;cursor:pointer;list-style:none;font-weight:650;font-size:.92rem}
+details.gbo-method>summary::-webkit-details-marker{display:none}
+details.gbo-method>summary::after{content:"";margin-left:auto;width:.5rem;height:.5rem;border-right:2px solid var(--ov-muted);border-bottom:2px solid var(--ov-muted);transform:rotate(45deg);transition:transform .15s}
+details.gbo-method[open]>summary::after{transform:rotate(-135deg)}
+details.gbo-method .gbo-method-mark{width:34px;height:34px;border-radius:8px;font-size:.72rem;background:var(--ov-ink)}
+details.gbo-method>div{padding:0 1rem 1rem}
+.gbo-work-nav{display:flex;gap:.4rem;overflow-x:auto;scrollbar-width:thin;margin:.4rem 0 1.1rem;padding:0 0 .35rem;background:none;border:0;border-bottom:1px solid var(--ov-line);border-radius:0}
+.gbo-work-nav button{flex:0 0 auto;min-height:0;padding:.55rem .85rem .6rem;border:1px solid transparent;border-radius:10px 10px 0 0;background:none;color:var(--ov-ink);gap:.1rem;box-shadow:none;position:relative}
+.gbo-work-nav button:hover{background:var(--ov-soft)}
+.gbo-work-nav button span{display:flex;align-items:center;gap:.4rem;font-weight:650;white-space:nowrap}
+.gbo-work-nav button em{display:inline-grid;place-items:center;width:1.25rem;height:1.25rem;border-radius:50%;background:var(--ov-line);color:var(--ov-ink);font-style:normal;font-size:.72rem;font-weight:700}
+.gbo-work-nav button small{font-size:.74rem;color:var(--ov-muted);white-space:nowrap}
+.gbo-work-nav button.active{background:none;border-color:transparent;color:var(--ov-ink);box-shadow:none}
+.gbo-work-nav button.active::after{content:"";position:absolute;left:.6rem;right:.6rem;bottom:-.4rem;height:3px;border-radius:3px;background:var(--ov-red)}
+.gbo-work-nav button.active small{color:var(--ov-muted)}
+.gbo-work-nav button.active em{background:var(--ov-red);color:#fff}
+.gbo-frist-banner{margin:8px 0;padding:.55rem .8rem;border-radius:10px;background:var(--ov-amber-t);border:1px solid #ecd9b4;color:#6b4a12;font-weight:500;font-size:.9rem}
+
+.gbo-overview{display:flex;flex-direction:column;gap:1rem}
+.gbo-ov-head h2{margin:0 0 .2rem}
+.gbo-ov-head p{margin:0;color:var(--ov-muted);font-size:.92rem}
+.gbo-ov-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem}
+.gbo-ov-tile{padding:.8rem .95rem;border:1px solid var(--ov-line);border-radius:12px;background:#fff;display:flex;flex-direction:column;gap:.3rem}
+.gbo-ov-tile>span{font-size:.78rem;color:var(--ov-muted);font-weight:600}
+.gbo-ov-tile>b{font-size:1.45rem;font-weight:700;color:var(--ov-ink);line-height:1.1}
+.gbo-ov-tile>b small{font-size:.85rem;font-weight:500;color:var(--ov-muted)}
+.gbo-ov-sub{font-size:.78rem;color:var(--ov-muted)}
+.gbo-ov-sub em.late{font-style:normal;color:var(--ov-red);font-weight:600}
+.gbo-ov-bar{display:block;height:6px;border-radius:6px;background:var(--ov-soft);overflow:hidden;box-shadow:inset 0 0 0 1px var(--ov-line)}
+.gbo-ov-bar em{display:block;height:100%;background:var(--ov-ink);border-radius:6px}
+.gbo-ov-dist{display:flex;height:10px;border-radius:10px;overflow:hidden;background:var(--ov-soft);margin-top:.85rem;gap:2px}
+.gbo-ov-dist i,.gbo-ov-legend i{display:block;background:var(--ov-grey)}
+.gbo-ov-dist .is-ok,.gbo-ov-legend .is-ok{background:var(--ov-green)}
+.gbo-ov-dist .is-na,.gbo-ov-legend .is-na{background:#d7dce0}
+.gbo-ov-dist .is-consult,.gbo-ov-legend .is-consult{background:var(--ov-blue)}
+.gbo-ov-dist .is-action,.gbo-ov-legend .is-action{background:var(--ov-red)}
+.gbo-ov-dist .is-open,.gbo-ov-legend .is-open{background:#eceff1}
+.gbo-ov-legend{display:flex;flex-wrap:wrap;gap:.35rem 1rem;margin-top:.5rem;font-size:.8rem;color:var(--ov-muted)}
+.gbo-ov-legend span{display:inline-flex;align-items:center;gap:.35rem}
+.gbo-ov-legend i{width:.65rem;height:.65rem;border-radius:3px;box-shadow:inset 0 0 0 1px #0001}
+.gbo-ov-legend b{color:var(--ov-ink);font-weight:600}
+.gbo-ov-card{border:1px solid var(--ov-line);border-radius:14px;background:#fff;padding:.9rem 1rem 1rem}
+.gbo-ov-card>header{display:flex;align-items:baseline;gap:.6rem;margin-bottom:.6rem;flex-wrap:wrap}
+.gbo-ov-card h3{margin:0;font-size:1.02rem;color:var(--ov-ink)}
+.gbo-ov-count{display:inline-grid;place-items:center;min-width:1.6rem;height:1.4rem;padding:0 .4rem;border-radius:999px;background:var(--ov-soft);border:1px solid var(--ov-line);font-size:.78rem;font-weight:700}
+.gbo-ov-hint{font-size:.78rem;color:var(--ov-muted)}
+.gbo-ov-foot{font-size:.84rem;color:var(--ov-muted);margin:.6rem 0 0;line-height:1.5}
+.gbo-ov-empty{margin:.2rem 0;color:var(--ov-muted);font-size:.9rem}
+.gbo-ov-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:1rem;align-items:start}
+.gbo-overview .gbo-risk-overview{margin:0}
+
+.gbo-todo{display:flex;flex-direction:column}
+.gbo-todo-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:.3rem .75rem;align-items:start;width:100%;padding:.6rem .4rem;border:0;border-top:1px solid var(--ov-line);background:none;text-align:left;font:inherit;color:inherit;cursor:pointer;border-radius:0}
+.gbo-todo>.gbo-todo-row:first-child{border-top:0}
+.gbo-todo-row:hover{background:var(--ov-soft)}
+.gbo-todo-row:focus-visible,.gbo-factor-row:focus-visible{outline:2px solid var(--ov-blue);outline-offset:-2px}
+.gbo-todo-main{display:flex;flex-direction:column;gap:.1rem;min-width:0}
+.gbo-todo-main b{font-size:.9rem;font-weight:600}
+.gbo-todo-main small{font-size:.76rem;color:var(--ov-muted)}
+.gbo-todo-text{font-size:.82rem;color:#3c474e;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.gbo-todo-due{font-size:.78rem;color:var(--ov-muted);white-space:nowrap;padding-top:.1rem}
+.gbo-todo-due.late{color:var(--ov-red);font-weight:600}
+.gbo-todo-more{margin-top:.2rem}
+.gbo-todo-more>summary{cursor:pointer;font-size:.85rem;color:var(--ov-blue);font-weight:600;padding:.4rem}
+.gbo-tag{display:inline-flex;align-items:center;justify-content:center;min-width:1.5rem;padding:.12rem .45rem;border-radius:6px;font-size:.72rem;font-weight:650;white-space:nowrap;background:var(--ov-soft);color:var(--ov-muted)}
+.gbo-tag.is-late{background:var(--ov-red);color:#fff}
+.gbo-tag.is-action{background:var(--ov-red-t);color:#a0061a}
+.gbo-tag.is-consult{background:var(--ov-blue-t);color:#2f526b}
+.gbo-overview #gboFristen{margin-top:.6rem}
+.gbo-frist-mail{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .9rem;padding:.6rem .7rem;border-radius:10px;background:var(--ov-soft);font-size:.82rem;color:var(--ov-muted)}
+.gbo-frist-mail b{color:var(--ov-ink)}
+.gbo-frist-mail.late b{color:var(--ov-red)}
+.gbo-frist-mail .gbo-btn,.gbo-frist-mail button{margin-left:auto}
+
+.gbo-factor-list{display:flex;flex-direction:column}
+.gbo-factor-row{display:grid;grid-template-columns:minmax(0,1fr) 7.5rem auto auto;gap:.6rem;align-items:center;width:100%;padding:.5rem .3rem;border:0;border-top:1px solid var(--ov-line);background:none;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.gbo-factor-list>.gbo-factor-row:first-child{border-top:0}
+.gbo-factor-row:hover{background:var(--ov-soft)}
+.gbo-factor-name{font-size:.86rem;font-weight:550;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gbo-factor-prog{display:flex;align-items:center;gap:.4rem}
+.gbo-factor-prog .gbo-ov-bar{flex:1}
+.gbo-factor-prog small{font-size:.72rem;color:var(--ov-muted);min-width:3.2rem;text-align:right}
+.gbo-factor-need{display:flex;gap:.25rem;min-width:3.4rem;justify-content:flex-end}
+.gbo-risk-pill{display:inline-block;min-width:4.6rem;text-align:center;padding:.12rem .45rem;border-radius:999px;font-size:.72rem;font-weight:600;white-space:nowrap;border:1px solid transparent}
+.gbo-risk-pill.is-none{color:var(--ov-muted);border-color:var(--ov-line)}
+.gbo-risk-pill.is-low{background:var(--ov-green-t);color:var(--ov-green)}
+.gbo-risk-pill.is-mid{background:var(--ov-amber-t);color:#8a5a12}
+.gbo-risk-pill.is-high{background:var(--ov-red-t);color:#a0061a}
+.gbo-risk-pill.is-top{background:var(--ov-red);color:#fff}
+
+.gbo-risk-ov{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1rem;align-items:start}
+.gbo-risk-ov .gbo-risk-matrix{margin:0;font-size:.74rem}
+.gbo-risk-ov .gbo-risk-matrix caption{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.gbo-risk-legend{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.3rem;font-size:.8rem;color:var(--ov-muted);min-width:8.5rem}
+.gbo-risk-legend li{display:flex;align-items:center;gap:.45rem}
+.gbo-risk-legend b{margin-left:auto;color:var(--ov-ink)}
+.gbo-risk-legend i{width:.7rem;height:.7rem;border-radius:3px;background:#eceff1}
+.gbo-risk-legend .is-low{background:var(--ov-green)}
+.gbo-risk-legend .is-mid{background:#e0a33b}
+.gbo-risk-legend .is-high{background:#e0606f}
+.gbo-risk-legend .is-top{background:var(--ov-red)}
+.gbo-risk-bad{margin-top:.7rem;padding:.6rem .75rem;border-radius:10px;background:var(--ov-red-t);font-size:.84rem}
+.gbo-risk-bad ul{margin:.3rem 0 0;padding-left:1.1rem}
+.gbo-risk-bad li span{color:var(--ov-muted);margin-left:.4rem}
+
+.gbo-review-status{display:flex;flex-direction:column;gap:.15rem;padding:.6rem .8rem;border-radius:10px;border-left:4px solid var(--ov-grey);background:var(--ov-soft);font-size:.88rem}
+.gbo-review-status span{color:var(--ov-muted);font-size:.82rem}
+.gbo-review-status.ok{border-left-color:var(--ov-green)}
+.gbo-review-status.warn{border-left-color:#e0a33b;background:var(--ov-amber-t)}
+.gbo-review-status.late{border-left-color:var(--ov-red);background:var(--ov-red-t)}
+.gbo-review-interval{display:inline-flex;align-items:center;gap:.35rem;margin-left:.2rem;white-space:nowrap;color:var(--ov-ink);font-weight:600}
+.gbo-review-interval select{width:auto;padding:.15rem .4rem;font:inherit}
+.gbo-review-add{margin-top:.8rem;border:1px solid var(--ov-line);border-radius:10px}
+.gbo-review-add>summary{cursor:pointer;padding:.55rem .8rem;font-weight:600;font-size:.9rem;color:var(--ov-ink)}
+.gbo-review-add[open]>summary{border-bottom:1px solid var(--ov-line)}
+.gbo-review-add>.gbo-review-form,.gbo-review-add>.gbo-doc-actions{padding:.7rem .8rem}
+.gbo-review-add>.gbo-doc-actions{padding-top:0}
+.gbo-review-label{display:block;font-size:.82rem;font-weight:600;margin-bottom:.35rem}
+.gbo-chips{display:flex;flex-wrap:wrap;gap:.35rem}
+.gbo-chip{position:relative;display:inline-flex;cursor:pointer}
+.gbo-chip input{position:absolute;opacity:0;pointer-events:none}
+.gbo-chip span{padding:.25rem .6rem;border-radius:999px;border:1px solid var(--ov-line);background:#fff;font-size:.78rem;color:var(--ov-ink)}
+.gbo-chip input:checked+span{background:var(--ov-ink);border-color:var(--ov-ink);color:#fff}
+.gbo-chip input:focus-visible+span{outline:2px solid var(--ov-blue);outline-offset:1px}
+.gbo-review-list{list-style:none;margin:.9rem 0 0;padding:0 0 0 .9rem;border-left:2px solid var(--ov-line)}
+.gbo-review-list li{position:relative;display:grid;grid-template-columns:6.2rem minmax(0,1fr) auto;gap:.6rem;padding:.45rem 0 .7rem .4rem}
+.gbo-review-list li::before{content:"";position:absolute;left:-1.33rem;top:.75rem;width:.6rem;height:.6rem;border-radius:50%;background:#fff;border:2px solid var(--ov-ink)}
+.gbo-review-when{font-size:.82rem;font-weight:600;padding-top:.1rem}
+.gbo-review-what{display:flex;flex-direction:column;gap:.2rem;font-size:.86rem;min-width:0}
+.gbo-review-what p{margin:.1rem 0 0;color:#3c474e}
+.gbo-review-what small{color:var(--ov-muted)}
+.gbo-review-result{font-size:.8rem;color:var(--ov-muted)}
+.gbo-review-fk{display:flex;flex-wrap:wrap;gap:.25rem}
+.gbo-review-fk i{font-style:normal;font-size:.72rem;padding:.05rem .4rem;border-radius:5px;background:var(--ov-soft);border:1px solid var(--ov-line)}
+
+@media(max-width:700px){
+ .gbo-ov-tiles{grid-template-columns:1fr 1fr}
+ .gbo-ov-tile:last-child{grid-column:1/-1}
+ .gbo-ov-card{padding:.8rem .75rem .85rem}
+ .gbo-todo-row{grid-template-columns:minmax(0,1fr) auto}
+ .gbo-todo-row>.gbo-tag{grid-column:1/-1;justify-self:start}
+ .gbo-factor-row{grid-template-columns:minmax(0,1fr) auto auto}
+ .gbo-factor-prog{grid-column:1/-1;grid-row:2}
+ .gbo-risk-ov{grid-template-columns:1fr}
+ .gbo-risk-ov .gbo-risk-matrix{display:block;overflow-x:auto}
+ .gbo-risk-legend{flex-direction:row;flex-wrap:wrap;gap:.3rem .8rem}
+ .gbo-risk-legend b{margin-left:.2rem}
+ .gbo-review-list li{grid-template-columns:minmax(0,1fr) auto}
+ .gbo-review-when{grid-column:1/-1}
+ .gbo-review-interval{margin:.3rem 0 0}
+ .gbo-work-nav button{padding:.5rem .65rem}
+ .gbo-work-nav button small{display:none}
+}
+.gbo-frist-mail>div{display:flex;flex-direction:column;gap:.1rem;min-width:0}
+.gbo-ov-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,560px),1fr))}
+.gbo-risk-ov{grid-template-columns:1fr}
+.gbo-risk-ov .gbo-risk-matrix{display:block;overflow-x:auto;max-width:100%}
+.gbo-risk-legend{flex-direction:row;flex-wrap:wrap;gap:.3rem 1rem}
+.gbo-risk-legend b{margin-left:.15rem}
+.gbo-work-nav{-webkit-mask-image:linear-gradient(90deg,#000 92%,transparent);mask-image:linear-gradient(90deg,#000 92%,transparent)}
+@media(max-width:700px){.gbo-factor-name{white-space:normal}.gbo-overview{gap:.8rem}}
+
+/* ===== Rev. 2.1.1 – einheitliches ASiC-Erscheinungsbild der GBO-Seite ===== */
+.gbo-page{--gbo-ink:#1c2226;--gbo-accent:#cc071e;--gbo-wash:#f6f7f8}
+.gbo-page>.gbo-card h2,.gbo-overview .gbo-ov-head h2{color:var(--ov-ink)}
+.gbo-page>.gbo-card:nth-of-type(n+5){border-left:1px solid #d7dde5}
+.gbo-card{border-color:var(--ov-line);box-shadow:0 1px 3px rgba(28,34,38,.05)}
+.gbo-qmeta{color:var(--ov-muted)}
+.gbo-statuses label:has(input:checked){background:var(--ov-soft);border-color:var(--ov-ink);color:var(--ov-ink);box-shadow:inset 0 0 0 1px var(--ov-ink)}
+.gbo-fields.open{border-color:var(--ov-line);background:var(--ov-soft)}
+.gbo-choice:has(input:checked){border-color:var(--ov-ink);background:var(--ov-soft)}
+/* Kontrollkästchen nie strecken (iPhone: riesige leere Kästchen im Inventar) */
+.gbo-page input[type=checkbox],.gbo-page input[type=radio]{flex:0 0 auto;width:1.1rem;min-width:1.1rem;height:1.1rem;min-height:0;margin:.15rem 0 0;padding:0;accent-color:var(--ov-ink)}
+.gbo-chip input[type=checkbox]{position:absolute;opacity:0;pointer-events:none}
+.gbo-choice>span{flex:1;min-width:0;margin-top:0}
+@media(max-width:520px){
+ .gbo-page{padding-left:1rem;padding-right:1rem}
+ .gbo-card{padding:14px;border-radius:14px}
+}
+.gbo-fields select,.gbo-grid select{width:100%;box-sizing:border-box;margin-top:6px;padding:10px;border:1px solid #cbd3dc;border-radius:9px;font:inherit;background:#fff;min-height:42px}.gbo-review-interval select{width:auto;margin-top:0;min-height:0;padding:.15rem .4rem}
+
+/* Ab 2.3.0-2: Knöpfe der Gefährdungsbeurteilung in derselben Größe wie
+   "Datei ▾" / "Exportieren ▾" (30 px hoch, 0.8rem). Schmale Displays
+   (Handy, <= 520 px) behalten ihre größeren Tippflächen. */
+@media (min-width: 521px) {
+    .gbo-btn, a.gbo-btn, .gbo-mini-btn, .gbo-link-btn,
+    .gbo-v2-finding .gbo-link-btn,
+    .gbo-attachment-actions .gbo-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 30px;
+        padding: 0 0.75rem;
+        font-size: 0.8rem;
+        line-height: 1.2;
+        box-sizing: border-box;
+    }
+}
+
+/* ==========================================================================
+   Großhandel Begehung: Akzentfarbe Petrol statt Rot (Ampelfarben bleiben)
+   ========================================================================== */
+.gbo-page{--gbo-accent:var(--brand-red)}
+.gbo-kicker{color:var(--brand-red)}
+.gbo-work-nav button.active::after,.gbo-work-nav button.active em{background:var(--brand-red)}
+.gbo-guidance{border-left-color:var(--brand-red);background:var(--brand-red-tint)}
+.gbo-linked-note{background:var(--brand-red-tint)}
+.gbo-overview-group[data-overview="kern"]>summary{border-left-color:var(--brand-red)}
+.gbo-source,.gbo-src-list b{color:var(--brand-red-dark)}
