@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fasi-Adventskalender Einzelhandel</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<style>
+  :root{
+    --night:#0f1d3a; --night2:#1b2f5c; --gold:#f3c969; --red:#c8323c; --green:#2f7d5b;
+    --cream:#fff7e8; --ink:#2a2230;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--cream);
+    background:radial-gradient(ellipse at 50% -10%,#2d4a8a 0%,var(--night2) 35%,var(--night) 75%) fixed;
+    overflow-x:hidden;
+  }
+  #snow{position:fixed;inset:0;pointer-events:none;z-index:0}
+  .wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:28px 16px 60px}
+  header{text-align:center;margin-bottom:22px}
+  h1{font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:clamp(2.4rem,7vw,4.2rem);margin:0;color:var(--gold);
+     text-shadow:0 2px 0 #8a5a12,0 0 24px rgba(243,201,105,.35);letter-spacing:1px}
+  .sub{margin:6px 0 0;font-size:1.05rem;opacity:.9}
+  .status{display:inline-block;margin-top:12px;padding:6px 14px;border-radius:999px;background:rgba(255,255,255,.08);
+          border:1px solid rgba(255,255,255,.15);font-size:.92rem}
+
+  .grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;perspective:1200px}
+  @media (max-width:760px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+  @media (max-width:420px){.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}}
+
+  .cell{position:relative;aspect-ratio:1/1;border-radius:14px;background:#0a1530;
+        box-shadow:inset 0 0 0 2px rgba(243,201,105,.25),inset 0 6px 18px rgba(0,0,0,.6)}
+  .cell.big{grid-column:span 2;aspect-ratio:2/1}
+  .inside{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:2.2rem;
+          border-radius:14px;cursor:pointer}
+  .door{position:absolute;inset:0;border-radius:14px;transform-origin:left center;transition:transform .9s cubic-bezier(.3,.7,.3,1);
+        cursor:pointer;display:flex;align-items:center;justify-content:center;border:none;padding:0;
+        font-family:Georgia,'Times New Roman',serif;font-style:italic;font-weight:700;font-size:clamp(1.8rem,5vw,2.6rem);color:var(--cream);
+        box-shadow:0 4px 10px rgba(0,0,0,.35);backface-visibility:hidden;outline-offset:3px}
+  .door::before{content:"";position:absolute;inset:6px;border-radius:9px;border:2px dashed rgba(255,255,255,.35)}
+  .door::after{content:"";position:absolute;right:10px;top:50%;width:7px;height:7px;margin-top:-3px;border-radius:50%;
+               background:var(--gold);box-shadow:0 0 0 2px rgba(0,0,0,.2)}
+  .door span{position:relative;text-shadow:0 2px 0 rgba(0,0,0,.3)}
+  .c0{background:linear-gradient(145deg,#d6434c,#9e2029)}
+  .c1{background:linear-gradient(145deg,#3a9a70,#1f5e43)}
+  .c2{background:linear-gradient(145deg,#e7b54f,#b07a1c);color:#3b2506}
+  .c3{background:linear-gradient(145deg,#3d64b5,#24407d)}
+  .c4{background:linear-gradient(145deg,#f2ece0,#cfc6b4);color:#7a1d24}
+  .door.open{transform:rotateY(-105deg)}
+  .door.locked{cursor:not-allowed}
+  .door.shake{animation:shake .45s}
+  @keyframes shake{20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
+  .today .door{box-shadow:0 0 0 3px var(--gold),0 0 22px rgba(243,201,105,.7)}
+  .today .door:not(.open){animation:glow 2s ease-in-out infinite}
+  @keyframes glow{50%{box-shadow:0 0 0 3px var(--gold),0 0 34px rgba(243,201,105,1)}}
+
+  .hint{text-align:center;margin-top:22px;font-size:.92rem;opacity:.75}
+  .tools{text-align:center;margin-top:10px}
+  .linkbtn{background:none;border:none;color:var(--gold);text-decoration:underline;font:inherit;font-size:.88rem;cursor:pointer;opacity:.8;margin:0 6px}
+  .linkbtn:hover{opacity:1}
+
+  /* Modal */
+  .modal{position:fixed;inset:0;z-index:10;display:none;align-items:center;justify-content:center;padding:18px;
+         background:rgba(5,10,25,.7);backdrop-filter:blur(3px)}
+  .modal.show{display:flex}
+  .card{position:relative;max-width:480px;width:100%;background:var(--cream);color:var(--ink);border-radius:20px;
+        padding:30px 26px 24px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.5);animation:pop .4s cubic-bezier(.2,1.4,.4,1)}
+  @keyframes pop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+  .card::before{content:"";position:absolute;left:0;right:0;top:0;height:10px;border-radius:20px 20px 0 0;
+        background:repeating-linear-gradient(45deg,#f2b705 0 14px,#1d1d1d 14px 28px)}
+  .tag{display:inline-block;margin:2px 0 4px;padding:3px 12px;border-radius:999px;font-size:.78rem;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:#fff}
+  .t-quiz{background:#24407d}.t-tipp{background:#1f7a4d}.t-para{background:#6b4a1f}.t-humor{background:#c8323c}
+  .card .day{font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:2.2rem;color:var(--red);margin:0}
+  .card .emoji{font-size:3rem;line-height:1;margin:6px 0 10px}
+  .card .q{font-size:1.2rem;font-weight:700;line-height:1.45;margin:0 0 14px}
+  .card .a{font-size:1.15rem;line-height:1.45;margin:0 0 6px;color:var(--green);font-weight:800;display:none}
+  .card .a.show{display:block;animation:pop .35s ease-out}
+  .btn{display:inline-block;border:none;border-radius:999px;padding:11px 22px;font:inherit;font-weight:800;cursor:pointer;margin:6px 4px 0}
+  .btn.primary{background:var(--red);color:#fff}
+  .btn.ghost{background:#eadfca;color:var(--ink)}
+  .btn:hover{filter:brightness(1.08)}
+  .close{position:absolute;right:12px;top:16px;background:none;border:none;font-size:1.6rem;cursor:pointer;color:#8a7f72}
+  .locked-msg .emoji{font-size:2.6rem}
+  .back{display:inline-block;margin-bottom:10px;color:var(--gold);text-decoration:none;font-weight:700;font-size:.95rem;opacity:.9}
+  .back:hover{opacity:1;text-decoration:underline}
+  footer{text-align:center;margin-top:30px;font-size:.8rem;opacity:.5}
+</style>
+</head>
+<body>
+<canvas id="snow"></canvas>
+<div class="wrap">
+  <a class="back" href="index.html">← Zurück zum Portal</a>
+  <header>
+    <h1>Fasi-Adventskalender</h1>
+    <p class="sub">24 Türchen Arbeitssicherheit im Einzelhandel – Quiz, Praxistipps, Paragrafen &amp; Fasi-Humor</p>
+    <div class="status" id="status"></div>
+  </header>
+
+  <main class="grid" id="grid" aria-label="Adventskalender-Türchen"></main>
+
+  <p class="hint">Jeden Tag im Dezember darf ein neues Türchen geöffnet werden. Schon geöffnete bleiben offen.</p>
+  <div class="tools">
+    <button class="linkbtn" id="previewBtn" hidden>Vorschau: alle Türchen freischalten</button>
+    <button class="linkbtn" id="resetBtn">Alle Türchen wieder schließen</button>
+  </div>
+  <footer>Frohe und unfallfreie Adventszeit! 🦺🎄<br>Kurzhinweise zur Sensibilisierung – sie ersetzen nicht den Blick in die aktuellen Vorschriften und eure Gefährdungsbeurteilung.</footer>
+</div>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <div class="card" id="card"></div>
+</div>
+
+<script>
+const TAGS = {quiz:["Quiz","t-quiz"], tipp:["Praxistipp","t-tipp"], para:["Paragrafenreiter","t-para"], humor:["Fasi-Humor","t-humor"]};
+const DATA = [
+  {t:"tipp", e:"🚪", q:"Hochsaison für Aktionsware: Woran denkst du beim Rundgang zuerst?", a:"Flucht- und Rettungswege und Notausgänge freihalten – auch wenn die Palette mit Lebkuchen „nur kurz“ dort steht. Gerade im Dezember lohnt der tägliche Blick (ASR A2.3)."},
+  {t:"quiz", e:"🩹", q:"Wie viele Ersthelfer braucht ein Markt mit 40 Beschäftigten?", a:"In Handelsbetrieben 5 % der anwesenden Versicherten – also mindestens 2. Bei 2 bis 20 Anwesenden reicht einer (DGUV Vorschrift 1, § 26)."},
+  {t:"humor", e:"🛷", q:"Warum fliegt der Weihnachtsmann nur einmal im Jahr?", a:"Weil die Gefährdungsbeurteilung für „Arbeiten auf Dächern bei Nacht, Glätte und mit Rentier-Zugmaschine“ immer noch in Abstimmung ist."},
+  {t:"para", e:"📋", q:"Was verlangt § 5 ArbSchG seit 2013 ausdrücklich zusätzlich?", a:"Die psychische Belastung bei der Arbeit muss in der Gefährdungsbeurteilung berücksichtigt werden – Stichwort Weihnachtsstress an Kasse und Kundeninfo."},
+  {t:"tipp", e:"🔌", q:"Die Mitarbeiter bringen Lichterketten von zu Hause mit. Und jetzt?", a:"Private Elektrogeräte gehören nicht ungeprüft in den Betrieb. Besser: geprüfte Deko vom Unternehmen, keine echten Kerzen auf der Fläche und Mehrfachsteckdosen nicht hintereinanderstecken."},
+  {t:"humor", e:"🥾", q:"Der Nikolaus kommt in den Markt. Was fragt die Fasi zuerst?", a:"„Schön, dass du da bist. Sind das S3-Stiefel? Und wer hat den Sack auf ergonomisches Heben geprüft?“"},
+  {t:"quiz", e:"🧯", q:"Wie oft müssen Feuerlöscher geprüft werden?", a:"Mindestens alle 2 Jahre durch eine sachkundige Person – bei besonderer Beanspruchung öfter (ASR A2.2)."},
+  {t:"para", e:"🗣️", q:"Wie oft müssen Beschäftigte unterwiesen werden – und wie oft Jugendliche?", a:"Erwachsene mindestens einmal jährlich (DGUV Vorschrift 1, § 4), Jugendliche mindestens halbjährlich (§ 29 JArbSchG). Dazu kommen Anlässe wie Einstellung oder neue Arbeitsmittel (§ 12 ArbSchG)."},
+  {t:"tipp", e:"🧊", q:"Draußen friert es. Wo passieren jetzt die meisten Unfälle?", a:"Stolpern, Rutschen, Stürzen gehören zu den häufigsten Arbeitsunfällen im Handel. Winterdienst am Eingang und auf dem Parkplatz, Schmutzfangmatten und das Aufwischen von Nässe sofort erledigen."},
+  {t:"humor", e:"🪜", q:"Was sagt die Stehleiter zum Mitarbeiter auf der obersten Stufe?", a:"„Ich bin eine Leiter, kein Podest. Und schon gar keine Weihnachtsbaumspitze.“"},
+  {t:"quiz", e:"🤕", q:"Wann ist eine Unfallanzeige an die BGHW Pflicht?", a:"Wenn ein Arbeitsunfall zu mehr als 3 Tagen Arbeitsunfähigkeit führt – zu melden innerhalb von 3 Tagen, nachdem der Unternehmer davon erfahren hat (§ 193 SGB VII)."},
+  {t:"para", e:"📒", q:"Wie lange muss das Verbandbuch (die Dokumentation der Erste-Hilfe-Leistungen) aufbewahrt werden?", a:"5 Jahre, und es ist vertraulich zu behandeln (DGUV Vorschrift 1, § 24). Jeder eingetragene Pflasterfall kann später als Nachweis wichtig werden."},
+  {t:"tipp", e:"🔪", q:"Kartonflut im Wareneingang – welches Messer gehört in die Hand?", a:"Ein Sicherheitsmesser mit automatischem Klingenrückzug. Schneiden vom Körper weg, Messer nie in der Kitteltasche ohne Schutz."},
+  {t:"humor", e:"🎁", q:"Was wünscht sich eine Fasi vom Christkind?", a:"Einen Notausgang, vor dem nichts steht. Eine Unterweisung, die alle unterschreiben. Und einmal eine Begehung ohne „Das war nur kurz!“."},
+  {t:"quiz", e:"🌡️", q:"Wie warm muss es an einem Kassenarbeitsplatz mit leichter, überwiegend sitzender Tätigkeit mindestens sein?", a:"+20 °C (ASR A3.5). Zugluft an der Eingangstür ist im Winter ein Klassiker – Windfang, Türluftschleier oder Abschirmung helfen."},
+  {t:"tipp", e:"❄️", q:"Rein in die Tiefkühlzelle, schnell Nachschub holen. Was sollte vorher klar sein?", a:"Die Tür lässt sich von innen jederzeit öffnen, die Notrufeinrichtung funktioniert und Kälteschutzkleidung liegt bereit. Ein kurzer Funktionstest gehört in jede Begehung."},
+  {t:"para", e:"🤝", q:"Wie oft muss der Arbeitsschutzausschuss (ASA) mindestens tagen?", a:"Mindestens einmal im Vierteljahr (§ 11 ASiG)."},
+  {t:"humor", e:"🦌", q:"Warum gibt es für Rudolph keine Prüfplakette?", a:"Die rote Nase gilt als Beleuchtungseinrichtung, aber niemand weiß, wer als befähigte Person für Rentiere gilt."},
+  {t:"tipp", e:"📦", q:"Getränkekisten und schwere Aktionsware: Wie bewertest du das Heben und Tragen?", a:"Mit der Leitmerkmalmethode (LMM) der BAuA. Entlasten mit Hubwagen, Rollwagen und kleineren Gebinden. Lasten körpernah tragen, nicht verdrehen."},
+  {t:"quiz", e:"🎄", q:"Ist der Weg zur Betriebsweihnachtsfeier versichert?", a:"Ja, wenn die Feier eine betriebliche Gemeinschaftsveranstaltung ist: Die Unternehmensleitung veranstaltet sie oder trägt sie mit, und sie steht allen Beschäftigten offen. Rein private Runden sind nicht versichert."},
+  {t:"tipp", e:"🧤", q:"Frischetheke im Dauerbetrieb: Was hilft den Händen durch den Winter?", a:"Ein Hautschutzplan, der aushängt und gelebt wird: Schützen, Reinigen, Pflegen. Bei Feuchtarbeit an Handschuhe aus geeignetem Material denken."},
+  {t:"para", e:"🤰", q:"Muss die mutterschutzrechtliche Gefährdungsbeurteilung erst gemacht werden, wenn eine Schwangerschaft gemeldet wird?", a:"Nein. Sie ist für jeden Arbeitsplatz anlassunabhängig zu erstellen (§ 10 MuSchG). Bei Meldung einer Schwangerschaft werden dann die konkreten Schutzmaßnahmen festgelegt."},
+  {t:"humor", e:"🧑‍🎄", q:"Die Fasi prüft den Weihnachtsmann. Ergebnis?", a:"Übergewicht beim Heben, Nachtarbeit, Kamineinstieg ohne Absturzsicherung und Ladungssicherung am Schlitten fraglich. Maßnahme: Lieferung kontaktlos per Paketdienst."},
+  {t:"tipp", e:"⭐", q:"Frohe Weihnachten!", a:"Danke für jedes freigeräumte Regal, jede gemeldete Gefahrenstelle und jede ehrliche Unterweisung. Die beste Bilanz des Jahres: Alle kommen gesund nach Hause. Schöne Feiertage!"}
+];
+
+// feste, „zufällig“ wirkende Anordnung der Türchen
+const ORDER = [13,4,21,8,17,1,24,10,6,19,3,15,22,9,2,18,12,7,20,5,16,11,23,14];
+const COLORS = ["c0","c1","c2","c3","c4"];
+const KEY = "fasi-adventskalender-offen-v1";
+
+let preview = false;
+let opened = new Set();
+try { opened = new Set(JSON.parse(localStorage.getItem(KEY) || "[]")); } catch(e){}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify([...opened])); }catch(e){} }
+
+// heutiges Datum in Berliner Zeit
+function today(){
+  const parts = new Intl.DateTimeFormat("de-DE",{timeZone:"Europe/Berlin",year:"numeric",month:"numeric",day:"numeric"}).formatToParts(new Date());
+  const g = t => +parts.find(p=>p.type===t).value;
+  return {y:g("year"), m:g("month"), d:g("day")};
+}
+function maxDay(){
+  if (preview) return 24;
+  const t = today();
+  if (t.m === 12) return Math.min(t.d, 24) + (t.d > 24 ? 0 : 0);
+  if (t.m === 1) return 24;             // nach Weihnachten (Januar): alles offen
+  return 0;                              // vor dem 1. Dezember
+}
+function isToday(n){ const t = today(); return t.m===12 && t.d===n; }
+
+function updateStatus(){
+  const t = today(), el = document.getElementById("status");
+  if (preview) { el.textContent = "👀 Vorschau-Modus – alle Türchen sind frei"; return; }
+  if (t.m === 12 && t.d <= 24) {
+    const left = 24 - t.d;
+    el.textContent = left === 0 ? "🎄 Heiligabend – das letzte Türchen wartet!" : `🎄 Heute ist Türchen ${t.d} dran · noch ${left} ${left===1?"Tag":"Tage"} bis Heiligabend`;
+  } else if (t.m === 12 || t.m === 1) {
+    el.textContent = "🎁 Frohe Weihnachten! Alle Türchen sind offen.";
+  } else {
+    const start = new Date(Date.UTC(t.y,11,1)), now = new Date(Date.UTC(t.y,t.m-1,t.d));
+    const days = Math.round((start-now)/864e5);
+    el.textContent = `⏳ Noch ${days} ${days===1?"Tag":"Tage"}, bis das erste Türchen aufgeht`;
+  }
+}
+
+function build(){
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
+  ORDER.forEach((n,i)=>{
+    const cell = document.createElement("div");
+    cell.className = "cell" + "" + (isToday(n) ? " today" : "");
+    const inside = document.createElement("div");
+    inside.className = "inside";
+    inside.textContent = DATA[n-1].e;
+    inside.onclick = () => showDay(n);
+    const door = document.createElement("button");
+    door.className = "door " + COLORS[(i*3+n)%COLORS.length] + (n>maxDay() ? " locked" : "") + (opened.has(n) && n<=maxDay() ? " open" : "");
+    door.innerHTML = `<span>${n}</span>`;
+    door.setAttribute("aria-label", `Türchen ${n}`);
+    door.onclick = () => tryOpen(n, door);
+    cell.append(inside, door);
+    grid.append(cell);
+  });
+  updateStatus();
+}
+
+function tryOpen(n, door){
+  if (n > maxDay()){
+    door.classList.remove("shake"); void door.offsetWidth; door.classList.add("shake");
+    showLocked(n); return;
+  }
+  door.classList.add("open");
+  opened.add(n); save();
+  setTimeout(()=>showDay(n), 650);
+}
+
+const modal = document.getElementById("modal"), card = document.getElementById("card");
+function closeModal(){ modal.classList.remove("show"); }
+modal.addEventListener("click", e => { if (e.target === modal) closeModal(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+
+function showDay(n){
+  const d = DATA[n-1];
+  card.innerHTML = `
+    <button class="close" aria-label="Schließen">×</button>
+    <p class="day">${n}. Dezember</p>
+    <div class="emoji">${d.e}</div>
+    <span class="tag ${TAGS[d.t][1]}">${TAGS[d.t][0]}</span>
+    <p class="q">${d.q}</p>
+    <p class="a" id="ans">${d.a}</p>
+    <button class="btn primary" id="reveal">Antwort zeigen</button>
+    <button class="btn ghost" id="copy">Text kopieren</button>`;
+  card.querySelector(".close").onclick = closeModal;
+  const rev = card.querySelector("#reveal");
+  rev.onclick = () => { card.querySelector("#ans").classList.add("show"); rev.style.display="none"; };
+  const cp = card.querySelector("#copy");
+  cp.onclick = async () => {
+    try { await navigator.clipboard.writeText(`${n}. Dezember: ${d.q} – ${d.a}`); cp.textContent = "Kopiert ✓"; }
+    catch(e){ cp.textContent = "Kopieren nicht möglich"; }
+  };
+  modal.classList.add("show");
+  rev.focus();
+}
+
+function showLocked(n){
+  const t = today();
+  let msg = "Nicht schummeln – auch Türchen haben eine Freigabe! 😄";
+  if (t.m === 12) { const w = n - t.d; msg = `Noch ${w} ${w===1?"Tag":"Tage"} Geduld – dieses Türchen ist am ${n}. Dezember dran.`; }
+  else msg = `Dieses Türchen geht erst am ${n}. Dezember auf.`;
+  card.innerHTML = `
+    <button class="close" aria-label="Schließen">×</button>
+    <div class="locked-msg"><div class="emoji">🔒</div>
+    <p class="q">Psst … noch nicht!</p><p>${msg}</p></div>
+    <button class="btn primary" id="ok">Na gut</button>`;
+  card.querySelector(".close").onclick = closeModal;
+  card.querySelector("#ok").onclick = closeModal;
+  modal.classList.add("show");
+}
+
+// Vorschau nur über adventskalender.html?vorschau sichtbar
+if (new URLSearchParams(location.search).has("vorschau")) document.getElementById("previewBtn").hidden = false;
+document.getElementById("previewBtn").onclick = (e) => {
+  preview = !preview;
+  e.target.textContent = preview ? "Vorschau beenden" : "Vorschau: alle Türchen freischalten";
+  build();
+};
+document.getElementById("resetBtn").onclick = () => { opened.clear(); save(); build(); };
+
+build();
+
+// Schneefall
+const cv = document.getElementById("snow"), ctx = cv.getContext("2d");
+let flakes = [];
+function resize(){
+  cv.width = innerWidth * devicePixelRatio; cv.height = innerHeight * devicePixelRatio;
+  ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+  const count = Math.min(160, Math.round(innerWidth/8));
+  flakes = Array.from({length:count}, () => ({x:Math.random()*innerWidth, y:Math.random()*innerHeight, r:Math.random()*2.4+0.8, s:Math.random()*0.6+0.3, w:Math.random()*Math.PI*2}));
+}
+addEventListener("resize", resize); resize();
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+function tick(){
+  ctx.clearRect(0,0,innerWidth,innerHeight);
+  ctx.fillStyle = "rgba(255,255,255,.85)";
+  for (const f of flakes){
+    f.y += f.s; f.w += 0.01; f.x += Math.sin(f.w)*0.4;
+    if (f.y > innerHeight+5){ f.y = -5; f.x = Math.random()*innerWidth; }
+    ctx.beginPath(); ctx.arc(f.x,f.y,f.r,0,Math.PI*2); ctx.fill();
+  }
+  if (!reduce) requestAnimationFrame(tick);
+}
+tick();
+</script>
+</body>
+</html>

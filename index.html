@@ -30,6 +30,34 @@
         App unter <em>Einstellungen</em> Server-Adresse und Zugriffsschlüssel eingetragen sind.        
     </p>
 
+    <!-- Adventskalender-Banner: erscheint nur vom 1. bis 26. Dezember (Test: index.html?advent) -->
+    <div class="advent-banner" id="adventBanner" hidden>
+        <a class="advent-link" href="adventskalender.html">
+            <span class="advent-symbol">🎄</span>
+            <span class="advent-text">
+                <span class="advent-titel">Fasi-Adventskalender</span>
+                <span class="advent-sub" id="adventSub">Heute wartet ein neues Türchen.</span>
+            </span>
+            <span class="advent-pfeil">Öffnen →</span>
+        </a>
+        <button class="advent-zu" id="adventZu" aria-label="Für heute ausblenden">×</button>
+    </div>
+    <style>
+        .advent-banner{position:relative;margin:0 0 20px;border-radius:12px;overflow:hidden;
+            background:linear-gradient(120deg,#1b2f5c,#0f1d3a);box-shadow:0 4px 14px rgba(0,0,0,.18)}
+        .advent-banner::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;
+            background:repeating-linear-gradient(45deg,#f2b705 0 12px,#1d1d1d 12px 24px)}
+        .advent-link{display:flex;align-items:center;gap:14px;padding:18px 52px 14px 16px;color:#fff7e8;text-decoration:none}
+        .advent-symbol{font-size:2rem;line-height:1}
+        .advent-text{display:flex;flex-direction:column;flex:1;min-width:0}
+        .advent-titel{font-weight:700;font-size:1.05rem;color:#f3c969}
+        .advent-sub{font-size:.9rem;opacity:.9}
+        .advent-pfeil{font-weight:700;font-size:.9rem;white-space:nowrap;background:#c8323c;color:#fff;padding:7px 12px;border-radius:999px}
+        .advent-zu{position:absolute;right:8px;top:12px;width:34px;height:34px;border:none;border-radius:50%;
+            background:rgba(255,255,255,.1);color:#fff;font-size:1.3rem;line-height:1;cursor:pointer}
+        @media (max-width:480px){.advent-pfeil{display:none}.advent-link{padding-right:48px}}
+    </style>
+
     <div class="aktionen">
         <div class="aktion-spalte">
             <a class="aktion aktion-primaer" href="ASiC/index.html">
@@ -164,6 +192,30 @@
         setTimeout(() => {
             if (!wert.classList.contains('ok')) wert.textContent = 'wird eingerichtet …';
         }, 3000);
+    })();
+
+    // Adventskalender-Banner: 1.–26. Dezember, pro Tag wegklickbar
+    (function () {
+        const banner = document.getElementById('adventBanner');
+        if (!banner) return;
+        const KEY = 'advent-banner-aus';
+        const p = new Intl.DateTimeFormat('de-DE', { timeZone: 'Europe/Berlin', month: 'numeric', day: 'numeric' })
+            .formatToParts(new Date());
+        const monat = +p.find(x => x.type === 'month').value;
+        const tag = +p.find(x => x.type === 'day').value;
+        const test = new URLSearchParams(location.search).has('advent');
+        if (!test && !(monat === 12 && tag <= 26)) return;
+        const heute = monat + '-' + tag;
+        try { if (!test && localStorage.getItem(KEY) === heute) return; } catch (e) {}
+        const sub = document.getElementById('adventSub');
+        if (monat === 12 && tag <= 23) sub.textContent = 'Türchen ' + tag + ' ist offen – noch ' + (24 - tag) + (tag === 23 ? ' Tag' : ' Tage') + ' bis Heiligabend.';
+        else if (monat === 12 && tag === 24) sub.textContent = 'Heiligabend – das letzte Türchen wartet!';
+        else if (monat === 12) sub.textContent = 'Frohe Weihnachten! Alle 24 Türchen zum Nachlesen.';
+        banner.hidden = false;
+        document.getElementById('adventZu').addEventListener('click', function () {
+            banner.hidden = true;
+            try { localStorage.setItem(KEY, heute); } catch (e) {}
+        });
     })();
 </script>
 </body>
