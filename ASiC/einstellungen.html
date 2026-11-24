@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+
+<!-- Sicherheitsrichtlinie (ab Rev. 1.54-5): nur eigene Skripte, keine eingebetteten
+     Skripte oder Inline-Handler. connect-src erlaubt https:, damit ein Team-Archiv
+     auf einem anderen Server (Einstellungen) erreichbar bleibt. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https: ipc: http://ipc.localhost; worker-src 'self'; manifest-src 'self'; object-src 'none'; frame-src 'self' blob:; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="same-origin">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+<title>
+    Einstellungen – ASiC Handel
+</title>
+
+<link
+    rel="stylesheet"
+    href="css/styles.css?v=1.55-24"
+>
+
+<script src="js/anmeldung-pruefen.js?v=1.55-24"></script>
+
+<link
+    rel="manifest"
+    href="manifest.json"
+>
+
+<link
+    rel="apple-touch-icon"
+    href="icon-192.png"
+>
+
+<meta
+    name="apple-mobile-web-app-capable"
+    content="yes"
+>
+
+<meta
+    name="theme-color"
+    content="#1c2226"
+>
+
+</head>
+
+
+<body>
+
+
+<!-- ====================================================================== -->
+<!-- HEADER                                                                 -->
+<!-- ====================================================================== -->
+
+<header class="app-header">
+
+    <div class="hazard-strip"></div>
+
+    <div class="app-header-inner">
+
+
+        <div class="brand">
+
+            <span class="brand-title">
+                ASiC Handel
+            </span>
+
+            <span class="brand-tag">
+                Märkte
+            </span>
+
+            <span class="brand-subtitle">
+                „Sicher geprüft. Sicher gehandelt.“
+            </span>
+
+        </div>
+
+
+        <nav class="app-nav">
+
+            <a href="index.html">
+                Prüfkatalog
+            </a>
+
+            <a href="massnahmen.html">
+                Aktionsplan
+            </a>
+
+            <a href="fotos.html">
+                Fotos
+            </a>
+
+            <a href="verlauf.html">
+                Verlauf
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+
+<!-- ====================================================================== -->
+<!-- HAUPTBEREICH                                                           -->
+<!-- ====================================================================== -->
+
+<main class="page" id="oben">
+
+    <!-- ================================================================== -->
+    <!-- KOPF (Gestaltung wie Hilfe & FAQ)                                  -->
+    <!-- ================================================================== -->
+
+    <div class="h-hero">
+        <div class="h-hero-badge">Einstellungen</div>
+        <h1>Einstellungen</h1>
+        <p>Diese Einstellungen gelten nur für dieses Gerät und diesen Browser. Sie werden nicht auf dem Server oder in der Cloud gespeichert.</p>
+    </div>
+
+    <!-- ================================================================== -->
+    <!-- STATUS-KACHELN                                                     -->
+    <!-- ================================================================== -->
+
+    <div class="h-tiles s-tiles" aria-live="polite">
+        <div class="h-tile s-tile" id="st-server">
+            <span class="h-tile-icon" aria-hidden="true">🖥️</span>
+            <span class="h-tile-title">Server-Adresse</span>
+            <span class="h-tile-sub" data-st-text>–</span>
+        </div>
+        <div class="h-tile s-tile" id="st-key">
+            <span class="h-tile-icon" aria-hidden="true">🔑</span>
+            <span class="h-tile-title">Zugriffsschlüssel</span>
+            <span class="h-tile-sub" data-st-text>–</span>
+        </div>
+        <div class="h-tile s-tile" id="st-conn">
+            <span class="h-tile-icon" aria-hidden="true">📡</span>
+            <span class="h-tile-title">Verbindung</span>
+            <span class="h-tile-sub" data-st-text>noch nicht getestet</span>
+        </div>
+        <div class="h-tile s-tile" id="st-version">
+            <span class="h-tile-icon" aria-hidden="true">ℹ️</span>
+            <span class="h-tile-title">App-Version</span>
+            <span class="h-tile-sub" data-st-text>–</span>
+        </div>
+    </div>
+
+    <!-- ================================================================== -->
+    <!-- ANMELDUNG (ab Rev. 1.55, nur sichtbar, wenn der Server sie nutzt)  -->
+    <!-- ================================================================== -->
+
+    <section class="h-section" id="anmeldung" hidden>
+        <div class="h-section-label">Zugang</div>
+        <h2>Anmeldung</h2>
+        <div class="s-card">
+            <p class="an-wer" id="an-wer">–</p>
+            <p class="s-hint" id="an-bis"></p>
+            <div class="s-actions">
+                <a class="btn btn-secondary" id="btn-an-passwort" href="anmeldung.html?aktion=passwort&amp;ziel=einstellungen.html">Passwort ändern</a>
+                <a class="btn btn-secondary" id="btn-an-benutzer" href="benutzer.html" hidden>Benutzerverwaltung</a>
+                <a class="btn btn-secondary" id="btn-an-pdf" href="pdf-archiv.html" hidden>PDF-Archiv</a>
+                <a class="btn btn-secondary" id="btn-an-jahresbericht" href="benutzer.html#jahresbericht" hidden>Jahresbericht</a>
+                <a class="btn btn-secondary" id="btn-an-adminanleitung" href="admin-anleitung.html" hidden>Admin-Anleitung</a>
+                <button class="btn btn-secondary" id="btn-an-abmelden" type="button">Abmelden</button>
+            </div>
+            <p class="s-status" id="an-status"></p>
+        </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- SERVER-VERBINDUNG                                                  -->
+    <!-- ================================================================== -->
+
+    <section class="h-section" id="server">
+        <div class="h-section-label">Speichern &amp; Team-Archiv</div>
+        <h2>Server-Verbindung</h2>
+        <p class="h-section-intro">Im Regelbetrieb liegen App und Server-Skripte auf demselben Server – dann bleibt die Server-Adresse leer und nur der Zugriffsschlüssel wird eingetragen, falls die EDV einen vergeben hat.</p>
+
+        <div class="s-card">
+
+            <div class="s-field">
+                <label for="nas-base-url">Server-Adresse <span class="s-optional">optional</span></label>
+                <input type="url" id="nas-base-url" inputmode="url" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="leer lassen = gleiche Adresse wie die App">
+                <p class="s-hint">Nur nötig, wenn die App über eine andere Adresse geöffnet wird als der Server. Nur <code>https://</code>-Adressen, ohne abschließenden Schrägstrich, z. B. <code>https://server.firma.de/asic</code>.</p>
+            </div>
+
+            <div class="s-field">
+                <label for="nas-api-key">Zugriffsschlüssel <span class="s-optional">optional</span></label>
+                <div class="s-key-hinterlegt" id="key-hinterlegt" hidden>
+                    <span class="s-key-info" id="key-hinterlegt-text">✓ Schlüssel hinterlegt</span>
+                    <span class="s-key-aktionen">
+                        <button class="btn btn-secondary" id="btn-key-aendern" type="button">Schlüssel ändern</button>
+                        <button class="btn btn-secondary" id="btn-key-entfernen" type="button">Entfernen</button>
+                    </span>
+                </div>
+                <div class="s-key" id="key-eingabe">
+                    <input type="password" id="nas-api-key" autocomplete="new-password" autocapitalize="off" spellcheck="false" placeholder="nur nötig, wenn der Server einen Schlüssel verlangt">
+                    <button type="button" class="s-key-toggle" id="btn-toggle-key" aria-label="Eingabe anzeigen" aria-pressed="false">👁️</button>
+                </div>
+                <button class="btn btn-secondary s-key-abbrechen" id="btn-key-abbrechen" type="button" hidden>Abbrechen – bisherigen Schlüssel behalten</button>
+                <p class="s-hint">Den Wert erhalten Sie von der EDV. Er wird bei jeder Server-Anfrage mitgeschickt. Nach dem Speichern wird er aus Sicherheitsgründen nicht mehr angezeigt.</p>
+            </div>
+
+            <div class="s-field">
+                <label for="geraet-name">Gerätename <span class="s-optional">empfohlen</span></label>
+                <input type="text" id="geraet-name" maxlength="40" autocomplete="off" spellcheck="false" placeholder="z. B. iPad Bezirk Nord">
+                <p class="s-hint">Öffnen Sie eine Begehung aus dem Team-Archiv, sehen die anderen dort „geöffnet auf …“ mit diesem Namen. Ohne Namen steht dort „einem anderen Gerät“.</p>
+            </div>
+
+            <p class="s-team-auto" id="team-auto-info"></p>
+
+            <div class="s-actions">
+                <button class="btn btn-primary" id="btn-save-settings" type="button">Speichern</button>
+                <button class="btn btn-secondary" id="btn-test-connection" type="button">Verbindung testen</button>
+                <button class="btn btn-secondary" id="btn-reset-settings" type="button">Zurücksetzen</button>
+            </div>
+
+            <p id="settings-status" class="s-status"></p>
+
+        </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- UEBER DIESE APP & DIAGNOSE (ab Ausgabestand 1.54-3)                -->
+    <!-- ================================================================== -->
+
+    <section class="h-section" id="diagnose">
+        <div class="h-section-label">Hilfe bei Problemen</div>
+        <h2>Über diese App &amp; Diagnose</h2>
+        <p class="h-section-intro">Funktioniert etwas nicht? „Diagnose erstellen“ prüft die Verbindung und stellt den technischen Zustand dieses Geräts zusammen. Den Text an die EDV schicken – er enthält keine Begehungsinhalte, keine Namen und nie den Zugriffsschlüssel.</p>
+        <div class="s-card">
+            <div class="s-actions">
+                <button class="btn btn-primary" id="btn-diagnose-erstellen" type="button">🩺 Diagnose erstellen</button>
+                <button class="btn btn-secondary" id="btn-diagnose-kopieren" type="button" disabled>📋 Kopieren</button>
+                <button class="btn btn-secondary" id="btn-diagnose-mail" type="button" disabled>✉️ Per Mail senden</button>
+            </div>
+            <p id="diagnose-status" class="s-status"></p>
+            <pre id="diagnose-text" class="diagnose-text" hidden></pre>
+        </div>
+    </section>
+
+
+
+    <!-- ================================================================== -->
+    <!-- FRAGEN ZU DEN EINSTELLUNGEN                                        -->
+    <!-- ================================================================== -->
+
+    <section class="h-section" id="fragen">
+        <div class="h-section-label">Fragen &amp; Antworten</div>
+        <h2>Häufige Fragen zu den Einstellungen</h2>
+
+        <details class="h-item">
+            <summary>Wann muss ich eine Server-Adresse eintragen?</summary>
+            <div class="h-body">
+                <p class="h-short">Fast nie. Standardmäßig sucht die App <code>save.php</code>, <code>list.php</code> und <code>load.php</code> im selben Verzeichnis wie diese Seite. Das passt, wenn App und Server-Skripte auf demselben Server liegen (Regelbetrieb).</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Eine Adresse ist nur nötig, wenn die App über eine andere Adresse aufgerufen wird (z. B. eine Test-Installation) und trotzdem auf den Firmenserver zugreifen soll. Ein abweichender Port wird direkt in der Adresse angegeben, z. B. <code>https://server.firma.de:8443/asic</code>.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item">
+            <summary>Was ist der Zugriffsschlüssel?</summary>
+            <div class="h-body">
+                <p class="h-short">Ein langes Kennwort, das die EDV auf dem Server festlegt. Ist dort ein Schlüssel eingerichtet, nimmt der Server Speicher- und Ladeanfragen nur mit diesem Schlüssel an.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>Der Schlüssel muss exakt übereinstimmen – auch Groß-/Kleinschreibung und Leerzeichen zählen. Beim Eintippen lässt er sich mit dem Auge-Symbol zur Kontrolle anzeigen; nach dem Speichern zeigt die App nur noch die letzten vier Zeichen. Bei Zweifeln „Schlüssel ändern“ wählen und den Wert neu eintragen. Ist auf dem Server kein Schlüssel eingerichtet, hat dieses Feld keine Wirkung.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item">
+            <summary>Was prüft „Verbindung testen“?</summary>
+            <div class="h-body">
+                <p class="h-short">Die App fragt beim Server die Liste der gespeicherten Begehungen ab – mit der eingetragenen Adresse und dem Schlüssel. Es wird nichts gespeichert oder verändert.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <ul>
+                            <li><strong>Verbindung in Ordnung</strong> – Server erreichbar, Schlüssel passt; die Anzahl der Begehungen im Team-Archiv wird angezeigt.</li>
+                            <li><strong>Ungültiger oder fehlender Zugriffsschlüssel</strong> – Schlüssel fehlt oder weicht ab.</li>
+                            <li><strong>Datenordner nicht gefunden</strong> – auf dem Server stimmt der Pfad in <code>config.php</code> nicht; bitte die EDV informieren.</li>
+                            <li><strong>Server nicht erreichbar</strong> – keine Netzverbindung, VPN aus oder falsche Adresse.</li>
+                        </ul>
+                        <p>Der Test verwendet die gerade eingetragenen Werte, auch wenn sie noch nicht gespeichert sind. Dauerhaft übernommen werden sie erst mit „Speichern“.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item">
+            <summary>Server-Adresse und App liegen auf verschiedenen Servern – was ist zu beachten?</summary>
+            <div class="h-body">
+                <p class="h-short">Dann muss der Server-Betreiber CORS-Zugriff für die Adresse der App erlauben, sonst blockiert der Browser die Anfrage aus Sicherheitsgründen.</p>
+                <div class="h-warn">Sobald der Server nicht mehr nur über ein geschütztes Netz (Firmennetz oder VPN) erreichbar ist, ist ein Zugriffsschlüssel dringend zu empfehlen.</div>
+            </div>
+        </details>
+
+        <details class="h-item">
+            <summary>Wo werden diese Einstellungen gespeichert?</summary>
+            <div class="h-body">
+                <p class="h-short">Nur im Browser-Speicher dieses Geräts. Auf einem anderen iPad oder in einem anderen Browser müssen sie neu eingetragen werden.</p>
+                <details class="h-more">
+                    <summary>Mehr Details</summary>
+                    <div>
+                        <p>„Zurücksetzen“ löscht Server-Adresse und Zugriffsschlüssel auf diesem Gerät. Begehungen, Fotos und das Archiv bleiben davon unberührt.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <details class="h-item">
+            <summary>Wer bekommt ein Konto, und was tun bei vergessenem Passwort?</summary>
+            <div class="h-body">
+                <p class="h-short">Konten legt ein Administrator in der Benutzerverwaltung an (Abschnitt „Anmeldung“ oben). Bei vergessenem Passwort vergibt er ein neues Startpasswort; beim nächsten Anmelden legen Sie sofort ein eigenes fest.</p>
+            </div>
+        </details>
+
+        <div class="h-help">
+            <p>Weitere Antworten stehen in der <a href="hilfe.html">Hilfe &amp; FAQ</a>, technische Einzelheiten in der <a href="dokumentation.html">Technischen Dokumentation</a>.</p>
+        </div>
+    </section>
+
+</main>
+
+
+
+<!-- ====================================================================== -->
+<!-- FOOTER                                                                 -->
+<!-- ====================================================================== -->
+
+<footer class="app-footer">
+
+    <div class="app-footer-meta">
+
+        <span id="footer-version"></span>
+
+        <span
+            class="footer-copyright"
+            id="footer-copyright"
+        ></span>
+
+    </div>
+
+
+    <div class="app-footer-links">
+
+        <a href="impressum.html">
+            Impressum
+        </a>
+
+        <a href="datenschutz.html">
+            Datenschutz
+        </a>
+
+        <a href="dokumentation.html">
+            Technische Dokumentation
+        </a>
+
+        <a href="hilfe.html">
+            Hilfe &amp; FAQ
+        </a>
+
+        <a href="auswertung.html">
+            Auswertung
+        </a>
+
+
+        <a href="auswertung-team.html">
+            Auswertung Team
+        </a>
+
+    </div>
+
+</footer>
+
+
+<script src="js/audit-data.js?v=1.55-24"></script>
+
+<script src="js/text.js?v=1.55-24"></script>
+
+<script src="js/photos-store.js?v=1.55-24"></script>
+
+<script src="js/archive-store.js?v=1.55-24"></script>
+
+<script src="js/app.js?v=1.55-24&amp;r=2"></script>
+
+<script src="js/einstellungen.js?v=1.55-24"></script>
+
+
+</body>
+
+</html>
