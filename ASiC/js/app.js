@@ -58,7 +58,7 @@ const AKTION_ERLAUBT = new Set([
     'onKategorieBalkenKlick',
     'onPhotoCommentChange', 'onPhotoDelete',
     'onMeasurePhotoDelete', 'openMeasureCamera', 'onMeasurePhotosCaptured',
-    'updateMeasureField', 'onMeasureStatusChange',
+    'updateMeasureField', 'onMeasureStatusChange', 'onMeasureZustaendigChange',
     'onArchiveExport', 'onArchiveRestore', 'onArchiveFollowUp', 'onArchiveDelete',
     'onTeamArchiveExport', 'onTeamArchiveRestore', 'onTeamArchiveFollowUp', 'onTeamArchiveDelete'
 ]);
@@ -3013,6 +3013,39 @@ function quellenAusText(text) {
 }
 
 // Quellen zu einer Massnahme (Pruefpunkt-ID): aus BGHW- und Rechtlich-Text
+// --------------------------------------------------------------------------
+// Zuständigkeit je Maßnahme (ab Ausgabestand 1.55-24)
+// Reihenfolge = Sortierung im PDF; ohne Angabe -> "Nicht zugeordnet" am Ende.
+// --------------------------------------------------------------------------
+const ZUSTAENDIGKEITEN = [
+    { wert: 'marktmanager', text: 'Marktmanager' },
+    { wert: 'technik',      text: 'Technik' },
+    { wert: 'inventar',     text: 'Inventar' },
+    { wert: 'vermieter',    text: 'Vermieter' }
+];
+
+function sichereZustaendigkeit(wert) {
+    return ZUSTAENDIGKEITEN.some(z => z.wert === wert) ? wert : '';
+}
+
+function zustaendigkeitText(wert) {
+    const z = ZUSTAENDIGKEITEN.find(e => e.wert === sichereZustaendigkeit(wert));
+    return z ? z.text : 'Nicht zugeordnet';
+}
+
+// Stabile Sortierung: erst nach Zuständigkeit (Reihenfolge oben), innerhalb
+// einer Gruppe bleibt die Reihenfolge des Aktionsplans erhalten.
+function massnahmenNachZustaendigkeit(measures) {
+    const rang = m => {
+        const i = ZUSTAENDIGKEITEN.findIndex(z => z.wert === sichereZustaendigkeit(m && m.zustaendig));
+        return i === -1 ? ZUSTAENDIGKEITEN.length : i;
+    };
+    return (measures || [])
+        .map((m, i) => ({ m, i }))
+        .sort((a, b) => rang(a.m) - rang(b.m) || a.i - b.i)
+        .map(e => e.m);
+}
+
 function quellenZuMassnahme(itemId) {
     if (FREIE_PUNKT_IDS.indexOf(itemId) !== -1) return [];   // freie Pruefpunkte ohne Quellen
     const e = (typeof MEASURES_BY_ID !== 'undefined' && MEASURES_BY_ID[itemId]) || (typeof MEASURES_TEXT !== 'undefined' ? MEASURES_TEXT.default : null);
@@ -3261,7 +3294,18 @@ async function buildPdf(includeChecklist, includeFotos) {
     // MASSNAHMEN
     // ======================================================================
 
-    if (state.measures.length === 0) {
+    // Ab 1.55-24: im PDF nach Zuständigkeit sortiert (siehe ZUSTAENDIGKEITEN).
+    // Die Nummern gelten im ganzen PDF (Karten, Foto- und Quellen-Anhang).
+    const pdfMassnahmen = massnahmenNachZustaendigkeit(state.measures);
+    const mitGruppen = pdfMassnahmen.some(m => sichereZustaendigkeit(m.zustaendig));
+    const gruppenAnzahl = {};
+    pdfMassnahmen.forEach(m => {
+        const k = sichereZustaendigkeit(m.zustaendig);
+        gruppenAnzahl[k] = (gruppenAnzahl[k] || 0) + 1;
+    });
+    let letzteGruppe = null;
+
+    if (pdfMassnahmen.length === 0) {
 
         doc.setFontSize(11);
         doc.setTextColor(0);
@@ -3295,12 +3339,12 @@ async function buildPdf(includeChecklist, includeFotos) {
 
         for (
             let index = 0;
-            index < state.measures.length;
+            index < pdfMassnahmen.length;
             index++
         ) {
 
             const measure =
-                state.measures[index];
+                pdfMassnahmen[index];
 
             const found =
                 findItemById(measure.itemId);
@@ -3409,12 +3453,35 @@ async function buildPdf(includeChecklist, includeFotos) {
                 statusH +
                 padding;
 
+            const gruppe = sichereZustaendigkeit(measure.zustaendig);
+            const neueGruppe = mitGruppen && gruppe !== letzteGruppe;
+            const gruppeH = neueGruppe ? 11 : 0;
+
             if (
-                y + cardHeight >
+                y + gruppeH + cardHeight >
                 pageHeight - 24
             ) {
                 doc.addPage();
                 y = 18;
+            }
+
+            if (neueGruppe) {
+                letzteGruppe = gruppe;
+                const anzahl = gruppenAnzahl[gruppe] || 0;
+                doc.setFont(undefined, 'bold');
+                doc.setFontSize(11);
+                doc.setTextColor(28, 34, 38);
+                doc.text(
+                    'Zuständig: ' + zustaendigkeitText(gruppe) +
+                    '  (' + anzahl + (anzahl === 1 ? ' Maßnahme)' : ' Maßnahmen)'),
+                    margin,
+                    y + 5
+                );
+                doc.setDrawColor(200, 16, 46);
+                doc.setLineWidth(0.5);
+                doc.line(margin, y + 7, margin + contentWidth, y + 7);
+                doc.setLineWidth(0.3);
+                y += gruppeH;
             }
 
             doc.setDrawColor(
@@ -3634,6 +3701,12 @@ async function buildPdf(includeChecklist, includeFotos) {
                 cy
             );
 
+            doc.text(
+                'ZUSTÄNDIG',
+                margin + padding + 60,
+                cy
+            );
+
             cy += 4.3;
 
             const statusLabel =
@@ -3657,6 +3730,13 @@ async function buildPdf(includeChecklist, includeFotos) {
             doc.text(
                 statusLabel,
                 margin + padding,
+                cy
+            );
+
+            doc.setTextColor(30, 41, 59);
+            doc.text(
+                zustaendigkeitText(measure.zustaendig),
+                margin + padding + 60,
                 cy
             );
 
@@ -3799,16 +3879,16 @@ async function buildPdf(includeChecklist, includeFotos) {
         margin,
         contentWidth,
         pageHeight,
-        state.measures
+        pdfMassnahmen
     );
 
     // Quellen als Anhang - nur wenn ueberhaupt Massnahmen vorhanden sind.
     // "BGHW"/"Rechtlich": Gesamtliste (die Texte zitieren die Fundstellen
     // selbst). "Einfach": nur die Quellen zu den Massnahmen dieser Begehung,
     // je Massnahme (ab Ausgabestand 1.54-13).
-    if (state.measures.length > 0) {
+    if (pdfMassnahmen.length > 0) {
         if (MEASURE_STYLE === 'einfach') {
-            renderMassnahmenQuellenAnhang(doc, margin, contentWidth, pageHeight, state.measures);
+            renderMassnahmenQuellenAnhang(doc, margin, contentWidth, pageHeight, pdfMassnahmen);
         } else if (typeof MEASURE_SOURCES !== 'undefined') {
             renderSourcesAppendix(doc, margin, contentWidth, pageHeight);
         }
@@ -4475,6 +4555,7 @@ function setRating(itemId, rating) {
 
             responsible: '',
             dueDate: '',
+            zustaendig: '',
             status: 'offen',
             photoThumbnails: []
         });
@@ -4847,6 +4928,7 @@ function buildFollowUpState(record) {
             comment: kommentar,
             responsible: m.responsible || '',
             dueDate: m.dueDate || '',
+            zustaendig: sichereZustaendigkeit(m.zustaendig),
             status: m.status === 'bearbeitung' ? 'bearbeitung' : 'offen',
             photoThumbnails: [],
             vorbegehung: { datum: vorDatum, status: m.status || 'offen' }

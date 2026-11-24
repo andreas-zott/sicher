@@ -321,6 +321,25 @@ async function renderMeasures() {
 
                     </select>
 
+                    <span class="label zustaendig-label">
+                        Zuständig
+                    </span>
+
+                    <select
+                        class="status-badge zustaendig-badge ${sichereZustaendigkeit(measure.zustaendig) ? 'gesetzt' : 'leer'}"
+                        aria-label="Zuständig für die Abstellung"
+                        ${aktionAttr('change', 'onMeasureZustaendigChange', measure.id, '$el')}>
+
+                        <option value="" ${sichereZustaendigkeit(measure.zustaendig) ? '' : 'selected'}>
+                            Nicht zugeordnet
+                        </option>
+                        ${ZUSTAENDIGKEITEN.map(z => `
+                        <option value="${escapeHtml(z.wert)}" ${sichereZustaendigkeit(measure.zustaendig) === z.wert ? 'selected' : ''}>
+                            ${escapeHtml(z.text)}
+                        </option>`).join('')}
+
+                    </select>
+
                 </div>
 
             </div>
@@ -345,6 +364,13 @@ function sicheresVorschaubild(dataUrl) {
 // Status nur aus den bekannten Werten - wird auch als CSS-Klasse genutzt.
 function sichererStatus(status) {
     return ['offen', 'bearbeitung', 'erledigt'].includes(status) ? status : 'offen';
+}
+
+// Zuständigkeit (ab 1.55-24) - nur bekannte Werte speichern.
+function onMeasureZustaendigChange(measureId, selectEl) {
+    const wert = sichereZustaendigkeit(selectEl.value);
+    updateMeasureField(measureId, 'zustaendig', wert);
+    selectEl.className = 'status-badge zustaendig-badge ' + (wert ? 'gesetzt' : 'leer');
 }
 
 // Ersetzt den frueheren Inline-Handler am Status-Auswahlfeld.
